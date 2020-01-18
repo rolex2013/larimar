@@ -1,4 +1,7 @@
-from django.http import HttpResponse
+from django.views.generic import TemplateView
 
-def home_project_view(request):
-    return HttpResponse('<h1>Добрый день!</h1>')
+class HomeProjectsView(TemplateView):
+    template_name = 'home.html'
+
+class ListProjectsView(TemplateView):
+    template_name = 'projects.html'    
