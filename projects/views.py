@@ -1,15 +1,45 @@
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import View, TemplateView, ListView, DetailView
+from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
+from django.template import loader, Context, RequestContext
+#from versane.models import Company
 
-from .models import Project, Task, TaskComment
-from .forms import ProjectForm, TaskForm, TaskcommentForm
-from .utils import ObjectUpdateMixin
+from .models import Company, Project, Task, TaskComment
+from .forms import CompanyForm, ProjectForm, TaskForm, TaskCommentForm
+#from .utils import ObjectUpdateMixin
 
 class ProjectsHome(TemplateView):
    template_name = 'home.html'
+
+class CompaniesList(ListView):
+    model = Company
+    template_name = 'companies.html' 
+    #ordering = ['company_up', 'id']
+
+def company_page(request, pk):
+    #getting detail information about current object
+    current_company = Company.objects.get(id=pk)
+    root_company_id = current_company.get_root().id
+    #render
+    #return render("company_children.html",
+    #                      {
+    #                          'nodes':Company.objects.all(),
+    #                          'current_company':current_company,
+    #                          'root_company_id':root_company_id
+    #                      },
+    #                      context_instance=RequestContext(request))    
+    return render(request, "company_page.html", {
+                              'nodes':Company.objects.all(),
+                              'current_company':current_company,
+                              'root_company_id':root_company_id
+                                                    })                          
+
+class CompanyDetail(DetailView):
+    model = Company
+    template_name = 'projects.html'
 
 class ProjectsList(ListView):
     model = Project
@@ -17,92 +47,114 @@ class ProjectsList(ListView):
 
 class ProjectDetail(DetailView):
     model = Project
-    template_name = 'project_detail.html'   
+    template_name = 'project_detail.html' 
 
-#class ProjectsEditView(DetailView):
-#    model = Project
-#    template_name = 'project_edit.html' 
+class ProjectCreate(CreateView):    
+    model = Project
+    form_class = ProjectForm
+    #template_name = 'project_create.html'
+    template_name = 'object_form.html'
 
-#class TasksListView(ListView):
-#    model = Task
-#    template_name = 'task.html' #'tasks.html' 
-    #def get_queryset(self):
-    #    return Task.objects.filter(Task.name!='war')[:5] # Получить 5 книг, содержащих 'war' в заголовке
+    def form_valid(self, form):
+       form.instance.author_id = self.request.user.id
+       return super(ProjectCreate, self).form_valid(form)
 
-class TaskDetail(DetailView):
-    model = Task
-    template_name = 'task_detail.html'  
-
-#class CommentsListView(ListView):
-#   model = TaskComment
-#    template_name = 'taskcomments.html' 
-
-class CommentDetail(DetailView):
-    model = TaskComment
-    template_name = 'taskcomment_detail.html'
-
-
-def project_add(request):
-    if request.method == "POST":
-        form = ProjectForm(request.POST or None)
-        if form.is_valid():
-            new_project = form.save(commit=False)
-            new_project.author = request.user
-            form.save()
-            return redirect('my_project:project_detail', pk=new_project.pk)
-    else:
-        form = ProjectForm()
-    return render(request, 'project_add.html', {'form': form})
+    def get_context_data(self, **kwargs):
+       context = super(ProjectCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новый Проект'
+       return context
 
 class ProjectUpdate(UpdateView):    
     model = Project
     form_class = ProjectForm
-    #fields = ['name', 'description', 'assigner', 'datebegin', 'dateend']
-    template_name = 'project_update.html'
+    #template_name = 'project_update.html'
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(ProjectUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Проект'
+       return context
+
+#class ProjectDelete(DeleteView):    
+#    model = Project
+#    #form_class = ProjectForm
+#    template_name = 'project_delete.html'
+#    success_url = '/success/' 
+
+
+class TaskDetail(DetailView):
+    model = Task
+    template_name = 'task_detail.html'  
     
+    #def index(request):
+    #   data = {"Filter_1": user.is_authenticated and taskcomment.is_active, "message": "Welcome to Python"}
+    #   return render(request, "task_detail.html", context=data)
 
-class Project_Update(ObjectUpdateMixin, View):    
-    model = Project
-    model_form = ProjectForm
-    template = 'project_update.html'
+class TaskCreate(CreateView):    
+    model = Task
+    form_class = TaskForm
+    #template_name = 'task_create.html'
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(TaskCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новая Задача'
+       return context
+
+    def form_valid(self, form):
+       form.instance.project_id = self.kwargs['projectid']
+       form.instance.author_id = self.request.user.id
+       return super(TaskCreate, self).form_valid(form)
+
+class TaskUpdate(UpdateView):    
+    model = Task
+    form_class = TaskForm
+    #template_name = 'task_update.html'
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(TaskUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Задачу'
+       return context    
+
+#class TaskDelete(DeleteView):    
+#    model = Task
+#    #form_class = TaskForm
+#    template_name = 'task_delete.html'
+#    success_url = '/success/' 
 
 
-     
-def project_delete(request, pk):
-#    try:
-#        project = Project.objects.get(id=id)
-#        project.delete()
-#        return HttpResponseRedirect("/")
-#    except Project.DoesNotExist:
-        return HttpResponseNotFound("<h2>Проект не найден!</h2>")
+class TaskCommentDetail(DetailView):
+    model = TaskComment
+    template_name = 'taskcomment_detail.html'
 
+class TaskCommentCreate(CreateView):    
+    model = TaskComment
+    form_class = TaskCommentForm
+    template_name = 'object_form.html'
 
-def task_add(request, projectid):
-    if request.method == "POST":
-        form = TaskForm(request.POST or None)
-        if form.is_valid():
-            new_task = form.save(commit=False)     
-            new_task.project = Project(projectid)
-            new_task.author = request.user
-            form.save()
-            return redirect('my_project:task_detail', pk=new_task.pk)
-    else:
-        form = TaskForm()
-    return render(request, 'task_add.html', {'form': form, 'projectid': projectid})
+    def get_context_data(self, **kwargs):
+       context = super(TaskCommentCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новый Комментарий'
+       return context
 
-def taskcomment_add(request, taskid):
-    if request.method == "POST":
-        form = TaskcommentForm(request.POST or None)
-        if form.is_valid():
-            new_taskcomment = form.save(commit=False)
-            new_taskcomment.task = Task(taskid)
-            new_taskcomment.author = request.user
-            form.save()
-            #return redirect('my_project:taskcomment_detail', pk=new_taskcomment.pk)
-            return redirect('my_project:task_detail', pk=taskid)
-    else:
-        form = TaskcommentForm()
-    return render(request, 'taskcomment_add.html', {'form': form, 'taskid': taskid})
+    def form_valid(self, form):
+       form.instance.task_id = self.kwargs['taskid']
+       form.instance.author_id = self.request.user.id
+       return super(TaskCommentCreate, self).form_valid(form)
 
-#def Contacts(request):   
-#        return HttpResponse('Contact form')
+class TaskCommentUpdate(UpdateView):    
+    model = TaskComment
+    form_class = TaskCommentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(TaskCommentUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Комментарий'
+       return context
+
+#class TaskCommentDelete(DeleteView):    
+#    model = TaskComment
+#    #form_class = TaskCommentForm
+#    #template_name = 'taskcomment_delete.html'
+#    success_url = '/success/' 

@@ -1,16 +1,35 @@
 {% extends 'base.html' %}
 
-{% load bootstrap4 %}
+<!--{% load bootstrap4 %}-->
+{% block company %}
+
+  <div class="company-entry">
+    <h2>{{ company.name }}
+    {% if not company.is_active %}
+       (Организация перемещена в архив)
+    {% endif %}
+    </h2>
+    <p>{{ company.description }}</p>
+    <p>Тип: {{ company.type }}</p>
+    <em>Автор: {{ company.author }}</em><br /> 
+    <em>Дата: {{ company.datecreate }}</em>
+    <p>&nbsp;</p>
+
+{% endblock company %}
 
 {% block list %}
-   <h1>Список Проектов</h1>
-   
-        {% for result in object_list %}
-          <div class="project-entry">
-              <div><h2><a href="{% url 'my_project:project_detail' result.pk %}">{{ result.name }}</a></h2></div>
-          </div>
+
+   <h1>Список Проектов</h1>  
+        <!--{ for result in object_list %}-->
+        {% for project in company.resultcompany.all %}
+            {% if user.is_authenticated and project.is_active %}
+               <div class="project-entry">
+                  <!--<div><h2><a href="{ url 'my_project:project_detail' result.pk %}">{{ result.name }}</a></h2></div>-->
+                  <div><h2><a href="{% url 'my_project:project_detail' project.pk %}">{{ project.name }}</a></h2></div>
+               </div>
+            {% endif %}
         {% endfor %}
 
     <p>&nbsp;</p> 
-    <a href="{% url 'my_project:project_add' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>   
+    <div class="project-entry"></div><a href="{% url 'my_project:project_create' %}" class="top-menu"><span class="badge badge-secondary">Создать Проект</span></a></div>
 {% endblock list %}

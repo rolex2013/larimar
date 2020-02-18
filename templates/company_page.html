@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+<!--{% load bootstrap4 %}-->
+{% block company %}
+<!--
+  <div class="company-entry">
+    <h2>{{ node.name }}
+    {% if not node.is_active %}
+       (Организация перемещена в архив)
+    {% endif %}
+    </h2>
+    <p>{{ node.description }}</p>
+    <p>Тип: {{ node.type }}</p>
+    <em>Автор: {{ node.author }}</em><br /> 
+    <em>Дата: {{ node.datecreate }}</em>
+    <p>&nbsp;</p>
+-->
+{% endblock company %}
+
+{% block list %}
+
+    {% load mptt_tags %}
+       <h3>Организации</h3>
+    {% load mptt_tags %}
+    <ul>
+        {% recursetree nodes %}
+            <li>
+                <!-- если нет детей, то переходим в project_detail, если есть - раскрываем дерево дальше -->
+                <!--{ if item.subitems.exists %}-->
+                <!--{ if node.get_descendant_count() > 1 %}-->
+                {% if node.rght > node.lft|add:"1" %}
+                   <a href="{% url 'my_project:children' node.pk %}">
+                {% else %}
+                   <a href="{% url 'my_project:projects' node.pk %}">
+                {% endif %}
+                {{ node.name }}
+                <!--{{ node.id }}
+                {{ node.level }}-->
+                </a>
+                &nbsp;&nbsp;&nbsp;===><a href="{% url 'my_project:projects' node.pk %}"> Проекты</a>
+                {% if node.is_root_node %}
+                    {% ifequal node.id root_company_id %}
+                        {% if not node.is_leaf_node %}
+                            <ul class="children">
+                                {{ children }}
+                            </ul>
+                        {% endif %}
+                    {% endifequal %}
+                {% else %}
+                    {% if not node.is_leaf_node %}
+                        {% if current_company.id == node.id %}
+                            <ul class="children">
+                                {{ children }}
+                            </ul>
+                        {% elif node.level < current_company.level %}
+                            <ul class="children">
+                                {{ children }}
+                            </ul>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            </li>
+        {% endrecursetree %}
+    </ul>
+
+{% endblock list %}    

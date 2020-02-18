@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
-{% block project %}
-    <h1>Новый проект</h1>
-    <form method="POST" class="post-form" action="{% url 'my_project:project_delete' %}">
+{% block comment %}
+    <h1>Новый комментарий</h1>
+    <form method="POST" class="post-form">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="save btn btn-default">Сохранить</button>

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block list %}
+
+   <h2>Список Организаций</h2>
+
+   <div class="company-entry">
+        {% if user.is_authenticated %}
+           {% for company in object_list %}
+               {% if company.parent_id is None and company.is_active %}
+                  <li>
+                  {% if company.rght > company.lft|add:"1" %}
+                     <a href="{% url 'my_project:children' company.pk %}">
+                  {% else %}
+                     <a href="{% url 'my_project:projects' company.pk %}">
+                  {% endif %}
+                  {{ company.name }}
+                  </a>
+                  &nbsp;&nbsp;&nbsp;===><a href="{% url 'my_project:projects' company.pk %}"> Проекты</a>
+                  </li>
+                  {% for child in company.company_children.all %}
+                     <!--<ul>* {{child.name}} </ul>-->
+                  {% endfor %}
+                  </li>
+               {% endif %}
+           {% endfor %}
+        {% endif %}
+    </div>
+    <p>&nbsp;</p> 
+    <!--<div class="project-entry"></div><a href="{ url 'my_project:project_create' %}" class="top-menu"><span class="badge badge-secondary">Создать Проект</span></a></div>-->
+    
+{% endblock list %}

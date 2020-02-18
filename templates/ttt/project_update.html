@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block project %}
+    <h1>Изменить проект</h1>
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Сохранить</button>
+    </form>
+{% endblock %}

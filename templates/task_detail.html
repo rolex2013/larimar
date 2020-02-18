@@ -2,39 +2,76 @@
 
 {% block project %}
   <div class="project-entry">
-    <h2>{{ task.project.name }}</h2>
+    <h3>Проект: {{ task.project.name }}</h3>
     <p>{{ task.project.description }}</p>
     <p>Исполнитель: {{ task.project.assigner }}</p>     
     <p>Начало: {{ task.project.datebegin }}</p>
     <p>Окончание: {{ task.project.dateend }}</p>
+    <p>Тип: {{ task.project.type }}</p>
+    <p>Статус: {{ task.project.status }}</p>    
     <em>Автор: {{ task.project.author }}</em><br /> 
     <em>Дата: {{ task.project.datecreate }}</em>
-    <p>&nbsp;</p>   
+    <!--<p>&nbsp;</p> -->  
   </div>
 {% endblock project %}
 
 {% block task %}
    <div class="task-entry">
-      <h2>{{ task.name }}</h2>
+      <p><h4>Задача: {{ task.name }}
+        {% if not task.is_active %}
+           (Задача перемещена в архив)
+        {% endif %}
+        </h4></p>      
       <p>{{ task.description }}</p>
       <p>Исполнитель: {{ task.assigner }}</p>       
       <p>Начало: {{ task.datebegin }}</p>
       <p>Окончание: {{ task.dateend }}</p>
+      <p>Тип: {{ task.type }}</p>
+      <p>Статус: {{ task.status }}</p>      
       <em>Автор: {{ task.author }}</em><br />
       <em>Дата: {{ task.datecreate }}</em>              
       <p>&nbsp;</p>
+      {% if user.is_authenticated and user.id == task.author_id %}
+        <div>
+          <div style="float: left;"><a href="{% url 'my_project:task_update' task.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
+          <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+          <!-- <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
+        </div>
+      {% endif %}      
    </div>
 {% endblock task %}
 
 {% block list %}
    <div class="comment-entry">
-        <h3>Список Комментариев</h3>
         <p>&nbsp;</p>
-        {% for result in task.resulttask.all %}
-          <div class="comment-entry">
-             <h2><a href="{% url 'my_project:taskcomment_detail' result.pk %}">{{ result.name }}</a></h2>           
-          <div>
+        <h5>Комментарии</h5>
+        <p>&nbsp;</p>
+        {% for taskcomment in task.resulttask.all %}
+            {% if user.is_authenticated and taskcomment.is_active %}  
+              {% if taskcomment.author_id == user.id or taskcomment.assigner_id == user.id %}          
+                <!--<div class="comment-entry">
+                  <h2><a href="{ url 'my_project:taskcomment_detail' taskcomment.pk %}">{{ taskcomment.name }}</a></h2>           
+                <div>-->
+                  <div class="comment-entry">
+                    <h6> {{ taskcomment.name }}</h6><em>{{ taskcomment.author }}</em> / <em>{{ taskcomment.datecreate }}</em>
+                    <p>{{ taskcomment.description }}</p>
+                    <!--<em>Автор: {{ taskcomment.author }}</em><br />
+                    <em>Дата: {{ taskcomment.datecreate }}</em>              
+                    <p>&nbsp;</p>
+                    {% if user.is_authenticated and user.id == task.author_id %}
+                      <div>
+                        <div style="float: left;"><a href="{ url 'my_project:task_update' task.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
+                        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+                        <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div>
+                      </div>
+                    {% endif %}   -->   
+                 </div>
+              {% endif %}
+            {% endif %}
         {% endfor %}
    </div>
-   <a href="{% url 'my_project:taskcomment_new' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>   
+   <!--<a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
+   <div class="comment-entry"></div><a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">Создать Комментарий</span></a></div>
+   <p>&nbsp;</p>
+  
 {% endblock list %}
