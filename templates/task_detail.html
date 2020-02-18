@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block project %}
+  <div class="project-entry">
+    <h2>{{ task.project.name }}</h2>
+    <p>{{ task.project.description }}</p>
+    <p>Исполнитель: {{ task.project.assigner }}</p>     
+    <p>Начало: {{ task.project.datebegin }}</p>
+    <p>Окончание: {{ task.project.dateend }}</p>
+    <em>Автор: {{ task.project.author }}</em><br /> 
+    <em>Дата: {{ task.project.datecreate }}</em>
+    <p>&nbsp;</p>   
+  </div>
+{% endblock project %}
+
+{% block task %}
+   <div class="task-entry">
+      <h2>{{ task.name }}</h2>
+      <p>{{ task.description }}</p>
+      <p>Исполнитель: {{ task.assigner }}</p>       
+      <p>Начало: {{ task.datebegin }}</p>
+      <p>Окончание: {{ task.dateend }}</p>
+      <em>Автор: {{ task.author }}</em><br />
+      <em>Дата: {{ task.datecreate }}</em>              
+      <p>&nbsp;</p>
+   </div>
+{% endblock task %}
+
+{% block list %}
+   <div class="comment-entry">
+        <h3>Список Комментариев</h3>
+        <p>&nbsp;</p>
+        {% for result in task.resulttask.all %}
+          <div class="comment-entry">
+             <h2><a href="{% url 'my_project:taskcomment_detail' result.pk %}">{{ result.name }}</a></h2>           
+          <div>
+        {% endfor %}
+   </div>
+   <a href="{% url 'my_project:taskcomment_new' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>   
+{% endblock list %}

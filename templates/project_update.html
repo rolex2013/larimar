@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block project %}
+    <h1>Изменить проект</h1>
+    <!--<form method="POST" class="post-form" action="{{ Project.get_update_url }}"></form>-->
+    <form method="POST" class="post-form"></form>
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-primary">Сохранить</button>
+    </form>
+{% endblock %}

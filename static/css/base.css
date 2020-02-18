@@ -1,0 +1,101 @@
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 18px;    
+}
+
+header {
+    border-bottom: 1px solid #999999;
+    margin-bottom: 2rem;
+    display: flex;
+}
+
+header h1 a {
+    color: red;
+    text-decoration: none;  
+}
+
+.nav-left {
+    margin-right: auto;
+}
+
+.nav-right {
+    display: flex;
+    padding-top: 2rem;
+}
+
+.project-entry {
+    margin-bottom: 2rem;
+}
+
+.project-entry h2 {
+    margin-bottom: 0.5rem 0;
+}
+
+.project-entry h2 a,
+.project-entry h2 a:visited {
+    color: blue;
+    text-decoration: none;
+}
+
+.project-entry p {
+    margin: 0;
+    font-weight: 400;
+}
+
+.project-entry h2 a:hover {
+    color: red;
+}
+
+.task-entry {
+    margin-bottom: 2rem;
+}
+
+.task-entry h2 {
+    margin-bottom: 0.5rem 0;
+}
+
+.task-entry h2 a,
+.task-entry h2 a:visited {
+    color: blue;
+    text-decoration: none;
+}
+
+.task-entry p {
+    margin: 0;
+    font-weight: 400;
+}
+
+.task-entry h2 a:hover {
+    color: red;
+}
+
+.comment-entry {
+    margin-bottom: 2rem;
+}
+
+.comment-entry h2 {
+    margin-bottom: 0.5rem 0;
+}
+
+.comment-entry h2 a,
+.comment-entry h2 a:visited {
+    color: blue;
+    text-decoration: none;
+}
+
+.comment-entry p {
+    margin: 0;
+    font-weight: 400;
+}
+
+.comment-entry h2 a:hover {
+    color: red;
+}
+
+/*
+footer {
+    border-bottom: 1px solid #999999;
+    margin-bottom: 2rem;
+    display: flex;
+}
+*/

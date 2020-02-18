@@ -1,1 +1,16 @@
-<h1>Список Проектов</h1>
+{% extends 'base.html' %}
+
+{% load bootstrap4 %}
+
+{% block list %}
+   <h1>Список Проектов</h1>
+   
+        {% for result in object_list %}
+          <div class="project-entry">
+              <div><h2><a href="{% url 'my_project:project_detail' result.pk %}">{{ result.name }}</a></h2></div>
+          </div>
+        {% endfor %}
+
+    <p>&nbsp;</p> 
+    <a href="{% url 'my_project:project_add' %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>   
+{% endblock list %}
