@@ -16,22 +16,22 @@ class ProjectsHome(TemplateView):
 
 class CompaniesList(ListView):
     model = Company
-    template_name = 'companies.html' 
+    template_name = 'menu_companies.html' 
     #ordering = ['company_up', 'id']
 
-def company_page(request, pk):
+def companies(request, pk):
     #getting detail information about current object
     current_company = Company.objects.get(id=pk)
     root_company_id = current_company.get_root().id
     #render
-    #return render("company_children.html",
+    #return render("companies.html",
     #                      {
     #                          'nodes':Company.objects.all(),
     #                          'current_company':current_company,
     #                          'root_company_id':root_company_id
     #                      },
     #                      context_instance=RequestContext(request))    
-    return render(request, "company_page.html", {
+    return render(request, "companies.html", {
                               'nodes':Company.objects.all(),
                               'current_company':current_company,
                               'root_company_id':root_company_id
@@ -39,11 +39,38 @@ def company_page(request, pk):
 
 class CompanyDetail(DetailView):
     model = Company
-    template_name = 'projects.html'
+    template_name = 'company_detail.html'
+
+class CompanyCreate(CreateView):    
+    model = Company
+    form_class = CompanyForm
+    #template_name = 'project_create.html'
+    template_name = 'object_form.html'
+
+    def form_valid(self, form):
+       form.instance.author_id = self.request.user.id
+       form.instance.parent_id = self.kwargs['companyid']
+       return super(CompanyCreate, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+       context = super(CompanyCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новая Организация'
+       return context
+
+class CompanyUpdate(UpdateView):    
+    model = Company
+    form_class = CompanyForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(CompanyUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Организацию'
+       return context
+
 
 class ProjectsList(ListView):
     model = Project
-    template_name = 'projects.html' 
+    template_name = 'company_detail.html' 
 
 class ProjectDetail(DetailView):
     model = Project
@@ -57,6 +84,8 @@ class ProjectCreate(CreateView):
 
     def form_valid(self, form):
        form.instance.author_id = self.request.user.id
+       form.instance.company_id = self.kwargs['companyid']
+       #form.instance.parent_id = self.kwargs['projectid']
        return super(ProjectCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -102,7 +131,8 @@ class TaskCreate(CreateView):
        return context
 
     def form_valid(self, form):
-       form.instance.project_id = self.kwargs['projectid']
+       form.instance.parent_id = self.kwargs['taskid']
+       #form.instance.project_id = self.kwargs['projectid']
        form.instance.author_id = self.request.user.id
        return super(TaskCreate, self).form_valid(form)
 

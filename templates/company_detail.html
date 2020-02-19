@@ -13,9 +13,17 @@
     <p>Тип: {{ company.type }}</p>
     <em>Автор: {{ company.author }}</em><br /> 
     <em>Дата: {{ company.datecreate }}</em>
-    <p>&nbsp;</p>
+    
+    {% if user.is_authenticated and user.id == company.author_id  %}
+      <div>
+        <div style="float: left;"><a href="{% url 'my_project:company_update' company.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить Организацию</span></a></div>
+        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+        <div class="task-entry"></div><a href="{% url 'my_project:company_create' company.id %}" class="top-menu"><span class="badge badge-secondary">Создать Организацию</span></a></div>
+      </div>
+    {% endif %}
+    
 
-{% endblock company %}
+    {% endblock company %}
 
 {% block list %}
 
@@ -31,5 +39,5 @@
         {% endfor %}
 
     <p>&nbsp;</p> 
-    <div class="project-entry"></div><a href="{% url 'my_project:project_create' %}" class="top-menu"><span class="badge badge-secondary">Создать Проект</span></a></div>
+    <div class="project-entry"></div><a href="{% url 'my_project:project_create' company.pk %}" class="top-menu"><span class="badge badge-secondary">Создать Проект</span></a></div>
 {% endblock list %}

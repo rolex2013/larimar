@@ -24,13 +24,13 @@
     {% load mptt_tags %}
     <ul>
         {% recursetree nodes %}
+
             <li>
-                <!-- если нет детей, то переходим в project_detail, если есть - раскрываем дерево дальше -->
-                <!--{ if item.subitems.exists %}-->
-                <!--{ if node.get_descendant_count() > 1 %}-->
                 {% if node.rght > node.lft|add:"1" %}
+                   <!-- если есть дети - раскрываем дерево дальше -->
                    <a href="{% url 'my_project:children' node.pk %}">
                 {% else %}
+                   <!-- если нет детей, то переходим в project_detail -->
                    <a href="{% url 'my_project:projects' node.pk %}">
                 {% endif %}
                 {{ node.name }}
@@ -60,6 +60,7 @@
                     {% endif %}
                 {% endif %}
             </li>
+
         {% endrecursetree %}
     </ul>
 

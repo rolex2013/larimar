@@ -105,7 +105,7 @@ class Project(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)    
     def get_create_url(self):
-        return reverse('my_project:projects')     
+        return reverse('my_project:company_detail')     
     def get_absolute_url(self):
         return reverse('my_project:project_detail', kwargs={'pk': self.pk})
     def __str__(self):
