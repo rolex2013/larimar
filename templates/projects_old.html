@@ -1,27 +1,13 @@
-{% extends 'base.html' %}
+{ extends 'base.html' %}
 
 <!--{% load bootstrap4 %}-->
 {% block company %}
-<!--
-  <div class="company-entry">
-    <h2>{{ node.name }}
-    {% if not node.is_active %}
-       (Организация перемещена в архив)
-    {% endif %}
-    </h2>
-    <p>{{ node.description }}</p>
-    <p>Тип: {{ node.type }}</p>
-    <em>Автор: {{ node.author }}</em><br /> 
-    <em>Дата: {{ node.datecreate }}</em>
-    <p>&nbsp;</p>
--->
+
 {% endblock company %}
 
 {% block list %}
 
-    <!--{ load mptt_tags %}-->
-    <h3>{{ current_company.name }}</h3>
-
+    <h3>{{ project.name }}</h3>
     {% load mptt_tags %}
     
       <ul>
@@ -29,7 +15,7 @@
            {% ifequal node.tree_id tree_company_id %}
               {% if user.is_authenticated and node.is_active %}
                  <li>
-                   <a href="{% url 'my_project:projects' node.pk 1 %}">
+                   <a href="{% url 'my_project:company_detail' node.pk %}">
                    {{ node.name }}
                    <!--{{ node.id }}
                    {{ node.level }}-->

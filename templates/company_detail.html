@@ -4,40 +4,65 @@
 {% block company %}
 
   <div class="company-entry">
-    <h2>{{ company.name }}
-    {% if not company.is_active %}
+    <h2>{{ current_project.company.name }}
+    {% if not current_project.company.is_active %}
        (Организация перемещена в архив)
     {% endif %}
     </h2>
-    <p>{{ company.description }}</p>
-    <p>Тип: {{ company.type }}</p>
-    <em>Автор: {{ company.author }}</em><br /> 
-    <em>Дата: {{ company.datecreate }}</em>
-    
-    {% if user.is_authenticated and user.id == company.author_id  %}
+    <p>{{ current_project.company.description }}</p>
+    <p>Тип: {{ current_project.company.type }}</p>
+    <em>Автор: {{ current_project.company.author }}</em><br /> 
+    <em>Дата: {{ current_project.company.datecreate }}</em>
+    <br /><br />
+    {% if user.is_authenticated and user.id == current_project.company.author_id  %}
       <div>
-        <div style="float: left;"><a href="{% url 'my_project:company_update' company.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить Организацию</span></a></div>
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_project:company_create' current_project.company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-        <div class="task-entry"></div><a href="{% url 'my_project:company_create' company.id %}" class="top-menu"><span class="badge badge-secondary">Создать Организацию</span></a></div>
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_project:company_update' current_project.company.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
       </div>
     {% endif %}
-    
-
-    {% endblock company %}
+  </div>
+  <br /><br />
+{% endblock company %}
 
 {% block list %}
 
-   <h1>Список Проектов</h1>  
-        <!--{ for result in object_list %}-->
-        {% for project in company.resultcompany.all %}
-            {% if user.is_authenticated and project.is_active %}
-               <div class="project-entry">
-                  <!--<div><h2><a href="{ url 'my_project:project_detail' result.pk %}">{{ result.name }}</a></h2></div>-->
-                  <div><h2><a href="{% url 'my_project:project_detail' project.pk %}">{{ project.name }}</a></h2></div>
-               </div>
-            {% endif %}
-        {% endfor %}
+   <div class="project-list">
+      <h3>Список Проектов</h3>  
+<!--
+      { for project in company.resultcompany.all %}
+        { if user.is_authenticated and project.is_active %}
+          <div class="project-entry">
+            <div><h2><a href="{ url 'my_project:project_detail' project.pk %}">{{ project.name }}</a></h2></div>
+          </div>
+        { endif %}
+      { endfor %}
+        -->
 
-    <p>&nbsp;</p> 
-    <div class="project-entry"></div><a href="{% url 'my_project:project_create' company.pk %}" class="top-menu"><span class="badge badge-secondary">Создать Проект</span></a></div>
+      {% load mptt_tags %}
+    
+      <ul>
+        {% recursetree nodes %}
+           {% ifequal node.company_id companyid %}
+              {% if user.is_authenticated and node.is_active %}
+                 <li>
+                   <a href="{% url 'my_project:project_detail' node.pk %}">
+                   {{ node.name }}
+                   </a>
+                   {% if not node.is_leaf_node %}
+                      <ul class="children">
+                         {{ children }}
+                      </ul>
+                   {% endif %}
+                 </li>
+              {% endif %}
+           {% endifequal %}
+        {% endrecursetree %}
+      </ul>      
+ 
+
+      <p>&nbsp;</p> 
+      <div class="project-entry"><a href="{ url 'my_project:project_create' company.id 1 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
+   </div>
+
 {% endblock list %}

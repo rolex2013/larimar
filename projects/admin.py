@@ -7,7 +7,19 @@ from django_mptt_admin.admin import DjangoMpttAdmin
 class CompanyAdmin(DjangoMpttAdmin):
     pass
 
+class ProjectAdmin(DjangoMpttAdmin):
+    pass
+
+class TaskAdmin(DjangoMpttAdmin):
+    pass
+
 admin.site.register(Company, CompanyAdmin)
+
+admin.site.register(Project, ProjectAdmin)
+
+admin.site.register(Task, TaskAdmin)
+
+admin.site.register(TaskComment)
 
 admin.site.register(Dict_CompanyType)
 
@@ -21,8 +33,7 @@ admin.site.register(Dict_TaskStatus)
 
 #admin.site.register(Company)
 
-admin.site.register(Project)
+#admin.site.register(Project)
 
-admin.site.register(Task)
+#admin.site.register(Task)
 
-admin.site.register(TaskComment)

@@ -8,6 +8,7 @@
     {% endif %}
     </h2></p>
     <p>{{ project.description }}</p>
+    <p>Организация: {{ project.company }}</p>
     <p>Исполнитель: {{ project.assigner }}</p>     
     <p>Начало: {{ project.datebegin }}</p>
     <p>Окончание: {{ project.dateend }}</p>
@@ -18,9 +19,10 @@
     <p>&nbsp;</p>
     {% if user.is_authenticated and user.id == project.author_id  %}
       <div>
+        <div style="float: left;"><a href="{% url 'my_project:project_create' project.company.id project.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
+        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
         <div style="float: left;"><a href="{% url 'my_project:project_update' project.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
-       <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-       <!-- <div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
+        <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
       </div>
     {% endif %}
   </div>
@@ -28,18 +30,42 @@
 
 {% block list %}
 
+<!--
    <div class="task-entry">
         <h3>Список Задач</h3>
-        {% for task in project.resultproject.all %}
-          {% if user.is_authenticated and task.is_active %}
-            {% if task.author_id == user.id or task.assigner_id == user.id %}
+        { for task in project.resultproject.all %}
+          { if user.is_authenticated and task.is_active %}
+            { if task.author_id == user.id or task.assigner_id == user.id %}
               <div class="task-entry">             
-                  <a href="{% url 'my_project:task_detail' task.pk %}">{{ task.name }}</a>
+                  <a href="{ url 'my_project:task_detail' task.pk %}">{{ task.name }}</a>
               <div>
-            {% endif %}
-          {% endif %}
-        {% endfor %}
-        <p>&nbsp;</p>   
+            { endif %}
+          { endif %}
+        { endfor %}
+              -->
+
+        {% load mptt_tags %}
+    
+        <ul>
+          {% recursetree nodes %}
+             {% ifequal node.project_id projectid %}
+                {% if user.is_authenticated and node.is_active %}
+                   <li>
+                     <a href="{% url 'my_project:task_detail' node.pk %}">
+                     {{ node.name }}
+                     </a>
+                     {% if not node.is_leaf_node %}
+                        <ul class="children">
+                           {{ children }}
+                        </ul>
+                     {% endif %}
+                   </li>
+                {% endif %}
+             {% endifequal %}
+          {% endrecursetree %}
+        </ul>              
+        <p>&nbsp;</p>  
+
    </div>
    <!--<a href="{% url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
    <div class="task-entry"></div><a href="{% url 'my_project:task_create' project.pk %}" class="top-menu"><span class="badge badge-secondary">Создать Задачу</span></a></div>
