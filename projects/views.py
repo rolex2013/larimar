@@ -22,10 +22,15 @@ class CompaniesList(ListView):
 def companies(request, pk):
     current_company = Company.objects.get(id=pk)
     root_company_id = current_company.get_root().id
-    tree_company_id = current_company.tree_id  
-    current_project = current_company.resultcompany.all()[0].id
-    #project_id = current_company.resultcompany.get()
-    project_id = current_project     
+    tree_company_id = current_company.tree_id
+
+    try:  
+       current_project = current_company.resultcompany.all()[0].id
+    except (ValueError, IndexError) as e:
+       project_id = 0
+    else:
+       project_id = 0 #current_project
+
     return render(request, "companies.html", {
                               'nodes':Company.objects.all(),
                               'current_company':current_company,
@@ -34,10 +39,10 @@ def companies(request, pk):
                               'project_id':project_id
                                             })  
 
-#def tree_get_root(request, pk):
-#    current_company = Company.objects.get(id=pk)
-#    root_company_id = current_company.get_root().id
-#    return root_company_id                                                                            
+def tree_get_root(request, pk):
+    current_company = Company.objects.get(id=pk)
+    root_company_id = current_company.get_root().id
+    return root_company_id                                                                            
 
 class CompanyDetail(DetailView):
     model = Company
@@ -75,16 +80,25 @@ class ProjectsList(ListView):
     template_name = 'company_detail.html'
 
 def projects(request, companyid, pk):
+    current_company = Company.objects.get(id=companyid)
     current_project = Project.objects.get(id=pk)
     tree_project_id = current_project.tree_id  
     root_project_id = current_project.get_root().id
     tree_project_id = current_project.tree_id
+    try:  
+       current_task = current_project.resultproject.all()[0].id
+    except (ValueError, IndexError) as e:
+       task_id = 0
+    else:
+       task_id = current_task
     return render(request, "company_detail.html", {
                               'nodes':Project.objects.all(),
                               'current_project':current_project,
                               'root_project_id':root_project_id,
                               'tree_project_id':tree_project_id,
-                              'companyid':companyid
+                              'current_company':current_company,
+                              'companyid':companyid,
+                              'task_id':task_id
                                                 })       
 
 class ProjectDetail(DetailView):
@@ -126,16 +140,25 @@ class ProjectUpdate(UpdateView):
 #    success_url = '/success/' 
 
 def tasks(request, projectid, pk):
+    current_project = Project.objects.get(id=projectid)
     current_task = Task.objects.get(id=pk)
     tree_task_id = current_task.tree_id  
     root_task_id = current_task.get_root().id
     tree_task_id = current_task.tree_id
+    #try:  
+    #   current_comment = current_task.resulttask.all()[0].id
+    #except (ValueError, IndexError) as e:
+    #   taskcomment_id = 0
+    #else:
+    #   taskcomment_id = current_comment    
     return render(request, "project_detail.html", {
                               'nodes':Task.objects.all(),
                               'current_task':current_task,
                               'root_task_id':root_task_id,
                               'tree_task_id':tree_task_id,
-                              'projectid':projectid
+                              'current_project':current_project,                             
+                              'projectid':projectid,
+                              #'taskcomment_id':taskcomment_id
                                                 })       
 
 

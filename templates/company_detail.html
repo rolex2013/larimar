@@ -4,24 +4,25 @@
 {% block company %}
 
   <div class="company-entry">
-    <h2>{{ current_project.company.name }}
-    {% if not current_project.company.is_active %}
+    <h2>{{ current_company.name }}
+    {% if not current_company.is_active %}
        (Организация перемещена в архив)
     {% endif %}
     </h2>
-    <p>{{ current_project.company.description }}</p>
-    <p>Тип: {{ current_project.company.type }}</p>
-    <em>Автор: {{ current_project.company.author }}</em><br /> 
-    <em>Дата: {{ current_project.company.datecreate }}</em>
+    <p>{{ current_company.description }}</p>
+    <p>Тип: {{ current_company.type }}</p>
+    <em>Автор: {{ current_company.author }}</em><br /> 
+    <em>Дата: {{ current_company.datecreate }}</em>
     <br /><br />
-    {% if user.is_authenticated and user.id == current_project.company.author_id  %}
+    {% if user.is_authenticated and user.id == current_company.author_id  %}
       <div>
-        <div style="float: left;" class="task-entry"><a href="{% url 'my_project:company_create' current_project.company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_project:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-        <div style="float: left;" class="task-entry"><a href="{% url 'my_project:company_update' current_project.company.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_project:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
       </div>
     {% endif %}
   </div>
+  
   <br /><br />
 {% endblock company %}
 
@@ -46,7 +47,8 @@
            {% ifequal node.company_id companyid %}
               {% if user.is_authenticated and node.is_active %}
                  <li>
-                   <a href="{% url 'my_project:project_detail' node.pk %}">
+                   <!--<a href="{ url 'my_project:project_detail' node.pk %}">-->
+                   <a href="{% url 'my_project:tasks' node.pk 1 %}">
                    {{ node.name }}
                    </a>
                    {% if not node.is_leaf_node %}
@@ -59,10 +61,9 @@
            {% endifequal %}
         {% endrecursetree %}
       </ul>      
- 
 
       <p>&nbsp;</p> 
-      <div class="project-entry"><a href="{ url 'my_project:project_create' company.id 1 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
+      <div class="project-entry"><a href="{% url 'my_project:project_create' current_company.id 1 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
    </div>
 
 {% endblock list %}

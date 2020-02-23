@@ -2,26 +2,26 @@
 
 {% block project %}
   <div class="project-entry">
-    <p><h2>{{ project.name }}
-    {% if not project.is_active %}
+    <p><h2>{{ current_project.name }}
+    {% if not current_project.is_active %}
        (Проект перемещён в архив)
     {% endif %}
     </h2></p>
-    <p>{{ project.description }}</p>
-    <p>Организация: {{ project.company }}</p>
-    <p>Исполнитель: {{ project.assigner }}</p>     
-    <p>Начало: {{ project.datebegin }}</p>
-    <p>Окончание: {{ project.dateend }}</p>
-    <p>Тип: {{ project.type }}</p>
-    <p>Статус: {{ project.status }}</p>
-    <em>Автор: {{ project.author }}</em><br /> 
-    <em>Дата: {{ project.datecreate }}</em>
+    <p>{{ current_project.description }}</p>
+    <p>Организация: {{ current_project.company }}</p>
+    <p>Исполнитель: {{ current_project.assigner }}</p>     
+    <p>Начало: {{ current_project.datebegin }}</p>
+    <p>Окончание: {{ current_project.dateend }}</p>
+    <p>Тип: {{ current_project.type }}</p>
+    <p>Статус: {{ current_project.status }}</p>
+    <em>Автор: {{ current_project.author }}</em><br /> 
+    <em>Дата: {{ current_project.datecreate }}</em>
     <p>&nbsp;</p>
-    {% if user.is_authenticated and user.id == project.author_id  %}
+    {% if user.is_authenticated and user.id == current_project.author_id  %}
       <div>
-        <div style="float: left;"><a href="{% url 'my_project:project_create' project.company.id project.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
+        <div style="float: left;"><a href="{% url 'my_project:project_create' project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-        <div style="float: left;"><a href="{% url 'my_project:project_update' project.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
+        <div style="float: left;"><a href="{% url 'my_project:project_update' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
         <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
       </div>
     {% endif %}
@@ -68,6 +68,6 @@
 
    </div>
    <!--<a href="{% url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-   <div class="task-entry"></div><a href="{% url 'my_project:task_create' project.pk %}" class="top-menu"><span class="badge badge-secondary">Создать Задачу</span></a></div>
+   <div class="task-entry"></div><a href="{% url 'my_project:task_create' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">Создать Задачу</span></a></div>
 
    {% endblock list %}

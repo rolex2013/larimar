@@ -79,10 +79,16 @@ class Company(MPTTModel):
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)    
-    def get_create_url(self):
-        return reverse('my_project:companies')   
+    #def get_create_url(self):
+    #    #return reverse('my_project:company_detail', kwargs={'pk': self.pk})  
+    #    return reverse('my_project:companies', kwargs={'pk': self.pk})
+    #def get_update_url(self):
+    #    return reverse('my_project:projects', kwargs={'companyid': self.pk, 'pk': self.resultcompany.all()[0].id})          
     def get_absolute_url(self):
-        return reverse('my_project:company_detail', kwargs={'pk': self.pk})
+        #return reverse('my_project:company_detail', kwargs={'pk': self.pk})
+        #return reverse('my_project:companies', kwargs={'pk': self.pk})
+        return reverse('my_project:projects', kwargs={'companyid': self.pk, 'pk': '1'})          
+               
     def __str__(self):
         return (self.name)
     class MPTTMeta:
@@ -105,11 +111,14 @@ class Project(MPTTModel):
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)    
-    def get_create_url(self):
-        #return reverse('my_project:company_detail')
-        return reverse('my_project:projects')          
+    #def get_create_url(self):
+    #    #return reverse('my_project:company_detail')
+    #    return reverse('my_project:projects')          
     def get_absolute_url(self):
-        return reverse('my_project:project_detail', kwargs={'pk': self.pk})
+        #return reverse('my_project:project_detail', kwargs={'pk': self.pk})
+        #companyid = self.company_id
+        #return reverse('my_project:projects', kwargs={'companyid': self.company_id, 'pk': self.pk})
+        return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '1'})  
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
     class MPTTMeta:
@@ -133,7 +142,8 @@ class Task(MPTTModel):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
-        return reverse('my_project:task_detail', kwargs={'pk': self.pk})
+        #return reverse('my_project:task_detail', kwargs={'pk': self.pk})
+        return reverse('my_project:tasks', kwargs={'pk': self.project_id, 'pk': self.pk})
     def __str__(self):
          return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     class MPTTMeta:
