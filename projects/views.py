@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
 from django.template import loader, Context, RequestContext
+from django.core.exceptions import ObjectDoesNotExist
 #from versane.models import Company
 
 from .models import Company, Project, Task, TaskComment
@@ -29,7 +30,7 @@ def companies(request, pk):
     except (ValueError, IndexError) as e:
        project_id = 0
     else:
-       project_id = 0 #current_project
+       project_id = current_project
 
     return render(request, "companies.html", {
                               'nodes':Company.objects.all(),
@@ -56,7 +57,8 @@ class CompanyCreate(CreateView):
 
     def form_valid(self, form):
        form.instance.author_id = self.request.user.id
-       form.instance.parent_id = self.kwargs['parentid']
+       if self.kwargs['parentid'] != 0:
+          form.instance.parent_id = self.kwargs['parentid']
        return super(CompanyCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -81,16 +83,17 @@ class ProjectsList(ListView):
 
 def projects(request, companyid, pk):
     current_company = Company.objects.get(id=companyid)
-    current_project = Project.objects.get(id=pk)
-    tree_project_id = current_project.tree_id  
-    root_project_id = current_project.get_root().id
-    tree_project_id = current_project.tree_id
-    try:  
-       current_task = current_project.resultproject.all()[0].id
-    except (ValueError, IndexError) as e:
-       task_id = 0
+    if pk == 0:
+       current_project = 0
+       tree_project_id = 0
+       root_project_id = 0
+       tree_project_id = 0
     else:
-       task_id = current_task
+       current_project = Project.objects.get(id=pk)
+       tree_project_id = current_project.tree_id  
+       root_project_id = current_project.get_root().id
+       tree_project_id = current_project.tree_id
+
     return render(request, "company_detail.html", {
                               'nodes':Project.objects.all(),
                               'current_project':current_project,
@@ -98,7 +101,7 @@ def projects(request, companyid, pk):
                               'tree_project_id':tree_project_id,
                               'current_company':current_company,
                               'companyid':companyid,
-                              'task_id':task_id
+                              #'task_id':task_id
                                                 })       
 
 class ProjectDetail(DetailView):
@@ -112,9 +115,10 @@ class ProjectCreate(CreateView):
     template_name = 'object_form.html'
 
     def form_valid(self, form):
-       form.instance.author_id = self.request.user.id
        form.instance.company_id = self.kwargs['companyid']
-       form.instance.parent_id = self.kwargs['parentid']
+       if self.kwargs['parentid'] != 0:
+          form.instance.parent_id = self.kwargs['parentid']
+       form.instance.author_id = self.request.user.id
        return super(ProjectCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -141,16 +145,28 @@ class ProjectUpdate(UpdateView):
 
 def tasks(request, projectid, pk):
     current_project = Project.objects.get(id=projectid)
-    current_task = Task.objects.get(id=pk)
-    tree_task_id = current_task.tree_id  
-    root_task_id = current_task.get_root().id
-    tree_task_id = current_task.tree_id
-    #try:  
-    #   current_comment = current_task.resulttask.all()[0].id
-    #except (ValueError, IndexError) as e:
-    #   taskcomment_id = 0
-    #else:
-    #   taskcomment_id = current_comment    
+    if pk == 0:
+       current_task = 0
+       tree_task_id = 0  
+       root_task_id = 0
+       tree_task_id = 0 
+    else:
+       current_task = Task.objects.get(id=pk)
+       tree_task_id = current_task.tree_id  
+       root_task_id = current_task.get_root().id
+       tree_task_id = current_task.tree_id
+#    try:
+#       current_task = Task.objects.get(id=pk)
+#    except ObjectDoesNotExist:
+#       current_task = 0
+#       tree_task_id = 0  
+#       root_task_id = 0
+#       tree_task_id = 0
+#    else:   
+#       tree_task_id = current_task.tree_id  
+#       root_task_id = current_task.get_root().id
+#       tree_task_id = current_task.tree_id
+     
     return render(request, "project_detail.html", {
                               'nodes':Task.objects.all(),
                               'current_task':current_task,
@@ -161,14 +177,13 @@ def tasks(request, projectid, pk):
                               #'taskcomment_id':taskcomment_id
                                                 })       
 
-
 class TaskDetail(DetailView):
-    model = Task
-    template_name = 'task_detail.html'  
+   model = Task
+   template_name = 'task_detail.html'  
     
-    #def index(request):
-    #   data = {"Filter_1": user.is_authenticated and taskcomment.is_active, "message": "Welcome to Python"}
-    #   return render(request, "task_detail.html", context=data)
+   def get_context_data(self, **kwargs):
+       #context = super(TaskDetail, self).get_context_data(**kwargs)
+       return super(TaskDetail, self).get_context_data(**kwargs)
 
 class TaskCreate(CreateView):    
     model = Task
@@ -176,16 +191,17 @@ class TaskCreate(CreateView):
     #template_name = 'task_create.html'
     template_name = 'object_form.html'
 
+    def form_valid(self, form):
+       form.instance.project_id = self.kwargs['projectid']
+       if self.kwargs['parentid'] != 0:
+          form.instance.parent_id = self.kwargs['parentid']
+       form.instance.author_id = self.request.user.id
+       return super(TaskCreate, self).form_valid(form)
+
     def get_context_data(self, **kwargs):
        context = super(TaskCreate, self).get_context_data(**kwargs)
        context['header'] = 'Новая Задача'
        return context
-
-    def form_valid(self, form):
-       form.instance.parent_id = self.kwargs['parentid']
-       form.instance.project_id = self.kwargs['projectid']
-       form.instance.author_id = self.request.user.id
-       return super(TaskCreate, self).form_valid(form)
 
 class TaskUpdate(UpdateView):    
     model = Task

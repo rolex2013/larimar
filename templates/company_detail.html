@@ -48,7 +48,7 @@
               {% if user.is_authenticated and node.is_active %}
                  <li>
                    <!--<a href="{ url 'my_project:project_detail' node.pk %}">-->
-                   <a href="{% url 'my_project:tasks' node.pk 1 %}">
+                   <a href="{% url 'my_project:tasks' node.pk 0 %}">
                    {{ node.name }}
                    </a>
                    {% if not node.is_leaf_node %}
@@ -62,8 +62,7 @@
         {% endrecursetree %}
       </ul>      
 
-      <p>&nbsp;</p> 
-      <div class="project-entry"><a href="{% url 'my_project:project_create' current_company.id 1 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
+      <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
    </div>
 
 {% endblock list %}

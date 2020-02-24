@@ -29,7 +29,7 @@
            {% ifequal node.tree_id tree_company_id %}
               {% if user.is_authenticated and node.is_active %}
                  <li>
-                   <a href="{% url 'my_project:projects' node.pk 1 %}">
+                   <a href="{% url 'my_project:projects' node.pk 0 %}">
                    {{ node.name }}
                    <!--{{ node.id }}
                    {{ node.level }}-->

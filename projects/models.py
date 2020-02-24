@@ -103,7 +103,6 @@ class Project(MPTTModel):
     datebegin = models.DateField("Начало")
     dateend = models.DateField("Окончание")
     company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='resultcompany', verbose_name="Компания")    
-    #project_up = models.ForeignKey('self', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='resultproject_up', verbose_name="Родительский проект")
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_children', verbose_name="Проект верхнего уровня")
     assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='project_assigner', verbose_name="Исполнитель")    
     type = models.ForeignKey('Dict_ProjectType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
@@ -118,7 +117,7 @@ class Project(MPTTModel):
         #return reverse('my_project:project_detail', kwargs={'pk': self.pk})
         #companyid = self.company_id
         #return reverse('my_project:projects', kwargs={'companyid': self.company_id, 'pk': self.pk})
-        return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '1'})  
+        return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '0'})  
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
     class MPTTMeta:
@@ -134,7 +133,6 @@ class Task(MPTTModel):
     dateend = models.DateTimeField("Окончание")
     project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='resultproject', verbose_name="Проект")
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_children', verbose_name="Задача верхнего уровня")
-    #task_up = models.ForeignKey('self', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='resulttask_up', verbose_name="Родительская задача")
     assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='task_assigner', verbose_name="Исполнитель")   
     type = models.ForeignKey('Dict_TaskType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
@@ -142,8 +140,8 @@ class Task(MPTTModel):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
-        #return reverse('my_project:task_detail', kwargs={'pk': self.pk})
-        return reverse('my_project:tasks', kwargs={'pk': self.project_id, 'pk': self.pk})
+        return reverse('my_project:task_detail', kwargs={'pk': self.pk})
+        #return reverse('my_project:tasks', kwargs={'projectid': self.project, 'pk': self.pk})
     def __str__(self):
          return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     class MPTTMeta:
