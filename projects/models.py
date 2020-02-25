@@ -8,63 +8,99 @@ from mptt.models import MPTTModel, TreeForeignKey
 #now = timezone.now()
 #now.strftime('%H:%M:%S')
 
-class Dict_CompanyType(models.Model):
-    name = models.CharField("Наименование", max_length=32)
+class Dict_CompanyStructureType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=256, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип в оргструктуре'
+        verbose_name_plural = 'Типы в оргструктуре'
+    def __str__(self):
+        return (self.name)
+
+class Dict_CompanyType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
         verbose_name = 'Тип организации'
-        verbose_name_plural = 'Типы организации'
+        verbose_name_plural = 'Типы организаций'
     def __str__(self):
         return (self.name)
 
 class Dict_ProjectStatus(models.Model):
-    name = models.CharField("Наименование", max_length=32)
+    name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=256, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
         verbose_name = 'Статус проекта'
-        verbose_name_plural = 'Статусы проекта'
+        verbose_name_plural = 'Статусы проектов'
+    def __str__(self):
+        return (self.name)
+
+class Dict_ProjectStructureType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип проектов в иерархии'
+        verbose_name_plural = 'Типы проектов в иерархии'
     def __str__(self):
         return (self.name)
 
 class Dict_ProjectType(models.Model):
-    name = models.CharField("Наименование", max_length=32)
+    name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=256, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
         verbose_name = 'Тип проекта'
-        verbose_name_plural = 'Типы проекта'
+        verbose_name_plural = 'Типы проектов'
     def __str__(self):
         return (self.name)
 
 class Dict_TaskStatus(models.Model):
-    name = models.CharField("Наименование", max_length=32)
+    name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=256, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
         verbose_name = 'Статус задачи'
-        verbose_name_plural = 'Статусы задачи'
+        verbose_name_plural = 'Статусы задач'
+    def __str__(self):
+        return (self.name)
+
+class Dict_TaskStructureType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип задачи в иерархии'
+        verbose_name_plural = 'Типы задач в иерархии'
     def __str__(self):
         return (self.name)
 
 class Dict_TaskType(models.Model):
-    name = models.CharField("Наименование", max_length=32)
+    name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=256, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
         verbose_name = 'Тип задачи'
-        verbose_name_plural = 'Типы задачи'
+        verbose_name_plural = 'Типы задач'
     def __str__(self):
         return (self.name)
 
@@ -75,6 +111,7 @@ class Company(MPTTModel):
     description = models.TextField("Описание")
     #company_up = models.ForeignKey('self', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='resultcompany_up', verbose_name="Головная организация")
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_children', verbose_name="Головная организация")
+    structure_type = models.ForeignKey('Dict_CompanyStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_structure_type', verbose_name="Тип в оргструктуре")
     type = models.ForeignKey('Dict_CompanyType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_type', verbose_name="Тип")
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
@@ -105,6 +142,7 @@ class Project(MPTTModel):
     company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='resultcompany', verbose_name="Компания")    
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_children', verbose_name="Проект верхнего уровня")
     assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='project_assigner', verbose_name="Исполнитель")    
+    structure_type = models.ForeignKey('Dict_ProjectStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_structure_type', verbose_name="Тип проекта в иерархии")
     type = models.ForeignKey('Dict_ProjectType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
@@ -134,6 +172,7 @@ class Task(MPTTModel):
     project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='resultproject', verbose_name="Проект")
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_children', verbose_name="Задача верхнего уровня")
     assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='task_assigner', verbose_name="Исполнитель")   
+    structure_type = models.ForeignKey('Dict_TaskStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_structure_type', verbose_name="Тип задачи в иерархии")
     type = models.ForeignKey('Dict_TaskType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
     datecreate = models.DateTimeField("Создано", auto_now_add=True)    
