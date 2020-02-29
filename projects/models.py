@@ -5,6 +5,8 @@ from django.utils import timezone
 
 from mptt.models import MPTTModel, TreeForeignKey
 
+from ckeditor_uploader.fields import RichTextUploadingField
+
 #now = timezone.now()
 #now.strftime('%H:%M:%S')
 
@@ -108,7 +110,8 @@ class Dict_TaskType(models.Model):
 #class Company(models.Model):
 class Company(MPTTModel):    
     name = models.CharField("Наименование", max_length=64)
-    description = models.TextField("Описание")
+    #description = models.TextField("Описание")
+    description = RichTextUploadingField("Описание")
     #company_up = models.ForeignKey('self', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='resultcompany_up', verbose_name="Головная организация")
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_children', verbose_name="Головная организация")
     structure_type = models.ForeignKey('Dict_CompanyStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_structure_type', verbose_name="Тип в оргструктуре")
@@ -136,7 +139,7 @@ class Company(MPTTModel):
 
 class Project(MPTTModel):
     name = models.CharField("Наименование", max_length=64)
-    description = models.TextField("Описание")
+    description = RichTextUploadingField("Описание")
     datebegin = models.DateField("Начало")
     dateend = models.DateField("Окончание")
     company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='resultcompany', verbose_name="Компания")    
@@ -166,7 +169,7 @@ class Project(MPTTModel):
 
 class Task(MPTTModel):
     name = models.CharField("Наименование", max_length=128)
-    description = models.TextField("Описание")
+    description = RichTextUploadingField("Описание")
     datebegin = models.DateTimeField("Начало")
     dateend = models.DateTimeField("Окончание")
     project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='resultproject', verbose_name="Проект")
@@ -191,7 +194,7 @@ class Task(MPTTModel):
 
 class TaskComment(models.Model):
     name = models.CharField("Наименование", max_length=128)
-    description = models.TextField("Описание")
+    description = RichTextUploadingField("Описание")
     task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='resulttask', verbose_name="Задача")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)    
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")

@@ -3,7 +3,7 @@
 {% block project %}
   <div class="project-entry">   
     <h3>Проект: {{ task.project.name }}</h3>
-    <p>{{ task.project.description }}</p>
+    <p>{% autoescape off %}{{ task.project.description }}{% endautoescape %}</p>
     <p>Исполнитель: {{ task.project.assigner }}</p>     
     <p>Начало: {{ task.project.datebegin }}</p>
     <p>Окончание: {{ task.project.dateend }}</p>
@@ -23,7 +23,7 @@
            (Задача перемещена в архив)
         {% endif %}
         </h4></p>      
-      <p>{{ task.description }}</p>
+      <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p>
       <p>Исполнитель: {{ task.assigner }}</p>       
       <p>Начало: {{ task.datebegin }}</p>
       <p>Окончание: {{ task.dateend }}</p>
@@ -57,7 +57,7 @@
                 <div>-->
                   <div class="comment-entry">
                     <h6> {{ taskcomment.name }}&nbsp;<em>({{ taskcomment.author }} / {{ taskcomment.datecreate }})</em></h6>
-                    <p>{{ taskcomment.description }}</p>
+                    <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
                     <!--<em>Автор: {{ taskcomment.author }}</em><br />
                     <em>Дата: {{ taskcomment.datecreate }}</em>              
                     <p>&nbsp;</p>

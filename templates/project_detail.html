@@ -7,7 +7,7 @@
        (Проект перемещён в архив)
     {% endif %}
     </h2></p>
-    <p>{{ current_project.description }}</p>
+    <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
     <p>Организация: {{ current_project.company }}</p>
     <p>Исполнитель: {{ current_project.assigner }}</p>     
     <p>Начало: {{ current_project.datebegin }}</p>

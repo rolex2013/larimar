@@ -9,7 +9,7 @@
        (Организация перемещена в архив)
     {% endif %}
     </h2>
-    <p>{{ current_company.description }}</p>
+    <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
     <p>Тип в оргструктуре: {{ current_company.structure_type }}</p>
     <p>Тип: {{ current_company.type }}</p>
     <em>Автор: {{ current_company.author }}</em><br /> 
