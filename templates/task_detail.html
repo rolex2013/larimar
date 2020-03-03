@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block project %}
-  <div class="project-entry">   
+  <!--<div class="project-entry">   
     <h3>Проект: {{ task.project.name }}</h3>
-    <p>{% autoescape off %}{{ task.project.description }}{% endautoescape %}</p>
+    <p>{ autoescape off %}{{ task.project.description }}{ endautoescape %}</p>
     <p>Исполнитель: {{ task.project.assigner }}</p>     
     <p>Начало: {{ task.project.datebegin }}</p>
     <p>Окончание: {{ task.project.dateend }}</p>
@@ -12,8 +12,7 @@
     <p>Статус: {{ task.project.status }}</p>    
     <em>Автор: {{ task.project.author }}</em><br /> 
     <em>Дата: {{ task.project.datecreate }}</em>
-    <!--<p>&nbsp;</p> -->  
-  </div>
+  </div>-->
 {% endblock project %}
 
 {% block task %}
@@ -24,6 +23,7 @@
         {% endif %}
         </h4></p>      
       <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p>
+      <i><p>Проект: <a href="{% url 'my_project:tasks' task.project.pk 0 %}">{{ task.project.name }}</a></p></i>
       <p>Исполнитель: {{ task.assigner }}</p>       
       <p>Начало: {{ task.datebegin }}</p>
       <p>Окончание: {{ task.dateend }}</p>

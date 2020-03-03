@@ -8,7 +8,8 @@
     {% endif %}
     </h2></p>
     <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
-    <p>Организация: {{ current_project.company }}</p>
+    <!--<p>Организация: {{ current_project.company }}</p>-->
+    <i><p>Организация: <a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></p></i>
     <p>Исполнитель: {{ current_project.assigner }}</p>     
     <p>Начало: {{ current_project.datebegin }}</p>
     <p>Окончание: {{ current_project.dateend }}</p>

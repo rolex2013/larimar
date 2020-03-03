@@ -18,6 +18,8 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('projects/', include('projects.urls')),
@@ -26,6 +28,9 @@ urlpatterns = [
 
 if settings.DEBUG:
     import debug_toolbar
-    urlpatterns = [
+    urlpatterns += [
         path('__debug__/', include(debug_toolbar.urls)),
-    ] + urlpatterns
+    ]
+
+# без этого ckeditor не видит загруженные на сервер файлы/картинки (https://qarchive.ru/37247_django_media_url_i_media_root)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -14,12 +14,16 @@ class ProjectAdmin(DjangoMpttAdmin):
 class TaskAdmin(DjangoMpttAdmin):
     pass
 
+#class TaskCommentAdmin(DjangoMpttAdmin):
+#    pass
+
 admin.site.register(Company, CompanyAdmin)
 
 admin.site.register(Project, ProjectAdmin)
 
 admin.site.register(Task, TaskAdmin)
 
+#admin.site.register(TaskComment, TaskCommentAdmin)
 
 
 admin.site.register(Dict_CompanyStructureType)
@@ -45,4 +49,6 @@ admin.site.register(Dict_TaskStatus)
 #admin.site.register(Project)
 
 #admin.site.register(Task)
+
+admin.site.register(TaskComment)
 
