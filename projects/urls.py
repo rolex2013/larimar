@@ -1,3 +1,4 @@
+#from django.contrib.auth import views
 from django.urls import path
 from .models import Company, Project, Task, TaskComment
 from . import views
@@ -5,6 +6,7 @@ from . import views
 app_name = 'my_project'
 
 urlpatterns = [
+    #path('login/', views.LoginView.as_view(), name='login'),
     path('', views.ProjectsHome.as_view(), name = 'home'),
     path('menu_companies/', views.CompaniesList.as_view(), name = 'menu_companies'),
     path('companies_page/<int:pk>', views.companies, name = 'companies'),

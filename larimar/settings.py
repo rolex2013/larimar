@@ -43,10 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap4',
+    'crispy_forms',
     'django_mptt_admin',
     'mptt',
     'ckeditor',
-    'ckeditor_uploader', 
+    'ckeditor_uploader',
+    'accounts', 
     'projects',
 ]
 
@@ -62,6 +64,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'larimar.urls'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MEDIA_URL = '/media/'
 

@@ -59,6 +59,8 @@ class CompanyCreate(CreateView):
        form.instance.author_id = self.request.user.id
        if self.kwargs['parentid'] != 0:
           form.instance.parent_id = self.kwargs['parentid']
+       #else:
+       #   form.instance.parent_id = form.instance.id
        return super(CompanyCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -83,6 +85,11 @@ class ProjectsList(ListView):
 
 def projects(request, companyid, pk):
     current_company = Company.objects.get(id=companyid)
+    #try:
+    #  current_company = Company.objects.get(id=companyid)
+    #except ObjectDoesNotExist:
+    #   current_company = {'name':'dfdffdfdfd', 'id':companyid, 'parent_id':0}
+    #else:
     if pk == 0:
        current_project = 0
        tree_project_id = 0

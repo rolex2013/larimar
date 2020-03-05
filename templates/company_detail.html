@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 <!--{% load bootstrap4 %}-->
+
 {% block company %}
 
   <div class="company-entry">
@@ -10,6 +11,14 @@
     {% endif %}
     </h2>
     <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
+    <i><p>Организация: 
+    <!--{ if current_company.rght > current_company.lft|add:"1" %} -->
+    <!--{ if current_company.parent.lft == 1 %}
+       <a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>
+    { else %}-->
+       <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+    <!--{ endif %}-->
+    </p></i>
     <p>Тип в оргструктуре: {{ current_company.structure_type }}</p>
     <p>Тип: {{ current_company.type }}</p>
     <em>Автор: {{ current_company.author }}</em><br /> 
