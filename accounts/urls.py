@@ -8,4 +8,6 @@ app_name = 'my_accounts'
 
 urlpatterns = [
     path('login/', views.ELoginView.as_view(), name='login'),
+    path('logout/', views.ELogoutView.as_view(), name='logout'),
+    path('register/', views.register, name='register'),
 ]

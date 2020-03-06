@@ -1,0 +1,13 @@
+{% extends "../login_base.html" %}
+
+{% block title %}Регистрация пользователя{% endblock %}
+
+{% block main %}
+    <h3>Регистрация пользователя</h3>
+    <p>Пожалуйста, заполните все поля формы:</p>
+    <form action="." method="post">
+        {{ user_form.as_p }}
+        {% csrf_token %}
+        <div class="form-group"><input type="submit" value="Создать"></div>
+    </form>
+{% endblock %}

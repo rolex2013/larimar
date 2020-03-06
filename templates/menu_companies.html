@@ -9,11 +9,12 @@
            {% for company in object_list %}
                {% if company.parent_id is None and company.is_active %}
                   <li>
-                  {% if company.rght > company.lft|add:"1" %}
+                  <!--{ if company.rght > company.lft|add:"1" %}-->
                      <a href="{% url 'my_project:companies' company.pk %}">
-                  {% else %}
-                     <a href="{% url 'my_project:company_detail' company.pk %}">
-                  {% endif %}
+                  <!--{ else %}
+                     <!-<a href="{ url 'my_project:company_detail' company.pk %}">
+                     <a href="{ url 'my_project:companies' company.pk %}"></a>
+                  { endif %}-->
                   {{ company.name }}
                   </a>
                   <!--&nbsp;&nbsp;&nbsp;===><a href="{ url 'my_project:projects' company.pk %}"> Проекты</a>-->
