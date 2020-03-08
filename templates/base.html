@@ -1,60 +1,72 @@
-<!doctype  html>
-<html  lang="en">
+<!DOCTYPE html>
+<html lang="ru">
 
-{% load static %}
-
-{% block header %}
     <head>
-        <!--<a href="{ url 'my_project:home' %}">Главная</a> | <a href="{ url 'my_project:companies' %}">Организации</a> | <a href="{ url 'my_project:projects' %}">Проекты</a>-->
-        {% if user.is_authenticated %}        
-           <a href="{% url 'my_project:home' %}">Главная</a> | <a href="{% url 'my_project:menu_companies' %}">Организации</a> | {{ user.username }}&nbsp;/&nbsp;<a href="{% url 'my_accounts:logout' %}">Выход</a>
-        {% else %}
-           <a href="{% url 'my_accounts:login' %}">Вход</a> | <a href="{% url 'my_accounts:register' %}">Регистрация</a>
-        {% endif %}
-        <!--<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap-theme.min.css">-->
-        <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
-        <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">-->
-        
-        <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rye:100,300,500,700">-->
-        
-        <!--<link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-        <link rel="stylesheet" href="{ static 'css/base.css' %}">-->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-        {% load bootstrap4 %}
-        <script src="{% bootstrap_jquery_url %}"></script>
-        {% bootstrap_javascript %}
-        {% bootstrap_css %}
+
+       <meta charset=UTF-8>
+
+        <title>{% block title %}Управление проектами и задачами{% endblock %}</title>
+
+        {% load static %}
+
+        {% block head %}
+            {% if user.is_authenticated %}        
+               <a href="{% url 'my_project:home' %}">Главная</a> | <a href="{% url 'my_project:menu_companies' %}">Организации</a> | {{ user.username }}&nbsp;/&nbsp;<a href="{% url 'my_accounts:logout' %}">Выход</a>
+            {% else %}
+               <a href="{% url 'my_accounts:login' %}">Вход</a> | <a href="{% url 'my_accounts:register' %}">Регистрация</a>
+            {% endif %}
+
+            <!--<script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+
+
+            <!--<link rel=stylesheet type=text/css href={ static 'css/menu.css' %} />
+            <link rel=stylesheet type=text/css href={ static 'css/base.css' %} />-->
+        {% endblock %}
+
+        {% block css %}
+            <!-- blueimp Gallery styles --
+            <link rel=stylesheet href=/static/css/blueimp-gallery.min.css>
+            !-- CSS to style the file input field as button and adjust the Bootstrap progress bars --
+            <link rel=stylesheet href=/static/css/jquery.fileupload-ui.css>
+            !-- CSS adjustments for browsers with JavaScript disabled --
+            <noscript><link rel=stylesheet href=/static/css/jquery.fileupload-ui-noscript.css></noscript>-->
+        {% endblock %}
+
+        {% block bootstrap_css %}
+            <!--<link rel=stylesheet href={ static 'bootstrap-4.1.3/css/bootstrap.min.css' %}/>-->
+        {% endblock %}
+
+        {% block bootstrap_js %}
+            <!--<script src={ static 'jquery/jquery3.min.js' %}></script>
+            <script src={ static 'js/popper.min.js' %}></script>
+            <script src={ static 'bootstrap-4.1.3/js/bootstrap.min.js' %}></script>-->
+        {% endblock %}
+
+        {% block extrahead %}
+           <!--<script type="text/javascript" src="{ static 'js/jquery.js' %}"></script>-->
+        {% endblock %}
+
     </head>
-{% endblock header %}
-    
 
-<body>    
-
-    {% block company %}
-    {% endblock company %}
-
-    {% block project %}
-    {% endblock project %}
-
-    {% block task %}
-    {% endblock task %}     
-
-    {% block comment %}
-    {% endblock comment %}
-
-    {% block list %}
-    {% endblock list %}
-
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>    
-    <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>-->
-</body>
-
-{% block footer %}
-{% endblock footer %}
+    <body>
+        <br />
+        <section id=content>
+            {% block company %}
+            {% endblock company %}
+        
+            {% block project %}
+            {% endblock project %}
+        
+            {% block task %}
+            {% endblock task %}     
+        
+            {% block comment %}
+            {% endblock comment %}
+        
+            {% block list %}
+            {% endblock list %}
+        </section>
+    </body>
 
 </html>

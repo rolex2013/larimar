@@ -1,11 +1,44 @@
 {% extends 'base.html' %}
 
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{{ form.media }}
+<!--{ form.as_p.media }} -->      
+
+
 {% block project %}
+
     <h3>{{ header }}</h3>
+<!--    
     <form method="POST" class="post-form">
-        {% csrf_token %}
-        {{ form.media }}
-        {{ form.as_p }}
+        { csrf_token %}
+        { form.media }}
+        { form.as_p }}
         <button type="submit">Сохранить</button>
     </form>
+-->
+    <form class="mt-3" action="" method="post">{% csrf_token %}
+
+        {% bootstrap_form form %}
+        
+          <input class="btn btn-primary btn-block" type="submit" value="Сохранить" />
+    
+    </form>
+
+    <script type="text/javascript">
+        //$(function () {
+        //    $('#datetimepicker1').datetimepicker();
+        //});
+        //
+        //$(function(){
+        //   $('#datetimepicker').datetimepicker({
+        //     language: 'ru'
+        //   });
+        //   $('#datetimepicker').data("DateTimePicker").getDate();
+        //});
+        //
+    </script>
+
 {% endblock %}

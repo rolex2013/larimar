@@ -42,8 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jquery',
     'bootstrap4',
     'crispy_forms',
+    'bootstrap_datepicker_plus',
+    #'bootstrap4_datetime',
     'django_mptt_admin',
     'mptt',
     'ckeditor',
@@ -51,6 +54,10 @@ INSTALLED_APPS = [
     'accounts', 
     'projects',
 ]
+
+#BOOTSTRAP4 = {
+#    'include_jquery': True,
+#}
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
