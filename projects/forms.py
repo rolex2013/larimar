@@ -28,6 +28,10 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'is_active']
+        widgets = {
+            'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
+            'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat
+        }        
 
 class TaskCommentForm(forms.ModelForm):
     class Meta:
