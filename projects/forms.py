@@ -3,6 +3,7 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 from .models import Company, Project, Task, TaskComment
 #from django.contrib.admin.widgets import AdminDateWidget
+#from django.contrib.admin.widgets import AdminSplitDateTime
 from bootstrap_datepicker_plus import DatePickerInput
 
 
@@ -14,23 +15,14 @@ class CompanyForm(forms.ModelForm):
 
 class ProjectForm(forms.ModelForm):
     #datebegin = forms.DateField(widget=AdminDateWidget())
-    dateend = forms.DateField(
-                    widget=DatePickerInput(
-                            options={
-                                "format": "dd/MM/YYYY",
-                                "autoclose": True
-                            }
-                    )
-                )
+    #datebegin = forms.DateField(widget=AdminSplitDateTime())
     class Meta:
         model = Project
         fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'is_active']
-        #widgets = {
-        #    'datebegin': AdminDateWidget(),
-        #    'dateend': AdminDateWidget(),
-        #}
-
-        #name.widget.attrs.update({'class': 'form-control'})    
+        widgets = {
+            'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
+            'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
+        }
 
 class TaskForm(forms.ModelForm):
     class Meta:

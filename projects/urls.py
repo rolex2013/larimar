@@ -2,12 +2,15 @@
 from django.urls import path
 from .models import Company, Project, Task, TaskComment
 from . import views
+#from django import views
+#from django.views.i18n import JavaScriptCatalog
 
 app_name = 'my_project'
 
 urlpatterns = [
     #path('login/', views.LoginView.as_view(), name='login'),
-    #path('admin/jsi18n', 'django.views.i18n.javascript_catalog', name='jsi18n'),
+    #path('admin/jsi18n', django.views.i18n.javascript_catalog, name='jsi18n'),
+    #path('admin/jsi18n/', JavaScriptCatalog.as_view(), name='jsi18n'),
     path('', views.ProjectsHome.as_view(), name = 'home'),
     path('menu_companies/', views.CompaniesList.as_view(), name = 'menu_companies'),
     path('companies_page/<int:pk>', views.companies, name = 'companies'),

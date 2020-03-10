@@ -1,30 +1,27 @@
 {% extends 'base.html' %}
-
+<!--
+<script type="text/javascript" src="/static/admin/js/jquery.min.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+-->
 {% load bootstrap4 %}
+
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
-{{ form.media }}
-<!--{ form.as_p.media }} -->      
-
-
+<div class="jumbotron">
 {% block project %}
+    
+    {{ form.media }}
 
     <h3>{{ header }}</h3>
-<!--    
-    <form method="POST" class="post-form">
-        { csrf_token %}
-        { form.media }}
-        { form.as_p }}
-        <button type="submit">Сохранить</button>
-    </form>
--->
-    <form class="mt-3" action="" method="post">{% csrf_token %}
 
-        {% bootstrap_form form %}
-        
-          <input class="btn btn-primary btn-block" type="submit" value="Сохранить" />
-    
+    <form class="mt-3" action="" method="post">{% csrf_token %}
+        {% bootstrap_form form layout="horizontal" %}
+        {% buttons %}
+           <button class="btn btn-success" name="submit">Сохранить</button>
+        {% endbuttons %}
+        <!--<input class="btn btn-success" type="submit" value="Сохранить" />-->
+        <!--{ bootstrap_button "Save" button_type="submit" button_class="btn-primary" %}-->
     </form>
 
     <script type="text/javascript">
@@ -42,3 +39,4 @@
     </script>
 
 {% endblock %}
+</div>

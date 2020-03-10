@@ -55,9 +55,9 @@ INSTALLED_APPS = [
     'projects',
 ]
 
-#BOOTSTRAP4 = {
-#    'include_jquery': True,
-#}
+BOOTSTRAP4 = {
+    'include_jquery': True,
+}
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',

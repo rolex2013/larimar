@@ -43,13 +43,14 @@
    <div class="project-list">
       <h3>Список Проектов</h3>  
 
-  {% if node %}
+  <!--{ if node %}-->
+  
       {% load mptt_tags %}
-    
+
       <ul>
         {% recursetree nodes %}
            {% ifequal node.company_id companyid %}
-              {% if user.is_authenticated and node.is_active %}
+              {% if user.is_authenticated and node.is_active %} <!-- тут будет еще проверка на авторство и исполнителей -->
                  <li>
                    <!--<a href="{ url 'my_project:project_detail' node.pk %}">-->
                    <a href="{% url 'my_project:tasks' node.pk 0 %}">
@@ -64,8 +65,8 @@
               {% endif %}
            {% endifequal %}
         {% endrecursetree %}
-  {% endif %}    </ul>      
-
+     </ul>      
+   <!--{ endif %}-->
       <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
    </div>
   
