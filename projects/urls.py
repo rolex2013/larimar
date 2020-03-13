@@ -1,9 +1,11 @@
 #from django.contrib.auth import views
 from django.urls import path
-from .models import Company, Project, Task, TaskComment
+
+from companies.models import Company
+from projects.models import Project, Task, TaskComment
+
+from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
-#from django import views
-#from django.views.i18n import JavaScriptCatalog
 
 app_name = 'my_project'
 
@@ -12,12 +14,12 @@ urlpatterns = [
     #path('admin/jsi18n', django.views.i18n.javascript_catalog, name='jsi18n'),
     #path('admin/jsi18n/', JavaScriptCatalog.as_view(), name='jsi18n'),
     path('', views.ProjectsHome.as_view(), name = 'home'),
-    path('menu_companies/', views.CompaniesList.as_view(), name = 'menu_companies'),
-    path('companies_page/<int:pk>', views.companies, name = 'companies'),
+    path('menu_companies/', CompaniesList.as_view(), name = 'menu_companies'),
+    path('companies_page/<int:pk>', companies, name = 'companies'),
     #path('projects_list/<int:pk>', views.ProjectsList.as_view(), name = 'projects'),
-    path('companies_list/<int:pk>', views.CompanyDetail.as_view(), name = 'company_detail'),
-    path('companies_list/company_create/<int:parentid>', views.CompanyCreate.as_view(), name = 'company_create'),
-    path('companies_list/company_update/<int:pk>', views.CompanyUpdate.as_view(), name = 'company_update'),
+    path('companies_list/<int:pk>', CompanyDetail.as_view(), name = 'company_detail'),
+    path('companies_list/company_create/<int:parentid>', CompanyCreate.as_view(), name = 'company_create'),
+    path('companies_list/company_update/<int:pk>', CompanyUpdate.as_view(), name = 'company_update'),
     path('projects_page/<int:companyid>/<int:pk>', views.projects, name = 'projects'),
     #path('projects_list/<int:pk>', views.ProjectDetail.as_view(), name = 'project_detail'),
     path('projects_list/project_create/<int:companyid>/<int:parentid>', views.ProjectCreate.as_view(), name='project_create'),

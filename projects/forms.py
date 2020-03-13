@@ -7,12 +7,6 @@ from .models import Company, Project, Task, TaskComment
 from bootstrap_datepicker_plus import DatePickerInput
 
 
-class CompanyForm(forms.ModelForm):
-    class Meta:
-        model = Company
-        fields = ['name', 'description', 'structure_type', 'type', 'is_active'] 
-        #description = forms.CharField(widget=CKEditorWidget, label='')
-
 class ProjectForm(forms.ModelForm):
     #datebegin = forms.DateField(widget=AdminDateWidget())
     #datebegin = forms.DateField(widget=AdminSplitDateTime())
