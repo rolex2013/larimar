@@ -3,6 +3,7 @@ from django.contrib import admin
 from companies.models import Company
 from companies.models import Dict_CompanyStructureType
 from companies.models import Dict_CompanyType
+from companies.models import UserCompany
 
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
@@ -24,6 +25,9 @@ class TaskAdmin(DjangoMpttAdmin):
 #    pass
 
 admin.site.register(Company, CompanyAdmin)
+
+admin.site.register(UserCompany)
+
 
 admin.site.register(Project, ProjectAdmin)
 
@@ -49,12 +53,6 @@ admin.site.register(Dict_TaskStructureType)
 admin.site.register(Dict_TaskType)
 
 admin.site.register(Dict_TaskStatus)
-
-#admin.site.register(Company)
-
-#admin.site.register(Project)
-
-#admin.site.register(Task)
 
 admin.site.register(TaskComment)
 

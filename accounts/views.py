@@ -11,6 +11,8 @@ from django.contrib.auth.views import LogoutView
 
 from .forms import UserRegistrationForm
 
+from companies.models import UserCompany
+
  
 class ELoginView(View):
  
@@ -35,6 +37,15 @@ class ELoginView(View):
         if form.is_valid():
             # в случае успеха авторизуем пользователя
             auth.login(request, form.get_user())
+            # ======================
+            # получаем список организаций, привязанных к этому пользователю из companies.UserCompany
+            # хорошо бы этот список сделать глобальным для всех приложений
+            #uc = getVariables(request)
+            #companies_list = request.UserCompany.objects.get(user=request.user)
+            #uc['UserCompany'] = companies_list
+            request.session['_auth_user_company_id'] = '17'
+            request.session.modified = True
+            # ======================
             # получаем предыдущий url
             #next = urlparse(get_next_url(request)).path
             next = '/projects/'

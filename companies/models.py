@@ -45,8 +45,6 @@ class Company(MPTTModel):
     is_active = models.BooleanField("Активность", default=True)    
 
     def get_absolute_url(self):
-        #return reverse('my_project:company_detail', kwargs={'pk': self.pk})
-        #return reverse('my_project:companies', kwargs={'pk': self.pk})
         return reverse('my_project:projects', kwargs={'companyid': self.pk, 'pk': '1'})          
                
     def __str__(self):
@@ -57,3 +55,17 @@ class Company(MPTTModel):
         verbose_name = 'Организация'
         verbose_name_plural = 'Организации'        
 
+class UserCompany(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='result_user', verbose_name="Пользователь")
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='result_company', verbose_name="Организация")    
+    is_active = models.BooleanField("Активность", default=True)
+    
+    def __str__(self):
+        return (self.user.username + ' - ' + self.company.name)
+    class Meta:
+        unique_together = ('user', 'company')
+        ordering = ('user','company')
+        verbose_name = 'Пользователь Организации'
+        verbose_name_plural = 'Пользователи Организаций'
+
+   

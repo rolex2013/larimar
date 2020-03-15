@@ -12,6 +12,7 @@ django-ckeditor = "*"
 django-crispy-forms = "*"
 django-bootstrap-datepicker-plus = "*"
 django-jquery = "*"
+pylint-django = "*"
 
 [requires]
 python_version = "3.8"

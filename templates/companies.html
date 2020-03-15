@@ -30,7 +30,7 @@
               {% if user.is_authenticated and node.is_active %}
                  <li>
                    <a href="{% url 'my_project:projects' node.pk 0 %}">
-                   {{ node.name }}
+                   {{ node.name }} / {{ user_company }}
                    <!--{{ node.id }}
                    {{ node.level }}-->
                    </a>

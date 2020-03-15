@@ -7,7 +7,7 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.template import loader, Context, RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Company
+from .models import Company, UserCompany
 from projects.models import Project, Task, TaskComment
 from .forms import CompanyForm
 
@@ -18,8 +18,31 @@ class CompaniesList(ListView):
 
 def companies(request, pk):
     current_company = Company.objects.get(id=pk)
+    #user_companies = UserCompany.objects.get(user=request.user)
     root_company_id = current_company.get_root().id
     tree_company_id = current_company.tree_id
+
+    #all_root_items = Company.objects.filter(is_active=1,id=pk).order_by('tree_id', 'lft')
+    ##all_root_items = Company.objects.all()
+    #companies_list = []
+    #for item in all_root_items:
+    #   #usr = UserCompany.objects.filter(company=item)
+    #   companies_list.append({'id': item.id, 'name': item.name, 'parent_id': item.parent_id, 
+    #      'description': item.description, 'structure_type_id': item.structure_type, 'type_id': item.type,
+    #      'datecreate': item.datecreate, 'author_id': item.author_id, 'is_active': item.is_active,
+    #      'tree_id': item.tree_id, 'lft': item.lft, 'rght': item.rght, 'level': item.level})
+    
+    #companies_list = list(Company.objects.order_by('tree_id', 'lft'))
+    #for i, obj in enumerate(companies_list):
+    #   obj.myIntB = i
+    #   usr = UserCompany.objects.filter(company=companies_list['company'])
+    #   #companies_list[i]['user'] = usr
+    #   obj.user = usr
+
+    enriched_models = []
+    companies_list = Company.objects.all()
+    for i in companies_list:
+        enriched_models.append((i, 'user'))       
 
     try:  
        current_project = current_company.resultcompany.all()[0].id
@@ -29,11 +52,16 @@ def companies(request, pk):
        project_id = current_project
 
     return render(request, "companies.html", {
-                              'nodes':Company.objects.all(),
+                              #'nodes':Company.objects.all(),
+                              'nodes': companies_list,
+                              "UserCompany": enriched_models,
                               'current_company':current_company,
                               'root_company_id':root_company_id,
                               'tree_company_id':tree_company_id,
-                              'project_id':project_id
+                              'project_id':project_id,
+                              #'uc':UserCompany.objects.filter(user=request.user),
+                              #'usr':usr,
+                              'user_company': request.session['_auth_user_company_id'],
                                             })  
 
 def tree_get_root(request, pk):
@@ -73,3 +101,7 @@ class CompanyUpdate(UpdateView):
        context = super(CompanyUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Организацию'
        return context
+
+#def getCompanies(request, user):
+#    #uc = UserCompany.objects.get(user=user)
+#    return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
