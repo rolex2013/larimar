@@ -16,52 +16,74 @@ class CompaniesList(ListView):
     template_name = 'menu_companies.html' 
     #ordering = ['company_up', 'id']
 
+    def render_to_response(self, context, **response_kwargs):
+        #return render(self.request, "menu_companies.html", {
+        #                      'user_companies': self.request.session['_auth_user_companies_id'],
+        #                                                   }
+        #             )  
+        response_kwargs.setdefault('content_type', self.content_type)
+        return self.response_class(
+           request=self.request,
+           template='menu_companies.html', #self.get_template_names(),
+           context={'user_companies': self.request.session['_auth_user_companies_id']},
+           #user_companies=self.request.session['_auth_user_companies_id'],
+           using=self.template_engine,
+           **response_kwargs
+                                  )
+
+def companies_main(request):
+    companies_list = Company.objects.filter(is_active=True)
+    #companies_list = Company.objects.all()
+    return render(request, 'menu_companies.html', {
+                              'node': companies_list, #Company.objects.all(),
+                              'user_companies': request.session['_auth_user_companies_id'],
+                                             }
+                 )  
+
 def companies(request, pk):
-    current_company = Company.objects.get(id=pk)
-    #user_companies = UserCompany.objects.get(user=request.user)
-    root_company_id = current_company.get_root().id
-    tree_company_id = current_company.tree_id
+    #current_company = Company.objects.get(id=pk)
+    #root_company_id = current_company.get_root().id
+    #tree_company_id = current_company.tree_id
+ 
+    #try:  
+    #   current_project = current_company.resultcompany.all()[0].id
+    #except (ValueError, IndexError) as e:
+    #   project_id = 0
+    #else:
+    #   project_id = current_project
 
-    #all_root_items = Company.objects.filter(is_active=1,id=pk).order_by('tree_id', 'lft')
-    ##all_root_items = Company.objects.all()
-    #companies_list = []
-    #for item in all_root_items:
-    #   #usr = UserCompany.objects.filter(company=item)
-    #   companies_list.append({'id': item.id, 'name': item.name, 'parent_id': item.parent_id, 
-    #      'description': item.description, 'structure_type_id': item.structure_type, 'type_id': item.type,
-    #      'datecreate': item.datecreate, 'author_id': item.author_id, 'is_active': item.is_active,
-    #      'tree_id': item.tree_id, 'lft': item.lft, 'rght': item.rght, 'level': item.level})
-    
-    #companies_list = list(Company.objects.order_by('tree_id', 'lft'))
-    #for i, obj in enumerate(companies_list):
-    #   obj.myIntB = i
-    #   usr = UserCompany.objects.filter(company=companies_list['company'])
-    #   #companies_list[i]['user'] = usr
-    #   obj.user = usr
+    #if pk == 0:
+    #   current_company_id = request.session['_auth_user_companies_id']
+    #   pk = current_company_id[0]
 
-    enriched_models = []
-    companies_list = Company.objects.all()
-    for i in companies_list:
-        enriched_models.append((i, 'user'))       
-
-    try:  
-       current_project = current_company.resultcompany.all()[0].id
-    except (ValueError, IndexError) as e:
+    if pk == 0:
+       current_company = 0
+       tree_company_id = 0
+       root_company_id = 0
+       tree_company_id = 0
        project_id = 0
+       template_name = "menu_companies.html"
+       #template_name = "companies.html"
     else:
-       project_id = current_project
+       current_company = Company.objects.get(id=pk)
+       tree_company_id = current_company.tree_id  
+       root_company_id = current_company.get_root().id
+       tree_company_id = current_company.tree_id
+       template_name = "companies.html"
+       try:  
+          current_project = current_company.resultcompany.all()[0].id
+       except (ValueError, IndexError) as e:
+          project_id = 0
+       else:
+          project_id = current_project       
 
-    return render(request, "companies.html", {
-                              #'nodes':Company.objects.all(),
-                              'nodes': companies_list,
-                              "UserCompany": enriched_models,
+    return render(request, template_name, {
+                              'nodes':Company.objects.all(),
                               'current_company':current_company,
                               'root_company_id':root_company_id,
                               'tree_company_id':tree_company_id,
                               'project_id':project_id,
-                              #'uc':UserCompany.objects.filter(user=request.user),
-                              #'usr':usr,
-                              'user_company': request.session['_auth_user_company_id'],
+                              'user_companies': request.session['_auth_user_companies_id'],
                                             })  
 
 def tree_get_root(request, pk):

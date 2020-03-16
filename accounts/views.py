@@ -8,6 +8,7 @@ from django.template.context_processors import csrf
 from django.views import View
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
+#from django.core import serializers
 
 from .forms import UserRegistrationForm
 
@@ -43,7 +44,10 @@ class ELoginView(View):
             #uc = getVariables(request)
             #companies_list = request.UserCompany.objects.get(user=request.user)
             #uc['UserCompany'] = companies_list
-            request.session['_auth_user_company_id'] = '17'
+            #companies_list = UserCompany.objects.filter(user=request.user.id, is_active=True).only('company')
+            companies_list = list(UserCompany.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
+            #companies_lst = companies_list.values_list("company", flat=True)
+            request.session['_auth_user_companies_id'] = companies_list #serializers.serialize('json', companies_list)
             request.session.modified = True
             # ======================
             # получаем предыдущий url

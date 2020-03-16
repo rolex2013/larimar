@@ -6,8 +6,8 @@
 
    <div class="company-entry">
         {% if user.is_authenticated %}
-           {% for company in object_list %}
-               {% if company.parent_id is None and company.is_active %}
+           {% for i in node %}
+               {% if node.parent_id is None and node.is_active %}
                   <li>
                   <!--{ if company.rght > company.lft|add:"1" %}-->
                      <a href="{% url 'my_project:companies' company.pk %}">
@@ -15,7 +15,7 @@
                      <!-<a href="{ url 'my_project:company_detail' company.pk %}">
                      <a href="{ url 'my_project:companies' company.pk %}"></a>
                   { endif %}-->
-                  {{ company.name }}
+                  {{ node.name }}
                   </a>
                   <!--&nbsp;&nbsp;&nbsp;===><a href="{ url 'my_project:projects' company.pk %}"> Проекты</a>-->
                   </li>
@@ -26,8 +26,8 @@
                {% endif %}
            {% endfor %}
         {% endif %}
-    </div>
-    <p>&nbsp;</p> 
+   </div>
+   <p>&nbsp;</p> 
     <!--<div class="project-entry"></div><a href="{ url 'my_project:project_create' %}" class="top-menu"><span class="badge badge-secondary">Создать Проект</span></a></div>-->
     
 {% endblock list %}

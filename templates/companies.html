@@ -27,10 +27,11 @@
       <ul>
         {% recursetree nodes %}
            {% ifequal node.tree_id tree_company_id %}
-              {% if user.is_authenticated and node.is_active %}
+              <!--{ if user.is_authenticated and node.is_active and node.id in user_companies %}-->
+              {% if node.id in user_companies %}
                  <li>
                    <a href="{% url 'my_project:projects' node.pk 0 %}">
-                   {{ node.name }} / {{ user_company }}
+                   {{ node.name }}
                    <!--{{ node.id }}
                    {{ node.level }}-->
                    </a>
@@ -45,6 +46,6 @@
         {% endrecursetree %}
       </ul>
 
-      <div class="task-entry"></div><a href="{% url 'my_project:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>    
+      <div class="task-entry"></div><a href="{ url 'my_project:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>    
 
 {% endblock list %}    

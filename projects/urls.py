@@ -4,7 +4,7 @@ from django.urls import path
 from companies.models import Company
 from projects.models import Project, Task, TaskComment
 
-from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
+from companies.views import CompaniesList, companies_main, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
 
 app_name = 'my_project'
@@ -14,7 +14,8 @@ urlpatterns = [
     #path('admin/jsi18n', django.views.i18n.javascript_catalog, name='jsi18n'),
     #path('admin/jsi18n/', JavaScriptCatalog.as_view(), name='jsi18n'),
     path('', views.ProjectsHome.as_view(), name = 'home'),
-    path('menu_companies/', CompaniesList.as_view(), name = 'menu_companies'),
+    #path('menu_companies/', CompaniesList.as_view(), name = 'menu_companies'),
+    path('menu_companies/', companies_main, name = 'menu_companies'),
     path('companies_page/<int:pk>', companies, name = 'companies'),
     #path('projects_list/<int:pk>', views.ProjectsList.as_view(), name = 'projects'),
     path('companies_list/<int:pk>', CompanyDetail.as_view(), name = 'company_detail'),
