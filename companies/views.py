@@ -16,20 +16,14 @@ class CompaniesList(ListView):
     template_name = 'menu_companies.html' 
     #ordering = ['company_up', 'id']
 
-    def render_to_response(self, context, **response_kwargs):
-        #return render(self.request, "menu_companies.html", {
-        #                      'user_companies': self.request.session['_auth_user_companies_id'],
-        #                                                   }
-        #             )  
-        response_kwargs.setdefault('content_type', self.content_type)
-        return self.response_class(
-           request=self.request,
-           template='menu_companies.html', #self.get_template_names(),
-           context={'user_companies': self.request.session['_auth_user_companies_id']},
-           #user_companies=self.request.session['_auth_user_companies_id'],
-           using=self.template_engine,
-           **response_kwargs
-                                  )
+    def get_context_data(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            context = super().get_context_data(**kwargs)
+            #current_membership = get_user_membership(self.request)
+            #context['current_membership'] = str(current_membership.membership)
+            # добавляем к контексту сессионный массив с id компаний, доступными этому авторизованному юзеру
+            context['user_companies'] = self.request.session['_auth_user_companies_id']
+            return context
 
 def companies_main(request):
     companies_list = Company.objects.filter(is_active=True)
