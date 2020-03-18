@@ -1,8 +1,9 @@
 from django.urls import path
 
 from .models import Company
-#from projects.models import Project, Task, TaskComment
 
+from .views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
+#from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
 
 app_name = 'my_company'

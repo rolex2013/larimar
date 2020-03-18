@@ -14,8 +14,8 @@ from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
 #from .utils import ObjectUpdateMixin
 
-class ProjectsHome(TemplateView):
-   template_name = 'home.html'
+#class ProjectsHome(TemplateView):
+#   template_name = 'home.html'
 
 class ProjectsList(ListView):
     model = Project

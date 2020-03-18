@@ -25,14 +25,14 @@ class CompaniesList(ListView):
             context['user_companies'] = self.request.session['_auth_user_companies_id']
             return context
 
-def companies_main(request):
-    companies_list = Company.objects.filter(is_active=True)
-    #companies_list = Company.objects.all()
-    return render(request, 'menu_companies.html', {
-                              'node': companies_list, #Company.objects.all(),
-                              'user_companies': request.session['_auth_user_companies_id'],
-                                             }
-                 )  
+#def companies_main(request):
+#    companies_list = Company.objects.filter(is_active=True)
+#    #companies_list = Company.objects.all()
+#    return render(request, 'menu_companies.html', {
+#                              'node': companies_list, #Company.objects.all(),
+#                              'user_companies': request.session['_auth_user_companies_id'],
+#                                             }
+#                 )  
 
 def companies(request, pk):
     #current_company = Company.objects.get(id=pk)

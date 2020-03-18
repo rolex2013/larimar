@@ -10,7 +10,7 @@
                {% if company.id in user_companies and company.parent_id is None and company.is_active %}
                   <li>
                   <!--{ if company.rght > company.lft|add:"1" %}-->
-                     <a href="{% url 'my_project:companies' company.pk %}">
+                     <a href="{% url 'my_company:companies' company.pk %}">
                   <!--{ else %}
                      <!-<a href="{ url 'my_project:company_detail' company.pk %}">
                      <a href="{ url 'my_project:companies' company.pk %}"></a>

@@ -15,7 +15,7 @@
            {% ifequal node.tree_id tree_company_id %}
               {% if user.is_authenticated and node.is_active %}
                  <li>
-                   <a href="{% url 'my_project:company_detail' node.pk %}">
+                   <a href="{% url 'my_company:company_detail' node.pk %}">
                    {{ node.name }}
                    <!--{{ node.id }}
                    {{ node.level }}-->
@@ -31,6 +31,6 @@
         {% endrecursetree %}
       </ul>
 
-      <div class="task-entry"></div><a href="{% url 'my_project:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>    
+      <div class="task-entry"></div><a href="{% url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>    
 
 {% endblock list %}    
