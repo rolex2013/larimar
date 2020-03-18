@@ -8,6 +8,7 @@ from companies.models import UserCompany
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
 from projects.models import Project, Task, TaskComment
+from projects.models import ProjectTaskStatusLog
 
 from django_mptt_admin.admin import DjangoMpttAdmin
 
@@ -55,4 +56,7 @@ admin.site.register(Dict_TaskType)
 admin.site.register(Dict_TaskStatus)
 
 admin.site.register(TaskComment)
+
+
+admin.site.register(ProjectTaskStatusLog)
 

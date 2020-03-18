@@ -94,6 +94,7 @@ class Project(MPTTModel):
     type = models.ForeignKey('Dict_ProjectType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    dateclose = models.DateTimeField("Закрыт", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)    
     #def get_create_url(self):
@@ -106,6 +107,7 @@ class Project(MPTTModel):
         return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '0'})  
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
+
     class MPTTMeta:
         order_insertion_by = ['name']
     class Meta:
@@ -123,7 +125,8 @@ class Task(MPTTModel):
     structure_type = models.ForeignKey('Dict_TaskStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_structure_type', verbose_name="Тип задачи в иерархии")
     type = models.ForeignKey('Dict_TaskType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
-    datecreate = models.DateTimeField("Создано", auto_now_add=True)    
+    datecreate = models.DateTimeField("Создана", auto_now_add=True)    
+    dateclose = models.DateTimeField("Закрыта", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
@@ -154,3 +157,22 @@ class TaskComment(models.Model):
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+
+class ProjectTaskStatusLog(models.Model):
+    LOG_TYPES = (('P', 'Project'), ('T', 'Task'))
+    logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='resultprojectlog', verbose_name="Проект")
+    status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status_log', verbose_name="Статус")    
+    date = models.DateTimeField("Создана", auto_now_add=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    description = models.CharField("Наименование", max_length=1024)
+    is_active = models.BooleanField("Активность", default=True)
+    
+    def __str__(self):
+        return (self.project.name + ' - ' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.author.name)
+    
+    class Meta:
+        unique_together = ('project', 'status', 'date', 'author')
+        ordering = ('project', 'date')
+        verbose_name = 'История Проекта'
+        verbose_name_plural = 'Истории Проектов'        

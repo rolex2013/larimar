@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 #from versane.models import Company
 
 from companies.models import Company
-from projects.models import Project, Task, TaskComment
+from projects.models import Project, Task, TaskComment, ProjectTaskStatusLog
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
 #from .utils import ObjectUpdateMixin
@@ -81,6 +81,7 @@ class ProjectUpdate(UpdateView):
        context = super(ProjectUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Проект'
        return context
+
 
 #class ProjectDelete(DeleteView):    
 #    model = Project
