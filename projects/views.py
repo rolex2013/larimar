@@ -71,6 +71,11 @@ class ProjectCreate(CreateView):
        context['header'] = 'Новый Проект'
        return context
 
+    def get_form_kwargs(self):
+       kwargs = super(ProjectCreate, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user})
+       return kwargs   
+
 class ProjectUpdate(UpdateView):    
     model = Project
     form_class = ProjectForm
@@ -82,6 +87,10 @@ class ProjectUpdate(UpdateView):
        context['header'] = 'Изменить Проект'
        return context
 
+    def get_form_kwargs(self):
+       kwargs = super(ProjectUpdate, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user})
+       return kwargs
 
 #class ProjectDelete(DeleteView):    
 #    model = Project
@@ -149,6 +158,11 @@ class TaskCreate(CreateView):
        context['header'] = 'Новая Задача'
        return context
 
+    def get_form_kwargs(self):
+       kwargs = super(TaskCreate, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user})
+       return kwargs   
+
 class TaskUpdate(UpdateView):    
     model = Task
     form_class = TaskForm
@@ -158,7 +172,12 @@ class TaskUpdate(UpdateView):
     def get_context_data(self, **kwargs):
        context = super(TaskUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Задачу'
-       return context    
+       return context
+
+    def get_form_kwargs(self):
+       kwargs = super(ProjectUpdate, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user})
+       return kwargs       
 
 #class TaskDelete(DeleteView):    
 #    model = Task

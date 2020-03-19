@@ -97,13 +97,8 @@ class Project(MPTTModel):
     dateclose = models.DateTimeField("Закрыт", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)    
-    #def get_create_url(self):
-    #    #return reverse('my_project:company_detail')
-    #    return reverse('my_project:projects')          
+         
     def get_absolute_url(self):
-        #return reverse('my_project:project_detail', kwargs={'pk': self.pk})
-        #companyid = self.company_id
-        #return reverse('my_project:projects', kwargs={'companyid': self.company_id, 'pk': self.pk})
         return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '0'})  
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
