@@ -46,6 +46,8 @@
         {% endrecursetree %}
       </ul>
 
-      <div class="task-entry"></div><a href="{ url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>    
+      <!--{ if user.is_authenticated and user_company.is_admin %}-->
+         <div class="task-entry"></div><a href="{ url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>    
+      <!--{ endif %}-->
 
 {% endblock list %}    

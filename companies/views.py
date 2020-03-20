@@ -71,6 +71,9 @@ def companies(request, pk):
        else:
           project_id = current_project       
 
+    #if 
+    button_company_create = 'Добавить'
+
     return render(request, template_name, {
                               'nodes':Company.objects.all(),
                               'current_company':current_company,
@@ -78,6 +81,7 @@ def companies(request, pk):
                               'tree_company_id':tree_company_id,
                               'project_id':project_id,
                               'user_companies': request.session['_auth_user_companies_id'],
+                              'button_company_create': button_company_create,
                                             })  
 
 def tree_get_root(request, pk):

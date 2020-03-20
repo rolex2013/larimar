@@ -126,7 +126,6 @@ class Task(MPTTModel):
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
         return reverse('my_project:task_detail', kwargs={'pk': self.pk})
-        #return reverse('my_project:tasks', kwargs={'projectid': self.project, 'pk': self.pk})
     def __str__(self):
          return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     class MPTTMeta:

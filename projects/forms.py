@@ -8,6 +8,7 @@ from .models import Dict_ProjectStatus, Dict_TaskStatus
 #from django.contrib.admin.widgets import AdminSplitDateTime
 from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.context_processors import auth
+import datetime
 
 
 class ProjectForm(forms.ModelForm):
@@ -21,6 +22,10 @@ class ProjectForm(forms.ModelForm):
            ProjectStatusLog.objects.create(project_id=self.initial['id'], 
                                            status_id=dict_status.id, 
                                            author_id=self.user.id)
+           if self.cleaned_data['status'].name == "Выполнен":
+              self.cleaned_data['dateclose'] = datetime.datetime.today()
+           else:
+              self.cleaned_data['dateclose'] = None
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
@@ -29,7 +34,7 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'is_active', 'id']
+        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'is_active', 'id']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
@@ -45,6 +50,10 @@ class TaskForm(forms.ModelForm):
            TaskStatusLog.objects.create(task_id=self.initial['id'], 
                                         status_id=dict_status.id, 
                                         author_id=self.user.id)
+           if self.cleaned_data['status'].name == "Решена":
+              self.cleaned_data['dateclose'] = datetime.datetime.today()
+           else:
+              self.cleaned_data['dateclose'] = None                                         
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
@@ -53,7 +62,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'is_active', 'id']
+        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'is_active', 'id']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat
