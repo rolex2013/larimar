@@ -153,21 +153,38 @@ class TaskComment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
-class ProjectTaskStatusLog(models.Model):
-    LOG_TYPES = (('P', 'Project'), ('T', 'Task'))
-    logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
+class ProjectStatusLog(models.Model):
+    #LOG_TYPES = (('P', 'Project'), ('T', 'Task'))
+    #logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
     project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='resultprojectlog', verbose_name="Проект")
-    status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status_log', verbose_name="Статус")    
-    date = models.DateTimeField("Создана", auto_now_add=True)
+    status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status_log', verbose_name="Статус Проекта")
+    date = models.DateTimeField("Дата", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    description = models.CharField("Наименование", max_length=1024)
+    description = models.CharField("Комментарий", max_length=1024)
     is_active = models.BooleanField("Активность", default=True)
     
     def __str__(self):
-        return (self.project.name + ' - ' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.author.name)
+        return (self.project.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
     
     class Meta:
         unique_together = ('project', 'status', 'date', 'author')
         ordering = ('project', 'date')
         verbose_name = 'История Проекта'
-        verbose_name_plural = 'Истории Проектов'        
+        verbose_name_plural = 'Истории Проектов'
+
+class TaskStatusLog(models.Model):
+    task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='resulttasklog', verbose_name="Задача")
+    status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_status_log', verbose_name="Статус Задачи")
+    date = models.DateTimeField("Дата", auto_now_add=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    description = models.CharField("Комментарий", max_length=1024)
+    is_active = models.BooleanField("Активность", default=True)
+    
+    def __str__(self):
+        return (self.task.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
+    
+    class Meta:
+        unique_together = ('task', 'status', 'date', 'author')
+        ordering = ('task', 'date')
+        verbose_name = 'История Задачи'
+        verbose_name_plural = 'Истории Задач'                

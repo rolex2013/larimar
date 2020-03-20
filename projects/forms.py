@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from ckeditor.widgets import CKEditorWidget
 from django import forms
-from .models import Company, Project, Task, TaskComment, ProjectTaskStatusLog
-from .models import Dict_ProjectStatus
+from .models import Company, Project, Task, TaskComment
+from .models import ProjectStatusLog, TaskStatusLog
+from .models import Dict_ProjectStatus, Dict_TaskStatus
 #from django.contrib.admin.widgets import AdminDateWidget
 #from django.contrib.admin.widgets import AdminSplitDateTime
 from bootstrap_datepicker_plus import DatePickerInput
@@ -14,17 +15,16 @@ class ProjectForm(forms.ModelForm):
     #datebegin = forms.DateField(widget=AdminSplitDateTime())
 
     def clean(self):
-        # здесь надо поставить проверку на view.ProjectUpdate
-        if self.cleaned_data['status'].id != self.initial['status']:
-           # если статус проекта был изменён, то пишем лог изменения 
+        if self.action == 'update' and self.cleaned_data['status'].id != self.initial['status']:
+           # если вызов пришёл из ProjectUpdate и статус проекта был изменён, то пишем лог изменения 
            dict_status = Dict_ProjectStatus.objects.get(pk=self.cleaned_data['status'].id)
-           ProjectTaskStatusLog.objects.create(logtype='P', 
-                                               project_id=self.initial['id'], 
-                                               status_id=dict_status.id, 
-                                               author_id=self.user.id)
+           ProjectStatusLog.objects.create(project_id=self.initial['id'], 
+                                           status_id=dict_status.id, 
+                                           author_id=self.user.id)
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
+        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
         super(ProjectForm, self).__init__(*args, **kwargs)
 
     class Meta:
@@ -39,17 +39,17 @@ class TaskForm(forms.ModelForm):
 
     def clean(self):
         # здесь надо поставить проверку на view.TaskUpdate
-        if self.cleaned_data['status'].id != self.initial['status']:
-           # если статус задачи был изменён, то пишем лог изменения 
+        if self.action == 'update' and self.cleaned_data['status'].id != self.initial['status']:
+           # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения 
            dict_status = Dict_TaskStatus.objects.get(pk=self.cleaned_data['status'].id)
-           ProjectTaskStatusLog.objects.create(logtype='T', 
-                                               project_id=self.initial['id'], 
-                                               status_id=dict_status.id, 
-                                               author_id=self.user.id)
+           TaskStatusLog.objects.create(task_id=self.initial['id'], 
+                                        status_id=dict_status.id, 
+                                        author_id=self.user.id)
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
-        super(ProjectForm, self).__init__(*args, **kwargs)
+        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
+        super(TaskForm, self).__init__(*args, **kwargs)
 
     class Meta:
         model = Task

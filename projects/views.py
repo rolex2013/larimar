@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 #from versane.models import Company
 
 from companies.models import Company
-from projects.models import Project, Task, TaskComment, ProjectTaskStatusLog
+from projects.models import Project, Task, TaskComment, ProjectStatusLog, TaskStatusLog
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
 #from .utils import ObjectUpdateMixin
@@ -73,7 +73,7 @@ class ProjectCreate(CreateView):
 
     def get_form_kwargs(self):
        kwargs = super(ProjectCreate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user})
+       kwargs.update({'user': self.request.user, 'action': 'create'})
        return kwargs   
 
 class ProjectUpdate(UpdateView):    
@@ -89,7 +89,7 @@ class ProjectUpdate(UpdateView):
 
     def get_form_kwargs(self):
        kwargs = super(ProjectUpdate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user})
+       kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs
 
 #class ProjectDelete(DeleteView):    
@@ -160,7 +160,7 @@ class TaskCreate(CreateView):
 
     def get_form_kwargs(self):
        kwargs = super(TaskCreate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user})
+       kwargs.update({'user': self.request.user, 'action': 'create'})
        return kwargs   
 
 class TaskUpdate(UpdateView):    
@@ -175,8 +175,8 @@ class TaskUpdate(UpdateView):
        return context
 
     def get_form_kwargs(self):
-       kwargs = super(ProjectUpdate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user})
+       kwargs = super(TaskUpdate, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs       
 
 #class TaskDelete(DeleteView):    
