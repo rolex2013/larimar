@@ -12,7 +12,7 @@ from django.contrib.auth.views import LogoutView
 
 from .forms import UserRegistrationForm
 
-from companies.models import UserCompany
+from companies.models import UserCompanyComponentGroup
 
  
 class ELoginView(View):
@@ -45,7 +45,7 @@ class ELoginView(View):
             #companies_list = request.UserCompany.objects.get(user=request.user)
             #uc['UserCompany'] = companies_list
             #companies_list = UserCompany.objects.filter(user=request.user.id, is_active=True).only('company')
-            companies_list = list(UserCompany.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
+            companies_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
             #companies_lst = companies_list.values_list("company", flat=True)
             request.session['_auth_user_companies_id'] = companies_list #serializers.serialize('json', companies_list)
             request.session.modified = True

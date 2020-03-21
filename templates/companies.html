@@ -30,8 +30,7 @@
               <!--{ if user.is_authenticated and node.is_active and node.id in user_companies %}-->
               {% if node.id in user_companies %}
                  <li>
-                   <a href="{% url 'my_project:projects' node.pk 0 %}">
-                   {{ node.name }}
+                   <a href="{% url 'my_project:projects' node.pk 0 %}">{{ node.name }}
                    <!--{{ node.id }}
                    {{ node.level }}-->
                    </a>
@@ -46,8 +45,9 @@
         {% endrecursetree %}
       </ul>
 
-      <!--{ if user.is_authenticated and user_company.is_admin %}-->
+      <!--{ if user.is_authenticated and user_company.is_admin %}
          <div class="task-entry"></div><a href="{ url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>    
-      <!--{ endif %}-->
+      { endif %}-->
+      <div class="task-entry"></div><a href="{% url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>    
 
 {% endblock list %}    

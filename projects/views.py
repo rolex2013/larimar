@@ -22,12 +22,9 @@ class ProjectsList(ListView):
     template_name = 'company_detail.html'
 
 def projects(request, companyid, pk):
+
     current_company = Company.objects.get(id=companyid)
-    #try:
-    #  current_company = Company.objects.get(id=companyid)
-    #except ObjectDoesNotExist:
-    #   current_company = {'name':'dfdffdfdfd', 'id':companyid, 'parent_id':0}
-    #else:
+
     if pk == 0:
        current_project = 0
        tree_project_id = 0
@@ -39,6 +36,16 @@ def projects(request, companyid, pk):
        root_project_id = current_project.get_root().id
        tree_project_id = current_project.tree_id
 
+    button_company_create = ''
+    button_company_update = ''
+    button_project_create = ''
+    # здесь нужно условие для button_company_create
+    button_company_create = 'Добавить'
+    # здесь нужно условие для button_company_update
+    button_company_update = 'Изменить'
+    # здесь нужно условие для button_project_create
+    button_project_create = 'Добавить'
+
     return render(request, "company_detail.html", {
                               'nodes':Project.objects.all(),
                               'current_project':current_project,
@@ -46,6 +53,9 @@ def projects(request, companyid, pk):
                               'tree_project_id':tree_project_id,
                               'current_company':current_company,
                               'companyid':companyid,
+                              'button_company_create': button_company_create,
+                              'button_company_update': button_company_update,
+                              'button_project_create': button_project_create,
                               #'task_id':task_id
                                                 })       
 
@@ -73,6 +83,7 @@ class ProjectCreate(CreateView):
 
     def get_form_kwargs(self):
        kwargs = super(ProjectCreate, self).get_form_kwargs()
+       # здесь нужно условие для 'action': 'create'
        kwargs.update({'user': self.request.user, 'action': 'create'})
        return kwargs   
 
@@ -89,6 +100,7 @@ class ProjectUpdate(UpdateView):
 
     def get_form_kwargs(self):
        kwargs = super(ProjectUpdate, self).get_form_kwargs()
+       # здесь нужно условие для 'action': 'update'
        kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs
 
@@ -121,6 +133,17 @@ def tasks(request, projectid, pk):
 #       tree_task_id = current_task.tree_id  
 #       root_task_id = current_task.get_root().id
 #       tree_task_id = current_task.tree_id
+
+
+    button_project_create = ''
+    button_project_update = ''
+    button_task_create = ''
+    # здесь нужно условие для button_project_create
+    button_project_create = 'Добавить'
+    # здесь нужно условие для button_project_update
+    button_project_update = 'Изменить'
+    # здесь нужно условие для button_task_create
+    button_task_create = 'Добавить'
      
     return render(request, "project_detail.html", {
                               'nodes':Task.objects.all(),
@@ -129,6 +152,9 @@ def tasks(request, projectid, pk):
                               'tree_task_id':tree_task_id,
                               'current_project':current_project,                             
                               'projectid':projectid,
+                              'button_project_create': button_project_create,
+                              'button_project_update': button_project_update,
+                              'button_task_create': button_task_create,
                               #'taskcomment_id':taskcomment_id
                                                 })       
 
@@ -137,8 +163,21 @@ class TaskDetail(DetailView):
    template_name = 'task_detail.html'  
     
    def get_context_data(self, **kwargs):
-       #context = super(TaskDetail, self).get_context_data(**kwargs)
-       return super(TaskDetail, self).get_context_data(**kwargs)
+       context = super(TaskDetail, self).get_context_data(**kwargs)
+       button_task_create = ''
+       button_task_update = ''
+       button_taskcomment_create = ''
+       # здесь нужно условие для button_task_create
+       button_task_create = 'Добавить'
+       # здесь нужно условие для button_task_update
+       button_task_update = 'Изменить'
+       # здесь нужно условие для button_taskcomment_create
+       button_taskcomment_create = 'Добавить'
+       context['button_task_create'] = button_task_create
+       context['button_task_update'] = button_task_update
+       context['button_taskcomment_create'] = button_taskcomment_create
+       #return super(TaskDetail, self).get_context_data(**kwargs)
+       return context
 
 class TaskCreate(CreateView):    
     model = Task

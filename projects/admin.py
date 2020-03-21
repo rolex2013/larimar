@@ -1,9 +1,11 @@
 from django.contrib import admin
 
+from main.models import Component
+
 from companies.models import Company
 from companies.models import Dict_CompanyStructureType
 from companies.models import Dict_CompanyType
-from companies.models import UserCompany
+from companies.models import UserCompanyComponentGroup
 
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
@@ -25,9 +27,16 @@ class TaskAdmin(DjangoMpttAdmin):
 #class TaskCommentAdmin(DjangoMpttAdmin):
 #    pass
 
+class ComponentAdmin(DjangoMpttAdmin):
+    pass
+
+
+admin.site.register(Component, ComponentAdmin)
+
+
 admin.site.register(Company, CompanyAdmin)
 
-admin.site.register(UserCompany)
+admin.site.register(UserCompanyComponentGroup)
 
 
 admin.site.register(Project, ProjectAdmin)

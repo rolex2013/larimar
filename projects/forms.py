@@ -15,6 +15,8 @@ class ProjectForm(forms.ModelForm):
     #datebegin = forms.DateField(widget=AdminDateWidget())
     #datebegin = forms.DateField(widget=AdminSplitDateTime())
 
+    disabled_fields = ('dateclose',)
+
     def clean(self):
         if self.action == 'update' and self.cleaned_data['status'].id != self.initial['status']:
            # если вызов пришёл из ProjectUpdate и статус проекта был изменён, то пишем лог изменения 
@@ -22,7 +24,7 @@ class ProjectForm(forms.ModelForm):
            ProjectStatusLog.objects.create(project_id=self.initial['id'], 
                                            status_id=dict_status.id, 
                                            author_id=self.user.id)
-           if self.cleaned_data['status'].name == "Выполнен":
+           if self.cleaned_data['status'].is_close: # == "Выполнен":
               self.cleaned_data['dateclose'] = datetime.datetime.today()
            else:
               self.cleaned_data['dateclose'] = None
@@ -31,6 +33,8 @@ class ProjectForm(forms.ModelForm):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
         super(ProjectForm, self).__init__(*args, **kwargs)
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
 
     class Meta:
         model = Project
@@ -42,6 +46,8 @@ class ProjectForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
 
+    disabled_fields = ('dateclose',)
+
     def clean(self):
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == 'update' and self.cleaned_data['status'].id != self.initial['status']:
@@ -50,7 +56,7 @@ class TaskForm(forms.ModelForm):
            TaskStatusLog.objects.create(task_id=self.initial['id'], 
                                         status_id=dict_status.id, 
                                         author_id=self.user.id)
-           if self.cleaned_data['status'].name == "Решена":
+           if self.cleaned_data['status'].is_close: # == "Решена" or self.cleaned_data['status'].name == "Снята":
               self.cleaned_data['dateclose'] = datetime.datetime.today()
            else:
               self.cleaned_data['dateclose'] = None                                         
@@ -59,6 +65,8 @@ class TaskForm(forms.ModelForm):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
         super(TaskForm, self).__init__(*args, **kwargs)
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
 
     class Meta:
         model = Task

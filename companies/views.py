@@ -7,7 +7,7 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.template import loader, Context, RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Company, UserCompany
+from .models import Company, UserCompanyComponentGroup
 from projects.models import Project, Task, TaskComment
 from .forms import CompanyForm
 
@@ -35,20 +35,6 @@ class CompaniesList(ListView):
 #                 )  
 
 def companies(request, pk):
-    #current_company = Company.objects.get(id=pk)
-    #root_company_id = current_company.get_root().id
-    #tree_company_id = current_company.tree_id
- 
-    #try:  
-    #   current_project = current_company.resultcompany.all()[0].id
-    #except (ValueError, IndexError) as e:
-    #   project_id = 0
-    #else:
-    #   project_id = current_project
-
-    #if pk == 0:
-    #   current_company_id = request.session['_auth_user_companies_id']
-    #   pk = current_company_id[0]
 
     if pk == 0:
        current_company = 0
@@ -71,7 +57,8 @@ def companies(request, pk):
        else:
           project_id = current_project       
 
-    #if 
+    # здесь нужно условие для button_company_create
+    button_company_create = ''
     button_company_create = 'Добавить'
 
     return render(request, template_name, {

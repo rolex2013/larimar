@@ -28,9 +28,10 @@
     <br /><br />
     {% if user.is_authenticated and user.id == current_company.author_id  %}
       <div>
-        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
+        <!--<div style="float: left;" class="task-entry"><a href="{ url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>
         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a></div>
       </div>
     {% endif %}
   </div>
@@ -44,30 +45,29 @@
       <h3>Список Проектов</h3>  
 
   <!--{ if node %}-->
-  
-      {% load mptt_tags %}
+      <div style="float: left;" class="task-entry"><a href="{% url 'my_project:projects' current_company.pk 0 %}" class="top-menu"><span class="badge badge-secondary">Здесь нужен фильтр по списку</span></a></div>
+      <br /><br />
 
+      {% load mptt_tags %}
+ 
       <ul>
         {% recursetree nodes %}
            {% ifequal node.company_id companyid %}
-              {% if user.is_authenticated and node.is_active %} <!-- тут будет еще проверка на авторство и исполнителей -->
-                 <li>
+              {% if user.is_authenticated and node.is_active %} <!-- тут будет еще проверка на авторство и исполнителей -->                  
                    <!--<a href="{ url 'my_project:project_detail' node.pk %}">-->
-                   <a href="{% url 'my_project:tasks' node.pk 0 %}">
-                   {{ node.name }}
-                   </a>
-                   {% if not node.is_leaf_node %}
-                      <ul class="children">
-                         {{ children }}
-                      </ul>
-                   {% endif %}
+                     <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | <i>{{ node.author.username }}</i></span></b>
+                     {% if not node.is_leaf_node %}
+                        <ul class="children">{{ children }}</ul>
+                     {% endif %}
+                  <!--<td>{{ node.datebegin }}</td><td>{{ node.dateend }}</td><td>{{ node.status.name }}</td>-->
                  </li>
               {% endif %}
            {% endifequal %}
         {% endrecursetree %}
-     </ul>      
+      </ul>  
    <!--{ endif %}-->
-      <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>
+      <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
+      <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
    </div>
   
 {% endblock list %}

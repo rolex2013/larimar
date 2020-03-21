@@ -7,6 +7,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
+#from main.models import Component
+
 
 class Dict_CompanyStructureType(models.Model):
     name = models.CharField("Наименование", max_length=64)
@@ -55,17 +57,31 @@ class Company(MPTTModel):
         verbose_name = 'Организация'
         verbose_name_plural = 'Организации'        
 
-class UserCompany(models.Model):
+#class UserCompany(models.Model):
+#    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='result_user', verbose_name="Пользователь")
+#    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='result_company', verbose_name="Организация")    
+#    is_active = models.BooleanField("Активность", default=True)
+#    
+#    def __str__(self):
+#        return (self.user.username + ' - ' + self.company.name)
+#    class Meta:
+#        unique_together = ('user', 'company')
+#        ordering = ('user','company')
+#        verbose_name = 'Пользователь Организации'
+#        verbose_name_plural = 'Пользователи Организаций'
+
+class UserCompanyComponentGroup(models.Model):
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='result_user', verbose_name="Пользователь")
-    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='result_company', verbose_name="Организация")    
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='result_company', verbose_name="Организация")
+    component = models.ForeignKey('main.Component', on_delete=models.CASCADE, related_name='result_component', verbose_name="Компонент")        
+    group = models.ForeignKey('auth.Group', on_delete=models.CASCADE, related_name='result_group', verbose_name="Группа")
     is_active = models.BooleanField("Активность", default=True)
     
     def __str__(self):
-        return (self.user.username + ' - ' + self.company.name)
+        return (self.user.username + ' - ' + self.company.name + ' - ' + self.component.name + ' - ' + self.group.name)
     class Meta:
-        unique_together = ('user', 'company')
-        ordering = ('user','company')
-        verbose_name = 'Пользователь Организации'
-        verbose_name_plural = 'Пользователи Организаций'
-
+        unique_together = ('user','company','component','group')
+        ordering = ('user','company','component','group')
+        verbose_name = 'Пользователь и Группа Организации и Компонента'
+        verbose_name_plural = 'Пользователи и Группы Организаций и Компонентов'
    

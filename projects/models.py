@@ -14,6 +14,7 @@ class Dict_ProjectStatus(models.Model):
     name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_close = models.BooleanField("Закрывает проект", default=False)
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
@@ -50,6 +51,7 @@ class Dict_TaskStatus(models.Model):
     name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_close = models.BooleanField("Закрывает задачу", default=False)    
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
@@ -94,7 +96,7 @@ class Project(MPTTModel):
     type = models.ForeignKey('Dict_ProjectType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
-    dateclose = models.DateTimeField("Закрыт", auto_now_add=False, blank=True, null=True)
+    dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)    
          
@@ -121,7 +123,7 @@ class Task(MPTTModel):
     type = models.ForeignKey('Dict_TaskType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
     datecreate = models.DateTimeField("Создана", auto_now_add=True)    
-    dateclose = models.DateTimeField("Закрыта", auto_now_add=False, blank=True, null=True)
+    dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
