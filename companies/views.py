@@ -90,8 +90,14 @@ class CompanyCreate(CreateView):
        form.instance.author_id = self.request.user.id
        if self.kwargs['parentid'] != 0:
           form.instance.parent_id = self.kwargs['parentid']
-       #else:
-       #   form.instance.parent_id = form.instance.id
+
+       if form.is_valid():
+          org = form.save()
+          UserCompanyComponentGroup.objects.create(user_id=form.instance.author_id, 
+                                                   company_id=org.id,
+                                                   component_id=5,
+                                                   group_id=1)
+
        return super(CompanyCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):

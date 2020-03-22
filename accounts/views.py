@@ -6,6 +6,8 @@ from urllib.parse import urlparse
 from django.contrib import auth
 from django.template.context_processors import csrf
 from django.views import View
+from django.views.generic import DetailView
+from django.views.generic.edit import UpdateView
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 #from django.core import serializers
@@ -13,6 +15,7 @@ from django.contrib.auth.views import LogoutView
 from .forms import UserRegistrationForm
 
 from companies.models import UserCompanyComponentGroup
+from .models import UserProfile
 
  
 class ELoginView(View):
@@ -48,6 +51,10 @@ class ELoginView(View):
             companies_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
             #companies_lst = companies_list.values_list("company", flat=True)
             request.session['_auth_user_companies_id'] = companies_list #serializers.serialize('json', companies_list)
+            components_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("component", flat=True))         
+            request.session['_auth_user_component_id'] = components_list
+            usergroups_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("group", flat=True))            
+            request.session['_auth_user_group_id'] = usergroups_list
             request.session.modified = True
             # ======================
             # получаем предыдущий url
@@ -98,3 +105,11 @@ def register(request):
     else:
         user_form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'user_form': user_form})
+
+
+class UserProfileDetail(DetailView):
+    model = UserProfile
+    template_name = 'userprofile_detail.html'    
+
+    def get_queryset(self):
+        return UserProfile.objects.filter(user_id=self.request.user.id) #self.kwargs['userid'])

@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from accounts.models import UserProfile
+
 from main.models import Component
 
 from companies.models import Company
@@ -29,6 +31,9 @@ class TaskAdmin(DjangoMpttAdmin):
 
 class ComponentAdmin(DjangoMpttAdmin):
     pass
+
+
+admin.site.register(UserProfile)
 
 
 admin.site.register(Component, ComponentAdmin)

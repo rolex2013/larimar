@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+<!--{% load bootstrap4 %}-->
+
+{% block company %}
+
+  <div class="company-entry">
+    <h2>{{ current_company.name }}
+    {% if not current_company.is_active %}
+       (Организация перемещена в архив)
+    {% endif %}
+    </h2>
+    <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
+
+    {% if current_company.parent.pk %}
+       <i><p>Организация: 
+       <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
+       <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+       </p></i>
+    <!--{ else %}
+       Это головная организация-->
+    {% endif %}
+
+    <p>Тип в оргструктуре: {{ current_company.structure_type }}</p>
+    <p>Тип: {{ current_company.type }}</p>
+    <em>Автор: {{ current_company.author }}</em><br /> 
+    <em>Дата: {{ current_company.datecreate }}</em>
+    <br /><br />
+    {% if user.is_authenticated and user.id == current_company.author_id  %}
+      <div>
+        <!--<div style="float: left;" class="task-entry"><a href="{ url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>
+        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a></div>
+      </div>
+    {% endif %}
+  </div>
+  
+  <br /><br />
+{% endblock company %}
+
+{% block list %}
+
+  
+{% endblock list %}

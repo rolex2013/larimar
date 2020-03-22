@@ -19,7 +19,7 @@
         {% block head %}
 
             {% if user.is_authenticated %}        
-               <a href="{% url 'my_main:home' %}">Главная</a> | <a href="{% url 'my_company:menu_companies' %}">Организации</a> | <a href="{% url 'my_company:menu_companies' %}">Проекты</a> | {{ user.username }}&nbsp;/&nbsp;<a href="{% url 'my_accounts:logout' %}">Выход</a>
+               <a href="{% url 'my_main:home' %}">Главная</a> | <a href="{% url 'my_company:menu_companies' %}">Организации</a> | <a href="{% url 'my_company:menu_companies' %}">Проекты</a> | <a href="{% url 'my_accounts:profile' user.id %}">{{ user.username }}</a>&nbsp;/&nbsp;<a href="{% url 'my_accounts:logout' %}">Выход</a>
             {% else %}
                <a href="{% url 'my_accounts:login' %}">Вход</a> | <a href="{% url 'my_accounts:register' %}">Регистрация</a>
             {% endif %}
