@@ -6,7 +6,7 @@ from companies.models import Company
 
 class UserProfile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='result_user_profile', verbose_name="Пользователь")
-    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='result_company_profile', verbose_name="Организация")
+    company = models.ForeignKey('companies.Company', blank=True, null=True, on_delete=models.CASCADE, related_name='result_company_profile', verbose_name="Организация")
     description = RichTextUploadingField("Описание", blank=True, null=True)    
     is_active = models.BooleanField("Активность", default=True)
 

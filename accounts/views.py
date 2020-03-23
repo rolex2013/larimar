@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 
 from urllib.parse import urlparse
  
@@ -48,7 +49,12 @@ class ELoginView(View):
             #companies_list = request.UserCompany.objects.get(user=request.user)
             #uc['UserCompany'] = companies_list
             #companies_list = UserCompany.objects.filter(user=request.user.id, is_active=True).only('company')
-            request.session['_auth_user_currentcompany_id'] = UserProfile.objects.get(user=request.user.id, is_active=True).company_id
+            current_company = ''
+            try:
+               current_company = UserProfile.objects.get(user=request.user.id, is_active=True).company_id
+            except ObjectDoesNotExist:
+               UserProfile.objects.create(user_id=request.user.id, description='')
+            request.session['_auth_user_currentcompany_id'] = current_company
             companies_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
             #companies_lst = companies_list.values_list("company", flat=True)
             request.session['_auth_user_companies_id'] = companies_list #serializers.serialize('json', companies_list)
