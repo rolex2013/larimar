@@ -12,7 +12,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 #from django.core import serializers
 
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserProfileForm
 
 from companies.models import UserCompanyComponentGroup
 from .models import UserProfile
@@ -27,9 +27,9 @@ class ELoginView(View):
         else:
             # Иначе формируем контекст с формой авторизации и отдаём страницу 
             # с этим контекстом.
-            # работает, как для url - /admin/login/ так и для /accounts/login/ 
+            # работает, как для url - /admin/login/ так и для /account/login/ 
             context = create_context_username_csrf(request)
-            #return render_to_response('accounts/login.html', context=context)
+            #return render_to_response('account/login.html', context=context)
             return render(request, 'registration/login.html', context=context)
  
     def post(self, request):
@@ -48,6 +48,7 @@ class ELoginView(View):
             #companies_list = request.UserCompany.objects.get(user=request.user)
             #uc['UserCompany'] = companies_list
             #companies_list = UserCompany.objects.filter(user=request.user.id, is_active=True).only('company')
+            request.session['_auth_user_currentcompany_id'] = UserProfile.objects.get(user=request.user.id, is_active=True).company_id
             companies_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
             #companies_lst = companies_list.values_list("company", flat=True)
             request.session['_auth_user_companies_id'] = companies_list #serializers.serialize('json', companies_list)
@@ -65,7 +66,7 @@ class ELoginView(View):
             if next == '/admin/login/' and request.user.is_staff:
                 return redirect('/admin/')
             # иначе делаем редирект на предыдущую страницу,
-            # в случае с /accounts/login/ произойдёт ещё один редирект на главную страницу
+            # в случае с /account/login/ произойдёт ещё один редирект на главную страницу
             # в случае любого другого url, пользователь вернётся на данный url
             return redirect(next)
  
@@ -74,7 +75,7 @@ class ELoginView(View):
         context = create_context_username_csrf(request)
         context['login_form'] = form
  
-        #return render_to_response('accounts/login.html', context=context)
+        #return render_to_response('account/login.html', context=context)
         return render(request, 'registration/login.html', context=context)
  
  
@@ -106,10 +107,35 @@ def register(request):
         user_form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'user_form': user_form})
 
+#
+#class UserProfileDetail(DetailView):
+#    model = UserProfile
+#    template_name = 'userprofile_detail.html'    
+#
+#    def get_queryset(self):
+#        return UserProfile.objects.filter(user_id=self.request.user.id) #self.kwargs['userid'])
+#
 
-class UserProfileDetail(DetailView):
+def UserProfileDetail(request, userid):
+    user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
+    #button_project_create = ''
+    button_userprofile_update = 'Изменить'
+    return render(request, 'userprofile_detail.html', {'user_profile': user_profile,
+                                                       'button_userprofile_update': button_userprofile_update})
+
+
+class UserProfileUpdate(UpdateView):    
     model = UserProfile
-    template_name = 'userprofile_detail.html'    
+    form_class = UserProfileForm
+    template_name = 'object_form.html'
 
-    def get_queryset(self):
-        return UserProfile.objects.filter(user_id=self.request.user.id) #self.kwargs['userid'])
+    def get_context_data(self, **kwargs):
+       context = super(UserProfileUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Профиль'
+       return context
+
+    #def get_form_kwargs(self):
+    #   kwargs = super(UserProfileUpdate, self).get_form_kwargs()
+    #   # здесь нужно условие для 'action': 'update'
+    #   kwargs.update({'user': self.request.user, 'action': 'update'})
+    #   return kwargs    

@@ -1,4 +1,4 @@
-<form id="contact_form" action="{% url 'my_accounts:login' %}" method="post">
+<form id="contact_form" action="{% url 'my_account:login' %}" method="post">
     {% load bootstrap4 %}
     {% csrf_token %}
     {% bootstrap_form login_form %}
