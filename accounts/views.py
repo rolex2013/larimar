@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from django.contrib import auth
 from django.template.context_processors import csrf
 from django.views import View
-from django.views.generic import DetailView
+from django.views.generic import DetailView, FormView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
@@ -56,8 +56,7 @@ class ELoginView(View):
                UserProfile.objects.create(user_id=request.user.id, description='')
             request.session['_auth_user_currentcompany_id'] = current_company
             companies_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
-            #companies_lst = companies_list.values_list("company", flat=True)
-            request.session['_auth_user_companies_id'] = companies_list #serializers.serialize('json', companies_list)
+            request.session['_auth_user_companies_id'] = companies_list
             components_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("component", flat=True))         
             request.session['_auth_user_component_id'] = components_list
             usergroups_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("group", flat=True))            
@@ -130,7 +129,23 @@ def UserProfileDetail(request, userid):
                                                        'button_userprofile_update': button_userprofile_update})
 
 
-class UserProfileUpdate(UpdateView):    
+#class UserProfileUpdate1(UpdateView):    
+#    model = UserProfile
+#    form_class = UserProfileForm
+#    template_name = 'object_form.html'
+#
+#    def get_context_data(self, **kwargs):
+#       context = super(UserProfileUpdate, self).get_context_data(**kwargs)
+#       context['header'] = 'Изменить Профиль'
+#       return context
+#
+#    def get_form_kwargs(self):
+#       kwargs = super(UserProfileUpdate, self).get_form_kwargs()
+#       # здесь нужно условие для 'action': 'update'
+#       kwargs.update({'org': self.request.session['_auth_user_companies_id']})
+#       return kwargs    
+#
+class UserProfileUpdate(FormView):    
     model = UserProfile
     form_class = UserProfileForm
     template_name = 'object_form.html'
@@ -140,8 +155,8 @@ class UserProfileUpdate(UpdateView):
        context['header'] = 'Изменить Профиль'
        return context
 
-    #def get_form_kwargs(self):
-    #   kwargs = super(UserProfileUpdate, self).get_form_kwargs()
-    #   # здесь нужно условие для 'action': 'update'
-    #   kwargs.update({'user': self.request.user, 'action': 'update'})
-    #   return kwargs    
+    def get_form_kwargs(self):
+       kwargs = super(UserProfileUpdate, self).get_form_kwargs()
+       # здесь нужно условие для 'action': 'update'
+       kwargs.update({'org': self.request.session['_auth_user_companies_id']})
+       return kwargs           

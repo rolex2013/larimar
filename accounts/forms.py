@@ -25,9 +25,10 @@ class UserRegistrationForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         #self.user = kwargs.pop('user')
-        self.request = kwargs.pop('request')
+        self.companies = kwargs.pop('org')
+        #print(self.companies)
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['company'].queryset = Company.objects.filter(id=self.request.session['_auth_user_companies_id'][0])
+        self.fields['company'].queryset = Company.objects.filter(id__in=self.companies)
     class Meta:
         model = UserProfile
         fields = ['company', 'description']        
