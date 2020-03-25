@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from .models import UserProfile
 from companies.models import Company
+from mptt.forms import MoveNodeForm, TreeNodeChoiceField
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
@@ -28,7 +29,10 @@ class UserProfileForm(forms.ModelForm):
         self.companies = kwargs.pop('org')
         #print(self.companies)
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['company'].queryset = Company.objects.filter(id__in=self.companies)
+        #self.fields['company'].queryset = Company.objects.filter(id__in=self.companies) # это без иерархии
+        #self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.all(), level_indicator = u'---') # из документации
+        self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.filter(id__in=self.companies), level_indicator = u'---') # с иерархией
     class Meta:
         model = UserProfile
-        fields = ['company', 'description']        
+        fields = ['company', 'description']     
+           

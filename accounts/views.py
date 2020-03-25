@@ -129,26 +129,11 @@ def UserProfileDetail(request, userid):
                                                        'button_userprofile_update': button_userprofile_update})
 
 
-#class UserProfileUpdate1(UpdateView):    
-#    model = UserProfile
-#    form_class = UserProfileForm
-#    template_name = 'object_form.html'
-#
-#    def get_context_data(self, **kwargs):
-#       context = super(UserProfileUpdate, self).get_context_data(**kwargs)
-#       context['header'] = 'Изменить Профиль'
-#       return context
-#
-#    def get_form_kwargs(self):
-#       kwargs = super(UserProfileUpdate, self).get_form_kwargs()
-#       # здесь нужно условие для 'action': 'update'
-#       kwargs.update({'org': self.request.session['_auth_user_companies_id']})
-#       return kwargs    
-#
-class UserProfileUpdate(FormView):    
+class UserProfileUpdate(UpdateView):    
     model = UserProfile
     form_class = UserProfileForm
     template_name = 'object_form.html'
+    #success_url = '../3'
 
     def get_context_data(self, **kwargs):
        context = super(UserProfileUpdate, self).get_context_data(**kwargs)
@@ -159,4 +144,5 @@ class UserProfileUpdate(FormView):
        kwargs = super(UserProfileUpdate, self).get_form_kwargs()
        # здесь нужно условие для 'action': 'update'
        kwargs.update({'org': self.request.session['_auth_user_companies_id']})
-       return kwargs           
+       return kwargs 
+                 

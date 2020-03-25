@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse, reverse_lazy
+#from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor_uploader.fields import RichTextUploadingField
 
 from companies.models import Company
