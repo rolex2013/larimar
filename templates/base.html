@@ -13,7 +13,6 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         
         <title>{% block title %}Управление проектами и задачами{% endblock %}</title>
-
         
 
         {% block head %}
@@ -21,9 +20,16 @@
             {% if user.is_authenticated %}        
                <span class="hint hint--bottom hint--info" data-hint="Главная страница"><a href="{% url 'my_main:home' %}">Главная</a></span> | 
                <span class="hint hint--bottom hint--info" data-hint="Организации"><a href="{% url 'my_company:menu_companies' %}">Организации</a></span> | 
-               <span class="hint hint--bottom hint--info" data-hint="Управление проектами и задачами"><a href="{% url 'my_company:menu_companies' %}">Проекты</a></span> | 
+               <!--<a href="{ url 'my_project:projects' 8 0 %}">Проекты компании</a> | -->
+               <span class="hint hint--bottom hint--info" data-hint="Управление проектами и задачами"><a href="{% url 'my_project:projects' 27 0 %}">Проекты</a></span> | 
                <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' user.pk %}">{{ user.username }}</a></span>&nbsp;/&nbsp;
                <span class="hint hint--bottom hint--info" data-hint="Завершить сеанс"><a href="{% url 'my_account:logout' %}">Выход</a></span>
+
+               <ul>{% load menubuilder %}{% menu main_menu %}
+                      <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
+                      {% for item in menuitems %}<a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a> | 
+                      {% endfor %}
+               </ul>
             {% else %}
                <a href="{% url 'my_account:login' %}">Вход</a> | <a href="{% url 'my_account:register' %}">Регистрация</a>
             {% endif %}

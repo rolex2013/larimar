@@ -13,6 +13,7 @@ django-crispy-forms = "*"
 django-bootstrap-datepicker-plus = "*"
 django-jquery = "*"
 pylint-django = "*"
+django-menu = "*"
 
 [requires]
 python_version = "3.8"

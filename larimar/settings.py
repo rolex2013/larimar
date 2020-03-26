@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'mptt',
     'ckeditor',
     'ckeditor_uploader',
+    'menu',
     'accounts',
     'main', 
     'companies', 

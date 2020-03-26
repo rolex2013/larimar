@@ -55,7 +55,7 @@
            {% ifequal node.company_id companyid %}
               {% if user.is_authenticated and node.is_active %} <!-- тут будет еще проверка на авторство и исполнителей -->                  
                    <!--<a href="{ url 'my_project:project_detail' node.pk %}">-->
-                     <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | <i>{{ node.author.username }}</i></span></b>
+                     <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | <i>{{ node.author.username }}</i></span></b><br />
                      {% if not node.is_leaf_node %}
                         <ul class="children">{{ children }}</ul>
                      {% endif %}
