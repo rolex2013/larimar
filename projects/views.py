@@ -23,6 +23,9 @@ class ProjectsList(ListView):
 
 def projects(request, companyid, pk):
 
+    if companyid == 0:
+       companyid = request.session['_auth_user_currentcompany_id']
+    
     current_company = Company.objects.get(id=companyid)
 
     if pk == 0:
@@ -36,9 +39,12 @@ def projects(request, companyid, pk):
        root_project_id = current_project.get_root().id
        tree_project_id = current_project.tree_id
 
+    button_company_select = ''
     button_company_create = ''
     button_company_update = ''
     button_project_create = ''
+    # здесь нужно условие для button_company_create
+    button_company_select = 'Сменить организацию'
     # здесь нужно условие для button_company_create
     button_company_create = 'Добавить'
     # здесь нужно условие для button_company_update
@@ -53,6 +59,7 @@ def projects(request, companyid, pk):
                               'tree_project_id':tree_project_id,
                               'current_company':current_company,
                               'companyid':companyid,
+                              'button_company_select': button_company_select,
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
                               'button_project_create': button_project_create,

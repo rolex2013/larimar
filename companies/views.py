@@ -22,7 +22,9 @@ class CompaniesList(ListView):
             #current_membership = get_user_membership(self.request)
             #context['current_membership'] = str(current_membership.membership)
             # добавляем к контексту сессионный массив с id компаний, доступными этому авторизованному юзеру
+            #button_company_select = 'Сменить организацию'
             context['user_companies'] = self.request.session['_auth_user_companies_id']
+            #context['button_company_select'] = button_company_select
             return context
 
 #def companies_main(request):
@@ -60,7 +62,7 @@ def companies(request, pk):
     # здесь нужно условие для button_company_create
     button_company_create = ''
     button_company_create = 'Добавить'
-
+    
     return render(request, template_name, {
                               'nodes':Company.objects.all(),
                               'current_company':current_company,
@@ -68,7 +70,7 @@ def companies(request, pk):
                               'tree_company_id':tree_company_id,
                               'project_id':project_id,
                               'user_companies': request.session['_auth_user_companies_id'],
-                              'button_company_create': button_company_create,
+                              'button_company_create': button_company_create,                              
                                             })  
 
 def tree_get_root(request, pk):

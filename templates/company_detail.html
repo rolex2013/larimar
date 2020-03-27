@@ -29,6 +29,8 @@
     {% if user.is_authenticated and user.id == current_company.author_id  %}
       <div>
         <!--<div style="float: left;" class="task-entry"><a href="{ url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
+        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:menu_companies' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a></div>
+        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
         <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>
         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
         <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a></div>

@@ -144,5 +144,26 @@ class UserProfileUpdate(UpdateView):
        kwargs = super(UserProfileUpdate, self).get_form_kwargs()
        # здесь нужно условие для 'action': 'update'
        kwargs.update({'org': self.request.session['_auth_user_companies_id']})
-       return kwargs 
+       return kwargs
+
+    #def post(self, request, *args, **kwargs):
+    #   current_company = ''
+    #   try:
+    #      current_company = UserProfile.objects.get(user=self.request.user.id, is_active=True).company_id
+    #   except ObjectDoesNotExist:
+    #      UserProfile.objects.create(user_id=self.request.user.id, description='')
+    #   self.request.session['_auth_user_currentcompany_id'] = current_company
+    #   #if (form.is_valid()):
+    #   return self.form_valid(form)
+    #get object
+    #def get_object(self, queryset=None): 
+    #   return self.request.UserProfile
+
+    #override form_valid method
+    #def form_valid(self, form):
+    #   #save cleaned post data
+    #   clean = form.cleaned_data 
+    #   context = {}        
+    #   self.object = context.save(clean) 
+    #   return super(UserProfileUpdate, self).form_valid(form)       
                  
