@@ -121,7 +121,9 @@ def register(request):
 #        return UserProfile.objects.filter(user_id=self.request.user.id) #self.kwargs['userid'])
 #
 
-def UserProfileDetail(request, userid):
+def UserProfileDetail(request, userid=0):
+    if userid == 0:
+       userid = request.user.id 
     user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
     #button_project_create = ''
     button_userprofile_update = 'Изменить'
@@ -146,24 +148,11 @@ class UserProfileUpdate(UpdateView):
        kwargs.update({'org': self.request.session['_auth_user_companies_id']})
        return kwargs
 
-    #def post(self, request, *args, **kwargs):
-    #   current_company = ''
-    #   try:
-    #      current_company = UserProfile.objects.get(user=self.request.user.id, is_active=True).company_id
-    #   except ObjectDoesNotExist:
-    #      UserProfile.objects.create(user_id=self.request.user.id, description='')
-    #   self.request.session['_auth_user_currentcompany_id'] = current_company
-    #   #if (form.is_valid()):
-    #   return self.form_valid(form)
-    #get object
-    #def get_object(self, queryset=None): 
-    #   return self.request.UserProfile
-
-    #override form_valid method
-    #def form_valid(self, form):
-    #   #save cleaned post data
-    #   clean = form.cleaned_data 
-    #   context = {}        
-    #   self.object = context.save(clean) 
-    #   return super(UserProfileUpdate, self).form_valid(form)       
+    # записываем новое значение текущей компании из профиля в переменную сессии
+    def form_valid(self, form):
+        #form.instance.user = self.request.user
+        form.save()
+        current_company = UserProfile.objects.get(user=self.request.user.id, is_active=True).company_id
+        self.request.session['_auth_user_currentcompany_id'] = current_company
+        return super(UserProfileUpdate, self).form_valid(form)
                  

@@ -13,6 +13,7 @@ urlpatterns = [
     #path('login/', views.LoginView.as_view(), name='login'),
     #path('', views.ProjectsHome.as_view(), name = 'home'),
 
+    path('projects_page0/', views.projects, name = 'projects0'),   # для вызова страницы списка проектов для текущей компании
     path('projects_page/<int:companyid>/<int:pk>', views.projects, name = 'projects'),
     #path('projects_list/<int:pk>', views.ProjectDetail.as_view(), name = 'project_detail'),
     path('projects_list/project_create/<int:companyid>/<int:parentid>', views.ProjectCreate.as_view(), name='project_create'),

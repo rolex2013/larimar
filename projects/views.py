@@ -21,7 +21,7 @@ class ProjectsList(ListView):
     model = Project
     template_name = 'company_detail.html'
 
-def projects(request, companyid, pk):
+def projects(request, companyid=0, pk=0):
 
     if companyid == 0:
        companyid = request.session['_auth_user_currentcompany_id']
