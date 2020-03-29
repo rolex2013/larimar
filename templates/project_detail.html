@@ -1,43 +1,53 @@
 {% extends 'base.html' %}
 
 {% block project %}
-  <div class="project-entry">
-    <p><h2>{{ current_project.name }}
-    {% if not current_project.is_active %}
-       (Проект перемещён в архив)
-    {% endif %}
-    </h2></p>
-    <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
-    <i><p>Организация: <a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></p></i>
-    {% if current_project.parent %}
-       <p>Уровень выше: <a href="{% url 'my_project:tasks' current_project.parent.pk 0 %}">{{ current_project.parent.name }}</a></p>
-    {% else %}
-       <!-- <p>: <a href="{ url 'my_project:projects' current_project.company.pk current_project.parent.pk %}">{{ current_project.parent.name }}</a></p>-->
-    {% endif %}
-    <p>Исполнитель: {{ current_project.assigner }}</p>     
-    <p>Начало: {{ current_project.datebegin }}</p>
-    <p>Окончание: {{ current_project.dateend }}</p>
-    <p>Тип в иерархии: {{ current_project.structure_type }}</p>
-    <p>Тип: {{ current_project.type }}</p>
-    <p>Статус: {{ current_project.status }}</p>
-    <em>Автор: {{ current_project.author }}</em><br /> 
-    <em>Дата: {{ current_project.datecreate }}</em>
-    <p>&nbsp;</p>
-    {% if user.is_authenticated and user.id == current_project.author_id  %}
-      <div>
-        <div style="float: left;"><a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
-        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-        <div style="float: left;"><a href="{% url 'my_project:project_update' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_update }}</span></a></div>
-        <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-      </div>
-    {% endif %}
-  </div>
-  <br /><br />
+   <!-- Защита от прямого доступа к проекту -->
+   {% if current_project.company.id in user_companies %}
+
+     <div class="project-entry">
+       <p><h2>{{ current_project.name }}
+       {% if not current_project.is_active %}
+          (Проект перемещён в архив)
+       {% endif %}
+       </h2></p>
+       <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
+       <i><p>Организация: <a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></p></i>
+       {% if current_project.parent %}
+          <p>Уровень выше: <a href="{% url 'my_project:tasks' current_project.parent.pk 0 %}">{{ current_project.parent.name }}</a></p>
+       {% else %}
+          <!-- <p>: <a href="{ url 'my_project:projects' current_project.company.pk current_project.parent.pk %}">{{ current_project.parent.name }}</a></p>-->
+       {% endif %}
+       <p>Исполнитель: {{ current_project.assigner }}</p>     
+       <p>Начало: {{ current_project.datebegin }}</p>
+       <p>Окончание: {{ current_project.dateend }}</p>
+       <p>Тип в иерархии: {{ current_project.structure_type }}</p>
+       <p>Тип: {{ current_project.type }}</p>
+       <p>Статус: {{ current_project.status }}</p>
+       <em>Автор: {{ current_project.author }}</em><br /> 
+       <em>Дата: {{ current_project.datecreate }}</em>
+       <p>&nbsp;</p>
+       {% if user.is_authenticated and user.id == current_project.author_id  %}
+         <div>
+           <div style="float: left;"><a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
+           <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+           <div style="float: left;"><a href="{% url 'my_project:project_update' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_update }}</span></a></div>
+           <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
+         </div>
+       {% endif %}
+     </div>
+     <br /><br />
+
+  {% else %}
+     <h4>Информация о проекте недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
+  {% endif %}  
+
 {% endblock project %}
 
 {% block list %}
+   <!-- Защита от прямого доступа к задачам проекта -->
+   {% if current_project.company.id in user_companies %}
 
-   <div class="task-list">
+      <div class="task-list">
         <h3>Список Задач</h3>
 
         {% load mptt_tags %}
@@ -61,9 +71,13 @@
           {% endrecursetree %}
         </ul>    
 
-   </div>
+      </div>
 
    <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
    <div class="task-entry"></div><a href="{% url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>
+
+   {% else %}
+      <h5>Информация о задачах недоступна!</h5>
+   {% endif %}  
 
    {% endblock list %}

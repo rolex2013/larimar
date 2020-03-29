@@ -3,73 +3,90 @@
 <!--{% load bootstrap4 %}-->
 
 {% block company %}
+   
+   <!-- Защита от прямого доступа к компании -->
+   {% if current_company.id in user_companies %}
 
-  <div class="company-entry">
-    <h2>{{ current_company.name }}
-    {% if not current_company.is_active %}
-       (Организация перемещена в архив)
-    {% endif %}
-    </h2>
-    <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
+     <div class="company-entry">
+        <h2>{{ current_company.name }}
+        {% if not current_company.is_active %}(Организация перемещена в архив){% endif %}
+        </h2>
+        <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
 
-    {% if current_company.parent.pk %}
-       <i><p>Организация: 
-       <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
-       <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
-       </p></i>
-    <!--{ else %}
-       Это головная организация-->
-    {% endif %}
+        {% if current_company.parent.pk %}
+           <i><p>Организация: 
+           <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
+           <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+           </p></i>
+        <!--{ else %}
+           Это головная организация-->
+        {% endif %}
 
-    <p>Тип в оргструктуре: {{ current_company.structure_type }}</p>
-    <p>Тип: {{ current_company.type }}</p>
-    <em>Автор: {{ current_company.author }}</em><br /> 
-    <em>Дата: {{ current_company.datecreate }}</em>
-    <br /><br />
-    {% if user.is_authenticated and user.id == current_company.author_id  %}
-      <div>
-        <!--<div style="float: left;" class="task-entry"><a href="{ url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
-        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:menu_companies' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a></div>
-        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>
-        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-        <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a></div>
-      </div>
-    {% endif %}
-  </div>
-  
-  <br /><br />
+        <p>Тип в оргструктуре: {{ current_company.structure_type }}</p>
+        <p>Тип: {{ current_company.type }}</p>
+        <em>Автор: {{ current_company.author }}</em><br /> 
+        <em>Дата: {{ current_company.datecreate }}</em>
+        <br /><br />
+        {% if user.is_authenticated and user.id == current_company.author_id  %}
+           <div>
+              <!--<div style="float: left;" class="task-entry"><a href="{ url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
+              <div style="float: left;" class="task-entry"><a href="{% url 'my_company:menu_companies' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a></div>
+              <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+              <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>
+              <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+              <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a></div>
+           </div>
+        {% endif %}
+     </div>
+     <br /><br />
+
+   {% else %}
+
+     <h4>Информация об организации недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
+
+   {% endif %}  
+
 {% endblock company %}
 
 {% block list %}
 
-   <div class="project-list">
-      <h3>Список Проектов</h3>  
+   <!-- Защита от прямого доступа к проектам компании -->
+   {% if current_company.id in user_companies %}
 
-  <!--{ if node %}-->
-      <div style="float: left;" class="task-entry"><a href="{% url 'my_project:projects' current_company.pk 0 %}" class="top-menu"><span class="badge badge-secondary">Здесь нужен фильтр по списку</span></a></div>
-      <br /><br />
+      <div class="project-list">
+         <h3>Список Проектов</h3>  
 
-      {% load mptt_tags %}
+         <!--{ if node %}-->
+         <div style="float: left;" class="task-entry"><a href="{% url 'my_project:projects' current_company.pk 0 %}" class="top-menu"><span class="badge badge-secondary">Здесь нужен фильтр по списку</span></a></div>
+         <br /><br />
+
+         {% load mptt_tags %}
  
-      <ul>
-        {% recursetree nodes %}
-           {% ifequal node.company_id companyid %}
-              {% if user.is_authenticated and node.is_active %} <!-- тут будет еще проверка на авторство и исполнителей -->                  
+         <ul>
+           {% recursetree nodes %}
+              {% ifequal node.company_id companyid %}
+                 {% if user.is_authenticated and node.is_active %} <!-- тут будет еще проверка на авторство и исполнителей -->                  
                    <!--<a href="{ url 'my_project:project_detail' node.pk %}">-->
                      <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | <i>{{ node.author.username }}</i></span></b><br />
                      {% if not node.is_leaf_node %}
                         <ul class="children">{{ children }}</ul>
                      {% endif %}
                   <!--<td>{{ node.datebegin }}</td><td>{{ node.dateend }}</td><td>{{ node.status.name }}</td>-->
-                 </li>
-              {% endif %}
-           {% endifequal %}
-        {% endrecursetree %}
-      </ul>  
-   <!--{ endif %}-->
-      <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
-      <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
-   </div>
-  
+                    </li>
+                 {% endif %}
+              {% endifequal %}
+           {% endrecursetree %}
+         </ul>  
+      <!--{ endif %}-->
+         <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
+         <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
+      </div>
+
+   {% else %}
+
+      <h5>Информация о проектах недоступна!</h5>
+
+   {% endif %}  
+
 {% endblock list %}
+

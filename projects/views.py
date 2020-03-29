@@ -43,8 +43,10 @@ def projects(request, companyid=0, pk=0):
     button_company_create = ''
     button_company_update = ''
     button_project_create = ''
-    # здесь нужно условие для button_company_create
-    button_company_select = 'Сменить организацию'
+    # здесь нужно условие для button_company_select
+    comps = request.session['_auth_user_companies_id']
+    if len(comps) > 1:
+       button_company_select = 'Сменить организацию'
     # здесь нужно условие для button_company_create
     button_company_create = 'Добавить'
     # здесь нужно условие для button_company_update
@@ -59,6 +61,7 @@ def projects(request, companyid=0, pk=0):
                               'tree_project_id':tree_project_id,
                               'current_company':current_company,
                               'companyid':companyid,
+                              'user_companies': comps,
                               'button_company_select': button_company_select,
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
@@ -129,18 +132,6 @@ def tasks(request, projectid, pk):
        tree_task_id = current_task.tree_id  
        root_task_id = current_task.get_root().id
        tree_task_id = current_task.tree_id
-#    try:
-#       current_task = Task.objects.get(id=pk)
-#    except ObjectDoesNotExist:
-#       current_task = 0
-#       tree_task_id = 0  
-#       root_task_id = 0
-#       tree_task_id = 0
-#    else:   
-#       tree_task_id = current_task.tree_id  
-#       root_task_id = current_task.get_root().id
-#       tree_task_id = current_task.tree_id
-
 
     button_project_create = ''
     button_project_update = ''
@@ -159,6 +150,7 @@ def tasks(request, projectid, pk):
                               'tree_task_id':tree_task_id,
                               'current_project':current_project,                             
                               'projectid':projectid,
+                              'user_companies': request.session['_auth_user_companies_id'],                              
                               'button_project_create': button_project_create,
                               'button_project_update': button_project_update,
                               'button_task_create': button_task_create,
