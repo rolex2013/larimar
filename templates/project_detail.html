@@ -23,7 +23,13 @@
        <p>Тип в иерархии: {{ current_project.structure_type }}</p>
        <p>Тип: {{ current_project.type }}</p>
        <p>Статус: {{ current_project.status }}</p>
+       <p><i>Участики: 
+       {% for u in current_project.members.all %}
+          {{ u.username }},&nbsp;
+       {% endfor %}
+       </i></p>
        <em>Автор: {{ current_project.author }}</em><br /> 
+       <!--<em>Участники: { current_project.members.name }}</em><br /> -->
        <em>Дата: {{ current_project.datecreate }}</em>
        <p>&nbsp;</p>
        {% if user.is_authenticated and user.id == current_project.author_id  %}

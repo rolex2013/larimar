@@ -97,7 +97,8 @@ class Project(MPTTModel):
     status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='project_author', verbose_name="Автор")
+    members = models.ManyToManyField('auth.User', related_name='project_members', verbose_name="Участники")
     is_active = models.BooleanField("Активность", default=True)    
          
     def get_absolute_url(self):

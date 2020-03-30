@@ -4,6 +4,7 @@ from django import forms
 from .models import Company, Project, Task, TaskComment
 from .models import ProjectStatusLog, TaskStatusLog
 from .models import Dict_ProjectStatus, Dict_TaskStatus
+from companies.models import UserCompanyComponentGroup
 #from django.contrib.admin.widgets import AdminDateWidget
 #from django.contrib.admin.widgets import AdminSplitDateTime
 from bootstrap_datepicker_plus import DatePickerInput
@@ -31,14 +32,17 @@ class ProjectForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
-        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
+        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму  
+      
         super(ProjectForm, self).__init__(*args, **kwargs)
+        #self.fields['members'].queryset = UserCompanyComponentGroup.objects.all() #filter(company_id=self.company)
+        #self.fields['members'].queryset = UserCompanyComponentGroup.objects.filter(company_id=8).values_list("user_id", flat=True)
         for field in self.disabled_fields:
             self.fields[field].disabled = True
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'is_active', 'id']
+        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'members', 'is_active', 'id']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
