@@ -5,6 +5,7 @@ from .models import Company, Project, Task, TaskComment
 from .models import ProjectStatusLog, TaskStatusLog
 from .models import Dict_ProjectStatus, Dict_TaskStatus
 from companies.models import UserCompanyComponentGroup
+from django.contrib.auth.models import User
 #from django.contrib.admin.widgets import AdminDateWidget
 #from django.contrib.admin.widgets import AdminSplitDateTime
 from bootstrap_datepicker_plus import DatePickerInput
@@ -35,8 +36,11 @@ class ProjectForm(forms.ModelForm):
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму  
       
         super(ProjectForm, self).__init__(*args, **kwargs)
-        #self.fields['members'].queryset = UserCompanyComponentGroup.objects.all() #filter(company_id=self.company)
-        #self.fields['members'].queryset = UserCompanyComponentGroup.objects.filter(company_id=8).values_list("user_id", flat=True)
+
+        # в выпадающий список для выбора участников проекта подбираем только тех юзеров, которые привязаны к этой организации (в админке)
+        uc = UserCompanyComponentGroup.objects.filter(company_id=).values_list('user_id', flat=True)
+        self.fields['members'].queryset = User.objects.filter(id__in=uc, is_active=True)
+
         for field in self.disabled_fields:
             self.fields[field].disabled = True
 
