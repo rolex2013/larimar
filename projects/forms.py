@@ -20,6 +20,8 @@ class ProjectForm(forms.ModelForm):
     disabled_fields = ('dateclose',)
 
     def clean(self):
+        if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
+           self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
         if self.action == 'update' and self.cleaned_data['status'].id != self.initial['status']:
            # если вызов пришёл из ProjectUpdate и статус проекта был изменён, то пишем лог изменения 
            dict_status = Dict_ProjectStatus.objects.get(pk=self.cleaned_data['status'].id)
@@ -46,7 +48,7 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'members', 'is_active', 'id']
+        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'members', 'is_active', 'id']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
@@ -57,6 +59,8 @@ class TaskForm(forms.ModelForm):
     disabled_fields = ('dateclose',)
 
     def clean(self):
+        if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
+           self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == 'update' and self.cleaned_data['status'].id != self.initial['status']:
            # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения 
@@ -78,7 +82,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'is_active', 'id']
+        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'is_active', 'id']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat
@@ -87,4 +91,4 @@ class TaskForm(forms.ModelForm):
 class TaskCommentForm(forms.ModelForm):
     class Meta:
         model = TaskComment
-        fields = ['name', 'description']        
+        fields = ['name', 'description', 'time', 'cost']        

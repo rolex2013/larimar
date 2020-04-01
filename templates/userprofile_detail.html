@@ -7,12 +7,15 @@
    {% autoescape off %}
          Описание: {{ user_profile.description }}
    {% endautoescape %}
-   <h5>Настройки</h5>
-   <p>Компания: {{ user_profile.company.name }}</p>
 
-   <div class="comment-entry">
-      <a href="{% url 'my_account:userprofile_update' user_profile.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_userprofile_update }}</span></a>
-   </div>
+   {% if user_profile.user.id == user.id %}
+      <h5>Настройки</h5>
+      <p>Компания: {{ user_profile.company.name }}</p>
+
+      <div class="comment-entry">
+         <a href="{% url 'my_account:userprofile_update' user_profile.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_userprofile_update }}</span></a>
+      </div>
+   {% endif %}
 
 {% endblock profile %}
 

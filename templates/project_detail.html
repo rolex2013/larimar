@@ -17,15 +17,16 @@
        {% else %}
           <!-- <p>: <a href="{ url 'my_project:projects' current_project.company.pk current_project.parent.pk %}">{{ current_project.parent.name }}</a></p>-->
        {% endif %}
+       <p>Бюджет: {{ current_project.cost }}</p>
        <p>Исполнитель: {{ current_project.assigner }}</p>     
        <p>Начало: {{ current_project.datebegin }}</p>
        <p>Окончание: {{ current_project.dateend }}</p>
        <p>Тип в иерархии: {{ current_project.structure_type }}</p>
        <p>Тип: {{ current_project.type }}</p>
        <p>Статус: {{ current_project.status }}</p>
-       <p><i>Участики: 
+       <p><i>Участники: 
        {% for u in current_project.members.all %}
-          {{ u.username }},&nbsp;
+          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk %}">{{ u.username }}</a>,&nbsp;
        {% endfor %}
        </i></p>
        <em>Автор: {{ current_project.author }}</em><br /> 
@@ -65,7 +66,7 @@
                    <li>
                      <b><a href="{% url 'my_project:task_detail' node.pk %}">
                      <!-- <a href="{% url 'my_project:tasks' current_project.id node.pk %}">-->
-                     {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | <i>{{ node.author.username }}</i></span></b>
+                     {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | <i>{{ node.author.username }}</i> | {{ node.cost }}</span></b>
                      {% if not node.is_leaf_node %}
                         <ul class="children">
                            {{ children }}
