@@ -38,7 +38,7 @@ class ProjectForm(forms.ModelForm):
         super(ProjectForm, self).__init__(*args, **kwargs)
 
         # в выпадающий список для выбора участников проекта подбираем только тех юзеров, которые привязаны к этой организации (в админке)
-        uc = UserCompanyComponentGroup.objects.filter(company_id=).values_list('user_id', flat=True)
+        uc = UserCompanyComponentGroup.objects.filter(company_id=self.instance.company_id).values_list('user_id', flat=True)
         self.fields['members'].queryset = User.objects.filter(id__in=uc, is_active=True)
 
         for field in self.disabled_fields:
