@@ -39,9 +39,11 @@ class ProjectForm(forms.ModelForm):
       
         super(ProjectForm, self).__init__(*args, **kwargs)
 
-        # в выпадающий список для выбора участников проекта подбираем только тех юзеров, которые привязаны к этой организации (в админке)
+        # в выпадающие списки для выбора Исполнителя (Руководителя) и участников проекта подбираем только тех юзеров, которые привязаны к этой организации (в админке)
         uc = UserCompanyComponentGroup.objects.filter(company_id=self.instance.company_id).values_list('user_id', flat=True)
-        self.fields['members'].queryset = User.objects.filter(id__in=uc, is_active=True)
+        usr = User.objects.filter(id__in=uc, is_active=True)
+        self.fields['assigner'].queryset = usr
+        self.fields['members'].queryset = usr
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True
@@ -77,6 +79,12 @@ class TaskForm(forms.ModelForm):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
         super(TaskForm, self).__init__(*args, **kwargs)
+
+        # в выпадающий список для выбора Исполнителя подбираем только тех юзеров, которые привязаны к этой организации (в админке)
+        uc = UserCompanyComponentGroup.objects.filter(company_id=self.instance.project.company_id).values_list('user_id', flat=True)
+        usr = User.objects.filter(id__in=uc, is_active=True)
+        self.fields['assigner'].queryset = usr
+
         for field in self.disabled_fields:
             self.fields[field].disabled = True
 

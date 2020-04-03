@@ -26,7 +26,7 @@
        <p>Статус: {{ current_project.status }}</p>
        <p><i>Участники: 
        {% for u in current_project.members.all %}
-          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk %}">{{ u.username }}</a>,&nbsp;
+          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i></p>
        <em>Автор: {{ current_project.author }}</em><br /> 
@@ -38,7 +38,9 @@
            <div style="float: left;"><a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
            <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
            <div style="float: left;"><a href="{% url 'my_project:project_update' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_update }}</span></a></div>
+           <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
            <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
+           <div style="float: left;"><a href="{% url 'my_project:project_history' current_project.pk %}" class="top-menu"><span class="badge badge-secondary"> История </span></a></div>
          </div>
        {% endif %}
      </div>

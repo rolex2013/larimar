@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block project %}
+   <!-- Защита от прямого доступа к проекту -->
+   {% if current_project.company.id in user_companies %}
+
+     <div class="project-entry">
+       <p><h2>{{ current_project.name }}
+       {% if not current_project.is_active %}
+          (Проект перемещён в архив)
+       {% endif %}
+       </h2></p>
+       {% autoescape off %}{{ current_project.description }}{% endautoescape %}<br />
+       Исполнитель: {{ current_project.assigner }}<br />     
+       Начало: {{ current_project.datebegin }}<br />
+       Окончание: {{ current_project.dateend }}<br />
+       Статус: {{ current_project.status }}<br />
+       <i>Участники: 
+       {% for u in current_project.members.all %}
+          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk %}">{{ u.username }}</a>,</span>&nbsp;
+       {% endfor %}
+       </i><br />
+       <em>Автор: {{ current_project.author }}</em><br /> 
+       <!--<em>Участники: { current_project.members.name }}</em><br /> -->
+       <em>Дата: {{ current_project.datecreate }}</em>
+       <p>&nbsp;</p>
+       {% if user.is_authenticated and user.id == current_project.author_id  %}
+
+       {% endif %}
+     </div>
+
+  {% else %}
+     <h4>Информация о проекте недоступна!</h4>
+  {% endif %}  
+
+{% endblock project %}
+
+{% block list %}
+   <!-- Защита от прямого доступа к истории проекта -->
+   {% if current_project.company.id in user_companies %}
+
+      <div class="project-history-list">
+        <h3>История проекта</h3>
+        <!--
+        <ul>
+         { for psl in nodes %}
+            <li>{ psl.date }}&nbsp;{ psl.status }}&nbsp;{ psl.author }}&nbsp;{ psl.description }}</li>
+         { endfor %}
+        </ul>    
+        -->
+        <!--
+        <table>
+           <!-<caption>История проекта</caption>->
+           <tr>
+              <th>Дата</th><th>Статус</th><th>Автор</th><th>Комментарий</th>
+           </tr>
+           {% for psl in nodes %}
+              <tr>
+                 <td>{ psl.date }}</td><td>{ psl.status }}</td><td>{ psl.author }}</td><td>{ psl.description }}</td>
+              </tr>
+           {% endfor %}
+        </table>  
+        -->
+
+        <div class="d-table">
+         <div class="d-tr">
+           <div class="d-td"><b>Дата</b></div>
+           <div class="d-td"><b>Статус</b></div>
+           <div class="d-td"><b>Автор</b></div>
+           <div class="d-td"><b>Комментарий</b></div>
+         </div>
+         {% for psl in nodes %}
+            <div class="d-tr">
+               <div class="d-td">{{ psl.date }}</div>
+               <div class="d-td">{{ psl.status }}</div>
+               <div class="d-td">{{ psl.author }}</div>
+               <div class="d-td">{{ psl.description }}</div>
+            </div>
+         {% endfor %}
+        </div>
+       
+      </div>
+      <p>&nbsp;</p>
+   <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
+   <!--<div class="task-entry"></div><a href="{ url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>-->
+
+   {% else %}
+      <h5>Информация об истории проекта недоступна!</h5>
+   {% endif %}  
+
+   {% endblock list %}

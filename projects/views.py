@@ -12,6 +12,7 @@ from companies.models import Company
 from projects.models import Project, Task, TaskComment, ProjectStatusLog, TaskStatusLog
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
+from .forms import ProjectStatusLog, TaskStatusLog
 #from .utils import ObjectUpdateMixin
 
 #class ProjectsHome(TemplateView):
@@ -43,6 +44,7 @@ def projects(request, companyid=0, pk=0):
     button_company_create = ''
     button_company_update = ''
     button_project_create = ''
+    button_project_history = ''
     # здесь нужно условие для button_company_select
     comps = request.session['_auth_user_companies_id']
     if len(comps) > 1:
@@ -53,6 +55,7 @@ def projects(request, companyid=0, pk=0):
     button_company_update = 'Изменить'
     # здесь нужно условие для button_project_create
     button_project_create = 'Добавить'
+    button_project_history = 'История'
 
     return render(request, "company_detail.html", {
                               'nodes':Project.objects.all(),
@@ -66,7 +69,7 @@ def projects(request, companyid=0, pk=0):
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
                               'button_project_create': button_project_create,
-                              #'task_id':task_id
+                              'button_project_history': button_project_history,
                                                 })       
 
 class ProjectDetail(DetailView):
@@ -142,6 +145,7 @@ def tasks(request, projectid, pk):
     button_project_update = 'Изменить'
     # здесь нужно условие для button_task_create
     button_task_create = 'Добавить'
+    button_task_history = 'История'
      
     return render(request, "project_detail.html", {
                               'nodes':Task.objects.all(),
@@ -154,6 +158,7 @@ def tasks(request, projectid, pk):
                               'button_project_create': button_project_create,
                               'button_project_update': button_project_update,
                               'button_task_create': button_task_create,
+                              'button_task_history': button_task_history,                              
                               #'taskcomment_id':taskcomment_id
                                                 })       
 
@@ -258,3 +263,41 @@ class TaskCommentUpdate(UpdateView):
 #    #form_class = TaskCommentForm
 #    #template_name = 'taskcomment_delete.html'
 #    success_url = '/success/' 
+
+def projecthistory(request, pk=0):
+
+    #if companyid == 0:
+    #   companyid = request.session['_auth_user_currentcompany_id']
+    #current_company = Company.objects.get(id=companyid)
+
+    if pk == 0:
+       current_project = 0
+    else:
+       current_project = Project.objects.get(id=pk)
+
+    comps = request.session['_auth_user_companies_id']
+
+    return render(request, "project_history.html", {
+                              'nodes':ProjectStatusLog.objects.filter(project_id=pk, is_active=True), 
+                              'current_project':current_project,
+                              #'root_project_id':root_project_id,
+                              #'tree_project_id':tree_project_id,
+                              #'current_company':current_company,
+                              #'companyid':companyid,
+                              'user_companies': comps,                                                           
+                                                })     
+
+def taskhistory(request, pk=0):
+
+    if pk == 0:
+       current_task = 0
+    else:
+       current_task = Task.objects.get(id=pk)
+
+    comps = request.session['_auth_user_companies_id']
+
+    return render(request, "task_history.html", {
+                              'nodes':TaskStatusLog.objects.filter(task_id=pk, is_active=True), 
+                              'current_task':current_task,
+                              'user_companies': comps,                                                           
+                                                })                                                     

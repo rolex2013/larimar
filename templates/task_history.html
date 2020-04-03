@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block project %}
+   <!-- Защита от прямого доступа к проекту -->
+   {% if current_task.project.company.id in user_companies %}
+
+     <div class="project-entry">
+       <p><h2>{{ current_task.name }}
+       {% if not current_task.is_active %}
+          (Проект перемещён в архив)
+       {% endif %}
+       </h2></p>
+       {% autoescape off %}{{ current_task.description }}{% endautoescape %}<br />
+       Исполнитель: {{ current_task.assigner }}<br />     
+       Начало: {{ current_task.datebegin }}<br />
+       Окончание: {{ current_task.dateend }}<br />
+       Статус: {{ current_task.status }}<br />
+       <em>Автор: {{ current_task.author }}</em><br /> 
+       <!--<em>Участники: { current_task.members.name }}</em><br /> -->
+       <em>Дата: {{ current_task.datecreate }}</em>
+       <p>&nbsp;</p>
+       {% if user.is_authenticated and user.id == current_task.author_id  %}
+
+       {% endif %}
+     </div>
+
+  {% else %}
+     <h4>Информация о проекте недоступна!</h4>
+  {% endif %}  
+
+{% endblock project %}
+
+{% block list %}
+   <!-- Защита от прямого доступа к истории проекта -->
+   {% if current_task.project.company.id in user_companies %}
+
+      <div class="project-history-list">
+        <h3>История задачи</h3>
+
+        <div class="d-table">
+         <div class="d-tr">
+           <div class="d-td"><b>Дата</b></div>
+           <div class="d-td"><b>Статус</b></div>
+           <div class="d-td"><b>Автор</b></div>
+           <div class="d-td"><b>Комментарий</b></div>
+         </div>
+         {% for psl in nodes %}
+            <div class="d-tr">
+               <div class="d-td">{{ psl.date }}</div>
+               <div class="d-td">{{ psl.status }}</div>
+               <div class="d-td">{{ psl.author }}</div>
+               <div class="d-td">{{ psl.description }}</div>
+            </div>
+         {% endfor %}
+        </div>
+       
+      </div>
+      <p>&nbsp;</p>
+
+   {% else %}
+      <h5>Информация об истории проекта недоступна!</h5>
+   {% endif %}  
+
+   {% endblock list %}

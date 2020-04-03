@@ -99,3 +99,25 @@ footer {
     display: flex;
 }
 */
+
+*{
+    box-sizing: border-box;
+  }
+  .d-table{
+    display: table;
+    width: 80%;
+    border-collapse: collapse;
+  }
+  .d-tr{
+    display: table-row;
+  }
+  .d-td{
+    display: table-cell;
+    text-align: center;
+    border: none;
+    border: 1px solid #995;
+    vertical-align: middle;
+  }
+  .d-td:not(.no-p){
+    padding: 4px;
+  }
