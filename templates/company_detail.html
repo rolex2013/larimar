@@ -56,31 +56,47 @@
       <div class="project-list">
          <h3>Список Проектов</h3>  
 
-         <!--{ if node %}-->
-         <div style="float: left;" class="task-entry"><a href="{% url 'my_project:projects' current_company.pk 0 %}" class="top-menu"><span class="badge badge-secondary">Здесь нужен фильтр по списку</span></a></div>
-         <br /><br />
+         <form action="{% url 'my_project:projects' current_company.pk 0 %}" method="post">
+            {% csrf_token %}
+            <!--<label for="">Введите название установки</label><br/>
+            <input name="search" type="text">-->
+            <label>Фильтр по статусу: </label>
+            <select name="select_projectstatus">
+               {% for prjstatus in projectstatus %}
+                  <option value="{{prjstatus.id}}">{{prjstatus.name}}</option>
+                  <!-- Надо получить обратно из вьюхи id select'а и установить его в selected -->
+               {% endfor %}
+            </select>
+            <button type="submit">Применить</button>&nbsp;<div class="project-entry"><a href="{% url 'my_project:projects' current_company.pk 0 %}" class="top-menu"><span class="badge badge-secondary">Все</span></a></div>
+         </form>
 
          {% load mptt_tags %}
  
          <ul>
            {% recursetree nodes %}
-              {% ifequal node.company_id companyid %}
-                 {% if user.is_authenticated and node.is_active %} <!-- тут будет еще проверка на авторство и исполнителей -->                  
-                   <!--<a href="{ url 'my_project:project_detail' node.pk %}">-->
-                     <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | <i>{{ node.author.username }}</i> | {{ node.cost }}</span></b><br />
-                     {% if not node.is_leaf_node %}
-                        <ul class="children">{{ children }}</ul>
-                     {% endif %}
-                  <!--<td>{{ node.datebegin }}</td><td>{{ node.dateend }}</td><td>{{ node.status.name }}</td>-->
+              <!--{ if node.company_id == companyid %}
+                 { if user.is_authenticated and node.is_active %}--> <!-- тут будет еще проверка на авторство и исполнителей --> 
+                    <!--{ if select_projectstatus == 0 or node.status_id == select_projectstatus %}-->
+                       <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
+                          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' node.author.pk %}"><i>{{ node.author.username }}</i></a> | 
+                             {{ node.cost }}
+                          </span></b><br />
+                       {% if not node.is_leaf_node %}
+                          <ul class="children">{{ children }}</ul>
+                       {% endif %}
+                    <!--{ endif %}-->
+                    <!--/{{ select_projectstatus }}/{{ node.status_id }}/{{ node.company_id }}/{{ companyid }}/{{ node.is_leaf_node }}/-->
                     </li>
-                 {% endif %}
-              {% endifequal %}
+                 <!--{ endif %}
+              { endif %}-->
            {% endrecursetree %}
          </ul>  
       <!--{ endif %}-->
          <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
          <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
       </div>
+
+      <br /><br />
 
    {% else %}
 

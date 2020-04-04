@@ -9,6 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 #from versane.models import Company
 
 from companies.models import Company
+from projects.models import Dict_ProjectStatus, Dict_TaskStatus
 from projects.models import Project, Task, TaskComment, ProjectStatusLog, TaskStatusLog
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
@@ -26,6 +27,20 @@ def projects(request, companyid=0, pk=0):
 
     if companyid == 0:
        companyid = request.session['_auth_user_currentcompany_id']
+
+    # фильтруем по статусу
+    #select_projectstatus = 0
+    try:
+       prjstatus = request.POST['select_projectstatus']
+    except:
+       #if companyid == 0:
+       #   project_list = Project.objects.filter(is_active=True)
+       #else:
+          project_list = Project.objects.filter(is_active=True, company=companyid) #Project.objects.all()
+       #select_projectstatus = 0
+    else:
+       project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus)
+       #select_projectstatus = prjstatus
     
     current_company = Company.objects.get(id=companyid)
 
@@ -58,18 +73,20 @@ def projects(request, companyid=0, pk=0):
     button_project_history = 'История'
 
     return render(request, "company_detail.html", {
-                              'nodes':Project.objects.all(),
-                              'current_project':current_project,
-                              'root_project_id':root_project_id,
-                              'tree_project_id':tree_project_id,
-                              'current_company':current_company,
-                              'companyid':companyid,
+                              'nodes': project_list, #Project.objects.all(),
+                              'current_project': current_project,
+                              'root_project_id': root_project_id,
+                              'tree_project_id': tree_project_id,
+                              'current_company': current_company,
+                              'companyid': companyid,
                               'user_companies': comps,
                               'button_company_select': button_company_select,
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
                               'button_project_create': button_project_create,
                               'button_project_history': button_project_history,
+                              'projectstatus': Dict_ProjectStatus.objects.filter(is_active=True),
+                              #'select_projectstatus': select_projectstatus,
                                                 })       
 
 class ProjectDetail(DetailView):

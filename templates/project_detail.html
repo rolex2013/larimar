@@ -65,10 +65,13 @@
           {% recursetree nodes %}
              {% ifequal node.project_id projectid %}
                 {% if user.is_authenticated and node.is_active %}
-                   <li>
+                   <li> 
                      <b><a href="{% url 'my_project:task_detail' node.pk %}">
                      <!-- <a href="{% url 'my_project:tasks' current_project.id node.pk %}">-->
-                     {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | <i>{{ node.author.username }}</i> | {{ node.cost }}</span></b>
+                     {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
+                        {{ node.status.name }} | 
+                        <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' node.author.pk %}"><i>{{ node.author.username }}</i></a></span> | 
+                        {{ node.cost }}</span></b>
                      {% if not node.is_leaf_node %}
                         <ul class="children">
                            {{ children }}
@@ -84,6 +87,8 @@
 
    <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
    <div class="task-entry"></div><a href="{% url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>
+
+   <br /><br />
 
    {% else %}
       <h5>Информация о задачах недоступна!</h5>

@@ -99,4 +99,10 @@ class TaskForm(forms.ModelForm):
 class TaskCommentForm(forms.ModelForm):
     class Meta:
         model = TaskComment
-        fields = ['name', 'description', 'time', 'cost']        
+        fields = ['name', 'description', 'time', 'cost']
+
+
+class FilterStatusForm(forms.ModelForm):                
+    class Meta:
+        model = Dict_ProjectStatus
+        fields = ['name']
