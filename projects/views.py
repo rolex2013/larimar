@@ -28,20 +28,20 @@ def projects(request, companyid=0, pk=0):
     if companyid == 0:
        companyid = request.session['_auth_user_currentcompany_id']
 
-    # фильтруем по статусу
-    #select_projectstatus = 0
+    # *** фильтруем по статусу ***
+    prjstatus_selectid = 1
     try:
        prjstatus = request.POST['select_projectstatus']
     except:
-       #if companyid == 0:
-       #   project_list = Project.objects.filter(is_active=True)
-       #else:
-          project_list = Project.objects.filter(is_active=True, company=companyid) #Project.objects.all()
-       #select_projectstatus = 0
+       project_list = Project.objects.filter(is_active=True, company=companyid)
     else:
-       project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus)
-       #select_projectstatus = prjstatus
-    
+       if prjstatus == "0":
+          # если в выпадающем списке выбрано "Все"
+          project_list = Project.objects.filter(is_active=True, company=companyid)
+       else:
+          project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus)
+       prjstatus_selectid = prjstatus
+    # *******************************
     current_company = Company.objects.get(id=companyid)
 
     if pk == 0:
@@ -86,6 +86,7 @@ def projects(request, companyid=0, pk=0):
                               'button_project_create': button_project_create,
                               'button_project_history': button_project_history,
                               'projectstatus': Dict_ProjectStatus.objects.filter(is_active=True),
+                              'prjstatus_selectid': prjstatus_selectid,
                               #'select_projectstatus': select_projectstatus,
                                                 })       
 

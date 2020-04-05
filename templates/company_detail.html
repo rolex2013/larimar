@@ -62,13 +62,19 @@
             <input name="search" type="text">-->
             <label>Фильтр по статусу: </label>
             <select name="select_projectstatus">
+               <option value="0" {% ifequal 0 prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>Все</option>   
                {% for prjstatus in projectstatus %}
-                  <option value="{{prjstatus.id}}">{{prjstatus.name}}</option>
-                  <!-- Надо получить обратно из вьюхи id select'а и установить его в selected -->
+                  <option value="{{prjstatus.id}}" {% ifequal prjstatus.id prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                     {{prjstatus.name}}
+                  </option>   
                {% endfor %}
             </select>
-            <button type="submit">Применить</button>&nbsp;<div class="project-entry"><a href="{% url 'my_project:projects' current_company.pk 0 %}" class="top-menu"><span class="badge badge-secondary">Все</span></a></div>
+            <button type="submit">Применить</button>
+            <!--<div class="project-entry"><a href="{ url 'my_project:projects' current_company.pk 0 %}" class="top-menu">
+            <span class="badge badge-secondary">Все</span></a></div>-->
          </form>
+         
+         <br />
 
          {% load mptt_tags %}
  
