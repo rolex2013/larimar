@@ -29,17 +29,21 @@ def projects(request, companyid=0, pk=0):
        companyid = request.session['_auth_user_currentcompany_id']
 
     # *** фильтруем по статусу ***
-    prjstatus_selectid = 1
+    prjstatus_selectid = 0
     try:
        prjstatus = request.POST['select_projectstatus']
     except:
-       project_list = Project.objects.filter(is_active=True, company=companyid)
+       project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
     else:
        if prjstatus == "0":
-          # если в выпадающем списке выбрано "Все"
-          project_list = Project.objects.filter(is_active=True, company=companyid)
+          # если в выпадающем списке выбрано "Все активные"
+          project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
        else:
-          project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus)
+          if prjstatus == "-1":
+             # если в выпадающем списке выбрано "Все"
+             project_list = Project.objects.filter(is_active=True, company=companyid)
+          else:             
+             project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True)
        prjstatus_selectid = prjstatus
     # *******************************
     current_company = Company.objects.get(id=companyid)
@@ -142,7 +146,9 @@ class ProjectUpdate(UpdateView):
 #    success_url = '/success/' 
 
 def tasks(request, projectid, pk):
+
     current_project = Project.objects.get(id=projectid)
+    
     if pk == 0:
        current_task = 0
        tree_task_id = 0  
