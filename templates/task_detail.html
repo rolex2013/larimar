@@ -67,7 +67,7 @@
                   <div class="comment-entry">
                     <!--<h6> { taskcomment.name }}&nbsp;<em>({ taskcomment.author }} / { taskcomment.datecreate }})</em></h6>-->
                     <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
-                      <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' taskcomment.author.pk %}">{{ taskcomment.author.username }}</a></span></i> | 
+                      <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk %}">{{ taskcomment.author.username }}</a></span></i> | 
                          {{ taskcomment.time }} час. | 
                          {{ taskcomment.cost }}</span></b>
                     <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>

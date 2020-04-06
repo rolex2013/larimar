@@ -84,4 +84,35 @@ class UserCompanyComponentGroup(models.Model):
         ordering = ('user','company','component','group')
         verbose_name = 'Пользователь и Группа Организации и Компонента'
         verbose_name_plural = 'Пользователи и Группы Организаций и Компонентов'
-   
+
+class Content(models.Model):
+    name = models.CharField("Заголовок", max_length=1024)
+    description = RichTextUploadingField("Текст")
+    datebegin = models.DateTimeField("Начало")
+    dateend = models.DateTimeField("Окончание")
+    type = models.ForeignKey('Dict_ContentType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='content_type', verbose_name="Тип")
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='content_company', verbose_name="Организация")
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    #dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    is_active = models.BooleanField("Активность", default=True)
+
+    def __str__(self):
+        return (self.company.name + ' - ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ' - ' + self.type.name + ' - ' + self.name + ' - ' + self.author.username)
+    class Meta:
+        ordering = ('company','type','datecreate')
+        verbose_name = 'Контент'
+        verbose_name_plural = 'Контент'
+
+class Dict_ContentType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип контента'
+        verbose_name_plural = 'Типы контента'
+    def __str__(self):
+        return (self.name)            

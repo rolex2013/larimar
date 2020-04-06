@@ -145,7 +145,26 @@ class ProjectUpdate(UpdateView):
 #    template_name = 'project_delete.html'
 #    success_url = '/success/' 
 
-def tasks(request, projectid, pk):
+def tasks(request, projectid=0, pk=0):
+
+    # *** фильтруем по статусу ***
+    tskstatus_selectid = 0
+    try:
+       tskstatus = request.POST['select_taskstatus']
+    except:
+       task_list = Task.objects.filter(is_active=True, project=projectid, dateclose__isnull=True)
+    else:
+       if tskstatus == "0":
+          # если в выпадающем списке выбрано "Все активные"
+          task_list = Task.objects.filter(is_active=True, project=projectid, dateclose__isnull=True)
+       else:
+          if tskstatus == "-1":
+             # если в выпадающем списке выбрано "Все"
+             task_list = Task.objects.filter(is_active=True, project=projectid)
+          else:             
+             task_list = Task.objects.filter(is_active=True, project=projectid, status=tskstatus, dateclose__isnull=True)
+       tskstatus_selectid = tskstatus
+    # *******************************
 
     current_project = Project.objects.get(id=projectid)
     
@@ -172,18 +191,19 @@ def tasks(request, projectid, pk):
     button_task_history = 'История'
      
     return render(request, "project_detail.html", {
-                              'nodes':Task.objects.all(),
-                              'current_task':current_task,
-                              'root_task_id':root_task_id,
-                              'tree_task_id':tree_task_id,
-                              'current_project':current_project,                             
-                              'projectid':projectid,
+                              'nodes': task_list, #Task.objects.all(),
+                              'current_task': current_task,
+                              'root_task_id': root_task_id,
+                              'tree_task_id': tree_task_id,
+                              'current_project': current_project,                             
+                              'projectid': projectid,
                               'user_companies': request.session['_auth_user_companies_id'],                              
                               'button_project_create': button_project_create,
                               'button_project_update': button_project_update,
                               'button_task_create': button_task_create,
                               'button_task_history': button_task_history,                              
-                              #'taskcomment_id':taskcomment_id
+                              'taskstatus': Dict_TaskStatus.objects.filter(is_active=True),
+                              'tskstatus_selectid': tskstatus_selectid,
                                                 })       
 
 class TaskDetail(DetailView):

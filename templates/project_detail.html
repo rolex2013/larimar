@@ -59,6 +59,23 @@
       <div class="task-list">
         <h3>Список Задач</h3>
 
+        <form action="{% url 'my_project:tasks' current_project.pk 0 %}" method="post">
+            {% csrf_token %}
+            <label>Фильтр по статусу: </label>
+            <select name="select_taskstatus">
+               <option value="-1" {% ifequal "-1" tskstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+               <option value="0" {% ifequal 0 tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>   
+               {% for tskstatus in taskstatus %}
+                  <option value="{{tskstatus.id}}" {% ifequal tskstatus.id tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                     {{tskstatus.name}}
+                  </option>   
+               {% endfor %}
+            </select>
+            <button type="submit">Применить</button>
+         </form>
+
+         <br />
+
         {% load mptt_tags %}
     
         <ul>
@@ -70,7 +87,7 @@
                      <!-- <a href="{% url 'my_project:tasks' current_project.id node.pk %}">-->
                      {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
                         {{ node.status.name }} | 
-                        <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' node.author.pk %}"><i>{{ node.author.username }}</i></a></span> | 
+                        <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk %}"><i>{{ node.author.username }}</i></a></span> | 
                         {{ node.cost }}</span></b>
                      {% if not node.is_leaf_node %}
                         <ul class="children">

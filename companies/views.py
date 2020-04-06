@@ -7,9 +7,9 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.template import loader, Context, RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Company, UserCompanyComponentGroup
-from projects.models import Project, Task, TaskComment
-from .forms import CompanyForm
+from .models import Company, UserCompanyComponentGroup, Content, Dict_ContentType
+#from projects.models import Project, Task, TaskComment
+from .forms import CompanyForm, ContentForm
 
 class CompaniesList(ListView):
     model = Company
@@ -120,3 +120,44 @@ class CompanyUpdate(UpdateView):
 #def getCompanies(request, user):
 #    #uc = UserCompany.objects.get(user=user)
 #    return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
+
+class ContentList(ListView):
+    model = Content
+    template_name = 'content.html' 
+    #ordering = ['company_up', 'id']
+
+    def get_context_data(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            context = super().get_context_data(**kwargs)
+            #current_membership = get_user_membership(self.request)
+            #context['current_membership'] = str(current_membership.membership)
+            # добавляем к контексту сессионный массив с id компаний, доступными этому авторизованному юзеру
+            #button_company_select = 'Сменить организацию'
+            context['user_companies'] = self.request.session['_auth_user_companies_id']
+            #context['button_company_select'] = button_company_select
+            return context
+
+class ContentCreate(CreateView):    
+    model = Content
+    form_class = ContentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(ContentCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новый Контент'
+       return context
+
+    def form_valid(self, form):
+       #form.instance.company_id = self.kwargs['companyid']
+       form.instance.author_id = self.request.user.id
+       return super(ContentCreate, self).form_valid(form)
+
+class ContentUpdate(UpdateView):    
+    model = Content
+    form_class = ContentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(ContentUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Контент'
+       return context
