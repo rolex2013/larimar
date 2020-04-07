@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.utils import timezone
+from datetime import datetime, date, time
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
@@ -121,9 +122,25 @@ class CompanyUpdate(UpdateView):
 #    #uc = UserCompany.objects.get(user=user)
 #    return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
 
+def contents(request):
+    template_name = 'home.html'
+    companies_id = request.session['_auth_user_companies_id']
+    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company_id__in=companies_id)
+    # здесь нужно условие для button_company_create
+    button_content_create = ''
+    # if юзер имеет право на добавление контента
+    #     button_content_create = 'Добавить'
+    
+    return render(request, template_name, {
+                              'content_list': content_list,
+                              'user_companies': request.session['_auth_user_companies_id'],
+                              'button_content_create': button_content_create,                              
+                                            })  
+
 class ContentList(ListView):
     model = Content
-    template_name = 'content.html' 
+    #template_name = 'content.html' 
+    template_name = 'home.html'
     #ordering = ['company_up', 'id']
 
     def get_context_data(self, *args, **kwargs):
@@ -136,6 +153,16 @@ class ContentList(ListView):
             context['user_companies'] = self.request.session['_auth_user_companies_id']
             #context['button_company_select'] = button_company_select
             return context
+
+class ContentDetail(DetailView):
+    model = Content
+    template_name = 'content_detail.html' 
+
+    def get_context_data(self, *args, **kwargs):
+        if self.request.user.is_authenticated:
+            context = super().get_context_data(**kwargs)
+            context['user_companies'] = self.request.session['_auth_user_companies_id']
+            return context    
 
 class ContentCreate(CreateView):    
     model = Content

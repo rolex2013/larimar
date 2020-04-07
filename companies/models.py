@@ -97,8 +97,11 @@ class Content(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
 
+    def get_absolute_url(self):
+        return reverse('my_main:home')
     def __str__(self):
         return (self.company.name + ' - ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ' - ' + self.type.name + ' - ' + self.name + ' - ' + self.author.username)
+    
     class Meta:
         ordering = ('company','type','datecreate')
         verbose_name = 'Контент'

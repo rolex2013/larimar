@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+<!--{% load bootstrap4 %}-->
+
+{% block content %}
+   
+   <!-- Защита от прямого доступа к контенту -->
+   <!--{ object.company_id }} / { user_companies }}-->
+   {% if object.company_id in user_companies %}
+
+     <div class="content-entry">
+        <h2>{{ object.name }}
+        {% if not object.is_active %}(Контент перемещен в архив){% endif %}
+        </h2>
+        <p>{% autoescape off %} {{ object.description }}{% endautoescape %}</p>
+
+        <p>Тип: {{ object.type }}</p>
+        <em>Автор: {{ object.author }}</em><br /> 
+        <em>Дата: {{ object.datecreate }}</em>
+        <br /><br />
+        {% if user.is_authenticated and user.id == object.author_id %}
+           <div>
+              <div style="float: left;" class="task-entry"><a href="{% url 'my_company:content_create' object.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_content_create }}</span></a></div>
+              <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+              <div style="float: left;" class="task-entry"><a href="{% url 'my_company:content_update' object.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_content_update }}</span></a></div>
+           </div>
+        {% endif %}
+     </div>
+     <br /><br />
+
+   {% else %}
+
+     <h4>Контент недоступен!</h4>
+
+   {% endif %} 
+
+{% endblock content %}
+
+{% block list %}
+
+{% endblock list %}
+

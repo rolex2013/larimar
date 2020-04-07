@@ -14,4 +14,8 @@ class CompanyForm(forms.ModelForm):
 class ContentForm(forms.ModelForm):
     class Meta:
         model = Content
-        fields = ['name', 'description', 'company', 'type', 'datebegin', 'dateend', 'is_active']        
+        fields = ['name', 'description', 'company', 'type', 'datebegin', 'dateend', 'is_active']  
+        widgets = {
+            'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'),
+            'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'),
+        }
