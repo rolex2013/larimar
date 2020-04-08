@@ -4,6 +4,8 @@ from django import forms
 from .models import Company, Content
 from bootstrap_datepicker_plus import DatePickerInput
 
+from mptt.forms import MoveNodeForm, TreeNodeChoiceField
+
 
 class CompanyForm(forms.ModelForm):
     class Meta:
@@ -12,9 +14,15 @@ class CompanyForm(forms.ModelForm):
         #description = forms.CharField(widget=CKEditorWidget, label='')
 
 class ContentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        self.companies = kwargs.pop('org')
+        super(ContentForm, self).__init__(*args, **kwargs)
+        #self.fields['company'].queryset = Company.objects.filter(id__in=self.companies) # это без иерархии
+        #self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.all(), level_indicator = u'---') # из документации
+        self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.filter(id__in=self.companies), level_indicator = u'---') # с иерархией    
     class Meta:
         model = Content
-        fields = ['name', 'description', 'company', 'type', 'datebegin', 'dateend', 'is_active']  
+        fields = ['name', 'announcement', 'description', 'company', 'type', 'datebegin', 'dateend', 'is_active']  
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'),
             'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'),

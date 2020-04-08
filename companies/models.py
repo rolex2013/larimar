@@ -87,23 +87,28 @@ class UserCompanyComponentGroup(models.Model):
 
 class Content(models.Model):
     name = models.CharField("Заголовок", max_length=1024)
-    description = RichTextUploadingField("Текст")
+    announcement = models.TextField("Анонс", max_length=10240, blank=True, null=True)
+    description = RichTextUploadingField("Текст", blank=True, null=True)
     datebegin = models.DateTimeField("Начало")
     dateend = models.DateTimeField("Окончание")
     type = models.ForeignKey('Dict_ContentType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='content_type', verbose_name="Тип")
-    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='content_company', verbose_name="Организация")
+    #company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='content_company', verbose_name="Организация")
+    company = models.ManyToManyField('Company', related_name='content_companies', verbose_name="Организации")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     #dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
-        return reverse('my_main:home')
+        #return reverse('my_main:home')
+        return reverse('my_company:content_detail', kwargs={'pk': self.pk})
     def __str__(self):
-        return (self.company.name + ' - ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ' - ' + self.type.name + ' - ' + self.name + ' - ' + self.author.username)
+        #return (self.company.name + ' - ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ' - ' + self.type.name + ' - ' + self.name + ' - ' + self.author.username)
+        return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ' - ' + self.type.name + ' - ' + self.name + ' - ' + self.author.username)
     
     class Meta:
-        ordering = ('company','type','datecreate')
+        #ordering = ('company','type','datecreate')
+        ordering = ('datecreate','datebegin','dateend','type')
         verbose_name = 'Контент'
         verbose_name_plural = 'Контент'
 

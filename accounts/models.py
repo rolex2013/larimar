@@ -14,7 +14,8 @@ class UserProfile(models.Model):
     def get_absolute_url(self):
         return reverse('my_account:userprofile_detail', kwargs={'userid': self.user.pk})  
     def __str__(self):
-        return (self.user.username + ' - ' + self.company.name)
+        #return (self.user.username + ' - ' + self.company.name)
+        return (self.user.username)
     class Meta:
         #unique_together = ('user','company')
         #ordering = ('user')

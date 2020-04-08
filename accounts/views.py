@@ -65,7 +65,7 @@ class ELoginView(View):
             # ======================
             # получаем предыдущий url
             #next = urlparse(get_next_url(request)).path
-            next = '/projects/'
+            next = '/projects/main/'
             # и если пользователь из числа персонала и заходил через url /admin/login/
             # то перенаправляем пользователя в админ панель
             if next == '/admin/login/' and request.user.is_staff:

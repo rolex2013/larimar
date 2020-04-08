@@ -123,24 +123,33 @@ class CompanyUpdate(UpdateView):
 #    return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
 
 def contents(request):
-    template_name = 'home.html'
+    template_name = 'main.html'
+    #if user.is_authenticated:
     companies_id = request.session['_auth_user_companies_id']
-    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company_id__in=companies_id)
-    # здесь нужно условие для button_company_create
+    content_list = ''
+    if request.user.is_authenticated:
+       #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company_id__in=companies_id)
+       #result=list(set(companies_id) & set(Word)) # - пример пересечения множеств
+       content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id) # это надо как-то исправить, чтоб записи не дублировались, когда контент для нескольких компаний, и они же есть в списке у пользователя!
+     # здесь нужно условие для button_company_create
     button_content_create = ''
     # if юзер имеет право на добавление контента
     #     button_content_create = 'Добавить'
-    
+    #else:
+    #   content_list = ''
+    #   companies_id = ''
+    #   button_content_create = ''
+   
     return render(request, template_name, {
                               'content_list': content_list,
-                              'user_companies': request.session['_auth_user_companies_id'],
+                              'user_companies': companies_id, #request.session['_auth_user_companies_id'],
                               'button_content_create': button_content_create,                              
                                             })  
 
 class ContentList(ListView):
     model = Content
     #template_name = 'content.html' 
-    template_name = 'home.html'
+    template_name = 'main.html'
     #ordering = ['company_up', 'id']
 
     def get_context_data(self, *args, **kwargs):
@@ -161,6 +170,8 @@ class ContentDetail(DetailView):
     def get_context_data(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             context = super().get_context_data(**kwargs)
+            context['button_content_create'] = 'Добавить' #button_company_create
+            context['button_content_update'] = 'Изменить'
             context['user_companies'] = self.request.session['_auth_user_companies_id']
             return context    
 
@@ -188,3 +199,10 @@ class ContentUpdate(UpdateView):
        context = super(ContentUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Контент'
        return context
+
+    def get_form_kwargs(self):
+       kwargs = super(ContentUpdate, self).get_form_kwargs()
+       # здесь нужно условие для 'action': 'update'
+       kwargs.update({'org': self.request.session['_auth_user_companies_id']})
+       return kwargs
+

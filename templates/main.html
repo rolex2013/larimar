@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block list %}
+   <h3>Главная страница</h3>
+   <div class="content-entry">
+       {% for content in content_list %}
+              <em>{{ content.datecreate }}</em>&nbsp;
+              <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a><br />
+              {% if content.announcement %}
+                 {{ content.announcement }}
+              {% else %} 
+                 <p><div>{% autoescape off %}{{ content.description }}{% endautoescape %}</div></p>
+              {% endif %}
+              <hr>
+       {% endfor %}
+   </div>
+   <p>&nbsp;</p> 
+{% endblock list %}

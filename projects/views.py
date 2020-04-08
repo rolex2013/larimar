@@ -17,7 +17,7 @@ from .forms import ProjectStatusLog, TaskStatusLog
 #from .utils import ObjectUpdateMixin
 
 #class ProjectsHome(TemplateView):
-#   template_name = 'home.html'
+#   template_name = 'main.html'
 
 class ProjectsList(ListView):
     model = Project
