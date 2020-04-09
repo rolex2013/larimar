@@ -9,6 +9,9 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 #from main.models import Component
 
+#from django.db.models.query import QuerySet
+#from django_group_by import GroupByMixin
+
 
 class Dict_CompanyStructureType(models.Model):
     name = models.CharField("Наименование", max_length=64)
@@ -85,12 +88,17 @@ class UserCompanyComponentGroup(models.Model):
         verbose_name = 'Пользователь и Группа Организации и Компонента'
         verbose_name_plural = 'Пользователи и Группы Организаций и Компонентов'
 
+#class ContentQuerySet(QuerySet, GroupByMixin):
+#    pass
+
 class Content(models.Model):
+    #objects = ContentQuerySet.as_manager()
     name = models.CharField("Заголовок", max_length=1024)
     announcement = models.TextField("Анонс", max_length=10240, blank=True, null=True)
     description = RichTextUploadingField("Текст", blank=True, null=True)
     datebegin = models.DateTimeField("Начало")
     dateend = models.DateTimeField("Окончание")
+    is_ontop = models.BooleanField("Всегда наверху", default=False)    
     type = models.ForeignKey('Dict_ContentType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='content_type', verbose_name="Тип")
     #company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='content_company', verbose_name="Организация")
     company = models.ManyToManyField('Company', related_name='content_companies', verbose_name="Организации")
@@ -108,7 +116,7 @@ class Content(models.Model):
     
     class Meta:
         #ordering = ('company','type','datecreate')
-        ordering = ('datecreate','datebegin','dateend','type')
+        ordering = ('-is_ontop','-id')
         verbose_name = 'Контент'
         verbose_name_plural = 'Контент'
 

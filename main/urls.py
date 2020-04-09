@@ -9,7 +9,8 @@ from . import views
 app_name = 'my_main'
 
 urlpatterns = [
-   path('', views.ProjectsHome.as_view(), name = 'home'),
+   #path('', views.ProjectsHome.as_view(), name = 'home'),
    #path('', ContentList.as_view(), name = 'home'),
-   path('main/', contents, name = 'main'),
+   #path('main/', contents, name = 'main'),
+   path('', contents, name = 'main'),
 ]

@@ -7,6 +7,7 @@ from django.views.generic import View, TemplateView, ListView, DetailView, Creat
 from django.views.generic.edit import UpdateView, DeleteView
 from django.template import loader, Context, RequestContext
 from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Count
 
 from .models import Company, UserCompanyComponentGroup, Content, Dict_ContentType
 #from projects.models import Project, Task, TaskComment
@@ -130,7 +131,8 @@ def contents(request):
     if request.user.is_authenticated:
        #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company_id__in=companies_id)
        #result=list(set(companies_id) & set(Word)) # - пример пересечения множеств
-       content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id) # это надо как-то исправить, чтоб записи не дублировались, когда контент для нескольких компаний, и они же есть в списке у пользователя!
+       content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id).annotate(cnt=Count('id'))
+                      # это надо как-то исправить, чтоб записи не дублировались, когда контент для нескольких компаний, и они же есть в списке у пользователя!
      # здесь нужно условие для button_company_create
     button_content_create = ''
     # if юзер имеет право на добавление контента
