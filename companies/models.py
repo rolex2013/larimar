@@ -105,6 +105,8 @@ class Content(models.Model):
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     #dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    is_forprofile = models.BooleanField("Только для профиля", default=False)
+    is_private = models.BooleanField("Приватно", default=False)
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):

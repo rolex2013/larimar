@@ -121,3 +121,17 @@ footer {
   .d-td:not(.no-p){
     padding: 4px;
   }
+  .d-td-text{
+    display: table-cell;
+    /*text-align: left;*/
+    border: none;
+    /*border: 1px solid #995;*/
+    vertical-align: top;
+  }
+  .d-td-num{
+    display: table-cell;
+    text-align: right;
+    border: none;
+    border: 1px solid #995;
+    vertical-align: middle;
+  }

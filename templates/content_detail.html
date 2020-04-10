@@ -21,12 +21,14 @@
         <br /><br />
         <!--{user.is_authenticated}} and {user.id}} == {object.author_id}}-->
         {% if user.is_authenticated and user.id == object.author_id %}
+           <!--{ button_content_create }}-->
            <div>
-              <div style="float: left;" class="content-entry"><a href="{% url 'my_company:content_create' object.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_content_create }}</span></a></div>
-              <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-              <div style="float: left;" class="content-entry"><a href="{% url 'my_company:content_update' object.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_content_update }}</span></a></div>
+              <!--{ if perms.companies.change_content %}
+                 <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>-->
+                 <div style="float: left;" class="content-entry"><a href="{% url 'my_company:content_update' object.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_content_update }}</span></a></div>
+              <!--{ endif %}-->
            </div>
-        {% endif %}
+         {% endif %}
      </div>
      <br /><br />
 

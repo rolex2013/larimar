@@ -3,6 +3,11 @@
 {% block list %}
    <h3>Главная страница</h3>
    <div class="content-entry">
+       {% if perms.companies.add_content %}
+          <br />
+          <div style="float: left;" class="content-entry"><a href="{% url 'my_company:content_create' %}" class="top-menu"><span class="badge badge-secondary">Добавить<!--{ button_content_create }}--></span></a></div>
+          <br /><br />
+       {% endif %}
        {% for content in content_list %}
               <em>{{ content.datecreate }}</em>&nbsp;
               <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a><br />

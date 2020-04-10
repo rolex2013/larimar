@@ -2,20 +2,65 @@
 
 {% block profile %}
 
-   <h3>Профиль пользователя</h3>
-   <p>Пользователь: {{ user_profile.user.username }}</p>
-   {% autoescape off %}
-         Описание: {{ user_profile.description }}
-   {% endautoescape %}
+<div class="d-table">
 
-   {% if user_profile.user.id == user.id %}
-      <h5>Настройки</h5>
-      <p>Компания: {{ user_profile.company.name }}</p>
+   <div class="d-tr">
+      
+      <div class="d-td-text">
 
-      <div class="comment-entry">
-         <a href="{% url 'my_account:userprofile_update' user_profile.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_userprofile_update }}</span></a>
+         <h3>Профиль пользователя</h3>
+         <p>Пользователь: {{ user_profile.user.username }}</p>
+         <p>Описание: {% autoescape off %}{{ user_profile.description }}{% endautoescape %}</p>
+
+         {% if user_profile.user.id == user.id %}
+            <h5>Настройки</h5>
+            <p>Компания: {{ user_profile.company.name }}</p>
+            <div class="comment-entry">
+               <a href="{% url 'my_account:userprofile_update' user_profile.pk %}" class="top-menu"><span
+                     class="badge badge-secondary">{{ button_userprofile_update }}</span></a>
+            </div>
+         {% endif %}
+
       </div>
-   {% endif %}
+
+      <div class="d-td-text">
+
+         <h3>Блог пользователя</h3>
+         <!--<div class="content-entry">-->
+            {% if user_profile.user.id == user.id %}
+               <br />
+               <div style="float: left;" class="content-entry"><a href="{% url 'my_company:content_create' %}"
+                    class="top-menu"><span class="badge badge-secondary">Добавить</span></a>
+               </div>
+               <br /><br />
+            {% endif %}
+
+            <div class="d-table">
+
+               {% for content in content_list %}
+                  <div class="d-tr">
+                     <div class="d-td-text">
+                        <em>{{ content.datecreate }}</em>&nbsp;
+                        <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a><br />
+                        {% if content.announcement %}
+                           {{ content.announcement }}
+                        {% else %}
+                           {% autoescape off %}{{ content.description }}{% endautoescape %}
+                        {% endif %}
+                     </div>
+                  </div>
+                  <hr>
+                  <br />
+               {% endfor %}
+
+            </div>
+
+         <!--</div>-->
+
+      </div>
+
+   </div>
+
+</div>
 
 {% endblock profile %}
-

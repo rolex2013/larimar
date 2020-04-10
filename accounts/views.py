@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime, date, time
 
 from urllib.parse import urlparse
  
@@ -15,8 +16,9 @@ from django.contrib.auth.views import LogoutView
 
 from .forms import UserRegistrationForm, UserProfileForm
 
-from companies.models import UserCompanyComponentGroup
+from companies.models import UserCompanyComponentGroup, Content
 from .models import UserProfile
+from django.db.models import Count
 
  
 class ELoginView(View):
@@ -128,8 +130,16 @@ def UserProfileDetail(request, userid=0):
     user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
     #button_project_create = ''
     button_userprofile_update = 'Изменить'
-    return render(request, 'userprofile_detail.html', {'user_profile': user_profile,
-                                                       'button_userprofile_update': button_userprofile_update})
+
+    companies_id = request.session['_auth_user_companies_id']
+    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_forprofile=True).annotate(cnt=Count('id'))          
+
+    return render(request, 'userprofile_detail.html', {
+                                                       'user_profile': user_profile,
+                                                       'button_userprofile_update': button_userprofile_update,
+                                                       'content_list': content_list,
+                                                       'user_companies': companies_id
+                                                       })
 
 
 class UserProfileUpdate(UpdateView):    

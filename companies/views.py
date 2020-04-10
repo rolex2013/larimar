@@ -8,6 +8,7 @@ from django.views.generic.edit import UpdateView, DeleteView
 from django.template import loader, Context, RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
+from django.contrib.auth.models import User
 
 from .models import Company, UserCompanyComponentGroup, Content, Dict_ContentType
 #from projects.models import Project, Task, TaskComment
@@ -123,24 +124,36 @@ class CompanyUpdate(UpdateView):
 #    #uc = UserCompany.objects.get(user=user)
 #    return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
 
-def contents(request):
+def contents(request, place=0):
     template_name = 'main.html'
+    if place == 1:
+       template_name = 'userprofile_detail.html'
+
     #if user.is_authenticated:
     companies_id = request.session['_auth_user_companies_id']
     content_list = ''
     if request.user.is_authenticated:
        #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company_id__in=companies_id)
        #result=list(set(companies_id) & set(Word)) # - пример пересечения множеств
-       content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id).annotate(cnt=Count('id'))
+       if place == 0:
+          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
+       else:
+          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_forprofile=True).annotate(cnt=Count('id'))          
                       # это надо как-то исправить, чтоб записи не дублировались, когда контент для нескольких компаний, и они же есть в списке у пользователя!
      # здесь нужно условие для button_company_create
+     # юзер имеет право на добавление контента
+     # это реализовано в шаблоне через штатный perms.companies.add_content
     button_content_create = ''
-    # if юзер имеет право на добавление контента
-    #     button_content_create = 'Добавить'
+    #is_add2 = 'SELECT p.id FROM auth_user_groups ug INNER JOIN auth_user u ON u.id=ug.user_id INNER JOIN auth_group_permissions gp ON gp.group_id=ug.group_id INNER JOIN auth_permission p ON p.id=gp.permission_id WHERE u.is_superuser OR (ug.user_id=2 AND p.codename="add_content")'
+    #is_add1 = 'SELECT p.id FROM auth_user_user_permissions uup INNER JOIN auth_permission p ON p.id=uup.permission_id WHERE uup.user_id=3 AND p.codename="add_content"'
+    #is_add.query = auth_user_user_permissions.objects.filter(user_id=3, auth_permission__codename='add_content').values('auth_permission__id')
+    #u = User.objects.add_content(username='larimarit')
+    #is_add = u.has_perm('add_content')
+    #if is_add:
+    #   button_content_create = 'Добавить'
     #else:
-    #   content_list = ''
-    #   companies_id = ''
-    #   button_content_create = ''
+    #   if is_add2:
+    #      button_content_create = 'Добавить'
    
     return render(request, template_name, {
                               'content_list': content_list,
@@ -186,6 +199,12 @@ class ContentCreate(CreateView):
        context = super(ContentCreate, self).get_context_data(**kwargs)
        context['header'] = 'Новый Контент'
        return context
+
+    def get_form_kwargs(self):
+       kwargs = super(ContentCreate, self).get_form_kwargs()
+       # здесь нужно условие для 'action': 'create'
+       kwargs.update({'org': self.request.session['_auth_user_companies_id']})
+       return kwargs
 
     def form_valid(self, form):
        #form.instance.company_id = self.kwargs['companyid']
