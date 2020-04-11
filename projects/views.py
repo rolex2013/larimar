@@ -46,6 +46,8 @@ def projects(request, companyid=0, pk=0):
              project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True)
        prjstatus_selectid = prjstatus
     # *******************************
+    #project_list = project_list.order_by('dateclose')
+
     current_company = Company.objects.get(id=companyid)
 
     if pk == 0:
@@ -119,7 +121,7 @@ class ProjectCreate(CreateView):
     def get_form_kwargs(self):
        kwargs = super(ProjectCreate, self).get_form_kwargs()
        # здесь нужно условие для 'action': 'create'
-       kwargs.update({'user': self.request.user, 'action': 'create'})
+       kwargs.update({'user': self.request.user, 'action': 'create', 'companyid': self.kwargs['companyid']})
        return kwargs   
 
 class ProjectUpdate(UpdateView):    
@@ -247,7 +249,7 @@ class TaskCreate(CreateView):
 
     def get_form_kwargs(self):
        kwargs = super(TaskCreate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user, 'action': 'create'})
+       kwargs.update({'user': self.request.user, 'action': 'create', 'projectid': self.kwargs['projectid']})
        return kwargs   
 
 class TaskUpdate(UpdateView):    

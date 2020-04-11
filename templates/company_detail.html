@@ -85,7 +85,7 @@
                  { if user.is_authenticated and node.is_active %}--> <!-- тут будет еще проверка на авторство и исполнителей --> 
                     <!--{ if select_projectstatus == 0 or node.status_id == select_projectstatus %}-->
                        <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
-                          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk %}"><i>{{ node.author.username }}</i></a> | 
+                          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | 
                              {{ node.cost }}
                           </span></b><br />
                        {% if not node.is_leaf_node %}

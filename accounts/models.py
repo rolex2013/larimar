@@ -12,7 +12,7 @@ class UserProfile(models.Model):
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
-        return reverse('my_account:userprofile_detail', kwargs={'userid': self.user.pk})  
+        return reverse('my_account:userprofile_detail', kwargs={'userid': self.user.pk, 'param': ' '})  
     def __str__(self):
         #return (self.user.username + ' - ' + self.company.name)
         return (self.user.username)

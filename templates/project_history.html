@@ -17,7 +17,7 @@
        Статус: {{ current_project.status }}<br />
        <i>Участники: 
        {% for u in current_project.members.all %}
-          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk %}">{{ u.username }}</a>,</span>&nbsp;
+          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i><br />
        <em>Автор: {{ current_project.author }}</em><br /> 

@@ -32,6 +32,10 @@
                <div style="float: left;" class="content-entry"><a href="{% url 'my_company:content_create' %}"
                     class="top-menu"><span class="badge badge-secondary">Добавить</span></a>
                </div>
+               <div style="float: left;" class="content-entry">&nbsp;&nbsp;&nbsp;</div>
+               <div style="float: left;" class="content-entry"><a href="{% url 'my_account:userprofile_detail' 0 'all' %}"
+                  class="top-menu"><span class="badge badge-secondary">Вывести все</span></a>
+               </div>               
                <br /><br />
             {% endif %}
 
@@ -41,7 +45,11 @@
                   <div class="d-tr">
                      <div class="d-td-text">
                         <em>{{ content.datecreate }}</em>&nbsp;
-                        <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a><br />
+                        <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a>
+                        {% if content.is_active == False %}
+                           <strong><em>(в архиве)</em></strong>
+                        {% endif %}
+                        <br />
                         {% if content.announcement %}
                            {{ content.announcement }}
                         {% else %}

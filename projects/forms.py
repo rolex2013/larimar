@@ -35,12 +35,18 @@ class ProjectForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
-        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму  
-      
-        super(ProjectForm, self).__init__(*args, **kwargs)
+        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму 
+
+        if self.action == 'create':
+           self.company = kwargs.pop('companyid') 
+           super(ProjectForm, self).__init__(*args, **kwargs)
+           companyid = self.company
+        else:
+           super(ProjectForm, self).__init__(*args, **kwargs)
+           companyid = self.instance.company_id
 
         # в выпадающие списки для выбора Исполнителя (Руководителя) и участников проекта подбираем только тех юзеров, которые привязаны к этой организации (в админке)
-        uc = UserCompanyComponentGroup.objects.filter(company_id=self.instance.company_id).values_list('user_id', flat=True)
+        uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
         usr = User.objects.filter(id__in=uc, is_active=True)
         self.fields['assigner'].queryset = usr
         self.fields['members'].queryset = usr
@@ -50,7 +56,7 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'members', 'is_active', 'id']
+        fields = ['name', 'description', 'members', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'is_active', 'id']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
@@ -78,10 +84,17 @@ class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
-        super(TaskForm, self).__init__(*args, **kwargs)
+        if self.action == 'create':
+           self.project = kwargs.pop('projectid') 
+           super(TaskForm, self).__init__(*args, **kwargs)
+           prj = Project.objects.get(id=self.project)
+           companyid = prj.company_id
+        else:
+           super(TaskForm, self).__init__(*args, **kwargs)
+           companyid = self.instance.project.company_id                
 
         # в выпадающий список для выбора Исполнителя подбираем только тех юзеров, которые привязаны к этой организации (в админке)
-        uc = UserCompanyComponentGroup.objects.filter(company_id=self.instance.project.company_id).values_list('user_id', flat=True)
+        uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
         usr = User.objects.filter(id__in=uc, is_active=True)
         self.fields['assigner'].queryset = usr
 

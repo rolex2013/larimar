@@ -124,15 +124,20 @@ def register(request):
 #        return UserProfile.objects.filter(user_id=self.request.user.id) #self.kwargs['userid'])
 #
 
-def UserProfileDetail(request, userid=0):
+def UserProfileDetail(request, userid=0, param=''):
+
+    companies_id = request.session['_auth_user_companies_id']
     if userid == 0:
        userid = request.user.id 
+       if param == 'all':
+          content_list = Content.objects.filter(author_id=userid, is_forprofile=True).annotate(cnt=Count('id'))          
+       else:
+          content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), is_forprofile=True).annotate(cnt=Count('id'))
+    else:
+       content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), is_forprofile=True, is_private=False).annotate(cnt=Count('id'))          
     user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
     #button_project_create = ''
     button_userprofile_update = 'Изменить'
-
-    companies_id = request.session['_auth_user_companies_id']
-    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_forprofile=True).annotate(cnt=Count('id'))          
 
     return render(request, 'userprofile_detail.html', {
                                                        'user_profile': user_profile,

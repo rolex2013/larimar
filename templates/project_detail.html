@@ -26,7 +26,7 @@
        <p>Статус: {{ current_project.status }}</p>
        <p><i>Участники: 
        {% for u in current_project.members.all %}
-          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk %}">{{ u.username }}</a>,</span>&nbsp;
+          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i></p>
        <em>Автор: {{ current_project.author }}</em><br /> 
@@ -80,14 +80,14 @@
     
         <ul>
           {% recursetree nodes %}
-             {% ifequal node.project_id projectid %}
+             <!--{ ifequal node.project_id projectid %}-->
                 {% if user.is_authenticated and node.is_active %}
                    <li> 
                      <b><a href="{% url 'my_project:task_detail' node.pk %}">
                      <!-- <a href="{% url 'my_project:tasks' current_project.id node.pk %}">-->
                      {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
                         {{ node.status.name }} | 
-                        <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk %}"><i>{{ node.author.username }}</i></a></span> | 
+                        <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | 
                         {{ node.cost }}</span></b>
                      {% if not node.is_leaf_node %}
                         <ul class="children">
@@ -96,7 +96,7 @@
                      {% endif %}
                    </li>
                 {% endif %}
-             {% endifequal %}
+             <!--{ endifequal %}-->
           {% endrecursetree %}
         </ul>    
 
