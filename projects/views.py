@@ -79,7 +79,7 @@ def projects(request, companyid=0, pk=0):
     button_project_history = 'История'
 
     return render(request, "company_detail.html", {
-                              'nodes': project_list, #Project.objects.all(),
+                              'nodes': project_list.order_by(), #Project.objects.all(),
                               'current_project': current_project,
                               'root_project_id': root_project_id,
                               'tree_project_id': tree_project_id,
@@ -193,7 +193,7 @@ def tasks(request, projectid=0, pk=0):
     button_task_history = 'История'
      
     return render(request, "project_detail.html", {
-                              'nodes': task_list, #Task.objects.all(),
+                              'nodes': task_list.order_by(), #.order_by('tree_id', 'level', '-dateend'),
                               'current_task': current_task,
                               'root_task_id': root_task_id,
                               'tree_task_id': tree_task_id,
