@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 from bootstrap_datepicker_plus import DatePickerInput
 from django.contrib.auth.context_processors import auth
 import datetime
+from django.conf import settings
+from django.core.mail import send_mail
 
 
 class ProjectForm(forms.ModelForm):
@@ -30,6 +32,7 @@ class ProjectForm(forms.ModelForm):
                                            author_id=self.user.id)
            if self.cleaned_data['status'].is_close: # == "Выполнен":
               self.cleaned_data['dateclose'] = datetime.datetime.today()
+              send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Ппроекта!', settings.EMAIL_HOST_USER, ['larimaritgroup.ru@gmail.com'])
            else:
               self.cleaned_data['dateclose'] = None
 
