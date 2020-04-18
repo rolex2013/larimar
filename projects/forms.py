@@ -38,9 +38,10 @@ class ProjectForm(forms.ModelForm):
               user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
               Notification.objects.create(type=user_profile.protocoltype,
                                           sendfrom=settings.EMAIL_HOST_USER,
-                                          theme='Ваш Проект закрыт.',
-                                          text='Уведомляем о закрытии Вашего Проекта',
-                                          sendto=self.user.email,
+                                          theme='Ваш Проект переведён в статус "'+dict_status.name+'"',
+                                          text='Уведомляем об изменении статуса Вашего Проекта "'+self.cleaned_data['name']+'".',
+                                          #sendto=self.user.email,
+                                          sendto=user_profile.email,
                                           author_id=self.user.id)
            else:
               self.cleaned_data['dateclose'] = None
@@ -90,6 +91,13 @@ class TaskForm(forms.ModelForm):
                                         author_id=self.user.id)
            if self.cleaned_data['status'].is_close: # == "Решена" or self.cleaned_data['status'].name == "Снята":
               self.cleaned_data['dateclose'] = datetime.datetime.today()
+              user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
+              Notification.objects.create(type=user_profile.protocoltype,
+                                          sendfrom=settings.EMAIL_HOST_USER,
+                                          theme='Ваша Задача закрыта.',
+                                          text='Уведомляем о закрытии Вашей Задачи',
+                                          sendto=user_profile.email,
+                                          author_id=self.user.id)              
            else:
               self.cleaned_data['dateclose'] = None                                         
 

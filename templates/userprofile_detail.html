@@ -16,7 +16,9 @@
             <h5>Настройки</h5>
             <p>Компания: {{ user_profile.company.name }}</p>
             <p>Оповещения: {{ prompt_is_notify }} </p>   
-            <p>Протокол: {{ user_profile.protocoltype.name }}</p>                    
+            <p>Протокол: {{ user_profile.protocoltype.name }}</p>
+            <p>E-mail: {{ user_profile.email }}</p>
+            <p>Телефон: {{ user_profile.phone }}</p>                                            
             <div class="comment-entry">
                <a href="{% url 'my_account:userprofile_update' user_profile.pk %}" class="top-menu"><span
                      class="badge badge-secondary">{{ button_userprofile_update }}</span></a>
