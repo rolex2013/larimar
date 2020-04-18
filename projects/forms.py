@@ -4,6 +4,8 @@ from django import forms
 from .models import Company, Project, Task, TaskComment
 from .models import ProjectStatusLog, TaskStatusLog
 from .models import Dict_ProjectStatus, Dict_TaskStatus
+from main.models import Notification
+from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
 #from django.contrib.admin.widgets import AdminDateWidget
@@ -32,7 +34,14 @@ class ProjectForm(forms.ModelForm):
                                            author_id=self.user.id)
            if self.cleaned_data['status'].is_close: # == "Выполнен":
               self.cleaned_data['dateclose'] = datetime.datetime.today()
-              send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Ппроекта!', settings.EMAIL_HOST_USER, ['larimaritgroup.ru@gmail.com'])
+              #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Ппроекта!', settings.EMAIL_HOST_USER, ['larimaritgroup.ru@gmail.com'])
+              user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
+              Notification.objects.create(type=user_profile.protocoltype,
+                                          sendfrom=settings.EMAIL_HOST_USER,
+                                          theme='Ваш Проект закрыт.',
+                                          text='Уведомляем о закрытии Вашего Проекта',
+                                          sendto=self.user.email,
+                                          author_id=self.user.id)
            else:
               self.cleaned_data['dateclose'] = None
 

@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from accounts.models import UserProfile
 
-from main.models import Component
+from main.models import Component, Dict_ProtocolType, Notification
 
 from companies.models import Company
 from companies.models import Dict_CompanyStructureType
@@ -38,6 +38,10 @@ admin.site.register(UserProfile)
 
 
 admin.site.register(Component, ComponentAdmin)
+
+admin.site.register(Dict_ProtocolType)
+
+admin.site.register(Notification)
 
 
 admin.site.register(Company, CompanyAdmin)

@@ -8,6 +8,8 @@ from companies.models import Company
 class UserProfile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='result_user_profile', verbose_name="Пользователь")
     company = models.ForeignKey('companies.Company', blank=True, null=True, on_delete=models.CASCADE, related_name='result_company_profile', verbose_name="Организация")
+    is_notify = models.BooleanField("Оповещать", default=True)
+    protocoltype = models.ForeignKey('main.Dict_ProtocolType', blank=True, null=True, on_delete=models.CASCADE, related_name='result_protocol_type', verbose_name="Протокол оповещения")    
     description = RichTextUploadingField("Описание", blank=True, null=True)    
     is_active = models.BooleanField("Активность", default=True)
 

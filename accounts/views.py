@@ -138,12 +138,16 @@ def UserProfileDetail(request, userid=0, param=''):
     user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
     #button_project_create = ''
     button_userprofile_update = 'Изменить'
+    prompt_is_notify = 'Вкл.'
+    if user_profile.is_notify == False:
+       prompt_is_notify = 'Выкл.'
 
     return render(request, 'userprofile_detail.html', {
                                                        'user_profile': user_profile,
                                                        'button_userprofile_update': button_userprofile_update,
                                                        'content_list': content_list,
-                                                       'user_companies': companies_id
+                                                       'user_companies': companies_id,
+                                                       'prompt_is_notify': prompt_is_notify
                                                        })
 
 

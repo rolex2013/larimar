@@ -34,5 +34,5 @@ class UserProfileForm(forms.ModelForm):
         self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.filter(id__in=self.companies), level_indicator = u'---') # с иерархией
     class Meta:
         model = UserProfile
-        fields = ['company', 'description']     
+        fields = ['company', 'description', 'is_notify', 'protocoltype']     
            
