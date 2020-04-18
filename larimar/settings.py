@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'mptt',
     'ckeditor',
     'ckeditor_uploader',
+    'django_tables2',
     'menu',
     'accounts',
     'main', 

@@ -14,6 +14,10 @@ from projects.models import Project, Task, TaskComment, ProjectStatusLog, TaskSt
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
 from .forms import ProjectStatusLog, TaskStatusLog
+
+from .tables import ProjectStatusLogTable, TaskStatusLogTable
+from django_tables2 import RequestConfig
+
 #from .utils import ObjectUpdateMixin
 
 #class ProjectsHome(TemplateView):
@@ -323,14 +327,18 @@ def projecthistory(request, pk=0):
 
     comps = request.session['_auth_user_companies_id']
 
+    nodes = ProjectStatusLog.objects.filter(project_id=pk, is_active=True)
+    table = ProjectStatusLogTable(nodes)
+
     return render(request, "project_history.html", {
-                              'nodes':ProjectStatusLog.objects.filter(project_id=pk, is_active=True), 
+                              'nodes': nodes, 
                               'current_project':current_project,
                               #'root_project_id':root_project_id,
                               #'tree_project_id':tree_project_id,
                               #'current_company':current_company,
                               #'companyid':companyid,
-                              'user_companies': comps,                                                           
+                              'user_companies': comps,
+                              'table': table,                                                           
                                                 })     
 
 def taskhistory(request, pk=0):
@@ -342,8 +350,12 @@ def taskhistory(request, pk=0):
 
     comps = request.session['_auth_user_companies_id']
 
+    nodes = TaskStatusLog.objects.filter(task_id=pk, is_active=True)
+    table = ProjectStatusLogTable(nodes)    
+
     return render(request, "task_history.html", {
-                              'nodes':TaskStatusLog.objects.filter(task_id=pk, is_active=True), 
-                              'current_task':current_task,
-                              'user_companies': comps,                                                           
+                              'nodes': nodes, 
+                              'current_task': current_task,
+                              'user_companies': comps,  
+                              'table': table,                                                               
                                                 })                                                     
