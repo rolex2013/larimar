@@ -1,0 +1,29 @@
+   <!-- Защита от прямого доступа к проектам компании -->
+
+      <div class="project-list">
+
+         {% load mptt_tags %}
+ 
+         <ul>
+           {% recursetree nodes %}
+              <!--{ if node.company_id == companyid %}
+                 { if user.is_authenticated and node.is_active %}--> <!-- тут будет еще проверка на авторство и исполнителей --> 
+                    <!--{ if select_projectstatus == 0 or node.status_id == select_projectstatus %}-->
+                       <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
+                          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | 
+                             {{ node.cost }}
+                          </span></b><br />
+                       {% if not node.is_leaf_node %}
+                          <ul class="children">{{ children }}</ul>
+                       {% endif %}
+                    <!--{ endif %}-->
+                    <!--/{{ select_projectstatus }}/{{ node.status_id }}/{{ node.company_id }}/{{ companyid }}/{{ node.is_leaf_node }}/-->
+                    </li>
+                 <!--{ endif %}
+              { endif %}-->
+           {% endrecursetree %}
+         </ul> 
+          
+      </div>
+
+
