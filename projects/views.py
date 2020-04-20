@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.utils import timezone
+import json
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
@@ -361,31 +362,40 @@ def taskhistory(request, pk=0):
                                                 })  
 
 
-def projectfilter(request, companyid=0):
+def projectfilter(request):
     #if request.user.is_authenticated():
+            companyid = request.GET['companyid']
+            prjstatus = request.GET['projectstatus']
             if companyid == 0:
                companyid = request.session['_auth_user_currentcompany_id']
             # *** фильтруем по статусу ***
-            prjstatus_selectid = 0
-            try:
-               prjstatus = request.GET['select-projectstatus']
-            except:
+ 
+            #assert False, request.GET['select-projectstatus']
+            #prjstatus_selectid = 0
+            #try:
+            #   prjstatus = request.GET['select-projectstatus']
+            #except:
+            #   project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
+            #else:
+            if prjstatus == "0":
+               # если в выпадающем списке выбрано "Все активные"
                project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
             else:
-               if prjstatus == "0":
-                  # если в выпадающем списке выбрано "Все активные"
-                  project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
-               else:
-                  if prjstatus == "-1":
-                     # если в выпадающем списке выбрано "Все"
-                     project_list = Project.objects.filter(is_active=True, company=companyid)
-                  else:             
-                     project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True)
-            print('=============='+prjstatus)
-            prjstatus_selectid = prjstatus
-            nodes = project_list.order_by()
-            # *******************************        
-            return HttpResponse(json.dumps(data), content_type='application/json')
+               if prjstatus == "-1":
+                  # если в выпадающем списке выбрано "Все"
+                  project_list = Project.objects.filter(is_active=True, company=companyid)
+               else:             
+                  project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True)
+            #print '=============='+prjstatus
+            #assert False, companyid
+            #prjstatus_selectid = prjstatus
+            #nodes = project_list.order_by()
+            # *******************************
+            #project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True) 
+            nodes = project_list.order_by()              
+            #return HttpResponse(json.dumps(nodes), content_type='application/json')
+            #return JsonResponse({'nodes': list(nodes)})
+            return render(request, 'projects_list.html', {'nodes': nodes})
 
             
     #else:
@@ -394,7 +404,7 @@ def projectfilter(request, companyid=0):
 def project__filter(request, companyid=0):
    response = render(
          request,
-         'projects__list.html',
-         {'nodes': ''}
+         'projects_list.html',
+         {'nodes': Project.objects.filter(is_active=True, company=companyid).order_by()}
          )
    return response                                                   
