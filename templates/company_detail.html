@@ -62,7 +62,7 @@
             <!--<label for="">Введите название установки</label><br/>
             <input name="search" type="text">-->
             <label>Фильтр по статусу: </label>
-            <select name="select-projectstatus">
+            <select name="select-projectstatus" id="selectid"  class="select-project-status">
                <option value="-1" {% ifequal "-1" prjstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
                <option value="0" {% ifequal 0 prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>   
                {% for prjstatus in projectstatus %}
@@ -71,15 +71,13 @@
                   </option>   
                {% endfor %}
             </select>
-            <!--<button id="selection-button" type="submit" method="GET">Применить</button>-->
-            <input type="button" value="Применить" id="selection-button" method="GET">
+            <!--<button id="selection-button" type="submit" method="GET">Применить</button>
+            <input type="button" value="Применить" id="selection-button" method="GET">-->
             <!--<div class="project-entry"><a href="{ url 'my_project:projects' current_company.pk 0 %}" class="top-menu">
             <span class="badge badge-secondary">Все</span></a></div>-->
          </form>
 
-         <br />
-
-         {% include 'projects_list.html' %}
+         <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
 
       <!--{ endif %}-->
          <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
@@ -90,27 +88,27 @@
 
       <script>
   
-         $("#selectionbutton").keyup(function(){
-            console.log(this.value);
-            $('.projects_list').html('').load("{% url 'my_project:project_filter' %}" /*+ this.value*/);
-         });
-      
-         $("#selection-button").on('click',function(){
-            console.log(this.value);
-            console.log(this.text);
+         //$("#selection-button").on('click',function(){
+         $(document).on('change', '.select-project-status', function() {
+            //console.log(this.value);
+            //console.log(this.text);
             //$('.projects_list').html('').load("{ url 'my_project:project_filter' 8 %}" /*+ this.value*/);
-            var statusSelected = $('#select-projectstatus').find(":selected").val();            
+            //var statusSelected = $('#select-projectstatus').find(":selected").val();   
+            //var statusSelected = document.getElementById('selectid').value; 
+            var statusSelected = $(this).val(); 
+            //console.log(statusSelected);            
             $.ajax({
                  url: "{% url 'my_project:project_filter' %}",
                  method: 'GET',
                  data : {
                          //filter_category: parseInt(statusSelected)
-                         companyid: 8,
-                         projectstatus: 2
+                         companyid: {{ current_company.id }},
+                         projectstatus: statusSelected
                         },
                  success: function(data) 
                         {
-                         console.log(data)
+                         //console.log(data)
+                         $('#ajax_listresult').html(data);
                         },
                  error: function(xhr, errmsg, err) 
                         {
@@ -119,14 +117,20 @@
                         }
              });            
          });         
-      
+
+         /*
+         $("#selectionbutton").keyup(function(){
+            console.log(this.value);
+            $('.projects_list').html('').load("{ url 'my_project:project_filter' %}" /+ this.value/);
+         });
+            
          $("#selectionbutton" ).click(function(event) {
              event.preventDefault();
              var statusSelected = $('#select-projectstatus').find(":selected").val();
              console.log($('#select-projectstatus').find(":selected").val());
           
              $.ajax({
-                 url: "{% url 'my_project:project_filter' %}",
+                 url: "{ url 'my_project:project_filter' %}",
                  method: 'GET',
                  data : {
                          filter_category: parseInt(statusSelected)
@@ -142,7 +146,8 @@
                         }
              });
          });
-      
+         */
+
       </script>
 
    {% else %}

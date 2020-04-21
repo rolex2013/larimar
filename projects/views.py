@@ -19,6 +19,8 @@ from .forms import ProjectStatusLog, TaskStatusLog
 from .tables import ProjectStatusLogTable, TaskStatusLogTable
 from django_tables2 import RequestConfig
 
+from django.contrib.auth.decorators import login_required
+
 #from .utils import ObjectUpdateMixin
 
 #class ProjectsHome(TemplateView):
@@ -28,6 +30,7 @@ class ProjectsList(ListView):
     model = Project
     template_name = 'company_detail.html'
 
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def projects(request, companyid=0, pk=0):
 
     if companyid == 0:
@@ -48,7 +51,7 @@ def projects(request, companyid=0, pk=0):
              # если в выпадающем списке выбрано "Все"
              project_list = Project.objects.filter(is_active=True, company=companyid)
           else:             
-             project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True)
+             project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
        prjstatus_selectid = prjstatus
     # *******************************
     #project_list = project_list.order_by('dateclose')
@@ -98,6 +101,7 @@ def projects(request, companyid=0, pk=0):
                               'button_project_history': button_project_history,
                               'projectstatus': Dict_ProjectStatus.objects.filter(is_active=True),
                               'prjstatus_selectid': prjstatus_selectid,
+                              'object_list': 'project_list',
                               #'select_projectstatus': select_projectstatus,
                                                 })       
 
@@ -152,6 +156,7 @@ class ProjectUpdate(UpdateView):
 #    template_name = 'project_delete.html'
 #    success_url = '/success/' 
 
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def tasks(request, projectid=0, pk=0):
 
     # *** фильтруем по статусу ***
@@ -169,7 +174,7 @@ def tasks(request, projectid=0, pk=0):
              # если в выпадающем списке выбрано "Все"
              task_list = Task.objects.filter(is_active=True, project=projectid)
           else:             
-             task_list = Task.objects.filter(is_active=True, project=projectid, status=tskstatus, dateclose__isnull=True)
+             task_list = Task.objects.filter(is_active=True, project=projectid, status=tskstatus) #, dateclose__isnull=True)
        tskstatus_selectid = tskstatus
     # *******************************
 
@@ -211,6 +216,7 @@ def tasks(request, projectid=0, pk=0):
                               'button_task_history': button_task_history,                              
                               'taskstatus': Dict_TaskStatus.objects.filter(is_active=True),
                               'tskstatus_selectid': tskstatus_selectid,
+                              'object_list': 'task_list',
                                                 })       
 
 class TaskDetail(DetailView):
@@ -279,7 +285,6 @@ class TaskUpdate(UpdateView):
 #    template_name = 'task_delete.html'
 #    success_url = '/success/' 
 
-
 class TaskCommentDetail(DetailView):
     model = TaskComment
     template_name = 'taskcomment_detail.html'
@@ -315,6 +320,7 @@ class TaskCommentUpdate(UpdateView):
 #    #template_name = 'taskcomment_delete.html'
 #    success_url = '/success/' 
 
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def projecthistory(request, pk=0):
 
     #if companyid == 0:
@@ -342,6 +348,7 @@ def projecthistory(request, pk=0):
                               'table': table,                                                           
                                                 })     
 
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def taskhistory(request, pk=0):
 
     if pk == 0:
@@ -361,7 +368,7 @@ def taskhistory(request, pk=0):
                               'table': table,                                                               
                                                 })  
 
-
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def projectfilter(request):
     #if request.user.is_authenticated():
             companyid = request.GET['companyid']
@@ -369,7 +376,6 @@ def projectfilter(request):
             if companyid == 0:
                companyid = request.session['_auth_user_currentcompany_id']
             # *** фильтруем по статусу ***
- 
             #assert False, request.GET['select-projectstatus']
             #prjstatus_selectid = 0
             #try:
@@ -385,9 +391,9 @@ def projectfilter(request):
                   # если в выпадающем списке выбрано "Все"
                   project_list = Project.objects.filter(is_active=True, company=companyid)
                else:             
-                  project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True)
+                  project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
             #print '=============='+prjstatus
-            #assert False, companyid
+            #assert False, prjstatus
             #prjstatus_selectid = prjstatus
             #nodes = project_list.order_by()
             # *******************************
@@ -395,16 +401,34 @@ def projectfilter(request):
             nodes = project_list.order_by()              
             #return HttpResponse(json.dumps(nodes), content_type='application/json')
             #return JsonResponse({'nodes': list(nodes)})
-            return render(request, 'projects_list.html', {'nodes': nodes})
-
-            
+            return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'project_list'})           
     #else:
-    #    return JsonResponse({'error': 'Only authenticated users'}, status=404)  
-    # 
-def project__filter(request, companyid=0):
-   response = render(
-         request,
-         'projects_list.html',
-         {'nodes': Project.objects.filter(is_active=True, company=companyid).order_by()}
-         )
-   return response                                                   
+    #    return JsonResponse({'error': 'Only authenticated users'}, status=404) 
+        #return render(request, 'projects_list.html', 'Информация недоступна') 
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def taskfilter(request):
+    projectid = request.GET['projectid']
+    taskstatus = request.GET['taskstatus']
+    # *** фильтруем по статусу ***
+    #tskstatus_selectid = 0
+    if taskstatus == "0":
+       # если в выпадающем списке выбрано "Все активные"
+       task_list = Task.objects.filter(is_active=True, project=projectid, dateclose__isnull=True)
+    else:
+       if taskstatus == "-1":
+          # если в выпадающем списке выбрано "Все"
+          task_list = Task.objects.filter(is_active=True, project=projectid)
+       else:             
+          task_list = Task.objects.filter(is_active=True, project=projectid, status=taskstatus)
+    # *******************************
+    nodes = task_list.order_by()              
+    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'task_list'})           
+
+#def project__filter(request, companyid=0):
+#   response = render(
+#         request,
+#         'projects_list.html',
+#         {'nodes': Project.objects.filter(is_active=True, company=companyid).order_by()}
+#         )
+#  return response                                                   
