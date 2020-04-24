@@ -6,6 +6,7 @@
  
          <ul>
            {% recursetree nodes %}
+           <li>
               {% if object_list == 'project_list' %}         
                  <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
                     <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | 
@@ -20,9 +21,10 @@
                        {{ node.cost }}
                     </span></b>            
               {% endif %}                          
-              {% if not node.is_leaf_node %}
+              { if not node.is_leaf_node %}
                  <ul class="children">{{ children }}</ul>
-              {% endif %}
+              { endif %}
+            </li>
            {% endrecursetree %}
          </ul> 
           

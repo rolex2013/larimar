@@ -107,8 +107,8 @@ class Project(MPTTModel):
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
 
-    class MPTTMeta:
-        order_insertion_by = ['name']
+    #class MPTTMeta:
+    #    order_insertion_by = ['name']
     class Meta:
         verbose_name = 'Проект'
         verbose_name_plural = 'Проекты'

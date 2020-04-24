@@ -52,10 +52,20 @@ class ELoginView(View):
             #uc['UserCompany'] = companies_list
             #companies_list = UserCompany.objects.filter(user=request.user.id, is_active=True).only('company')
             current_company = ''
+            # === проверяем существование профиля ===
             try:
-               current_company = UserProfile.objects.get(user=request.user.id, is_active=True).company_id
+               current_profile = UserProfile.objects.get(user=request.user.id, is_active=True)
             except ObjectDoesNotExist:
                UserProfile.objects.create(user_id=request.user.id, description='')
+            # === проверяем, есть ли в настройках профиля какая-нибудь Организация ===
+            current_company = UserProfile.objects.get(user=request.user.id, is_active=True).company_id
+            if current_company == None:
+               # === проверяем, даны ли права этому пользователю на какую-нибудь Организацию ===
+               current_company = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))[0]
+               if current_company != None:
+                  UserProfile.objects.filter(user_id=request.user.id).update(company_id=current_company)               
+            # ========================================         
+            #print(current_company)
             request.session['_auth_user_currentcompany_id'] = current_company
             companies_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
             request.session['_auth_user_companies_id'] = companies_list

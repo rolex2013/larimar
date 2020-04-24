@@ -21,6 +21,8 @@ from django_tables2 import RequestConfig
 
 from django.contrib.auth.decorators import login_required
 
+from django.db.models import Q
+
 #from .utils import ObjectUpdateMixin
 
 #class ProjectsHome(TemplateView):
@@ -37,21 +39,22 @@ def projects(request, companyid=0, pk=0):
        companyid = request.session['_auth_user_currentcompany_id']
 
     # *** фильтруем по статусу ***
+    currentuser = request.user.id
     prjstatus_selectid = 0
     try:
        prjstatus = request.POST['select_projectstatus']
     except:
-       project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
+       project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True)
     else:
        if prjstatus == "0":
           # если в выпадающем списке выбрано "Все активные"
-          project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
+          project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True)
        else:
           if prjstatus == "-1":
              # если в выпадающем списке выбрано "Все"
-             project_list = Project.objects.filter(is_active=True, company=companyid)
+             project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
           else:             
-             project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
+             project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
        prjstatus_selectid = prjstatus
     # *******************************
     #project_list = project_list.order_by('dateclose')
@@ -87,7 +90,7 @@ def projects(request, companyid=0, pk=0):
     button_project_history = 'История'
 
     return render(request, "company_detail.html", {
-                              'nodes': project_list.order_by(), #Project.objects.all(),
+                              'nodes': project_list.distinct().order_by(), # для удаления задвоений и восстановления иерархии
                               'current_project': current_project,
                               'root_project_id': root_project_id,
                               'tree_project_id': tree_project_id,
@@ -376,32 +379,24 @@ def projectfilter(request):
             if companyid == 0:
                companyid = request.session['_auth_user_currentcompany_id']
             # *** фильтруем по статусу ***
-            #assert False, request.GET['select-projectstatus']
-            #prjstatus_selectid = 0
-            #try:
-            #   prjstatus = request.GET['select-projectstatus']
-            #except:
-            #   project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
-            #else:
+            currentuser = request.user.id
             if prjstatus == "0":
                # если в выпадающем списке выбрано "Все активные"
-               project_list = Project.objects.filter(is_active=True, company=companyid, dateclose__isnull=True)
+               project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True)
             else:
                if prjstatus == "-1":
                   # если в выпадающем списке выбрано "Все"
-                  project_list = Project.objects.filter(is_active=True, company=companyid)
+                  project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
                else:             
-                  project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
-            #print '=============='+prjstatus
-            #assert False, prjstatus
-            #prjstatus_selectid = prjstatus
-            #nodes = project_list.order_by()
+                  project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
             # *******************************
             #project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True) 
-            nodes = project_list.order_by()              
+            nodes = project_list.order_by().distinct()
+            #print(project_list)        
+            #print(nodes)       
             #return HttpResponse(json.dumps(nodes), content_type='application/json')
             #return JsonResponse({'nodes': list(nodes)})
-            return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'project_list'})           
+            return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'project_list', 'error_message': 'Проекты не найдены!'})           
     #else:
     #    return JsonResponse({'error': 'Only authenticated users'}, status=404) 
         #return render(request, 'projects_list.html', 'Информация недоступна') 
