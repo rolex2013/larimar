@@ -27,11 +27,11 @@ urlpatterns = [
     path('tasks_list/task_update/<int:pk>', views.TaskUpdate.as_view(), name = 'task_update'),    
     #path('projects_list/tasks_list/task_delete/<int:pk>', views.TaskDelete.as_view(), name='task_delete'),  
     path('tasks_list/task_filter/', views.taskfilter, name = 'task_filter'),
-    path('tasks_list/task_history/<int:pk>', views.taskhistory, name = 'task_history'),          
+    path('tasks_list/task_history/<int:pk>', views.taskhistory, name = 'task_history'),
+    path('taskcomments_page/<int:taskid>', views.taskcomments, name = 'taskcomments'),          
     path('taskcomments_list/<int:pk>', views.TaskCommentDetail.as_view(), name = 'taskcomment_detail'),
     path('taskcomments_list/taskcomment_create/<int:taskid>', views.TaskCommentCreate.as_view(), name = 'taskcomment_create'),
     path('taskcomments_list/taskcomment_update/<int:pk>', views.TaskCommentUpdate.as_view(), name = 'taskcomment_update'),
     #path('projects_list/tasks_list/taskcomments_list/taskcomment_delete/<int:pk>', views.TaskCommentDelete.as_view(), name='taskcomment_delete'),    
     #path('contact_form/', views.Contacts, name = 'contacts'),
-
 ]

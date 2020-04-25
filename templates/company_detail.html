@@ -64,7 +64,8 @@
             <label>Фильтр по статусу: </label>
             <select name="select-projectstatus" id="selectid"  class="select-project-status">
                <option value="-1" {% ifequal "-1" prjstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-               <option value="0" {% ifequal 0 prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>   
+               <option value="0" {% ifequal 0 prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
+               <option value="-2" {% ifequal "-2" prjstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>   
                {% for prjstatus in projectstatus %}
                   <option value="{{prjstatus.id}}" {% ifequal prjstatus.id prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
                      {{prjstatus.name}}

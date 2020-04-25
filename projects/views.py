@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
 from django.utils import timezone
+from datetime import datetime, date, time
 import json
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
@@ -53,6 +54,9 @@ def projects(request, companyid=0, pk=0):
           if prjstatus == "-1":
              # если в выпадающем списке выбрано "Все"
              project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
+          elif prjstatus == "-2":
+             # если в выпадающем списке выбрано "Просроченные"
+             project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.now())                         
           else:             
              project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
        prjstatus_selectid = prjstatus
@@ -163,21 +167,25 @@ class ProjectUpdate(UpdateView):
 def tasks(request, projectid=0, pk=0):
 
     # *** фильтруем по статусу ***
+    currentuser = request.user.id
     tskstatus_selectid = 0
     try:
        tskstatus = request.POST['select_taskstatus']
     except:
-       task_list = Task.objects.filter(is_active=True, project=projectid, dateclose__isnull=True)
+       task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True)
     else:
        if tskstatus == "0":
           # если в выпадающем списке выбрано "Все активные"
-          task_list = Task.objects.filter(is_active=True, project=projectid, dateclose__isnull=True)
+          task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True)
        else:
           if tskstatus == "-1":
              # если в выпадающем списке выбрано "Все"
-             task_list = Task.objects.filter(is_active=True, project=projectid)
+             task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid)
+          elif tskstatus == "-2":
+             # если в выпадающем списке выбрано "Просроченные"
+             task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True, dateend__lt=datetime.now())                         
           else:             
-             task_list = Task.objects.filter(is_active=True, project=projectid, status=tskstatus) #, dateclose__isnull=True)
+             task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, status=tskstatus) #, dateclose__isnull=True)
        tskstatus_selectid = tskstatus
     # *******************************
 
@@ -206,7 +214,7 @@ def tasks(request, projectid=0, pk=0):
     button_task_history = 'История'
      
     return render(request, "project_detail.html", {
-                              'nodes': task_list.order_by(), #.order_by('tree_id', 'level', '-dateend'),
+                              'nodes': task_list.distinct().order_by(), #.order_by('tree_id', 'level', '-dateend'),
                               'current_task': current_task,
                               'root_task_id': root_task_id,
                               'tree_task_id': tree_task_id,
@@ -287,6 +295,40 @@ class TaskUpdate(UpdateView):
 #    #form_class = TaskForm
 #    template_name = 'task_delete.html'
 #    success_url = '/success/' 
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def taskcomments(request, taskid, pk=0):
+
+    currenttask = Task.objects.get(id=taskid)
+    currentuser = request.user.id
+    #if pk == 0:
+    #   current_task = 0
+    #else:
+    #   current_task = Task.objects.get(id=pk)
+    taskcomment_list = TaskComment.objects.filter(Q(author=request.user.id) | Q(task__project__members__in=[currentuser,]), is_active=True, task=taskid)
+
+    button_taskcomment_create = ''
+    button_taskcomment_update = ''
+    button_task_create = ''
+    # здесь нужно условие для button_task_create
+    # здесь нужно условие для button_taskcomment_create
+    if currentuser in currenttask.project.members.all:
+       button_task_create = 'Добавить'
+       button_taskcomment_create = 'Добавить'
+    # здесь нужно условие для button_task_update
+    if currentuser == currenttask.author_id:
+       button_task_update = 'Изменить'
+    button_task_history = 'История'
+     
+    return render(request, "task_detail.html", {
+                              'nodes': taskcomment_list.distinct().order_by(),
+                              #'current_taskcomment': currenttaskcomment,
+                              'task': currenttask,
+                              'button_task_create': button_task_create,
+                              'button_task_update': button_task_update,
+                              'button_task_history': button_task_history,
+                              'button_taskcomment_create': button_taskcomment_create,
+                                                })      
 
 class TaskCommentDetail(DetailView):
     model = TaskComment
@@ -387,7 +429,10 @@ def projectfilter(request):
                if prjstatus == "-1":
                   # если в выпадающем списке выбрано "Все"
                   project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
-               else:             
+               elif prjstatus == "-2":
+                  # если в выпадающем списке выбрано "Просроченные"
+                  project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.now())                         
+               else:   
                   project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
             # *******************************
             #project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True) 
@@ -406,18 +451,22 @@ def taskfilter(request):
     projectid = request.GET['projectid']
     taskstatus = request.GET['taskstatus']
     # *** фильтруем по статусу ***
+    currentuser = request.user.id
     #tskstatus_selectid = 0
     if taskstatus == "0":
        # если в выпадающем списке выбрано "Все активные"
-       task_list = Task.objects.filter(is_active=True, project=projectid, dateclose__isnull=True)
+       task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True)
     else:
        if taskstatus == "-1":
           # если в выпадающем списке выбрано "Все"
-          task_list = Task.objects.filter(is_active=True, project=projectid)
+          task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid)
+       elif taskstatus == "-2":
+          # если в выпадающем списке выбрано "Просроченные"
+          task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True, dateend__lt=datetime.now())                         
        else:             
-          task_list = Task.objects.filter(is_active=True, project=projectid, status=taskstatus)
+          task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, status=taskstatus)
     # *******************************
-    nodes = task_list.order_by()              
+    nodes = task_list.distinct().order_by()              
     return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'task_list'})           
 
 #def project__filter(request, companyid=0):

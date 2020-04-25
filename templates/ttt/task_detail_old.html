@@ -39,6 +39,7 @@
       <em>Автор: {{ task.author }}</em><br />
       <em>Дата: {{ task.datecreate }}</em>              
       <p>&nbsp;</p>
+      {% if user.is_authenticated and user.id == task.author_id %}
         <div>
           <div style="float: left;"><a href="{% url 'my_project:task_create' task.project.id task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>
           <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
@@ -46,8 +47,9 @@
           <!-- <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
           <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
           <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-          <div style="float: left;"><a href="{% url 'my_project:task_history' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_history }} </span></a></div>          
+          <div style="float: left;"><a href="{% url 'my_project:task_history' task.pk %}" class="top-menu"><span class="badge badge-secondary"> История </span></a></div>          
         </div>
+      {% endif %}      
    </div>
 {% endblock task %}
 
@@ -56,15 +58,47 @@
         <p>&nbsp;</p>
         <h5>Комментарии</h5>
         <p>&nbsp;</p>
+        <!--{ user.username }} in { task.project.members.all }}-->
+        {% if user.is_authenticated and user.username in task.project.members.all %}                  
+        {% for taskcomment in task.resulttask.all %}
+            {% if taskcomment.is_active %}  
+              <!--{ if taskcomment.author_id == user.id or taskcomment.assigner_id == user.id %}-->          
+                <!--<div class="comment-entry">
+                  <h2><a href="{ url 'my_project:taskcomment_detail' taskcomment.pk %}">{{ taskcomment.name }}</a></h2>           
+                <div>-->
+                  <div class="comment-entry">
+                    <!--<h6> { taskcomment.name }}&nbsp;<em>({ taskcomment.author }} / { taskcomment.datecreate }})</em></h6>-->
+                    <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
+                      <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
+                         {{ taskcomment.time }} час. | 
+                         {{ taskcomment.cost }}</span></b>
+                    <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
+                    <!--<em>Автор: {{ taskcomment.author }}</em><br />
+                    <em>Дата: {{ taskcomment.datecreate }}</em>              
+                    <p>&nbsp;</p>
+                    {% if user.is_authenticated and user.id == task.author_id %}
+                      <div>
+                        <div style="float: left;"><a href="{ url 'my_project:task_update' task.pk %}" class="top-menu"><span class="badge badge-secondary">Изменить</span></a></div>
+                        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+                        <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div>
+                      </div>
+                    {% endif %}   -->   
+                 </div>
+              <!--{ endif %}-->
+            {% endif %}
+        {% endfor %}
+        {% endif %} 
         
         {% for taskcomment in nodes %}
+           {{ current_taskcomment.name}}
            <div class="comment-entry">
+            <!--<h6> { taskcomment.name }}&nbsp;<em>({ taskcomment.author }} / { taskcomment.datecreate }})</em></h6>-->
             <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
               <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
                  {{ taskcomment.time }} час. | 
                  {{ taskcomment.cost }}</span></b>
             <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
-           </div>           
+         </div>           
         {% endfor %}
 
    </div>
