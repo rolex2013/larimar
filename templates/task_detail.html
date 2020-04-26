@@ -46,17 +46,21 @@
           <!-- <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
           <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
           <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-          <div style="float: left;"><a href="{% url 'my_project:task_history' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_history }} </span></a></div>          
+          <div style="float: left;"><a href="{% url 'my_project:task_history' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_history }}</span></a></div>          
         </div>
    </div>
 {% endblock task %}
-
+<hr>
 {% block list %}
    <div class="comment-entry">
         <p>&nbsp;</p>
         <h5>Комментарии</h5>
         <p>&nbsp;</p>
-        
+
+      <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
+      <div class="comment-entry"></div><a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_taskcomment_create }}</span></a></div>
+      <p>&nbsp;</p>
+
         {% for taskcomment in nodes %}
            <div class="comment-entry">
             <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
@@ -68,8 +72,5 @@
         {% endfor %}
 
    </div>
-   <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-   <div class="comment-entry"></div><a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_taskcomment_create }}</span></a></div>
-   <p>&nbsp;</p>
   
 {% endblock list %}

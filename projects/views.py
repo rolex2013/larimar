@@ -189,7 +189,7 @@ def tasks(request, projectid=0, pk=0):
        tskstatus_selectid = tskstatus
     # *******************************
 
-    current_project = Project.objects.get(id=projectid)
+    currentproject = Project.objects.get(id=projectid)
     
     if pk == 0:
        current_task = 0
@@ -204,27 +204,30 @@ def tasks(request, projectid=0, pk=0):
 
     button_project_create = ''
     button_project_update = ''
+    button_project_history = ''     
     button_task_create = ''
-    # здесь нужно условие для button_project_create
-    button_project_create = 'Добавить'
-    # здесь нужно условие для button_project_update
-    button_project_update = 'Изменить'
-    # здесь нужно условие для button_task_create
-    button_task_create = 'Добавить'
-    button_task_history = 'История'
+
+    is_member = Project.objects.filter(members__in=[currentuser,]).exists()
+    if currentuser == currentproject.author_id or currentuser == currentproject.assigner_id or is_member:
+       button_project_create = 'Добавить'
+       button_project_history = 'История' 
+       button_task_create = 'Добавить'             
+       if currentuser == currentproject.author_id:
+          button_project_update = 'Изменить'    
      
     return render(request, "project_detail.html", {
                               'nodes': task_list.distinct().order_by(), #.order_by('tree_id', 'level', '-dateend'),
                               'current_task': current_task,
                               'root_task_id': root_task_id,
                               'tree_task_id': tree_task_id,
-                              'current_project': current_project,                             
+                              'current_project': currentproject,                             
                               'projectid': projectid,
                               'user_companies': request.session['_auth_user_companies_id'],                              
                               'button_project_create': button_project_create,
                               'button_project_update': button_project_update,
+                              'button_project_history': button_project_history,
                               'button_task_create': button_task_create,
-                              'button_task_history': button_task_history,                              
+                              #'button_task_history': button_task_history,                              
                               'taskstatus': Dict_TaskStatus.objects.filter(is_active=True),
                               'tskstatus_selectid': tskstatus_selectid,
                               'object_list': 'task_list',
@@ -308,17 +311,17 @@ def taskcomments(request, taskid, pk=0):
     taskcomment_list = TaskComment.objects.filter(Q(author=request.user.id) | Q(task__project__members__in=[currentuser,]), is_active=True, task=taskid)
 
     button_taskcomment_create = ''
-    button_taskcomment_update = ''
+    #button_taskcomment_update = ''
     button_task_create = ''
-    # здесь нужно условие для button_task_create
-    # здесь нужно условие для button_taskcomment_create
-    if currentuser in currenttask.project.members.all:
+    button_task_update = ''    
+    button_task_history = ''
+    is_member = Project.objects.filter(members__in=[currentuser,]).exists()
+    if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id or is_member:
        button_task_create = 'Добавить'
-       button_taskcomment_create = 'Добавить'
-    # здесь нужно условие для button_task_update
-    if currentuser == currenttask.author_id:
-       button_task_update = 'Изменить'
-    button_task_history = 'История'
+       button_task_history = 'История' 
+       button_taskcomment_create = 'Добавить'             
+       if currentuser == currenttask.author_id:
+          button_task_update = 'Изменить'
      
     return render(request, "task_detail.html", {
                               'nodes': taskcomment_list.distinct().order_by(),
