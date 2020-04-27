@@ -25,7 +25,7 @@
       <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p>
       <i><p>Проект: <a href="{% url 'my_project:tasks' task.project.pk 0 %}">{{ task.project.name }}</a></p></i>
       {% if task.parent %}
-         <p>Уровень выше: <a href="{% url 'my_project:task_detail' task.parent.pk %}">{{ task.parent.name }}</a></p>
+         <p>Уровень выше: <a href="{% url 'my_project:taskcomments' task.parent.pk %}">{{ task.parent.name }}</a></p>
       {% else %}
          <!-- <p>: <a href="{ url 'my_project:projects' current_project.company.pk current_project.parent.pk %}">{{ current_project.parent.name }}</a></p>-->
       {% endif %}

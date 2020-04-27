@@ -107,8 +107,8 @@ class Project(MPTTModel):
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
 
-    #class MPTTMeta:
-    #    order_insertion_by = ['name']
+    class MPTTMeta:
+        order_insertion_by = ['name']
     class Meta:
         verbose_name = 'Проект'
         verbose_name_plural = 'Проекты'
@@ -130,7 +130,8 @@ class Task(MPTTModel):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
-        return reverse('my_project:task_detail', kwargs={'pk': self.pk})
+        return reverse('my_project:taskcomments', kwargs={'taskid': self.pk})
+        #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
     def __str__(self):
          return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     class MPTTMeta:
@@ -151,7 +152,7 @@ class TaskComment(models.Model):
     is_active = models.BooleanField("Активность", default=True) 
 
     def get_absolute_url(self):
-        return reverse('my_project:task_detail', kwargs={'pk': self.task_id})           
+        return reverse('my_project:taskcomments', kwargs={'taskid': self.task_id})           
 
     def __str__(self):
         return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')

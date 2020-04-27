@@ -92,7 +92,7 @@ def projects(request, companyid=0, pk=0):
     # здесь нужно условие для button_project_create
     button_project_create = 'Добавить'
     button_project_history = 'История'
-
+    #print(len(comps))
     return render(request, "company_detail.html", {
                               'nodes': project_list.distinct().order_by(), # для удаления задвоений и восстановления иерархии
                               'current_project': current_project,
@@ -233,25 +233,29 @@ def tasks(request, projectid=0, pk=0):
                               'object_list': 'task_list',
                                                 })       
 
-class TaskDetail(DetailView):
+class TaskDetail___(DetailView):
    model = Task
    template_name = 'task_detail.html'  
     
    def get_context_data(self, **kwargs):
        context = super(TaskDetail, self).get_context_data(**kwargs)
+       currentuser = request.user.id
        button_task_create = ''
        button_task_update = ''
+       button_task_history = '' 
        button_taskcomment_create = ''
-       # здесь нужно условие для button_task_create
-       button_task_create = 'Добавить'
-       # здесь нужно условие для button_task_update
-       button_task_update = 'Изменить'
-       # здесь нужно условие для button_taskcomment_create
-       button_taskcomment_create = 'Добавить'
+       #return super(TaskDetail, self).get_context_data(**kwargs)
+       is_member = Project.objects.filter(members__in=[currentuser,]).exists()
+       if currentuser == self.author_id or currentuser == self.assigner_id or is_member:
+          button_task_create = 'Добавить'
+          button_task_history = 'История' 
+          button_taskcomment_create = 'Добавить'             
+          if currentuser == self.author_id:
+             button_task_update = 'Изменить' 
        context['button_task_create'] = button_task_create
        context['button_task_update'] = button_task_update
-       context['button_taskcomment_create'] = button_taskcomment_create
-       #return super(TaskDetail, self).get_context_data(**kwargs)
+       context['button_task_history'] = button_task_history
+       context['button_taskcomment_create'] = button_taskcomment_create      
        return context
 
 class TaskCreate(CreateView):    
@@ -300,7 +304,7 @@ class TaskUpdate(UpdateView):
 #    success_url = '/success/' 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def taskcomments(request, taskid, pk=0):
+def taskcomments(request, taskid):
 
     currenttask = Task.objects.get(id=taskid)
     currentuser = request.user.id
@@ -427,11 +431,11 @@ def projectfilter(request):
             currentuser = request.user.id
             if prjstatus == "0":
                # если в выпадающем списке выбрано "Все активные"
-               project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True)
+               project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True) #.filter(id__in=[project.id for project in Project.objects.all() if project.is_leaf_node()])
             else:
                if prjstatus == "-1":
                   # если в выпадающем списке выбрано "Все"
-                  project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
+                  project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid) #.filter(id__in=[project.id for project in Project.objects.all() if project.is_leaf_node()])
                elif prjstatus == "-2":
                   # если в выпадающем списке выбрано "Просроченные"
                   project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.now())                         
@@ -439,6 +443,7 @@ def projectfilter(request):
                   project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
             # *******************************
             #project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True) 
+            #project_list = Project.objects.filter(id__in=[project.id for project in Project.objects.all() if project.is_leaf_node()])
             nodes = project_list.order_by().distinct()
             #print(project_list)        
             #print(nodes)       

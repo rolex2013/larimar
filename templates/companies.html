@@ -26,26 +26,26 @@
     
       <ul>
         {% recursetree nodes %}
-           {% ifequal node.tree_id tree_company_id %}
+           <!--{ ifequal node.tree_id tree_company_id %}-->
               <!--{ if user.is_authenticated and node.is_active and node.id in user_companies %}-->
               <!--{ if node.id in user_companies %}-->
                  <li>
-                   {% if node.id in user_companies %}
+                   <!--{ if node.id in user_companies %}-->
                       <a href="{% url 'my_project:projects' node.pk 0 %}">{{ node.name }}
                          <!--{{ node.id }}
                          {{ node.level }}-->
                       </a>
-                   {% else %}
+                   <!--{ else %}
                       {{ node.name }}
-                   {% endif %}
+                   { endif %}-->
                    {% if not node.is_leaf_node %}
-                      <ul class="children">
-                         {{ children }}
-                      </ul>
+                      <ul class="children">{{ children }}</ul>
+                   {% else %}
+                      {{ children }}
                    {% endif %}
                  </li>
               <!--{ endif %}-->
-           {% endifequal %}
+           <!--{ endifequal %}-->
         {% endrecursetree %}
       </ul>
 

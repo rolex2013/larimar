@@ -41,6 +41,7 @@ class CompaniesList(ListView):
 
 def companies(request, pk):
 
+    comps = request.session['_auth_user_companies_id']
     if pk == 0:
        current_company = 0
        tree_company_id = 0
@@ -67,11 +68,12 @@ def companies(request, pk):
     button_company_create = 'Добавить'
     
     return render(request, template_name, {
-                              'nodes':Company.objects.all(),
-                              'current_company':current_company,
-                              'root_company_id':root_company_id,
-                              'tree_company_id':tree_company_id,
-                              'project_id':project_id,
+                              #'nodes':Company.objects.all(),
+                              'nodes': Company.objects.filter(is_active=True, id__in=comps).order_by(),
+                              'current_company': current_company,
+                              'root_company_id': root_company_id,
+                              'tree_company_id': tree_company_id,
+                              'project_id': project_id,
                               'user_companies': request.session['_auth_user_companies_id'],
                               'button_company_create': button_company_create,                              
                                             })  
