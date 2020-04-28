@@ -24,6 +24,7 @@
        <p>Тип в иерархии: {{ current_project.structure_type }}</p>
        <p>Тип: {{ current_project.type }}</p>
        <p>Статус: {{ current_project.status }}</p>
+       <p>Выполнен на: {{ current_project.percentage }} %</p>
        <p><i>Участники: 
        {% for u in current_project.members.all %}
           <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;

@@ -34,6 +34,7 @@ class ProjectForm(forms.ModelForm):
                                            author_id=self.user.id)
            if self.cleaned_data['status'].is_close: # == "Выполнен":
               self.cleaned_data['dateclose'] = datetime.datetime.today()
+              self.cleaned_data['percentage'] = 100                            
               #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Ппроекта!', settings.EMAIL_HOST_USER, ['larimaritgroup.ru@gmail.com'])
               user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
               Notification.objects.create(type=user_profile.protocoltype,
@@ -69,7 +70,7 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'members', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'is_active', 'id']
+        fields = ['name', 'description', 'members', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
@@ -91,6 +92,7 @@ class TaskForm(forms.ModelForm):
                                         author_id=self.user.id)
            if self.cleaned_data['status'].is_close: # == "Решена" or self.cleaned_data['status'].name == "Снята":
               self.cleaned_data['dateclose'] = datetime.datetime.today()
+              self.cleaned_data['percentage'] = 100              
               user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
               Notification.objects.create(type=user_profile.protocoltype,
                                           sendfrom=settings.EMAIL_HOST_USER,
@@ -123,7 +125,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'dateclose', 'is_active', 'id']
+        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat

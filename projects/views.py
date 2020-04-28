@@ -80,19 +80,24 @@ def projects(request, companyid=0, pk=0):
     button_company_create = ''
     button_company_update = ''
     button_project_create = ''
-    button_project_history = ''
+
+    # здесь нужно условие для button_company_create
+    # если текущий пользователь не является автором созданной текущей организации, то добавлять и изменять Компанию можно только в приложении Организации
+    #button_company_create = 'Добавить'
+    # здесь нужно условие для button_company_update
+    #button_company_update = 'Изменить'
+    # здесь нужно условие для button_project_create
+    #button_project_create = 'Добавить'
     # здесь нужно условие для button_company_select
     comps = request.session['_auth_user_companies_id']
     if len(comps) > 1:
-       button_company_select = 'Сменить организацию'
-    # здесь нужно условие для button_company_create
-    button_company_create = 'Добавить'
-    # здесь нужно условие для button_company_update
-    button_company_update = 'Изменить'
-    # здесь нужно условие для button_project_create
-    button_project_create = 'Добавить'
-    button_project_history = 'История'
-    #print(len(comps))
+       button_company_select = 'Сменить организацию'        
+    if currentuser == current_company.author_id:
+       button_company_create = 'Добавить'
+       button_company_update = 'Изменить'
+       button_project_create = 'Добавить'        
+    if current_company in comps:
+       button_project_create = 'Добавить'
     return render(request, "company_detail.html", {
                               'nodes': project_list.distinct().order_by(), # для удаления задвоений и восстановления иерархии
                               'current_project': current_project,
@@ -105,7 +110,7 @@ def projects(request, companyid=0, pk=0):
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
                               'button_project_create': button_project_create,
-                              'button_project_history': button_project_history,
+                              #'button_project_history': button_project_history,
                               'projectstatus': Dict_ProjectStatus.objects.filter(is_active=True),
                               'prjstatus_selectid': prjstatus_selectid,
                               'object_list': 'project_list',
