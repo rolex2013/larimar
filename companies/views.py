@@ -10,25 +10,29 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.contrib.auth.models import User
 
+from django.contrib.auth.decorators import login_required
+
+from django.db.models import Q
+
 from .models import Company, UserCompanyComponentGroup, Content, Dict_ContentType
 #from projects.models import Project, Task, TaskComment
 from .forms import CompanyForm, ContentForm
 
-class CompaniesList(ListView):
-    model = Company
-    template_name = 'menu_companies.html' 
-    #ordering = ['company_up', 'id']
-
-    def get_context_data(self, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            context = super().get_context_data(**kwargs)
-            #current_membership = get_user_membership(self.request)
-            #context['current_membership'] = str(current_membership.membership)
-            # добавляем к контексту сессионный массив с id компаний, доступными этому авторизованному юзеру
-            #button_company_select = 'Сменить организацию'
-            context['user_companies'] = self.request.session['_auth_user_companies_id']
-            #context['button_company_select'] = button_company_select
-            return context
+#class CompaniesList(ListView):
+#    model = Company
+#    template_name = 'menu_companies.html' 
+#    #ordering = ['company_up', 'id']
+#
+#    def get_context_data(self, *args, **kwargs):
+#        if self.request.user.is_authenticated:
+#            context = super().get_context_data(**kwargs)
+#            #current_membership = get_user_membership(self.request)
+#            #context['current_membership'] = str(current_membership.membership)
+#            # добавляем к контексту сессионный массив с id компаний, доступными этому авторизованному юзеру
+#            #button_company_select = 'Сменить организацию'
+#            context['user_companies'] = self.request.session['_auth_user_companies_id']
+#            #context['button_company_select'] = button_company_select
+#            return context
 
 #def companies_main(request):
 #    companies_list = Company.objects.filter(is_active=True)
@@ -39,7 +43,8 @@ class CompaniesList(ListView):
 #                                             }
 #                 )  
 
-def companies(request, pk):
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def companies(request, pk=0):
 
     comps = request.session['_auth_user_companies_id']
     if pk == 0:
@@ -48,8 +53,8 @@ def companies(request, pk):
        root_company_id = 0
        tree_company_id = 0
        project_id = 0
-       template_name = "menu_companies.html"
-       #template_name = "companies.html"
+       #template_name = "menu_companies.html"
+       template_name = "companies.html"
     else:
        current_company = Company.objects.get(id=pk)
        tree_company_id = current_company.tree_id  
@@ -74,8 +79,9 @@ def companies(request, pk):
                               'root_company_id': root_company_id,
                               'tree_company_id': tree_company_id,
                               'project_id': project_id,
-                              'user_companies': request.session['_auth_user_companies_id'],
-                              'button_company_create': button_company_create,                              
+                              'user_companies': comps, #request.session['_auth_user_companies_id'],
+                              'button_company_create': button_company_create,
+                              'object_list': 'company_list',                              
                                             })  
 
 def tree_get_root(request, pk):

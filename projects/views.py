@@ -22,7 +22,7 @@ from django_tables2 import RequestConfig
 
 from django.contrib.auth.decorators import login_required
 
-from django.db.models import Q
+from django.db.models import Q, Count, Min, Max, Sum, Avg
 
 #from .utils import ObjectUpdateMixin
 
@@ -317,6 +317,8 @@ def taskcomments(request, taskid):
     #   current_task = 0
     #else:
     #   current_task = Task.objects.get(id=pk)
+    
+    taskcomment_costsum = TaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
     taskcomment_list = TaskComment.objects.filter(Q(author=request.user.id) | Q(task__project__members__in=[currentuser,]), is_active=True, task=taskid)
 
     button_taskcomment_create = ''
@@ -339,6 +341,7 @@ def taskcomments(request, taskid):
                               'button_task_create': button_task_create,
                               'button_task_update': button_task_update,
                               'button_task_history': button_task_history,
+                              'taskcomment_costsum': taskcomment_costsum,
                               'button_taskcomment_create': button_taskcomment_create,
                                                 })      
 

@@ -19,39 +19,10 @@
 
 {% block list %}
 
-    <!--{ load mptt_tags %}-->
-    <h3>{{ current_company.name }}</h3>
+    <h3>Организации <!--{ current_company.name }}--></h3>
+   
+    <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
 
-    {% load mptt_tags %}
-    
-      <ul>
-        {% recursetree nodes %}
-           <!--{ ifequal node.tree_id tree_company_id %}-->
-              <!--{ if user.is_authenticated and node.is_active and node.id in user_companies %}-->
-              <!--{ if node.id in user_companies %}-->
-                 <li>
-                   <!--{ if node.id in user_companies %}-->
-                      <a href="{% url 'my_project:projects' node.pk 0 %}">{{ node.name }}
-                         <!--{{ node.id }}
-                         {{ node.level }}-->
-                      </a>
-                   <!--{ else %}
-                      {{ node.name }}
-                   { endif %}-->
-                   {% if not node.is_leaf_node %}
-                      <ul class="children">{{ children }}</ul>
-                   {% else %}
-                      {{ children }}
-                   {% endif %}
-                 </li>
-              <!--{ endif %}-->
-           <!--{ endifequal %}-->
-        {% endrecursetree %}
-      </ul>
-
-      <!--{ if user.is_authenticated and user_company.is_admin %}
-         <div class="task-entry"></div><a href="{ url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>    
-      { endif %}-->
-      <div class="task-entry"></div><a href="{% url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>    
+    <!--<div class="task-entry"></div><a href="{ url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">{ button_company_create }}</span></a></div>    -->
 
 {% endblock list %}    

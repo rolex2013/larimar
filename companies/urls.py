@@ -2,14 +2,14 @@ from django.urls import path
 
 from .models import Company
 
-from .views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate, ContentDetail, ContentCreate, ContentUpdate
+from .views import companies, CompanyDetail, CompanyCreate, CompanyUpdate, ContentDetail, ContentCreate, ContentUpdate #, CompaniesList
 #from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
 
 app_name = 'my_company'
 
 urlpatterns = [    
-    path('menu_companies/', views.CompaniesList.as_view(), name = 'menu_companies'),
+    #path('menu_companies/', views.CompaniesList.as_view(), name = 'menu_companies'),
     path('companies_page/<int:pk>', views.companies, name = 'companies'),
     #path('projects_list/<int:pk>', views.ProjectsList.as_view(), name = 'projects'),
     path('companies_list/<int:pk>', views.CompanyDetail.as_view(), name = 'company_detail'),
