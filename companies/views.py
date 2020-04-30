@@ -132,6 +132,7 @@ class CompanyUpdate(UpdateView):
 #    #uc = UserCompany.objects.get(user=user)
 #    return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
 
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def contents(request, place=0):
     template_name = 'main.html'
     if place == 1:
@@ -144,9 +145,9 @@ def contents(request, place=0):
        #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company_id__in=companies_id)
        #result=list(set(companies_id) & set(Word)) # - пример пересечения множеств
        if place == 0:
-          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
+          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_public=False, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
        else:
-          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_forprofile=True).annotate(cnt=Count('id'))          
+          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_public=False, is_forprofile=True).annotate(cnt=Count('id'))          
                       # это надо как-то исправить, чтоб записи не дублировались, когда контент для нескольких компаний, и они же есть в списке у пользователя!
      # здесь нужно условие для button_company_create
      # юзер имеет право на добавление контента

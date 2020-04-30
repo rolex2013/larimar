@@ -22,7 +22,7 @@ class ContentForm(forms.ModelForm):
         self.fields['company'] = TreeNodeMultipleChoiceField(queryset=Company.objects.filter(id__in=self.companies), level_indicator = u'---') # с иерархией    
     class Meta:
         model = Content
-        fields = ['name', 'announcement', 'description', 'is_ontop', 'company', 'type', 'datebegin', 'dateend', 'is_forprofile', 'is_private', 'is_active']  
+        fields = ['name', 'announcement', 'description', 'is_ontop', 'company', 'type', 'datebegin', 'dateend', 'is_public', 'is_forprofile', 'is_private', 'is_active']  
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'),
             'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'),
