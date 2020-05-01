@@ -11,6 +11,7 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from django.db.models import Q
 
@@ -170,6 +171,15 @@ def contents(request, place=0):
                               'button_content_create': button_content_create,                              
                                             })  
 
+def publiccontents(request):
+    template_name = 'index.html'
+
+    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, is_public=True, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
+ 
+    return render(request, template_name, {
+                              'content_list': content_list,                              
+                                            })
+
 class ContentList(ListView):
     model = Content
     #template_name = 'content.html' 
@@ -191,13 +201,26 @@ class ContentDetail(DetailView):
     model = Content
     template_name = 'content_detail.html' 
 
+    def get_object(self):
+        object = super(ContentDetail, self).get_object()
+        if not self.request.user.is_authenticated and object.is_public == False:
+           raise Http404
+        return object
+
     def get_context_data(self, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            context = super().get_context_data(**kwargs)
-            context['button_content_create'] = 'Добавить' #button_company_create
-            context['button_content_update'] = 'Изменить'
-            context['user_companies'] = self.request.session['_auth_user_companies_id']
-            return context    
+       context = super(ContentDetail, self).get_context_data(**kwargs)
+       #print(self.object.name)       
+       if self.request.user.is_authenticated:
+          context['button_content_create'] = 'Добавить' #button_company_create
+          context['button_content_update'] = 'Изменить'
+          context['user_companies'] = self.request.session['_auth_user_companies_id']
+          context['whoisauthor'] = 'Автор: ' + self.object.author.username
+          if not self.object.is_active:
+             context['extdescription'] = ' (Контент перемещен в архив)'
+          return context              
+       elif self.object.is_public == True:
+          return context  
+       #context['extdescription'] = ' Контент недоступен!'
 
 class ContentCreate(CreateView):    
     model = Content
