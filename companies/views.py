@@ -15,7 +15,7 @@ from django.http import Http404
 
 from django.db.models import Q
 
-from .models import Company, UserCompanyComponentGroup, Content, Dict_ContentType
+from .models import Company, UserCompanyComponentGroup, Content, Dict_ContentType, Dict_ContentPlace
 #from projects.models import Project, Task, TaskComment
 from .forms import CompanyForm, ContentForm
 
@@ -146,9 +146,9 @@ def contents(request, place=0):
        #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company_id__in=companies_id)
        #result=list(set(companies_id) & set(Word)) # - пример пересечения множеств
        if place == 0:
-          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_public=False, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
+          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, place_id=2).annotate(cnt=Count('id'))
        else:
-          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, is_public=False, is_forprofile=True).annotate(cnt=Count('id'))          
+          content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, place_id=3).annotate(cnt=Count('id'))          
                       # это надо как-то исправить, чтоб записи не дублировались, когда контент для нескольких компаний, и они же есть в списке у пользователя!
      # здесь нужно условие для button_company_create
      # юзер имеет право на добавление контента
@@ -174,8 +174,9 @@ def contents(request, place=0):
 def publiccontents(request):
     template_name = 'index.html'
 
-    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, is_public=True, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
- 
+    #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, is_public=True, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
+    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, place__is_active=True, place_id=1).annotate(cnt=Count('id')) 
+    #print('***********************')
     return render(request, template_name, {
                               'content_list': content_list,                              
                                             })

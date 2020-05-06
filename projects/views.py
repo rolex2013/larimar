@@ -319,6 +319,11 @@ def taskcomments(request, taskid):
     #   current_task = Task.objects.get(id=pk)
     
     taskcomment_costsum = TaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
+    taskcomment_timesum = TaskComment.objects.filter(task=taskid).aggregate(Sum('time'))
+    sec = taskcomment_timesum["time__sum"]*3600
+    hours, sec = divmod(sec, 3600)
+    minutes, sec = divmod(sec, 60)
+    seconds = sec
     taskcomment_list = TaskComment.objects.filter(Q(author=request.user.id) | Q(task__project__members__in=[currentuser,]), is_active=True, task=taskid)
 
     button_taskcomment_create = ''
@@ -342,6 +347,8 @@ def taskcomments(request, taskid):
                               'button_task_update': button_task_update,
                               'button_task_history': button_task_history,
                               'taskcomment_costsum': taskcomment_costsum,
+                              'taskcomment_timesum': taskcomment_timesum,  
+                              'hours': hours, 'minutes': minutes, 'seconds': seconds,                            
                               'button_taskcomment_create': button_taskcomment_create,
                                                 })      
 

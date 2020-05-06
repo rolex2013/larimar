@@ -105,9 +105,10 @@ class Content(models.Model):
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     #dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    is_public = models.BooleanField("Только для внешнего сайта", default=False)
-    is_forprofile = models.BooleanField("Только для профиля", default=False)
-    is_private = models.BooleanField("Приватно", default=False)
+    #is_public = models.BooleanField("Только для внешнего сайта", default=False)
+    #is_forprofile = models.BooleanField("Только для профиля", default=False)
+    #is_private = models.BooleanField("Приватно", default=False)
+    place = models.ForeignKey('Dict_ContentPlace', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='content_place', verbose_name="Место")    
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
@@ -134,4 +135,17 @@ class Dict_ContentType(models.Model):
         verbose_name = 'Тип контента'
         verbose_name_plural = 'Типы контента'
     def __str__(self):
-        return (self.name)            
+        return (self.name)     
+
+class Dict_ContentPlace(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=2, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Место отображения контента'
+        verbose_name_plural = 'Места отображения контента'
+    def __str__(self):
+        return (self.name)                        

@@ -8,7 +8,7 @@ from companies.models import Company
 from companies.models import Dict_CompanyStructureType
 from companies.models import Dict_CompanyType
 from companies.models import UserCompanyComponentGroup
-from companies.models import Dict_ContentType, Content
+from companies.models import Dict_ContentType, Dict_ContentPlace, Content
 
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
@@ -61,6 +61,8 @@ admin.site.register(Dict_CompanyStructureType)
 admin.site.register(Dict_CompanyType)
 
 admin.site.register(Dict_ContentType)
+
+admin.site.register(Dict_ContentPlace)
 
 admin.site.register(Content)
 

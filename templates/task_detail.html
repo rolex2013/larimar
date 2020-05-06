@@ -36,6 +36,7 @@
       <p>Тип в иерархии: {{ task.structure_type }}</p>
       <p>Тип: {{ task.type }}</p>
       <p>Статус: {{ task.status }}</p>  
+      <p>Затраченное время, час.: <!--{ taskcomment_timesum.time__sum|floatformat:2 }}-->{{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
       <p>Выполнена на: {{ task.percentage }} %</p>          
       <em>Автор: {{ task.author }}</em><br />
       <em>Дата: {{ task.datecreate }}</em>              

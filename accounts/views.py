@@ -3,6 +3,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from datetime import datetime, date, time
 
 from urllib.parse import urlparse
+
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
+from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseNotFound
  
 #from django.shortcuts import redirect, render_to_response
 from django.contrib import auth
@@ -19,6 +23,8 @@ from .forms import UserRegistrationForm, UserProfileForm
 from companies.models import UserCompanyComponentGroup, Content
 from .models import UserProfile
 from django.db.models import Count
+
+#from companies.views import publiccontents
 
  
 class ELoginView(View):
@@ -107,8 +113,14 @@ def create_context_username_csrf(request):
 
 
 class ELogoutView(LogoutView):  
-   template_name = 'registration/logout.html' 
+    template_name = 'registration/logout.html'
+    #pbcontent = publiccontents
+    #template_name = 'index.html' 
 
+# эта ф-ция после логаута переадресовывает на начальную страницу с публичным контентом (внешний сайт)
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/')
 
 def register(request):
     if request.method == 'POST':
@@ -134,17 +146,19 @@ def register(request):
 #        return UserProfile.objects.filter(user_id=self.request.user.id) #self.kwargs['userid'])
 #
 
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def UserProfileDetail(request, userid=0, param=''):
 
     companies_id = request.session['_auth_user_companies_id']
     if userid == 0:
        userid = request.user.id 
        if param == 'all':
-          content_list = Content.objects.filter(author_id=userid, is_forprofile=True).annotate(cnt=Count('id'))          
+          #content_list = Content.objects.filter(author_id=userid, is_forprofile=True).annotate(cnt=Count('id'))          
+          content_list = Content.objects.filter(author_id=userid, place_id=3).annotate(cnt=Count('id'))          
        else:
-          content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), is_forprofile=True).annotate(cnt=Count('id'))
+          content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), place_id=3).annotate(cnt=Count('id'))
     else:
-       content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), is_forprofile=True, is_private=False).annotate(cnt=Count('id'))          
+       content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), place_id=3).annotate(cnt=Count('id'))          
     user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
     #button_project_create = ''
     button_userprofile_update = 'Изменить'

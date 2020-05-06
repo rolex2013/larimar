@@ -26,26 +26,37 @@ class ProjectForm(forms.ModelForm):
     def clean(self):
         if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
            self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
-        if self.action == 'update' and self.cleaned_data['status'].id != self.initial['status']:
-           # если вызов пришёл из ProjectUpdate и статус проекта был изменён, то пишем лог изменения 
-           dict_status = Dict_ProjectStatus.objects.get(pk=self.cleaned_data['status'].id)
-           ProjectStatusLog.objects.create(project_id=self.initial['id'], 
-                                           status_id=dict_status.id, 
-                                           author_id=self.user.id)
-           if self.cleaned_data['status'].is_close: # == "Выполнен":
-              self.cleaned_data['dateclose'] = datetime.datetime.today()
-              self.cleaned_data['percentage'] = 100                            
-              #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Ппроекта!', settings.EMAIL_HOST_USER, ['larimaritgroup.ru@gmail.com'])
-              user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
+        if self.action == 'update': 
+           if self.cleaned_data['status'].id != self.initial['status']:
+              # если вызов пришёл из ProjectUpdate и статус проекта был изменён, то пишем лог изменения 
+              dict_status = Dict_ProjectStatus.objects.get(pk=self.cleaned_data['status'].id)
+              ProjectStatusLog.objects.create(project_id=self.initial['id'], 
+                                              status_id=dict_status.id, 
+                                              author_id=self.user.id)
+              if self.cleaned_data['status'].is_close: # == "Выполнен":
+                 self.cleaned_data['dateclose'] = datetime.datetime.today()
+                 self.cleaned_data['percentage'] = 100  
+                 user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)                                           
+                 #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+                 Notification.objects.create(type=user_profile.protocoltype,
+                                             sendfrom=settings.EMAIL_HOST_USER,
+                                             theme='Ваш Проект переведён в статус "'+dict_status.name+'"',
+                                             text='Уведомляем об изменении статуса Вашего Проекта "'+self.cleaned_data['name']+'".',
+                                             #sendto=self.user.email,
+                                             sendto=user_profile.email,
+                                             author_id=self.user.id)
+              else:
+                 self.cleaned_data['dateclose'] = None
+           elif self.cleaned_data['assigner'].id != self.initial['assigner']:
+              user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
+              #send_mail('LarimarITGroup. Вы назначены исполнителем Проекта.', 'Уведомляем о назначении Вам Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           sendfrom=settings.EMAIL_HOST_USER,
-                                          theme='Ваш Проект переведён в статус "'+dict_status.name+'"',
-                                          text='Уведомляем об изменении статуса Вашего Проекта "'+self.cleaned_data['name']+'".',
+                                          theme='Вы назначены исполнителем Проекта.',
+                                          text='Уведомляем о назначении Вам Проекта "'+self.cleaned_data['name']+'".',
                                           #sendto=self.user.email,
                                           sendto=user_profile.email,
                                           author_id=self.user.id)
-           else:
-              self.cleaned_data['dateclose'] = None
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
@@ -84,24 +95,35 @@ class TaskForm(forms.ModelForm):
         if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
            self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
         # здесь надо поставить проверку на view.TaskUpdate
-        if self.action == 'update' and self.cleaned_data['status'].id != self.initial['status']:
-           # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения 
-           dict_status = Dict_TaskStatus.objects.get(pk=self.cleaned_data['status'].id)
-           TaskStatusLog.objects.create(task_id=self.initial['id'], 
-                                        status_id=dict_status.id, 
-                                        author_id=self.user.id)
-           if self.cleaned_data['status'].is_close: # == "Решена" or self.cleaned_data['status'].name == "Снята":
-              self.cleaned_data['dateclose'] = datetime.datetime.today()
-              self.cleaned_data['percentage'] = 100              
-              user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
+        if self.action == 'update':
+           if self.cleaned_data['status'].id != self.initial['status']:
+              # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения 
+              dict_status = Dict_TaskStatus.objects.get(pk=self.cleaned_data['status'].id)
+              TaskStatusLog.objects.create(task_id=self.initial['id'], 
+                                           status_id=dict_status.id, 
+                                           author_id=self.user.id)
+              if self.cleaned_data['status'].is_close: # == "Решена" or self.cleaned_data['status'].name == "Снята":
+                 self.cleaned_data['dateclose'] = datetime.datetime.today()
+                 self.cleaned_data['percentage'] = 100              
+                 user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
+                 #send_mail('LarimarITGroup. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
+                 Notification.objects.create(type=user_profile.protocoltype,
+                                             sendfrom=settings.EMAIL_HOST_USER,
+                                             theme='Ваша Задача закрыта.',
+                                             text='Уведомляем о закрытии Вашей Задачи!',
+                                             sendto=user_profile.email,
+                                             author_id=self.user.id)              
+              else:
+                 self.cleaned_data['dateclose'] = None  
+           elif self.cleaned_data['assigner'].id != self.initial['assigner']:
+              user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
+              #send_mail('LarimarITGroup. Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           sendfrom=settings.EMAIL_HOST_USER,
-                                          theme='Ваша Задача закрыта.',
-                                          text='Уведомляем о закрытии Вашей Задачи',
+                                          theme='Вы назначены исполнителем Задачи.',
+                                          text='Уведомляем о назначении Вам Задачи "'+self.cleaned_data['name']+'".',
                                           sendto=user_profile.email,
-                                          author_id=self.user.id)              
-           else:
-              self.cleaned_data['dateclose'] = None                                         
+                                          author_id=self.user.id)                                                     
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
