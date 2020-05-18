@@ -73,8 +73,15 @@
                   </option>   
                {% endfor %}
             </select>
-            <!--<button id="selection-button" type="submit" method="GET">Применить</button>
-            <input type="button" value="Применить" id="selection-button" method="GET">-->
+            <label>Мои проекты: </label>
+            <select name="select-myproject" id="myselectid"  class="select-my-project">
+               <option value="-1" {% ifequal "-1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+               <option value="0" {% ifequal "0" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
+               <option value="1" {% ifequal "1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+               <option value="2" {% ifequal "2" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
+            </select>            
+            <button id="selection-button" type="submit" method="GET">Применить</button>
+            <!--<input type="button" value="Применить" id="selection-button" method="GET">-->
             <!--<div class="project-entry"><a href="{ url 'my_project:projects' current_company.pk 0 %}" class="top-menu">
             <span class="badge badge-secondary">Все</span></a></div>-->
          </form>
@@ -90,15 +97,19 @@
       <br /><br />
 
       <script>
-  
+         // *** это обработка отдельного select - отключено ***
          //$("#selection-button").on('click',function(){
-         $(document).on('change', '.select-project-status', function() {
+         $(document).on('change', '.select-project-status---', function() {
+         //$("#selection-button").click(function(event) {
+             event.preventDefault();
+             var statusSelected = $('#select-projectstatus').find(":selected").val();            
             //console.log(this.value);
             //console.log(this.text);
             //$('.projects_list').html('').load("{ url 'my_project:project_filter' 8 %}" /*+ this.value*/);
             //var statusSelected = $('#select-projectstatus').find(":selected").val();   
             //var statusSelected = document.getElementById('selectid').value; 
-            var statusSelected = $(this).val(); 
+            var statusSelected = $(this).val();
+               //var myprojectSelected = $(this).val();  
             //console.log(statusSelected);            
             $.ajax({
                  url: "{% url 'my_project:project_filter' %}",
@@ -107,6 +118,7 @@
                          //filter_category: parseInt(statusSelected)
                          companyid: {{ current_company.id }},
                          projectstatus: statusSelected
+                         //myprojectuser: myprojectSelected
                         },
                  success: function(data) 
                         {
@@ -121,36 +133,31 @@
                         }
              });            
          });         
+         // ***
 
-         /*
-         $("#selectionbutton").keyup(function(){
-            console.log(this.value);
-            $('.projects_list').html('').load("{ url 'my_project:project_filter' %}" /+ this.value/);
+         $('#selection-button').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            var statusSelected = $("#selectid option:selected").val()
+            var myprojectSelected = $("#myselectid option:selected").val()
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_project:project_filter' %}",
+               data: {
+                  companyid: {{ current_company.id }},
+                  projectstatus: statusSelected,
+                  myprojectuser: myprojectSelected
+               },
+               success: function(data){
+                  //console.log(data.nodes)                  
+                  $('#ajax_listresult').html(data);                  
+                  //alert(data);
+               },
+               error: function(xhr, errmsg, err){               
+                  console.log("error")                                  
+                  $('#ajax_listerrors').html('Нет данных!');
+               }               
+            });
          });
-            
-         $("#selectionbutton" ).click(function(event) {
-             event.preventDefault();
-             var statusSelected = $('#select-projectstatus').find(":selected").val();
-             console.log($('#select-projectstatus').find(":selected").val());
-          
-             $.ajax({
-                 url: "{ url 'my_project:project_filter' %}",
-                 method: 'GET',
-                 data : {
-                         filter_category: parseInt(statusSelected)
-                        },
-                 success: function(data) 
-                        {
-                         console.log(data)
-                        },
-                 error: function(xhr, errmsg, err) 
-                        {
-                         console.log("error")
-                         console.log(error_data)
-                        }
-             });
-         });
-         */
 
       </script>
 

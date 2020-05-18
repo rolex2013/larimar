@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from datetime import datetime, date, time
 import json
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
@@ -42,6 +42,7 @@ def projects(request, companyid=0, pk=0):
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     prjstatus_selectid = 0
+    #myprjstatus = 0 # для фильтра "Мои проекты"
     try:
        prjstatus = request.POST['select_projectstatus']
     except:
@@ -60,6 +61,7 @@ def projects(request, companyid=0, pk=0):
           else:             
              project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
        prjstatus_selectid = prjstatus
+    #prjstatus_myselectid = myprjstatus
     # *******************************
     #project_list = project_list.order_by('dateclose')
 
@@ -113,6 +115,7 @@ def projects(request, companyid=0, pk=0):
                               #'button_project_history': button_project_history,
                               'projectstatus': Dict_ProjectStatus.objects.filter(is_active=True),
                               'prjstatus_selectid': prjstatus_selectid,
+                              #'prjstatus_myselectid': prjstatus_myselectid,                              
                               'object_list': 'project_list',
                               #'select_projectstatus': select_projectstatus,
                                                 })       
@@ -313,14 +316,13 @@ def taskcomments(request, taskid):
 
     currenttask = Task.objects.get(id=taskid)
     currentuser = request.user.id
-    #if pk == 0:
-    #   current_task = 0
-    #else:
-    #   current_task = Task.objects.get(id=pk)
     
     taskcomment_costsum = TaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
     taskcomment_timesum = TaskComment.objects.filter(task=taskid).aggregate(Sum('time'))
-    sec = taskcomment_timesum["time__sum"]*3600
+    try:
+       sec = taskcomment_timesum["time__sum"]*3600
+    except:
+       sec = 0
     hours, sec = divmod(sec, 3600)
     minutes, sec = divmod(sec, 60)
     seconds = sec
@@ -459,12 +461,24 @@ def projectfilter(request):
             # *******************************
             #project_list = Project.objects.filter(is_active=True, company=companyid, status=prjstatus, dateclose__isnull=True) 
             #project_list = Project.objects.filter(id__in=[project.id for project in Project.objects.all() if project.is_leaf_node()])
+            # фильтр по принадлежности
+            myprjuser = request.GET['myprojectuser']
+            if myprjuser == "0":
+               project_list = project_list.filter(Q(members__in=[currentuser,]))
+            elif myprjuser == "1":
+               project_list = project_list.filter(Q(author=request.user.id))               
+            elif myprjuser == "2":
+               project_list = project_list.filter(Q(assigner=request.user.id)) 
             nodes = project_list.order_by().distinct()
+            object_message = ''
+            if len(nodes) == 0:
+               object_message = 'Проекты не найдены!'
             #print(project_list)        
-            #print(nodes)       
+            #print(prjstatus)
+            #print(len(nodes))       
             #return HttpResponse(json.dumps(nodes), content_type='application/json')
-            #return JsonResponse({'nodes': list(nodes)})
-            return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'project_list', 'error_message': 'Проекты не найдены!'})           
+            #return JsonResponse({'message': 'Это message!'})
+            return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'project_list', 'object_message': object_message})           
     #else:
     #    return JsonResponse({'error': 'Only authenticated users'}, status=404) 
         #return render(request, 'projects_list.html', 'Информация недоступна') 
@@ -488,9 +502,20 @@ def taskfilter(request):
           task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True, dateend__lt=datetime.now())                         
        else:             
           task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, status=taskstatus)
-    # *******************************
-    nodes = task_list.distinct().order_by()              
-    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'task_list'})           
+    # фильтр по принадлежности    
+    mytskuser = request.GET['mytaskuser']
+    if mytskuser == "0":
+       task_list = task_list.filter(Q(project__members__in=[currentuser,]))
+    elif mytskuser == "1":
+       task_list = task_list.filter(Q(author=request.user.id))               
+    elif mytskuser == "2":
+       task_list = task_list.filter(Q(assigner=request.user.id)) 
+    # *******************************           
+    nodes = task_list.distinct().order_by()
+    object_message = ''
+    if len(nodes) == 0:
+       object_message = 'Задачи не найдены!'                  
+    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'task_list', 'object_message': object_message})           
 
 #def project__filter(request, companyid=0):
 #   response = render(
