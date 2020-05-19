@@ -43,11 +43,14 @@ class Notification(models.Model):
     type = models.ForeignKey('Dict_ProtocolType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='protocol_type', verbose_name="Тип")
     sendfrom = models.CharField("От кого", max_length=64, blank=True, null=True)  
     theme = models.CharField("Тема", max_length=256, blank=True, null=True) 
-    text = RichTextUploadingField("Текст", max_length=1024)       
+    text = RichTextUploadingField("Текст", max_length=1024)      
+    recipient = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True, null=True, related_name='notify_recipient', verbose_name="Получатель")     
     sendto = models.CharField("Кому", max_length=64, blank=True, null=True)
-    datesent = models.DateTimeField("Дата отправки", auto_now_add=False, blank=True, null=True)
+    datesent = models.DateTimeField("Момент отправки", auto_now_add=False, blank=True, null=True)
+    dateread = models.DateTimeField("Момент прочтения", auto_now_add=False, blank=True, null=True)    
     response = models.CharField("Ответ", max_length=128, blank=True, null=True) 
-    is_sent = models.BooleanField("Отправлено", default=False)      
+    is_sent = models.BooleanField("Отправлено", default=False)
+    is_read = models.BooleanField("Прочитано", default=False)           
     is_active = models.BooleanField("Активность", default=True)      
                
     def __str__(self):

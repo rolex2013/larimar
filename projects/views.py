@@ -220,7 +220,7 @@ def tasks(request, projectid=0, pk=0):
        button_project_create = 'Добавить'
        button_project_history = 'История' 
        button_task_create = 'Добавить'             
-       if currentuser == currentproject.author_id:
+       if currentuser == currentproject.author_id or currentuser == currentproject.assigner_id:
           button_project_update = 'Изменить'    
      
     return render(request, "project_detail.html", {
@@ -338,7 +338,7 @@ def taskcomments(request, taskid):
        button_task_create = 'Добавить'
        button_task_history = 'История' 
        button_taskcomment_create = 'Добавить'             
-       if currentuser == currenttask.author_id:
+       if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
           button_task_update = 'Изменить'
      
     return render(request, "task_detail.html", {

@@ -21,7 +21,7 @@ class ProjectForm(forms.ModelForm):
     #datebegin = forms.DateField(widget=AdminDateWidget())
     #datebegin = forms.DateField(widget=AdminSplitDateTime())
 
-    disabled_fields = ('dateclose',)
+    disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
         if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
@@ -34,17 +34,20 @@ class ProjectForm(forms.ModelForm):
                                               status_id=dict_status.id, 
                                               author_id=self.user.id)
               if self.cleaned_data['status'].is_close: # == "Выполнен":
-                 self.cleaned_data['dateclose'] = datetime.datetime.today()
-                 self.cleaned_data['percentage'] = 100  
-                 user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)                                           
-                 #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
-                 Notification.objects.create(type=user_profile.protocoltype,
-                                             sendfrom=settings.EMAIL_HOST_USER,
-                                             theme='Ваш Проект переведён в статус "'+dict_status.name+'"',
-                                             text='Уведомляем об изменении статуса Вашего Проекта "'+self.cleaned_data['name']+'".',
-                                             #sendto=self.user.email,
-                                             sendto=user_profile.email,
-                                             author_id=self.user.id)
+                 if self.user.id != self.initial['author']: 
+                    # если проект закрывается Исполнителем, то уведомление отсылается Автору
+                    self.cleaned_data['dateclose'] = datetime.datetime.today()
+                    self.cleaned_data['percentage'] = 100  
+                    #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)    
+                    user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)                                       
+                    #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+                    Notification.objects.create(type=user_profile.protocoltype,
+                                                sendfrom=settings.EMAIL_HOST_USER,
+                                                theme='Ваш Проект переведён в статус "'+dict_status.name+'"',
+                                                text='Уведомляем об изменении статуса Вашего Проекта "'+self.cleaned_data['name']+'".',
+                                                recipient_id=self.initial['author'],                                             
+                                                sendto=user_profile.email,
+                                                author_id=self.user.id)
               else:
                  self.cleaned_data['dateclose'] = None
            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
@@ -54,7 +57,7 @@ class ProjectForm(forms.ModelForm):
                                           sendfrom=settings.EMAIL_HOST_USER,
                                           theme='Вы назначены исполнителем Проекта.',
                                           text='Уведомляем о назначении Вам Проекта "'+self.cleaned_data['name']+'".',
-                                          #sendto=self.user.email,
+                                          recipient_id=self.initial['assigner'],                                          
                                           sendto=user_profile.email,
                                           author_id=self.user.id)
 
@@ -76,12 +79,16 @@ class ProjectForm(forms.ModelForm):
         self.fields['assigner'].queryset = usr
         self.fields['members'].queryset = usr
 
+        # Исполнитель не может менять Исполнителя
+        if self.user.id == self.initial['assigner']:
+           self.fields['assigner'].disabled = True
+
         for field in self.disabled_fields:
             self.fields[field].disabled = True
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'members', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id']
+        fields = ['name', 'description', 'members', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id', 'author']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
@@ -89,7 +96,7 @@ class ProjectForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
 
-    disabled_fields = ('dateclose',)
+    disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
         if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
@@ -102,17 +109,20 @@ class TaskForm(forms.ModelForm):
               TaskStatusLog.objects.create(task_id=self.initial['id'], 
                                            status_id=dict_status.id, 
                                            author_id=self.user.id)
-              if self.cleaned_data['status'].is_close: # == "Решена" or self.cleaned_data['status'].name == "Снята":
-                 self.cleaned_data['dateclose'] = datetime.datetime.today()
-                 self.cleaned_data['percentage'] = 100              
-                 user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
-                 #send_mail('LarimarITGroup. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
-                 Notification.objects.create(type=user_profile.protocoltype,
-                                             sendfrom=settings.EMAIL_HOST_USER,
-                                             theme='Ваша Задача закрыта.',
-                                             text='Уведомляем о закрытии Вашей Задачи!',
-                                             sendto=user_profile.email,
-                                             author_id=self.user.id)              
+              if self.cleaned_data['status'].is_close:
+                 if self.user.id != self.initial['author']: 
+                    self.cleaned_data['dateclose'] = datetime.datetime.today()
+                    self.cleaned_data['percentage'] = 100              
+                    #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
+                    user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
+                    #send_mail('LarimarITGroup. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
+                    Notification.objects.create(type=user_profile.protocoltype,
+                                                sendfrom=settings.EMAIL_HOST_USER,
+                                                theme='Ваша Задача закрыта.',
+                                                text='Уведомляем о закрытии Вашей Задачи!',
+                                                recipient_id=self.initial['author'],
+                                                sendto=user_profile.email,
+                                                author_id=self.user.id)              
               else:
                  self.cleaned_data['dateclose'] = None  
            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
@@ -122,6 +132,7 @@ class TaskForm(forms.ModelForm):
                                           sendfrom=settings.EMAIL_HOST_USER,
                                           theme='Вы назначены исполнителем Задачи.',
                                           text='Уведомляем о назначении Вам Задачи "'+self.cleaned_data['name']+'".',
+                                          recipient_id=self.cleaned_data['assigner'],                                                
                                           sendto=user_profile.email,
                                           author_id=self.user.id)                                                     
 
@@ -142,12 +153,16 @@ class TaskForm(forms.ModelForm):
         usr = User.objects.filter(id__in=uc, is_active=True)
         self.fields['assigner'].queryset = usr
 
+        # Исполнитель не может менять Исполнителя
+        if self.user.id == self.initial['assigner']:
+           self.fields['assigner'].disabled = True
+
         for field in self.disabled_fields:
             self.fields[field].disabled = True
 
     class Meta:
         model = Task
-        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id']
+        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id', 'author']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat
