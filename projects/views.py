@@ -428,7 +428,7 @@ def taskhistory(request, pk=0):
     comps = request.session['_auth_user_companies_id']
 
     nodes = TaskStatusLog.objects.filter(task_id=pk, is_active=True)
-    table = ProjectStatusLogTable(nodes)    
+    table = TaskStatusLogTable(nodes)    
 
     return render(request, "task_history.html", {
                               'nodes': nodes, 
@@ -523,4 +523,16 @@ def taskfilter(request):
 #         'projects_list.html',
 #         {'nodes': Project.objects.filter(is_active=True, company=companyid).order_by()}
 #         )
-#  return response                                                   
+#  return response   
+
+
+def notificationfilter(request):
+
+    currentuser = request.user.id
+    
+    #notification_list = Notification.objects.filter(Q(author=request.user.id) | Q(task__project__members__in=[currentuser,]), is_active=True, task=taskid)
+    notification_list = Notification.objects.filter(recipient_id=currentuser, is_active=True, is_read=False, type_id=3)
+  
+    return render(request, "notify_list.html", {
+                              'nodes': notification_list.distinct().order_by(),
+                                                })         

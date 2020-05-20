@@ -71,6 +71,17 @@
 
       </div>
 
+      {% if user_profile.user.id == user.id %}
+
+      <div class="d-td-text">
+
+         <div id="ajax_listresult">{% include 'notify_list.html' %}</div>
+         <div id="ajax_listerrors"></div>         
+
+      </div> 
+      
+      {% endif %}
+
    </div>
 
 </div>

@@ -1,0 +1,35 @@
+<!--{ load render_table from django_tables2 %}-->
+
+<h3>Мои уведомления</h3>
+<!--
+<br />
+<div style="float: left;" class="notification-entry"><a href="{ url 'my_company:notification_create' %}"
+     class="top-menu"><span class="badge badge-secondary">Добавить</span></a>
+</div>
+<div style="float: left;" class="notification-entry">&nbsp;&nbsp;&nbsp;</div>
+<div style="float: left;" class="notification-entry"><a href="{ url 'my_account:userprofile_detail' 0 'all' %}"
+   class="top-menu"><span class="badge badge-secondary">Вывести все</span></a>
+</div>               
+<br /><br />-->
+
+<div class="d-table">
+
+    <!--{ render_table table %} -->
+
+    
+{% for notification in notification_list %}
+   <div class="d-tr">
+      <div class="d-td-text">
+         <em>{{ notification.datecreate }}&nbsp;&nbsp;&nbsp;{{ notification.author.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info" data-hint="{{ notification.text }}">{{ notification.theme }}</span>
+         <!--<a href="{ url 'my_company:notification_detail' notification.pk %}">{ notification.name }}</a>
+         { if notification.is_active == False %}
+            <strong><em>(в архиве)</em></strong>
+         { endif %}
+         <br />-->
+      </div>
+   </div>
+   
+   <br />
+{% endfor %}
+
+</div>

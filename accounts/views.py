@@ -20,6 +20,8 @@ from django.contrib.auth.views import LogoutView
 
 from .forms import UserRegistrationForm, UserProfileForm
 
+from main.models import Notification
+#from .tables import NotificationTable
 from companies.models import UserCompanyComponentGroup, Content
 from .models import UserProfile
 from django.db.models import Count
@@ -160,6 +162,10 @@ def UserProfileDetail(request, userid=0, param=''):
     else:
        content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), place_id=3).annotate(cnt=Count('id'))          
     user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
+
+    notification_list = Notification.objects.filter(recipient_id=userid, is_active=True, is_read=False, type_id=3)
+    #table = NotificationTable(notification_list)
+
     #button_project_create = ''
     button_userprofile_update = 'Изменить'
     prompt_is_notify = 'Вкл.'
@@ -171,7 +177,9 @@ def UserProfileDetail(request, userid=0, param=''):
                                                        'button_userprofile_update': button_userprofile_update,
                                                        'content_list': content_list,
                                                        'user_companies': companies_id,
-                                                       'prompt_is_notify': prompt_is_notify
+                                                       'prompt_is_notify': prompt_is_notify,
+                                                       'notification_list': notification_list.distinct().order_by(),
+                                                       #'table': table,
                                                        })
 
 
