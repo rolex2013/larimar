@@ -525,14 +525,3 @@ def taskfilter(request):
 #         )
 #  return response   
 
-
-def notificationfilter(request):
-
-    currentuser = request.user.id
-    
-    #notification_list = Notification.objects.filter(Q(author=request.user.id) | Q(task__project__members__in=[currentuser,]), is_active=True, task=taskid)
-    notification_list = Notification.objects.filter(recipient_id=currentuser, is_active=True, is_read=False, type_id=3)
-  
-    return render(request, "notify_list.html", {
-                              'nodes': notification_list.distinct().order_by(),
-                                                })         

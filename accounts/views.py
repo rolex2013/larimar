@@ -20,7 +20,7 @@ from django.contrib.auth.views import LogoutView
 
 from .forms import UserRegistrationForm, UserProfileForm
 
-from main.models import Notification
+from main.models import Notification, Meta_Object
 #from .tables import NotificationTable
 from companies.models import UserCompanyComponentGroup, Content
 from .models import UserProfile
@@ -165,6 +165,7 @@ def UserProfileDetail(request, userid=0, param=''):
 
     notification_list = Notification.objects.filter(recipient_id=userid, is_active=True, is_read=False, type_id=3)
     #table = NotificationTable(notification_list)
+    metaobject_list = Meta_Object.objects.filter(is_active=True)
 
     #button_project_create = ''
     button_userprofile_update = 'Изменить'
@@ -178,7 +179,8 @@ def UserProfileDetail(request, userid=0, param=''):
                                                        'content_list': content_list,
                                                        'user_companies': companies_id,
                                                        'prompt_is_notify': prompt_is_notify,
-                                                       'notification_list': notification_list.distinct().order_by(),
+                                                       'notification_list': notification_list.distinct().order_by("-datecreate"),
+                                                       'metaobject_list': metaobject_list.distinct().order_by(),
                                                        #'table': table,
                                                        })
 

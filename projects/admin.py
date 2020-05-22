@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from accounts.models import UserProfile
 
-from main.models import Component, Dict_ProtocolType, Notification
+from main.models import Meta_Object, Component, Dict_ProtocolType, Notification
 
 from companies.models import Company
 from companies.models import Dict_CompanyStructureType
@@ -36,6 +36,8 @@ class ComponentAdmin(DjangoMpttAdmin):
 
 admin.site.register(UserProfile)
 
+
+admin.site.register(Meta_Object)
 
 admin.site.register(Component, ComponentAdmin)
 
