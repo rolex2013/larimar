@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 
-from main.models import Notification, Meta_Object
+from main.models import Notification, Meta_ObjectType
 
 from django.contrib.auth.decorators import login_required
 
@@ -19,10 +19,10 @@ def notificationread(request):
        curr_notify.is_read = True
        curr_notify.save()
     notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True, is_read=False, type_id=3)
-    metaobject_list = Meta_Object.objects.filter(is_active=True)
+    metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
     return render(request,  "notify_list.html", {
                                                  'notification_list': notification_list.distinct().order_by("-datecreate"),
-                                                 'metaobject_list': metaobject_list.distinct().order_by(),
+                                                 'metaobjecttype_list': metaobjecttype_list.distinct().order_by(),
                                                 }
                  )
 
@@ -30,24 +30,24 @@ def notificationfilter(request):
 
     #currentuser = request.user.id
     notificationstatus = request.GET['notificationstatus']
-    notificationobject = request.GET['notificationobject']
+    notificationobjecttype = request.GET['notificationobjecttype']
 
     notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True)
     if notificationstatus == "2":
        notification_list = notification_list.filter(is_read=False)       
     elif notificationstatus == "3":
        notification_list = notification_list.filter(is_read=True)
-    #print(notificationobject)
+    #print(notification_list)
     
-    if notificationobject != "0":
-       notification_list = notification_list.filter(object_id=notificationobject)
+    if notificationobjecttype != "0":
+       notification_list = notification_list.filter(objecttype_id=notificationobjecttype)
 
-    metaobject_list = Meta_Object.objects.filter(is_active=True)
+    metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
   
     return render(request, "notify_list.html", {
-                              'notification_list': notification_list.distinct().order_by("-datecreate"),
-                              'metaobject_list': metaobject_list.distinct().order_by(),
-                              'status_selectid': notificationstatus,
-                              'metaobject_selectid': notificationobject,
-                                                }
+                                                'notification_list': notification_list.distinct().order_by("-datecreate"),
+                                                'metaobjecttype_list': metaobjecttype_list.distinct().order_by(),
+                                                'status_selectid': notificationstatus,
+                                                'metaobjecttype_selectid': notificationobjecttype,
+                                               }
                  )         

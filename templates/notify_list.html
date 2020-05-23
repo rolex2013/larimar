@@ -26,12 +26,12 @@
          <option value="2" {% ifequal "2" status_selectid %} selected="selected" {% endifequal %}>- Непрочитанные</option>
          <option value="3" {% ifequal "3" status_selectid %} selected="selected" {% endifequal %}>- Прочитанные</option>   
       </select> 
-      <label>Фильтр по объектам: </label>
-      <select name="select-metaobject" id="metaobjectselectid"  class="select-metaobject">
-         <option value="0" {% ifequal 0 metaobject_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все</option>
-         {% for metaobject in metaobject_list %}
-            <option value="{{metaobject.id}}" {% ifequal metaobject.id metaobject_selectid|add:"0" %} selected="selected" {% endifequal %}>
-               {{metaobject.name}}
+      <label>Фильтр по типам объектов: </label>
+      <select name="select-metaobjecttype" id="metaobjecttypeselectid"  class="select-metaobjecttype">
+         <option value="0" {% ifequal 0 metaobjecttype_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все</option>
+         {% for metaobjecttype in metaobjecttype_list %}
+            <option value="{{metaobjecttype.id}}" {% ifequal metaobjecttype.id metaobjecttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+               {{metaobjecttype.name}}
             </option>   
          {% endfor %}
       </select>                
@@ -41,7 +41,15 @@
 {% for notification in notification_list %}
    <div class="d-tr">
       <div class="d-td-text">
-         <span class="hint hint--bottom hint--info" data-hint="Отметить прочитанным"><input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" /></span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate }}&nbsp;&nbsp;&nbsp;{{ notification.author.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info" data-hint="{{ notification.text }}"><!--<a href="{ url 'my_main:notificationread' notification.id %}">-->{{ notification.theme }}<!--</a>--></span>
+         <span class="hint hint--bottom hint--info" data-hint="Отметить прочитанным"><input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" /></span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate }}&nbsp;&nbsp;&nbsp;{{ notification.author.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info" data-hint="{{ notification.text }}">
+             {% if notification.objecttype.shortname == 'prj' %}
+                <a href="{% url 'my_project:tasks' notification.objectid 0 %}">{{ notification.theme }}</a>
+             {% elif notification.objecttype.shortname == 'tsk' %}
+                <a href="{% url 'my_project:taskcomments' notification.objectid %}">{{ notification.theme }}</a> 
+             {% else %} 
+                {{ notification.theme }}          
+             {% endif %}
+         </span>
          <!--<a href="{ url 'my_company:notification_detail' notification.pk %}">{ notification.name }}</a>
          { if notification.is_active == False %}
             <strong><em>(в архиве)</em></strong>
@@ -87,14 +95,14 @@
    $('#selection-button').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             var statusSelected = $("#statusselectid option:selected").val()
-            var metaobjectSelected = $("#metaobjectselectid option:selected").val()
+            var metaobjecttypeSelected = $("#metaobjecttypeselectid option:selected").val()
             $.ajax({
                type: 'GET',
                url: "{% url 'my_main:notification_filter' %}",
                data: {
                   //companyid: {{ current_company.id }},
                   notificationstatus: statusSelected,
-                  notificationobject: metaobjectSelected
+                  notificationobjecttype: metaobjecttypeSelected
                },
                success: function(data){           
                   $('#ajax_listresult').html(data);                  

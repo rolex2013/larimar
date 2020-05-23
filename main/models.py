@@ -3,7 +3,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
-class Meta_Object(models.Model):
+class Meta_ObjectType(models.Model):
     shortname = models.CharField("Код", max_length=8)    
     name = models.CharField("Наименование", max_length=64)
     tablename = models.CharField("Таблица", max_length=64)    
@@ -12,8 +12,8 @@ class Meta_Object(models.Model):
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
-        verbose_name = 'Список объектов'
-        verbose_name_plural = 'Списки объектов'
+        verbose_name = 'Список типов объектов'
+        verbose_name_plural = 'Списки типов объектов'
     def __str__(self):
         return (self.name)
 
@@ -52,7 +52,8 @@ class Component(MPTTModel):
 
 
 class Notification(models.Model):
-    object = models.ForeignKey('Meta_Object', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='meta_object', verbose_name="Объект")
+    objecttype = models.ForeignKey('Meta_ObjectType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='meta_objecttype', verbose_name="Тип Объекта")
+    objectid = models.PositiveIntegerField("ID объекта", default=0) 
     datecreate = models.DateTimeField("Дата", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     type = models.ForeignKey('Dict_ProtocolType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='protocol_type', verbose_name="Тип")

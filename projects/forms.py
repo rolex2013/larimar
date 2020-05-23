@@ -4,7 +4,7 @@ from django import forms
 from .models import Company, Project, Task, TaskComment
 from .models import ProjectStatusLog, TaskStatusLog
 from .models import Dict_ProjectStatus, Dict_TaskStatus
-from main.models import Notification, Meta_Object
+from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
@@ -40,10 +40,11 @@ class ProjectForm(forms.ModelForm):
                     self.cleaned_data['percentage'] = 100  
                     #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)    
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
-                    objectid = Meta_Object.objects.get(shortname='prj').id                                       
+                    objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id                                       
                     #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
                     Notification.objects.create(type=user_profile.protocoltype,
-                                                object_id=objectid,
+                                                objecttype_id=objecttypeid,
+                                                objectid=self.initial['id'],
                                                 sendfrom=settings.EMAIL_HOST_USER,
                                                 theme='Ваш Проект переведён в статус "'+dict_status.name+'"',
                                                 text='Уведомляем об изменении статуса Вашего Проекта "'+self.cleaned_data['name']+'".',
@@ -54,10 +55,11 @@ class ProjectForm(forms.ModelForm):
                  self.cleaned_data['dateclose'] = None
            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
-              objectid = Meta_Object.objects.get(shortname='prj').id
+              objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id
               #send_mail('LarimarITGroup. Вы назначены исполнителем Проекта.', 'Уведомляем о назначении Вам Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
-                                          object_id=objectid,              
+                                          object_id=objecttypeid,  
+                                          objectid=self.initial['id'],            
                                           sendfrom=settings.EMAIL_HOST_USER,
                                           theme='Вы назначены исполнителем Проекта.',
                                           text='Уведомляем о назначении Вам Проекта "'+self.cleaned_data['name']+'".',
@@ -76,16 +78,16 @@ class ProjectForm(forms.ModelForm):
         else:
            super(ProjectForm, self).__init__(*args, **kwargs)
            companyid = self.instance.company_id
+           # Исполнитель не может менять Исполнителя
+           if self.user.id == self.initial['assigner']:
+              self.fields['assigner'].disabled = True           
 
         # в выпадающие списки для выбора Исполнителя (Руководителя) и участников проекта подбираем только тех юзеров, которые привязаны к этой организации (в админке)
         uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
         usr = User.objects.filter(id__in=uc, is_active=True)
         self.fields['assigner'].queryset = usr
         self.fields['members'].queryset = usr
-
-        # Исполнитель не может менять Исполнителя
-        if self.user.id == self.initial['assigner']:
-           self.fields['assigner'].disabled = True
+        self.fields['author'].initial = self.user.id
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True
@@ -119,10 +121,11 @@ class TaskForm(forms.ModelForm):
                     self.cleaned_data['percentage'] = 100              
                     #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
-                    objectid = Meta_Object.objects.get(shortname='tsk').id                    
+                    objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id                    
                     #send_mail('LarimarITGroup. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
                     Notification.objects.create(type=user_profile.protocoltype,
-                                                object_id=objectid,
+                                                objecttype_id=objecttypeid,
+                                                objectid=self.initial['id'],
                                                 sendfrom=settings.EMAIL_HOST_USER,
                                                 theme='Ваша Задача закрыта.',
                                                 text='Уведомляем о закрытии Вашей Задачи!',
@@ -133,10 +136,11 @@ class TaskForm(forms.ModelForm):
                  self.cleaned_data['dateclose'] = None  
            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
-              objectid = Meta_Object.objects.get(shortname='tsk').id
+              objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id
               #send_mail('LarimarITGroup. Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
-                                          object_id=objectid,              
+                                          objecttype_id=objecttypeid,      
+                                          objectid=self.initial['id'],        
                                           sendfrom=settings.EMAIL_HOST_USER,
                                           theme='Вы назначены исполнителем Задачи.',
                                           text='Уведомляем о назначении Вам Задачи "'+self.cleaned_data['name']+'".',
@@ -154,16 +158,16 @@ class TaskForm(forms.ModelForm):
            companyid = prj.company_id
         else:
            super(TaskForm, self).__init__(*args, **kwargs)
-           companyid = self.instance.project.company_id                
+           companyid = self.instance.project.company_id  
+           # Исполнитель не может менять Исполнителя
+           if self.user.id == self.initial['assigner']:
+              self.fields['assigner'].disabled = True                         
 
         # в выпадающий список для выбора Исполнителя подбираем только тех юзеров, которые привязаны к этой организации (в админке)
         uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
         usr = User.objects.filter(id__in=uc, is_active=True)
         self.fields['assigner'].queryset = usr
-
-        # Исполнитель не может менять Исполнителя
-        if self.user.id == self.initial['assigner']:
-           self.fields['assigner'].disabled = True
+        self.fields['author'].initial = self.user.id        
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True
