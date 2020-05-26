@@ -4,6 +4,8 @@ from accounts.models import UserProfile
 
 from main.models import Meta_ObjectType, Component, Dict_ProtocolType, Notification
 
+from financies.models import Dict_Currency
+
 from companies.models import Company
 from companies.models import Dict_CompanyStructureType
 from companies.models import Dict_CompanyType
@@ -44,6 +46,9 @@ admin.site.register(Component, ComponentAdmin)
 admin.site.register(Dict_ProtocolType)
 
 admin.site.register(Notification)
+
+
+admin.site.register(Dict_Currency)
 
 
 admin.site.register(Company, CompanyAdmin)

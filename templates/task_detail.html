@@ -29,7 +29,7 @@
       {% else %}
          <!-- <p>: <a href="{ url 'my_project:projects' current_project.company.pk current_project.parent.pk %}">{{ current_project.parent.name }}</a></p>-->
       {% endif %}
-      <p>Бюджет: {{ task.cost }} <i>(Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
+      <p>Бюджет: {{ task.cost }} {{ task.project.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
       <p>Исполнитель: <span class="hint hint--bottom hint--info" data-hint="Профиль исполнителя"><a href="{% url 'my_account:userprofile_detail' task.assigner.pk ' ' %}">{{ task.assigner }}</a></span></p>       
       <p>Начало: {{ task.datebegin }}</p>
       <p>Окончание: {{ task.dateend }}</p>
@@ -66,7 +66,7 @@
             <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
               <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
                  {{ taskcomment.time }} час. | 
-                 {{ taskcomment.cost }}</span></b>
+                 {{ task.project.currency.symbol }}{{ taskcomment.cost }}</span></b>
             <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
            </div>           
         {% endfor %}

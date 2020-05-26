@@ -12,7 +12,7 @@
               {% elif object_list == 'project_list' %}         
                  <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
                     <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | 
-                        {{ node.cost }}
+                     {{ node.currency.symbol }}{{ node.cost }}
                     </span></b><br />
               {% else %}
                  <!--<b><a href="{ url 'my_project:task_detail' node.pk %}">-->
@@ -21,7 +21,7 @@
                     {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
                        {{ node.status.name }} | 
                        <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | 
-                       {{ node.cost }}
+                       {{ node.project.currency.symbol }}{{ node.cost }}
                     </span></b>            
               {% endif %}                          
               {% if not node.is_leaf_node %}
