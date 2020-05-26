@@ -198,6 +198,16 @@ def tasks(request, projectid=0, pk=0):
     # *******************************
 
     currentproject = Project.objects.get(id=projectid)
+
+    taskcomment_costsum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('cost'))
+    taskcomment_timesum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('time'))
+    try:
+       sec = taskcomment_timesum["time__sum"]*3600
+    except:
+       sec = 0
+    hours, sec = divmod(sec, 3600)
+    minutes, sec = divmod(sec, 60)
+    seconds = sec    
     
     if pk == 0:
        current_task = 0
@@ -239,6 +249,9 @@ def tasks(request, projectid=0, pk=0):
                               'taskstatus': Dict_TaskStatus.objects.filter(is_active=True),
                               'tskstatus_selectid': tskstatus_selectid,
                               'object_list': 'task_list',
+                              'taskcomment_costsum': taskcomment_costsum,
+                              'taskcomment_timesum': taskcomment_timesum,  
+                              'hours': hours, 'minutes': minutes, 'seconds': seconds,                                   
                                                 })       
 
 class TaskDetail___(DetailView):
