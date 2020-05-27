@@ -10,7 +10,7 @@ from mptt.forms import MoveNodeForm, TreeNodeChoiceField, TreeNodeMultipleChoice
 class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
-        fields = ['name', 'description', 'structure_type', 'type', 'is_active'] 
+        fields = ['name', 'description', 'currency', 'structure_type', 'type', 'is_active'] 
         #description = forms.CharField(widget=CKEditorWidget, label='')
 
 class ContentForm(forms.ModelForm):

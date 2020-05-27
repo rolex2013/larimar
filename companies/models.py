@@ -43,6 +43,7 @@ class Company(MPTTModel):
     description = RichTextUploadingField("Описание")
     #company_up = models.ForeignKey('self', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='resultcompany_up', verbose_name="Головная организация")
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_children', verbose_name="Головная организация")
+    currency = models.ForeignKey('finance.Dict_Currency', on_delete=models.CASCADE, related_name='company_currency', verbose_name="Валюта")   
     structure_type = models.ForeignKey('Dict_CompanyStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_structure_type', verbose_name="Тип в оргструктуре")
     type = models.ForeignKey('Dict_CompanyType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_type', verbose_name="Тип")
     datecreate = models.DateTimeField("Создана", auto_now_add=True)

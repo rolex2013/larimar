@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block finance %}
+
+<div class="d-table">
+
+   {{ button_currencyrate_update }}
+
+   {% for currencyrate in currencyrate_list %}
+      <div class="d-tr">
+         <div class="d-td-text">
+            {{ currencyrate.date }} {{ currencyrate.currency.code_char }} {{ currencyrate.currency.code_num }}  {{ currencyrate.rate }}
+         </div>
+      </div>
+    
+      <br />
+   {% endfor %}
+
+</div>
+
+{% endblock finance %}

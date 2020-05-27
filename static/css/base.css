@@ -23,6 +23,29 @@ header h1 a {
     padding-top: 2rem;
 }
 
+.company-entry {
+    margin-bottom: 2rem;
+}
+
+.company-entry h2 {
+    margin-bottom: 0.5rem 0;
+}
+
+.company-entry h2 a,
+.company-entry h2 a:visited {
+    color: blue;
+    text-decoration: none;
+}
+
+.company-entry p {
+    margin: 0;
+    font-weight: 400;
+}
+
+.company-entry h2 a:hover {
+    color: red;
+}
+
 .project-entry {
     margin-bottom: 2rem;
 }

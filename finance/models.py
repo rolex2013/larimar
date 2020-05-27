@@ -19,3 +19,18 @@ class Dict_Currency(models.Model):
         verbose_name_plural = 'Виды валют'
     def __str__(self):
         return (self.name)
+
+class CurrencyRate(models.Model):
+    currency = models.ForeignKey('Dict_Currency', on_delete=models.CASCADE, related_name='currencyrate_currency', verbose_name="Валюта")
+    date = models.DateTimeField("Дата", auto_now_add=True)
+    rate = models.DecimalField("Курс", max_digits=12, decimal_places=4)    
+    is_active = models.BooleanField("Активность", default=True)
+    
+    def __str__(self):
+        return (self.currency.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.rate)
+    
+    class Meta:
+        unique_together = ('currency','date')
+        ordering = ('currency', 'date')
+        verbose_name = 'История курса валют'
+        verbose_name_plural = 'Истории курсов валют'                    

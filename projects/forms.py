@@ -94,7 +94,7 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'members', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id', 'author']
+        fields = ['name', 'description', 'members', 'assigner', 'currency', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id', 'author']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat

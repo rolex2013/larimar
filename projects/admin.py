@@ -4,7 +4,7 @@ from accounts.models import UserProfile
 
 from main.models import Meta_ObjectType, Component, Dict_ProtocolType, Notification
 
-from financies.models import Dict_Currency
+from finance.models import Dict_Currency
 
 from companies.models import Company
 from companies.models import Dict_CompanyStructureType
