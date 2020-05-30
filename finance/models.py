@@ -22,8 +22,9 @@ class Dict_Currency(models.Model):
 
 class CurrencyRate(models.Model):
     currency = models.ForeignKey('Dict_Currency', on_delete=models.CASCADE, related_name='currencyrate_currency', verbose_name="Валюта")
-    date = models.DateTimeField("Дата", auto_now_add=True)
-    rate = models.DecimalField("Курс", max_digits=12, decimal_places=4)    
+    date = models.DateTimeField("Дата")
+    rate = models.DecimalField("Курс", max_digits=12, decimal_places=4)
+    datecreate = models.DateTimeField("Дата загрузки", auto_now_add=True)        
     is_active = models.BooleanField("Активность", default=True)
     
     def __str__(self):
@@ -31,6 +32,6 @@ class CurrencyRate(models.Model):
     
     class Meta:
         unique_together = ('currency','date')
-        ordering = ('currency', 'date')
+        ordering = ('-date', 'currency')
         verbose_name = 'История курса валют'
         verbose_name_plural = 'Истории курсов валют'                    

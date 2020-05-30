@@ -4,8 +4,14 @@
 
 <div class="d-table">
 
-   {{ button_currencyrate_update }}
+   {{ button_currencyrate_update }}<br /><br />
 
+   {{ r_error }}
+   {{ r_date }} {{ r_base }}<br />
+   {{ r_rate }}
+   <br /><br />
+   {{ r_xml }}
+   <br /><br />
    {% for currencyrate in currencyrate_list %}
       <div class="d-tr">
          <div class="d-td-text">

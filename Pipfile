@@ -17,6 +17,9 @@ pylint-django = "*"
 django-menu = "*"
 django-group-by = "*"
 django-tables2 = "*"
+requests = "*"
+lxml = "*"
+python-dateutil = "*"
 
 [requires]
 python_version = "3.8"
