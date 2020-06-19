@@ -15,6 +15,7 @@ urlpatterns = [
     path('companies_list/<int:pk>', views.CompanyDetail.as_view(), name = 'company_detail'),
     path('companies_list/company_create/<int:parentid>', views.CompanyCreate.as_view(), name = 'company_create'),
     path('companies_list/company_update/<int:pk>', views.CompanyUpdate.as_view(), name = 'company_update'),
+    path('companies_list/stafflist/<int:pk>', views.CompanyUpdate.as_view(), name = 'stafflist'),    
     #path('content_page/<int:pk>', views.ContentList.as_view(), name = 'contents'),  
     path('content_list/content_detail/<int:pk>', views.ContentDetail.as_view(), name = 'content_detail'),               
     path('content_list/content_create/', views.ContentCreate.as_view(), name = 'content_create'),        

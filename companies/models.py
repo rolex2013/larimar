@@ -37,6 +37,18 @@ class Dict_CompanyType(models.Model):
     def __str__(self):
         return (self.name)
 
+class Dict_PositionType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип должности'
+        verbose_name_plural = 'Типы должностей'
+    def __str__(self):
+        return (self.name)
+
 class Company(MPTTModel):    
     name = models.CharField("Наименование", max_length=64)
     #description = models.TextField("Описание")
@@ -91,6 +103,47 @@ class UserCompanyComponentGroup(models.Model):
 
 #class ContentQuerySet(QuerySet, GroupByMixin):
 #    pass
+
+class StaffList(MPTTModel): 
+    parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='staff_children', verbose_name="Головная должность")
+    company = models.ForeignKey('Company', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='related_company', verbose_name="Организация")
+    name = models.CharField("Наименование", max_length=64)
+    description = models.TextField("Описание", null=True, blank=True)
+    #description = RichTextUploadingField("Описание")
+    type = models.ForeignKey('Dict_PositionType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='position_type', verbose_name="Тип должности")
+    currency = models.ForeignKey('finance.Dict_Currency', on_delete=models.CASCADE, related_name='related_currency', verbose_name="Валюта")
+    salary = models.DecimalField("Оклад", max_digits=14, decimal_places=2)    
+    datecreate = models.DateTimeField("Создана", auto_now_add=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    is_active = models.BooleanField("Активность", default=True)    
+
+    def get_absolute_url(self):
+        return reverse('my_company:staff', kwargs={'companyid': self.pk, 'pk': '1'})          
+               
+    def __str__(self):
+        return (self.company.name + '. ' + self.name)
+    class MPTTMeta:
+        order_insertion_by = ['company_id', 'name']
+    class Meta:
+        verbose_name = 'Штатное расписание'
+        verbose_name_plural = 'Штатные расписания'    
+
+class Staff(models.Model):
+    stafflist = models.ForeignKey('StaffList', on_delete=models.CASCADE, related_name='staff_stafflist', verbose_name="Должность")
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='staff_user', verbose_name="Пользователь")
+    datebegin = models.DateTimeField("Начало работы", auto_now_add=True)
+    dateend = models.DateTimeField("Окончание работы", auto_now_add=True)    
+    datecreate = models.DateTimeField("Создана", auto_now_add=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")    
+    is_active = models.BooleanField("Активность", default=True)
+    
+    def __str__(self):
+        return (self.stafflist.company.name + ' - ' + self.stafflist.name + ' - ' + self.user.username)
+    class Meta:
+        unique_together = ('stafflist','user')
+        ordering = ('stafflist','user')
+        verbose_name = 'Сотрудник'
+        verbose_name_plural = 'Сотрудники'
 
 class Content(models.Model):
     #objects = ContentQuerySet.as_manager()

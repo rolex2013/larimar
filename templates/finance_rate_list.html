@@ -1,0 +1,17 @@
+
+   <!--
+   { r_error }}
+   { r_date }} { r_base }}<br />
+   { r_rate }}
+   <br /><br />
+   { r_xml }}
+   <br /><br />-->
+   {% for currencyrate in currencyrate_list %}
+      <div class="d-tr">
+         <div class="d-td-text">
+            <p>{{ currencyrate.date }} {{ currencyrate.currency.code_char }} {{ currencyrate.currency.code_num }}  {{ currencyrate.rate }}</p>
+         </div>
+      </div>
+    
+      <!--<br />-->
+   {% endfor %}

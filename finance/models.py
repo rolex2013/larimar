@@ -28,7 +28,7 @@ class CurrencyRate(models.Model):
     is_active = models.BooleanField("Активность", default=True)
     
     def __str__(self):
-        return (self.currency.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.rate)
+        return (self.currency.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + str(self.rate))
     
     class Meta:
         unique_together = ('currency','date')

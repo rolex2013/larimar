@@ -8,6 +8,7 @@ from datetime import datetime
 from dateutil.parser import *
 
 from .models import Dict_Currency, CurrencyRate
+from companies.models import Company
 
 # Create your views here.
 
@@ -15,8 +16,12 @@ from .models import Dict_Currency, CurrencyRate
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def finance(request):
 
+    #companyid = request.session['_auth_user_currentcompany_id']
+    #r_base = Company.objects.get(id=companyid).currency.code_char
+    r_base = 'RUB'  
+
     r_rate = ''
-    r_base = ''
+    #r_base = ''
     r_date = ''  
     #r = requests.get('https://api.exchangeratesapi.io/latest?start_at=2020-05-27&end_at=2020-05-28&symbols=USD,GBP,RUB,EUR').json()
     #r_error = r['error']
@@ -33,7 +38,7 @@ def finance(request):
     # на всякий случай загружаем курсы на предыдущую дату
     r_date = r['PreviousDate']
     r_date = parse(r_date)
-    r_base = 'RUB'   
+    #r_base = 'RUB'   
     r_curr = r['Valute']
     currents_list = Dict_Currency.objects.filter(is_active=True)    
     for curr in currents_list:
@@ -54,7 +59,7 @@ def finance(request):
     #r_date = datetime.strptime(r_date, '%y-%m-%dT%H:%M:%S')
     #r_date = datetime.datetime.strptime(r_date, '%d.%m.%Y %H:%M:%S')
     r_date = parse(r_date)
-    r_base = 'RUB'   
+    #r_base = 'RUB'   
     r_curr = r['Valute']
     currents_list = Dict_Currency.objects.filter(is_active=True) #.exclude(code_char='RUB')    
     for curr in currents_list:
@@ -84,13 +89,15 @@ def finance(request):
     #print(r1.text)
     #print(r)
 
+    currency_list = Dict_Currency.objects.filter(is_active=True)
     currencyrate_list = CurrencyRate.objects.filter(is_active=True)    
 
     button_currencyrate_update = 'Обновить'
 
     return render(request, 'finance_detail.html', {
                                                        'button_currencyrate_update': button_currencyrate_update,
-                                                       'currencyrate_list': currencyrate_list.distinct().order_by(),
+                                                       'currency_list': currency_list,                                                       
+                                                       'currencyrate_list': currencyrate_list,
                                                        #'r_error': r_error,
                                                        'r_rate': r_rate,
                                                        'r_base': r_base,
@@ -98,3 +105,30 @@ def finance(request):
                                                        #'r_xml': r1.text,
                                                   }
                  )
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def currencyratefilter(request):
+    #currdate = request.GET['currdate']
+    currid = request.GET['currid']    
+
+    #print(currid)
+
+    currency_list = Dict_Currency.objects.filter(is_active=True)
+    if currid == '0':
+       currencyrate_list = CurrencyRate.objects.filter(is_active=True)
+    else:
+       currencyrate_list = CurrencyRate.objects.filter(is_active=True,currency_id=currid).distinct()
+
+    button_currencyrate_update = 'Обновить'
+
+    return render(request, 'finance_rate_list.html', {
+                                                       'button_currencyrate_update': button_currencyrate_update,
+                                                       'currency_list': currency_list,
+                                                       'currencyrate_list': currencyrate_list,
+                                                       #'r_error': r_error,
+                                                       #'r_rate': r_rate,
+                                                       #'r_base': r_base,
+                                                       #'r_date': r_date,
+                                                       #'r_xml': r1.text,
+                                                  }
+                 )                 

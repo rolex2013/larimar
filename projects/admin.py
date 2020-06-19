@@ -4,13 +4,14 @@ from accounts.models import UserProfile
 
 from main.models import Meta_ObjectType, Component, Dict_ProtocolType, Notification
 
-from finance.models import Dict_Currency
+from finance.models import Dict_Currency, CurrencyRate
 
 from companies.models import Company
 from companies.models import Dict_CompanyStructureType
 from companies.models import Dict_CompanyType
 from companies.models import UserCompanyComponentGroup
 from companies.models import Dict_ContentType, Dict_ContentPlace, Content
+from companies.models import Dict_PositionType, StaffList, Staff
 
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
@@ -35,6 +36,9 @@ class TaskAdmin(DjangoMpttAdmin):
 class ComponentAdmin(DjangoMpttAdmin):
     pass
 
+class StaffListAdmin(DjangoMpttAdmin):
+    pass
+
 
 admin.site.register(UserProfile)
 
@@ -49,6 +53,8 @@ admin.site.register(Notification)
 
 
 admin.site.register(Dict_Currency)
+
+admin.site.register(CurrencyRate)
 
 
 admin.site.register(Company, CompanyAdmin)
@@ -66,6 +72,12 @@ admin.site.register(Task, TaskAdmin)
 admin.site.register(Dict_CompanyStructureType)
 
 admin.site.register(Dict_CompanyType)
+
+admin.site.register(Dict_PositionType)
+
+admin.site.register(StaffList, StaffListAdmin)
+
+admin.site.register(Staff)
 
 admin.site.register(Dict_ContentType)
 

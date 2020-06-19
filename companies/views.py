@@ -72,6 +72,7 @@ def companies(request, pk=0):
     # здесь нужно условие для button_company_create
     button_company_create = ''
     button_company_create = 'Добавить'
+    button_stafflist = "Штатное расписание"
     
     return render(request, template_name, {
                               #'nodes':Company.objects.all(),
@@ -82,6 +83,7 @@ def companies(request, pk=0):
                               'project_id': project_id,
                               'user_companies': comps, #request.session['_auth_user_companies_id'],
                               'button_company_create': button_company_create,
+                              'button_stafflist': button_stafflist,
                               'object_list': 'company_list',                              
                                             })  
 

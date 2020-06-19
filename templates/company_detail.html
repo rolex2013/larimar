@@ -36,6 +36,8 @@
               <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>
               <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
               <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a></div>
+              <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+              <div style="float: left;" class="task-entry"><a href="{% url 'my_company:stafflist' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist }}</span></a></div>              
            </div>
         <!--{ endif %}-->
      </div>
