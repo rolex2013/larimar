@@ -15,9 +15,9 @@ from django.http import Http404
 
 from django.db.models import Q
 
-from .models import Company, UserCompanyComponentGroup, Content, Dict_ContentType, Dict_ContentPlace
+from .models import Company, UserCompanyComponentGroup, StaffList, Content, Dict_ContentType, Dict_ContentPlace
 #from projects.models import Project, Task, TaskComment
-from .forms import CompanyForm, ContentForm
+from .forms import CompanyForm, StaffListForm, ContentForm
 
 #class CompaniesList(ListView):
 #    model = Company
@@ -72,7 +72,7 @@ def companies(request, pk=0):
     # здесь нужно условие для button_company_create
     button_company_create = ''
     button_company_create = 'Добавить'
-    button_stafflist = "Штатное расписание"
+    button_StaffList = "Штатное расписание"
     
     return render(request, template_name, {
                               #'nodes':Company.objects.all(),
@@ -83,7 +83,7 @@ def companies(request, pk=0):
                               'project_id': project_id,
                               'user_companies': comps, #request.session['_auth_user_companies_id'],
                               'button_company_create': button_company_create,
-                              'button_stafflist': button_stafflist,
+                              'button_StaffList': button_StaffList,
                               'object_list': 'company_list',                              
                                             })  
 
@@ -134,6 +134,86 @@ class CompanyUpdate(UpdateView):
 #def getCompanies(request, user):
 #    #uc = UserCompany.objects.get(user=user)
 #    return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def stafflist(request, companyid=0, pk=0):
+
+    if companyid == 0:
+       companyid = request.session['_auth_user_currentcompany_id']
+
+    comps = request.session['_auth_user_companies_id']
+    current_company = Company.objects.get(id=companyid)
+
+    if pk == 0:
+       current_stafflist = 0
+       tree_stafflist_id = 0
+       root_stafflist_id = 0
+       tree_stafflist_id = 0
+       stafflist_id = 0
+       #template_name = "stafflist.html"
+    else:
+       current_stafflist = StaffList.objects.get(id=pk)
+       tree_stafflist_id = current_stafflist.tree_id  
+       root_stafflist_id = current_stafflist.get_root().id
+       tree_stafflist_id = current_stafflist.tree_id
+    template_name = "company_detail.html"
+
+    # здесь нужно условие для button_stafflist_create
+    button_stafflist_create = ''
+    button_stafflist_create = 'Добавить'
+    #button_stafflist = "Штатное расписание"
+    
+    return render(request, template_name, {
+                              'nodes': StaffList.objects.filter(is_active=True, company_id=companyid).order_by(),
+                              'current_stafflist': current_stafflist,
+                              'root_stafflist_id': root_stafflist_id,
+                              'tree_stafflist_id': tree_stafflist_id,
+                              'current_company': current_company,
+                              'companyid': companyid,
+                              'user_companies': comps,                              
+                              'button_stafflist_create': button_stafflist_create,
+                              #'button_StaffList': button_stafflist,
+                              'object_list': 'stafflist_list',                              
+                                            })
+
+#class StaffListDetail(DetailView):
+#    model = StaffList
+#    template_name = 'stafflist_detail.html'
+
+class StaffListCreate(CreateView):    
+    model = StaffList
+    form_class = StaffListForm
+    template_name = 'object_form.html'
+
+    def form_valid(self, form):
+       form.instance.author_id = self.request.user.id
+       if self.kwargs['parentid'] != 0:
+          form.instance.parent_id = self.kwargs['parentid']
+
+       #if form.is_valid():
+       #   org = form.save()
+       #   UserCompanyComponentGroup.objects.create(user_id=form.instance.author_id, 
+       #                                            company_id=org.id,
+       #                                            component_id=5,
+       #                                            group_id=1)
+
+       return super(StaffListCreate, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+       context = super(StaffListCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новая Должность'
+       return context
+
+class StaffListUpdate(UpdateView):    
+    model = StaffList
+    form_class = StaffListForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(StaffListUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Должность'
+       return context
+
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def contents(request, place=0):
