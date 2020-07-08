@@ -15,7 +15,7 @@ from django.http import Http404
 
 from django.db.models import Q
 
-from .models import Company, UserCompanyComponentGroup, StaffList, Content, Dict_ContentType, Dict_ContentPlace
+from .models import Company, UserCompanyComponentGroup, StaffList, Staff, Content, Dict_ContentType, Dict_ContentPlace
 #from projects.models import Project, Task, TaskComment
 from .forms import CompanyForm, StaffListForm, ContentForm
 
@@ -45,7 +45,7 @@ from .forms import CompanyForm, StaffListForm, ContentForm
 #                 )  
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def companies(request, pk=0):
+def companies(request, pk=0, razdel='projects'):
 
     comps = request.session['_auth_user_companies_id']
     if pk == 0:
@@ -73,6 +73,9 @@ def companies(request, pk=0):
     button_company_create = ''
     button_company_create = 'Добавить'
     button_StaffList = "Штатное расписание"
+
+    component_name = razdel       
+    request.session['_auth_user_currentcomponent'] = component_name
     
     return render(request, template_name, {
                               #'nodes':Company.objects.all(),
@@ -84,7 +87,8 @@ def companies(request, pk=0):
                               'user_companies': comps, #request.session['_auth_user_companies_id'],
                               'button_company_create': button_company_create,
                               'button_StaffList': button_StaffList,
-                              'object_list': 'company_list',                              
+                              'object_list': 'company_list',
+                              'component_name': component_name,                              
                                             })  
 
 def tree_get_root(request, pk):
@@ -138,6 +142,8 @@ class CompanyUpdate(UpdateView):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def stafflist(request, companyid=0, pk=0):
 
+    currentuser = request.user.id
+
     if companyid == 0:
        companyid = request.session['_auth_user_currentcompany_id']
 
@@ -162,6 +168,19 @@ def stafflist(request, companyid=0, pk=0):
     button_stafflist_create = ''
     button_stafflist_create = 'Добавить'
     #button_stafflist = "Штатное расписание"
+
+    button_company_select = 'Сменить организацию'  
+    comps = request.session['_auth_user_companies_id']
+    if len(comps) > 1:
+       button_company_select = 'Сменить организацию'  
+
+    component_name = 'companies'    
+
+    button_company_create = ''
+    button_company_update = ''
+    if currentuser == current_company.author_id:
+       button_company_create = 'Добавить'
+       button_company_update = 'Изменить'
     
     return render(request, template_name, {
                               'nodes': StaffList.objects.filter(is_active=True, company_id=companyid).order_by(),
@@ -170,10 +189,14 @@ def stafflist(request, companyid=0, pk=0):
                               'tree_stafflist_id': tree_stafflist_id,
                               'current_company': current_company,
                               'companyid': companyid,
-                              'user_companies': comps,                              
+                              'user_companies': comps,    
+                              'button_company_create' : button_company_create,
+                              'button_company_update' : button_company_update,                          
                               'button_stafflist_create': button_stafflist_create,
                               #'button_StaffList': button_stafflist,
-                              'object_list': 'stafflist_list',                              
+                              'object_list': 'stafflist_list',
+                              'component_name': component_name, 
+                              'button_company_select' : button_company_select,                                                                 
                                             })
 
 #class StaffListDetail(DetailView):
@@ -213,6 +236,60 @@ class StaffListUpdate(UpdateView):
        context = super(StaffListUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Должность'
        return context
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def staffs(request, stafflistid=0, pk=0):
+
+    currentuser = request.user.id
+
+    #if companyid == 0:
+    #   companyid = request.session['_auth_user_currentcompany_id']
+
+    comps = request.session['_auth_user_companies_id']
+    current_stafflist = StaffList.objects.get(id=stafflistid)
+    current_company = Company.objects.get(id=current_stafflist.company_id)
+
+    if pk == 0:
+       current_staff = 0
+       staff_id = 0
+       #template_name = "stafflist.html"
+    else:
+       current_staff = Staff.objects.get(id=pk)
+    template_name = "stafflist_detail.html"
+
+    # здесь нужно условие для button_stafflist_create
+    button_stafflist_create = ''
+    button_stafflist_create = 'Добавить'
+    #button_stafflist = "Штатное расписание"
+
+    button_company_select = 'Сменить организацию'  
+    comps = request.session['_auth_user_companies_id']
+    if len(comps) > 1:
+       button_company_select = 'Сменить организацию'  
+
+    component_name = 'companies'    
+
+    button_company_create = ''
+    button_company_update = ''
+    if currentuser == current_company.author_id:
+       button_company_create = 'Добавить'
+       button_company_update = 'Изменить'
+    
+    return render(request, template_name, {
+                              'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid).order_by(),
+                              'current_stafflist': current_stafflist,
+                              #'current_company': current_company,
+                              #'companyid': companyid,
+                              #'user_companies': comps,    
+                              #'button_company_create' : button_company_create,
+                              #'button_company_update' : button_company_update,                          
+                              #'button_stafflist_create': button_stafflist_create,
+                              #'button_StaffList': button_stafflist,
+                              #'object_list': 'stafflist_list',
+                              'component_name': component_name, 
+                              'button_company_select' : button_company_select,                                                                 
+                                            })
+
 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

@@ -2,6 +2,34 @@
 
 {% block project %}
 
-<p><h2>{{ current_stafflist.name }}===</h2></p>
+    <!--{ if current_company.id in user_companies %}-->
+
+<div class="company-entry">
+   <h2>{{ nodes.stafflist.name }}
+   {% if not current_stafflist.is_active %}(Должность перемещена в архив){% endif %}
+   </h2>
+   <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
+
+   {% if current_company.parent.pk %}
+      <i><p>Организация: 
+      <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
+      <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+      </p></i>
+   <!--{ else %}
+      Это головная организация-->
+   {% endif %}
+
+   <p>Описание: {{ current_stafflist.description }}</p>
+   <p>Оклад: {{ current_stafflist.salary }} {{ current_stafflist.currency.shortname }}</p>
+   {% if current_stafflist.is_vacancy %} 
+      <p>Вакансия: Да</p>    
+      <p>Описание вакансии: {% autoescape off %} {{ current_stafflist.vacancy }} {% endautoescape %}</p>
+   {% endif %}  
+   <p>Тип: {{ current_stafflist.type }}</p>
+   <em>Автор: {{ current_stafflist.author }}</em><br /> 
+   <em>Дата: {{ current_stafflist.datecreate }}</em>
+   <br /><br />
+
+   <!--{ endif %}-->
 
 {% endblock project %}

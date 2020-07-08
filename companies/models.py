@@ -109,12 +109,13 @@ class StaffList(MPTTModel):
     company = models.ForeignKey('Company', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='related_company', verbose_name="Организация")
     name = models.CharField("Наименование", max_length=64)
     description = models.TextField("Описание", null=True, blank=True)
-    #description = RichTextUploadingField("Описание")
     type = models.ForeignKey('Dict_PositionType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='position_type', verbose_name="Тип должности")
     currency = models.ForeignKey('finance.Dict_Currency', on_delete=models.CASCADE, related_name='related_currency', verbose_name="Валюта")
-    salary = models.DecimalField("Оклад", max_digits=14, decimal_places=2)    
+    salary = models.DecimalField("Оклад", max_digits=14, decimal_places=2)
+    vacancy = RichTextUploadingField("Описание вакансии", null=True, blank=True)    
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    is_vacancy = models.BooleanField("Вакансия", default=False)
     is_active = models.BooleanField("Активность", default=True)    
 
     def get_absolute_url(self):

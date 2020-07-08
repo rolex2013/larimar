@@ -39,6 +39,8 @@ def projects(request, companyid=0, pk=0):
     if companyid == 0:
        companyid = request.session['_auth_user_currentcompany_id']
 
+    request.session['_auth_user_currentcomponent'] = 'projects'
+
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     prjstatus_selectid = 0

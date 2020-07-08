@@ -16,7 +16,7 @@ class CompanyForm(forms.ModelForm):
 class StaffListForm(forms.ModelForm):
     class Meta:
         model = StaffList
-        fields = ['company', 'name', 'description', 'currency', 'salary', 'type', 'is_active'] 
+        fields = ['company', 'name', 'description', 'currency', 'salary', 'type', 'is_vacancy', 'vacancy', 'is_active'] 
         #description = forms.CharField(widget=CKEditorWidget, label='')
 
 class ContentForm(forms.ModelForm):
