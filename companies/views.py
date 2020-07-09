@@ -79,7 +79,7 @@ def companies(request, pk=0, razdel='projects'):
     
     return render(request, template_name, {
                               #'nodes':Company.objects.all(),
-                              'nodes': Company.objects.filter(is_active=True, id__in=comps).order_by(),
+                              'nodes': Company.objects.filter(is_active=True, id__in=comps),
                               'current_company': current_company,
                               'root_company_id': root_company_id,
                               'tree_company_id': tree_company_id,

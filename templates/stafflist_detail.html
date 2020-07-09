@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
-{% block project %}
+{% block staff %}
 
     <!--{ if current_company.id in user_companies %}-->
 
 <div class="company-entry">
-   <h2>{{ nodes.stafflist.name }}
+   <h2>{{ current_stafflist.name }}
    {% if not current_stafflist.is_active %}(Должность перемещена в архив){% endif %}
    </h2>
-   <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
+   <p>{% autoescape off %} {{ current_stafflist.description }}{% endautoescape %}</p>
 
-   {% if current_company.parent.pk %}
-      <i><p>Организация: 
+   {% if current_stafflist.parent.pk %}
+      <i><p>Руководитель: 
       <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
-      <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+      <a href="{% url 'my_company:staffs' current_stafflist.parent.pk 0 %}">{{ current_stafflist.parent.name }}</a>
       </p></i>
    <!--{ else %}
       Это головная организация-->
@@ -32,4 +32,15 @@
 
    <!--{ endif %}-->
 
-{% endblock project %}
+   <h3>Список Сотрудников</h3>  
+
+   {% for currstaff in nodes %}
+      <div class="d-tr">
+         <div class="d-td-text">
+            {{ currstaff.user.username }}          
+         </div>
+      </div>
+      <br />
+   {% endfor %}   
+
+{% endblock staff %}

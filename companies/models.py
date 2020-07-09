@@ -63,7 +63,8 @@ class Company(MPTTModel):
     is_active = models.BooleanField("Активность", default=True)    
 
     def get_absolute_url(self):
-        return reverse('my_project:projects', kwargs={'companyid': self.pk, 'pk': '1'})          
+        #return reverse('my_project:projects', kwargs={'companyid': self.pk, 'pk': '1'})  
+        return reverse('my_company:stafflist', kwargs={'companyid': self.pk, 'pk': '1'})         
                
     def __str__(self):
         return (self.name)

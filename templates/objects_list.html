@@ -9,9 +9,9 @@
            <li>
               {% if object_list == 'company_list' %}
                  {% if component_name == 'projects' %}                    
-                    <b><a href="{% url 'my_project:projects' node.pk 0 %}">{{ node.name }}</b><br />
+                    <span class="hint hint--bottom hint--info" data-hint="Проекты, Задачи"><b><a href="{% url 'my_project:projects' node.pk 0 %}">{{ node.name }}</b></span><br />
                  {% elif component_name == 'companies' %}
-                    <b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}</b><br />
+                    <span class="hint hint--bottom hint--info" data-hint="Штатное расписание"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{{ node.parent.name }}--></b></span><br />
                  {% endif %}                    
               {% elif object_list == 'project_list' %}         
                  <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
