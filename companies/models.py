@@ -133,12 +133,15 @@ class StaffList(MPTTModel):
 class Staff(models.Model):
     stafflist = models.ForeignKey('StaffList', on_delete=models.CASCADE, related_name='staff_stafflist', verbose_name="Должность")
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='staff_user', verbose_name="Пользователь")
-    datebegin = models.DateTimeField("Начало работы", auto_now_add=True)
-    dateend = models.DateTimeField("Окончание работы", auto_now_add=True)    
+    datebegin = models.DateField("Начало работы")
+    dateend = models.DateField("Окончание работы")    
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")    
     is_active = models.BooleanField("Активность", default=True)
-    
+
+    def get_absolute_url(self):
+        return reverse('my_company:staffs', kwargs={'stafflistid': self.pk, 'pk': '0'})  
+
     def __str__(self):
         return (self.stafflist.company.name + ' - ' + self.stafflist.name + ' - ' + self.user.username)
     class Meta:

@@ -37,10 +37,14 @@
    {% for currstaff in nodes %}
       <div class="d-tr">
          <div class="d-td-text">
-            {{ currstaff.user.username }}          
+            <a href="{% url 'my_company:staff_update' current_stafflist.pk %}">{{ currstaff.user.username }}</a>
          </div>
       </div>
       <br />
+      <div>
+         <div style="float: left;"><a href="{% url 'my_company:staff_create' currstaff.stafflist.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_staff_create }}</span></a></div>
+         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>        
+       </div>
    {% endfor %}   
 
 {% endblock staff %}

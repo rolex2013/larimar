@@ -17,7 +17,7 @@ from django.db.models import Q
 
 from .models import Company, UserCompanyComponentGroup, StaffList, Staff, Content, Dict_ContentType, Dict_ContentPlace
 #from projects.models import Project, Task, TaskComment
-from .forms import CompanyForm, StaffListForm, ContentForm
+from .forms import CompanyForm, StaffListForm, StaffForm, ContentForm
 
 #class CompaniesList(ListView):
 #    model = Company
@@ -269,11 +269,11 @@ def staffs(request, stafflistid=0, pk=0):
 
     component_name = 'companies'    
 
-    button_company_create = ''
-    button_company_update = ''
+    button_staff_create = ''
+    #button_staff_update = ''
     if currentuser == current_company.author_id:
-       button_company_create = 'Добавить'
-       button_company_update = 'Изменить'
+       button_staff_create = 'Добавить'
+       #button_staff_update = 'Изменить'
     
     return render(request, template_name, {
                               'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid).order_by(),
@@ -287,9 +287,43 @@ def staffs(request, stafflistid=0, pk=0):
                               #'button_StaffList': button_stafflist,
                               #'object_list': 'stafflist_list',
                               'component_name': component_name, 
-                              'button_company_select' : button_company_select,                                                                 
+                              'button_company_select' : button_company_select,
+                              'button_staff_create' : button_staff_create,                                                                 
                                             })
 
+class StaffCreate(CreateView):    
+    model = Staff
+    form_class = StaffForm
+    template_name = 'object_form.html'
+
+    def form_valid(self, form):
+       form.instance.author_id = self.request.user.id
+       #if self.kwargs['parentid'] != 0:
+       #   form.instance.parent_id = self.kwargs['parentid']
+
+       #if form.is_valid():
+       #   org = form.save()
+       #   UserCompanyComponentGroup.objects.create(user_id=form.instance.author_id, 
+       #                                            company_id=org.id,
+       #                                            component_id=5,
+       #                                            group_id=1)
+
+       return super(StaffCreate, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+       context = super(StaffCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новый Сотрудник на Должность '
+       return context
+
+class StaffUpdate(UpdateView):    
+    model = Staff
+    form_class = StaffForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(StaffUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Должность'
+       return context
 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

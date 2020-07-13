@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from ckeditor.widgets import CKEditorWidget
 from django import forms
-from .models import Company, StaffList, Content
+import datetime
+from .models import Company, StaffList, Staff, Content
 from bootstrap_datepicker_plus import DatePickerInput
 
 from mptt.forms import MoveNodeForm, TreeNodeChoiceField, TreeNodeMultipleChoiceField
@@ -16,8 +17,14 @@ class CompanyForm(forms.ModelForm):
 class StaffListForm(forms.ModelForm):
     class Meta:
         model = StaffList
-        fields = ['company', 'name', 'description', 'currency', 'salary', 'type', 'is_vacancy', 'vacancy', 'is_active'] 
+        fields = ['name', 'description', 'currency', 'salary', 'type', 'is_vacancy', 'vacancy', 'is_active'] 
         #description = forms.CharField(widget=CKEditorWidget, label='')
+
+class StaffForm(forms.ModelForm):
+    class Meta:
+        model = Staff
+        fields = ['user', 'datebegin', 'dateend', 'is_active'] 
+        #description = forms.CharField(widget=CKEditorWidget, label='')        
 
 class ContentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
