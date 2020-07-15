@@ -4,47 +4,63 @@
 
     <!--{ if current_company.id in user_companies %}-->
 
-<div class="company-entry">
-   <h2>{{ current_stafflist.name }}
-   {% if not current_stafflist.is_active %}(Должность перемещена в архив){% endif %}
-   </h2>
-   <p>{% autoescape off %} {{ current_stafflist.description }}{% endautoescape %}</p>
+   <div class="company-entry">
+      <h2>{{ current_stafflist.name }}
+      {% if not current_stafflist.is_active %}(Должность перемещена в архив){% endif %}
+      </h2>
+      <!--<p>{ autoescape off %} { current_stafflist.description }}{ endautoescape %}</p>-->
+      {{ current_stafflist.description }}<br />
+      {% if current_stafflist.parent.pk %}
+         <i><p>Руководитель: 
+         <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
+         <a href="{% url 'my_company:staffs' current_stafflist.parent.pk 0 %}">{{ current_stafflist.parent.name }}</a>
+         </p></i>
+      <!--{ else %}
+         Это головная организация-->
+      {% endif %}
 
-   {% if current_stafflist.parent.pk %}
-      <i><p>Руководитель: 
-      <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
-      <a href="{% url 'my_company:staffs' current_stafflist.parent.pk 0 %}">{{ current_stafflist.parent.name }}</a>
-      </p></i>
-   <!--{ else %}
-      Это головная организация-->
-   {% endif %}
-
-   <p>Описание: {{ current_stafflist.description }}</p>
-   <p>Оклад: {{ current_stafflist.salary }} {{ current_stafflist.currency.shortname }}</p>
-   {% if current_stafflist.is_vacancy %} 
-      <p>Вакансия: Да</p>    
-      <p>Описание вакансии: {% autoescape off %} {{ current_stafflist.vacancy }} {% endautoescape %}</p>
-   {% endif %}  
-   <p>Тип: {{ current_stafflist.type }}</p>
-   <em>Автор: {{ current_stafflist.author }}</em><br /> 
-   <em>Дата: {{ current_stafflist.datecreate }}</em>
-   <br /><br />
-
-   <!--{ endif %}-->
-
-   <h3>Список Сотрудников</h3>  
-
-   {% for currstaff in nodes %}
-      <div class="d-tr">
-         <div class="d-td-text">
-            <a href="{% url 'my_company:staff_update' current_stafflist.pk %}">{{ currstaff.user.username }}</a>
-         </div>
-      </div>
-      <br />
+      <i><p>Компания: <a href="{% url 'my_company:stafflist' current_stafflist.company.id 0 %}">{{ current_stafflist.company.name }}</a></p></i>
+      <p>Оклад: {{ current_stafflist.salary }} {{ current_stafflist.currency.shortname }}</p>
+      {% if current_stafflist.is_vacancy %} 
+         <p>Вакансия: Да</p>    
+         <p>Описание вакансии: {% autoescape off %} {{ current_stafflist.vacancy }} {% endautoescape %}</p>
+      {% endif %}  
+      <p>Тип: {{ current_stafflist.type }}</p>
+      <em>Автор: {{ current_stafflist.author }}</em><br /> 
+      <em>Дата: {{ current_stafflist.datecreate }}</em><br /> 
+      <p>&nbsp;</p>
       <div>
-         <div style="float: left;"><a href="{% url 'my_company:staff_create' currstaff.stafflist.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_staff_create }}</span></a></div>
-         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>        
-       </div>
-   {% endfor %}   
+         <div style="float: left;"><a href="{% url 'my_company:stafflist_create' current_stafflist.company.id current_stafflist.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_create }}</span></a></div>
+         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+         <div style="float: left;"><a href="{% url 'my_company:stafflist_update' current_stafflist.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_update }}</span></a></div>
+         <!-- <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
+         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+      </div>
 
-{% endblock staff %}
+      <!--{ endif %}-->
+   </div>
+   <!--<hr>-->
+
+{% endblock staff %}  
+
+{% block list %}
+
+      <div class="comment-entry">
+           <p>&nbsp;</p>
+           <h5>Список Сотрудников</h5>  
+
+           {% for currstaff in nodes %}
+                 <div class="d-tr">
+                    <div class="d-td-text">
+                       <a href="{% url 'my_company:staff_update' current_stafflist.pk %}">{{ currstaff.user.username }}</a>
+                    </div>
+                 </div>
+                 <br />
+                 <div>
+                    <div style="float: left;"><a href="{% url 'my_company:staff_create' currstaff.stafflist.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_staff_create }}</span></a></div>
+                    <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>        
+                 </div>
+           {% endfor %}   
+      </div>
+
+{% endblock list %}

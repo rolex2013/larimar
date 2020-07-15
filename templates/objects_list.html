@@ -14,7 +14,7 @@
                     <span class="hint hint--bottom hint--info" data-hint="Штатное расписание"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{{ node.parent.name }}--></b></span><br />
                  {% endif %}                    
               {% elif object_list == 'project_list' %}         
-                 <b><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
+                 <b><a href="{% url 'my_project:tasks' node.pk 0 %}">#{{ node.id }}. {{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
                     <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | 
                      {{ node.currency.symbol }}{{ node.cost }}
                     </span></b><br />
@@ -27,7 +27,7 @@
                  <!--<b><a href="{ url 'my_project:task_detail' node.pk %}">-->
                  <b><a href="{% url 'my_project:taskcomments' node.pk %}">
                     <!-- <a href="{ url 'my_project:tasks' current_project.id node.pk %}">-->
-                    {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
+                       #{{ node.id }}. {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
                        {{ node.status.name }} | 
                        <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | 
                        {{ node.project.currency.symbol }}{{ node.cost }}

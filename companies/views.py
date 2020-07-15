@@ -174,29 +174,33 @@ def stafflist(request, companyid=0, pk=0):
     if len(comps) > 1:
        button_company_select = 'Сменить организацию'  
 
-    component_name = 'companies'    
+    component_name = 'companies'  
+    nodes = StaffList.objects.filter(is_active=True, company_id=companyid).order_by()  
 
     button_company_create = ''
     button_company_update = ''
+    button_stafflist_create = ''    
     if currentuser == current_company.author_id:
        button_company_create = 'Добавить'
        button_company_update = 'Изменить'
+       if len(nodes) == 0:
+          button_stafflist_create = 'Добавить'
     
     return render(request, template_name, {
-                              'nodes': StaffList.objects.filter(is_active=True, company_id=companyid).order_by(),
+                              'nodes': nodes,
                               'current_stafflist': current_stafflist,
                               'root_stafflist_id': root_stafflist_id,
                               'tree_stafflist_id': tree_stafflist_id,
                               'current_company': current_company,
                               'companyid': companyid,
-                              'user_companies': comps,    
-                              'button_company_create' : button_company_create,
-                              'button_company_update' : button_company_update,                          
-                              'button_stafflist_create': button_stafflist_create,
+                              'user_companies': comps, 
+                              'button_company_select' : button_company_select,                                                        
+                              'button_company_create': button_company_create,
+                              'button_company_update' : button_company_update,                                             
                               #'button_StaffList': button_stafflist,
+                              'button_stafflist_create' : button_stafflist_create,
                               'object_list': 'stafflist_list',
                               'component_name': component_name, 
-                              'button_company_select' : button_company_select,                                                                 
                                             })
 
 #class StaffListDetail(DetailView):
@@ -210,16 +214,9 @@ class StaffListCreate(CreateView):
 
     def form_valid(self, form):
        form.instance.author_id = self.request.user.id
+       form.instance.company_id = self.kwargs['companyid']       
        if self.kwargs['parentid'] != 0:
           form.instance.parent_id = self.kwargs['parentid']
-
-       #if form.is_valid():
-       #   org = form.save()
-       #   UserCompanyComponentGroup.objects.create(user_id=form.instance.author_id, 
-       #                                            company_id=org.id,
-       #                                            component_id=5,
-       #                                            group_id=1)
-
        return super(StaffListCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -269,10 +266,14 @@ def staffs(request, stafflistid=0, pk=0):
 
     component_name = 'companies'    
 
+    button_stafflist_create = ''
+    button_stafflist_update = ''     
     button_staff_create = ''
     #button_staff_update = ''
     if currentuser == current_company.author_id:
        button_staff_create = 'Добавить'
+       button_stafflist_create = 'Добавить'
+       button_stafflist_update = 'Изменить'              
        #button_staff_update = 'Изменить'
     
     return render(request, template_name, {
@@ -287,7 +288,9 @@ def staffs(request, stafflistid=0, pk=0):
                               #'button_StaffList': button_stafflist,
                               #'object_list': 'stafflist_list',
                               'component_name': component_name, 
-                              'button_company_select' : button_company_select,
+                              #'button_company_select' : button_company_select,
+                              'button_stafflist_create' : button_stafflist_create,
+                              'button_stafflist_update' : button_stafflist_update,                                                                
                               'button_staff_create' : button_staff_create,                                                                 
                                             })
 

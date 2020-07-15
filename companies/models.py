@@ -120,12 +120,12 @@ class StaffList(MPTTModel):
     is_active = models.BooleanField("Активность", default=True)    
 
     def get_absolute_url(self):
-        return reverse('my_company:staff', kwargs={'companyid': self.pk, 'pk': '1'})          
+        return reverse('my_company:staffs', kwargs={'stafflistid': self.pk, 'pk': '0'})          
                
     def __str__(self):
         return (self.company.name + '. ' + self.name)
     class MPTTMeta:
-        order_insertion_by = ['company_id', 'name']
+        order_insertion_by = ['company', 'name']
     class Meta:
         verbose_name = 'Штатное расписание'
         verbose_name_plural = 'Штатные расписания'    
