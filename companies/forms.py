@@ -3,6 +3,8 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 import datetime
 from .models import Company, StaffList, Staff, Content
+from companies.models import UserCompanyComponentGroup
+from django.contrib.auth.models import User
 from bootstrap_datepicker_plus import DatePickerInput
 
 from mptt.forms import MoveNodeForm, TreeNodeChoiceField, TreeNodeMultipleChoiceField
@@ -21,6 +23,24 @@ class StaffListForm(forms.ModelForm):
         #description = forms.CharField(widget=CKEditorWidget, label='')
 
 class StaffForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
+        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму 
+        self.stafflistid = kwargs.pop('stafflistid') 
+        super(StaffForm, self).__init__(*args, **kwargs)
+        stafflistid = self.stafflistid
+        # в выпадающий список для выбора Сотрудника подбираем только тех юзеров, которые привязаны к этой компании, но не назначены на должности
+        st_list = StaffList.objects.get(id=stafflistid)
+        uc = UserCompanyComponentGroup.objects.filter(company_id=st_list.company_id).values_list('user_id', flat=True)
+        ucs = Staff.objects.filter(stafflist_id=stafflistid).values_list('user_id', flat=True)
+        usr = User.objects.filter(id__in=uc, is_active=True)
+        self.fields['user'].queryset = usr
+        #self.fields['author'].initial = self.user.id        
+
+        #for field in self.disabled_fields:
+        #    self.fields[field].disabled = True
+
     class Meta:
         model = Staff
         fields = ['user', 'datebegin', 'dateend', 'is_active'] 

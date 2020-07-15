@@ -184,6 +184,7 @@ def stafflist(request, companyid=0, pk=0):
        button_company_create = 'Добавить'
        button_company_update = 'Изменить'
        if len(nodes) == 0:
+          # в Компании может быть только один руководитель!
           button_stafflist_create = 'Добавить'
     
     return render(request, template_name, {
@@ -281,7 +282,7 @@ def staffs(request, stafflistid=0, pk=0):
                               'current_stafflist': current_stafflist,
                               #'current_company': current_company,
                               #'companyid': companyid,
-                              #'user_companies': comps,    
+                              'user_companies': comps,    
                               #'button_company_create' : button_company_create,
                               #'button_company_update' : button_company_update,                          
                               #'button_stafflist_create': button_stafflist_create,
@@ -315,8 +316,13 @@ class StaffCreate(CreateView):
 
     def get_context_data(self, **kwargs):
        context = super(StaffCreate, self).get_context_data(**kwargs)
-       context['header'] = 'Новый Сотрудник на Должность '
+       context['header'] = 'Новый Сотрудник на Должность ' # + stafflistid
        return context
+
+    def get_form_kwargs(self):
+       kwargs = super(StaffCreate, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user, 'action': 'create', 'stafflistid': self.kwargs['stafflistid']})
+       return kwargs          
 
 class StaffUpdate(UpdateView):    
     model = Staff
