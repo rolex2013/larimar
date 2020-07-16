@@ -55,7 +55,7 @@
            {% for currstaff in nodes %}
                  <div class="d-tr">
                     <div class="d-td-text">
-                       <a href="{% url 'my_company:staff_update' current_stafflist.pk %}">{{ currstaff.user.username }}</a>
+                       <b><a href="{% url 'my_company:staff_update' currstaff.pk %}">{{ currstaff.user.username }}</a>: <span style="font-size: 70%; color: blue;">{{ currstaff.datebegin }} - {{ currstaff.dateend }} | Ставка: {{ currstaff.rate }}</span></b>
                     </div>
                  </div>
                  <br />

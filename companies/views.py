@@ -17,7 +17,7 @@ from django.db.models import Q
 
 from .models import Company, UserCompanyComponentGroup, StaffList, Staff, Content, Dict_ContentType, Dict_ContentPlace
 #from projects.models import Project, Task, TaskComment
-from .forms import CompanyForm, StaffListForm, StaffForm, ContentForm
+from .forms import CompanyForm, StaffListForm, StaffForm, StaffUpdateForm, ContentForm
 
 #class CompaniesList(ListView):
 #    model = Company
@@ -279,6 +279,8 @@ def staffs(request, stafflistid=0, pk=0):
     
     return render(request, template_name, {
                               'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid).order_by(),
+                              # надо выводить только действующих Сотрудников (по датам)       
+                              #'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid, datebegin__gte=datetime.now(), datebegin__gte=datetime.now()).order_by(),
                               'current_stafflist': current_stafflist,
                               #'current_company': current_company,
                               #'companyid': companyid,
@@ -316,7 +318,7 @@ class StaffCreate(CreateView):
 
     def get_context_data(self, **kwargs):
        context = super(StaffCreate, self).get_context_data(**kwargs)
-       context['header'] = 'Новый Сотрудник на Должность ' # + stafflistid
+       context['header'] = 'Новый Сотрудник' # + stafflistid
        return context
 
     def get_form_kwargs(self):
@@ -326,13 +328,19 @@ class StaffCreate(CreateView):
 
 class StaffUpdate(UpdateView):    
     model = Staff
-    form_class = StaffForm
+    form_class = StaffUpdateForm
     template_name = 'object_form.html'
 
     def get_context_data(self, **kwargs):
        context = super(StaffUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Должность'
        return context
+
+    def get_form_kwargs(self):
+       kwargs = super(StaffUpdate, self).get_form_kwargs()
+       #kwargs.update({'user': self.request.user, 'action': 'update'})
+       kwargs.update({'user': self.request.user})
+       return kwargs        
 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

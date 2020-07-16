@@ -131,21 +131,22 @@ class StaffList(MPTTModel):
         verbose_name_plural = 'Штатные расписания'    
 
 class Staff(models.Model):
-    stafflist = models.ForeignKey('StaffList', on_delete=models.CASCADE, related_name='staff_stafflist', verbose_name="Должность")
+    stafflist = models.ForeignKey('StaffList', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='staff_stafflist', verbose_name="Должность")
     user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='staff_user', verbose_name="Пользователь")
+    rate = models.DecimalField("Ставка (0,1 - 1)", max_digits=3, decimal_places=2, default=1)
     datebegin = models.DateField("Начало работы")
-    dateend = models.DateField("Окончание работы")    
+    dateend = models.DateField("Окончание работы", null=True, blank=True)    
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")    
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
-        return reverse('my_company:staffs', kwargs={'stafflistid': self.pk, 'pk': '0'})  
+        return reverse('my_company:staffs', kwargs={'stafflistid': self.stafflist.id, 'pk': '0'})  
 
     def __str__(self):
         return (self.stafflist.company.name + ' - ' + self.stafflist.name + ' - ' + self.user.username)
     class Meta:
-        unique_together = ('stafflist','user')
+        #unique_together = ('stafflist','user')
         ordering = ('stafflist','user')
         verbose_name = 'Сотрудник'
         verbose_name_plural = 'Сотрудники'

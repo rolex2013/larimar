@@ -24,26 +24,72 @@ class StaffListForm(forms.ModelForm):
 
 class StaffForm(forms.ModelForm):
 
+    disabled_fields = ('stafflist', 'author',)
+
+    def clean(self):
+        if self.cleaned_data['rate'] > 1:
+           self.cleaned_data['rate'] = 1            
+        elif self.cleaned_data['rate'] <= 0:
+           self.cleaned_data['rate'] = 0.1
+
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
-        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму 
-        self.stafflistid = kwargs.pop('stafflistid') 
-        super(StaffForm, self).__init__(*args, **kwargs)
-        stafflistid = self.stafflistid
-        # в выпадающий список для выбора Сотрудника подбираем только тех юзеров, которые привязаны к этой компании, но не назначены на должности
+        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
+        if self.action == 'create': 
+           self.stafflistid = kwargs.pop('stafflistid') 
+           super(StaffForm, self).__init__(*args, **kwargs)
+           stafflistid = self.stafflistid
+           self.fields['stafflist'].initial = self.stafflistid            
+        else:
+           disabled_fields = ('user',)
+           super(StaffForm, self).__init__(*args, **kwargs)
+           stafflistid = self.instance.stafflist_id 
+        ## в выпадающий список для выбора Сотрудника подбираем только тех юзеров, которые привязаны к этой компании, но не назначены на должности
+        # у Сотрудника может быть несколько Должностей
         st_list = StaffList.objects.get(id=stafflistid)
         uc = UserCompanyComponentGroup.objects.filter(company_id=st_list.company_id).values_list('user_id', flat=True)
-        ucs = Staff.objects.filter(stafflist_id=stafflistid).values_list('user_id', flat=True)
-        usr = User.objects.filter(id__in=uc, is_active=True)
+        #ucs = Staff.objects.filter(stafflist_id=stafflistid).values_list('user_id', flat=True)
+        usr = User.objects.filter(id__in=uc, is_active=True) 
         self.fields['user'].queryset = usr
-        #self.fields['author'].initial = self.user.id        
+        self.fields['author'].initial = self.user.id        
 
-        #for field in self.disabled_fields:
-        #    self.fields[field].disabled = True
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
 
     class Meta:
         model = Staff
-        fields = ['user', 'datebegin', 'dateend', 'is_active'] 
+        fields = ['stafflist', 'user', 'rate', 'datebegin', 'dateend', 'author', 'is_active'] 
+        #description = forms.CharField(widget=CKEditorWidget, label='')        
+
+class StaffUpdateForm(forms.ModelForm):
+
+    disabled_fields = ('stafflist', 'user', 'author',)
+
+    def clean(self):
+        if self.cleaned_data['rate'] > 1:
+           self.cleaned_data['rate'] = 1            
+        elif self.cleaned_data['rate'] <= 0:
+           self.cleaned_data['rate'] = 0.1
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
+        #self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
+        super(StaffUpdateForm, self).__init__(*args, **kwargs)
+        stafflistid = self.instance.stafflist_id 
+        ## в выпадающий список для выбора Сотрудника подбираем только тех юзеров, которые привязаны к этой компании, но не назначены на должности
+        # у Сотрудника может быть несколько Должностей
+        st_list = StaffList.objects.get(id=stafflistid)
+        uc = UserCompanyComponentGroup.objects.filter(company_id=st_list.company_id).values_list('user_id', flat=True)
+        usr = User.objects.filter(id__in=uc, is_active=True) 
+        self.fields['user'].queryset = usr
+        #self.fields['author'].initial = self.user.id        
+
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
+
+    class Meta:
+        model = Staff
+        fields = ['stafflist', 'user', 'rate', 'datebegin', 'dateend', 'author', 'is_active'] 
         #description = forms.CharField(widget=CKEditorWidget, label='')        
 
 class ContentForm(forms.ModelForm):
