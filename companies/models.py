@@ -113,6 +113,7 @@ class StaffList(MPTTModel):
     type = models.ForeignKey('Dict_PositionType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='position_type', verbose_name="Тип должности")
     currency = models.ForeignKey('finance.Dict_Currency', on_delete=models.CASCADE, related_name='related_currency', verbose_name="Валюта")
     salary = models.DecimalField("Оклад", max_digits=14, decimal_places=2)
+    numberemployees = models.PositiveIntegerField("Кол-во сотрудников", default=1)
     vacancy = RichTextUploadingField("Описание вакансии", null=True, blank=True)    
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")

@@ -260,27 +260,33 @@ def staffs(request, stafflistid=0, pk=0):
     button_stafflist_create = 'Добавить'
     #button_stafflist = "Штатное расписание"
 
-    button_company_select = 'Сменить организацию'  
+    #button_company_select = 'Сменить организацию'  
     comps = request.session['_auth_user_companies_id']
-    if len(comps) > 1:
-       button_company_select = 'Сменить организацию'  
+    #if len(comps) > 1:
+    #   button_company_select = 'Сменить организацию'  
 
-    component_name = 'companies'    
+    component_name = 'companies' 
+
+    #number_employees = Staff.objects.filter(Q(dateend__gte=datetime.now()) | Q(dateend=None), datebegin__lte=datetime.now(), is_active=True, stafflist_id=stafflistid).annotate(cnt=Count('id'))   
+    nodes = Staff.objects.filter(Q(dateend__gte=datetime.now()) | Q(dateend=None), datebegin__lte=datetime.now(), is_active=True, stafflist_id=stafflistid).order_by()   
 
     button_stafflist_create = ''
     button_stafflist_update = ''     
     button_staff_create = ''
     #button_staff_update = ''
     if currentuser == current_company.author_id:
-       button_staff_create = 'Добавить'
+       #print(number_employees.cnt)
+       #if number_employees[0].cnt < current_stafflist.numberemployees:
+       if len(nodes) < current_stafflist.numberemployees:
+          button_staff_create = 'Добавить'
        button_stafflist_create = 'Добавить'
        button_stafflist_update = 'Изменить'              
        #button_staff_update = 'Изменить'
     
     return render(request, template_name, {
-                              'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid).order_by(),
+                              #'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid).order_by(),
                               # надо выводить только действующих Сотрудников (по датам)       
-                              #'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid, datebegin__gte=datetime.now(), datebegin__gte=datetime.now()).order_by(),
+                              'nodes': nodes,
                               'current_stafflist': current_stafflist,
                               #'current_company': current_company,
                               #'companyid': companyid,

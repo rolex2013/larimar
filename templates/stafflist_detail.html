@@ -21,6 +21,7 @@
 
       <i><p>Компания: <a href="{% url 'my_company:stafflist' current_stafflist.company.id 0 %}">{{ current_stafflist.company.name }}</a></p></i>
       <p>Оклад: {{ current_stafflist.salary }} {{ current_stafflist.currency.shortname }}</p>
+      <p>Кол-во сотрудников: {{ current_stafflist.numberemployees }} чел.</p>      
       {% if current_stafflist.is_vacancy %} 
          <p>Вакансия: Да</p>    
          <p>Описание вакансии: {% autoescape off %} {{ current_stafflist.vacancy }} {% endautoescape %}</p>
@@ -55,7 +56,11 @@
            {% for currstaff in nodes %}
                  <div class="d-tr">
                     <div class="d-td-text">
-                       <b><a href="{% url 'my_company:staff_update' currstaff.pk %}">{{ currstaff.user.username }}</a>: <span style="font-size: 70%; color: blue;">{{ currstaff.datebegin }} - {{ currstaff.dateend }} | Ставка: {{ currstaff.rate }}</span></b>
+                       {% if currstaff.dateend is Null %}
+                          <b><a href="{% url 'my_company:staff_update' currstaff.pk %}">{{ currstaff.user.username }}</a>: <span style="font-size: 70%; color: blue;"> Работает с {{ currstaff.datebegin }} | Ставка: {{ currstaff.rate }}</span></b>                       
+                       {% else %}
+                          <b><a href="{% url 'my_company:staff_update' currstaff.pk %}">{{ currstaff.user.username }}</a>: <span style="font-size: 70%; color: blue;">{{ currstaff.datebegin }} - {{ currstaff.dateend }} | Ставка: {{ currstaff.rate }}</span></b>
+                       {% endif %}
                     </div>
                  </div>
                  <br />

@@ -19,9 +19,9 @@
                      {{ node.currency.symbol }}{{ node.cost }}
                     </span></b><br />
               {% elif object_list == 'stafflist_list' %}         
-                 <b><a href="{% url 'my_company:staffs' node.pk 0 %}"{{ node.name }}:</a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
+                 <b><a href="{% url 'my_company:staffs' node.pk 0 %}">{{ node.name }}:</a><span style="font-size: 70%; color: green;"> {{ node.datebegin }} - {{ node.dateend }} | {{ node.status.name }} | 
                     <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><!--<i>{{ node.author.username }}</i></a> | -->
-                     {{ node.currency.symbol }}{{ node.salary }}
+                     {{ node.currency.symbol }}{{ node.salary }} | Кол-во: {{ node.numberemployees }}
                     </span></b><br />                    
               {% else %}
                  <!--<b><a href="{ url 'my_project:task_detail' node.pk %}">-->
