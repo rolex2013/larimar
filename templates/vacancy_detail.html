@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+<!--{% load bootstrap4 %}-->
+
+{% block vacancy %}
+   
+   <!-- Защита от прямого доступа к контенту -->
+   <!--{ object.company_id }} / { user_companies }}-->
+   <!--{ if object.company_id in user_companies %}-->
+
+     <div class="content-entry">
+         <h2>{{ current_stafflist.name }}</h2> <i><h5>{{ current_stafflist.datecreate }}</h5></i>
+         <p>{% autoescape off %} {{ current_stafflist.vacancy }} {% endautoescape %}</p>
+     </div>
+     <br /><br />
+     <div>
+      <div style="float: left;"><a href="{ url 'my_project:project_create' current_project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_send_resume }}</span></a></div>
+      <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+     </div>
+   <!--{ else %}
+
+     <h4>Контент недоступен!</h4>
+
+   { endif %} -->
+
+{% endblock vacancy %}
+
+
+

@@ -349,6 +349,24 @@ class StaffUpdate(UpdateView):
        return kwargs        
 
 
+def vacancies(request):
+    template_name = 'index.html'
+    vacancies_list = StaffList.objects.filter(is_vacancy=True)
+    param = 'vacancies'       
+    return render(request, template_name, {
+                                           'vacancies_list': vacancies_list,
+                                           'param': param,
+                                            }) 
+
+def vacancy_detail(request, pk):
+    template_name = 'vacancy_detail.html'
+    current_stafflist = StaffList.objects.get(id=pk)
+    button_send_resume = 'Откликнуться на вакансию'
+    return render(request, template_name, {
+                                           'current_stafflist': current_stafflist,
+                                           'button_send_resume': button_send_resume,
+                                            })                                             
+
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def contents(request, place=0):
     template_name = 'main.html'
@@ -389,12 +407,12 @@ def contents(request, place=0):
 
 def publiccontents(request):
     template_name = 'index.html'
-
     #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, is_public=True, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
     content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, place__is_active=True, place_id=1).annotate(cnt=Count('id')) 
-    #print('***********************')
+    param = 'publiccontent'
     return render(request, template_name, {
-                              'content_list': content_list,                              
+                              'content_list': content_list,
+                              'param': param,                              
                                             })
 
 class ContentList(ListView):
