@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 import datetime
-from .models import Company, StaffList, Staff, Content
+from .models import Company, StaffList, Staff, Summary, Content
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
 from bootstrap_datepicker_plus import DatePickerInput
@@ -91,6 +91,11 @@ class StaffUpdateForm(forms.ModelForm):
         model = Staff
         fields = ['stafflist', 'user', 'rate', 'datebegin', 'dateend', 'author', 'is_active'] 
         #description = forms.CharField(widget=CKEditorWidget, label='')        
+
+class SummaryForm(forms.ModelForm):
+    class Meta:
+        model = Summary
+        fields = ['theme', 'candidatefirstname', 'candidatemiddlename', 'candidatelastname', 'description', 'is_active']
 
 class ContentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

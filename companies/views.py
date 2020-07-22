@@ -15,9 +15,9 @@ from django.http import Http404
 
 from django.db.models import Q
 
-from .models import Company, UserCompanyComponentGroup, StaffList, Staff, Content, Dict_ContentType, Dict_ContentPlace
+from .models import Company, UserCompanyComponentGroup, StaffList, Staff, Summary, Content, Dict_ContentType, Dict_ContentPlace
 #from projects.models import Project, Task, TaskComment
-from .forms import CompanyForm, StaffListForm, StaffForm, StaffUpdateForm, ContentForm
+from .forms import CompanyForm, StaffListForm, StaffForm, StaffUpdateForm, SummaryForm, ContentForm
 
 #class CompaniesList(ListView):
 #    model = Company
@@ -366,6 +366,43 @@ def vacancy_detail(request, pk):
                                            'current_stafflist': current_stafflist,
                                            'button_send_resume': button_send_resume,
                                             })                                             
+
+class SummaryCreate(CreateView):    
+    model = Summary
+    form_class = SummaryForm
+    template_name = 'object_form.html'
+
+    def form_valid(self, form):
+       return super(SummaryCreate, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+       context = super(SummaryCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новое резюме'
+       return context
+
+    def get_form_kwargs(self):
+       kwargs = super(SummaryCreate, self).get_form_kwargs()
+       kwargs.update({'action': 'create', 'stafflistid': self.kwargs['stafflistid']})
+       return kwargs
+
+def summaries(request):
+    template_name = 'index.html'
+    summaries_list = Summary.objects.filter(is_active=True, stafflist__is_active=True, stafflist__is_vacancy=True)
+    param = 'summaries'       
+    return render(request, template_name, {
+                                           'summaries_list': summaries_list,
+                                           'param': param,
+                                            }) 
+
+def summary_detail(request, pk):
+    template_name = 'summary_detail.html'
+    current_summary = Summary.objects.get(id=pk)
+    #button_send_resume = 'Откликнуться на вакансию'
+    return render(request, template_name, {
+                                           'current_summary': current_summary,
+                                           #'button_send_resume': button_send_resume,
+                                            })      
+
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def contents(request, place=0):
