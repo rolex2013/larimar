@@ -4,7 +4,7 @@ from django.urls import path
 #from .views import ProjectsHome
 #from accounts.views import ELogoutView
 from .views import notificationread, notificationfilter
-from companies.views import contents, publiccontents, vacancies, vacancy_detail, summaries, summary_detail, SummaryCreate #, ContentList
+from companies.views import contents, publiccontents, vacancies, vacancy_detail, SummaryCreate #, summaries, summary_detail #, ContentList
 from . import views
 
 app_name = 'my_main'
@@ -13,8 +13,8 @@ urlpatterns = [
    #path('home/', views.ProjectsHome, name = 'home'),
    path('site/vacancies_page/', vacancies, name = 'vacancies'),
    path('site/vacancies_list/<int:pk>', vacancy_detail, name = 'vacancy_detail'), 
-   path('site/summary_page/', summaries, name = 'summaries'),
-   path('site/summaries_list/<int:pk>', summary_detail, name = 'summary_detail'), 
+   #path('site/summary_page/<int:pk>/<int:site>', summaries, name = 'summaries_site'),
+   #path('site/summaries_list/<int:pk>', summary_detail, name = 'summary_detail'), 
    path('site/summaries_list/<int:stafflistid>', SummaryCreate.as_view(), name = 'summary_create'),            
    path('', publiccontents, name = 'index'),
    path('main/', contents, name = 'main'),

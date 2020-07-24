@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+<!--{% load bootstrap4 %}-->
+
+{% block summary %}
+   
+   <!--{ if object.company_id in user_companies %}-->
+     <div>
+        <div style="float: left;"><a href="{% url 'my_company:summary_delete' current_summary.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_delete_resume }}</span></a></div>
+        <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+     </div>
+     <br /><br />
+     <div class="content-entry">
+         <h2>{{ current_summary.theme }}</h2> <i><h5>{{ current_summary.datecreate }}</h5></i>
+         <p>{{ current_summary.candidatefirstname }} {{ current_summary.candidatemiddlename }} {{ current_summary.candidatelastname }}</p>
+         <p>{{ email }}</p>
+         <p>{{ phone }}</p>
+         <p>{% autoescape off %} {{ current_summary.description }} {% endautoescape %}</p>
+     </div>
+
+   <!--{ else %}
+
+     <h4>Контент недоступен!</h4>
+
+   { endif %} -->
+
+{% endblock summary %}
+
+
+

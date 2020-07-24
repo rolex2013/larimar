@@ -365,6 +365,7 @@ def vacancy_detail(request, pk):
     return render(request, template_name, {
                                            'current_stafflist': current_stafflist,
                                            'button_send_resume': button_send_resume,
+                                           'stafflistid': current_stafflist.id,
                                             })                                             
 
 class SummaryCreate(CreateView):    
@@ -373,6 +374,7 @@ class SummaryCreate(CreateView):
     template_name = 'object_form.html'
 
     def form_valid(self, form):
+       form.instance.stafflist_id = self.kwargs['stafflistid']    
        return super(SummaryCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -380,29 +382,58 @@ class SummaryCreate(CreateView):
        context['header'] = 'Новое резюме'
        return context
 
-    def get_form_kwargs(self):
-       kwargs = super(SummaryCreate, self).get_form_kwargs()
-       kwargs.update({'action': 'create', 'stafflistid': self.kwargs['stafflistid']})
-       return kwargs
+    #def get_form_kwargs(self):
+    #   kwargs = super(SummaryCreate, self).get_form_kwargs()
+    #   kwargs.update({'action': 'create', 'stafflistid': self.kwargs['stafflistid']})
+    #   return kwargs
 
-def summaries(request):
-    template_name = 'index.html'
-    summaries_list = Summary.objects.filter(is_active=True, stafflist__is_active=True, stafflist__is_vacancy=True)
-    param = 'summaries'       
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def summaries(request, pk=0):
+    template_name = 'stafflist_detail.html'
+    if pk == 0:
+       summaries_list = Summary.objects.filter(is_active=True, stafflist__is_active=True, stafflist__is_vacancy=True).order_by('-datecreate')
+    else:
+       summaries_list = Summary.objects.filter(stafflist_id=pk, is_active=True, stafflist__is_active=True, stafflist__is_vacancy=True).order_by('-datecreate')      
+    param = 'summaries'
+    comps = request.session['_auth_user_companies_id']
+    current_stafflist = StaffList.objects.get(id=pk)
+    button_stafflist_create = 'Добавить'
+    button_stafflist_update = 'Изменить'       
     return render(request, template_name, {
                                            'summaries_list': summaries_list,
                                            'param': param,
+                                           'user_companies': comps,
+                                           'current_stafflist': current_stafflist,
+                                           'button_stafflist_create' : button_stafflist_create,
+                                           'button_stafflist_update' : button_stafflist_update,                                           
                                             }) 
 
 def summary_detail(request, pk):
     template_name = 'summary_detail.html'
     current_summary = Summary.objects.get(id=pk)
-    #button_send_resume = 'Откликнуться на вакансию'
+    if not current_summary.candidatemiddlename:
+       current_summary.candidatemiddlename = ''
+    button_delete_resume = 'Удалить резюме'
     return render(request, template_name, {
                                            'current_summary': current_summary,
-                                           #'button_send_resume': button_send_resume,
+                                           'button_delete_resume': button_delete_resume,
                                             })      
 
+def summary_delete(request, pk):
+    template_name = 'summary_detail.html'
+    current_summary = Summary.objects.get(id=pk)
+    if current_summary.is_active == True:
+       current_summary.is_active = False   
+       button_delete_resume = 'Восстановить резюме'           
+    else:
+       current_summary.is_active = True
+       button_delete_resume = 'Удалить резюме'
+    current_summary.save()
+
+    return render(request, template_name, {
+                                           'current_summary': current_summary,
+                                           'button_delete_resume': button_delete_resume,
+                                            })    
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def contents(request, place=0):

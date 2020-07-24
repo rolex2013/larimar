@@ -93,9 +93,10 @@ class StaffUpdateForm(forms.ModelForm):
         #description = forms.CharField(widget=CKEditorWidget, label='')        
 
 class SummaryForm(forms.ModelForm):
+
     class Meta:
         model = Summary
-        fields = ['theme', 'candidatefirstname', 'candidatemiddlename', 'candidatelastname', 'description', 'is_active']
+        fields = ['theme', 'candidatefirstname', 'candidatemiddlename', 'candidatelastname', 'email', 'phone', 'description', 'is_active']
 
 class ContentForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

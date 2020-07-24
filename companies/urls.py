@@ -4,7 +4,7 @@ from .models import Company
 
 from .views import companies, CompanyDetail, CompanyCreate, CompanyUpdate #, CompaniesList
 from .views import ContentDetail, ContentCreate, ContentUpdate
-from .views import stafflist, StaffListCreate, StaffListUpdate, staffs #, StaffListDetail
+from .views import stafflist, StaffListCreate, StaffListUpdate, staffs, summaries, summary_detail, summary_delete #, summary_update,  #, StaffListDetail
 #from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
 
@@ -26,6 +26,10 @@ urlpatterns = [
     path('staff_page/<int:stafflistid>/<int:pk>', views.staffs, name = 'staffs'),
     path('staff_list/staff_create/<int:stafflistid>', views.StaffCreate.as_view(), name = 'staff_create'),
     path('staff_list/staff_update/<int:pk>', views.StaffUpdate.as_view(), name = 'staff_update'),
+
+    path('stafflist_detail/summaries_page/<int:pk>', summaries, name = 'summaries'),
+    path('stafflist_detail/summaries_list/summary_detail/<int:pk>', summary_detail, name = 'summary_detail'),
+    path('stafflist_detail/summaries_list/summary_delete/<int:pk>', summary_delete, name = 'summary_delete'),             
 
     #path('content_page/<int:pk>', views.ContentList.as_view(), name = 'contents'),  
     path('content_list/content_detail/<int:pk>', views.ContentDetail.as_view(), name = 'content_detail'),               

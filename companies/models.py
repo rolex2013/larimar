@@ -157,20 +157,21 @@ class Summary(models.Model):
     stafflist = models.ForeignKey('StaffList', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='summary_stafflist', verbose_name="Должность")
     theme = models.CharField("Тема", max_length=1024)
     candidatefirstname = models.CharField("Имя", max_length=64)
-    candidatemiddlename = models.CharField("Отчество", max_length=64)     
+    candidatemiddlename = models.CharField("Отчество", max_length=64, blank=True, null=True)     
     candidatelastname = models.CharField("Фамилия", max_length=64)         
-    email = models.CharField("E-mail", max_length=64, blank=True, null=True)
-    phone = models.CharField("Телефон", max_length=16, blank=True, null=True)
+    email = models.CharField("E-mail", max_length=64)
+    phone = models.CharField("Телефон", max_length=16)
     description = RichTextUploadingField("Описание", blank=True, null=True)
     datecreate = models.DateTimeField("Создано", auto_now_add=True)        
     #document = models.FileField(upload_to='documents/summary/')     
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
-        return reverse('my_company:staffs', kwargs={'stafflistid': self.stafflist.id, 'pk': '0'})  
+        #return reverse('my_main:vacancy_detail', kwargs={'stafflistid': self.stafflist.id}) 
+        return reverse('my_main:vacancies') 
 
-    def __str__(self):
-        return (self.stafflist.company.name + ' - ' + self.stafflist.name + ' - ' + self.candidatename + ' ' + self.candidatemiddlename + ' ' + self.candidatelastname)
+    #def __str__(self):
+    #    return (self.stafflist.company.name + ' - ' + self.stafflist.name + ' - ' + self.candidatefirstname + ' ' + self.candidatemiddlename + ' ' + self.candidatelastname)
 
     class Meta:
         #unique_together = ('stafflist','user')
