@@ -2,6 +2,7 @@ from django.db import models
 
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+#import datetime
 
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -170,8 +171,11 @@ class Summary(models.Model):
         #return reverse('my_main:vacancy_detail', kwargs={'stafflistid': self.stafflist.id}) 
         return reverse('my_main:vacancies') 
 
-    #def __str__(self):
-    #    return (self.stafflist.company.name + ' - ' + self.stafflist.name + ' - ' + self.candidatefirstname + ' ' + self.candidatemiddlename + ' ' + self.candidatelastname)
+    def __str__(self):
+        middlename = self.candidatemiddlename
+        if self.candidatemiddlename is None:
+           middlename = ''
+        return (self.stafflist.company.name + ' --- ' + self.stafflist.name + ' - ' + self.candidatefirstname + ' ' + middlename + ' ' + self.candidatelastname)
 
     class Meta:
         #unique_together = ('stafflist','user')

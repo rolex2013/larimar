@@ -11,7 +11,7 @@ from companies.models import Dict_CompanyStructureType
 from companies.models import Dict_CompanyType
 from companies.models import UserCompanyComponentGroup
 from companies.models import Dict_ContentType, Dict_ContentPlace, Content
-from companies.models import Dict_PositionType, StaffList, Staff
+from companies.models import Dict_PositionType, StaffList, Staff, Summary
 
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
@@ -78,6 +78,9 @@ admin.site.register(Dict_PositionType)
 admin.site.register(StaffList, StaffListAdmin)
 
 admin.site.register(Staff)
+
+admin.site.register(Summary)
+
 
 admin.site.register(Dict_ContentType)
 
