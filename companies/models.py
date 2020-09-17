@@ -175,7 +175,7 @@ class Summary(models.Model):
         middlename = self.candidatemiddlename
         if self.candidatemiddlename is None:
            middlename = ''
-        return (self.stafflist.company.name + ' --- ' + self.stafflist.name + ' - ' + self.candidatefirstname + ' ' + middlename + ' ' + self.candidatelastname)
+        return (self.stafflist.company.name + ' - ' + self.stafflist.name + ' - ' + self.candidatefirstname + ' ' + middlename + ' ' + self.candidatelastname)
 
     class Meta:
         #unique_together = ('stafflist','user')
