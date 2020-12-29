@@ -7,14 +7,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         {% load static %}
-        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <!--link rel="stylesheet" href="{ static 'css/three.css' %}"-->
+        <link rel="stylesheet" href="{% static 'css/three.css' %}">
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/hint.css' %}">
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        
-        <title>{% block title %}Управление проектами и задачами{% endblock %}</title>
-        
+
+        <title>{% block title %}1Yes! Корпоративная система управление проектами и задачами{% endblock %}</title>
+
+        <div id="header"> 
+           <strong>1Yes! Корпоративная система управление проектами и задачами</strong>
+        </div>
 
         {% block head %}
 
@@ -26,11 +30,13 @@
                <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{ url 'my_account:userprofile_detail' user.pk %}">{{ user.username }}</a></span>&nbsp;/&nbsp;
                <span class="hint hint--bottom hint--info" data-hint="Завершить сеанс"><a href="{ url 'my_account:logout' %}">Выход</a></span>
                -->
+               <div id="menu">
                <ul>{% load menubuilder %}{% menu main_menu %}
                       <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
                       {% for item in menuitems %}<a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a> | 
                       {% endfor %}<span align="right"><b><i>{{ user.username }}</i></b></span>
                </ul>
+               </div>
             {% else %}
                <!--<a href="{ url 'my_account:login' %}">Вход</a> | <a href="{ url 'my_account:register' %}">Регистрация</a>-->
                <ul>{% load menubuilder %}{% menu logout_menu %}
@@ -76,7 +82,7 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
         <br />
-
+<div id="content">
         <section id=content>  
 
             {% block public_content %}
@@ -119,6 +125,8 @@
             {% endblock %}
 
         </section>
+</div>
+
     </body>
 
 </html>
