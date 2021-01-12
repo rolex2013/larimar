@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'companies',
     'finance', 
     'projects',
+    'crm',
 ]
 
 BOOTSTRAP4 = {

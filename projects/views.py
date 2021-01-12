@@ -73,12 +73,12 @@ def projects(request, companyid=0, pk=0):
        current_project = 0
        tree_project_id = 0
        root_project_id = 0
-       tree_project_id = 0
+       #tree_project_id = 0
     else:
        current_project = Project.objects.get(id=pk)
        tree_project_id = current_project.tree_id  
        root_project_id = current_project.get_root().id
-       tree_project_id = current_project.tree_id
+       #tree_project_id = current_project.tree_id
 
     button_company_select = ''
     button_company_create = ''

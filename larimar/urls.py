@@ -30,6 +30,7 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('accounts.urls')),
     path('finance/', include('finance.urls')),
+    path('crm/', include('crm.urls')),    
 ]
 
 if settings.DEBUG:

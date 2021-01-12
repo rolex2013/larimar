@@ -18,6 +18,9 @@ from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType,
 from projects.models import Project, Task, TaskComment
 from projects.models import ProjectStatusLog, TaskStatusLog
 
+from crm.models import Dict_ClientType, Dict_ClientStatus
+from crm.models import Client
+
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 
@@ -108,4 +111,12 @@ admin.site.register(TaskComment)
 admin.site.register(ProjectStatusLog)
 
 admin.site.register(TaskStatusLog)
+
+# crm
+
+admin.site.register(Dict_ClientType)
+
+admin.site.register(Dict_ClientStatus)
+
+admin.site.register(Client)
 

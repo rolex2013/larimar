@@ -35,7 +35,8 @@
                  <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>
                  <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
                  <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a></div>                 
-              <!--{% elif component_name == 'projects' %}       -->
+              {% elif component_name == 'crm' %}
+                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'crm' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a></div> 
               {% else %}
                  <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'projects' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a></div> 
               {% endif %}
@@ -67,12 +68,64 @@
 
          {% if component_name == 'companies' %}
 
-         <h3>Штатное расписание</h3>  
+            <h3>Штатное расписание</h3>  
 
-         <!--{ elif component_name == 'projects' %}-->
+            <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
+            <div id="ajax_listerrors"></div>            
+
+         {% elif component_name == 'crm' %}
+
+            <h3>Список Клиентов</h3> 
+
+            <!--<form action="{% url 'my_crm:clients' current_company.pk 0 %}" method="post">-->
+            <form method="GET">
+               {% csrf_token %}
+               <label>По статусу: </label>
+               <select name="select-clientstatus" id="selectid"  class="select-client-status">
+                  <option value="-1" {% ifequal "-1" clntstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                  <!--<option value="0" { ifequal 0 clntstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
+                  <option value="-2" { ifequal "-2" clntstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                  {% for clntstatus in clientstatus %}
+                     <option value="{{clntstatus.id}}" {% ifequal clntstatus.id clntstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                        {{clntstatus.name}}
+                     </option>   
+                  {% endfor %}
+               </select>
+               <label>По типу: </label>
+               <select name="select-clienttype" id="selectid"  class="select-client-type">
+                  <option value="-1" {% ifequal "-1" clnttype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                  <!--<option value="0" { ifequal 0 clnttype_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
+                  <option value="-2" { ifequal "-2" clnttype_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->   
+                  {% for clnttype in clienttype %}
+                     <option value="{{clnttype.id}}" {% ifequal clnttype.id clnttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                        {{clnttype.name}}
+                     </option>   
+                  {% endfor %}
+               </select>               
+               <label>Мои клиенты: </label>
+               <select name="select-myclient" id="myselectid"  class="select-my-client">
+                  <option value="-1" {% ifequal "-1" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                  <option value="0" {% ifequal "0" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
+                  <option value="1" {% ifequal "1" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                  <option value="2" {% ifequal "2" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>
+               </select>            
+               <button id="selection-button" type="submit" method="GET">Применить</button>
+            </form>
+
+            <div id="ajax_listresult">
+               {% for node in nodes %}
+                  <div class="d-tr">
+                     <div class="d-td-text">
+                        <p>{{ node.firstname }} {{ node.middlename }} {{ node.lastname }}  {{ node.status }}</p>
+                     </div>
+                  </div>
+               {% endfor %}
+            </div>
+            <div id="ajax_listerrors"></div>
+
          {% else %}
 
-         <h3>Список Проектов</h3>  
+            <h3>Список Проектов</h3>  
 
          <!--<form action="{% url 'my_project:projects' current_company.pk 0 %}" method="post">-->
          <form method="GET">
@@ -98,15 +151,18 @@
             <button id="selection-button" type="submit" method="GET">Применить</button>
          </form>
 
-         {% endif %}
-
          <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
          <div id="ajax_listerrors"></div>
+
+         {% endif %}
+
+
 
       <!--{ endif %}-->
          <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
          <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
          <div class="project-entry"><a href="{% url 'my_company:stafflist_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_create }}</span></a></div>
+         <div class="project-entry"><a href="{% url 'my_crm:client_create' companyid %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_create }}</span></a></div>
       </div>
 
       <br /><br />
