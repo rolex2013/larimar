@@ -10,9 +10,10 @@ body {
 #menu {
     width: 15%; /* ширина меню */
     height: 300px; /* высота */
-    background: #0fc; /* фон */
+    background: rgb(79, 103, 109); /* фон */
     float: left; /* всплытие влево */
     /*margin: 0 5% 0 5%; /* боковые поля */
+    margin: 1% 1% 1% 1%;
    }
 #sidebar {
     width: 15%; /* ширина сайдбара */
@@ -23,11 +24,12 @@ body {
 #content {
     /*height: 300px; /* высота контента */
     background: #eee; /* фон */
-    margin: 0 15% 0 15%; /* боковые поля */
+    margin: 0 17% 0 17%; /* боковые поля */
    }
 #footer {
     height: 50px; /* высота футера */
     color: #fff; /* цвет текста */
     background: #000; /* фон */
     clear: both; /* прерывание обтекания */
+    margin: 1% 1% 1% 1%;
    }

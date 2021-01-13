@@ -1,0 +1,14 @@
+- model: crm.Dict_ClientTaskStructureType
+  pk: 1
+  fields:
+    name: Основная задача
+    sort: 5
+    neme_lang: Main Task
+    is_active: 1
+- model: crm.Dict_ClientTaskStructureType
+  pk: 2
+  fields:
+    name: Подзадача
+    sort: 10
+    neme_lang: SubTask
+    is_active: 1

@@ -18,8 +18,10 @@ from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType,
 from projects.models import Project, Task, TaskComment
 from projects.models import ProjectStatusLog, TaskStatusLog
 
-from crm.models import Dict_ClientType, Dict_ClientStatus
-from crm.models import Client
+from crm.models import Dict_ClientTaskStructureType
+from crm.models import Dict_ClientType, Dict_ClientStatus, Dict_ClientTaskType, Dict_ClientTaskStatus
+from crm.models import Client, ClientTask, ClientTaskComment
+from crm.models import ClientStatusLog, ClientTaskStatusLog
 
 from django_mptt_admin.admin import DjangoMpttAdmin
 
@@ -40,6 +42,9 @@ class ComponentAdmin(DjangoMpttAdmin):
     pass
 
 class StaffListAdmin(DjangoMpttAdmin):
+    pass
+
+class ClientTaskAdmin(DjangoMpttAdmin):
     pass
 
 
@@ -69,6 +74,8 @@ admin.site.register(Project, ProjectAdmin)
 
 admin.site.register(Task, TaskAdmin)
 
+admin.site.register(ClientTask, ClientTaskAdmin)
+
 #admin.site.register(TaskComment, TaskCommentAdmin)
 
 
@@ -91,6 +98,7 @@ admin.site.register(Dict_ContentPlace)
 
 admin.site.register(Content)
 
+# projects
 
 admin.site.register(Dict_ProjectStructureType)
 
@@ -120,3 +128,14 @@ admin.site.register(Dict_ClientStatus)
 
 admin.site.register(Client)
 
+admin.site.register(Dict_ClientTaskStructureType)
+
+admin.site.register(Dict_ClientTaskType)
+
+admin.site.register(Dict_ClientTaskStatus)
+
+admin.site.register(ClientTaskComment)
+
+admin.site.register(ClientStatusLog)
+
+admin.site.register(ClientTaskStatusLog)
