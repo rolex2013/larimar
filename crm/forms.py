@@ -21,6 +21,8 @@ class ClientForm(forms.ModelForm):
     #datebegin = forms.DateField(widget=AdminDateWidget())
     #datebegin = forms.DateField(widget=AdminSplitDateTime())
 
+    # хотелось бы, если выбран юзер, заполнять данные этой формы (ФИО, email, phone) из его Профиля
+
     disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
@@ -38,6 +40,7 @@ class ClientForm(forms.ModelForm):
                     # если Клиент закрывается Менеджером, то уведомление отсылается Автору
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
                     #self.cleaned_data['percentage'] = 100  
+                    #self.cleaned_data['phone'] = '+7(999)999-9998'
                     ##user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)    
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='clnt').id                                       
@@ -94,7 +97,7 @@ class ClientForm(forms.ModelForm):
 
     class Meta:
         model = Client
-        fields = ['firstname', 'middlename', 'lastname', 'description', 'phone', 'email', 'members', 'manager', 'type', 'status', 'dateclose', 'is_active', 'id', 'author']
+        fields = ['user', 'firstname', 'middlename', 'lastname', 'description', 'phone', 'email', 'members', 'manager', 'type', 'status', 'dateclose', 'is_notify', 'protocoltype', 'is_active', 'id', 'author']
         #widgets = {
         #    'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
         #    'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat

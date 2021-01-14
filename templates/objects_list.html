@@ -10,8 +10,8 @@
               {% if object_list == 'company_list' %}
                  {% if component_name == 'projects' %}                    
                     <span class="hint hint--bottom hint--info" data-hint="Проекты, Задачи"><b><a href="{% url 'my_project:projects' node.pk 0 %}">{{ node.name }}</b></span><br />
-                 {% elif component_name == 'crm' %}                    
-                     <span class="hint hint--bottom hint--info" data-hint="CRM"><b><a href="{% url 'my_crm:clients' node.pk 0 %}">{{ node.name }}</b></span><br />
+                 <!--{ elif component_name == 'crm' %}                    
+                     <span class="hint hint--bottom hint--info" data-hint="CRM"><b><a href="{ url 'my_crm:clients' node.pk 0 %}">{{ node.name }}</b></span><br />-->
                  {% elif component_name == 'companies' %}
                     <span class="hint hint--bottom hint--info" data-hint="Штатное расписание"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{{ node.parent.name }}--></b></span><br />
                  {% endif %}                    

@@ -20,7 +20,7 @@ from crm.models import Client, Dict_ClientStatus, Dict_ClientType
 #from .forms import ProjectStatusLog, TaskStatusLog
 from .forms import ClientForm #, ClientTaskForm, ClientTaskCommentForm
 
-#from .tables import ProjectStatusLogTable, TaskStatusLogTable
+from .tables import ClientTable, ClientStatusLogTable, ClientTaskStatusLogTable
 from django_tables2 import RequestConfig
 
 from django.contrib.auth.decorators import login_required
@@ -56,7 +56,7 @@ def clients(request, companyid=0, pk=0):
              # если в выпадающем списке выбрано "Просроченные"
              client_list = Client.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.now())                         
           else:             
-             client_list = Client.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
+             client_list = Client.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=clntstatus) #, dateclose__isnull=True)
        clntstatus_selectid = clntstatus
     #clntstatus_myselectid = myclntstatus
     # *******************************
@@ -95,8 +95,11 @@ def clients(request, companyid=0, pk=0):
        button_client_create = 'Добавить'        
     if current_company in comps:
        button_client_create = 'Добавить'
+    nodes = client_list.distinct().order_by()
+    #table = ClientTable(nodes, c1_name='Клиент')
+    #table = ClientTable(nodes)
     return render(request, "company_detail.html", {
-                              'nodes': client_list.distinct().order_by(),
+                              'nodes': nodes,
                               'current_client': current_client,
                               'current_company': current_company,
                               'companyid': companyid,
@@ -113,6 +116,7 @@ def clients(request, companyid=0, pk=0):
                               'object_list': 'client_list',
                               #'select_clientstatus': select_clientstatus,
                               'component_name': 'crm',
+                              #'table': table,
                                                 })  
 
 class ClientCreate(CreateView):    
@@ -130,7 +134,7 @@ class ClientCreate(CreateView):
 
     def get_context_data(self, **kwargs):
        context = super(ClientCreate, self).get_context_data(**kwargs)
-       context['header'] = 'Новый Проект'
+       context['header'] = 'Новый Клиент'
        return context
 
     def get_form_kwargs(self):

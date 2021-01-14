@@ -10,6 +10,7 @@ body {
 #menu {
     width: 15%; /* ширина меню */
     height: 300px; /* высота */
+    color: rgb(223, 201, 4);
     background: rgb(79, 103, 109); /* фон */
     float: left; /* всплытие влево */
     /*margin: 0 5% 0 5%; /* боковые поля */
