@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-<!--{ load render_table from django_tables2 %}-->
-
 <!--{ load bootstrap4 %}-->
 
 {% block company %}
@@ -66,14 +64,13 @@
    <!-- Защита от прямого доступа к проектам компании -->
    {% if current_company.id in user_companies %}
 
-      <div class="project-list">
+      <div class="object-list">
 
          {% if component_name == 'companies' %}
 
             <h3>Штатное расписание</h3>  
 
-            <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
-            <div id="ajax_listerrors"></div>            
+            <div id="ajax_listresult">{% include 'objects_list.html' %}</div>        
 
          {% elif component_name == 'crm' %}
 
@@ -114,19 +111,7 @@
                <button id="selection-button" type="submit" method="GET">Применить</button>
             </form>
 
-            <br />
-            <div id="ajax_listresult">
-               {% for node in nodes %}
-                  <div class="d-tr">
-                     <div class="d-td-text">
-                        <span class="hint hint--bottom hint--info" data-hint="{{ node.description }}"><b><a href="{% url 'my_crm:clients' node.pk 0 %}">{{ node.lastname }} {{ node.firstname }} {{ node.middlename }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.type }} | {{ node.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.manager.pk ' ' %}">{{ node.manager }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span></b>
-                     </div>
-                  </div>
-               {% endfor %}
-            </div>
-            <br />
-
-            <!--{ render_table table %}   -->
+            <div id="ajax_clientlistresult">{% include 'clients_list.html' %}</div>
 
          {% else %}
 
@@ -154,7 +139,7 @@
                   <option value="2" {% ifequal "2" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
                </select>            
                <button id="selection-button" type="submit" method="GET">Применить</button>
-            </form>
+            </form>    
 
             <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
 

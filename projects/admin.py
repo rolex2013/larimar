@@ -78,6 +78,7 @@ admin.site.register(ClientTask, ClientTaskAdmin)
 
 #admin.site.register(TaskComment, TaskCommentAdmin)
 
+# company
 
 admin.site.register(Dict_CompanyStructureType)
 
@@ -90,7 +91,6 @@ admin.site.register(StaffList, StaffListAdmin)
 admin.site.register(Staff)
 
 admin.site.register(Summary)
-
 
 admin.site.register(Dict_ContentType)
 
@@ -114,7 +114,6 @@ admin.site.register(Dict_TaskType)
 admin.site.register(Dict_TaskStatus)
 
 admin.site.register(TaskComment)
-
 
 admin.site.register(ProjectStatusLog)
 

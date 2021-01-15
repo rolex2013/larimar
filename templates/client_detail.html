@@ -1,48 +1,46 @@
 {% extends 'base.html' %}
 
-{% block project %}
+{% block client %}
    <!-- Защита от прямого доступа к проекту -->
-   {% if current_project.company.id in user_companies %}
+   {% if current_client.company.id in user_companies %}
 
-     <div class="project-entry">
-       <p><h2>{{ current_project.name }}
-       {% if not current_project.is_active %}
-          (Проект перемещён в архив)
+     <div class="client-entry">
+       <p><h2>{{ current_client.lastname }} {{ current_client.firstname }} {{ current_client.middlename }}
+       {% if not current_client.is_active %}
+          (Клиент перемещён в архив)
        {% endif %}
        </h2></p>
-       <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
-       <i><p>Организация: <a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></p></i>
-       {% if current_project.parent %}
-          <p>Уровень выше: <a href="{% url 'my_project:tasks' current_project.parent.pk 0 %}">{{ current_project.parent.name }}</a></p>
+       <p>{% autoescape off %}{{ current_client.description }}{% endautoescape %}</p>
+       <i><p>Организация: <a href="{% url 'my_crm:clients' current_client.company.pk 0 %}">{{ current_client.company }}</a></p></i>
+       {% if current_client.parent %}
+          <p>Уровень выше: <a href="{% url 'my_crm:clienttasks' current_client.parent.pk 0 %}">{{ current_client.parent.name }}</a></p>
        {% else %}
-          <!-- <p>: <a href="{ url 'my_project:projects' current_project.company.pk current_project.parent.pk %}">{{ current_project.parent.name }}</a></p>-->
+          <!-- <p>: <a href="{ url 'my_crm:clients' current_client.company.pk current_client.parent.pk %}">{{ current_client.parent.name }}</a></p>-->
        {% endif %}
-       <p>Бюджет: {{ current_project.cost }} {{ current_project.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
-       <p>Исполнитель: {{ current_project.assigner }}</p>     
-       <p>Начало: {{ current_project.datebegin }}</p>
-       <p>Окончание: {{ current_project.dateend }}</p>
-       <p>Тип в иерархии: {{ current_project.structure_type }}</p>
-       <p>Тип: {{ current_project.type }}</p>
-       <p>Статус: {{ current_project.status }}</p>
+       <p>Бюджет: {{ current_client.cost }} {{ current_client.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
+       <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_client.manager.pk ' ' %}">{{ current_client.manager }}</a></p>     
+       <!--<p>Создан: {{ current_client.datecreate }}</p>
+       <p>Закрыт: {{ current_client.dateclose }}</p>-->
+       <p>Тип: {{ current_client.type }}</p>
+       <p>Статус: {{ current_client.status }}</p>
        <p>Затраченное время, час.: {{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>       
-       <p>Выполнен на: {{ current_project.percentage }} %</p>
+       <p>Выполнен на: {{ current_client.percentage }} %</p>
        <p><i>Участники: 
-       {% for u in current_project.members.all %}
+       {% for u in current_client.members.all %}
           <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i></p>
-       <em>Автор: {{ current_project.author }}</em><br /> 
-       <!--<em>Участники: { current_project.members.name }}</em><br /> -->
-       <em>Дата: {{ current_project.datecreate }}</em>
+       <em>Автор: {{ current_client.author }}</em><br /> 
+       <!--<em>Участники: { current_client.members.name }}</em><br /> -->
+       <em>Дата: {{ current_client.datecreate }}</em>
        <p>&nbsp;</p>
-       <!--{ if user.is_authenticated and user.id == current_project.author_id  %}-->
+       <!--{ if user.is_authenticated and user.id == current_client.author_id  %}-->
          <div>
-           <div style="float: left;"><a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
+           <!--<div style="float: left;"><a href="{ url 'my_crm:client_create' current_client.company.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_create }}</span></a></div>-->
            <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-           <div style="float: left;"><a href="{% url 'my_project:project_update' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_update }}</span></a></div>
+           <div style="float: left;"><a href="{% url 'my_crm:client_update' current_client.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_update }}</span></a></div>
            <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-           <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-           <div style="float: left;"><a href="{% url 'my_project:project_history' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_history }}</span></a></div>
+           <!--<div style="float: left;"><a href="{ url 'my_crm:client_history' current_client.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_history }}</span></a></div>-->
          </div>
        <!--{ endif %}-->
      </div>
@@ -52,16 +50,17 @@
      <h4>Информация о проекте недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
   {% endif %}  
 
-{% endblock project %}
+{% endblock client %}
 
 {% block list %}
    <!-- Защита от прямого доступа к задачам проекта -->
-   {% if current_project.company.id in user_companies %}
+   {% if current_client.company.id in user_companies %}
 
       <div class="task-list">
+
         <h3>Список Задач</h3>
 
-         <!--<form action="{ url 'my_project:tasks' current_project.pk 0 %}" method="post">-->
+         <!--<form action="{ url 'my_crm:tasks' current_client.pk 0 %}" method="post">-->
          <form method="GET">           
             {% csrf_token %}
             <label>Фильтр по статусу: </label>
@@ -87,38 +86,12 @@
             <!--<button type="submit">Применить</button>-->
          </form>
 
-         <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
-         <div id="ajax_listerrors"></div>         
+         <div id="ajax_tasklistresult">{% include 'objects_list.html' %}</div>
+         <div id="ajax_tasklisterrors"></div>         
 
-<!--
-        { load mptt_tags %}
-    
-        <ul>
-          { recursetree nodes %}
-             <!-{ ifequal node.project_id projectid %}->
-                { if user.is_authenticated and node.is_active %}
-                   <li> 
-                     <b><a href="{ url 'my_project:task_detail' node.pk %}">
-                     <!- <a href="{ url 'my_project:tasks' current_project.id node.pk %}">->
-                     { node.name }}</a> : <span style="font-size: 70%; color: brown;">{ node.datebegin }} - { node.dateend }} | 
-                        { node.status.name }} | 
-                        <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{ node.author.username }}</i></a></span> | 
-                        { node.cost }}</span></b>
-                     { if not node.is_leaf_node %}
-                        <ul class="children">
-                           { children }}
-                        </ul>
-                     { endif %}
-                   </li>
-                { endif %}
-             <!-{ endifequal %}->
-          { endrecursetree %}
-        </ul>    
--->
-      </div>
-
-   <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-   <div class="task-entry"></div><a href="{% url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>
+      </div> 
+      
+      <div class="task-entry"><a href="{% url 'my_crm:clienttask_create' clientid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>
 
    <br /><br />
 
@@ -128,16 +101,16 @@
          var statusSelected = $(this).val(); 
          //console.log(statusSelected);            
          $.ajax({
-              url: "{% url 'my_project:task_filter' %}",
+              url: "{% url 'my_crm:clienttask_filter' %}",
               method: 'GET',
               data : {
-                      projectid: {{ current_project.id }},
+                      clientid: {{ current_client.id }},
                       taskstatus: statusSelected
                      },
               success: function(data) 
                      {
                       //console.log(data)
-                      $('#ajax_listresult').html(data);
+                      $('#ajax_tasklistresult').html(data);
                      },
               error: function(xhr, errmsg, err) 
                      {
@@ -153,20 +126,20 @@
             var mytaskSelected = $("#myselectid option:selected").val()
             $.ajax({
                type: 'GET',
-               url: "{% url 'my_project:task_filter' %}",
+               url: "{% url 'my_crm:clienttask_filter' %}",
                data: {
-                  projectid: {{ current_project.id }},                  
+                  clientid: {{ current_client.id }},                  
                   taskstatus: statusSelected,
                   mytaskuser: mytaskSelected
                },
                success: function(data){
-                  $('#ajax_listresult').html(data);                  
+                  $('#ajax_tasklistresult').html(data);                  
                   //alert(data);
                },
                error: function(xhr, errmsg, err){
                   console.log("error")
                   console.log(error_data)
-                  $('#ajax_listerrors').html('Нет данных!');
+                  $('#ajax_tasklisterrors').html('Нет данных!');
                }               
             });
          });

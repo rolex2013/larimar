@@ -4,7 +4,7 @@ body {
     margin: 0; /* обнуление полей */
    }
 #header {
-    height: 100px; /* высота шапки */
+    height: 50px; /* высота шапки */
     background: #fc0; /* фон */
    }
 #menu {
@@ -25,12 +25,13 @@ body {
 #content {
     /*height: 300px; /* высота контента */
     background: #eee; /* фон */
-    margin: 0 17% 0 17%; /* боковые поля */
+    margin: 1% 17% 1% 17%; /* боковые поля */
    }
 #footer {
     height: 50px; /* высота футера */
     color: #fff; /* цвет текста */
-    background: #000; /* фон */
-    clear: both; /* прерывание обтекания */
-    margin: 1% 1% 1% 1%;
+    /*background: rgb(0, 65, 0); /* фон */
+    background: rgb(82, 97, 90); /* фон */
+    /*clear: both; /* прерывание обтекания */
+    /*margin: 1% 1% 1% 1%;*/
    }

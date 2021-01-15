@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from ckeditor.widgets import CKEditorWidget
 from django import forms
-from .models import Company, Client #, ClientTask, ClientTaskComment
-#from .models import ClientStatusLog, ClientTaskStatusLog
+from .models import Company, Client, ClientTask, ClientTaskComment
+from .models import ClientStatusLog, ClientTaskStatusLog
 from .models import Dict_ClientStatus, Dict_ClientType #,Dict_ClientTaskStatus
 from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
@@ -32,7 +32,7 @@ class ClientForm(forms.ModelForm):
            if self.cleaned_data['status'].id != self.initial['status']:
               # если вызов пришёл из ClientUpdate и статус Клиента был изменён, то пишем лог изменения 
               dict_status = Dict_ClientStatus.objects.get(pk=self.cleaned_data['status'].id)
-              #ClientStatusLog.objects.create(project_id=self.initial['id'], 
+              #ClientStatusLog.objects.create(client_id=self.initial['id'], 
               #                                status_id=dict_status.id, 
               #                                author_id=self.user.id)
               if self.cleaned_data['status'].is_close: # == "Выполнен":
@@ -56,9 +56,9 @@ class ClientForm(forms.ModelForm):
                                                 author_id=self.user.id)
               else:
                  self.cleaned_data['dateclose'] = None
-           elif self.cleaned_data['assigner'].id != self.initial['assigner']:
-              user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
-              objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id
+           elif self.cleaned_data['manager'].id != self.initial['manager']:
+              user_profile = UserProfile.objects.get(user=self.cleaned_data['manager'].id, is_active=True)
+              objecttypeid = Meta_ObjectType.objects.get(shortname='clnt').id
               #send_mail('LarimarITGroup. Вы назначены менеджерои Клиента.', 'Уведомляем о назначении Вам Клиента!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           object_id=objecttypeid,  
@@ -97,8 +97,101 @@ class ClientForm(forms.ModelForm):
 
     class Meta:
         model = Client
-        fields = ['user', 'firstname', 'middlename', 'lastname', 'description', 'phone', 'email', 'members', 'manager', 'type', 'status', 'dateclose', 'is_notify', 'protocoltype', 'is_active', 'id', 'author']
+        fields = ['user', 'firstname', 'middlename', 'lastname', 'description', 'phone', 'email', 'members', 'manager', 'type', 'status', 'currency', 'cost', 'percentage', 'dateclose', 'is_notify', 'protocoltype', 'is_active', 'id', 'author']
         #widgets = {
         #    'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
         #    'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
         #}
+
+class ClientTaskForm(forms.ModelForm):
+
+    disabled_fields = ('dateclose', 'author',)
+
+    def clean(self):
+        if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
+           self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
+        # здесь надо поставить проверку на view.TaskUpdate
+        if self.action == 'update':
+           if self.cleaned_data['status'].id != self.initial['status']:
+              # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения 
+              dict_status = Dict_TaskStatus.objects.get(pk=self.cleaned_data['status'].id)
+              ClientTaskStatusLog.objects.create(task_id=self.initial['id'], 
+                                           status_id=dict_status.id, 
+                                           author_id=self.user.id)
+              if self.cleaned_data['status'].is_close:
+                 if self.user.id != self.initial['author']: 
+                    self.cleaned_data['dateclose'] = datetime.datetime.today()
+                    self.cleaned_data['percentage'] = 100              
+                    #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
+                    user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
+                    objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id                    
+                    #send_mail('LarimarITGroup. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
+                    Notification.objects.create(type=user_profile.protocoltype,
+                                                objecttype_id=objecttypeid,
+                                                objectid=self.initial['id'],
+                                                sendfrom=settings.EMAIL_HOST_USER,
+                                                theme='Ваша Задача закрыта.',
+                                                text='Уведомляем о закрытии Вашей Задачи!',
+                                                recipient_id=self.initial['author'],
+                                                sendto=user_profile.email,
+                                                author_id=self.user.id)              
+              else:
+                 self.cleaned_data['dateclose'] = None  
+           elif self.cleaned_data['assigner'].id != self.initial['assigner']:
+              user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
+              objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id
+              #send_mail('LarimarITGroup. Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
+              Notification.objects.create(type=user_profile.protocoltype,
+                                          objecttype_id=objecttypeid,      
+                                          objectid=self.initial['id'],        
+                                          sendfrom=settings.EMAIL_HOST_USER,
+                                          theme='Вы назначены исполнителем Задачи.',
+                                          text='Уведомляем о назначении Вам Задачи "'+self.cleaned_data['name']+'".',
+                                          recipient_id=self.cleaned_data['assigner'],                                                
+                                          sendto=user_profile.email,
+                                          author_id=self.user.id)                                                     
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
+        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
+        if self.action == 'create':
+           self.client = kwargs.pop('clientid') 
+           super(ClientTaskForm, self).__init__(*args, **kwargs)
+           clnt = Client.objects.get(id=self.client)
+           companyid = clnt.company_id
+        else:
+           super(ClientTaskForm, self).__init__(*args, **kwargs)
+           companyid = self.instance.client.company_id  
+           # Исполнитель не может менять Исполнителя
+           if self.user.id == self.initial['assigner']:
+              self.fields['assigner'].disabled = True                         
+
+        # в выпадающий список для выбора Исполнителя подбираем только тех юзеров, которые привязаны к этой организации (в админке) ...
+        uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
+        # ... и являются участниками этого Клиента
+        #usr = User.objects.filter(id__in=uc, is_active=True).filter(client_members__in=uc)
+        usr = User.objects.filter(id__in=uc, client_members__in=uc, is_active=True)
+        self.fields['assigner'].queryset = usr
+        self.fields['author'].initial = self.user.id        
+
+        for field in self.disabled_fields:
+            self.fields[field].disabled = True
+
+    class Meta:
+        model = ClientTask
+        fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'cost', 'percentage', 'dateclose', 'is_active', 'id', 'author']
+        widgets = {
+            'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
+            'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat
+        }        
+
+class ClientTaskCommentForm(forms.ModelForm):
+    class Meta:
+        model = ClientTaskComment
+        fields = ['name', 'description', 'time', 'cost']
+
+
+class FilterStatusForm(forms.ModelForm):                
+    class Meta:
+        model = Dict_ClientStatus
+        fields = ['name']        

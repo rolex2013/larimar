@@ -89,6 +89,9 @@ class Client(models.Model):
     phone = models.CharField("Телефон", max_length=16, blank=True, null=True)
     #description = models.TextField("Описание")    
     description = RichTextUploadingField("Описание", blank=True, null=True)
+    currency = models.ForeignKey('finance.Dict_Currency', on_delete=models.CASCADE, related_name='result_currency_client', verbose_name="Валюта")   
+    cost = models.DecimalField("Стоимость", max_digits=12, decimal_places=2, default=0)
+    percentage = models.DecimalField("Процент выполнения", max_digits=5, decimal_places=2, default=0)    
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='client_author', verbose_name="Автор")
@@ -127,8 +130,8 @@ class ClientTask(MPTTModel):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultclienttaskuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
-        return reverse('my_crm:taskcomments', kwargs={'taskid': self.pk})
-        #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
+        return reverse('my_crm:clienttaskcomments', kwargs={'taskid': self.pk})
+        #return reverse('my_crm:clienttaskcomments, kwargs={'taskid': self.pk})
     def __str__(self):
          return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     class MPTTMeta:
