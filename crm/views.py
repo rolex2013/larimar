@@ -239,7 +239,7 @@ def clienttasks(request, clientid=0, pk=0):
                               #'button_task_history': button_task_history,                              
                               'taskstatus': Dict_ClientTaskStatus.objects.filter(is_active=True),
                               'tskstatus_selectid': tskstatus_selectid,
-                              'object_list': 'task_list',
+                              'object_list': 'clienttask_list',
                               'taskcomment_costsum': taskcomment_costsum,
                               'taskcomment_timesum': taskcomment_timesum,  
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,                                   
@@ -317,4 +317,77 @@ def clienttaskfilter(request):
     object_message = ''
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'                  
-    return render(request, 'clients_list.html', {'nodes': nodes, 'object_list': 'task_list', 'object_message': object_message}) 
+    return render(request, 'clients_list.html', {'nodes': nodes, 'object_list': 'clienttask_list', 'object_message': object_message}) 
+
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clienttaskcomments(request, taskid):
+
+    currenttask = ClientTask.objects.get(id=taskid)
+    currentuser = request.user.id
+    
+    taskcomment_costsum = ClientTaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
+    taskcomment_timesum = ClientTaskComment.objects.filter(task=taskid).aggregate(Sum('time'))
+    try:
+       sec = taskcomment_timesum["time__sum"]*3600
+    except:
+       sec = 0
+    hours, sec = divmod(sec, 3600)
+    minutes, sec = divmod(sec, 60)
+    seconds = sec
+    taskcomment_list = ClientTaskComment.objects.filter(Q(author=request.user.id) | Q(task__client__members__in=[currentuser,]), is_active=True, task=taskid)
+
+    button_taskcomment_create = ''
+    #button_taskcomment_update = ''
+    button_task_create = ''
+    button_task_update = ''    
+    button_task_history = ''
+    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
+    if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id or is_member:
+       button_task_create = 'Добавить'
+       button_task_history = 'История' 
+       button_taskcomment_create = 'Добавить'             
+       if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
+          button_task_update = 'Изменить'
+     
+    return render(request, "task_detail.html", {
+                              'nodes': taskcomment_list.distinct().order_by(),
+                              #'current_taskcomment': currenttaskcomment,
+                              'clienttask': currenttask,
+                              'button_clienttask_create': button_task_create,
+                              'button_clienttask_update': button_task_update,
+                              'button_clienttask_history': button_task_history,
+                              'clienttaskcomment_costsum': taskcomment_costsum,
+                              'clienttaskcomment_timesum': taskcomment_timesum,  
+                              'hours': hours, 'minutes': minutes, 'seconds': seconds,                            
+                              'button_clienttaskcomment_create': button_taskcomment_create,
+                                                })      
+
+class ClientTaskCommentDetail(DetailView):
+    model = ClientTaskComment
+    template_name = 'taskcomment_detail.html'
+
+class ClientTaskCommentCreate(CreateView):    
+    model = ClientTaskComment
+    form_class = ClientTaskCommentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(ClientTaskCommentCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новый Комментарий'
+       return context
+
+    def form_valid(self, form):
+       form.instance.task_id = self.kwargs['taskid']
+       form.instance.author_id = self.request.user.id
+       return super(ClientTaskCommentCreate, self).form_valid(form)
+
+class TaskCommentUpdate(UpdateView):    
+    model = ClientTaskComment
+    form_class = ClientTaskCommentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(TaskCommentUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Комментарий'
+       return context

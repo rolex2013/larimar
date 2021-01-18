@@ -156,6 +156,8 @@ class TaskForm(forms.ModelForm):
            super(TaskForm, self).__init__(*args, **kwargs)
            prj = Project.objects.get(id=self.project)
            companyid = prj.company_id
+           # выцепляем id юзеров-участников Проекта
+           members_list = list(Project.objects.filter(id=self.project).values_list('members', flat=True))           
         else:
            super(TaskForm, self).__init__(*args, **kwargs)
            companyid = self.instance.project.company_id  
@@ -166,6 +168,8 @@ class TaskForm(forms.ModelForm):
         # в выпадающий список для выбора Исполнителя подбираем только тех юзеров, которые привязаны к этой организации (в админке)
         uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
         usr = User.objects.filter(id__in=uc, is_active=True)
+        # в выпадающий список для выбора Исполнителя Задачи подбираем только тех юзеров, которые являются участниками этого Проекта 
+        usr = User.objects.filter(id__in=members_list, is_active=True)          
         self.fields['assigner'].queryset = usr
         self.fields['author'].initial = self.user.id        
 

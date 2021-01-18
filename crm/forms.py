@@ -152,13 +152,18 @@ class ClientTaskForm(forms.ModelForm):
                                           author_id=self.user.id)                                                     
 
     def __init__(self, *args, **kwargs):
+
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
+
         if self.action == 'create':
            self.client = kwargs.pop('clientid') 
            super(ClientTaskForm, self).__init__(*args, **kwargs)
            clnt = Client.objects.get(id=self.client)
-           companyid = clnt.company_id
+           companyid = clnt.company_id           
+           # выцепляем id юзеров-участников Клиента
+           members_list = list(Client.objects.filter(id=self.client).values_list('members', flat=True))
+           #print(members_list)
         else:
            super(ClientTaskForm, self).__init__(*args, **kwargs)
            companyid = self.instance.client.company_id  
@@ -166,11 +171,9 @@ class ClientTaskForm(forms.ModelForm):
            if self.user.id == self.initial['assigner']:
               self.fields['assigner'].disabled = True                         
 
-        # в выпадающий список для выбора Исполнителя подбираем только тех юзеров, которые привязаны к этой организации (в админке) ...
-        uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
-        # ... и являются участниками этого Клиента
-        #usr = User.objects.filter(id__in=uc, is_active=True).filter(client_members__in=uc)
-        usr = User.objects.filter(id__in=uc, client_members__in=uc, is_active=True)
+        # в выпадающий список для выбора Исполнителя Задачи подбираем только тех юзеров, которые являются участниками этого Клиента 
+        usr = User.objects.filter(id__in=members_list, is_active=True)  
+        #print (usr)
         self.fields['assigner'].queryset = usr
         self.fields['author'].initial = self.user.id        
 

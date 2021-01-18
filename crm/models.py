@@ -100,7 +100,7 @@ class Client(models.Model):
 
     def get_absolute_url(self):
         #return reverse('my_crm:client_detail', kwargs={'userid': self.user.pk, 'param': ' '}) 
-        return reverse('my_crm:tasks', kwargs={'clientid': self.pk, 'pk': '0'}) 
+        return reverse('my_crm:clienttasks', kwargs={'clientid': self.pk, 'pk': '0'}) 
         #return reverse('my_crm:clients0')  
     def __str__(self):
         #return (self.user.username + ' - ' + self.company.name)

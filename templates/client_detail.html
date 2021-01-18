@@ -86,8 +86,8 @@
             <!--<button type="submit">Применить</button>-->
          </form>
 
-         <div id="ajax_tasklistresult">{% include 'objects_list.html' %}</div>
-         <div id="ajax_tasklisterrors"></div>         
+         <div id="ajax_clienttasklistresult">{% include 'objects_list.html' %}</div>
+         <div id="ajax_clienttasklisterrors"></div>         
 
       </div> 
       
@@ -110,7 +110,7 @@
               success: function(data) 
                      {
                       //console.log(data)
-                      $('#ajax_tasklistresult').html(data);
+                      $('#ajax_clienttasklistresult').html(data);
                      },
               error: function(xhr, errmsg, err) 
                      {
@@ -133,13 +133,13 @@
                   mytaskuser: mytaskSelected
                },
                success: function(data){
-                  $('#ajax_tasklistresult').html(data);                  
+                  $('#ajax_clienttasklistresult').html(data);                  
                   //alert(data);
                },
                error: function(xhr, errmsg, err){
                   console.log("error")
                   console.log(error_data)
-                  $('#ajax_tasklisterrors').html('Нет данных!');
+                  $('#ajax_clienttasklisterrors').html('Нет данных!');
                }               
             });
          });
