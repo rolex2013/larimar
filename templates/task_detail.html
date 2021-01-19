@@ -60,11 +60,12 @@
    <div class="comment-entry">
 
         <p>&nbsp;</p>
+        <p>&nbsp;</p>
         <h5>Комментарии</h5>
-
+        <br />
         <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-      <div class="comment-entry"></div><a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_taskcomment_create }}</span></a></div>
-
+       <div class="comment-entry"><a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_taskcomment_create }}</span></a></div>
+       <br />
         {% for taskcomment in nodes %}
            <div class="comment-entry">
             <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
@@ -74,6 +75,8 @@
             <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
            </div>           
         {% endfor %}
+
+        <p>&nbsp;</p>
 
    </div>
   

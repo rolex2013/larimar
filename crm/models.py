@@ -152,7 +152,7 @@ class ClientTaskComment(models.Model):
     is_active = models.BooleanField("Активность", default=True) 
 
     def get_absolute_url(self):
-        return reverse('my_crm:taskcomments', kwargs={'taskid': self.task_id})           
+        return reverse('my_crm:clienttaskcomments', kwargs={'taskid': self.task_id})           
 
     def __str__(self):
         return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')

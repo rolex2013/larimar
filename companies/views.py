@@ -165,7 +165,7 @@ def stafflist(request, companyid=0, pk=0):
     template_name = "company_detail.html"
 
     # здесь нужно условие для button_stafflist_create
-    button_stafflist_create = ''
+    #button_stafflist_create = ''
     button_stafflist_create = 'Добавить'
     #button_stafflist = "Штатное расписание"
 
@@ -179,7 +179,9 @@ def stafflist(request, companyid=0, pk=0):
 
     button_company_create = ''
     button_company_update = ''
-    button_stafflist_create = ''    
+    button_stafflist_create = ''  
+    #print(currentuser)  
+    #print(current_company.author_id)
     if currentuser == current_company.author_id:
        button_company_create = 'Добавить'
        button_company_update = 'Изменить'

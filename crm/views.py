@@ -336,7 +336,7 @@ def clienttaskcomments(request, taskid):
     minutes, sec = divmod(sec, 60)
     seconds = sec
     taskcomment_list = ClientTaskComment.objects.filter(Q(author=request.user.id) | Q(task__client__members__in=[currentuser,]), is_active=True, task=taskid)
-
+    #print(taskcomment_list)
     button_taskcomment_create = ''
     #button_taskcomment_update = ''
     button_task_create = ''
@@ -350,13 +350,14 @@ def clienttaskcomments(request, taskid):
        if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
           button_task_update = 'Изменить'
      
-    return render(request, "task_detail.html", {
+    return render(request, "clienttask_detail.html", {
                               'nodes': taskcomment_list.distinct().order_by(),
                               #'current_taskcomment': currenttaskcomment,
                               'clienttask': currenttask,
                               'button_clienttask_create': button_task_create,
                               'button_clienttask_update': button_task_update,
                               'button_clienttask_history': button_task_history,
+                              #'object_list': 'clienttask_list',
                               'clienttaskcomment_costsum': taskcomment_costsum,
                               'clienttaskcomment_timesum': taskcomment_timesum,  
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,                            
@@ -382,12 +383,12 @@ class ClientTaskCommentCreate(CreateView):
        form.instance.author_id = self.request.user.id
        return super(ClientTaskCommentCreate, self).form_valid(form)
 
-class TaskCommentUpdate(UpdateView):    
+class ClientTaskCommentUpdate(UpdateView):    
     model = ClientTaskComment
     form_class = ClientTaskCommentForm
     template_name = 'object_form.html'
 
     def get_context_data(self, **kwargs):
-       context = super(TaskCommentUpdate, self).get_context_data(**kwargs)
+       context = super(ClientTaskCommentUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Комментарий'
        return context

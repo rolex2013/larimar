@@ -19,6 +19,7 @@
          Это головная организация-->
       {% endif %}
 
+      <p></p>
       <i><p>Компания: <a href="{% url 'my_company:stafflist' current_stafflist.company.id 0 %}">{{ current_stafflist.company.name }}</a></p></i>
       <p>Оклад: {{ current_stafflist.salary }} {{ current_stafflist.currency.shortname }}</p>
       <p>Кол-во сотрудников: {{ current_stafflist.numberemployees }} чел.</p>      
@@ -48,48 +49,68 @@
 {% endblock staff %}  
 
 {% block list %}
+
    {% if current_stafflist.company.id in user_companies %}
+
       {% if current_stafflist.is_vacancy %}
+
          <div class="comment-entry">
-           <p>&nbsp;</p>
-           <h5>Список резюме</h5>  
+
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <h5>Список резюме</h5>
+            <br /> 
+
            {% for currsummary in summaries_list %}
                  <div class="d-tr">
                     <div class="d-td-text">
-                        <b><a href="{% url 'my_company:summary_detail' currsummary.pk %}">{{ currsummary.theme }}</a>: <span style="font-size: 70%; color: blue;"> {{ currsummary.datecreate }} | {{ currsummary.candidatefirstname }} 
+                        <b><a href="{% url 'my_company:summary_detail' currsummary.pk %}">{{ currsummary.theme }}</a>: <span style="font-size: 70%; color: blue;"> {{ currsummary.datecreate|date:"d.m.Y" }} | {{ currsummary.candidatefirstname }} 
                            {% if currsummary.candidatemiddlename %}
                               {{ currsummary.candidatemiddlename }}
                            {% endif %}
                            {{ currsummary.candidatelastname }}</span></b>                       
                     </div>
                  </div>
-           {% endfor %}          
-         </div>
-      {% else %}
-      <div class="comment-entry">
-         <p>&nbsp;</p>
-         <h5>Список Сотрудников</h5>  
+           {% endfor %}   
+           <p>&nbsp;</p>
+           <p>&nbsp;</p>
 
-         {% for currstaff in nodes %}
-               <div class="d-tr">
-                  <div class="d-td-text">
-                     {% if currstaff.dateend is Null %}
-                        <b><a href="{% url 'my_company:staff_update' currstaff.pk %}">{{ currstaff.user.username }}</a>: <span style="font-size: 70%; color: blue;"> Работает с {{ currstaff.datebegin }} | Ставка: {{ currstaff.rate }}</span></b>                       
-                     {% else %}
-                        <b><a href="{% url 'my_company:staff_update' currstaff.pk %}">{{ currstaff.user.username }}</a>: <span style="font-size: 70%; color: blue;">{{ currstaff.datebegin }} - {{ currstaff.dateend }} | Ставка: {{ currstaff.rate }}</span></b>
-                     {% endif %}
-                  </div>
+         </div>
+
+      {% else %}
+
+         <div class="comment-entry">
+
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <h5>Список Сотрудников</h5> 
+
+            <br />
+            <div class="comment-entry"><a href="{% url 'my_company:staff_create' current_stafflist.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_staff_create }}</span></a></div>
+            <br />
+
+            {% for currstaff in nodes %}
+               <div class="comment-entry">
+                  <b><a href="{% url 'my_company:staff_update' currstaff.pk %}">{{ currstaff.user.username }}</a>: <span style="font-size: 70%; color: blue;">
+                  {% if currstaff.dateend is Null %}
+                      Работает с {{ currstaff.datebegin|date:"d.m.Y" }}                       
+                  {% else %}
+                     {{ currstaff.datebegin|date:"d.m.Y" }} - {{ currstaff.dateend|date:"d.m.Y" }}
+                  {% endif %}
+                  | Ставка: {{ currstaff.rate }}</span></b>
                </div>
-         {% endfor %}   
-         <p>&nbsp;</p>
-         <div>
-            <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>              
-            <div style="float: left;"><a href="{% url 'my_company:staff_create' current_stafflist.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_staff_create }}</span></a></div>
-            <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>        
-         </div>           
-       </div>               
+            {% endfor %}   
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+     
+         </div>
+
       {% endif %}
+
    {% else %}
+
       <h4>Информация о сотрудниках недоступна!</h4>
+
    {% endif %}
+
 {% endblock list %}

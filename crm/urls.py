@@ -5,7 +5,7 @@ from companies.models import Company
 from crm.models import Client #, ClientTask, ClientTaskComment
 
 #from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
-from crm.views import clients, ClientCreate, ClientUpdate, clienttasks, clienttaskcomments, ClientTaskCreate, clienttaskfilter
+from crm.views import clients, ClientCreate, ClientUpdate, clienttasks, clienttaskcomments, ClientTaskCreate, ClientTaskUpdate, clienttaskfilter, ClientTaskCommentCreate, ClientTaskCommentUpdate
 
 from . import views
 
@@ -25,12 +25,12 @@ urlpatterns = [
     path('clienttasks_page/<int:clientid>/<int:pk>', views.clienttasks, name = 'clienttasks'),
     ##path('tasks_list/<int:pk>', views.TaskDetail.as_view(), name = 'task_detail'),
     path('clienttasks_list/clienttask_create/<int:clientid>/<int:parentid>', views.ClientTaskCreate.as_view(), name = 'clienttask_create'),
-    #path('tasks_list/task_update/<int:pk>', views.TaskUpdate.as_view(), name = 'task_update'),    
+    path('clienttasks_list/clienttask_update/<int:pk>', views.ClientTaskUpdate.as_view(), name = 'clienttask_update'),    
     ##path('projects_list/tasks_list/task_delete/<int:pk>', views.TaskDelete.as_view(), name='task_delete'),  
     path('clienttasks_list/clienttask_filter/', views.clienttaskfilter, name = 'clienttask_filter'),
     #path('tasks_list/task_history/<int:pk>', views.taskhistory, name = 'task_history'),
     path('clienttaskcomments_page/<int:taskid>', views.clienttaskcomments, name = 'clienttaskcomments'),          
     #path('taskcomments_list/<int:pk>', views.TaskCommentDetail.as_view(), name = 'taskcomment_detail'),
-    #path('taskcomments_list/taskcomment_create/<int:taskid>', views.TaskCommentCreate.as_view(), name = 'taskcomment_create'),
-    #path('taskcomments_list/taskcomment_update/<int:pk>', views.TaskCommentUpdate.as_view(), name = 'taskcomment_update'),
+    path('clienttaskcomments_list/clienttaskcomment_create/<int:taskid>', views.ClientTaskCommentCreate.as_view(), name = 'clienttaskcomment_create'),
+    path('clienttaskcomments_list/clienttaskcomment_update/<int:pk>', views.ClientTaskCommentUpdate.as_view(), name = 'clienttaskcomment_update'),
 ]
