@@ -9,7 +9,7 @@ body {
    }
 #menu {
     width: 15%; /* ширина меню */
-    height: 300px; /* высота */
+    /*height: 300px; /* высота */
     color: rgb(223, 201, 4);
     background: rgb(79, 103, 109); /* фон */
     float: left; /* всплытие влево */
@@ -18,7 +18,7 @@ body {
    }
 #sidebar {
     width: 15%; /* ширина сайдбара */
-    height: 300px; /* высота */
+    /*height: 300px; /* высота */
     background: #c0f; /* фон */
     float: right; /* всплытие вправо */
    }
@@ -33,5 +33,6 @@ body {
     /*background: rgb(0, 65, 0); /* фон */
     background: rgb(82, 97, 90); /* фон */
     /*clear: both; /* прерывание обтекания */
-    /*margin: 1% 1% 1% 1%;*/
+    /*margin: 10px 0% 0% 0%;*/
+    float: bottom;
    }

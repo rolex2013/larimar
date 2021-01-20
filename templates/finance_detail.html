@@ -13,12 +13,12 @@
       {% csrf_token %}
       <label>Фильтр по дате: </label>
 
-<div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-   {{ form.date }}
-   <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-     <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-   </div>
- </div>
+      <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+         {{ form.date }}
+         <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+         </div>
+      </div>
   
       <!--<select name="select_taskstatus" id="selectid" class="select-task-status">
          <option value="-1" { ifequal "-1" tskstatus_selectid %} selected="selected" { endifequal %}>- Все</option>

@@ -67,6 +67,8 @@ def projects(request, companyid=0, pk=0):
     # *******************************
     #project_list = project_list.order_by('dateclose')
 
+    len_list = len(project_list)
+
     current_company = Company.objects.get(id=companyid)
 
     if pk == 0:
@@ -120,6 +122,7 @@ def projects(request, companyid=0, pk=0):
                               #'prjstatus_myselectid': prjstatus_myselectid,                              
                               'object_list': 'project_list',
                               #'select_projectstatus': select_projectstatus,
+                              'len_list': len_list,
                                                 })       
 
 class ProjectDetail(DetailView):
@@ -179,6 +182,7 @@ def tasks(request, projectid=0, pk=0):
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     tskstatus_selectid = 0
+
     try:
        tskstatus = request.POST['select_taskstatus']
     except:
@@ -196,8 +200,12 @@ def tasks(request, projectid=0, pk=0):
              task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True, dateend__lt=datetime.now())                         
           else:             
              task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, status=tskstatus) #, dateclose__isnull=True)
+
        tskstatus_selectid = tskstatus
     # *******************************
+
+    len_list = len(task_list)
+    #print(len_list)    
 
     currentproject = Project.objects.get(id=projectid)
 
@@ -253,7 +261,8 @@ def tasks(request, projectid=0, pk=0):
                               'object_list': 'task_list',
                               'taskcomment_costsum': taskcomment_costsum,
                               'taskcomment_timesum': taskcomment_timesum,  
-                              'hours': hours, 'minutes': minutes, 'seconds': seconds,                                   
+                              'hours': hours, 'minutes': minutes, 'seconds': seconds,
+                              'len_list': len_list,                                   
                                                 })       
 
 class TaskDetail___(DetailView):

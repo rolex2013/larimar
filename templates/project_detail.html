@@ -61,6 +61,8 @@
       <div class="task-list">
         <h3>Список Задач</h3>
 
+        {% if len_list %}
+
          <!--<form action="{ url 'my_project:tasks' current_project.pk 0 %}" method="post">-->
          <form method="GET">           
             {% csrf_token %}
@@ -88,7 +90,13 @@
          </form>
 
          <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
-         <div id="ajax_listerrors"></div>         
+         <div id="ajax_listerrors"></div> 
+         
+         {% else %}
+
+            <p>Задач пока нет...</p>
+
+         {% endif %}         
 
 <!--
         { load mptt_tags %}

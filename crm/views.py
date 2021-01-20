@@ -62,6 +62,8 @@ def clients(request, companyid=0, pk=0):
     # *******************************
     #client_list = client_list.order_by('dateclose')
 
+    len_list = len(client_list)
+
     current_company = Company.objects.get(id=companyid)
 
     if pk == 0:
@@ -117,6 +119,7 @@ def clients(request, companyid=0, pk=0):
                               #'select_clientstatus': select_clientstatus,
                               'component_name': 'crm',
                               #'table': table,
+                              'len_list': len_list,
                                                 })  
 
 class ClientCreate(CreateView):    
@@ -188,6 +191,8 @@ def clienttasks(request, clientid=0, pk=0):
        tskstatus_selectid = tskstatus
     # *******************************
 
+    len_list = len(task_list)
+
     currentclient = Client.objects.get(id=clientid)
 
     taskcomment_costsum = ClientTaskComment.objects.filter(task__client_id=currentclient.id).aggregate(Sum('cost'))
@@ -242,7 +247,8 @@ def clienttasks(request, clientid=0, pk=0):
                               'object_list': 'clienttask_list',
                               'taskcomment_costsum': taskcomment_costsum,
                               'taskcomment_timesum': taskcomment_timesum,  
-                              'hours': hours, 'minutes': minutes, 'seconds': seconds,                                   
+                              'hours': hours, 'minutes': minutes, 'seconds': seconds,
+                              'len_list': len_list,
                                                 })
 
 class ClientTaskCreate(CreateView):    

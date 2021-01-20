@@ -76,6 +76,8 @@
 
             <h3>Список Клиентов</h3> 
 
+            {% if len_list %}
+
             <!--<form action="{% url 'my_crm:clients' current_company.pk 0 %}" method="post">-->
             <form method="GET">
                {% csrf_token %}
@@ -113,15 +115,23 @@
 
             <div id="ajax_clientlistresult">{% include 'clients_list.html' %}</div>
 
+            {% else %}
+
+               <p>Клиентов пока нет...</p>
+
+            {% endif %}
+
          {% else %}
 
             <h3>Список Проектов</h3>  
+            
+            {% if len_list %}
 
             <!--<form action="{% url 'my_project:projects' current_company.pk 0 %}" method="post">-->
             <form method="GET">
                {% csrf_token %}
                <label>Фильтр по статусу: </label>
-               <select name="select-projectstatus" id="selectid"  class="select-project-status">
+               <select name="select-projectstatus" id="selectid" class="select-project-status">
                   <option value="-1" {% ifequal "-1" prjstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
                   <option value="0" {% ifequal 0 prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
                   <option value="-2" {% ifequal "-2" prjstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>   
@@ -132,7 +142,7 @@
                   {% endfor %}
                </select>
                <label>Мои проекты: </label>
-               <select name="select-myproject" id="myselectid"  class="select-my-project">
+               <select name="select-myproject" id="myselectid" class="select-my-project">
                   <option value="-1" {% ifequal "-1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
                   <option value="0" {% ifequal "0" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
                   <option value="1" {% ifequal "1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
@@ -142,6 +152,12 @@
             </form>    
 
             <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
+
+            {% else %}
+
+               <p>Проектов пока нет...</p>
+
+            {% endif %}
 
          {% endif %}
 
