@@ -4,7 +4,8 @@
    <!-- Защита от прямого доступа к проекту -->
    {% if current_project.company.id in user_companies %}
 
-     <div class="project-entry">
+     <div class="object-detail">
+
        <p><h2>{{ current_project.name }}
        {% if not current_project.is_active %}
           (Проект перемещён в архив)
@@ -36,13 +37,11 @@
        <em>Дата: {{ current_project.datecreate }}</em>
        <p>&nbsp;</p>
        <!--{ if user.is_authenticated and user.id == current_project.author_id  %}-->
-         <div>
-           <div style="float: left;"><a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
-           <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-           <div style="float: left;"><a href="{% url 'my_project:project_update' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_update }}</span></a></div>
-           <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+        <div class="object-detail-buttons">
+           <a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a>
+           <a href="{% url 'my_project:project_update' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_update }}</span></a>
            <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-           <div style="float: left;"><a href="{% url 'my_project:project_history' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_history }}</span></a></div>
+           <a href="{% url 'my_project:project_history' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_history }}</span></a>
          </div>
        <!--{ endif %}-->
      </div>
@@ -58,7 +57,8 @@
    <!-- Защита от прямого доступа к задачам проекта -->
    {% if current_project.company.id in user_companies %}
 
-      <div class="task-list">
+      <div class="object-list">
+
         <h3>Список Задач</h3>
 
         {% if len_list %}
@@ -124,7 +124,9 @@
         </ul>    
 -->
         <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-        <div class="task-entry"></div><a href="{% url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>
+        <div class="object-list-buttons">
+           <a href="{% url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a>
+         </div>
         <br /><br />
         
       </div>

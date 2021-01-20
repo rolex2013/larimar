@@ -16,7 +16,9 @@
 {% endblock project %}
 
 {% block task %}
-   <div class="task-entry">
+
+   <div class="object-detail">
+
       <p><h4>Задача: {{ task.name }}
         {% if not task.is_active %}
            (Задача перемещена в архив)
@@ -41,16 +43,18 @@
       <em>Автор: {{ task.author }}</em><br />
       <em>Дата: {{ task.datecreate }}</em>              
       <p>&nbsp;</p>
-        <div>
-          <div style="float: left;"><a href="{% url 'my_project:task_create' task.project.id task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>
-          <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-          <div style="float: left;"><a href="{% url 'my_project:task_update' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_update }}</span></a></div>
+      <div class="object-detail-buttons">
+          <a href="{% url 'my_project:task_create' task.project.id task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a>
+
+          <a href="{% url 'my_project:task_update' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_update }}</span></a>
           <!-- <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-          <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+
           <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-          <div style="float: left;"><a href="{% url 'my_project:task_history' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_history }}</span></a></div>          
-        </div>
+          <a href="{% url 'my_project:task_history' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_history }}</span></a>
+      </div>
+
    </div>
+
 {% endblock task %}
 
 <!--<hr>-->
@@ -64,7 +68,9 @@
         <h5>Комментарии</h5>
         <br />
         <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-       <div class="comment-entry"><a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_taskcomment_create }}</span></a></div>
+       <div class="object-list-buttons">
+          <a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_taskcomment_create }}</span></a>
+       </div>
        <br />
         {% for taskcomment in nodes %}
            <div class="comment-entry">

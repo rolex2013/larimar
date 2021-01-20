@@ -7,7 +7,8 @@
    <!-- Защита от прямого доступа к компании -->
    {% if current_company.id in user_companies %}
 
-     <div class="company-entry">
+   <div class="object-detail">
+
         <h2>{{ current_company.name }}
         {% if not current_company.is_active %}(Организация перемещена в архив){% endif %}
         </h2>
@@ -28,19 +29,19 @@
         <em>Дата: {{ current_company.datecreate }}</em>
         <br /><br />
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
-           <div>
+          <div class="object-detail-buttons">
               {% if component_name == 'companies' %}
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'companies' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a></div>
-                 <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a></div>
-                 <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a></div>                 
+                 <a href="{% url 'my_company:companies' 0 'companies' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>
+                 
+                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a>
+                 
+                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a>
               {% elif component_name == 'crm' %}
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'crm' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a></div> 
+                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'crm' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>
               {% else %}
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'projects' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a></div> 
+                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'projects' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>
               {% endif %}
-              <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+              
            </div>
            <br />
            <!--<div>
@@ -48,8 +49,8 @@
               <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
            </div>-->
         <!--{ endif %}-->
-     </div>
-     <br /><br />
+
+   </div> 
 
    {% else %}
 
@@ -164,10 +165,12 @@
          <div id="ajax_listerrors"></div>
 
       <!--{ endif %}-->
-         <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
-         <div class="project-entry"><a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a></div>
-         <div class="project-entry"><a href="{% url 'my_company:stafflist_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_create }}</span></a></div>
-         <div class="project-entry"><a href="{% url 'my_crm:client_create' companyid %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_create }}</span></a></div>
+         <div class="object-list-buttons">
+            <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
+            <a href="{% url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a>
+            <a href="{% url 'my_company:stafflist_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_create }}</span></a>
+            <a href="{% url 'my_crm:client_create' companyid %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_create }}</span></a>
+         </div>
       </div>
 
       <br /><br />

@@ -1,32 +1,102 @@
 body {
     color: #000; /* цвет текста на странице */
-    background: #fff; /* фон */
+    background: rgb(206, 206, 206); /* фон */
     margin: 0; /* обнуление полей */
    }
 #header {
     height: 50px; /* высота шапки */
     background: #fc0; /* фон */
+    border-radius: 10px;
    }
 #menu {
     width: 15%; /* ширина меню */
     /*height: 300px; /* высота */
-    color: rgb(223, 201, 4);
+    /*height: 100%;*/
+    color: #fff;
     background: rgb(79, 103, 109); /* фон */
     float: left; /* всплытие влево */
     /*margin: 0 5% 0 5%; /* боковые поля */
+    padding: 15px 0px 15px 0px;
     margin: 1% 1% 1% 1%;
+    border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 2px rgb(78, 78, 78);
    }
+#menu a {
+    color: #fff;
+   }  
+#menu a:hover {
+    background-color: rgb(79, 103, 109);
+    border-left: 5px solid #fc0;
+    border-bottom: 5px solid #fc0;
+    text-decoration: none;
+    /*border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 2px rgb(78, 78, 78);*/
+  }    
 #sidebar {
     width: 15%; /* ширина сайдбара */
     /*height: 300px; /* высота */
     background: #c0f; /* фон */
     float: right; /* всплытие вправо */
+    border-radius: 10px;
    }
 #content {
     /*height: 300px; /* высота контента */
     background: #eee; /* фон */
     margin: 1% 17% 1% 17%; /* боковые поля */
+    padding: 10px 15px 10px 15px;
+    border: 1px solid;
+    border-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 2px rgb(78, 78, 78);
    }
+ .object-detail {
+    /*height: 300px; /* высота контента */
+    background: #eee; /* фон */
+    background: linear-gradient(to left, #eee, #8e968e);
+    /*margin: 2% 1% 2% 1%; /* боковые поля */
+    padding: 10px 15px 10px 15px;
+    border: 1px solid;
+    border-radius: 10px; 
+    /*float: left;    */
+   }
+.object-detail-buttons {
+    /*height: 300px; /* высота контента */
+    background: #eee; /* фон */
+    background: linear-gradient(to left, #8e968e, #eee);
+    /*margin: 2% 1% 2% 1%; /* боковые поля */
+    padding: 10px 15px 10px 15px;
+    border: 0px solid;
+    border-radius: 10px; 
+    /*float: left;*/
+   }
+ /*.object-detail a {
+    color: #fff;
+    padding: 5px 10px;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    width: 100px;
+    }*/
+ .object-list {
+    /*height: 300px; /* высота контента */
+    background: #eee; /* фон */
+    margin: 2% 1% 2% 1%; /* боковые поля */
+    padding: 10px 15px 10px 15px;
+    /*border: 1px solid;
+    border-radius: 10px;*/
+   }   
+   .object-list-buttons {
+    /*height: 300px; /* высота контента */
+    background: #eee; /* фон */
+    background: linear-gradient(to left, #eee, #8e968e);
+    /*margin: 2% 1% 2% 1%; /* боковые поля */
+    padding: 10px 15px 10px 15px;
+    border: 0px solid;
+    border-radius: 10px; 
+    /*float: left;*/
+   }   
 #footer {
     height: 50px; /* высота футера */
     color: #fff; /* цвет текста */
@@ -35,4 +105,5 @@ body {
     /*clear: both; /* прерывание обтекания */
     /*margin: 10px 0% 0% 0%;*/
     float: bottom;
+    border-radius: 10px;
    }

@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block task %}
-   <div class="task-entry">
+
+<div class="object-detail">
+
       <p><h4>Задача: {{ clienttask.name }}
         {% if not clienttask.is_active %}
            (Задача перемещена в архив)
@@ -26,27 +28,26 @@
       <em>Автор: {{ clienttask.author }}</em><br />
       <em>Дата: {{ clienttask.datecreate }}</em>              
       <p>&nbsp;</p>
-        <div>
-          <div style="float: left;"><a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_create }}</span></a></div>
-          <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-          <div style="float: left;"><a href="{% url 'my_crm:clienttask_update' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_update }}</span></a></div>
-          <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-          <!--<div style="float: left;"><a href="{ url 'my_crm:clienttask_history' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_history }}</span></a></div>-->
-        </div>
+      <div class="object-detail-buttons">
+          <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_create }}</span></a>
+          <a href="{% url 'my_crm:clienttask_update' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_update }}</span></a>
+      </div>
+
    </div>
+
 {% endblock task %}
 
 <!--<hr>-->
 
 {% block list %}
 
-   <div class="comment-entry">
+   <div class="object-list">
 
-        <p>&nbsp;</p>
-        <p>&nbsp;</p>
         <h5>Комментарии</h5>
         <br />
-        <div class="comment-entry"><a href="{% url 'my_crm:clienttaskcomment_create' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttaskcomment_create }}</span></a></div>
+        <div class="object-list-buttons">        
+           <a href="{% url 'my_crm:clienttaskcomment_create' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttaskcomment_create }}</span></a>
+        </div>
         <br />      
 
         {% for taskcomment in nodes %}

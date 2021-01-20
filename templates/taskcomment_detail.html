@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block project %}
-  <div class="project-entry">
+  <div class="object-detail">
     <h2>{{ taskcomment.task.project.name }}</h2>
     <p>{{ taskcomment.task.project.description }}</p>
     <p>Исполнитель: {{ taskcomment.task.project.assigner }}</p>     
@@ -14,7 +14,7 @@
 {% endblock project %}
 
 {% block task %}
-   <div class="task-entry">
+   <div class="object-detail">
       <h2>{{ taskcomment.task.name }}</h2>
       <p>{{ taskcomment.task.description }}</p>
       <p>Исполнитель: {{ taskcomment.task.assigner }}</p>       
@@ -27,7 +27,7 @@
 {% endblock task %}
 
  {% block list %}
-    <div class="comment-entry">
+    <div class="object-detail">
         <h2>{{ taskcomment.name }}</h2>
         <p>{{ taskcomment.description }}</p>
         <p><i>Автор: {{ taskcomment.author }}</i></p>
