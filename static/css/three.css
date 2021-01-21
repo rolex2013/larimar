@@ -1,11 +1,13 @@
 body {
     color: #000; /* цвет текста на странице */
-    background: rgb(206, 206, 206); /* фон */
+    background: rgb(206, 206, 206) url(fon_1.jpg); /* фон */
     margin: 0; /* обнуление полей */
    }
 #header {
-    height: 50px; /* высота шапки */
+    height: 55px; /* высота шапки */
     background: #fc0; /* фон */
+    float: top; /* всплытие вверх */
+    padding: 15px 10px 15px 0px;
     border-radius: 10px;
    }
 #menu {

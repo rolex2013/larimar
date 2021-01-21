@@ -156,7 +156,8 @@ def UserProfileDetail(request, userid=0, param=''):
        userid = request.user.id 
        if param == 'all':
           #content_list = Content.objects.filter(author_id=userid, is_forprofile=True).annotate(cnt=Count('id'))          
-          content_list = Content.objects.filter(author_id=userid, place_id=3).annotate(cnt=Count('id'))          
+          #content_list = Content.objects.filter(author_id=userid, place_id=3).annotate(cnt=Count('id'))  
+          content_list = Content.objects.filter(author_id=userid).annotate(cnt=Count('id'))        
        else:
           content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), place_id=3).annotate(cnt=Count('id'))
     else:

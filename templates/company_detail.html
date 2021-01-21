@@ -7,7 +7,7 @@
    <!-- Защита от прямого доступа к компании -->
    {% if current_company.id in user_companies %}
 
-   <div class="object-detail">
+      <div class="object-detail">
 
         <h2>{{ current_company.name }}
         {% if not current_company.is_active %}(Организация перемещена в архив){% endif %}
@@ -31,26 +31,23 @@
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
           <div class="object-detail-buttons">
               {% if component_name == 'companies' %}
-                 <a href="{% url 'my_company:companies' 0 'companies' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>
-                 
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a>
-                 
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a>
+                 <a href="{% url 'my_company:companies' 0 'companies' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>                
+                 <a href="{% url 'my_company:company_create' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_create }}</span></a>                 
+                 <a href="{% url 'my_company:company_update' current_company.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_update }}</span></a>
               {% elif component_name == 'crm' %}
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'crm' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>
+                 <a href="{% url 'my_company:companies' 0 'crm' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>
               {% else %}
-                 <div style="float: left;" class="task-entry"><a href="{% url 'my_company:companies' 0 'projects' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>
-              {% endif %}
-              
-           </div>
-           <br />
+                 <a href="{% url 'my_company:companies' 0 'projects' %}" class="top-menu"><span class="badge badge-secondary">{{ button_company_select }}</span></a>
+              {% endif %}              
+          </div>
+          <br />
            <!--<div>
               <div class="task-entry"><a href="{ url 'my_company:stafflist' current_company.pk 0 %}" class="top-menu"><span class="badge badge-secondary">{ button_stafflist_select }}===</span></a></div>              
               <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
            </div>-->
         <!--{ endif %}-->
 
-   </div> 
+      </div>
 
    {% else %}
 
@@ -82,6 +79,7 @@
             <!--<form action="{% url 'my_crm:clients' current_company.pk 0 %}" method="post">-->
             <form method="GET">
                {% csrf_token %}
+               <div class="object-list-filters">
                <label>По статусу: </label>
                <select name="select-clientstatus" id="selectid"  class="select-client-status">
                   <option value="-1" {% ifequal "-1" clntstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
@@ -112,6 +110,7 @@
                   <option value="2" {% ifequal "2" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>
                </select>            
                <button id="selection-button" type="submit" method="GET">Применить</button>
+               </div>
             </form>
 
             <div id="ajax_clientlistresult">{% include 'clients_list.html' %}</div>
@@ -131,6 +130,7 @@
             <!--<form action="{% url 'my_project:projects' current_company.pk 0 %}" method="post">-->
             <form method="GET">
                {% csrf_token %}
+               <div class="object-list-filters">
                <label>Фильтр по статусу: </label>
                <select name="select-projectstatus" id="selectid" class="select-project-status">
                   <option value="-1" {% ifequal "-1" prjstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
@@ -150,6 +150,7 @@
                   <option value="2" {% ifequal "2" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
                </select>            
                <button id="selection-button" type="submit" method="GET">Применить</button>
+               </div>
             </form>    
 
             <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
@@ -173,7 +174,6 @@
          </div>
       </div>
 
-      <br /><br />
 
       <script>
          // *** это обработка отдельного select - отключено ***

@@ -43,11 +43,12 @@
        </div>
        <!--{ endif %}-->
        
-     </div>
-     <br /><br />
+   </div>
 
   {% else %}
+
      <h4>Информация о Клиенте недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
+  
   {% endif %}  
 
 {% endblock client %}
@@ -103,7 +104,6 @@
 
       </div> 
       
-   <br /><br />
 
    <script>
       // *** отключено ***
@@ -157,7 +157,9 @@
    </script>
 
    {% else %}
+
       <h5>Информация о задачах недоступна!</h5>
+
    {% endif %}  
 
    {% endblock list %}

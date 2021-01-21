@@ -20,24 +20,27 @@
 
    <form method="GET">
       {% csrf_token %}
-      <label>Фильтр по статусам: </label>
-      <select name="select-status" id="statusselectid"  class="select-status">
-         <option value="1" {% ifequal "1" status_selectid %} selected="selected" {% endifequal %}>- Все</option>
-         <option value="2" {% ifequal "2" status_selectid %} selected="selected" {% endifequal %}>- Непрочитанные</option>
-         <option value="3" {% ifequal "3" status_selectid %} selected="selected" {% endifequal %}>- Прочитанные</option>   
-      </select> 
-      <label>Фильтр по типам объектов: </label>
-      <select name="select-metaobjecttype" id="metaobjecttypeselectid"  class="select-metaobjecttype">
-         <option value="0" {% ifequal 0 metaobjecttype_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все</option>
-         {% for metaobjecttype in metaobjecttype_list %}
-            <option value="{{metaobjecttype.id}}" {% ifequal metaobjecttype.id metaobjecttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
-               {{metaobjecttype.name}}
-            </option>   
-         {% endfor %}
-      </select>                
-      <button id="selection-button" type="submit" method="GET">Применить</button>
+      <div class="object-list-filters">
+         <label>Фильтр по статусам: </label>
+         <select name="select-status" id="statusselectid"  class="select-status">
+            <option value="1" {% ifequal "1" status_selectid %} selected="selected" {% endifequal %}>- Все</option>
+            <option value="2" {% ifequal "2" status_selectid %} selected="selected" {% endifequal %}>- Непрочитанные</option>
+            <option value="3" {% ifequal "3" status_selectid %} selected="selected" {% endifequal %}>- Прочитанные</option>   
+         </select> 
+         <label>Фильтр по типам объектов: </label>
+         <select name="select-metaobjecttype" id="metaobjecttypeselectid"  class="select-metaobjecttype">
+            <option value="0" {% ifequal 0 metaobjecttype_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все</option>
+            {% for metaobjecttype in metaobjecttype_list %}
+               <option value="{{metaobjecttype.id}}" {% ifequal metaobjecttype.id metaobjecttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                  {{metaobjecttype.name}}
+               </option>   
+            {% endfor %}
+         </select>                
+         <button id="selection-button" type="submit" method="GET">Применить</button>
+      </div>
    </form>    
     
+<div class="object-list">   
 {% for notification in notification_list %}
    <div class="d-tr">
       <div class="d-td-text">
@@ -60,6 +63,7 @@
    
    <br />
 {% endfor %}
+</div>
 
 </div>
 

@@ -45,10 +45,11 @@
          </div>
        <!--{ endif %}-->
      </div>
-     <br /><br />
 
   {% else %}
+
      <h4>Информация о проекте недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
+
   {% endif %}  
 
 {% endblock project %}
@@ -127,7 +128,6 @@
         <div class="object-list-buttons">
            <a href="{% url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a>
          </div>
-        <br /><br />
         
       </div>
 
@@ -186,4 +186,4 @@
       <h5>Информация о задачах недоступна!</h5>
    {% endif %}  
 
-   {% endblock list %}
+{% endblock list %}

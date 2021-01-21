@@ -1,12 +1,8 @@
 {% extends 'base.html' %}
 
 {% block profile %}
-
-<div class="d-table">
-
-   <div class="d-tr">
-      
-      <div class="d-td-text">
+     
+      <div class="object-detail">
 
          <h3>Профиль пользователя</h3>
          <p>Пользователь: {{ user_profile.user.username }}</p>
@@ -19,7 +15,7 @@
             <p>Протокол: {{ user_profile.protocoltype.name }}</p>
             <p>E-mail: {{ user_profile.email }}</p>
             <p>Телефон: {{ user_profile.phone }}</p>                                            
-            <div class="comment-entry">
+            <div class="object-detail-buttons">
                <a href="{% url 'my_account:userprofile_update' user_profile.pk %}" class="top-menu"><span
                      class="badge badge-secondary">{{ button_userprofile_update }}</span></a>
             </div>   
@@ -27,42 +23,35 @@
 
       </div>
 
-      <div class="d-td-text">
+      <div class="object-list">
 
          <h3>Блог пользователя</h3>
          <!--<div class="content-entry">-->
             {% if user_profile.user.id == user.id %}
-               <br />
-               <div style="float: left;" class="content-entry"><a href="{% url 'my_company:content_create' %}"
-                    class="top-menu"><span class="badge badge-secondary">Добавить</span></a>
+               <div class="object-list-buttons">
+                  <a href="{% url 'my_company:content_create' %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a>
+                  <a href="{% url 'my_account:userprofile_detail' 0 'all' %}" class="top-menu"><span class="badge badge-secondary">Вывести все</span></a>
                </div>
-               <div style="float: left;" class="content-entry">&nbsp;&nbsp;&nbsp;</div>
-               <div style="float: left;" class="content-entry"><a href="{% url 'my_account:userprofile_detail' 0 'all' %}"
-                  class="top-menu"><span class="badge badge-secondary">Вывести все</span></a>
-               </div>               
-               <br /><br />
             {% endif %}
 
-            <div class="d-table">
+            <div class="object-list">
 
                {% for content in content_list %}
-                  <div class="d-tr">
-                     <div class="d-td-text">
-                        <em>{{ content.datecreate }}</em>&nbsp;
-                        <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a>
-                        {% if content.is_active == False %}
-                           <strong><em>(в архиве)</em></strong>
-                        {% endif %}
-                        <br />
-                        {% if content.announcement %}
-                           {{ content.announcement }}
-                        {% else %}
-                           {% autoescape off %}{{ content.description }}{% endautoescape %}
-                        {% endif %}
-                     </div>
-                  </div>
-                  <hr>
+
+                  <em>{{ content.datecreate }}</em>&nbsp;({{ content.type }}/{{ content.place }})&nbsp;
+                  <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a>
+                  {% if content.is_active == False %}
+                     <strong><em>(в архиве)</em></strong>
+                  {% endif %}
                   <br />
+                  {% if content.announcement %}
+                     {{ content.announcement }}
+                  {% else %}
+                     {% autoescape off %}{{ content.description }}{% endautoescape %}
+                  {% endif %}
+
+                  <hr>
+
                {% endfor %}
 
             </div>
@@ -73,17 +62,13 @@
 
       {% if user_profile.user.id == user.id %}
 
-      <div class="d-td-text">
-
+      <!--<div class="d-td-text">-->
+      <!--<div id="sidebar">-->
          <div id="ajax_listresult">{% include 'notify_list.html' %}</div>
          <div id="ajax_listerrors"></div>         
-
-      </div> 
+      <!--</div>-->
+      <!--</div> -->
       
       {% endif %}
-
-   </div>
-
-</div>
 
 {% endblock profile %}
