@@ -80,36 +80,36 @@
             <form method="GET">
                {% csrf_token %}
                <div class="object-list-filters">
-               <label>По статусу: </label>
-               <select name="select-clientstatus" id="selectid"  class="select-client-status">
-                  <option value="-1" {% ifequal "-1" clntstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                  <!--<option value="0" { ifequal 0 clntstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                  <option value="-2" { ifequal "-2" clntstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
-                  {% for clntstatus in clientstatus %}
-                     <option value="{{clntstatus.id}}" {% ifequal clntstatus.id clntstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                        {{clntstatus.name}}
-                     </option>   
-                  {% endfor %}
-               </select>
-               <label>По типу: </label>
-               <select name="select-clienttype" id="selectid"  class="select-client-type">
-                  <option value="-1" {% ifequal "-1" clnttype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                  <!--<option value="0" { ifequal 0 clnttype_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                  <option value="-2" { ifequal "-2" clnttype_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->   
-                  {% for clnttype in clienttype %}
-                     <option value="{{clnttype.id}}" {% ifequal clnttype.id clnttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                        {{clnttype.name}}
-                     </option>   
-                  {% endfor %}
-               </select>               
-               <label>Мои клиенты: </label>
-               <select name="select-myclient" id="myselectid"  class="select-my-client">
-                  <option value="-1" {% ifequal "-1" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                  <option value="0" {% ifequal "0" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
-                  <option value="1" {% ifequal "1" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                  <option value="2" {% ifequal "2" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>
-               </select>            
-               <button id="selection-button" type="submit" method="GET">Применить</button>
+                   <label>По статусу: </label>
+                   <select name="select-clientstatus" id="statusselectid" class="select-client-status">
+                      <option value="-1" {% ifequal "-1" clntstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                      <!--<option value="0" { ifequal 0 clntstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
+                      <option value="-2" { ifequal "-2" clntstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                      {% for clntstatus in clientstatus %}
+                         <option value="{{clntstatus.id}}" {% ifequal clntstatus.id clntstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                            {{clntstatus.name}}
+                         </option>   
+                      {% endfor %}
+                   </select>
+                   <label>По типу: </label>
+                   <select name="select-clienttype" id="typeselectid" class="select-client-type">
+                      <option value="-1" {% ifequal "-1" clnttype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                      <!--<option value="0" { ifequal 0 clnttype_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
+                      <option value="-2" { ifequal "-2" clnttype_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->   
+                      {% for clnttype in clienttype %}
+                         <option value="{{clnttype.id}}" {% ifequal clnttype.id clnttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                            {{clnttype.name}}
+                         </option>   
+                      {% endfor %}
+                   </select>               
+                   <label>Мои клиенты: </label>
+                   <select name="select-myclient" id="myselectid" class="select-my-client">
+                      <option value="-1" {% ifequal "-1" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                      <option value="0" {% ifequal "0" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
+                      <option value="1" {% ifequal "1" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                      <option value="2" {% ifequal "2" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>
+                   </select>            
+                   <button id="selection-button-client" type="submit" method="GET">Применить</button>
                </div>
             </form>
 
@@ -131,25 +131,25 @@
             <form method="GET">
                {% csrf_token %}
                <div class="object-list-filters">
-               <label>Фильтр по статусу: </label>
-               <select name="select-projectstatus" id="selectid" class="select-project-status">
-                  <option value="-1" {% ifequal "-1" prjstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                  <option value="0" {% ifequal 0 prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
-                  <option value="-2" {% ifequal "-2" prjstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>   
-                  {% for prjstatus in projectstatus %}
-                     <option value="{{prjstatus.id}}" {% ifequal prjstatus.id prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                        {{prjstatus.name}}
-                     </option>   
-                  {% endfor %}
-               </select>
-               <label>Мои проекты: </label>
-               <select name="select-myproject" id="myselectid" class="select-my-project">
-                  <option value="-1" {% ifequal "-1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                  <option value="0" {% ifequal "0" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
-                  <option value="1" {% ifequal "1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                  <option value="2" {% ifequal "2" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
-               </select>            
-               <button id="selection-button" type="submit" method="GET">Применить</button>
+                  <label>Фильтр по статусу: </label>
+                  <select name="select-projectstatus" id="selectid" class="select-project-status">
+                     <option value="-1" {% ifequal "-1" prjstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                     <option value="0" {% ifequal 0 prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
+                     <option value="-2" {% ifequal "-2" prjstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>   
+                     {% for prjstatus in projectstatus %}
+                        <option value="{{prjstatus.id}}" {% ifequal prjstatus.id prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                           {{prjstatus.name}}
+                        </option>   
+                     {% endfor %}
+                  </select>
+                  <label>Мои проекты: </label>
+                  <select name="select-myproject" id="myselectid" class="select-my-project">
+                     <option value="-1" {% ifequal "-1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                     <option value="0" {% ifequal "0" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
+                     <option value="1" {% ifequal "1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                     <option value="2" {% ifequal "2" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
+                  </select>            
+                  <button id="selection-button-project" type="submit" method="GET">Применить</button>
                </div>
             </form>    
 
@@ -177,9 +177,9 @@
 
       <script>
          // *** это обработка отдельного select - отключено ***
-         //$("#selection-button").on('click',function(){
+         //$("#selection-button-project").on('click',function(){
          $(document).on('change', '.select-project-status---', function() {
-         //$("#selection-button").click(function(event) {
+         //$("#selection-button-project").click(function(event) {
              event.preventDefault();
              var statusSelected = $('#select-projectstatus').find(":selected").val();            
             //console.log(this.value);
@@ -214,7 +214,7 @@
          });         
          // ***
 
-         $('#selection-button').click(function(){
+         $('#selection-button-project').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             var statusSelected = $("#selectid option:selected").val()
             var myprojectSelected = $("#myselectid option:selected").val()
@@ -235,6 +235,30 @@
                }               
             });
          });
+
+         $('#selection-button-client').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            var statusSelected = $("#statusselectid option:selected").val()
+            var typeSelected = $("#typeselectid option:selected").val()
+            var myclientSelected = $("#myselectid option:selected").val()
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_crm:client_filter' %}",
+               data: {
+                  companyid: {{ current_company.id }},
+                  clientstatus: statusSelected,
+                  clienttype: typeSelected,
+                  myclientuser: myclientSelected
+               },
+               success: function(data){           
+                  $('#ajax_clientlistresult').html(data);              
+               },
+               error: function(xhr, errmsg, err){               
+                  console.log("error")                                  
+                  $('#ajax_listerrors').html('Нет данных!');
+               }               
+            });
+         });         
 
       </script>
 

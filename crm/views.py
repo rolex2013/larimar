@@ -243,6 +243,7 @@ def clienttasks(request, clientid=0, pk=0):
                               'button_task_create': button_task_create,
                               #'button_task_history': button_task_history,                              
                               'taskstatus': Dict_ClientTaskStatus.objects.filter(is_active=True),
+                              'tasktype': Dict_ClientTaskType.objects.filter(is_active=True),
                               'tskstatus_selectid': tskstatus_selectid,
                               'object_list': 'clienttask_list',
                               'taskcomment_costsum': taskcomment_costsum,
@@ -289,42 +290,6 @@ class ClientTaskUpdate(UpdateView):
        kwargs = super(ClientTaskUpdate, self).get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs       
-
-
-@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def clienttaskfilter(request):
-    clientid = request.GET['clientid']
-    taskstatus = request.GET['taskstatus']
-    # *** фильтруем по статусу ***
-    currentuser = request.user.id
-    #tskstatus_selectid = 0
-    if taskstatus == "0":
-       # если в выпадающем списке выбрано "Все активные"
-       task_list = ClientTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True)
-    else:
-       if taskstatus == "-1":
-          # если в выпадающем списке выбрано "Все"
-          task_list = ClientTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid)
-       elif taskstatus == "-2":
-          # если в выпадающем списке выбрано "Просроченные"
-          task_list = ClientTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True, dateend__lt=datetime.now())                         
-       else:             
-          task_list = ClientTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, status=taskstatus)
-    # фильтр по принадлежности    
-    mytskuser = request.GET['mytaskuser']
-    if mytskuser == "0":
-       task_list = task_list.filter(Q(client__members__in=[currentuser,]))
-    elif mytskuser == "1":
-       task_list = task_list.filter(Q(author=request.user.id))               
-    elif mytskuser == "2":
-       task_list = task_list.filter(Q(assigner=request.user.id)) 
-    # *******************************           
-    nodes = task_list.distinct().order_by()
-    object_message = ''
-    if len(nodes) == 0:
-       object_message = 'Задачи не найдены!'                  
-    return render(request, 'clients_list.html', {'nodes': nodes, 'object_list': 'clienttask_list', 'object_message': object_message}) 
-
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienttaskcomments(request, taskid):
@@ -398,3 +363,95 @@ class ClientTaskCommentUpdate(UpdateView):
        context = super(ClientTaskCommentUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Комментарий'
        return context
+
+# *** ФИЛЬТРЫ СПИСКОВ ***
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clientfilter(request):
+    #if request.user.is_authenticated():
+            companyid = request.GET['companyid']
+            clntstatus = request.GET['clientstatus']
+            clnttype = request.GET['clienttype']            
+            if companyid == 0:
+               companyid = request.session['_auth_user_currentcompany_id']
+            # *** фильтруем по статусу ***
+            currentuser = request.user.id
+            if clntstatus == "0":
+               # если в выпадающем списке выбрано "Все активные"
+               client_list = Client.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True)
+            else:
+               if clntstatus == "-1":
+                  # если в выпадающем списке выбрано "Все"
+                  client_list = Client.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
+               elif clntstatus == "-2":
+                  # если в выпадающем списке выбрано "Просроченные"
+                  client_list = Client.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.now())                         
+               else:   
+                  client_list = Client.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=clntstatus)
+            # *******************************
+            #client_list = Client.objects.filter(is_active=True, company=companyid, status=clntstatus, dateclose__isnull=True) 
+            #client_list = Client.objects.filter(id__in=[client.id for client in Client.objects.all() if client.is_leaf_node()])   
+            # **** фильтр по типу ***
+            if clnttype != "-1":
+               client_list = client_list.filter(Q(type=clnttype))
+            # *** фильтр по принадлежности ***
+            myclntuser = request.GET['myclientuser']
+            if myclntuser == "0":
+               client_list = client_list.filter(Q(members__in=[currentuser,]))
+            elif myclntuser == "1":
+               client_list = client_list.filter(Q(author=request.user.id))               
+            elif myclntuser == "2":
+               client_list = client_list.filter(Q(manager=request.user.id)) 
+            nodes = client_list.order_by().distinct()
+            object_message = ''
+            if len(nodes) == 0:
+               object_message = 'Клиенты не найдены!'
+               #object_message = 'Нет данных!'
+            #print(client_list)        
+            #print(clntstatus)
+            #print(clnttype)
+            #print(len(nodes))    
+            #print(object_message)   
+            #return HttpResponse(json.dumps(nodes), content_type='application/json')
+            #return JsonResponse({'message': 'Это message!'})
+            return render(request, 'clients_list.html', {'nodes': nodes, 'object_list': 'client_list', 'object_message': object_message})           
+    #else:
+    #    return JsonResponse({'error': 'Only authenticated users'}, status=404) 
+        #return render(request, 'clients_list.html', 'Информация недоступна') 
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clienttaskfilter(request):
+    clientid = request.GET['clientid']
+    taskstatus = request.GET['taskstatus']
+    tasktype = request.GET['tasktype']
+    # *** фильтруем по статусу ***
+    currentuser = request.user.id
+    #tskstatus_selectid = 0
+    if taskstatus == "0":
+       # если в выпадающем списке выбрано "Все активные"
+       task_list = ClientTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True)
+    else:
+       if taskstatus == "-1":
+          # если в выпадающем списке выбрано "Все"
+          task_list = ClientTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid)
+       elif taskstatus == "-2":
+          # если в выпадающем списке выбрано "Просроченные"
+          task_list = ClientTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True, dateend__lt=datetime.now())                         
+       else:             
+          task_list = ClientTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, status=taskstatus)
+    # *** фильтр по типу ***
+    if tasktype != "-1":
+       task_list = task_list.filter(Q(type=tasktype))
+    # *** фильтр по принадлежности ***
+    mytskuser = request.GET['mytaskuser']
+    if mytskuser == "0":
+       task_list = task_list.filter(Q(client__members__in=[currentuser,]))
+    elif mytskuser == "1":
+       task_list = task_list.filter(Q(author=request.user.id))               
+    elif mytskuser == "2":
+       task_list = task_list.filter(Q(assigner=request.user.id)) 
+    # *******************************           
+    nodes = task_list.distinct().order_by()
+    object_message = ''
+    if len(nodes) == 0:
+       object_message = 'Задачи не найдены!'                  
+    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'clienttask_list', 'object_message': object_message})             

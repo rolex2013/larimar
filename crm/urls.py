@@ -5,7 +5,8 @@ from companies.models import Company
 from crm.models import Client #, ClientTask, ClientTaskComment
 
 #from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
-from crm.views import clients, ClientCreate, ClientUpdate, clienttasks, clienttaskcomments, ClientTaskCreate, ClientTaskUpdate, clienttaskfilter, ClientTaskCommentCreate, ClientTaskCommentUpdate
+from crm.views import clients, ClientCreate, ClientUpdate, clienttasks, clienttaskcomments, ClientTaskCreate, ClientTaskUpdate, ClientTaskCommentCreate, ClientTaskCommentUpdate
+from crm.views import clientfilter, clienttaskfilter
 
 from . import views
 
@@ -20,7 +21,7 @@ urlpatterns = [
     #path('projects_list/project_update/<int:pk>', views.ProjectUpdate.as_view(), name = 'project_update'),
     ##path('projects_list/project_delete/<int:pk>', views.ProjectDelete.as_view(), name = 'project_delete'),
     ##path('project_list/project_filter/<int:companyid>', views.projectfilter, name = 'project_filter'),
-    #path('project_list/project_filter/', views.projectfilter, name = 'project_filter'),
+    path('clients_list/client_filter/', views.clientfilter, name = 'client_filter'),
     #path('projects_list/project_history/<int:pk>', views.projecthistory, name = 'project_history'),    
     path('clienttasks_page/<int:clientid>/<int:pk>', views.clienttasks, name = 'clienttasks'),
     ##path('tasks_list/<int:pk>', views.TaskDetail.as_view(), name = 'task_detail'),

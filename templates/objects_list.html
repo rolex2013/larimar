@@ -2,6 +2,11 @@
 
       <!--<div class="object-list">-->
 
+<!--{ if data == 'Нет данных!'%}
+
+   <p><strong>Нет данных!!!</strong></p>
+
+{ else %}   -->
          {% load mptt_tags %}
  
          <ul>
@@ -16,13 +21,15 @@
                     <span class="hint hint--bottom hint--info" data-hint="Штатное расписание"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{{ node.parent.name }}--></b></span><br />
                  {% endif %}                    
               {% elif object_list == 'project_list' %}         
-                 <b><a href="{% url 'my_project:tasks' node.pk 0 %}">#{{ node.id }}. {{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin|date:"d.m.Y" }} - {{ node.dateend|date:"d.m.Y" }} | 
-                 {{ node.status.name }} | 
-                 {{ node.type }} | 
-                 <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}">{{ node.assigner.username }}</a></span> | 
-                 <i>{{ node.datecreate|date:"d.m.Y" }}</i> |
-                 <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> |
-                 </b><br />          
+                 <!--<div class="object-list-row">-->
+                    <b><a href="{% url 'my_project:tasks' node.pk 0 %}">#{{ node.id }}. {{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin|date:"d.m.Y" }} - {{ node.dateend|date:"d.m.Y" }} | 
+                    {{ node.status.name }} | 
+                    {{ node.type }} | 
+                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}">{{ node.assigner.username }}</a></span> | 
+                    <i>{{ node.datecreate|date:"d.m.Y" }}</i> |
+                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> |
+                    </b>
+                 <!--</div>--><br />          
               {% elif object_list == 'stafflist_list' %}
                  {% if node.is_vacancy %}         
                     <b><a href="{% url 'my_company:summaries' node.pk %}">{{ node.name }}:</a><span style="font-size: 70%; color: green;"> {{ node.datecreate|date:"d.m.Y" }} | 
@@ -49,7 +56,8 @@
                     {{ node.project.currency.symbol }}{{ node.cost }}
                  </span></b>   
         
-              {% endif %}                          
+              {% endif %}       
+
               {% if not node.is_leaf_node %}
                  <ul class="children">{{ children }}</ul>
               {% else %}
@@ -61,5 +69,5 @@
          <p><em>{{ object_message }}</em></p>
       <!--</div>-->
 
-
+<!--{ endif %}-->
       

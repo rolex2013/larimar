@@ -99,6 +99,20 @@ body {
     border-radius: 10px; 
     /*float: left;*/
    }   
+   .object-list-filters {
+      /*height: 300px; /* высота контента */
+      background: #eee; /* фон */
+      background: linear-gradient(to top, #eee, #8e968e);
+      /*margin: 2% 1% 2% 1%; /* боковые поля */
+      padding: 10px 15px 10px 15px;
+      border: 0px solid;
+      border-radius: 10px; 
+      /*float: left;*/
+     }    
+   .object-list-row {
+      background: #eee; /* фон */
+      background: linear-gradient(to top, #eee, #8e968e);      
+   }  
 #footer {
     height: 50px; /* высота футера */
     color: #fff; /* цвет текста */

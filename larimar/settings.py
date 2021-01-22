@@ -30,7 +30,7 @@ INTERNAL_IPS = [
     '192.168.88.153',
 ]
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost','192.168.88.153']
 
 
 # Application definition
