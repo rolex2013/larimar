@@ -22,6 +22,7 @@ class ProjectStatusLogTable(tables.Table):
         # add class="paleblue" to <table> tag
         attrs = {'class': 'd-table'}
         exclude = ('id', 'project', 'is_active')
+        order_by = '-date'        
         #sequence = ('date', 'blank1', 'status', 'blank2', 'author', 'blank3', 'description')
         sequence = ('date', 'status', 'author', 'description')
 
@@ -32,6 +33,7 @@ class TaskStatusLogTable(tables.Table):
         # add class="paleblue" to <table> tag
         attrs = {'class': 'd-table'}
         exclude = ('id', 'task', 'is_active')
+        order_by = '-date'
         sequence = ('date', 'status', 'author', 'description')   
 
 

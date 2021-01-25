@@ -430,6 +430,8 @@ def projecthistory(request, pk=0):
     nodes = ProjectStatusLog.objects.filter(project_id=pk, is_active=True)
     table = ProjectStatusLogTable(nodes)
 
+    RequestConfig(request).configure(table)    
+
     return render(request, "project_history.html", {
                               'nodes': nodes, 
                               'current_project':current_project,
@@ -452,7 +454,9 @@ def taskhistory(request, pk=0):
     comps = request.session['_auth_user_companies_id']
 
     nodes = TaskStatusLog.objects.filter(task_id=pk, is_active=True)
-    table = TaskStatusLogTable(nodes)    
+    table = TaskStatusLogTable(nodes)
+
+    RequestConfig(request).configure(table)        
 
     return render(request, "task_history.html", {
                               'nodes': nodes, 

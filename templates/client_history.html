@@ -2,49 +2,51 @@
 
 {% load render_table from django_tables2 %}
 
-{% block project %}
-   <!-- Защита от прямого доступа к проекту -->
+{% block client %}
+   <!-- Защита от прямого доступа к Клиенту -->
    {% if current_project.company.id in user_companies %}
 
      <div class="object-detail">
-       <p><h2>{{ current_project.name }}
-       {% if not current_project.is_active %}
-          (Проект перемещён в архив)
+
+       <p><h2>{{ current_client.lastname }}{{ current_client.firstname }}{{ current_client.middlename }}
+       {% if not current_client.is_active %}
+          (Клиент перемещён в архив)
        {% endif %}
        </h2></p>
-       {% autoescape off %}{{ current_project.description }}{% endautoescape %}<br />
-       Исполнитель: {{ current_project.assigner }}<br />     
-       Начало: {{ current_project.datebegin }}<br />
-       Окончание: {{ current_project.dateend }}<br />
-       Статус: {{ current_project.status }}<br />
+       {% autoescape off %}{{ current_client.description }}{% endautoescape %}<br />
+       Менеджер: {{ current_client.manager }}<br />     
+       Начало: {{ current_client.datebegin }}<br />
+       Окончание: {{ current_client.dateend }}<br />
+       Статус: {{ current_client.status }}<br />
        <i>Участники: 
-       {% for u in current_project.members.all %}
+       {% for u in current_client.members.all %}
           <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i><br />
-       <em>Автор: {{ current_project.author }}</em><br /> 
-       <!--<em>Участники: { current_project.members.name }}</em><br /> -->
-       <em>Дата: {{ current_project.datecreate }}</em>
+       <em>Автор: {{ current_client.author }}</em><br /> 
+       <!--<em>Участники: { current_client.members.name }}</em><br /> -->
+       <em>Дата: {{ current_client.datecreate }}</em>
        <p>&nbsp;</p>
-       {% if user.is_authenticated and user.id == current_project.author_id  %}
+       {% if user.is_authenticated and user.id == current_client.author_id  %}
 
        {% endif %}
+
      </div>
 
   {% else %}
-     <h4>Информация о проекте недоступна!</h4>
+     <h4>Информация о Клиенте недоступна!</h4>
   {% endif %}  
 
-{% endblock project %}
+{% endblock client %}
 
 {% block list %}
    <!-- Защита от прямого доступа к истории проекта -->
-   {% if current_project.company.id in user_companies %}
+   {% if current_client.company.id in user_companies %}
 
 <!--     <div class="project-history-list">-->
-      <div class="object-list">
+      <div class="object-list">   
 
-        <h3>История проекта</h3>
+        <h3>История Клиента</h3>
 
         {% render_table table %}   
 
@@ -87,14 +89,14 @@
         </div>
  
       </div>
--->    
-      </div>        
+-->  
+      </div>          
       <p>&nbsp;</p>
    <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
    <!--<div class="task-entry"></div><a href="{ url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>-->
 
    {% else %}
-      <h5>Информация об истории проекта недоступна!</h5>
+      <h5>Информация об истории Клиента недоступна!</h5>
    {% endif %}  
 
    {% endblock list %}

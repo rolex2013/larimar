@@ -31,6 +31,7 @@
       <div class="object-detail-buttons">
           <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_create }}</span></a>
           <a href="{% url 'my_crm:clienttask_update' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_update }}</span></a>
+          <a href="{% url 'my_crm:clienttask_history' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_history }}</span></a>
       </div>
 
    </div>

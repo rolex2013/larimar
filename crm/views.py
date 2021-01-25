@@ -15,12 +15,14 @@ from companies.models import Company
 from companies.forms import CompanyForm
 
 from crm.models import Client, Dict_ClientStatus, Dict_ClientType
-from crm.models import ClientTask, ClientTaskComment, Dict_ClientTaskStatus, Dict_ClientTaskType #, ClientStatusLog, TaskStatusLog
+from crm.models import ClientTask, ClientTaskComment, Dict_ClientTaskStatus, Dict_ClientTaskType, ClientStatusLog, ClientTaskStatusLog
+#from projects.models import ProjectStatusLog
 #from .forms import clientForm, TaskForm, TaskCommentForm
 #from .forms import clientStatusLog, TaskStatusLog
 from .forms import ClientForm, ClientTaskForm, ClientTaskCommentForm
 
 from .tables import ClientTable, ClientStatusLogTable, ClientTaskStatusLogTable
+#from projects.tables import ProjectStatusLogTable
 from django_tables2 import RequestConfig
 
 from django.contrib.auth.decorators import login_required
@@ -363,6 +365,61 @@ class ClientTaskCommentUpdate(UpdateView):
        context = super(ClientTaskCommentUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Комментарий'
        return context
+
+# *** ИСТОРИИ ИЗМЕНЕНИЯ СТАТУСОВ КЛИЕНТОВ И ЗАДАЧ ***
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clienthistory(request, pk=0):
+
+    #if companyid == 0:
+    #   companyid = request.session['_auth_user_currentcompany_id']
+    #current_company = Company.objects.get(id=companyid)
+
+    if pk == 0:
+       current_client = 0
+    else:
+       current_client = Client.objects.get(id=pk)
+
+    comps = request.session['_auth_user_companies_id']
+
+    nodes = ClientStatusLog.objects.filter(client_id=pk, is_active=True)
+    table = ClientStatusLogTable(nodes)
+    #nodes = ProjectStatusLog.objects.filter(project_id=pk, is_active=True)
+    #table = ProjectStatusLogTable(nodes)
+    
+    RequestConfig(request).configure(table)
+
+    return render(request, "client_history.html", {
+                              'nodes': nodes, 
+                              'current_client':current_client,
+                              #'current_company':current_company,
+                              #'companyid':companyid,
+                              'user_companies': comps,
+                              'table': table,                                                           
+                                                })     
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clienttaskhistory(request, pk=0):
+
+    if pk == 0:
+       current_task = 0
+    else:
+       current_task = ClientTask.objects.get(id=pk)
+
+    comps = request.session['_auth_user_companies_id']
+
+    nodes = ClientTaskStatusLog.objects.filter(task_id=pk, is_active=True)
+    table = ClientTaskStatusLogTable(nodes)  
+
+    RequestConfig(request).configure(table)      
+
+    return render(request, "clienttask_history.html", {
+                              'nodes': nodes, 
+                              'current_task': current_task,
+                              'user_companies': comps,  
+                              'table': table,                                                               
+                                                })
+
 
 # *** ФИЛЬТРЫ СПИСКОВ ***
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

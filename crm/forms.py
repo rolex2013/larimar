@@ -3,7 +3,7 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 from .models import Company, Client, ClientTask, ClientTaskComment
 from .models import ClientStatusLog, ClientTaskStatusLog
-from .models import Dict_ClientStatus, Dict_ClientType #,Dict_ClientTaskStatus
+from .models import Dict_ClientStatus, Dict_ClientType, Dict_ClientTaskStatus
 from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
@@ -32,9 +32,9 @@ class ClientForm(forms.ModelForm):
            if self.cleaned_data['status'].id != self.initial['status']:
               # если вызов пришёл из ClientUpdate и статус Клиента был изменён, то пишем лог изменения 
               dict_status = Dict_ClientStatus.objects.get(pk=self.cleaned_data['status'].id)
-              #ClientStatusLog.objects.create(client_id=self.initial['id'], 
-              #                                status_id=dict_status.id, 
-              #                                author_id=self.user.id)
+              ClientStatusLog.objects.create(client_id=self.initial['id'], 
+                                              status_id=dict_status.id, 
+                                              author_id=self.user.id)
               if self.cleaned_data['status'].is_close: # == "Выполнен":
                  if self.user.id != self.initial['author']: 
                     # если Клиент закрывается Менеджером, то уведомление отсылается Автору
@@ -114,7 +114,7 @@ class ClientTaskForm(forms.ModelForm):
         if self.action == 'update':
            if self.cleaned_data['status'].id != self.initial['status']:
               # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения 
-              dict_status = Dict_TaskStatus.objects.get(pk=self.cleaned_data['status'].id)
+              dict_status = Dict_ClientTaskStatus.objects.get(pk=self.cleaned_data['status'].id)
               ClientTaskStatusLog.objects.create(task_id=self.initial['id'], 
                                            status_id=dict_status.id, 
                                            author_id=self.user.id)

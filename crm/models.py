@@ -28,6 +28,7 @@ class Dict_ClientStatus(models.Model):
     description = models.TextField("Описание", blank=True, null=True) 
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_close = models.BooleanField("Закрывает клиента", default=False)     
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
@@ -164,7 +165,7 @@ class ClientTaskComment(models.Model):
 class ClientStatusLog(models.Model):
     #LOG_TYPES = (('P', 'Client'), ('T', 'Task'))
     #logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
-    client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='resultclientlog', verbose_name="Проект")
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='resultclientlog', verbose_name="Клиент")
     status = models.ForeignKey('Dict_ClientStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='client_status_log', verbose_name="Статус Клиента")
     date = models.DateTimeField("Дата", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
@@ -172,7 +173,7 @@ class ClientStatusLog(models.Model):
     is_active = models.BooleanField("Активность", default=True)
     
     def __str__(self):
-        return (self.client.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
+        return (self.client.lastname + '. ' + self.client.firstname + '. ' + self.client.middlename + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
     
     class Meta:
         unique_together = ('client', 'status', 'date', 'author')

@@ -39,7 +39,7 @@
        <div class="object-detail-buttons">
            <a href="{% url 'my_crm:client_create' current_client.company.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_create }}</span></a>
            <a href="{% url 'my_crm:client_update' current_client.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_update }}</span></a>
-           <!--<div style="float: left;"><a href="{ url 'my_crm:client_history' current_client.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_history }}</span></a></div>-->
+           <a href="{% url 'my_crm:client_history' current_client.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_history }}</span></a>
        </div>
        <!--{ endif %}-->
        

@@ -2,7 +2,7 @@
 
 {% load render_table from django_tables2 %}
 
-{% block project %}
+{% block task %}
    <!-- Защита от прямого доступа к проекту -->
    {% if current_task.project.company.id in user_companies %}
 
@@ -10,7 +10,7 @@
 
        <p><h2>{{ current_task.name }}
        {% if not current_task.is_active %}
-          (Задача перемещна в архив)
+          (Задача перемещена в архив)
        {% endif %}
        </h2></p>
        {% autoescape off %}{{ current_task.description }}{% endautoescape %}<br />
@@ -29,16 +29,16 @@
       </div>
 
   {% else %}
-     <h4>Информация о проекте недоступна!</h4>
+     <h4>Информация о Задаче недоступна!</h4>
   {% endif %}  
 
-{% endblock project %}
+{% endblock task %}
 
 {% block list %}
    <!-- Защита от прямого доступа к истории проекта -->
-   {% if current_task.project.company.id in user_companies %}
+   {% if current_task.client.company.id in user_companies %}
 
-   <div class="object-list">
+      <div class="object-list">
 
        <h3>История задачи</h3>
        
