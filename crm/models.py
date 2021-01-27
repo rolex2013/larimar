@@ -74,8 +74,21 @@ class Dict_ClientTaskType(models.Model):
     def __str__(self):
         return (self.name)
 
+class Dict_ClientInitiator(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Инициатор'
+        verbose_name_plural = 'Инициаторы'
+    def __str__(self):
+        return (self.name)        
+
 
 class Client(models.Model):
+    #WHO_INIT = (('CLNT', 'Клиент'), ('ORG', 'Компания'), ('OTHER', 'Другое'))
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='result_company_client', verbose_name="Организация")    
     manager = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='result_manager_client', verbose_name="Менеджер")    
     user = models.OneToOneField('auth.User', blank=True, null=True, on_delete=models.CASCADE, related_name='result_user_client', verbose_name="Пользователь")
@@ -95,6 +108,8 @@ class Client(models.Model):
     percentage = models.DecimalField("Процент выполнения", max_digits=5, decimal_places=2, default=0)    
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
+    #initiator = models.CharField("Инициатор", max_length = 5, choices=WHO_INIT)
+    initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='client_initiator_client', verbose_name="Инициатор клиента")    
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='client_author', verbose_name="Автор")
     members = models.ManyToManyField('auth.User', related_name='client_members', verbose_name="Участники")        
     is_active = models.BooleanField("Активность", default=True)
@@ -129,6 +144,7 @@ class ClientTask(MPTTModel):
     datecreate = models.DateTimeField("Создана", auto_now_add=True)    
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultclienttaskuser', verbose_name="Автор")
+    initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_initiator', verbose_name="Инициатор задачи")        
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
         return reverse('my_crm:clienttaskcomments', kwargs={'taskid': self.pk})

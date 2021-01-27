@@ -1,0 +1,53 @@
+[
+    {
+      "model": "crm.Dict_ClientInitiator",
+      "pk": 1,
+      "fields": {
+        "name": "Клиент",
+        "sort": "5",
+        "name_lang": "Client",
+        "is_active": "1"        
+      }
+    },
+    {
+      "model": "crm.Dict_ClientInitiator",
+      "pk": 2,
+      "fields": {
+        "name": "Организация",
+        "sort": "10",
+        "name_lang": "Organization",
+        "is_active": "1"
+      }
+    },
+    {
+        "model": "crm.Dict_ClientInitiator",
+        "pk": 3,
+        "fields": {
+          "name": "Другое",
+          "sort": "15",
+          "name_lang": "Other",
+          "is_active": "1"
+        }
+    },
+
+    {
+         "model": "crm.Dict_ClientTaskStructureType",
+         "pk": 1,
+         "fields": {
+           "name": "Основная задача",
+           "sort": "5",
+           "name_lang": "Main Task",
+           "is_active": "1"
+         }
+    },
+    {
+        "model": "crm.Dict_ClientTaskStructureType",
+        "pk": 2,
+        "fields": {
+          "name": "Подзадача",
+          "sort": "10",
+          "name_lang": "SubTask",
+          "is_active": "1"
+        }
+    }       
+]

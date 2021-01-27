@@ -5,7 +5,7 @@
    {% if current_client.company.id in user_companies %}
 
    <div class="object-detail">
-
+       <!--<div class="circle-left"></div><div class="circle-right"></div>-->
        <p><h2>{{ current_client.lastname }} {{ current_client.firstname }} {{ current_client.middlename }}
        {% if not current_client.is_active %}
           (Клиент перемещён в архив)
@@ -24,6 +24,7 @@
        <p>Закрыт: {{ current_client.dateclose }}</p>-->
        <p>Тип: {{ current_client.type }}</p>
        <p>Статус: {{ current_client.status }}</p>
+       <p>Инициатор: {{ current_client.initiator }}</p>
        <p>Затраченное время, час.: {{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>       
        <p>Выполнен на: {{ current_client.percentage }} %</p>
        <p><i>Участники: 
@@ -43,6 +44,7 @@
        </div>
        <!--{ endif %}-->
        
+       <!--<div class="circle-left"></div><div class="circle-right"></div>       -->
    </div>
 
   {% else %}

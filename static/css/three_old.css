@@ -1,0 +1,153 @@
+body {
+    color: #000; /* цвет текста на странице */
+    background: rgb(206, 206, 206) url(fon_1.jpg); /* фон */
+    margin: 0; /* обнуление полей */
+   }
+#layout { 
+    position: relative;
+   }   
+#header {
+    height: 55px; /* высота шапки */
+    background: #fc0; /* фон */
+    float: top; /* всплытие вверх */
+    padding: 15px 10px 15px 0px;
+    border-radius: 10px;
+   }
+#menu {
+    width: 150px%; /* ширина меню */
+    /*height: 300px; /* высота */
+    /*height: 100%;*/
+    color: #fff;
+    background: rgb(79, 103, 109); /* фон */
+    float: left; /* всплытие влево */
+    /*margin: 0 5% 0 5%; /* боковые поля */
+    padding: 15px 0px 15px 0px;
+    margin: 1% 1% 1% 1%;
+    border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 2px rgb(78, 78, 78);
+   }
+#menu a {
+    color: #fff;
+   }  
+#menu a:hover {
+    background-color: rgb(79, 103, 109);
+    border-left: 5px solid #fc0;
+    border-bottom: 5px solid #fc0;
+    text-decoration: none;
+    /*border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 2px rgb(78, 78, 78);*/
+  }    
+#sidebar {
+    width: 150px; /* ширина сайдбара */
+    /*height: 300px; /* высота */
+    color: #fff;    
+    background: rgb(79, 103, 109); /* фон */
+    float: right; /* всплытие вправо */
+    padding: 15px 0px 15px 0px;
+    /*margin: 1% 1% 1% 1%;*/
+    border: 1px solid;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 2px rgb(78, 78, 78);
+   }
+#content {
+    /*height: 300px; /* высота контента */
+    background: #eee; /* фон */
+    /*margin: 1% 17% 1% 17%; /* боковые поля */
+    margin: 10px 250px 10px 180px;
+    padding: 10px 15px 10px 15px;
+    border: 1px solid;
+    border-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 4px 2px rgb(78, 78, 78);
+    /*float: left;*/
+   }
+   .object-detail {
+    /*height: 300px; /* высота контента */
+    background: #eee; /* фон */
+    background: linear-gradient(to left, #eee, #8e968e);
+    /*margin: 2% 1% 2% 1%; /* боковые поля */
+    padding: 10px 15px 10px 15px;
+    border: 1px solid;
+    border-radius: 10px; 
+    /*float: left;    */
+   }
+    .circle-left {
+      width: 10px;
+      height: 10px;
+      background: rgb(31, 30, 30);
+      -moz-border-radius: 50px;
+      -webkit-border-radius: 50px;
+      border-radius: 5px;
+      float: left;
+    }
+    .circle-right {
+      width: 8px;
+      height: 8px;
+      background: rgb(31, 30, 30);
+      -moz-border-radius: 50px;
+      -webkit-border-radius: 50px;
+      border-radius: 5px;
+      float: right;
+    }    
+      .object-detail-buttons {
+         /*height: 300px; /* высота контента */
+         background: #eee; /* фон */
+         background: linear-gradient(to left, #8e968e, #eee);
+         /*margin: 2% 1% 2% 1%; /* боковые поля */
+         padding: 10px 15px 10px 15px;
+         border: 0px solid;
+         border-radius: 10px; 
+         /*float: left;*/
+      }
+         /*.object-detail a {
+            color: #fff;
+            padding: 5px 10px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-block;
+            width: 100px;
+            }*/
+   .object-list {
+      /*height: 300px; /* высота контента */
+      background: #eee; /* фон */
+      margin: 2% 1% 2% 1%; /* боковые поля */
+      padding: 10px 15px 10px 15px;
+      /*border: 1px solid;
+      border-radius: 10px;*/
+   }   
+     .object-list-buttons {
+      /*height: 300px; /* высота контента */
+      background: #eee; /* фон */
+      background: linear-gradient(to left, #eee, #8e968e);
+      /*margin: 2% 1% 2% 1%; /* боковые поля */
+      padding: 10px 15px 10px 15px;
+      border: 0px solid;
+      border-radius: 10px; 
+      /*float: left;*/
+     }   
+     .object-list-filters {
+        /*height: 300px; /* высота контента */
+        background: #eee; /* фон */
+        background: linear-gradient(to top, #eee, #8e968e);
+        /*margin: 2% 1% 2% 1%; /* боковые поля */
+        padding: 10px 15px 10px 15px;
+        border: 0px solid;
+        border-radius: 10px; 
+        /*float: left;*/
+       }    
+     .object-list-row {
+        background: #eee; /* фон */
+        background: linear-gradient(to top, #eee, #8e968e);      
+     }  
+#footer {
+    height: 50px; /* высота футера */
+    color: #fff; /* цвет текста */
+    /*background: rgb(0, 65, 0); /* фон */
+    background: rgb(82, 97, 90); /* фон */
+    /*clear: both; /* прерывание обтекания */
+    /*margin: 10px 0% 0% 0%;*/
+    /*float: bottom;*/
+    border-radius: 10px;
+   }

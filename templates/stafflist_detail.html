@@ -4,7 +4,7 @@
    <!--{ current_stafflist.company.id }}<br />{ user_companies }}<br />-->
    {% if current_stafflist.company.id in user_companies %}
 
-   <div class="company-entry">
+   <div class="object-detail">
       <h2>{{ current_stafflist.name }}
       {% if not current_stafflist.is_active %}(Должность перемещена в архив){% endif %}
       </h2>
@@ -31,13 +31,10 @@
       <em>Автор: {{ current_stafflist.author }}</em><br /> 
       <em>Дата: {{ current_stafflist.datecreate }}</em><br /> 
       <p>&nbsp;</p>
-      <div>
-         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-         <div style="float: left;"><a href="{% url 'my_company:stafflist_create' current_stafflist.company.id current_stafflist.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_create }}</span></a></div>
-         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
-         <div style="float: left;"><a href="{% url 'my_company:stafflist_update' current_stafflist.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_update }}</span></a></div>
-         <!-- <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-         <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>
+      <div class="object-detail-buttons">
+         <a href="{% url 'my_company:stafflist_create' current_stafflist.company.id current_stafflist.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_create }}</span></a>
+         <a href="{% url 'my_company:stafflist_update' current_stafflist.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_update }}</span></a>
+         <!-- <a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a> -->
       </div>
 
       <!--{ endif %}-->
@@ -46,6 +43,7 @@
    {% else %}
       <h4>Информация о должности недоступна!</h4>
    {% endif %}
+
 {% endblock staff %}  
 
 {% block list %}
@@ -54,10 +52,8 @@
 
       {% if current_stafflist.is_vacancy %}
 
-         <div class="comment-entry">
+         <div class="object-list">
 
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
             <h5>Список резюме</h5>
             <br /> 
 
@@ -72,21 +68,19 @@
                     </div>
                  </div>
            {% endfor %}   
-           <p>&nbsp;</p>
-           <p>&nbsp;</p>
 
          </div>
 
       {% else %}
 
-         <div class="comment-entry">
+         <div class="object-list">
 
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
             <h5>Список Сотрудников</h5> 
-
             <br />
-            <div class="comment-entry"><a href="{% url 'my_company:staff_create' current_stafflist.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_staff_create }}</span></a></div>
+
+            <div class="object-list-buttons">
+               <a href="{% url 'my_company:staff_create' current_stafflist.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_staff_create }}</span></a>
+            </div>
             <br />
 
             {% for currstaff in nodes %}
@@ -100,8 +94,6 @@
                   | Ставка: {{ currstaff.rate }}</span></b>
                </div>
             {% endfor %}   
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
      
          </div>
 

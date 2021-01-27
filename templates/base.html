@@ -16,44 +16,14 @@
 
         <title>{% block title %}1Yes! Корпоративная система управление проектами и задачами{% endblock %}</title>
 
-        <div id="header">    
+        <div class="header">    
            <strong>&nbsp;1Yes! Корпоративная система управление проектами и задачами</strong>
         </div>
 
         {% block head %}
-
-            {% if user.is_authenticated %}    
-               <!--    
-               <span class="hint hint--bottom hint--info" data-hint="Главная страница"><a href="{ url 'my_main:home' %}">Главная</a></span> | 
-               <span class="hint hint--bottom hint--info" data-hint="Организации"><a href="{ url 'my_company:menu_companies' %}">Организации</a></span> | 
-               <span class="hint hint--bottom hint--info" data-hint="Управление проектами и задачами"><a href="{ url 'my_project:projects' 27 0 %}">Проекты</a></span> | 
-               <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{ url 'my_account:userprofile_detail' user.pk %}">{{ user.username }}</a></span>&nbsp;/&nbsp;
-               <span class="hint hint--bottom hint--info" data-hint="Завершить сеанс"><a href="{ url 'my_account:logout' %}">Выход</a></span>
-               -->
-               <div id="menu">
-               <ul>{% load menubuilder %}{% menu main_menu %}
-                      <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
-                      {% for item in menuitems %}
-                         <p><a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a></p>
-                      {% endfor %}
-                      <br />
-                      <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' user.id ' ' %}"><b><i>{{ user.username }}</i></b></a></span>
-                      <!--<span align="right"><b><i>{{ user.username }}</i></b></span>-->
-               </ul>
-               </div>
-            {% else %}
-               <!--<a href="{ url 'my_account:login' %}">Вход</a> | <a href="{ url 'my_account:register' %}">Регистрация</a>-->
-               <ul>{% load menubuilder %}{% menu logout_menu %}
-                  <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
-                  {% for item in menuitems %}<a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a> | 
-                  {% endfor %}
-               </ul>
-            {% endif %}
-
-            <!--<script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>-->
-            <!-----------<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-------->
-            <!--<script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>-->
-
+           <!--<script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>-->
+           <!-----------<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-------->
+           <!--<script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>-->
         {% endblock %}
 
         {% block css %}
@@ -82,65 +52,105 @@
 
     <body>
 
-        <!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
-        <script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+       <!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+       <script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>
+       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+       
+       <div class="layout">
 
+          {% if user.is_authenticated %}    
 
-      <div id="content">
+             <div class="menu">
+                <ul>{% load menubuilder %}{% menu main_menu %}
+                    <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
+                    {% for item in menuitems %}
+                       <p><a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a></p>
+                    {% endfor %}
+                    <br />
+                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' user.id ' ' %}"><b><i>{{ user.username }}</i></b></a></span>
+                    <!--<span align="right"><b><i>{{ user.username }}</i></b></span>-->
+                </ul>
+             </div>
 
-        <!--section id=content>  -->
+             <div class='sidebar'>
+      
+                <p>Сообщения</p>
+                   
+             </div>
 
-            {% block public_content %}
-            {% endblock %}
+            <div class="content">
+      
+              <!--section id=content>  -->          
 
-            {% block vacancies_list %}
-            {% endblock %}  
+                  {% block public_content %}
+                  {% endblock %}    
+      
+                  {% block summary %}
+                  {% endblock %}                
+      
+                  {% block profile %}
+                  {% endblock %}
+      
+                  {% block content %}
+                  {% endblock %}            
+      
+                  {% block company %}
+                  {% endblock %}
+      
+                  {% block staff %}
+                  {% endblock %}            
+      
+                  {% block finance %}
+                  {% endblock %}            
+      
+                  {% block project %}
+                  {% endblock %}
+              
+                  {% block task %}
+                  {% endblock %}     
+              
+                  {% block comment %}
+                  {% endblock %}
+      
+                  {% block client %}
+                  {% endblock %}
+      
+                  {% block list %}
+                  {% endblock %}
+      
+              <!--/section>-->
+      
+            </div>
+      
+          {% else %}
 
-            {% block vacancy %}
-            {% endblock %}     
+            <div id="menu-logout">          
+               <!--<a href="{ url 'my_account:login' %}">Вход</a> | <a href="{ url 'my_account:register' %}">Регистрация</a>-->
+               <ul>{% load menubuilder %}{% menu logout_menu %}
+                  <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
+                  {% for item in menuitems %}<a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a> | 
+                  {% endfor %}
+               </ul>
+            </div>
 
-            {% block summary %}
-            {% endblock %}                
+            <div class="content">
 
-            {% block profile %}
-            {% endblock %}
+               {% block vacancies_list %}
+               {% endblock %}  
+   
+               {% block vacancy %}
+               {% endblock %}                
+               
+            </div>   
 
-            {% block content %}
-            {% endblock %}            
+          {% endif %}
 
-            {% block company %}
-            {% endblock %}
+       </div>
 
-            {% block staff %}
-            {% endblock %}            
-
-            {% block finance %}
-            {% endblock %}            
-
-            {% block project %}
-            {% endblock %}
-        
-            {% block task %}
-            {% endblock %}     
-        
-            {% block comment %}
-            {% endblock %}
-
-            {% block client %}
-            {% endblock %}
-
-            {% block list %}
-            {% endblock %}
-
-        <!--/section>-->
-
-      </div>
-
-      <div id='footer'>
-           
-      </div>
+       <div class='footer'>
+                 
+       </div>
 
     </body>
 

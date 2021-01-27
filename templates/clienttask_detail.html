@@ -22,7 +22,8 @@
       <p>Окончание: {{ clienttask.dateend }}</p>
       <p>Тип в иерархии: {{ clienttask.structure_type }}</p>
       <p>Тип: {{ clienttask.type }}</p>
-      <p>Статус: {{ clienttask.status }}</p>  
+      <p>Статус: {{ clienttask.status }}</p>
+      <p>Инициатор: {{ clienttask.initiator }}</p>        
       <p>Затраченное время, час.: <!--{ taskcomment_timesum.time__sum|floatformat:2 }}-->{{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
       <p>Выполнена на: {{ clienttask.percentage }} %</p>          
       <em>Автор: {{ clienttask.author }}</em><br />

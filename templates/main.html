@@ -2,7 +2,7 @@
 
 {% block public_content %}
    <h3>Главная страница</h3>
-   <div class="content-entry">
+   <!--<div class="content-entry">-->
        {% if perms.companies.add_content %}
           <br />
           <div style="float: left;" class="content-entry"><a href="{% url 'my_company:content_create' %}" class="top-menu"><span class="badge badge-secondary">Добавить<!--{ button_content_create }}--></span></a></div>
@@ -18,7 +18,7 @@
               {% endif %}
               <hr>
        {% endfor %}
-   </div>
+   <!--</div>-->
    <p>&nbsp;</p> 
 {% endblock %}
 
