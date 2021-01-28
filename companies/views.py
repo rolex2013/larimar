@@ -468,7 +468,7 @@ def contents(request, place=0):
     #else:
     #   if is_add2:
     #      button_content_create = 'Добавить'
-   
+    #print(template_name)
     return render(request, template_name, {
                               'content_list': content_list,
                               'user_companies': companies_id, #request.session['_auth_user_companies_id'],
@@ -508,7 +508,7 @@ class ContentDetail(DetailView):
 
     def get_object(self):
         object = super(ContentDetail, self).get_object()
-        if not self.request.user.is_authenticated and object.is_public == False:
+        if not self.request.user.is_authenticated and object.place_id != 1:
            raise Http404
         return object
 
@@ -523,9 +523,12 @@ class ContentDetail(DetailView):
           if not self.object.is_active:
              context['extdescription'] = ' (Контент перемещен в архив)'
           return context              
-       elif self.object.is_public == True:
+       elif self.object.place_id == 1:
+          print(context)
           return context  
        #context['extdescription'] = ' Контент недоступен!'
+       
+       #return context  
 
 class ContentCreate(CreateView):    
     model = Content

@@ -30,9 +30,9 @@
       <em>Дата: {{ clienttask.datecreate }}</em>              
       <p>&nbsp;</p>
       <div class="object-detail-buttons">
-          <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_create }}</span></a>
-          <a href="{% url 'my_crm:clienttask_update' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_update }}</span></a>
-          <a href="{% url 'my_crm:clienttask_history' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttask_history }}</span></a>
+          <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}">{{ button_clienttask_create }}</a>
+          <a href="{% url 'my_crm:clienttask_update' clienttask.pk %}">{{ button_clienttask_update }}</a>
+          <a href="{% url 'my_crm:clienttask_history' clienttask.pk %}">{{ button_clienttask_history }}></a>
       </div>
 
    </div>
@@ -48,7 +48,7 @@
         <h5>Комментарии</h5>
         <br />
         <div class="object-list-buttons">        
-           <a href="{% url 'my_crm:clienttaskcomment_create' clienttask.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_clienttaskcomment_create }}</span></a>
+           <a href="{% url 'my_crm:clienttaskcomment_create' clienttask.pk %}">{{ button_clienttaskcomment_create }}</a>
         </div>
         <br />      
 

@@ -30,7 +30,7 @@ body {
 .menu { 
    float: left;    
    background: #C7E3E4; 
-   width: 200px; 
+   width: 200px;
    color: #fff;
    background: rgb(79, 103, 109); /* фон */
    padding: 15px 0px 15px 0px;
@@ -56,7 +56,7 @@ body {
 .sidebar { 
    float: right;
    background: #C7E3E4; 
-   width: 200px; 
+   width: 200px;
    color: #fff;
    background: rgb(79, 103, 109); /* фон */
    padding: 15px 0px 15px 0px;
@@ -75,6 +75,10 @@ body {
    border-radius: 10px;
    box-shadow: 0 0 4px 2px rgb(78, 78, 78);   
 }
+/*.menu + .content {
+   width: 80%;
+   margin-left: 20%;
+}*/
 .object-detail {
    /*height: 300px; /* высота контента */
    background: #eee; /* фон */
@@ -107,6 +111,7 @@ body {
         /*height: 300px; /* высота контента */
         background: #eee; /* фон */
         background: linear-gradient(to left, #8e968e, #eee);
+        /*background: url(https://html5book.ru/wp-content/uploads/2015/10/background54.png);*/
         /*margin: 2% 1% 2% 1%; /* боковые поля */
         padding: 10px 15px 10px 15px;
         border: 0px solid;
@@ -121,6 +126,34 @@ body {
            display: inline-block;
            width: 100px;
            }*/
+         .object-detail-buttons a {
+            text-decoration: none;
+            display: inline-block;
+            padding: 6px 8px;
+            /*margin: 10px 20px;*/
+            border-radius: 10px;
+            /*background-image: linear-gradient(45deg, #6ab1d7 0%, #33d9de 50%, #002878 100%);*/
+            background-image: linear-gradient(to left, #8e968e, #eee);
+            background-position: 50% 0;
+            background-size: 200% 200%;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
+            /*font-weight: 200;*/
+            font-weight: bold;      
+            color: #4b4b4b;
+            box-shadow: 0 16px 32px 0 #8e968e;
+            transition: .5s;
+         }
+         .object-detail-buttons a:hover {
+            color: #8e968e;    
+            box-shadow: 0 0 0 0 rgba(0, 40, 120, 0);
+            background-position: 0 0;
+            text-decoration: none;      
+         }
+          .object-detail-buttons a:empty {
+            display: none;   
+         }
+      
   .object-list {
      /*height: 300px; /* высота контента */
      background: #eee; /* фон */
@@ -130,7 +163,7 @@ body {
      border-radius: 10px;*/
   }   
     .object-list-buttons {
-     /*height: 300px; /* высота контента */
+     /*height: 300px; /* высота контента */     
      background: #eee; /* фон */
      background: linear-gradient(to left, #eee, #8e968e);
      /*margin: 2% 1% 2% 1%; /* боковые поля */
@@ -138,7 +171,36 @@ body {
      border: 0px solid;
      border-radius: 10px; 
      /*float: left;*/
-    }   
+    }
+    .object-list-buttons a {
+      text-decoration: none;
+      display: inline-block;
+      /*padding: 15px 30px;*/
+      padding: 6px 8px;      
+      /*margin: 10px 20px;*/
+      border-radius: 10px;
+      /*box-shadow: 0 0 40px 40px #F137A6 inset, 0 0 0 0 #F137A6;*/
+      box-shadow: 0 0 40px 40px #8e968e inset, 0 0 0 0 #8e968e;
+      /*background-image: linear-gradient(to left, #8e968e, #eee);*/
+      background: linear-gradient(to left, #8e968e, #eee);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: bold;
+      /*letter-spacing: 2px;*/
+      color: white;
+      transition: .15s ease-in-out;
+    }
+    .object-list-buttons a:hover {
+      /*box-shadow: 0 0 10px 0 #F137A6 inset, 0 0 10px 4px #F137A6;
+      color: #F137A6;*/
+      box-shadow: 0 0 10px 0 #8e968e inset, 0 0 10px 4px #8e968e;
+      color: #8e968e;     
+      text-decoration: none; 
+    }
+    .object-list-buttons a:empty {
+      display: none;   
+    }    
+  
     .object-list-filters {
        /*height: 300px; /* высота контента */
        background: #eee; /* фон */
@@ -152,5 +214,32 @@ body {
     .object-list-row {
        background: #eee; /* фон */
        background: linear-gradient(to top, #eee, #8e968e);      
-    }  
+    }
 
+    .object-filter-button {
+      text-decoration: none;
+      display: inline-block;
+      padding: 4px 6px;
+      /*margin: 10px 20px;*/
+      border-radius: 10px;
+      /*background-image: linear-gradient(45deg, #6ab1d7 0%, #33d9de 50%, #002878 100%);*/
+      background-image: linear-gradient(to left, #8e968e, #eee);
+      background-position: 50% 0;
+      background-size: 200% 200%;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      /*font-weight: 200;*/
+      font-weight: bold;      
+      color: #4b4b4b;
+      box-shadow: 0 12px 24px 0 #8e968e;
+      transition: .5s;
+    }
+    .object-filter-button:hover {
+      color: #8e968e;    
+      box-shadow: 0 0 0 0 rgba(0, 40, 120, 0);
+      background-position: 0 0;
+      text-decoration: none;      
+    }
+    .object-filter-button:empty {
+      display: none;   
+    }

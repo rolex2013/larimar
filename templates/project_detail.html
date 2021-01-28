@@ -38,10 +38,10 @@
        <p>&nbsp;</p>
        <!--{ if user.is_authenticated and user.id == current_project.author_id  %}-->
         <div class="object-detail-buttons">
-           <a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_create }}</span></a>
-           <a href="{% url 'my_project:project_update' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_update }}</span></a>
+           <a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}">{{ button_project_create }}</a>
+           <a href="{% url 'my_project:project_update' current_project.pk %}">{{ button_project_update }}</a>
            <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-           <a href="{% url 'my_project:project_history' current_project.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_project_history }}</span></a>
+           <a href="{% url 'my_project:project_history' current_project.pk %}">{{ button_project_history }}</a>
          </div>
        <!--{ endif %}-->
      </div>
@@ -86,7 +86,7 @@
                   <option value="1" {% ifequal "1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
                   <option value="2" {% ifequal "2" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
                </select>            
-               <button id="selection-button" type="submit" method="GET">Применить</button>               
+               <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>               
             </div>
             <!--<button type="submit">Применить</button>-->
          </form>
@@ -127,7 +127,7 @@
 -->
         <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
         <div class="object-list-buttons">
-           <a href="{% url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a>
+           <a href="{% url 'my_project:task_create' projectid 0 %}">{{ button_task_create }}</a>
          </div>
         
       </div>

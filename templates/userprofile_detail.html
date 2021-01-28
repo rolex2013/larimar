@@ -16,8 +16,7 @@
             <p>E-mail: {{ user_profile.email }}</p>
             <p>Телефон: {{ user_profile.phone }}</p>                                            
             <div class="object-detail-buttons">
-               <a href="{% url 'my_account:userprofile_update' user_profile.pk %}" class="top-menu"><span
-                     class="badge badge-secondary">{{ button_userprofile_update }}</span></a>
+               <a href="{% url 'my_account:userprofile_update' user_profile.pk %}">{{ button_userprofile_update }}</a>
             </div>   
          {% endif %}
 
@@ -25,50 +24,43 @@
 
       <div class="object-list">
 
+
          <h3>Блог пользователя</h3>
-         <!--<div class="content-entry">-->
-            {% if user_profile.user.id == user.id %}
-               <div class="object-list-buttons">
-                  <a href="{% url 'my_company:content_create' %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a>
-                  <a href="{% url 'my_account:userprofile_detail' 0 'all' %}" class="top-menu"><span class="badge badge-secondary">Вывести все</span></a>
-               </div>
-            {% endif %}
 
-            <div class="object-list">
-
-               {% for content in content_list %}
-
-                  <em>{{ content.datecreate }}</em>&nbsp;({{ content.type }}/{{ content.place }})&nbsp;
-                  <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a>
-                  {% if content.is_active == False %}
-                     <strong><em>(в архиве)</em></strong>
-                  {% endif %}
-                  <br />
-                  {% if content.announcement %}
-                     {{ content.announcement }}
-                  {% else %}
-                     {% autoescape off %}{{ content.description }}{% endautoescape %}
-                  {% endif %}
-
-                  <hr>
-
-               {% endfor %}
-
+         {% if user_profile.user.id == user.id %}
+            <div class="object-list-buttons">
+               <a href="{% url 'my_company:content_create' %}">Добавить</a>
+               <a href="{% url 'my_account:userprofile_detail' 0 'all' %}">Вывести все</a>
             </div>
+         {% endif %}
 
-         <!--</div>-->
+         <div class="object-list">
+
+            {% for content in content_list %}
+
+               <em>{{ content.datecreate }}</em>&nbsp;({{ content.type }}/{{ content.place }})&nbsp;
+               <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a>
+               {% if content.is_active == False %}
+                  <strong><em>(в архиве)</em></strong>
+               {% endif %}
+               <br />
+               {% if content.announcement %}
+                  {{ content.announcement }}
+               {% else %}
+                  {% autoescape off %}{{ content.description }}{% endautoescape %}
+               {% endif %}
+
+            {% endfor %}
+
+         </div>
+
+         <hr>
+
+         {% if user_profile.user.id == user.id %}
+            <div id="ajax_listresult">{% include 'notify_list.html' %}</div>
+            <div id="ajax_listerrors"></div>              
+         {% endif %}
 
       </div>
-
-      {% if user_profile.user.id == user.id %}
-
-      <!--<div class="d-td-text">-->
-      <!--<div id="sidebar">-->
-         <div id="ajax_listresult">{% include 'notify_list.html' %}</div>
-         <div id="ajax_listerrors"></div>         
-      <!--</div>-->
-      <!--</div> -->
-      
-      {% endif %}
 
 {% endblock profile %}

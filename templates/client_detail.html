@@ -38,9 +38,9 @@
        <p>&nbsp;</p>
        <!--{ if user.is_authenticated and user.id == current_client.author_id  %}-->
        <div class="object-detail-buttons">
-           <a href="{% url 'my_crm:client_create' current_client.company.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_create }}</span></a>
-           <a href="{% url 'my_crm:client_update' current_client.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_update }}</span></a>
-           <a href="{% url 'my_crm:client_history' current_client.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_client_history }}</span></a>
+           <a href="{% url 'my_crm:client_create' current_client.company.id %}">{{ button_client_create }}</a>
+           <a href="{% url 'my_crm:client_update' current_client.pk %}">{{ button_client_update }}</a>
+           <a href="{% url 'my_crm:client_history' current_client.pk %}">{{ button_client_history }}</a>
        </div>
        <!--{ endif %}-->
        
@@ -96,7 +96,7 @@
                   <option value="1" {% ifequal "1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
                   <option value="2" {% ifequal "2" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
                </select>            
-               <button id="selection-button" type="submit" method="GET">Применить</button>                
+               <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>                
                <!--<button type="submit">Применить</button>-->
             </div>
          </form>
@@ -111,7 +111,7 @@
          {% endif %}
          
          <div class="object-list-buttons">
-            <a href="{% url 'my_crm:clienttask_create' clientid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a>
+            <a href="{% url 'my_crm:clienttask_create' clientid 0 %}">{{ button_task_create }}</a>
          </div>
 
       </div> 

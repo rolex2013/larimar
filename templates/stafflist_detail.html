@@ -32,11 +32,10 @@
       <em>Дата: {{ current_stafflist.datecreate }}</em><br /> 
       <p>&nbsp;</p>
       <div class="object-detail-buttons">
-         <a href="{% url 'my_company:stafflist_create' current_stafflist.company.id current_stafflist.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_create }}</span></a>
-         <a href="{% url 'my_company:stafflist_update' current_stafflist.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_stafflist_update }}</span></a>
-         <!-- <a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a> -->
+           <a href="{% url 'my_company:stafflist_create' current_stafflist.company.id current_stafflist.pk %}">{{ button_stafflist_create }}</a>
+           <a href="{% url 'my_company:stafflist_update' current_stafflist.pk %}">{{ button_stafflist_update }}</a>
+            <!-- <a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a> -->
       </div>
-
       <!--{ endif %}-->
    </div>
    <!--<hr>-->
@@ -79,7 +78,7 @@
             <br />
 
             <div class="object-list-buttons">
-               <a href="{% url 'my_company:staff_create' current_stafflist.id %}" class="top-menu"><span class="badge badge-secondary">{{ button_staff_create }}</span></a>
+               <a href="{% url 'my_company:staff_create' current_stafflist.id %}">{{ button_staff_create }}</a>
             </div>
             <br />
 

@@ -44,13 +44,11 @@
       <em>Дата: {{ task.datecreate }}</em>              
       <p>&nbsp;</p>
       <div class="object-detail-buttons">
-          <a href="{% url 'my_project:task_create' task.project.id task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a>
-
-          <a href="{% url 'my_project:task_update' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_update }}</span></a>
+          <a href="{% url 'my_project:task_create' task.project.id task.pk %}">{{ button_task_create }}</a>
+          <a href="{% url 'my_project:task_update' task.pk %}">{{ button_task_update }}</a>
           <!-- <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-
           <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-          <a href="{% url 'my_project:task_history' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_history }}</span></a>
+          <a href="{% url 'my_project:task_history' task.pk %}">{{ button_task_history }}</a>
       </div>
 
    </div>
@@ -67,7 +65,7 @@
         <br />
         <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
        <div class="object-list-buttons">
-          <a href="{% url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_taskcomment_create }}</span></a>
+          <a href="{% url 'my_project:taskcomment_create' task.pk %}">{{ button_taskcomment_create }}</span></a>
        </div>
        <br />
         {% for taskcomment in nodes %}

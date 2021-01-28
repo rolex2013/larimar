@@ -7,7 +7,7 @@
    <!--{ if object.company_id in user_companies %}-->
    <div class="object-detail">   
      <div class='object-detail-buttons'>
-        <a href="{% url 'my_company:summary_delete' current_summary.pk %}" class="top-menu"><span class="badge badge-secondary">{{ button_delete_resume }}</span></a>        
+        <a href="{% url 'my_company:summary_delete' current_summary.pk %}">{{ button_delete_resume }}</a>        
      </div>
      <br /><br />
 

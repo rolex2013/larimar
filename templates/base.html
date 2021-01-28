@@ -83,8 +83,7 @@
       
               <!--section id=content>  -->          
 
-                  {% block public_content %}
-                  {% endblock %}    
+
       
                   {% block summary %}
                   {% endblock %}                
@@ -125,16 +124,21 @@
       
           {% else %}
 
-            <div id="menu-logout">          
+            <!--<div id="menu-logout">-->
+            <div class="menu">          
                <!--<a href="{ url 'my_account:login' %}">Вход</a> | <a href="{ url 'my_account:register' %}">Регистрация</a>-->
                <ul>{% load menubuilder %}{% menu logout_menu %}
                   <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
-                  {% for item in menuitems %}<a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a> | 
+                  {% for item in menuitems %}
+                     <p><a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a></p>
                   {% endfor %}
                </ul>
             </div>
 
             <div class="content">
+
+               {% block public_content %}
+               {% endblock %}    
 
                {% block vacancies_list %}
                {% endblock %}  
