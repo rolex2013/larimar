@@ -59,6 +59,13 @@
        
        <div class="layout">
 
+         <div class='sidebar'>
+      
+            {% block sidebar %}
+            {% endblock %}     
+               
+         </div>
+
           {% if user.is_authenticated %}    
 
              <div class="menu">
@@ -73,17 +80,9 @@
                 </ul>
              </div>
 
-             <div class='sidebar'>
-      
-                <p>Сообщения</p>
-                   
-             </div>
-
-            <div class="content">
+             <div class="content">
       
               <!--section id=content>  -->          
-
-
       
                   {% block summary %}
                   {% endblock %}                
@@ -120,7 +119,7 @@
       
               <!--/section>-->
       
-            </div>
+             </div>
       
           {% else %}
 
@@ -136,6 +135,12 @@
             </div>
 
             <div class="content">
+
+               {% block registration %}
+               {% endblock %} 
+
+               {% block login %}
+               {% endblock %} 
 
                {% block public_content %}
                {% endblock %}    

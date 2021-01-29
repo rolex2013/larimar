@@ -1,6 +1,7 @@
 body {
    color: #000; /* цвет текста на странице */
    background: rgb(206, 206, 206) url(fon_3_1.jpg); /* фон */
+   background-attachment: fixed;
    margin: 0; /* обнуление полей */
 }
 
@@ -13,7 +14,7 @@ body {
 } 
 
 .footer { 
-   height: 50px; /* высота футера */
+   height: 46px; /* высота футера */
    color: #fff; /* цвет текста */
    /*background: rgb(0, 65, 0); /* фон */
    background: rgb(82, 97, 90); /* фон */
@@ -25,12 +26,15 @@ body {
 
 .layout { 
    overflow: hidden; 
+   /*min-height: 89vh;*/
 }
 
 .menu { 
-   float: left;    
+   float: left;
    background: #C7E3E4; 
    width: 200px;
+   /*min-height: 880px;*/
+   min-height: 88vh;
    color: #fff;
    background: rgb(79, 103, 109); /* фон */
    padding: 15px 0px 15px 0px;
@@ -57,6 +61,7 @@ body {
    float: right;
    background: #C7E3E4; 
    width: 200px;
+   min-height: 88vh;   
    color: #fff;
    background: rgb(79, 103, 109); /* фон */
    padding: 15px 0px 15px 0px;
@@ -66,7 +71,8 @@ body {
    box-shadow: 0 0 4px 2px rgb(78, 78, 78);       
 }
 
-.content { 
+.content {
+   min-height: 88vh;
    margin: 5px 210px 0 210px; /* Отступ справа и слева */
    background: #eee; /* фон */
    padding: 10px 15px 10px 15px;
@@ -128,6 +134,7 @@ body {
            }*/
          .object-detail-buttons a {
             text-decoration: none;
+            /*text-shadow: 1px 1px;*/
             display: inline-block;
             padding: 6px 8px;
             /*margin: 10px 20px;*/
@@ -139,7 +146,7 @@ body {
             font-family: 'Montserrat', sans-serif;
             font-size: 16px;
             /*font-weight: 200;*/
-            font-weight: bold;      
+            font-weight: bold;
             color: #4b4b4b;
             box-shadow: 0 16px 32px 0 #8e968e;
             transition: .5s;
@@ -243,3 +250,31 @@ body {
     .object-filter-button:empty {
       display: none;   
     }
+
+
+.object-detail-button {
+	box-shadow: 0px 10px 14px -7px #276873;
+	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+	background-color:#599bb3;
+	border-radius:8px;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:20px;
+	font-weight:bold;
+	padding:13px 32px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #3d768a;
+   }
+   .object-detail-button:hover {
+	   background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
+	   background-color:#408c99;
+   }
+   .object-detail-button:active {
+	   position:relative;
+	   top:1px;
+   }
+   .object-detail--button:empty {
+      display: none;   
+   }   
