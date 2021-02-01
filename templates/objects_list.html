@@ -7,6 +7,7 @@
    <p><strong>Нет данных!!!</strong></p>
 
 { else %}   -->
+
          {% load mptt_tags %}
  
          <ul>
@@ -22,22 +23,22 @@
                  {% endif %}                    
               {% elif object_list == 'project_list' %}         
                  <!--<div class="object-list-row">-->
-                    <b><a href="{% url 'my_project:tasks' node.pk 0 %}">#{{ node.id }}. {{ node.name }}: </a><span style="font-size: 70%; color: green;"> {{ node.datebegin|date:"d.m.Y" }} - {{ node.dateend|date:"d.m.Y" }} | 
+                    <b><a href="{% url 'my_project:tasks' node.pk 0 %}">#{{ node.id }}. {{ node.name }} </a><span style="font-size: 70%; color: green;"> {{ node.datebegin|date:"d.m.Y" }} - {{ node.dateend|date:"d.m.Y" }} | 
                     {{ node.status.name }} | 
                     {{ node.type }} | 
                     <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}">{{ node.assigner.username }}</a></span> | 
                     <i>{{ node.datecreate|date:"d.m.Y" }}</i> |
-                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> |
+                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span>
                     </b>
                  <!--</div>--><br />          
               {% elif object_list == 'stafflist_list' %}
                  {% if node.is_vacancy %}         
-                    <b><a href="{% url 'my_company:summaries' node.pk %}">{{ node.name }}:</a><span style="font-size: 70%; color: green;"> {{ node.datecreate|date:"d.m.Y" }} | 
+                    <b><a href="{% url 'my_company:summaries' node.pk %}">{{ node.name }}</a><span style="font-size: 70%; color: green;"> {{ node.datecreate|date:"d.m.Y" }} | 
                        <!--<span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | -->
                         {{ node.currency.symbol }}{{ node.salary }} | Кол-во: {{ node.numberemployees }}
                        </span></b><br />
                  {% else %}
-                    <b><a href="{% url 'my_company:staffs' node.pk 0 %}">{{ node.name }}:</a><span style="font-size: 70%; color: green;"> {{ node.datecreate|date:"d.m.Y" }} | 
+                    <b><a href="{% url 'my_company:staffs' node.pk 0 %}">{{ node.name }}</a><span style="font-size: 70%; color: green;"> {{ node.datecreate|date:"d.m.Y" }} | 
                        <!--<span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | -->
                         {{ node.currency.symbol }}{{ node.salary }} | Кол-во: {{ node.numberemployees }}
                        </span></b><br />
@@ -50,7 +51,7 @@
                     <b><a href="{% url 'my_project:taskcomments' node.pk %}">  
                  {% endif %}                                          
                  <!-- <a href="{ url 'my_project:tasks' current_project.id node.pk %}">-->
-                 #{{ node.id }}. {{ node.name }}</a> : <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
+                 #{{ node.id }}. {{ node.name }}</a> <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
                  {{ node.status.name }} | 
                  <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | 
                     {{ node.project.currency.symbol }}{{ node.cost }}
@@ -67,7 +68,7 @@
            {% endrecursetree %}
          </ul> 
          <p><em>{{ object_message }}</em></p>
-      <!--</div>-->
+
 
 <!--{ endif %}-->
       

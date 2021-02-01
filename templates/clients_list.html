@@ -4,17 +4,19 @@
 
    <!--{ if component_name == 'crm' %}-->
        
-      <br />
+
       <!--<div id="ajax_clientlistresult">-->
+         <ul>
          {% for node in nodes %}
             <div class="d-tr">
                <div class="d-td-text">
-                  <span class="hint hint--bottom hint--info" data-hint="{{ node.description }}"><b><a href="{% url 'my_crm:clienttasks' node.pk 0 %}">#{{ node.id }}. {{ node.lastname }} {{ node.firstname }} {{ node.middlename }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.type }} | {{ node.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.manager.pk ' ' %}">{{ node.manager }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span></b>
+                  <li><span class="hint hint--bottom hint--info" data-hint="{{ node.description }}"><b><a href="{% url 'my_crm:clienttasks' node.pk 0 %}">#{{ node.id }}. {{ node.lastname }} {{ node.firstname }} {{ node.middlename }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.type }} | {{ node.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.manager.pk ' ' %}">{{ node.manager }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span></b></li>
                </div>
             </div>
          {% endfor %}
+         </ul>
       <!--</div>-->
-      <br />
+
 
    <!--{ endif %}    -->
 

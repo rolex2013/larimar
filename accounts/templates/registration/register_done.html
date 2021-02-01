@@ -1,8 +1,11 @@
-{% extends "../login_base.html" %}
+{% extends 'base.html' %}
+<!--{ extends "../login_base.html" %}-->
 
 {% block title %}Добро пожаловать!{% endblock %}
 
-{% block main %}
-    <h3>Добро пожаловать, {{ new_user.first_name }}!</h3>
-    <p>Ваш аккаунт успешно создан. Теперь вы можете <a href="{% url 'my_account:login' %}">войти</a> в систему.</p>
+{% block registration_done %}
+   <div class="object-detail">
+      <h3>Добро пожаловать, {{ new_user.first_name }}!</h3>
+      <p>Ваш аккаунт успешно создан. Теперь вы можете <a href="{% url 'my_account:login' %}">войти</a> в систему.</p>
+   </div>
 {% endblock %}
