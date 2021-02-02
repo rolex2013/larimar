@@ -16,12 +16,12 @@ from companies.forms import CompanyForm
 
 from crm.models import Client, Dict_ClientStatus, Dict_ClientType
 from crm.models import ClientTask, ClientTaskComment, Dict_ClientTaskStatus, Dict_ClientTaskType, ClientStatusLog, ClientTaskStatusLog
-#from projects.models import ProjectStatusLog
-#from .forms import clientForm, TaskForm, TaskCommentForm
-#from .forms import clientStatusLog, TaskStatusLog
-from .forms import ClientForm, ClientTaskForm, ClientTaskCommentForm
+from crm.models import ClientEvent, ClientEventComment, Dict_ClientEventStatus, Dict_ClientEventType, ClientEventStatusLog
 
-from .tables import ClientTable, ClientStatusLogTable, ClientTaskStatusLogTable
+from .forms import ClientForm, ClientTaskForm, ClientTaskCommentForm
+from .forms import ClientEventForm, ClientEventCommentForm
+
+from .tables import ClientTable, ClientStatusLogTable, ClientTaskStatusLogTable, ClientEventStatusLogTable
 #from projects.tables import ProjectStatusLogTable
 from django_tables2 import RequestConfig
 
@@ -274,7 +274,7 @@ class ClientTaskCreate(CreateView):
 
     def get_form_kwargs(self):
        kwargs = super(ClientTaskCreate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid']})
+       kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid'], 'is_event': self.kwargs['is_event']})
        return kwargs   
 
 class ClientTaskUpdate(UpdateView):    
@@ -366,6 +366,172 @@ class ClientTaskCommentUpdate(UpdateView):
        context['header'] = 'Изменить Комментарий'
        return context
 
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clientevents(request, clientid=0, pk=0):
+
+    # *** фильтруем по статусу ***
+    currentuser = request.user.id
+    evntstatus_selectid = 0
+    try:
+       evntstatus = request.POST['select_eventstatus']
+    except:
+       event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True)
+    else:
+       if evntstatus == "0":
+          # если в выпадающем списке выбрано "Все активные"
+          event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True)
+       else:
+          if evntstatus == "-1":
+             # если в выпадающем списке выбрано "Все"
+             event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid)
+          elif evntstatus == "-2":
+             # если в выпадающем списке выбрано "Просроченные"
+             event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True, dateend__lt=datetime.now())                         
+          else:             
+             event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, status=evntstatus) #, dateclose__isnull=True)
+       evntstatus_selectid = evntstatus
+    # *******************************
+
+    len_list = len(event_list)
+
+    currentclient = Client.objects.get(id=clientid)  
+    
+    if pk == 0:
+       current_event = 0 
+    else:
+       current_event = ClientEvent.objects.get(id=pk)
+
+    button_client_create = ''
+    button_client_update = ''
+    button_client_history = ''     
+    button_event_create = ''
+
+    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
+    if currentuser == currentclient.author_id or currentuser == currentclient.assigner_id or is_member:
+       button_client_create = 'Добавить'
+       button_client_history = 'История' 
+       button_event_create = 'Добавить'             
+       if currentuser == currentclient.author_id or currentuser == currentclient.assigner_id:
+          button_client_update = 'Изменить'    
+     
+    return render(request, "client_detail.html", {
+                              'nodes': event_list.distinct().order_by(), #.order_by('tree_id', 'level', '-dateend'),
+                              'current_event': current_event,
+                              'current_client': currentclient,                             
+                              'clientid': clientid,
+                              'user_companies': request.session['_auth_user_companies_id'],                              
+                              'button_client_create': button_client_create,
+                              'button_client_update': button_client_update,
+                              'button_client_history': button_client_history,
+                              'button_event_create': button_event_create,
+                              #'button_event_history': button_event_history,                              
+                              'eventstatus': Dict_ClientEventStatus.objects.filter(is_active=True),
+                              'eventtype': Dict_ClientEventType.objects.filter(is_active=True),
+                              'evntstatus_selectid': evntstatus_selectid,
+                              'object_list': 'clientevent_list',
+                              'len_list': len_list,
+                                                })
+
+class ClientEventCreate(CreateView):    
+    model = ClientEvent
+    form_class = ClientEventForm
+    #template_name = 'event_create.html'
+    template_name = 'object_form.html'
+
+    def form_valid(self, form):
+       form.instance.client_id = self.kwargs['clientid']
+       form.instance.author_id = self.request.user.id
+       return super(ClientEventCreate, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+       context = super(ClientEventCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новое Событие'
+       return context
+
+    def get_form_kwargs(self):
+       kwargs = super(ClientEventCreate, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid']})
+       return kwargs   
+
+class ClientEventUpdate(UpdateView):    
+    model = ClientEvent
+    form_class = ClientEventForm
+    #template_name = 'task_update.html'
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(ClientEventkUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Событие'
+       return context
+
+    def get_form_kwargs(self):
+       kwargs = super(ClientУмутеUpdate, self).get_form_kwargs()
+       kwargs.update({'user': self.request.user, 'action': 'update'})
+       return kwargs       
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clienteventcomments(request, eventid):
+
+    currentevent = ClientEvent.objects.get(id=eventid)
+    currentuser = request.user.id
+    
+    eventcomment_list = ClientEventComment.objects.filter(Q(author=request.user.id) | Q(task__client__members__in=[currentuser,]), is_active=True, event=eventid)
+    #print(taskcomment_list)
+    button_eventcomment_create = ''
+    #button_eventcomment_update = ''
+    button_event_create = ''
+    button_event_update = ''    
+    button_event_history = ''
+    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
+    if currentuser == currentevent.author_id or currentuser == currentevent.assigner_id or is_member:
+       button_event_create = 'Добавить'
+       button_event_history = 'История' 
+       button_eventcomment_create = 'Добавить'             
+       if currentuser == currentevent.author_id or currentuser == currentevent.assigner_id:
+          button_event_update = 'Изменить'
+     
+    return render(request, "clientevent_detail.html", {
+                              'nodes': eventcomment_list.distinct().order_by(),
+                              #'current_eventcomment': currenteventcomment,
+                              'clienttask': currenttask,
+                              'button_clientevent_create': button_event_create,
+                              'button_clientevent_update': button_event_update,
+                              'button_clientevent_history': button_event_history,
+                              #'object_list': 'clientevent_list',
+                              'button_clienteventcomment_create': button_eventcomment_create,
+                                                })      
+
+class ClientEventCommentDetail(DetailView):
+    model = ClientEventComment
+    template_name = 'eventcomment_detail.html'
+
+class ClientEventCommentCreate(CreateView):    
+    model = ClientEventComment
+    form_class = ClientEventCommentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(ClientEventCommentCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новый Комментарий'
+       return context
+
+    def form_valid(self, form):
+       form.instance.event_id = self.kwargs['eventid']
+       form.instance.author_id = self.request.user.id
+       return super(ClientEventCommentCreate, self).form_valid(form)
+
+class ClientEventCommentUpdate(UpdateView):    
+    model = ClientEventComment
+    form_class = ClientEventCommentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+       context = super(ClientEventCommentUpdate, self).get_context_data(**kwargs)
+       context['header'] = 'Изменить Комментарий'
+       return context
+
+
 # *** ИСТОРИИ ИЗМЕНЕНИЯ СТАТУСОВ КЛИЕНТОВ И ЗАДАЧ ***
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
@@ -420,6 +586,27 @@ def clienttaskhistory(request, pk=0):
                               'table': table,                                                               
                                                 })
 
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clienteventhistory(request, pk=0):
+
+    if pk == 0:
+       current_event = 0
+    else:
+       current_event = ClientEvent.objects.get(id=pk)
+
+    comps = request.session['_auth_user_companies_id']
+
+    nodes = ClientEventStatusLog.objects.filter(task_id=pk, is_active=True)
+    table = ClientEventStatusLogTable(nodes)  
+
+    RequestConfig(request).configure(table)      
+
+    return render(request, "clientevent_history.html", {
+                              'nodes': nodes, 
+                              'current_event': current_event,
+                              'user_companies': comps,  
+                              'table': table,                                                               
+                                                })
 
 # *** ФИЛЬТРЫ СПИСКОВ ***
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
@@ -511,4 +698,42 @@ def clienttaskfilter(request):
     object_message = ''
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'                  
-    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'clienttask_list', 'object_message': object_message})             
+    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'clienttask_list', 'object_message': object_message})     
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def clienteventfilter(request):
+    clientid = request.GET['clientid']
+    eventstatus = request.GET['eventstatus']
+    eventtype = request.GET['eventtype']
+    # *** фильтруем по статусу ***
+    currentuser = request.user.id
+    #tskstatus_selectid = 0
+    if eventstatus == "0":
+       # если в выпадающем списке выбрано "Все активные"
+       event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True)
+    else:
+       if eventstatus == "-1":
+          # если в выпадающем списке выбрано "Все"
+          event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid)
+       elif eventstatus == "-2":
+          # если в выпадающем списке выбрано "Просроченные"
+          event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True, dateend__lt=datetime.now())                         
+       else:             
+          event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, status=eventstatus)
+    # *** фильтр по типу ***
+    if eventtype != "-1":
+       event_list = event_list.filter(Q(type=eventtype))
+    # *** фильтр по принадлежности ***
+    mytskuser = request.GET['myeventuser']
+    if mytskuser == "0":
+       event_list = event_list.filter(Q(client__members__in=[currentuser,]))
+    elif mytskuser == "1":
+       event_list = event_list.filter(Q(author=request.user.id))               
+    elif mytskuser == "2":
+       event_list = event_list.filter(Q(assigner=request.user.id)) 
+    # *******************************           
+    nodes = event_list.distinct().order_by()
+    object_message = ''
+    if len(nodes) == 0:
+       object_message = 'Задачи не найдены!'                  
+    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'clientevent_list', 'object_message': object_message})    

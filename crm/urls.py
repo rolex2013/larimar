@@ -2,11 +2,12 @@
 from django.urls import path
 
 from companies.models import Company
-from crm.models import Client #, ClientTask, ClientTaskComment
+from crm.models import Client #, ClientTask, ClientTaskComment, ClientEvent, ClientEventComment
 
-#from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
-from crm.views import clients, ClientCreate, ClientUpdate, clienttasks, clienttaskcomments, ClientTaskCreate, ClientTaskUpdate, ClientTaskCommentCreate, ClientTaskCommentUpdate
-from crm.views import clienthistory, clienttaskhistory, clientfilter, clienttaskfilter
+from crm.views import clients, clienttasks, clienttaskcomments, clientevents, clienteventcomments
+from crm.views import ClientCreate, ClientUpdate, ClientTaskCreate, ClientTaskUpdate, ClientTaskCommentCreate, ClientTaskCommentUpdate, ClientEventCreate, ClientEventUpdate, ClientEventCommentCreate, ClientEventCommentUpdate
+from crm.views import clientfilter, clienttaskfilter, clienteventfilter
+from crm.views import clienthistory, clienttaskhistory, clienteventhistory
 
 from . import views
 
@@ -34,4 +35,9 @@ urlpatterns = [
     #path('taskcomments_list/<int:pk>', views.TaskCommentDetail.as_view(), name = 'taskcomment_detail'),
     path('clienttaskcomments_list/clienttaskcomment_create/<int:taskid>', views.ClientTaskCommentCreate.as_view(), name = 'clienttaskcomment_create'),
     path('clienttaskcomments_list/clienttaskcomment_update/<int:pk>', views.ClientTaskCommentUpdate.as_view(), name = 'clienttaskcomment_update'),
+    path('clientevents_list/clientevent_create/<int:clientid>', views.ClientEventCreate.as_view(), name = 'clientevent_create'),
+    path('clientevents_list/clientevent_update/<int:pk>', views.ClientEventUpdate.as_view(), name = 'clientevent_update'),    
+    path('clientevents_list/clientevent_filter/', views.clienteventfilter, name = 'clientevent_filter'),
+    path('clientevents_list/clientevent_history/<int:pk>', views.clienteventhistory, name = 'clientevent_history'),
+    path('clientevents_page/<int:eventid>', views.clienteventcomments, name = 'clienteventcomments'),     
 ]

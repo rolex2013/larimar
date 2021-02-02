@@ -41,7 +41,7 @@ class Dict_ClientTaskStatus(models.Model):
     name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
-    is_close = models.BooleanField("Закрывает задачу", default=False)    
+    is_close = models.BooleanField("Закрывает задачу", default=False)
     is_active = models.BooleanField("Активность", default=True)    
     class Meta:
         ordering = ('sort',)
@@ -73,6 +73,31 @@ class Dict_ClientTaskType(models.Model):
         verbose_name_plural = 'Типы задач'
     def __str__(self):
         return (self.name)
+
+class Dict_ClientEventType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип события'
+        verbose_name_plural = 'Типы событий'
+    def __str__(self):
+        return (self.name)
+
+class Dict_ClientEventStatus(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_close = models.BooleanField("Закрывает событие", default=False)
+    is_active = models.BooleanField("Активность", default=True)    
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Статус события'
+        verbose_name_plural = 'Статусы событий'
+    def __str__(self):
+        return (self.name)                
 
 class Dict_ClientInitiator(models.Model):
     name = models.CharField("Наименование", max_length=64)
@@ -130,7 +155,7 @@ class Client(models.Model):
 
 class ClientTask(MPTTModel):
     name = models.CharField("Наименование", max_length=128)
-    description = RichTextUploadingField("Описание")
+    description = RichTextUploadingField("Описание", null=True, blank=True)
     datebegin = models.DateTimeField("Начало")
     dateend = models.DateTimeField("Окончание")
     client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='resultclient', verbose_name="Клиент")
@@ -138,13 +163,14 @@ class ClientTask(MPTTModel):
     assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='clienttask_assigner', verbose_name="Исполнитель")   
     cost = models.DecimalField("Стоимость", max_digits=12, decimal_places=2)
     percentage = models.DecimalField("Процент выполнения", max_digits=5, decimal_places=2, default=0)    
-    structure_type = models.ForeignKey('Dict_ClientTaskStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_structure_type', verbose_name="Тип задачи в иерархии")
-    type = models.ForeignKey('Dict_ClientTaskType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_type', verbose_name="Тип")
+    structure_type = models.ForeignKey('Dict_ClientTaskStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_structure_type', verbose_name="Тип в иерархии")
+    type = models.ForeignKey('Dict_ClientTaskType', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_type', verbose_name="Тип")
+    typeevent = models.ForeignKey('Dict_ClientEventType', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clientevent_type', verbose_name="Тип события")    
     status = models.ForeignKey('Dict_ClientTaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_status', verbose_name="Статус")
-    datecreate = models.DateTimeField("Создана", auto_now_add=True)    
+    datecreate = models.DateTimeField("Дата создания", auto_now_add=True)    
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultclienttaskuser', verbose_name="Автор")
-    initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_initiator', verbose_name="Инициатор задачи")        
+    initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_initiator', verbose_name="Инициатор")        
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
         return reverse('my_crm:clienttaskcomments', kwargs={'taskid': self.pk})
@@ -170,6 +196,50 @@ class ClientTaskComment(models.Model):
 
     def get_absolute_url(self):
         return reverse('my_crm:clienttaskcomments', kwargs={'taskid': self.task_id})           
+
+    def __str__(self):
+        return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+class ClientEvent(models.Model):
+    name = models.CharField("Наименование", max_length=128)
+    description = RichTextUploadingField("Описание", null=True, blank=True)
+    datebegin = models.DateTimeField("Начало")
+    dateend = models.DateTimeField("Окончание")
+    client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='event_client', verbose_name="Клиент")
+    task = models.ForeignKey('ClientTask', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='eventtask', verbose_name="Связанная задача")
+    assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='event_assigner', verbose_name="Исполнитель")   
+    type = models.ForeignKey('Dict_ClientEventType', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='event_type', verbose_name="Тип события")
+    status = models.ForeignKey('Dict_ClientEventStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='event_status', verbose_name="Статус события")
+    datecreate = models.DateTimeField("Дата создания", auto_now_add=True)    
+    dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='event_user', verbose_name="Автор")
+    initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='event_initiator', verbose_name="Инициатор")        
+    is_active = models.BooleanField("Активность", default=True)
+    def get_absolute_url(self):
+        return reverse('my_crm:clienteventcomments', kwargs={'eventid': self.pk})
+    def __str__(self):
+         return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
+    class MPTTMeta:
+        #order_insertion_by = ['name']    
+        order_insertion_by = ['-dateend']     
+    class Meta:
+        verbose_name = 'Событие'
+        verbose_name_plural = 'События'         
+
+class ClientEventComment(models.Model):
+    name = models.CharField("Наименование", max_length=128)
+    description = RichTextUploadingField("Описание")
+    event = models.ForeignKey('ClientEvent', on_delete=models.CASCADE, related_name='resultclientevent', verbose_name="Событие")
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)    
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    is_active = models.BooleanField("Активность", default=True) 
+
+    def get_absolute_url(self):
+        return reverse('my_crm:clienteventcomments', kwargs={'eventid': self.task_id})           
 
     def __str__(self):
         return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
@@ -213,4 +283,20 @@ class ClientTaskStatusLog(models.Model):
         ordering = ('task', 'date')
         verbose_name = 'История Задачи'
         verbose_name_plural = 'Истории Задач'                
-        
+
+class ClientEventStatusLog(models.Model):
+    event = models.ForeignKey('ClientEvent', on_delete=models.CASCADE, related_name='resultclienteventlog', verbose_name="Событие")
+    status = models.ForeignKey('Dict_ClientEventStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clientevent_status_log', verbose_name="Статус События")
+    date = models.DateTimeField("Дата", auto_now_add=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    description = models.CharField("Комментарий", max_length=1024)
+    is_active = models.BooleanField("Активность", default=True)
+    
+    def __str__(self):
+        return (self.clienttask.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
+    
+    class Meta:
+        unique_together = ('event', 'status', 'date', 'author')
+        ordering = ('event', 'date')
+        verbose_name = 'История События'
+        verbose_name_plural = 'Истории Событий'            

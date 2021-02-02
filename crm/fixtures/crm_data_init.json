@@ -49,5 +49,77 @@
           "name_lang": "SubTask",
           "is_active": "1"
         }
-    }       
+    },  
+    
+    {
+      "model": "crm.Dict_ClientEventType",
+      "pk": 1,
+      "fields": {
+        "name": "Звонок исходящий",
+        "sort": "10",
+        "name_lang": "",
+        "is_active": "1"
+      }
+    },
+    {
+      "model": "crm.Dict_ClientEventType",
+      "pk": 2,
+      "fields": {
+        "name": "Звонок входящий",
+        "sort": "15",
+        "name_lang": "",
+        "is_active": "1"
+      }
+    },
+    {
+      "model": "crm.Dict_ClientEventType",
+      "pk": 3,
+      "fields": {
+        "name": "Встреча онлайн",
+        "sort": "20",
+        "name_lang": "",
+        "is_active": "1"
+      }
+    }, 
+    
+    {
+      "model": "crm.Dict_ClientEventStatus",
+      "pk": 1,
+      "fields": {
+        "name": "Ожидаемое",
+        "sort": "5",
+        "name_lang": "",
+        "is_active": "1"
+      }
+    },
+    {
+      "model": "crm.Dict_ClientEventStatus",
+      "pk": 2,
+      "fields": {
+        "name": "Перенесено",
+        "sort": "10",
+        "name_lang": "",
+        "is_active": "1"
+      }
+    },
+    {
+      "model": "crm.Dict_ClientEventStatus",
+      "pk": 3,
+      "fields": {
+        "name": "Состоялось",
+        "sort": "15",
+        "name_lang": "",
+        "is_active": "1"
+      }
+    },
+    {
+      "model": "crm.Dict_ClientEventStatus",
+      "pk": 4,
+      "fields": {
+        "name": "Отменено",
+        "sort": "20",
+        "name_lang": "Canceled",
+        "is_active": "1"
+      }
+    }                                        
 ]

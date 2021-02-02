@@ -1,5 +1,5 @@
 import django_tables2 as tables
-from .models import Client, ClientStatusLog, ClientTaskStatusLog
+from .models import Client, ClientStatusLog, ClientTaskStatusLog, ClientEventStatusLog
 
 #class Blank1Column(tables.Column):
 #
@@ -58,5 +58,15 @@ class ClientTaskStatusLogTable(tables.Table):
         # add class="paleblue" to <table> tag
         attrs = {'class': 'd-table'}
         exclude = ('id', 'task', 'is_active')
+        order_by = '-date'
+        sequence = ('date', 'status', 'author', 'description')   
+
+class ClientEventStatusLogTable(tables.Table):
+    #age = tables.Column('Custom name')
+    class Meta:
+        model = ClientEventStatusLog
+        # add class="paleblue" to <table> tag
+        attrs = {'class': 'd-table'}
+        exclude = ('id', 'event', 'is_active')
         order_by = '-date'
         sequence = ('date', 'status', 'author', 'description')   

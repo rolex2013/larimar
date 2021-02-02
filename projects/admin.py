@@ -20,8 +20,11 @@ from projects.models import ProjectStatusLog, TaskStatusLog
 
 from crm.models import Dict_ClientTaskStructureType
 from crm.models import Dict_ClientType, Dict_ClientStatus, Dict_ClientTaskType, Dict_ClientTaskStatus
+from crm.models import Dict_ClientEventType, Dict_ClientEventStatus
 from crm.models import Client, ClientTask, ClientTaskComment
 from crm.models import ClientStatusLog, ClientTaskStatusLog
+from crm.models import ClientEvent, ClientEventComment
+from crm.models import ClientEventStatusLog
 
 from django_mptt_admin.admin import DjangoMpttAdmin
 
@@ -106,7 +109,6 @@ admin.site.register(Dict_ProjectType)
 
 admin.site.register(Dict_ProjectStatus)
 
-
 admin.site.register(Dict_TaskStructureType)
 
 admin.site.register(Dict_TaskType)
@@ -125,16 +127,26 @@ admin.site.register(Dict_ClientType)
 
 admin.site.register(Dict_ClientStatus)
 
-admin.site.register(Client)
-
 admin.site.register(Dict_ClientTaskStructureType)
 
 admin.site.register(Dict_ClientTaskType)
 
 admin.site.register(Dict_ClientTaskStatus)
 
+admin.site.register(Dict_ClientEventType)
+
+admin.site.register(Dict_ClientEventStatus)
+
+admin.site.register(Client)
+
+admin.site.register(ClientEvent)
+
 admin.site.register(ClientTaskComment)
+
+admin.site.register(ClientEventComment)
 
 admin.site.register(ClientStatusLog)
 
 admin.site.register(ClientTaskStatusLog)
+
+admin.site.register(ClientEventStatusLog)
