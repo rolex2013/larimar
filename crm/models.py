@@ -239,10 +239,10 @@ class ClientEventComment(models.Model):
     is_active = models.BooleanField("Активность", default=True) 
 
     def get_absolute_url(self):
-        return reverse('my_crm:clienteventcomments', kwargs={'eventid': self.task_id})           
+        return reverse('my_crm:clienteventcomments', kwargs={'eventid': self.event_id})           
 
     def __str__(self):
-        return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
+        return (str(self.event) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
 
     class Meta:
         verbose_name = 'Комментарий'

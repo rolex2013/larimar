@@ -195,6 +195,9 @@ def clienttasks(request, clientid=0, pk=0):
 
     len_list = len(task_list)
 
+    event_list = ClientEvent.objects.filter(client=clientid, is_active=True)
+    len_elist = len(event_list)    
+
     currentclient = Client.objects.get(id=clientid)
 
     taskcomment_costsum = ClientTaskComment.objects.filter(task__client_id=currentclient.id).aggregate(Sum('cost'))
@@ -227,7 +230,8 @@ def clienttasks(request, clientid=0, pk=0):
     if currentuser == currentclient.author_id or currentuser == currentclient.assigner_id or is_member:
        button_client_create = 'Добавить'
        button_client_history = 'История' 
-       button_task_create = 'Добавить'             
+       button_task_create = 'Добавить'
+       button_event_create = 'Добавить'                    
        if currentuser == currentclient.author_id or currentuser == currentclient.assigner_id:
           button_client_update = 'Изменить'    
      
@@ -252,6 +256,12 @@ def clienttasks(request, clientid=0, pk=0):
                               'taskcomment_timesum': taskcomment_timesum,  
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,
                               'len_list': len_list,
+                              'enodes': event_list.distinct().order_by(),
+                              'len_elist': len_elist,
+                              'button_event_create': button_event_create,
+                              'eventstatus': Dict_ClientEventStatus.objects.filter(is_active=True),
+                              'eventtype': Dict_ClientEventType.objects.filter(is_active=True),
+                              #'evntstatus_selectid': evntstatus_selectid,                                                            
                                                 })
 
 class ClientTaskCreate(CreateView):    
@@ -476,7 +486,7 @@ def clienteventcomments(request, eventid):
     currentevent = ClientEvent.objects.get(id=eventid)
     currentuser = request.user.id
     
-    eventcomment_list = ClientEventComment.objects.filter(Q(author=request.user.id) | Q(task__client__members__in=[currentuser,]), is_active=True, event=eventid)
+    eventcomment_list = ClientEventComment.objects.filter(Q(author=request.user.id) | Q(event__client__members__in=[currentuser,]), is_active=True, event=eventid)
     #print(taskcomment_list)
     button_eventcomment_create = ''
     #button_eventcomment_update = ''
@@ -494,7 +504,7 @@ def clienteventcomments(request, eventid):
     return render(request, "clientevent_detail.html", {
                               'nodes': eventcomment_list.distinct().order_by(),
                               #'current_eventcomment': currenteventcomment,
-                              'clienttask': currenttask,
+                              'clientevent': currentevent,
                               'button_clientevent_create': button_event_create,
                               'button_clientevent_update': button_event_update,
                               'button_clientevent_history': button_event_history,
@@ -649,14 +659,6 @@ def clientfilter(request):
             object_message = ''
             if len(nodes) == 0:
                object_message = 'Клиенты не найдены!'
-               #object_message = 'Нет данных!'
-            #print(client_list)        
-            #print(clntstatus)
-            #print(clnttype)
-            #print(len(nodes))    
-            #print(object_message)   
-            #return HttpResponse(json.dumps(nodes), content_type='application/json')
-            #return JsonResponse({'message': 'Это message!'})
             return render(request, 'clients_list.html', {'nodes': nodes, 'object_list': 'client_list', 'object_message': object_message})           
     #else:
     #    return JsonResponse({'error': 'Only authenticated users'}, status=404) 
@@ -708,6 +710,8 @@ def clienteventfilter(request):
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     #tskstatus_selectid = 0
+    #print('////////*******************************')
+    #print(request)
     if eventstatus == "0":
        # если в выпадающем списке выбрано "Все активные"
        event_list = ClientEvent.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True)
@@ -724,16 +728,18 @@ def clienteventfilter(request):
     if eventtype != "-1":
        event_list = event_list.filter(Q(type=eventtype))
     # *** фильтр по принадлежности ***
-    mytskuser = request.GET['myeventuser']
-    if mytskuser == "0":
+    myevntuser = request.GET['myeventuser']
+    if myevntuser == "0":
        event_list = event_list.filter(Q(client__members__in=[currentuser,]))
-    elif mytskuser == "1":
+    elif myevntuser == "1":
        event_list = event_list.filter(Q(author=request.user.id))               
-    elif mytskuser == "2":
+    elif myevntuser == "2":
        event_list = event_list.filter(Q(assigner=request.user.id)) 
     # *******************************           
-    nodes = event_list.distinct().order_by()
-    object_message = ''
-    if len(nodes) == 0:
-       object_message = 'Задачи не найдены!'                  
-    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'clientevent_list', 'object_message': object_message})    
+    enodes = event_list.distinct().order_by()
+    #print(enodes)               
+    event_message = ''
+    len_elist = len(enodes)
+    if len_elist == 0:
+       event_message = 'События не найдены!'                  
+    return render(request, 'clientevents_list.html', {'enodes': enodes, 'event_list': 'clientevent_list', 'event_message': event_message, 'clientid': clientid})    

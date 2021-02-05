@@ -35,9 +35,12 @@ urlpatterns = [
     #path('taskcomments_list/<int:pk>', views.TaskCommentDetail.as_view(), name = 'taskcomment_detail'),
     path('clienttaskcomments_list/clienttaskcomment_create/<int:taskid>', views.ClientTaskCommentCreate.as_view(), name = 'clienttaskcomment_create'),
     path('clienttaskcomments_list/clienttaskcomment_update/<int:pk>', views.ClientTaskCommentUpdate.as_view(), name = 'clienttaskcomment_update'),
+    path('clientevents_page/<int:clientid>/<int:pk>', views.clientevents, name = 'clientevents'),
     path('clientevents_list/clientevent_create/<int:clientid>', views.ClientEventCreate.as_view(), name = 'clientevent_create'),
     path('clientevents_list/clientevent_update/<int:pk>', views.ClientEventUpdate.as_view(), name = 'clientevent_update'),    
     path('clientevents_list/clientevent_filter/', views.clienteventfilter, name = 'clientevent_filter'),
     path('clientevents_list/clientevent_history/<int:pk>', views.clienteventhistory, name = 'clientevent_history'),
-    path('clientevents_page/<int:eventid>', views.clienteventcomments, name = 'clienteventcomments'),     
+    path('clienteventcomments_page/<int:eventid>', views.clienteventcomments, name = 'clienteventcomments'),
+    path('clienteventcomments_list/clienteventcomment_create/<int:eventid>', views.ClientEventCommentCreate.as_view(), name = 'clienteventcomment_create'),
+    path('clienteventcomments_list/clienteventcomment_update/<int:pk>', views.ClientEventCommentUpdate.as_view(), name = 'clienteventcomment_update'),        
 ]

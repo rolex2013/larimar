@@ -1,0 +1,84 @@
+<h3>Список Задач</h3>
+
+{% if len_list %}
+
+ <!--<form action="{ url 'my_crm:tasks' current_client.pk 0 %}" method="post">-->
+ <form method="GET">           
+    {% csrf_token %}
+    <div class="object-list-filters">            
+       <label>По статусу: </label>
+       <select name="select_taskstatus" id="statusselectid" class="select-task-status">
+          <option value="-1" {% ifequal "-1" tskstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+          <option value="0" {% ifequal 0 tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option> 
+          <option value="-2" {% ifequal "-2" tskstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>                    
+          {% for tskstatus in taskstatus %}
+             <option value="{{tskstatus.id}}" {% ifequal tskstatus.id tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                {{tskstatus.name}}
+             </option>   
+          {% endfor %}
+       </select>
+       <label>По типу: </label>
+       <select name="select-tasktype" id="typeselectid" class="select-task-type">
+          <option value="-1" {% ifequal "-1" tsktype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+          {% for tsktype in tasktype %}
+             <option value="{{tsktype.id}}" {% ifequal tsktype.id tsktype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                {{tsktype.name}}
+             </option>   
+          {% endfor %}
+       </select>                              
+       <label>Мои задачи: </label>
+       <select name="select-mytask" id="myselectid" class="select-my-task">
+          <option value="-1" {% ifequal "-1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+          <option value="0" {% ifequal "0" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
+          <option value="1" {% ifequal "1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+          <option value="2" {% ifequal "2" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
+       </select>            
+       <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>                
+       <!--<button type="submit">Применить</button>-->
+    </div>
+ </form>
+
+ <div id="ajax_clienttasklistresult">{% include 'objects_list.html' %}</div>
+ <div id="ajax_clienttasklisterrors"></div>
+
+ {% else %}
+
+    <p>Задач пока нет...</p>
+
+ {% endif %}
+ 
+ <div class="object-list-buttons">
+    <a href="{% url 'my_crm:clienttask_create' clientid 0 %}">{{ button_task_create }}</a>
+ </div>
+
+
+ <script>
+
+    $('#selection-button').click(function(){
+          event.preventDefault(); // *** без этого страница перегружается после возврата data
+          var statusSelected = $("#statusselectid option:selected").val()
+          var typeSelected = $("#typeselectid option:selected").val()
+          var mytaskSelected = $("#myselectid option:selected").val()
+          console.log('===' + typeSelected)            
+          $.ajax({
+             type: 'GET',
+             url: "{% url 'my_crm:clienttask_filter' %}",
+             data: {
+                clientid: {{ current_client.id }},                  
+                taskstatus: statusSelected,
+                tasktype: typeSelected,
+                mytaskuser: mytaskSelected
+             },
+             success: function(data){
+                $('#ajax_clienttasklistresult').html(data);                  
+                //alert(data);
+             },
+             error: function(xhr, errmsg, err){
+                console.log("error")
+                console.log(error_data)
+                $('#ajax_clienttasklisterrors').html('Нет данных!');
+             }               
+          });
+       });
+
+ </script>

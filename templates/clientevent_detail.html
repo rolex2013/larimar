@@ -24,8 +24,8 @@
       <em>Дата: {{ clientevent.datecreate }}</em>              
       <p>&nbsp;</p>
       <div class="object-detail-buttons">
-          <a href="{% url 'my_crm:clientevent_create' clientevent.client.id clientevent.pk 0 %}">{{ button_clientevent_create }}</a>
-          <a href="{% url 'my_crm:clientevent_update' clientevent.pk 0 %}">{{ button_clientevent_update }}</a>
+          <a href="{% url 'my_crm:clientevent_create' clientevent.client.id %}">{{ button_clientevent_create }}</a>
+          <a href="{% url 'my_crm:clientevent_update' clientevent.pk %}">{{ button_clientevent_update }}</a>
           <a href="{% url 'my_crm:clientevent_history' clientevent.pk %}">{{ button_clientevent_history }}></a>
       </div>
 

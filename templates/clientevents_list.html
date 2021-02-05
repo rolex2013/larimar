@@ -1,0 +1,98 @@
+<h3>Список Событий</h3>
+
+
+
+         <form method="GET">           
+            {% csrf_token %}
+            <div class="object-list-filters">            
+               <label>По статусу: </label>
+               <select name="select_eventstatus" id="eventstatusselectid" class="select-event-status">
+                  <option value="-1" {% ifequal "-1" evntstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                  <option value="0" {% ifequal 0 evntstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option> 
+                  <option value="-2" {% ifequal "-2" evntstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>                    
+                  {% for evntstatus in eventstatus %}
+                     <option value="{{evntstatus.id}}" {% ifequal evntstatus.id evntstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                        {{evntstatus.name}}
+                     </option>   
+                  {% endfor %}
+               </select>
+               <label>По типу: </label>
+               <select name="select-eventtype" id="eventtypeselectid" class="select-event-type">
+                  <option value="-1" {% ifequal "-1" evnttype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                  {% for evnttype in eventtype %}
+                     <option value="{{evnttype.id}}" {% ifequal evnttype.id evnttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                        {{evnttype.name}}
+                     </option>   
+                  {% endfor %}
+               </select>                              
+               <label>Мои события: </label>
+               <select name="select-myevent" id="myeventselectid" class="select-my-event">
+                  <option value="-1" {% ifequal "-1" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                  <option value="0" {% ifequal "0" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
+                  <option value="1" {% ifequal "1" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                  <option value="2" {% ifequal "2" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
+               </select>            
+               <button id="selection-event-button" type="submit" method="GET" class="object-filter-button">Применить</button>                
+               <!--<button type="submit">Применить</button>-->
+            </div>
+         </form>         
+
+         <div id="ajax_clienteventlistresult">
+            <!--{ if len_elist %}         -->
+               <ul>
+               {% for enode in enodes %}
+                  <div class="d-tr">
+                     <div class="d-td-text">
+                        <li><span class="hint hint--bottom hint--info" data-hint="{{ enode.description }}"><b><a href="{% url 'my_crm:clientevents' enode.pk 0 %}">#{{ enode.id }}. {{ enode.name }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{{ enode.datecreate}} | {{ enode.type }} | {{ enode.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' enode.assigner.pk ' ' %}">{{ enode.assigner }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' enode.author.pk ' ' %}"><i>{{ enode.author }}</i></a></span></span></b></li>
+                     </div>
+                  </div>
+               {% endfor %}
+               </ul>
+            <!--{ else %}
+               <p>Событий пока нет...</p>     
+            { endif %}-->
+            {{ event.message }}   
+         
+
+         </div>
+
+         <div id="ajax_clienteventlisterrors"></div>
+
+   <p><em>{{ event_message }}</em></p>
+
+
+<div class="object-list-buttons">
+   <a href="{% url 'my_crm:clientevent_create' clientid %}">{{ button_event_create }}</a>
+</div>
+
+
+<script>
+
+   $('#selection-event-button').click(function(){
+         event.preventDefault(); // *** без этого страница перегружается после возврата data
+         var eventstatusSelected = $("#eventstatusselectid option:selected").val()
+         var eventtypeSelected = $("#eventtypeselectid option:selected").val()
+         var myeventSelected = $("#myeventselectid option:selected").val()
+         console.log('===' + eventtypeSelected)            
+         $.ajax({
+            type: 'GET',
+            url: "{% url 'my_crm:clientevent_filter' %}",
+            data: {
+               clientid: {{ current_client.id }},                  
+               eventstatus: eventstatusSelected,
+               eventtype: eventtypeSelected,
+               myeventuser: myeventSelected
+            },
+            success: function(data){
+               $('#ajax_clienteventlistresult').html(data);                  
+               //alert(data);
+            },
+            error: function(xhr, errmsg, err){
+               console.log("error")
+               console.log(error_data)
+               $('#ajax_clienteventlisterrors').html('Нет данных!');
+            }               
+         });
+      });
+
+</script>
