@@ -156,8 +156,8 @@ class ClientTaskForm(forms.ModelForm):
 
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
-        self.is_event = kwargs.pop('is_event')  # Узнаём, что за модель
-        is_event = bool(self.is_event)
+        #self.is_event = kwargs.pop('is_event')  # Узнаём, что за модель
+        #is_event = bool(self.is_event)
 
         if self.action == 'create':
            self.client = kwargs.pop('clientid')
@@ -256,6 +256,7 @@ class ClientEventForm(forms.ModelForm):
 
         if self.action == 'create':
            self.client = kwargs.pop('clientid')
+           self.task = kwargs.pop('taskid')           
            super(ClientEventForm, self).__init__(*args, **kwargs)
            clnt = Client.objects.get(id=self.client)
            companyid = clnt.company_id           
@@ -273,6 +274,8 @@ class ClientEventForm(forms.ModelForm):
         # в выпадающий список для выбора Исполнителя События подбираем только тех юзеров, которые являются участниками этого Клиента 
         usr = User.objects.filter(id__in=members_list, is_active=True)  
         #print (usr)
+        if self.task != 0:
+           self.fields['task'].initial = self.task
         self.fields['assigner'].queryset = usr
         self.fields['author'].initial = self.user.id        
         for field in self.disabled_fields:

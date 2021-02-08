@@ -79,7 +79,8 @@ body {
    border: 1px solid;
    border-color: #fff;
    border-radius: 10px;
-   box-shadow: 0 0 4px 2px rgb(78, 78, 78);   
+   box-shadow: 0 0 4px 2px rgb(78, 78, 78);
+   font-size: 80%;   
 }
 /*.menu + .content {
    width: 80%;
@@ -113,6 +114,18 @@ body {
      border-radius: 5px;
      float: right;
    }    
+     .object-detail p {
+        line-height: 8px;
+     }
+     .object-detail a {
+      color: rgb(180, 180, 180);
+      text-shadow: 1px 1px #fff;
+
+     }      
+     .object-detail a:hover{      
+      color: #000;
+      text-decoration: none;         
+     }           
      .object-detail-buttons {
         /*height: 300px; /* высота контента */
         background: #eee; /* фон */
@@ -121,7 +134,7 @@ body {
         /*margin: 2% 1% 2% 1%; /* боковые поля */
         padding: 10px 15px 10px 15px;
         border: 0px solid;
-        border-radius: 10px; 
+        border-radius: 10px;
         /*float: left;*/
      }
         /*.object-detail a {
@@ -144,7 +157,7 @@ body {
             background-position: 50% 0;
             background-size: 200% 200%;
             font-family: 'Montserrat', sans-serif;
-            font-size: 16px;
+            font-size: 12px;
             /*font-weight: 200;*/
             font-weight: bold;
             color: #4b4b4b;
@@ -246,7 +259,7 @@ body {
       /*background-image: linear-gradient(to left, #8e968e, #eee);*/
       background: linear-gradient(to left, #8e968e, #eee);
       font-family: 'Montserrat', sans-serif;
-      font-size: 16px;
+      font-size: 12px;
       font-weight: bold;
       /*letter-spacing: 2px;*/
       color: white;
@@ -275,7 +288,20 @@ body {
        border: 0px solid;
        border-radius: 10px; 
        /*float: left;*/
-      }    
+    }
+    .object-list-left {
+       float: left;
+       text-decoration: none;
+       width: 49%; 
+       /*margin-right: 10px;       */
+       /*min-height: 68vh;*/
+    }     
+    .object-list-right {
+       /*float: right;       */
+       text-decoration: none;
+       width: 49%;        
+       margin-left: 52%;
+    }      
     .object-list-row {
        background: #eee; /* фон */
        background: linear-gradient(to top, #eee, #8e968e);      

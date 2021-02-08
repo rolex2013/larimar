@@ -80,7 +80,17 @@
         "name_lang": "",
         "is_active": "1"
       }
-    }, 
+    },
+    {
+      "model": "crm.Dict_ClientEventType",
+      "pk": 4,
+      "fields": {
+        "name": "Встреча офлайн",
+        "sort": "25",
+        "name_lang": "",
+        "is_active": "1"
+      }
+    },      
     
     {
       "model": "crm.Dict_ClientEventStatus",

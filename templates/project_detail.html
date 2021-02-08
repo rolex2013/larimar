@@ -60,9 +60,9 @@
 
       <div class="object-list">
 
-        <h3>Список Задач</h3>
+        <h4>Задачи</h4>
 
-        {% if len_list %}
+        <!--{ if len_list %}-->
 
          <!--<form action="{ url 'my_project:tasks' current_project.pk 0 %}" method="post">-->
          <form method="GET">           
@@ -94,11 +94,11 @@
          <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
          <div id="ajax_listerrors"></div> 
          
-         {% else %}
+         <!--{ else %}
 
             <p>Задач пока нет...</p>
 
-         {% endif %}         
+         { endif %}         -->
 
 <!--
         { load mptt_tags %}

@@ -193,10 +193,10 @@ def clienttasks(request, clientid=0, pk=0):
        tskstatus_selectid = tskstatus
     # *******************************
 
-    len_list = len(task_list)
+    #len_list = len(task_list)
 
     event_list = ClientEvent.objects.filter(client=clientid, is_active=True)
-    len_elist = len(event_list)    
+    #len_elist = len(event_list)    
 
     currentclient = Client.objects.get(id=clientid)
 
@@ -255,9 +255,9 @@ def clienttasks(request, clientid=0, pk=0):
                               'taskcomment_costsum': taskcomment_costsum,
                               'taskcomment_timesum': taskcomment_timesum,  
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,
-                              'len_list': len_list,
+                              #'len_list': len_list,
                               'enodes': event_list.distinct().order_by(),
-                              'len_elist': len_elist,
+                              #'len_elist': len_elist,
                               'button_event_create': button_event_create,
                               'eventstatus': Dict_ClientEventStatus.objects.filter(is_active=True),
                               'eventtype': Dict_ClientEventType.objects.filter(is_active=True),
@@ -284,7 +284,7 @@ class ClientTaskCreate(CreateView):
 
     def get_form_kwargs(self):
        kwargs = super(ClientTaskCreate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid'], 'is_event': self.kwargs['is_event']})
+       kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid']})
        return kwargs   
 
 class ClientTaskUpdate(UpdateView):    
@@ -319,6 +319,9 @@ def clienttaskcomments(request, taskid):
     minutes, sec = divmod(sec, 60)
     seconds = sec
     taskcomment_list = ClientTaskComment.objects.filter(Q(author=request.user.id) | Q(task__client__members__in=[currentuser,]), is_active=True, task=taskid)
+    
+    event_list = ClientEvent.objects.filter(task=currenttask, is_active=True)    
+    
     #print(taskcomment_list)
     button_taskcomment_create = ''
     #button_taskcomment_update = ''
@@ -329,7 +332,8 @@ def clienttaskcomments(request, taskid):
     if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id or is_member:
        button_task_create = 'Добавить'
        button_task_history = 'История' 
-       button_taskcomment_create = 'Добавить'             
+       button_taskcomment_create = 'Добавить'
+       button_event_create = 'Добавить'             
        if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
           button_task_update = 'Изменить'
      
@@ -345,7 +349,9 @@ def clienttaskcomments(request, taskid):
                               'clienttaskcomment_timesum': taskcomment_timesum,  
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,                            
                               'button_clienttaskcomment_create': button_taskcomment_create,
-                                                })      
+                              'enodes': event_list.distinct().order_by(), 
+                              'button_event_create': button_event_create,                                                 
+                              })      
 
 class ClientTaskCommentDetail(DetailView):
     model = ClientTaskComment
@@ -403,7 +409,7 @@ def clientevents(request, clientid=0, pk=0):
        evntstatus_selectid = evntstatus
     # *******************************
 
-    len_list = len(event_list)
+    #len_list = len(event_list)
 
     currentclient = Client.objects.get(id=clientid)  
     
@@ -431,16 +437,14 @@ def clientevents(request, clientid=0, pk=0):
                               'current_client': currentclient,                             
                               'clientid': clientid,
                               'user_companies': request.session['_auth_user_companies_id'],                              
-                              'button_client_create': button_client_create,
-                              'button_client_update': button_client_update,
-                              'button_client_history': button_client_history,
-                              'button_event_create': button_event_create,
-                              #'button_event_history': button_event_history,                              
+                              'button_event_create': button_client_create,
+                              'buttonevent_update': button_client_update,
+                              'button_event_history': button_client_history,                              
                               'eventstatus': Dict_ClientEventStatus.objects.filter(is_active=True),
                               'eventtype': Dict_ClientEventType.objects.filter(is_active=True),
                               'evntstatus_selectid': evntstatus_selectid,
                               'object_list': 'clientevent_list',
-                              'len_list': len_list,
+                              #'len_list': len_list,
                                                 })
 
 class ClientEventCreate(CreateView):    
@@ -451,6 +455,7 @@ class ClientEventCreate(CreateView):
 
     def form_valid(self, form):
        form.instance.client_id = self.kwargs['clientid']
+       form.instance.task_id = self.kwargs['taskid']
        form.instance.author_id = self.request.user.id
        return super(ClientEventCreate, self).form_valid(form)
 
@@ -461,7 +466,7 @@ class ClientEventCreate(CreateView):
 
     def get_form_kwargs(self):
        kwargs = super(ClientEventCreate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid']})
+       kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid'], 'taskid': self.kwargs['taskid']})
        return kwargs   
 
 class ClientEventUpdate(UpdateView):    
@@ -471,12 +476,12 @@ class ClientEventUpdate(UpdateView):
     template_name = 'object_form.html'
 
     def get_context_data(self, **kwargs):
-       context = super(ClientEventkUpdate, self).get_context_data(**kwargs)
+       context = super(ClientEventUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Событие'
        return context
 
     def get_form_kwargs(self):
-       kwargs = super(ClientУмутеUpdate, self).get_form_kwargs()
+       kwargs = super(ClientEventUpdate, self).get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs       
 
@@ -510,7 +515,7 @@ def clienteventcomments(request, eventid):
                               'button_clientevent_history': button_event_history,
                               #'object_list': 'clientevent_list',
                               'button_clienteventcomment_create': button_eventcomment_create,
-                                                })      
+                              })      
 
 class ClientEventCommentDetail(DetailView):
     model = ClientEventComment
@@ -606,7 +611,7 @@ def clienteventhistory(request, pk=0):
 
     comps = request.session['_auth_user_companies_id']
 
-    nodes = ClientEventStatusLog.objects.filter(task_id=pk, is_active=True)
+    nodes = ClientEventStatusLog.objects.filter(event_id=pk, is_active=True)
     table = ClientEventStatusLogTable(nodes)  
 
     RequestConfig(request).configure(table)      
@@ -741,5 +746,6 @@ def clienteventfilter(request):
     event_message = ''
     len_elist = len(enodes)
     if len_elist == 0:
-       event_message = 'События не найдены!'                  
-    return render(request, 'clientevents_list.html', {'enodes': enodes, 'event_list': 'clientevent_list', 'event_message': event_message, 'clientid': clientid})    
+       event_message = 'События не найдены!'   
+    #print(event_message)               
+    return render(request, 'clientevents_objects_list.html', {'enodes': enodes, 'event_list': 'clientevent_list', 'event_message': event_message, 'clientid': clientid})    

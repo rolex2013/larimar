@@ -1,6 +1,6 @@
-<h3>Список Задач</h3>
+<h4>Задачи</h4>
 
-{% if len_list %}
+<!--{ if len_list %}-->
 
  <!--<form action="{ url 'my_crm:tasks' current_client.pk 0 %}" method="post">-->
  <form method="GET">           
@@ -26,7 +26,7 @@
              </option>   
           {% endfor %}
        </select>                              
-       <label>Мои задачи: </label>
+       <label>Мои: </label>
        <select name="select-mytask" id="myselectid" class="select-my-task">
           <option value="-1" {% ifequal "-1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
           <option value="0" {% ifequal "0" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
@@ -41,11 +41,11 @@
  <div id="ajax_clienttasklistresult">{% include 'objects_list.html' %}</div>
  <div id="ajax_clienttasklisterrors"></div>
 
- {% else %}
+ <!--{ else %}
 
     <p>Задач пока нет...</p>
 
- {% endif %}
+ { endif %}-->
  
  <div class="object-list-buttons">
     <a href="{% url 'my_crm:clienttask_create' clientid 0 %}">{{ button_task_create }}</a>

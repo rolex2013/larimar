@@ -1,6 +1,4 @@
-<h3>Список Событий</h3>
-
-
+   <h4>События</h4>
 
          <form method="GET">           
             {% csrf_token %}
@@ -25,7 +23,7 @@
                      </option>   
                   {% endfor %}
                </select>                              
-               <label>Мои события: </label>
+               <label>Мои: </label>
                <select name="select-myevent" id="myeventselectid" class="select-my-event">
                   <option value="-1" {% ifequal "-1" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
                   <option value="0" {% ifequal "0" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
@@ -37,32 +35,11 @@
             </div>
          </form>         
 
-         <div id="ajax_clienteventlistresult">
-            <!--{ if len_elist %}         -->
-               <ul>
-               {% for enode in enodes %}
-                  <div class="d-tr">
-                     <div class="d-td-text">
-                        <li><span class="hint hint--bottom hint--info" data-hint="{{ enode.description }}"><b><a href="{% url 'my_crm:clientevents' enode.pk 0 %}">#{{ enode.id }}. {{ enode.name }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{{ enode.datecreate}} | {{ enode.type }} | {{ enode.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' enode.assigner.pk ' ' %}">{{ enode.assigner }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' enode.author.pk ' ' %}"><i>{{ enode.author }}</i></a></span></span></b></li>
-                     </div>
-                  </div>
-               {% endfor %}
-               </ul>
-            <!--{ else %}
-               <p>Событий пока нет...</p>     
-            { endif %}-->
-            {{ event.message }}   
-         
-
-         </div>
-
+         <div id="ajax_clienteventlistresult">{% include 'clientevents_objects_list.html' %}</div>
          <div id="ajax_clienteventlisterrors"></div>
 
-   <p><em>{{ event_message }}</em></p>
-
-
 <div class="object-list-buttons">
-   <a href="{% url 'my_crm:clientevent_create' clientid %}">{{ button_event_create }}</a>
+   <a href="{% url 'my_crm:clientevent_create' clientid 0 %}">{{ button_event_create }}</a>
 </div>
 
 

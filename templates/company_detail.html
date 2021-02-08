@@ -66,13 +66,13 @@
 
          {% if component_name == 'companies' %}
 
-            <h3>Штатное расписание</h3>  
+            <h4>Штатное расписание</h4>  
 
             <div id="ajax_listresult">{% include 'objects_list.html' %}</div>        
 
          {% elif component_name == 'crm' %}
 
-            <h3>Список Клиентов</h3> 
+            <h4>Клиенты</h4> 
 
             {% if len_list %}
 
@@ -123,7 +123,7 @@
 
          {% else %}
 
-            <h3>Список Проектов</h3>  
+            <h4>Проекты</h4>  
             
             {% if len_list %}
 

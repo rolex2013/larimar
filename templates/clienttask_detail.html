@@ -30,9 +30,9 @@
       <em>Дата: {{ clienttask.datecreate }}</em>              
       <p>&nbsp;</p>
       <div class="object-detail-buttons">
-          <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk 0 %}">{{ button_clienttask_create }}</a>
-          <a href="{% url 'my_crm:clienttask_update' clienttask.pk 0 %}">{{ button_clienttask_update }}</a>
-          <a href="{% url 'my_crm:clienttask_history' clienttask.pk %}">{{ button_clienttask_history }}></a>
+          <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}">{{ button_clienttask_create }}</a>
+          <a href="{% url 'my_crm:clienttask_update' clienttask.pk %}">{{ button_clienttask_update }}</a>
+          <a href="{% url 'my_crm:clienttask_history' clienttask.pk %}">{{ button_clienttask_history }}</a>
       </div>
 
    </div>
@@ -44,7 +44,8 @@
 {% block list %}
 
    <div class="object-list">
-
+ 
+      <div class="object-list-left">
         <h5>Комментарии</h5>
         <br />
         <div class="object-list-buttons">        
@@ -53,17 +54,33 @@
         <br />      
 
         {% for taskcomment in nodes %}
-           <div class="comment-entry">
+           <!--<div class="comment-entry">-->
             <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
               <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
                  {{ taskcomment.time }} час. | 
                  {{ clienttask.client.currency.symbol }}{{ taskcomment.cost }}</span></b>
             <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
-           </div>           
+           <!--</div>           -->
         {% endfor %}
+      </div>
 
-        <p>&nbsp;</p>
-        
+      <div class="object-list-right">
+         <h5>События</h5>
+         <br />
+         <div class="object-list-buttons">        
+            <a href="{% url 'my_crm:clientevent_create' clienttask.client.pk clienttask.id %}">{{ button_event_create }}</a>
+         </div>
+         <br />      
+ 
+         {% for event in enodes %}
+            <!--<div class="comment-entry">-->
+             <b>{{ event.name }} : <span style="font-size: 70%; color: blue;">{{ event.datecreate }} | 
+               <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' event.author.pk ' ' %}">{{ event.author.username }}</a></span></i></span></b>
+             <p>{% autoescape off %}{{ event.description }}{% endautoescape %}</p>
+            <!--</div>           -->
+         {% endfor %}
+      </div>
+
    </div>
 
 {% endblock list %}

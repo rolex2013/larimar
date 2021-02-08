@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% load render_table from django_tables2 %}
+
+{% block event %}
+
+   <div class="object-detail">
+   
+      <p><h4>Событие: {{ current_event.name }}
+        {% if not current_event.is_active %}
+           (Событие перемещено в архив)
+        {% endif %}
+        </h4></p>      
+      <p>{% autoescape off %}{{ current_event.description }}{% endautoescape %}</p>
+      <i><p>Клиент: {{ current_event.client }}</p></i>
+      {% if current_event.task %}
+         <p>Связанная задача: {{ current_event.task }}</p>
+      {% endif %}
+      <p>Исполнитель: {{ current_event.assigner }}</p>       
+      <p>Начало: {{ current_event.datebegin }}</p>
+      <p>Окончание: {{ current_event.dateend }}</p>
+      <p>Тип: {{ current_event.type }}</p>
+      <p>Статус: {{ current_event.status }}</p>
+      <p>Инициатор: {{ current_event.initiator }}</p>        
+      <em>Автор: {{ current_event.author }}</em><br />
+      <em>Дата: {{ current_event.datecreate }}</em>              
+      <p>&nbsp;</p>
+   
+   </div>
+
+{% endblock %}
+
+{% block list %}
+   <!-- Защита от прямого доступа к истории проекта -->
+   {% if current_event.client.company.id in user_companies %}
+
+      <div class="object-list">
+
+         <h4>История события</h4>
+       
+         {% render_table table %}   
+
+      </div>
+      <p>&nbsp;</p>
+
+   {% else %}
+      <h5>Информация об истории события недоступна!</h5>
+   {% endif %}  
+
+{% endblock %}
