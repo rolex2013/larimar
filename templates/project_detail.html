@@ -6,11 +6,11 @@
 
      <div class="object-detail">
 
-       <p><h2>{{ current_project.name }}
+       <h3>{{ current_project.name }}
        {% if not current_project.is_active %}
           (Проект перемещён в архив)
        {% endif %}
-       </h2></p>
+       </h3>
        <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
        <i><p>Организация: <a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></p></i>
        {% if current_project.parent %}

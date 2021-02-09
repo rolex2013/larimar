@@ -108,7 +108,11 @@ class Project(MPTTModel):
         return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '0'})  
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
-
+    def save(self, *args, **kwargs):
+        super(Project, self).save(*args, **kwargs)          
+        ProjectStatusLog.objects.create(project_id=self.id, 
+                                        status=self.status, 
+                                        author=self.author) 
     class MPTTMeta:
         order_insertion_by = ['name']
     class Meta:
@@ -137,6 +141,11 @@ class Task(MPTTModel):
         #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
     def __str__(self):
          return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
+    def save(self, *args, **kwargs):
+        super(Task, self).save(*args, **kwargs)          
+        TaskStatusLog.objects.create(task_id=self.id, 
+                                     status=self.status, 
+                                     author=self.author)          
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     

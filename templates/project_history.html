@@ -7,21 +7,21 @@
    {% if current_project.company.id in user_companies %}
 
      <div class="object-detail">
-       <p><h2>{{ current_project.name }}
+       <h4>{{ current_project.name }}
        {% if not current_project.is_active %}
           (Проект перемещён в архив)
        {% endif %}
-       </h2></p>
-       {% autoescape off %}{{ current_project.description }}{% endautoescape %}<br />
-       Исполнитель: {{ current_project.assigner }}<br />     
-       Начало: {{ current_project.datebegin }}<br />
-       Окончание: {{ current_project.dateend }}<br />
-       Статус: {{ current_project.status }}<br />
-       <i>Участники: 
+       </h4>
+       <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
+       <p>Исполнитель: {{ current_project.assigner }}</p>     
+       <p>Начало: {{ current_project.datebegin }}</p>
+       <p>Окончание: {{ current_project.dateend }}</p>
+       <p>Статус: {{ current_project.status }}</p>
+       <p><i>Участники: 
        {% for u in current_project.members.all %}
           <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
-       </i><br />
+       </i></p>
        <em>Автор: {{ current_project.author }}</em><br /> 
        <!--<em>Участники: { current_project.members.name }}</em><br /> -->
        <em>Дата: {{ current_project.datecreate }}</em>
@@ -44,7 +44,7 @@
 <!--     <div class="project-history-list">-->
       <div class="object-list">
 
-        <h3>История проекта</h3>
+        <h4>История проекта</h4>
 
         {% render_table table %}   
 

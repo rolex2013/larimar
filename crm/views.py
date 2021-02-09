@@ -455,7 +455,9 @@ class ClientEventCreate(CreateView):
 
     def form_valid(self, form):
        form.instance.client_id = self.kwargs['clientid']
-       form.instance.task_id = self.kwargs['taskid']
+       #print(self.kwargs['taskid'])
+       if self.kwargs['taskid'] != 0:
+          form.instance.task_id = self.kwargs['taskid']
        form.instance.author_id = self.request.user.id
        return super(ClientEventCreate, self).form_valid(form)
 

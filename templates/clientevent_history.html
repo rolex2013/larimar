@@ -4,13 +4,15 @@
 
 {% block event %}
 
+  {% if current_event.client.company.id in user_companies %}
+
    <div class="object-detail">
    
-      <p><h4>Событие: {{ current_event.name }}
-        {% if not current_event.is_active %}
-           (Событие перемещено в архив)
-        {% endif %}
-        </h4></p>      
+      <h4>{{ current_event.name }}
+      {% if not current_event.is_active %}
+          (Событие перемещено в архив)
+      {% endif %}
+      </h4>
       <p>{% autoescape off %}{{ current_event.description }}{% endautoescape %}</p>
       <i><p>Клиент: {{ current_event.client }}</p></i>
       {% if current_event.task %}
@@ -24,9 +26,12 @@
       <p>Инициатор: {{ current_event.initiator }}</p>        
       <em>Автор: {{ current_event.author }}</em><br />
       <em>Дата: {{ current_event.datecreate }}</em>              
-      <p>&nbsp;</p>
-   
+      <p>&nbsp;</p>   
    </div>
+
+  {% else %}
+     <h4>Информация о Событии недоступна!</h4>
+  {% endif %}  
 
 {% endblock %}
 
@@ -36,7 +41,7 @@
 
       <div class="object-list">
 
-         <h4>История события</h4>
+         <h5>История события</h5>
        
          {% render_table table %}   
 

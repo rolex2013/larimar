@@ -2,12 +2,14 @@
 
 {% block finance %}
 
-<h3>Курсы валют, {{ r_base }} за 1 ед.</h3>
-<br />
+<div class="object-list">   
+
+   <h3>Курсы валют, {{ r_base }} за 1 ед.</h3>
+   <br />
 
 <!--{ button_currencyrate_update }}<br /><br />-->
 
-<div class="d-table">
+<!--<div class="d-table">-->
 
    <form method="GET">           
       {% csrf_token %}

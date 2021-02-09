@@ -19,11 +19,11 @@
 
    <div class="object-detail">
 
-      <p><h4>Задача: {{ task.name }}
-        {% if not task.is_active %}
-           (Задача перемещена в архив)
-        {% endif %}
-        </h4></p>      
+      <h4>Задача: {{ task.name }}
+      {% if not task.is_active %}
+         (Задача перемещена в архив)
+      {% endif %}
+      </h4>      
       <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p>
       <i><p>Проект: <a href="{% url 'my_project:tasks' task.project.pk 0 %}">{{ task.project.name }}</a></p></i>
       {% if task.parent %}
@@ -61,8 +61,8 @@
 
    <div class="object-list">
 
-        <h4>Комментарии</h4>
-        <br />
+        <h5>Комментарии</h5>
+        
         <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
        <div class="object-list-buttons">
           <a href="{% url 'my_project:taskcomment_create' task.pk %}">{{ button_taskcomment_create }}</span></a>

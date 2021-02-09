@@ -4,11 +4,11 @@
 
 <div class="object-detail">
 
-      <p><h4>Задача: {{ clienttask.name }}
+      <h4>Задача: {{ clienttask.name }}
         {% if not clienttask.is_active %}
            (Задача перемещена в архив)
         {% endif %}
-        </h4></p>      
+        </h4>      
       <p>{% autoescape off %}{{ clienttask.description }}{% endautoescape %}</p>
       <i><p>Клиент: <a href="{% url 'my_crm:clienttasks' clienttask.client.pk 0 %}">{{ clienttask.client }}</a></p></i>
       {% if clienttask.parent %}
@@ -46,8 +46,9 @@
    <div class="object-list">
  
       <div class="object-list-left">
+         
         <h5>Комментарии</h5>
-        <br />
+
         <div class="object-list-buttons">        
            <a href="{% url 'my_crm:clienttaskcomment_create' clienttask.pk %}">{{ button_clienttaskcomment_create }}</a>
         </div>
@@ -65,8 +66,9 @@
       </div>
 
       <div class="object-list-right">
+
          <h5>События</h5>
-         <br />
+
          <div class="object-list-buttons">        
             <a href="{% url 'my_crm:clientevent_create' clienttask.client.pk clienttask.id %}">{{ button_event_create }}</a>
          </div>

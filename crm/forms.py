@@ -114,11 +114,11 @@ class ClientTaskForm(forms.ModelForm):
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == 'update':
            if self.cleaned_data['status'].id != self.initial['status']:
-              # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения 
-              dict_status = Dict_ClientTaskStatus.objects.get(pk=self.cleaned_data['status'].id)
-              ClientTaskStatusLog.objects.create(task_id=self.initial['id'], 
-                                                 status_id=dict_status.id, 
-                                                 author_id=self.user.id)
+              # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели)
+              #dict_status = Dict_ClientTaskStatus.objects.get(pk=self.cleaned_data['status'].id)
+              #ClientTaskStatusLog.objects.create(task_id=self.initial['id'], 
+              #                                   status_id=dict_status.id, 
+              #                                   author_id=self.user.id)
               if self.cleaned_data['status'].is_close:
                  if self.user.id != self.initial['author']: 
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
@@ -213,11 +213,11 @@ class ClientEventForm(forms.ModelForm):
         # здесь надо поставить проверку на view.EventUpdate
         if self.action == 'update':
            if self.cleaned_data['status'].id != self.initial['status']:
-              # если вызов пришёл из EventUpdate и статус События был изменён, то пишем лог изменения 
-              dict_status = Dict_ClientEventStatus.objects.get(pk=self.cleaned_data['status'].id)
-              ClientEventStatusLog.objects.create(event_id=self.initial['id'], 
-                                                  status_id=dict_status.id, 
-                                                  author_id=self.user.id)
+              # если вызов пришёл из EventUpdate и статус События был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели)
+              #dict_status = Dict_ClientEventStatus.objects.get(pk=self.cleaned_data['status'].id)
+              #ClientEventStatusLog.objects.create(event_id=self.initial['id'], 
+              #                                    status_id=dict_status.id, 
+              #                                    author_id=self.user.id)
               if self.cleaned_data['status'].is_close:
                  if self.user.id != self.initial['author']: 
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
@@ -248,6 +248,16 @@ class ClientEventForm(forms.ModelForm):
                                           recipient_id=self.cleaned_data['assigner'],                                                
                                           sendto=user_profile.email,
                                           author_id=self.user.id)                                                     
+        #else:
+            #dict_status = Dict_ClientEventStatus.objects.get(pk=self.cleaned_data['status'].id) 
+            #print(self.cleaned_data['id'])
+            #print(self.initial['id']) 
+            #print(self.initial['event_id'])         
+            #print(self.cleaned_data['status_id'])
+            #print(self.cleaned_data['author_id'])                            
+            #ClientEventStatusLog.objects.create(event_id=self.cleaned_data['event_id'], 
+            #                                     status_id=self.cleaned_data['status_id'], 
+            #                                    author_id=self.cleaned_data['author_id'])              
 
     def __init__(self, *args, **kwargs):
 
@@ -260,6 +270,8 @@ class ClientEventForm(forms.ModelForm):
            super(ClientEventForm, self).__init__(*args, **kwargs)
            clnt = Client.objects.get(id=self.client)
            companyid = clnt.company_id           
+           if self.task != 0:
+              self.fields['task'].initial = self.task           
         else:
            super(ClientEventForm, self).__init__(*args, **kwargs)
            companyid = self.instance.client.company_id  
@@ -274,8 +286,6 @@ class ClientEventForm(forms.ModelForm):
         # в выпадающий список для выбора Исполнителя События подбираем только тех юзеров, которые являются участниками этого Клиента 
         usr = User.objects.filter(id__in=members_list, is_active=True)  
         #print (usr)
-        if self.task != 0:
-           self.fields['task'].initial = self.task
         self.fields['assigner'].queryset = usr
         self.fields['author'].initial = self.user.id        
         for field in self.disabled_fields:

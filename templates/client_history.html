@@ -4,25 +4,25 @@
 
 {% block client %}
    <!-- Защита от прямого доступа к Клиенту -->
-   {% if current_project.company.id in user_companies %}
+   {% if current_client.company.id in user_companies %}
 
      <div class="object-detail">
 
-       <p><h2>{{ current_client.lastname }}{{ current_client.firstname }}{{ current_client.middlename }}
+       <h4>{{ current_client.lastname }} {{ current_client.firstname }} {{ current_client.middlename }}
        {% if not current_client.is_active %}
           (Клиент перемещён в архив)
        {% endif %}
-       </h2></p>
-       {% autoescape off %}{{ current_client.description }}{% endautoescape %}<br />
-       Менеджер: {{ current_client.manager }}<br />     
-       Начало: {{ current_client.datebegin }}<br />
-       Окончание: {{ current_client.dateend }}<br />
-       Статус: {{ current_client.status }}<br />
-       <i>Участники: 
+       </h4>
+       <p>{% autoescape off %}{{ current_client.description }}{% endautoescape %}</p>
+       <p>Менеджер: {{ current_client.manager }}</p>     
+       <p>Начало: {{ current_client.datebegin }}</p>
+       <p>Окончание: {{ current_client.dateend }}</p>
+       <p>Статус: {{ current_client.status }}</p>
+       <p><i>Участники: 
        {% for u in current_client.members.all %}
           <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
-       </i><br />
+       </i></p>
        <em>Автор: {{ current_client.author }}</em><br /> 
        <!--<em>Участники: { current_client.members.name }}</em><br /> -->
        <em>Дата: {{ current_client.datecreate }}</em>
@@ -46,7 +46,7 @@
 <!--     <div class="project-history-list">-->
       <div class="object-list">   
 
-        <h3>История Клиента</h3>
+        <h5>История Клиента</h5>
 
         {% render_table table %}   
 

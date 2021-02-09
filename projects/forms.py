@@ -28,11 +28,11 @@ class ProjectForm(forms.ModelForm):
            self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
         if self.action == 'update': 
            if self.cleaned_data['status'].id != self.initial['status']:
-              # если вызов пришёл из ProjectUpdate и статус проекта был изменён, то пишем лог изменения 
-              dict_status = Dict_ProjectStatus.objects.get(pk=self.cleaned_data['status'].id)
-              ProjectStatusLog.objects.create(project_id=self.initial['id'], 
-                                              status_id=dict_status.id, 
-                                              author_id=self.user.id)
+              # если вызов пришёл из ProjectUpdate и статус проекта был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели)
+              #dict_status = Dict_ProjectStatus.objects.get(pk=self.cleaned_data['status'].id)
+              #ProjectStatusLog.objects.create(project_id=self.initial['id'], 
+              #                                status_id=dict_status.id, 
+              #                                author_id=self.user.id)
               if self.cleaned_data['status'].is_close: # == "Выполнен":
                  if self.user.id != self.initial['author']: 
                     # если проект закрывается Исполнителем, то уведомление отсылается Автору
@@ -110,11 +110,11 @@ class TaskForm(forms.ModelForm):
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == 'update':
            if self.cleaned_data['status'].id != self.initial['status']:
-              # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения 
-              dict_status = Dict_TaskStatus.objects.get(pk=self.cleaned_data['status'].id)
-              TaskStatusLog.objects.create(task_id=self.initial['id'], 
-                                           status_id=dict_status.id, 
-                                           author_id=self.user.id)
+              # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели) 
+              #dict_status = Dict_TaskStatus.objects.get(pk=self.cleaned_data['status'].id)
+              #TaskStatusLog.objects.create(task_id=self.initial['id'], 
+              #                             status_id=dict_status.id, 
+              #                             author_id=self.user.id)
               if self.cleaned_data['status'].is_close:
                  if self.user.id != self.initial['author']: 
                     self.cleaned_data['dateclose'] = datetime.datetime.today()

@@ -177,6 +177,11 @@ class ClientTask(MPTTModel):
         #return reverse('my_crm:clienttaskcomments, kwargs={'taskid': self.pk})
     def __str__(self):
          return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
+    def save(self, *args, **kwargs):
+        super(ClientTask, self).save(*args, **kwargs)          
+        ClientTaskStatusLog.objects.create(task_id=self.id, 
+                                           status=self.status, 
+                                           author=self.author)          
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     
@@ -223,6 +228,11 @@ class ClientEvent(models.Model):
         return reverse('my_crm:clienteventcomments', kwargs={'eventid': self.pk})
     def __str__(self):
          return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
+    def save(self, *args, **kwargs):
+        super(ClientEvent, self).save(*args, **kwargs)          
+        ClientEventStatusLog.objects.create(event_id=self.id, 
+                                            status=self.status, 
+                                            author=self.author)                                             
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     

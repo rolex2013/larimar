@@ -3,25 +3,26 @@
 {% load render_table from django_tables2 %}
 
 {% block task %}
-   <!-- Защита от прямого доступа к проекту -->
-   {% if current_task.project.company.id in user_companies %}
+   <!-- Защита от прямого доступа к задаче -->
+   {% if current_task.client.company.id in user_companies %}
 
      <div class="object-detail">
 
-       <p><h2>{{ current_task.name }}
+       <h4>{{ current_task.name }}
        {% if not current_task.is_active %}
           (Задача перемещена в архив)
        {% endif %}
-       </h2></p>
-       {% autoescape off %}{{ current_task.description }}{% endautoescape %}<br />
-       Исполнитель: {{ current_task.assigner }}<br />     
-       Начало: {{ current_task.datebegin }}<br />
-       Окончание: {{ current_task.dateend }}<br />
-       Статус: {{ current_task.status }}<br />
+       </h4>
+       <p>{% autoescape off %}{{ current_task.description }}{% endautoescape %}</p>
+       <p>Исполнитель: {{ current_task.assigner }}</p>     
+       <p>Начало: {{ current_task.datebegin }}</p>
+       <p>Окончание: {{ current_task.dateend }}</p>
+       <p>Статус: {{ current_task.status }}</p>
        <em>Автор: {{ current_task.author }}</em><br /> 
        <!--<em>Участники: { current_task.members.name }}</em><br /> -->
        <em>Дата: {{ current_task.datecreate }}</em>
        <p>&nbsp;</p>
+       
        {% if user.is_authenticated and user.id == current_task.author_id  %}
 
        {% endif %}
@@ -40,7 +41,7 @@
 
       <div class="object-list">
 
-       <h3>История задачи</h3>
+       <h5>История задачи</h5>
        
        {% render_table table %}   
        
