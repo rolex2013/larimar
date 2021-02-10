@@ -108,16 +108,27 @@ def finance(request):
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def currencyratefilter(request):
-    #currdate = request.GET['currdate']
+    datebegin = request.GET['currdatebegin']
+    dateend = request.GET['currdateend']    
     currid = request.GET['currid']    
 
+    datebegin = datetime.strptime(datebegin +' 00:00:00', '%d.%m.%Y %H:%M:%S').date()
+    dateend = datetime.strptime(dateend +' 00:00:00', '%d.%m.%Y %H:%M:%S').date()
     #print(currid)
+    print(datebegin)
+    print(dateend)
 
     currency_list = Dict_Currency.objects.filter(is_active=True)
     if currid == '0':
        currencyrate_list = CurrencyRate.objects.filter(is_active=True)
     else:
        currencyrate_list = CurrencyRate.objects.filter(is_active=True,currency_id=currid).distinct()
+
+    if datebegin:
+       currencyrate_list = currencyrate_list.filter(date__gte=datebegin) 
+
+    if dateend:
+       currencyrate_list = currencyrate_list.filter(date__lte=dateend)          
 
     button_currencyrate_update = 'Обновить'
 
