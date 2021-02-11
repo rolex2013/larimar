@@ -15,7 +15,7 @@
       {% csrf_token %}
 
       <div class="object-list-filters">      
-         <label>Фильтр по дате </label>
+         <label>Фильтр по дате: </label>
    
          <!--<div class="input-group date" id="datetimepicker1" data-target-input="nearest">-->
             <!--{{ form.date }}-->
@@ -25,7 +25,7 @@
                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
          </div>-->
-         c: <input id="datebegin"> по: <input id="dateend">
+         c <input type="date" id="datebegin"> по <input type="date" id="dateend">
          <label>Фильтр по валюте: </label>
          <select name="select-curr" id="currselectid" class="select-curr">
             <option value="0" {% ifequal "0" currselectid %} selected="selected" {% endifequal %}>- Все</option>
@@ -34,7 +34,7 @@
                   {{ currency.code_char }}
                </option>        
             {% endfor %}                 
-         </select>            
+         </select>&nbsp;            
          <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>               
    
          <!--<button type="submit">Применить</button>-->

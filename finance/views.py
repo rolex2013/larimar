@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 #from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 import requests
 #from lxml import etree as et
-from datetime import datetime
+from datetime import datetime, timedelta
 from dateutil.parser import *
 
 from .models import Dict_Currency, CurrencyRate
@@ -112,8 +112,12 @@ def currencyratefilter(request):
     dateend = request.GET['currdateend']    
     currid = request.GET['currid']    
 
-    datebegin = datetime.strptime(datebegin +' 00:00:00', '%d.%m.%Y %H:%M:%S').date()
-    dateend = datetime.strptime(dateend +' 00:00:00', '%d.%m.%Y %H:%M:%S').date()
+    #if datebegin:
+    #   datebegin = datetime.strptime(datebegin, '%d.%m.%Y').date()
+    if dateend:
+    #   dateend = datetime.strptime(dateend, '%d.%m.%Y').date() + timedelta(days=1)
+       dateend = datetime.strptime(dateend, '%Y-%m-%d').date() + timedelta(days=1)
+    
     #print(currid)
     print(datebegin)
     print(dateend)
@@ -130,12 +134,17 @@ def currencyratefilter(request):
     if dateend:
        currencyrate_list = currencyrate_list.filter(date__lte=dateend)          
 
+    #print(currencyrate_list)
     button_currencyrate_update = 'Обновить'
+    currencyrate_message = ''
+    if len(currencyrate_list) == 0:
+       currencyrate_message = 'На выбранный период курсы не загружены!' 
 
     return render(request, 'finance_rate_list.html', {
                                                        'button_currencyrate_update': button_currencyrate_update,
                                                        'currency_list': currency_list,
                                                        'currencyrate_list': currencyrate_list,
+                                                       'currencyrate_message': currencyrate_message,
                                                        #'r_error': r_error,
                                                        #'r_rate': r_rate,
                                                        #'r_base': r_base,

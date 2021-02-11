@@ -1,6 +1,8 @@
 
    <div class="object-list">
-      
+
+      <div><em>{{ currencyrate_message }}</em></div>
+
       {% for currencyrate in currencyrate_list %}
 
          <p>{{ currencyrate.date }} {{ currencyrate.currency.code_char }} {{ currencyrate.currency.code_num }}  {{ currencyrate.rate }}</p>
