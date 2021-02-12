@@ -2,6 +2,7 @@ from django.urls import reverse_lazy
 from django.utils import timezone
 from datetime import datetime, date, time
 import json
+import requests
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
@@ -11,8 +12,10 @@ from django.core.exceptions import ObjectDoesNotExist
 #from versane.models import Company
 
 from companies.models import Company
+from main.models import ModelLog
 from projects.models import Dict_ProjectStatus, Dict_TaskStatus
 from projects.models import Project, Task, TaskComment, ProjectStatusLog, TaskStatusLog
+
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
 from .forms import ProjectStatusLog, TaskStatusLog
@@ -414,7 +417,7 @@ class TaskCommentUpdate(UpdateView):
 #    success_url = '/success/' 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def projecthistory(request, pk=0):
+def projecthistory_(request, pk=0):
 
     #if companyid == 0:
     #   companyid = request.session['_auth_user_currentcompany_id']
@@ -442,6 +445,56 @@ def projecthistory(request, pk=0):
                               'user_companies': comps,
                               'table': table,                                                           
                                                 })     
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def projecthistory(request, pk=0):
+
+    if pk == 0:
+       current_project = 0
+    else:
+       current_project = Project.objects.get(id=pk)
+
+    comps = request.session['_auth_user_companies_id']
+
+    # формируем массив заголовков
+    row = ModelLog.objects.filter(modelobjectid=pk, is_active=True).first()
+    titles = json.loads(row.log).items()
+    #print(titles)    
+    #for key, value in titles:
+    #   print(key, value)
+
+    nodes = ModelLog.objects.filter(modelobjectid=pk, is_active=True) #.order_by()
+    #for
+    #nodes = row
+    #print(nodes)
+    col = len(titles)
+    rw = len(nodes)
+    print(col, rw)
+    r = 0
+    mas = []
+    for i in range(rw):
+       mas.append([])
+       for j in range(col):
+          mas[i].append(titles)
+          r += 1
+
+    print(mas)          
+       
+    #RequestConfig(request).configure(table)   
+    #response = requests.get("https://jsonplaceholder.typicode.com/todos")
+    #todos = json.loads(response.text)
+ 
+    #print(todos == response.json()) # True
+    #print(type(todos)) # <class 'list'>
+ 
+    #print(todos[:10]) # ...     
+
+    return render(request, "project_history.html", {
+                              'titles': titles,
+                              'nodes': nodes, 
+                              'current_project':current_project,
+                              'user_companies': comps,
+                              #'table': table,                                                           
+                                                })  
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def taskhistory(request, pk=0):

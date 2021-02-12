@@ -214,6 +214,7 @@ class ClientEvent(models.Model):
     description = RichTextUploadingField("Описание", null=True, blank=True)
     datebegin = models.DateTimeField("Начало")
     dateend = models.DateTimeField("Окончание")
+    place = models.CharField("Место", max_length=254, null=True, blank=True)
     client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='event_client', verbose_name="Клиент")
     task = models.ForeignKey('ClientTask', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='eventtask', verbose_name="Связанная задача")
     assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='event_assigner', verbose_name="Исполнитель")   

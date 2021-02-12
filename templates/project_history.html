@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% load render_table from django_tables2 %}
+<!--{ load render_table from django_tables2 %}-->
 
 {% block project %}
    <!-- Защита от прямого доступа к проекту -->
@@ -46,8 +46,24 @@
 
         <h4>История проекта</h4>
 
-        {% render_table table %}   
+        <!--{ render_table table %}   -->
 
+        <table width="100%" border="1" cellpadding="4" cellspacing="0" align="center">
+           <tr>
+              {% for key, value in titles %}          
+                 <th>{{ key }}</th>
+              {% endfor %}
+           </tr>
+           {% for node in nodes %}
+              <tr>
+                 <!--{ for key, value in json.loads(node.log).items() %}       -->
+                 {% for key, value in node.log %}
+                    <!-- <td>==={{ value }}</td>-->
+                    <td>{{ value }}</td>
+                 {% endfor %}
+              </tr>                 
+           {% endfor %}
+        </table>
         <!--
         <ul>
          { for psl in nodes %}

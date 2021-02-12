@@ -75,3 +75,23 @@ class Notification(models.Model):
     class Meta:
         verbose_name = 'Оповещение'
         verbose_name_plural = 'Оповещения'
+
+class ModelLog(models.Model):
+    #LOG_TYPES = (('P', 'Project'), ('T', 'Task'))
+    #logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
+    componentname = models.CharField("Компонент", max_length=16)
+    modelname = models.CharField("Модель", max_length=64)
+    modelobjectid = models.IntegerField("Объект")
+    date = models.DateTimeField("Дата", auto_now_add=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    log = models.TextField()
+    is_active = models.BooleanField("Активность", default=True)
+    
+    def __str__(self):
+        return (self.componentname + '. ' + self.modelname + self.date.strftime('%d.%m.%Y, %H:%M') + ' (' + self.author.username + ')' + self.log)
+    
+    class Meta:
+        #unique_together = ('project', 'status', 'date', 'author')
+        ordering = ('componentname', 'modelname', 'modelobjectid', 'date')
+        verbose_name = 'История Объекта'
+        verbose_name_plural = 'Истории Объектов'        

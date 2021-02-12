@@ -4,10 +4,14 @@ from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 
 from mptt.models import MPTTModel, TreeForeignKey
+from main.models import ModelLog
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
 from companies.models import Company
+
+import json
+from datetime import datetime, timedelta
 
 
 class Dict_ProjectStatus(models.Model):
@@ -95,7 +99,7 @@ class Project(MPTTModel):
     currency = models.ForeignKey('finance.Dict_Currency', on_delete=models.CASCADE, related_name='resultcurrency', verbose_name="Валюта")   
     cost = models.DecimalField("Стоимость", max_digits=12, decimal_places=2, default=0)
     percentage = models.DecimalField("Процент выполнения", max_digits=5, decimal_places=2, default=0)
-    structure_type = models.ForeignKey('Dict_ProjectStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_structure_type', verbose_name="Тип проекта в иерархии")
+    structure_type = models.ForeignKey('Dict_ProjectStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_structure_type', verbose_name="Тип в иерархии")
     type = models.ForeignKey('Dict_ProjectType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
@@ -109,10 +113,25 @@ class Project(MPTTModel):
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
     def save(self, *args, **kwargs):
-        super(Project, self).save(*args, **kwargs)          
-        ProjectStatusLog.objects.create(project_id=self.id, 
-                                        status=self.status, 
-                                        author=self.author) 
+        super(Project, self).save(*args, **kwargs)  
+        historyjson = {"Проект":self.name, "Статус":self.status.name, 
+                       "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
+                       "Тип в иерархии":self.structure_type.name, "Тип":self.type.name,
+                       "Валюта":self.currency.code_char, "Стоимость":str(self.cost), "Выполнен на, %":str(self.percentage),
+                       "Исполнитель":self.assigner.username
+                      }
+        #print(historyjson)
+        #ProjectStatusLog.objects.create(project_id=self.id, 
+        #                                status=self.status, 
+        #                                author=self.author,
+        #                                description=json.dumps(historyjson)
+        #                               ) 
+        ModelLog.objects.create(componentname='PRJ', 
+                                modelname="Project",
+                                modelobjectid=self.id,
+                                author=self.author,
+                                log=json.dumps(historyjson)
+                                )                                        
     class MPTTMeta:
         order_insertion_by = ['name']
     class Meta:
