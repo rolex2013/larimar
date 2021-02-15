@@ -41,7 +41,8 @@
            <a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}">{{ button_project_create }}</a>
            <a href="{% url 'my_project:project_update' current_project.pk %}">{{ button_project_update }}</a>
            <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
-           <a href="{% url 'my_project:project_history' current_project.pk %}">{{ button_project_history }}</a>
+           <!--<a href="{ url 'my_project:project_history' current_project.pk %}">{ button_project_history }}</a>-->
+           <a href="{% url 'my_main:object_history' 'prj' current_project.pk %}">{{ button_project_history }}</a>
          </div>
        <!--{ endif %}-->
      </div>

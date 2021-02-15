@@ -446,7 +446,7 @@ def projecthistory_(request, pk=0):
                               'table': table,                                                           
                                                 })     
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def projecthistory(request, pk=0):
+def projecthistory__(request, pk=0):
 
     if pk == 0:
        current_project = 0

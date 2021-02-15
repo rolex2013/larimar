@@ -6,6 +6,7 @@ from projects.models import Project, Task, TaskComment
 
 #from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
+#from main.views import objecthistory
 
 app_name = 'my_project'
 
@@ -20,7 +21,7 @@ urlpatterns = [
     #path('projects_list/project_delete/<int:pk>', views.ProjectDelete.as_view(), name = 'project_delete'),
     #path('project_list/project_filter/<int:companyid>', views.projectfilter, name = 'project_filter'),
     path('project_list/project_filter/', views.projectfilter, name = 'project_filter'),
-    path('projects_list/project_history/<int:pk>', views.projecthistory, name = 'project_history'),    
+    #path('projects_list/project_history/<int:pk>', views.projecthistory, name = 'project_history'),       
     path('tasks_page/<int:projectid>/<int:pk>', views.tasks, name = 'tasks'),
     #path('tasks_list/<int:pk>', views.TaskDetail.as_view(), name = 'task_detail'),
     path('tasks_list/task_create/<int:projectid>/<int:parentid>', views.TaskCreate.as_view(), name = 'task_create'),

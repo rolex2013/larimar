@@ -57,13 +57,15 @@ class ProjectForm(forms.ModelForm):
               user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
               objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id
               #send_mail('LarimarITGroup. Вы назначены исполнителем Проекта.', 'Уведомляем о назначении Вам Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+              #print(user_profile.protocoltype)
+              print(self.cleaned_data['assigner'].id)
               Notification.objects.create(type=user_profile.protocoltype,
-                                          object_id=objecttypeid,  
+                                          objecttype_id=objecttypeid,  
                                           objectid=self.initial['id'],            
                                           sendfrom=settings.EMAIL_HOST_USER,
                                           theme='Вы назначены исполнителем Проекта.',
                                           text='Уведомляем о назначении Вам Проекта "'+self.cleaned_data['name']+'".',
-                                          recipient_id=self.initial['assigner'],                                          
+                                          recipient_id=self.cleaned_data['assigner'].id,                                          
                                           sendto=user_profile.email,
                                           author_id=self.user.id)
 
@@ -78,8 +80,8 @@ class ProjectForm(forms.ModelForm):
         else:
            super(ProjectForm, self).__init__(*args, **kwargs)
            companyid = self.instance.company_id
-           # Исполнитель не может менять Исполнителя
-           if self.user.id == self.initial['assigner']:
+           # Исполнитель не может менять Исполнителя, если он не Автор
+           if self.user.id == self.initial['assigner'] and self.initial['assigner'] != self.initial['author']:
               self.fields['assigner'].disabled = True           
 
         # в выпадающие списки для выбора Исполнителя (Руководителя) и участников проекта подбираем только тех юзеров, которые привязаны к этой организации (в админке)
@@ -160,8 +162,8 @@ class TaskForm(forms.ModelForm):
            super(TaskForm, self).__init__(*args, **kwargs)
            companyid = self.instance.project.company_id
            self.project = self.instance.project_id      
-           # Исполнитель не может менять Исполнителя
-           if self.user.id == self.initial['assigner']:
+           # Исполнитель не может менять Исполнителя, если он не Автор
+           if self.user.id == self.initial['assigner'] and self.initial['assigner'] != self.initial['author']:
               self.fields['assigner'].disabled = True                         
  
         # в выпадающий список для выбора Исполнителя подбираем только тех юзеров, которые привязаны к этой организации (в админке)

@@ -4,29 +4,29 @@
 
 {% block project %}
    <!-- Защита от прямого доступа к проекту -->
-   {% if current_project.company.id in user_companies %}
+   {% if current_object.company.id in user_companies %}
 
      <div class="object-detail">
-       <h4>{{ current_project.name }}
-       {% if not current_project.is_active %}
+       <h4>{{ current_object.name }}
+       {% if not current_object.is_active %}
           (Проект перемещён в архив)
        {% endif %}
        </h4>
-       <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
-       <p>Исполнитель: {{ current_project.assigner }}</p>     
-       <p>Начало: {{ current_project.datebegin }}</p>
-       <p>Окончание: {{ current_project.dateend }}</p>
-       <p>Статус: {{ current_project.status }}</p>
+       <p>{% autoescape off %}{{ current_object.description }}{% endautoescape %}</p>
+       <p>Исполнитель: {{ current_object.assigner }}</p>     
+       <p>Начало: {{ current_object.datebegin }}</p>
+       <p>Окончание: {{ current_object.dateend }}</p>
+       <p>Статус: {{ current_object.status }}</p>
        <p><i>Участники: 
-       {% for u in current_project.members.all %}
+       {% for u in current_object.members.all %}
           <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i></p>
-       <em>Автор: {{ current_project.author }}</em><br /> 
-       <!--<em>Участники: { current_project.members.name }}</em><br /> -->
-       <em>Дата: {{ current_project.datecreate }}</em>
+       <em>Автор: {{ current_object.author }}</em><br /> 
+       <!--<em>Участники: { current_object.members.name }}</em><br /> -->
+       <em>Дата: {{ current_object.datecreate }}</em>
        <p>&nbsp;</p>
-       {% if user.is_authenticated and user.id == current_project.author_id  %}
+       {% if user.is_authenticated and user.id == current_object.author_id  %}
 
        {% endif %}
      </div>
@@ -39,7 +39,7 @@
 
 {% block list %}
    <!-- Защита от прямого доступа к истории проекта -->
-   {% if current_project.company.id in user_companies %}
+   {% if current_object.company.id in user_companies %}
 
 <!--     <div class="project-history-list">-->
       <div class="object-list">

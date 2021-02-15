@@ -126,7 +126,7 @@ class Project(MPTTModel):
         #                                author=self.author,
         #                                description=json.dumps(historyjson)
         #                               ) 
-        ModelLog.objects.create(componentname='PRJ', 
+        ModelLog.objects.create(componentname='prj', 
                                 modelname="Project",
                                 modelobjectid=self.id,
                                 author=self.author,

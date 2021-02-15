@@ -166,6 +166,7 @@ def UserProfileDetail(request, userid=0, param=''):
     user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
 
     notification_list = Notification.objects.filter(recipient_id=userid, is_active=True, is_read=False, type_id=3)
+    print(notification_list)
     #table = NotificationTable(notification_list)
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
 
