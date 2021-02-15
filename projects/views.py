@@ -456,41 +456,23 @@ def projecthistory(request, pk=0):
     comps = request.session['_auth_user_companies_id']
 
     # формируем массив заголовков
-    row = ModelLog.objects.filter(modelobjectid=pk, is_active=True).first()
-    titles = json.loads(row.log).items()
-    #print(titles)    
-    #for key, value in titles:
-    #   print(key, value)
+    #row = ModelLog.objects.filter(modelobjectid=pk, is_active=True).first()
+    #row = ModelLog.objects.get(modelobjectid=pk, is_active=True)
+    #titles = json.loads(row.log).items()
 
     nodes = ModelLog.objects.filter(modelobjectid=pk, is_active=True) #.order_by()
-    #for
-    #nodes = row
-    #print(nodes)
-    col = len(titles)
-    rw = len(nodes)
-    print(col, rw)
-    r = 0
+    
+    i = -1
     mas = []
-    for i in range(rw):
-       mas.append([])
-       for j in range(col):
-          mas[i].append(titles)
-          r += 1
-
-    print(mas)          
+    for node in nodes:
+       i += 1
+       mas.append(json.loads(node.log).items())
+       #print(mas[i])           
        
-    #RequestConfig(request).configure(table)   
-    #response = requests.get("https://jsonplaceholder.typicode.com/todos")
-    #todos = json.loads(response.text)
- 
-    #print(todos == response.json()) # True
-    #print(type(todos)) # <class 'list'>
- 
-    #print(todos[:10]) # ...     
-
     return render(request, "project_history.html", {
-                              'titles': titles,
-                              'nodes': nodes, 
+                              #'titles': titles,
+                              'nodes': nodes,
+                              'mas': mas,
                               'current_project':current_project,
                               'user_companies': comps,
                               #'table': table,                                                           

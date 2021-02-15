@@ -44,66 +44,12 @@
 <!--     <div class="project-history-list">-->
       <div class="object-list">
 
-        <h4>История проекта</h4>
+         <h4>История проекта</h4>
 
-        <!--{ render_table table %}   -->
+         <!--{ render_table table %}   -->
 
-        <table width="100%" border="1" cellpadding="4" cellspacing="0" align="center">
-           <tr>
-              {% for key, value in titles %}          
-                 <th>{{ key }}</th>
-              {% endfor %}
-           </tr>
-           {% for node in nodes %}
-              <tr>
-                 <!--{ for key, value in json.loads(node.log).items() %}       -->
-                 {% for key, value in node.log %}
-                    <!-- <td>==={{ value }}</td>-->
-                    <td>{{ value }}</td>
-                 {% endfor %}
-              </tr>                 
-           {% endfor %}
-        </table>
-        <!--
-        <ul>
-         { for psl in nodes %}
-            <li>{ psl.date }}&nbsp;{ psl.status }}&nbsp;{ psl.author }}&nbsp;{ psl.description }}</li>
-         { endfor %}
-        </ul>    
-        -->
-        <!--
-        <table>
-           <!-<caption>История проекта</caption>->
-           <tr>
-              <th>Дата</th><th>Статус</th><th>Автор</th><th>Комментарий</th>
-           </tr>
-           {% for psl in nodes %}
-              <tr>
-                 <td>{ psl.date }}</td><td>{ psl.status }}</td><td>{ psl.author }}</td><td>{ psl.description }}</td>
-              </tr>
-           {% endfor %}
-        </table>  
-        -->
-<!--
-        <div class="d-table">
-         <div class="d-tr">
-           <div class="d-td"><b>Дата</b></div>
-           <div class="d-td"><b>Статус</b></div>
-           <div class="d-td"><b>Автор</b></div>
-           <div class="d-td"><b>Комментарий</b></div>
-         </div>
-         {% for psl in nodes %}
-            <div class="d-tr">
-               <div class="d-td">{{ psl.date }}</div>
-               <div class="d-td">{{ psl.status }}</div>
-               <div class="d-td">{{ psl.author }}</div>
-               <div class="d-td">{{ psl.description }}</div>
-            </div>
-         {% endfor %}
-        </div>
- 
-      </div>
--->    
+         {% include 'object_history.html' %}
+   
       </div>        
       <p>&nbsp;</p>
    <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->

@@ -1,0 +1,37 @@
+
+   <div class="d-tr">
+      <div class="d-td-text">
+         <table width="80%" border="1" cellpadding="4" cellspacing="0" align="center">
+            {% comment %}
+            <tr>
+               <th>Дата</th> <th>Автор</th>
+               {% for key, value in titles %}          
+                  <th>{ key }}</th>
+               {% endfor %}
+            </tr>
+            {% endcomment %}
+            {% for rec in mas %}
+               {% if forloop.first %}
+                  <tr>                      
+                     <th>Дата</th> <th>Автор</th>
+                     {% for key, value in rec %}          
+                        <th>{{ key }}</th>
+                     {% endfor %}    
+                  </tr>                                     
+               {% endif %} 
+               <tr>
+                  {% for nd in nodes %}
+                     {% if forloop.counter0 == forloop.parentloop.counter0 %}
+                        <td>{{ nd.date }}</td> <td>{{ nd.author.username }}</td>
+                     {% endif %}                  
+                  {% endfor %}
+                  {% for key, value in rec %}
+                     <td>{{ value }}</td>
+                  {% endfor %}
+               </tr>                               
+            {% endfor %}
+         </table>                  
+      </div>
+   </div>
+
+   <p><em>{{ object_message }}</em></p>
