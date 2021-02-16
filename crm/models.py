@@ -7,7 +7,11 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
+from main.models import ModelLog
 from companies.models import Company
+
+import json
+from datetime import datetime, timedelta
 
 
 class Dict_ClientType(models.Model):
@@ -147,6 +151,22 @@ class Client(models.Model):
         #return (self.user.username + ' - ' + self.company.name)
         #return (self.user.username)
         return (self.firstname + ' ' + self.middlename +' ' + self.lastname)
+    def save(self, *args, **kwargs):
+        super(Client, self).save(*args, **kwargs)          
+        historyjson = {"Имя":self.firstname, "Отчество":self.middlename if self.middlename else '', "Фамилия":self.lastname, "Пользователь":self.user.username if self.user else '',
+                       "E-mail":self.email if self.email else '', "Телефон":self.phone if self.phone else '',  
+                       #"Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
+                       "Тип":self.type.name, "Статус":self.status.name,
+                       "Валюта":self.currency.code_char, "Стоимость":str(self.cost), "Выполнен на, %":str(self.percentage),
+                       "Инициатор":self.initiator.name, "Менеджер":self.manager.username,
+                       "Оповещение":'✓' if self.is_notify else '', "Протокол":self.protocoltype.name if self.protocoltype else '', "Активность":'✓' if self.is_active else ''
+                      }        
+        ModelLog.objects.create(componentname='clnt', 
+                                modelname="Client",
+                                modelobjectid=self.id,
+                                author=self.author,
+                                log=json.dumps(historyjson)
+                                )                                   
     class Meta:
         #unique_together = ('user','company')
         #ordering = ('user')
@@ -165,7 +185,7 @@ class ClientTask(MPTTModel):
     percentage = models.DecimalField("Процент выполнения", max_digits=5, decimal_places=2, default=0)    
     structure_type = models.ForeignKey('Dict_ClientTaskStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_structure_type', verbose_name="Тип в иерархии")
     type = models.ForeignKey('Dict_ClientTaskType', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_type', verbose_name="Тип")
-    typeevent = models.ForeignKey('Dict_ClientEventType', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clientevent_type', verbose_name="Тип события")    
+    #typeevent = models.ForeignKey('Dict_ClientEventType', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clientevent_type', verbose_name="Тип события")    
     status = models.ForeignKey('Dict_ClientTaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_status', verbose_name="Статус")
     datecreate = models.DateTimeField("Дата создания", auto_now_add=True)    
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
@@ -179,9 +199,18 @@ class ClientTask(MPTTModel):
          return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     def save(self, *args, **kwargs):
         super(ClientTask, self).save(*args, **kwargs)          
-        ClientTaskStatusLog.objects.create(task_id=self.id, 
-                                           status=self.status, 
-                                           author=self.author)          
+        historyjson = {"Задача":self.name, "Статус":self.status.name, 
+                       "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
+                       "Тип в иерархии":self.structure_type.name, "Тип":self.type.name if self.type else '',
+                       "Стоимость":str(self.cost), "Выполнен на, %":str(self.percentage),
+                       "Инициатор":self.initiator.name, "Исполнитель":self.assigner.username, "Активность":'✓' if self.is_active else ''
+                      }        
+        ModelLog.objects.create(componentname='cltsk', 
+                                modelname="ClientTask",
+                                modelobjectid=self.id,
+                                author=self.author,
+                                log=json.dumps(historyjson)
+                                )                                         
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     
@@ -231,9 +260,17 @@ class ClientEvent(models.Model):
          return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     def save(self, *args, **kwargs):
         super(ClientEvent, self).save(*args, **kwargs)          
-        ClientEventStatusLog.objects.create(event_id=self.id, 
-                                            status=self.status, 
-                                            author=self.author)                                             
+        historyjson = {"Событие":self.name, "Задача":('#'+str(self.task.id)+'. '+self.task.name) if self.task else '', "Статус":self.status.name, 
+                       "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
+                       "Тип":self.type.name if self.type else '', "Место":self.place if self.place else '',
+                       "Инициатор":self.initiator.name, "Исполнитель":self.assigner.username, "Активность":'✓' if self.is_active else ''
+                      }        
+        ModelLog.objects.create(componentname='clevnt', 
+                                modelname="ClientEvent",
+                                modelobjectid=self.id,
+                                author=self.author,
+                                log=json.dumps(historyjson)
+                                )                                                              
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     
@@ -259,6 +296,7 @@ class ClientEventComment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
+"""
 class ClientStatusLog(models.Model):
     #LOG_TYPES = (('P', 'Client'), ('T', 'Task'))
     #logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
@@ -311,3 +349,4 @@ class ClientEventStatusLog(models.Model):
         ordering = ('event', 'date')
         verbose_name = 'История События'
         verbose_name_plural = 'Истории Событий'            
+"""

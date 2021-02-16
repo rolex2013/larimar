@@ -4,30 +4,34 @@
 
 {% block client %}
    <!-- Защита от прямого доступа к Клиенту -->
-   {% if current_client.company.id in user_companies %}
+   {% if current_object.company.id in user_companies %}
 
      <div class="object-detail">
 
-       <h4>{{ current_client.lastname }} {{ current_client.firstname }} {{ current_client.middlename }}
-       {% if not current_client.is_active %}
+       <h4>{{ current_object.lastname }} {{ current_object.firstname }} {{ current_object.middlename }}
+       {% if not current_object.is_active %}
           (Клиент перемещён в архив)
        {% endif %}
        </h4>
-       <p>{% autoescape off %}{{ current_client.description }}{% endautoescape %}</p>
-       <p>Менеджер: {{ current_client.manager }}</p>     
-       <p>Начало: {{ current_client.datebegin }}</p>
-       <p>Окончание: {{ current_client.dateend }}</p>
-       <p>Статус: {{ current_client.status }}</p>
+       <p>{% autoescape off %}{{ current_object.description }}{% endautoescape %}</p>
+       <p>Менеджер: {{ current_object.manager }}</p>     
+       <!--<p>Начало: { current_object.datebegin }}</p>
+       <p>Окончание: { current_object.dateend }}</p>-->
+       <p>Тип: {{ current_object.type }}</p>
+       <p>Статус: {{ current_object.status }}</p>
+       <p>Инициатор: {{ current_object.initiator }}</p>
+       <p>Затраченное время, час.: {{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>       
+       <p>Выполнен на: {{ current_object.percentage }} %</p>
        <p><i>Участники: 
-       {% for u in current_client.members.all %}
+       {% for u in current_object.members.all %}
           <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i></p>
-       <em>Автор: {{ current_client.author }}</em><br /> 
-       <!--<em>Участники: { current_client.members.name }}</em><br /> -->
-       <em>Дата: {{ current_client.datecreate }}</em>
+       <em>Автор: {{ current_object.author }}</em><br /> 
+       <!--<em>Участники: { current_object.members.name }}</em><br /> -->
+       <em>Дата: {{ current_object.datecreate }}</em>
        <p>&nbsp;</p>
-       {% if user.is_authenticated and user.id == current_client.author_id  %}
+       {% if user.is_authenticated and user.id == current_object.author_id  %}
 
        {% endif %}
 
@@ -41,14 +45,16 @@
 
 {% block list %}
    <!-- Защита от прямого доступа к истории проекта -->
-   {% if current_client.company.id in user_companies %}
+   {% if current_object.company.id in user_companies %}
 
 <!--     <div class="project-history-list">-->
       <div class="object-list">   
 
         <h5>История Клиента</h5>
 
-        {% render_table table %}   
+        <!--{ render_table table %}-->
+        
+        {% include 'object_history.html' %}
 
         <!--
         <ul>

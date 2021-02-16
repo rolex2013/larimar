@@ -22,7 +22,7 @@
                <tr>
                   {% for nd in nodes %}
                      {% if forloop.counter0 == forloop.parentloop.counter0 %}
-                        <td>{{ nd.date }}</td> <td>{{ nd.author.username }}</td>
+                        <td>{{ nd.date|date:"d.m.Y H:i:s" }}</td> <td>{{ nd.author.username }}</td>
                      {% endif %}                  
                   {% endfor %}
                   {% for key, value in rec %}

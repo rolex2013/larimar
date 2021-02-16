@@ -4,26 +4,28 @@
 
 {% block task %}
    <!-- Защита от прямого доступа к задаче -->
-   {% if current_task.client.company.id in user_companies %}
+   {% if current_object.client.company.id in user_companies %}
 
      <div class="object-detail">
 
-       <h4>{{ current_task.name }}
-       {% if not current_task.is_active %}
+       <h4>{{ current_object.name }}
+       {% if not current_object.is_active %}
           (Задача перемещена в архив)
        {% endif %}
        </h4>
-       <p>{% autoescape off %}{{ current_task.description }}{% endautoescape %}</p>
-       <p>Исполнитель: {{ current_task.assigner }}</p>     
-       <p>Начало: {{ current_task.datebegin }}</p>
-       <p>Окончание: {{ current_task.dateend }}</p>
-       <p>Статус: {{ current_task.status }}</p>
-       <em>Автор: {{ current_task.author }}</em><br /> 
-       <!--<em>Участники: { current_task.members.name }}</em><br /> -->
-       <em>Дата: {{ current_task.datecreate }}</em>
+       <p>{% autoescape off %}{{ current_object.description }}{% endautoescape %}</p>
+       <p>Исполнитель: {{ current_object.assigner }}</p>     
+       <p>Начало: {{ current_object.datebegin }}</p>
+       <p>Окончание: {{ current_object.dateend }}</p>
+       <p>Тип в иерархии: {{ current_object.structure_type }}</p>
+       <p>Тип: {{ current_object.type }}</p>       
+       <p>Статус: {{ current_object.status }}</p>
+       <em>Автор: {{ current_object.author }}</em><br /> 
+       <!--<em>Участники: { current_object.members.name }}</em><br /> -->
+       <em>Дата: {{ current_object.datecreate }}</em>
        <p>&nbsp;</p>
        
-       {% if user.is_authenticated and user.id == current_task.author_id  %}
+       {% if user.is_authenticated and user.id == current_object.author_id  %}
 
        {% endif %}
 
@@ -37,13 +39,15 @@
 
 {% block list %}
    <!-- Защита от прямого доступа к истории проекта -->
-   {% if current_task.client.company.id in user_companies %}
+   {% if current_object.client.company.id in user_companies %}
 
       <div class="object-list">
 
        <h5>История задачи</h5>
        
-       {% render_table table %}   
+       <!--{ render_table table %}--> 
+       
+       {% include 'object_history.html' %}       
        
        <!--
           <div class="project-history-list">

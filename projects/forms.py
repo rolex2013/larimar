@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from ckeditor.widgets import CKEditorWidget
 from django import forms
 from .models import Company, Project, Task, TaskComment
-from .models import ProjectStatusLog, TaskStatusLog
+#from .models import ProjectStatusLog, TaskStatusLog
 from .models import Dict_ProjectStatus, Dict_TaskStatus
 from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile

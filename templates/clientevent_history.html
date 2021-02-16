@@ -4,28 +4,28 @@
 
 {% block event %}
 
-  {% if current_event.client.company.id in user_companies %}
+  {% if current_object.client.company.id in user_companies %}
 
    <div class="object-detail">
    
-      <h4>{{ current_event.name }}
-      {% if not current_event.is_active %}
+      <h4>{{ current_object.name }}
+      {% if not current_object.is_active %}
           (Событие перемещено в архив)
       {% endif %}
       </h4>
-      <p>{% autoescape off %}{{ current_event.description }}{% endautoescape %}</p>
-      <i><p>Клиент: {{ current_event.client }}</p></i>
-      {% if current_event.task %}
-         <p>Связанная задача: {{ current_event.task }}</p>
+      <p>{% autoescape off %}{{ current_object.description }}{% endautoescape %}</p>
+      <i><p>Клиент: {{ current_object.client }}</p></i>
+      {% if current_object.task %}
+         <p>Связанная задача: {{ current_object.task }}</p>
       {% endif %}
-      <p>Исполнитель: {{ current_event.assigner }}</p>       
-      <p>Начало: {{ current_event.datebegin }}</p>
-      <p>Окончание: {{ current_event.dateend }}</p>
-      <p>Тип: {{ current_event.type }}</p>
-      <p>Статус: {{ current_event.status }}</p>
-      <p>Инициатор: {{ current_event.initiator }}</p>        
-      <em>Автор: {{ current_event.author }}</em><br />
-      <em>Дата: {{ current_event.datecreate }}</em>              
+      <p>Исполнитель: {{ current_object.assigner }}</p>       
+      <p>Начало: {{ current_object.datebegin }}</p>
+      <p>Окончание: {{ current_object.dateend }}</p>
+      <p>Тип: {{ current_object.type }}</p>
+      <p>Статус: {{ current_object.status }}</p>
+      <p>Инициатор: {{ current_object.initiator }}</p>        
+      <em>Автор: {{ current_object.author }}</em><br />
+      <em>Дата: {{ current_object.datecreate }}</em>              
       <p>&nbsp;</p>   
    </div>
 
@@ -37,13 +37,15 @@
 
 {% block list %}
    <!-- Защита от прямого доступа к истории проекта -->
-   {% if current_event.client.company.id in user_companies %}
+   {% if current_object.client.company.id in user_companies %}
 
       <div class="object-list">
 
          <h5>История события</h5>
        
-         {% render_table table %}   
+         <!--{ render_table table %}   -->
+
+         {% include 'object_history.html' %}
 
       </div>
       <p>&nbsp;</p>

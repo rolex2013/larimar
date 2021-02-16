@@ -32,7 +32,8 @@
       <div class="object-detail-buttons">
           <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}">{{ button_clienttask_create }}</a>
           <a href="{% url 'my_crm:clienttask_update' clienttask.pk %}">{{ button_clienttask_update }}</a>
-          <a href="{% url 'my_crm:clienttask_history' clienttask.pk %}">{{ button_clienttask_history }}</a>
+          <!--<a href="{ url 'my_crm:clienttask_history' clienttask.pk %}">{ button_clienttask_history }}</a>-->
+          <a href="{% url 'my_main:object_history' 'cltsk' clienttask.pk %}">{{ button_clienttask_history }}</a>
       </div>
 
    </div>
@@ -76,7 +77,7 @@
  
          {% for event in enodes %}
             <!--<div class="comment-entry">-->
-             <b>{{ event.name }} : <span style="font-size: 70%; color: blue;">{{ event.datecreate }} | 
+             <b><a href="{% url 'my_crm:clienteventcomments' event.pk %}">{{ event.name }}</a> : <span style="font-size: 70%; color: blue;">{{ event.datecreate }} | 
                <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' event.author.pk ' ' %}">{{ event.author.username }}</a></span></i></span></b>
              <p>{% autoescape off %}{{ event.description }}{% endautoescape %}</p>
             <!--</div>           -->

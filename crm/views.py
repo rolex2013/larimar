@@ -15,13 +15,13 @@ from companies.models import Company
 from companies.forms import CompanyForm
 
 from crm.models import Client, Dict_ClientStatus, Dict_ClientType
-from crm.models import ClientTask, ClientTaskComment, Dict_ClientTaskStatus, Dict_ClientTaskType, ClientStatusLog, ClientTaskStatusLog
-from crm.models import ClientEvent, ClientEventComment, Dict_ClientEventStatus, Dict_ClientEventType, ClientEventStatusLog
+from crm.models import ClientTask, ClientTaskComment, Dict_ClientTaskStatus, Dict_ClientTaskType #, ClientStatusLog, ClientTaskStatusLog
+from crm.models import ClientEvent, ClientEventComment, Dict_ClientEventStatus, Dict_ClientEventType #, ClientEventStatusLog
 
 from .forms import ClientForm, ClientTaskForm, ClientTaskCommentForm
 from .forms import ClientEventForm, ClientEventCommentForm
 
-from .tables import ClientTable, ClientStatusLogTable, ClientTaskStatusLogTable, ClientEventStatusLogTable
+#from .tables import ClientTable, ClientStatusLogTable, ClientTaskStatusLogTable, ClientEventStatusLogTable
 #from projects.tables import ProjectStatusLogTable
 from django_tables2 import RequestConfig
 
@@ -549,6 +549,7 @@ class ClientEventCommentUpdate(UpdateView):
        return context
 
 
+"""
 # *** ИСТОРИИ ИЗМЕНЕНИЯ СТАТУСОВ КЛИЕНТОВ И ЗАДАЧ ***
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
@@ -624,6 +625,7 @@ def clienteventhistory(request, pk=0):
                               'user_companies': comps,  
                               'table': table,                                                               
                                                 })
+"""
 
 # *** ФИЛЬТРЫ СПИСКОВ ***
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

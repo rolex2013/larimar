@@ -16,15 +16,15 @@ from companies.models import Dict_PositionType, StaffList, Staff, Summary
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
 from projects.models import Project, Task, TaskComment
-from projects.models import ProjectStatusLog, TaskStatusLog
+#from projects.models import ProjectStatusLog, TaskStatusLog
 
 from crm.models import Dict_ClientTaskStructureType
 from crm.models import Dict_ClientType, Dict_ClientStatus, Dict_ClientTaskType, Dict_ClientTaskStatus
 from crm.models import Dict_ClientEventType, Dict_ClientEventStatus
 from crm.models import Client, ClientTask, ClientTaskComment
-from crm.models import ClientStatusLog, ClientTaskStatusLog
+#from crm.models import ClientStatusLog, ClientTaskStatusLog
 from crm.models import ClientEvent, ClientEventComment
-from crm.models import ClientEventStatusLog
+#from crm.models import ClientEventStatusLog
 
 from django_mptt_admin.admin import DjangoMpttAdmin
 
@@ -117,9 +117,9 @@ admin.site.register(Dict_TaskStatus)
 
 admin.site.register(TaskComment)
 
-admin.site.register(ProjectStatusLog)
+#admin.site.register(ProjectStatusLog)
 
-admin.site.register(TaskStatusLog)
+#admin.site.register(TaskStatusLog)
 
 # crm
 
@@ -145,8 +145,8 @@ admin.site.register(ClientTaskComment)
 
 admin.site.register(ClientEventComment)
 
-admin.site.register(ClientStatusLog)
+#admin.site.register(ClientStatusLog)
 
-admin.site.register(ClientTaskStatusLog)
+#admin.site.register(ClientTaskStatusLog)
 
-admin.site.register(ClientEventStatusLog)
+#admin.site.register(ClientEventStatusLog)

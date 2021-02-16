@@ -40,7 +40,8 @@
        <div class="object-detail-buttons">
            <a href="{% url 'my_crm:client_create' current_client.company.id %}">{{ button_client_create }}</a>
            <a href="{% url 'my_crm:client_update' current_client.pk %}">{{ button_client_update }}</a>
-           <a href="{% url 'my_crm:client_history' current_client.pk %}">{{ button_client_history }}</a>
+           <!--<a href="{ url 'my_crm:client_history' current_client.pk %}">{ button_client_history }}</a>-->
+           <a href="{% url 'my_main:object_history' 'clnt' current_client.pk %}">{{ button_client_history }}</a>
        </div>
        <!--{ endif %}-->
        

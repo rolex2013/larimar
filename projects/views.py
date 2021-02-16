@@ -14,13 +14,13 @@ from django.core.exceptions import ObjectDoesNotExist
 from companies.models import Company
 from main.models import ModelLog
 from projects.models import Dict_ProjectStatus, Dict_TaskStatus
-from projects.models import Project, Task, TaskComment, ProjectStatusLog, TaskStatusLog
+from projects.models import Project, Task, TaskComment #, ProjectStatusLog, TaskStatusLog
 
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
-from .forms import ProjectStatusLog, TaskStatusLog
+#from .forms import ProjectStatusLog, TaskStatusLog
 
-from .tables import ProjectStatusLogTable, TaskStatusLogTable
+#from .tables import ProjectStatusLogTable, TaskStatusLogTable
 from django_tables2 import RequestConfig
 
 from django.contrib.auth.decorators import login_required

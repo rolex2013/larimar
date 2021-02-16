@@ -118,7 +118,7 @@ class Project(MPTTModel):
                        "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
                        "Тип в иерархии":self.structure_type.name, "Тип":self.type.name,
                        "Валюта":self.currency.code_char, "Стоимость":str(self.cost), "Выполнен на, %":str(self.percentage),
-                       "Исполнитель":self.assigner.username
+                       "Исполнитель":self.assigner.username, "Активность":'✓' if self.is_active else '' #, "Участники":self.members.username
                       }
         #print(historyjson)
         #ProjectStatusLog.objects.create(project_id=self.id, 
@@ -162,9 +162,21 @@ class Task(MPTTModel):
          return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     def save(self, *args, **kwargs):
         super(Task, self).save(*args, **kwargs)          
-        TaskStatusLog.objects.create(task_id=self.id, 
-                                     status=self.status, 
-                                     author=self.author)          
+        #TaskStatusLog.objects.create(task_id=self.id, 
+        #                             status=self.status, 
+        #                             author=self.author)
+        historyjson = {"Задача":self.name, "Статус":self.status.name, 
+                       "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
+                       "Тип в иерархии":self.structure_type.name, "Тип":self.type.name,
+                       "Стоимость":str(self.cost), "Выполнен на, %":str(self.percentage),
+                       "Исполнитель":self.assigner.username, "Активность":'✓' if self.is_active else ''
+                      }        
+        ModelLog.objects.create(componentname='tsk', 
+                                modelname="Task",
+                                modelobjectid=self.id,
+                                author=self.author,
+                                log=json.dumps(historyjson)
+                                )                                            
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     
@@ -192,6 +204,7 @@ class TaskComment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
+"""
 class ProjectStatusLog(models.Model):
     #LOG_TYPES = (('P', 'Project'), ('T', 'Task'))
     #logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
@@ -227,3 +240,4 @@ class TaskStatusLog(models.Model):
         ordering = ('task', 'date')
         verbose_name = 'История Задачи'
         verbose_name_plural = 'Истории Задач'                
+"""
