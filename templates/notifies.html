@@ -1,0 +1,97 @@
+<!--{ load render_table from django_tables2 %}-->
+
+<h4>Мои уведомления</h4>
+<!--
+<br />
+<div style="float: left;" class="notification-entry"><a href="{ url 'my_company:notification_create' %}"
+     class="top-menu"><span class="badge badge-secondary">Добавить</span></a>
+</div>
+<div style="float: left;" class="notification-entry">&nbsp;&nbsp;&nbsp;</div>
+<div style="float: left;" class="notification-entry"><a href="{ url 'my_account:userprofile_detail' 0 'all' %}"
+   class="top-menu"><span class="badge badge-secondary">Вывести все</span></a>
+</div>               
+<br /><br />-->
+
+<div id="ajax_listresult">
+
+<!--<div class="d-table">-->
+
+   <form method="GET">
+      {% csrf_token %}
+      <div class="object-list-filters">
+         <label>По статусам: </label>
+         <select name="select-status" id="statusselectid" class="select-status">
+            <option value="1" {% ifequal "1" status_selectid %} selected="selected" {% endifequal %}>- Все</option>
+            <option value="2" {% ifequal "2" status_selectid %} selected="selected" {% endifequal %}>- Непрочитанные</option>
+            <option value="3" {% ifequal "3" status_selectid %} selected="selected" {% endifequal %}>- Прочитанные</option>   
+         </select> 
+         <label>По типам: </label>
+         <select name="select-metaobjecttype" id="metaobjecttypeselectid"  class="select-metaobjecttype">
+            <option value="0" {% ifequal 0 metaobjecttype_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все</option>
+            {% for metaobjecttype in metaobjecttype_list %}
+               <option value="{{metaobjecttype.id}}" {% ifequal metaobjecttype.id metaobjecttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                  {{metaobjecttype.name}}
+               </option>   
+            {% endfor %}
+         </select>                
+         <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>
+      </div>
+   </form>    
+    
+   {% include 'notify_list.html' %}
+
+<!--</div>-->
+
+</div>
+
+
+<script>
+
+   $('input[type="checkbox"]').change(function(){
+
+      // Проверка стоит галочка или нет
+      if ($(this).is(':checked')) {
+
+         var chk = $(this).attr("name");
+         var chkVal = $(this).attr("value");
+
+         // Ваш запрос
+         $.ajax({
+            url: "{% url 'my_main:notification_read' %}",
+            type: 'GET',
+            //data: { name: chk, val: chkVal },
+            data: { val: chkVal },
+            //beforeSend: function() { alert(chk+ ' '+chkVal); },
+            //success: function(data) { alert(data); }
+            success: function(data) {
+               $('#ajax_listresult').html(data);
+            }
+         });
+
+      }
+
+   });
+
+   $('#selection-button').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            var statusSelected = $("#statusselectid option:selected").val()
+            var metaobjecttypeSelected = $("#metaobjecttypeselectid option:selected").val()
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_main:notification_filter' %}",
+               data: {
+                  //companyid: {{ current_company.id }},
+                  notificationstatus: statusSelected,
+                  notificationobjecttype: metaobjecttypeSelected
+               },
+               success: function(data){           
+                  $('#ajax_listresult').html(data);                  
+               },
+               error: function(xhr, errmsg, err){               
+                  console.log("error")                                  
+                  $('#ajax_listerrors').html('Нет данных!');
+               }               
+            });
+   });
+
+</script>

@@ -3,6 +3,8 @@ from django.utils import timezone
 from datetime import datetime, date, time
 import json
 import requests
+from django.db import connection
+
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
@@ -73,6 +75,16 @@ def projects(request, companyid=0, pk=0):
     len_list = len(project_list)
 
     current_company = Company.objects.get(id=companyid)
+    # *** немного потискал прямые запросы к БД
+    #cursor = connection.cursor()
+    #sql = 'SELECT * FROM companies_company WHERE id=%s'
+    #cursor.execute(sql, [companyid])
+    #current_company = cursor.fetchone() #.fetchall()
+    #idcomp = '''id=companyid'''
+    #current_company = Company.objects.get(idcomp)
+    #print(current_company)
+    #print(current_company[9])
+    # ***
 
     if pk == 0:
        current_project = 0
@@ -81,6 +93,8 @@ def projects(request, companyid=0, pk=0):
        #tree_project_id = 0
     else:
        current_project = Project.objects.get(id=pk)
+       #idpk = 'id=pk'
+       #current_project = Project.objects.get({idpk})
        tree_project_id = current_project.tree_id  
        root_project_id = current_project.get_root().id
        #tree_project_id = current_project.tree_id

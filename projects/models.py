@@ -117,7 +117,7 @@ class Project(MPTTModel):
         historyjson = {"Проект":self.name, "Статус":self.status.name, 
                        "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
                        "Тип в иерархии":self.structure_type.name, "Тип":self.type.name,
-                       "Валюта":self.currency.code_char, "Стоимость":str(self.cost), "Выполнен на, %":str(self.percentage),
+                       "Стоимость":str(self.cost), "Валюта":self.currency.code_char, "Выполнен на, %":str(self.percentage),
                        "Исполнитель":self.assigner.username, "Активность":'✓' if self.is_active else '' #, "Участники":self.members.username
                       }
         #print(historyjson)

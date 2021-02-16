@@ -157,7 +157,7 @@ class Client(models.Model):
                        "E-mail":self.email if self.email else '', "Телефон":self.phone if self.phone else '',  
                        #"Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
                        "Тип":self.type.name, "Статус":self.status.name,
-                       "Валюта":self.currency.code_char, "Стоимость":str(self.cost), "Выполнен на, %":str(self.percentage),
+                       "Стоимость":str(self.cost), "Валюта":self.currency.code_char, "Выполнен на, %":str(self.percentage),
                        "Инициатор":self.initiator.name, "Менеджер":self.manager.username,
                        "Оповещение":'✓' if self.is_notify else '', "Протокол":self.protocoltype.name if self.protocoltype else '', "Активность":'✓' if self.is_active else ''
                       }        

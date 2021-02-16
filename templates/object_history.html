@@ -1,37 +1,37 @@
 
-   <div class="d-tr">
-      <div class="d-td-text">
-         <table width="80%" border="1" cellpadding="4" cellspacing="0" align="center">
+   <!--<div class="object-list-tr">
+      <div class="object-list-td">-->
+         <div class="table">
             {% comment %}
-            <tr>
-               <th>Дата</th> <th>Автор</th>
+            <div class="row">
+               <div class="cell">Дата</div> <div class="cell">Автор</div>
                {% for key, value in titles %}          
-                  <th>{ key }}</th>
+                  <div class="cell">{ key }}</div>
                {% endfor %}
-            </tr>
+            </div>
             {% endcomment %}
             {% for rec in mas %}
                {% if forloop.first %}
-                  <tr>                      
-                     <th>Дата</th> <th>Автор</th>
+                  <div class="th-row">                      
+                     <div class="th-cell">Дата</div> <div class="th-cell">Автор</div>
                      {% for key, value in rec %}          
-                        <th>{{ key }}</th>
+                        <div class="th-cell">{{ key }}</div>
                      {% endfor %}    
-                  </tr>                                     
+                  </div>                                     
                {% endif %} 
-               <tr>
+               <div class="{% cycle 'row1' 'row2' %}">
                   {% for nd in nodes %}
                      {% if forloop.counter0 == forloop.parentloop.counter0 %}
-                        <td>{{ nd.date|date:"d.m.Y H:i:s" }}</td> <td>{{ nd.author.username }}</td>
+                        <div class="cell">{{ nd.date|date:"d.m.Y H:i:s" }}</div> <div class="cell">{{ nd.author.username }}</div>
                      {% endif %}                  
                   {% endfor %}
                   {% for key, value in rec %}
-                     <td>{{ value }}</td>
+                     <div class="cell">{{ value }}</div>
                   {% endfor %}
-               </tr>                               
+               </div>                               
             {% endfor %}
-         </table>                  
-      </div>
-   </div>
+         </div>                  
+   <!--   </div>
+   </div>-->
 
    <p><em>{{ object_message }}</em></p>
