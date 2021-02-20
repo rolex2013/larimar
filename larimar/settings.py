@@ -30,7 +30,7 @@ INTERNAL_IPS = [
     '192.168.88.153',
 ]
 
-ALLOWED_HOSTS = ['localhost','192.168.88.153']
+ALLOWED_HOSTS = ['1yes.larimaritgroup.ru', 'localhost','192.168.88.153']
 
 
 # Application definition
@@ -178,8 +178,8 @@ USE_TZ = True
 
 EMAIL_HOST = 'smtp.beget.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = "superadmin@larimaritgroup.ru"
-EMAIL_HOST_PASSWORD = "CucumbeR___000"
+EMAIL_HOST_USER = "1yes@larimaritgroup.ru"
+EMAIL_HOST_PASSWORD = "CucumbeR---000"
 EMAIL_USE_TLS = False
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

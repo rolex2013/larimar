@@ -31,10 +31,10 @@ class ClientForm(forms.ModelForm):
         if self.action == 'update': 
            if self.cleaned_data['status'].id != self.initial['status']:
               # если вызов пришёл из ClientUpdate и статус Клиента был изменён, то пишем лог изменения 
-              dict_status = Dict_ClientStatus.objects.get(pk=self.cleaned_data['status'].id)
-              ClientStatusLog.objects.create(client_id=self.initial['id'], 
-                                              status_id=dict_status.id, 
-                                              author_id=self.user.id)
+              #dict_status = Dict_ClientStatus.objects.get(pk=self.cleaned_data['status'].id)
+              #ClientStatusLog.objects.create(client_id=self.initial['id'], 
+              #                                status_id=dict_status.id, 
+              #                                author_id=self.user.id)
               if self.cleaned_data['status'].is_close: # == "Выполнен":
                  if self.user.id != self.initial['author']: 
                     # если Клиент закрывается Менеджером, то уведомление отсылается Автору
@@ -44,13 +44,13 @@ class ClientForm(forms.ModelForm):
                     ##user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)    
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='clnt').id                                       
-                    #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+                    send_mail('1Yes. Ваш Клиент закрыт.', 'Уведомляем о закрытии Вашего Клиента!', settings.EMAIL_HOST_USER, [user_profile.email])
                     Notification.objects.create(type=user_profile.protocoltype,
                                                 objecttype_id=objecttypeid,
                                                 objectid=self.initial['id'],
                                                 sendfrom=settings.EMAIL_HOST_USER,
-                                                theme='Ваш Клиент переведён в статус "'+dict_status.name+'"',
-                                                text='Уведомляем об изменении статуса Вашего Клиента "'+self.cleaned_data['name']+'".',
+                                                theme='Ваш Клиент закрыт!',
+                                                text='Уведомляем о закрытии Вашего Клиента.',
                                                 recipient_id=self.initial['author'],                                             
                                                 sendto=user_profile.email,
                                                 author_id=self.user.id)
@@ -59,7 +59,7 @@ class ClientForm(forms.ModelForm):
            elif self.cleaned_data['manager'].id != self.initial['manager']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['manager'].id, is_active=True)
               objecttypeid = Meta_ObjectType.objects.get(shortname='clnt').id
-              #send_mail('LarimarITGroup. Вы назначены менеджерои Клиента.', 'Уведомляем о назначении Вам Клиента!', settings.EMAIL_HOST_USER, [user_profile.email])
+              send_mail('1Yes. Вы назначены менеджерои Клиента.', 'Уведомляем о назначении Вам Клиента!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           object_id=objecttypeid,  
                                           objectid=self.initial['id'],            
@@ -125,7 +125,7 @@ class ClientTaskForm(forms.ModelForm):
                     #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id                    
-                    #send_mail('LarimarITGroup. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
+                    send_mail('1Yes. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
                     Notification.objects.create(type=user_profile.protocoltype,
                                                 objecttype_id=objecttypeid,
                                                 objectid=self.initial['id'],
@@ -140,7 +140,7 @@ class ClientTaskForm(forms.ModelForm):
            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
               objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id
-              #send_mail('LarimarITGroup. Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
+              send_mail('1Yes. Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           objecttype_id=objecttypeid,      
                                           objectid=self.initial['id'],        
@@ -222,7 +222,7 @@ class ClientEventForm(forms.ModelForm):
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='evnt').id                    
-                    #send_mail('LarimarITGroup. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
+                    send_mail('1Yes. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
                     Notification.objects.create(type=user_profile.protocoltype,
                                                 objecttype_id=objecttypeid,
                                                 objectid=self.initial['id'],
@@ -237,7 +237,7 @@ class ClientEventForm(forms.ModelForm):
            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
               objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id
-              #send_mail('LarimarITGroup. Вы назначены исполнителем События.', 'Уведомляем о назначении Вам События!', settings.EMAIL_HOST_USER, [user_profile.email])
+              send_mail('1Yes. Вы назначены исполнителем События.', 'Уведомляем о назначении Вам События!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           objecttype_id=objecttypeid,      
                                           objectid=self.initial['id'],        

@@ -41,13 +41,14 @@ class ProjectForm(forms.ModelForm):
                     #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)    
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id                                       
-                    #send_mail('LarimarITGroup. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+                    send_mail('1Yes. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+                    #print('==================')
                     Notification.objects.create(type=user_profile.protocoltype,
                                                 objecttype_id=objecttypeid,
                                                 objectid=self.initial['id'],
                                                 sendfrom=settings.EMAIL_HOST_USER,
-                                                theme='Ваш Проект переведён в статус "'+dict_status.name+'"',
-                                                text='Уведомляем об изменении статуса Вашего Проекта "'+self.cleaned_data['name']+'".',
+                                                theme='Ваш Проект закрыт!',
+                                                text='Уведомляем о закрытии Вашего Проекта.',
                                                 recipient_id=self.initial['author'],                                             
                                                 sendto=user_profile.email,
                                                 author_id=self.user.id)
@@ -58,7 +59,7 @@ class ProjectForm(forms.ModelForm):
               objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id
               #send_mail('LarimarITGroup. Вы назначены исполнителем Проекта.', 'Уведомляем о назначении Вам Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
               #print(user_profile.protocoltype)
-              print(self.cleaned_data['assigner'].id)
+              #print(self.cleaned_data['assigner'].id)
               Notification.objects.create(type=user_profile.protocoltype,
                                           objecttype_id=objecttypeid,  
                                           objectid=self.initial['id'],            
@@ -124,7 +125,7 @@ class TaskForm(forms.ModelForm):
                     #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id                    
-                    #send_mail('LarimarITGroup. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
+                    send_mail('1Yes. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
                     Notification.objects.create(type=user_profile.protocoltype,
                                                 objecttype_id=objecttypeid,
                                                 objectid=self.initial['id'],
@@ -139,7 +140,7 @@ class TaskForm(forms.ModelForm):
            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
               objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id
-              #send_mail('LarimarITGroup. Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
+              send_mail('1Yes. Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           objecttype_id=objecttypeid,      
                                           objectid=self.initial['id'],        
