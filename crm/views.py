@@ -549,6 +549,7 @@ class ClientEventCommentUpdate(UpdateView):
        return context
 
 
+### *** тестовый коммент *** ###
 """
 # *** ИСТОРИИ ИЗМЕНЕНИЯ СТАТУСОВ КЛИЕНТОВ И ЗАДАЧ ***
 
