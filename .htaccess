@@ -16,7 +16,7 @@
 # set it here.
 ##
 
-## No directory listings
+### No directory listings
 <IfModule autoindex>
   IndexIgnore *
 </IfModule>
