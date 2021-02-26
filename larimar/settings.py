@@ -189,7 +189,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/static_collected/'
+
 
 if sys.platform == "win32":
    # для разработки
@@ -200,7 +200,9 @@ if sys.platform == "win32":
        '192.168.88.153',
    ]
 
-   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+   STATIC_URL = '/static/'
+   #STATIC_ROOT = '/static/'
+   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  
 
    ALLOWED_HOSTS = ['localhost','192.168.88.153']
 
@@ -213,5 +215,8 @@ if sys.platform == "win32":
 
 else:
 
+   #STATIC_URL = '/static/static_collected/'
+   STATIC_ROOT = '/static/static_collected/'
+   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
    STATIC_ROOT = "/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static/static_collected"
 
