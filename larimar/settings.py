@@ -190,17 +190,17 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-
 
 if sys.platform == "win32":
    # для разработки
-   
+
    DEBUG = True
    INTERNAL_IPS = [
        '127.0.0.1',
        '192.168.88.153',
    ]
+
+   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
    ALLOWED_HOSTS = ['localhost','192.168.88.153']
 
@@ -210,4 +210,8 @@ if sys.platform == "win32":
    DEBUG_TOOLBAR_CONFIG = {
      "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
    }
+
+else:
+
+   STATIC_ROOT = "/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static/static_collected"
 
