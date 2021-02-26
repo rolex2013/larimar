@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,15 +24,16 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@2%zg8-cp_cqq!=4g-1o0ok6#q3t##0a3@hrat-=i8(=!7(xr!'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = False
 
-INTERNAL_IPS = [
-    '127.0.0.1',
-    '192.168.88.153',
-]
+#INTERNAL_IPS = [
+#    '127.0.0.1',
+#    '192.168.88.153',
+#]
 
-ALLOWED_HOSTS = ['1yes.larimaritgroup.ru', 'localhost','192.168.88.153']
+ALLOWED_HOSTS = ['1yes.larimaritgroup.ru']
 
+ADMINS = (('Harry', 'larimaritgroup.ru@gmail.com'),)
 
 # Application definition
 
@@ -177,7 +179,7 @@ USE_L10N = True
 USE_TZ = True
 
 EMAIL_HOST = 'smtp.beget.com'
-EMAIL_PORT = 25
+EMAIL_PORT = 2525
 EMAIL_HOST_USER = "1yes@larimaritgroup.ru"
 EMAIL_HOST_PASSWORD = "CucumbeR---000"
 EMAIL_USE_TLS = False
@@ -190,8 +192,22 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
-def show_toolbar(request):
-  return True
-DEBUG_TOOLBAR_CONFIG = {
-  "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
-}
+
+if sys.platform == "win32":
+   # для разработки
+   
+   DEBUG = True
+   INTERNAL_IPS = [
+       '127.0.0.1',
+       '192.168.88.153',
+   ]
+
+   ALLOWED_HOSTS = ['localhost','192.168.88.153']
+
+   def show_toolbar(request):
+      return True
+
+   DEBUG_TOOLBAR_CONFIG = {
+     "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
+   }
+
