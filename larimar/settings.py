@@ -215,7 +215,7 @@ if sys.platform == "win32":
 
 else:
 
-   STATIC_URL = '/static/'
+   STATIC_URL = '/larimar/static/'
    #STATIC_ROOT = '/static/static_collected/'
    STATICFILES_DIRS = ('/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static',)
    STATIC_ROOT = '/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static/static_collected'
