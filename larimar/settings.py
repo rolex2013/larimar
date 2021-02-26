@@ -215,8 +215,8 @@ if sys.platform == "win32":
 
 else:
 
-   STATIC_URL = '/static/static_collected/'
-   STATIC_ROOT = '/static/static_collected/'
-   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-   STATIC_ROOT = "/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static/static_collected"
+   #STATIC_URL = '/static/static_collected/'
+   #STATIC_ROOT = '/static/static_collected/'
+   STATICFILES_DIRS = ('/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static',)
+   STATIC_ROOT = '/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static/static_collected'
 
