@@ -31,8 +31,6 @@ SECRET_KEY = '@2%zg8-cp_cqq!=4g-1o0ok6#q3t##0a3@hrat-=i8(=!7(xr!'
 #    '192.168.88.153',
 #]
 
-ALLOWED_HOSTS = ['1yes.larimaritgroup.ru']
-
 ADMINS = (('Harry', 'larimaritgroup.ru@gmail.com'),)
 
 # Application definition
@@ -135,17 +133,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'larimar.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -201,10 +188,19 @@ if sys.platform == "win32":
    ]
 
    STATIC_URL = '/static/'
-   #STATIC_ROOT = '/static/'
    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  
 
    ALLOWED_HOSTS = ['localhost','192.168.88.153']
+
+   # Database
+   # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.sqlite3',
+           'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+       }
+   }
 
    def show_toolbar(request):
       return True
@@ -215,8 +211,22 @@ if sys.platform == "win32":
 
 else:
 
+   ALLOWED_HOSTS = ['1yes.larimaritgroup.ru']
+
    STATIC_URL = '/larimar/static/'
-   #STATIC_ROOT = '/static/static_collected/'
    STATICFILES_DIRS = ('/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static',)
    STATIC_ROOT = '/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static/static_collected'
+
+   DATABASES = {
+      'default': {
+         #'ENGINE': 'django.db.backends.postgresql_psycopg2',
+         'ENGINE': 'django.db.backends.mysql',
+         'NAME': 'larimarit_1yes',
+         'USER': 'larimarit_1yes',
+         'PASSWORD': 'CucumbeR@000',
+         'HOST': '127.0.0.1',
+         #'PORT': '5432'
+         'PORT': '3306'
+      }
+   }
 
