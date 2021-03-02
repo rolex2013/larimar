@@ -221,6 +221,7 @@ else:
       'default': {
          #'ENGINE': 'django.db.backends.postgresql_psycopg2',
          'ENGINE': 'django.db.backends.mysql',
+         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
          'NAME': 'larimarit_1yes',
          'USER': 'larimarit_1yes',
          'PASSWORD': 'CucumbeR@000',
