@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "is_active": 1,
+        "is_close": 0,
+        "name": "В разработке",
+        "name_lang": "Planing",
+        "sort": 1
+    },
+    {
+        "id": 2,
+        "is_active": 1,
+        "is_close": 0,
+        "name": "В работе",
+        "name_lang": "Working",
+        "sort": 2
+    },
+    {
+        "id": 3,
+        "is_active": 1,
+        "is_close": 0,
+        "name": "Приостановлен",
+        "name_lang": "In pause",
+        "sort": 3
+    },
+    {
+        "id": 4,
+        "is_active": 1,
+        "is_close": 1,
+        "name": "Выполнен",
+        "name_lang": "Completed",
+        "sort": 4
+    },
+    {
+        "id": 5,
+        "is_active": 1,
+        "is_close": 1,
+        "name": "Отменён",
+        "name_lang": "Canceled",
+        "sort": 5
+    }
+]
