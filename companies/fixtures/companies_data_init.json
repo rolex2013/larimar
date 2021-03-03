@@ -139,6 +139,158 @@
           "name_lang": "Contractor",
           "is_active": "1"        
         }
-    }    
+    },
+    
+    {
+        "model": "companies.Dict_ContentPlace",
+        "pk": 1,
+        "fields": {
+          "name": "Внешний сайт",
+          "sort": "5",
+          "name_lang": "External Site",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_ContentPlace",
+        "pk": 2,
+        "fields": {
+          "name": "Organization Content",
+          "sort": "10",
+          "name_lang": "Partner",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_ContentPlace",
+        "pk": 3,
+        "fields": {
+          "name": "Для профиля",
+          "sort": "15",
+          "name_lang": "For Profile",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_ContentPlace",
+        "pk": 4,
+        "fields": {
+          "name": "Личный контент",
+          "sort": "20",
+          "name_lang": "Personal Content",
+          "is_active": "1"        
+        }
+    },
+    
+    {
+        "model": "companies.Dict_ContentType",
+        "pk": 1,
+        "fields": {
+          "name": "Новость",
+          "sort": "5",
+          "name_lang": "News",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_ContentType",
+        "pk": 2,
+        "fields": {
+          "name": "Объявление",
+          "sort": "10",
+          "name_lang": "Announcement",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_ContentType",
+        "pk": 3,
+        "fields": {
+          "name": "Блог",
+          "sort": "15",
+          "name_lang": "Blog",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_ContentType",
+        "pk": 4,
+        "fields": {
+          "name": "Заметка",
+          "sort": "20",
+          "name_lang": "Note",
+          "is_active": "1"        
+        }
+    },             
 
+    {
+        "model": "companies.Dict_PositionType",
+        "pk": 1,
+        "fields": {
+          "name": "Руководитель высшего звена",
+          "sort": "5",
+          "name_lang": "Top Manager",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_PositionType",
+        "pk": 2,
+        "fields": {
+          "name": "Руководитель среднего звена",
+          "sort": "10",
+          "name_lang": "Middle Manager",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_PositionType",
+        "pk": 3,
+        "fields": {
+          "name": "Руководитель низшего звена",
+          "sort": "15",
+          "name_lang": "Lower Level Manager",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_PositionType",
+        "pk": 4,
+        "fields": {
+          "name": "Специалист",
+          "sort": "20",
+          "name_lang": "Expert",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_PositionType",
+        "pk": 5,
+        "fields": {
+          "name": "Менеджер",
+          "sort": "25",
+          "name_lang": "Manager",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_PositionType",
+        "pk": 6,
+        "fields": {
+          "name": "Инженер",
+          "sort": "30",
+          "name_lang": "Engineer",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_PositionType",
+        "pk": 7,
+        "fields": {
+          "name": "Рабочий",
+          "sort": "35",
+          "name_lang": "Worker",
+          "is_active": "1"        
+        }
+    }              
 ]
