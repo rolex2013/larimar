@@ -1,0 +1,144 @@
+[
+    {
+      "model": "companies.Dict_CompanyStructureType",
+      "pk": 1,
+      "fields": {
+        "name": "Головная организация",
+        "sort": "5",
+        "name_lang": "Main company",
+        "is_active": "1"        
+      }
+    },
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 2,
+        "fields": {
+          "name": "Холдинг",
+          "sort": "10",
+          "name_lang": "Holding",
+          "is_active": "1"        
+        }
+    },    
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 3,
+        "fields": {
+          "name": "Группа компаний",
+          "sort": "15",
+          "name_lang": "Group of companies",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 4,
+        "fields": {
+          "name": "Филиал",
+          "sort": "20",
+          "name_lang": "Branch",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 5,
+        "fields": {
+          "name": "Обособленное подразделение",
+          "sort": "25",
+          "name_lang": "Separate division",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 6,
+        "fields": {
+          "name": "Представительство",
+          "sort": "30",
+          "name_lang": "Representation",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 7,
+        "fields": {
+          "name": "Отделение",
+          "sort": "35",
+          "name_lang": "Office",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 8,
+        "fields": {
+          "name": "Отдел",
+          "sort": "40",
+          "name_lang": "Department",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 9,
+        "fields": {
+          "name": "Сектор",
+          "sort": "45",
+          "name_lang": "Sector",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyStructureType",
+        "pk": 10,
+        "fields": {
+          "name": "Группа",
+          "sort": "50",
+          "name_lang": "Group",
+          "is_active": "1"        
+        }
+    },
+
+    {
+        "model": "companies.Dict_CompanyType",
+        "pk": 1,
+        "fields": {
+          "name": "Поставщик",
+          "sort": "5",
+          "name_lang": "Provider",
+          "is_active": "1"        
+        }
+    },          
+    {
+        "model": "companies.Dict_CompanyType",
+        "pk": 2,
+        "fields": {
+          "name": "Покупатель",
+          "sort": "10",
+          "name_lang": "Buyer",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyType",
+        "pk": 3,
+        "fields": {
+          "name": "Партнёр",
+          "sort": "15",
+          "name_lang": "Partner",
+          "is_active": "1"        
+        }
+    },
+    {
+        "model": "companies.Dict_CompanyType",
+        "pk": 4,
+        "fields": {
+          "name": "Подрядчик",
+          "sort": "20",
+          "name_lang": "Contractor",
+          "is_active": "1"        
+        }
+    }    
+
+]
