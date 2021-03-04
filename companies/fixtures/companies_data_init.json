@@ -292,5 +292,26 @@
           "name_lang": "Worker",
           "is_active": "1"        
         }
-    }              
+    },
+    
+    {
+      "model": "companies.company",
+      "pk": 1,
+      "fields": {      
+        "author_id": 1,
+        "currency_id": 1,
+        "datecreate": "2021-03-04 13:00:00.0000000",
+        "description": "<p><em><strong><img alt=\"\" src=\"/media/uploads/2020/02/29/larimar_2.png\" />&nbsp;Компания Larimar IT Group</strong></em></p>",
+        "is_active": "1",
+        "level": "0",
+        "lft": "1",
+        "name": "Larimar IT Group",
+        "parent_id": null,
+        "rght": "1",
+        "structure_type_id": "1",
+        "tree_id": "1",
+        "type_id": "1"
+    }
+  }
+
 ]
