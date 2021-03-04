@@ -1,0 +1,169 @@
+[
+
+    {
+        "model": "main.Menu",
+        "pk": 1,        
+        "fields": {        
+            "base_url": "/base.html",
+            "description": "Меню после авторизации",
+            "name": "Главное меню",
+            "slug": "main_menu"  
+        }
+    },
+    {
+        "model": "main.Menu",
+        "pk": 2,        
+        "fields": {        
+            "base_url": "/accounts/logout/",
+            "description": "",
+            "name": "Вход и Регистрация",
+            "slug": "logout_menu"
+        }
+    },
+    
+    {
+        "model": "main.MenuItem",
+        "pk": 1,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/main/",
+            "login_required": 0,
+            "menu_id": 1,
+            "order": 10,
+            "title": "Главная"
+        }
+    },
+    {
+        "model": "main.MenuItem",
+        "pk": 2,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/projects/projects_page0/",
+            "login_required": 0,
+            "menu_id": 1,
+            "order": 40,
+            "title": "Проекты"   
+        }
+    },
+    {
+        "model": "main.MenuItem",
+        "pk": 3,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/accounts/logout/",
+            "login_required": 0,
+            "menu_id": 1,
+            "order": 70,
+            "title": "Выход"
+        }
+    },
+    {
+        "model": "main.MenuItem",
+        "pk": 4,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/accounts/profile0/",
+            "login_required": 0,
+            "menu_id": 1,
+            "order": 60,
+            "title": "Мой профиль"    
+        }
+    },
+    {
+        "model": "main.MenuItem",
+        "pk": 5,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/accounts/login/",
+            "login_required": 0,
+            "menu_id": 2,
+            "order": 10,
+            "title": "Вход"   
+        }
+    },                  
+    {
+        "model": "main.MenuItem",
+        "pk": 6,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/accounts/register/",
+            "login_required": 0,
+            "menu_id": 2,
+            "order": 20,
+            "title": "Регистрация"      
+        }
+    },                  
+    {
+        "model": "main.MenuItem",
+        "pk": 7,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/finance/",
+            "login_required": 0,
+            "menu_id": 1,
+            "order": 30,
+            "title": "Финансы"    
+        }
+    },
+    {
+        "model": "main.MenuItem",
+        "pk": 8,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/companies/companies_page/0/companies",
+            "login_required": 0,
+            "menu_id": 1,
+            "order": 20,
+            "title": "Организации"        
+        }
+    },                      
+    {
+        "model": "main.MenuItem",
+        "pk": 9,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/site/vacancies_page/",
+            "login_required": 0,
+            "menu_id": 2,
+            "order": 5,
+            "title": "Вакансии"    
+        }
+    },
+    {
+        "model": "main.MenuItem",
+        "pk": 10,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/site/vacancies_page/",
+            "login_required": 0,
+            "menu_id": 2,
+            "order": 5,
+            "title": "Вакансии"    
+        }
+    },
+    {
+        "model": "main.MenuItem",
+        "pk": 1,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/",
+            "login_required": 0,
+            "menu_id": 2,
+            "order": 2,
+            "title": "Главная"
+        }
+    },
+    {
+        "model": "main.MenuItem",
+        "pk": 12,        
+        "fields": {        
+            "anonymous_only": 0,
+            "link_url": "/crm/clients_page0/",
+            "login_required": 1,
+            "menu_id": 1,
+            "order": 50,
+            "title": "Клиенты"
+        }
+    }
+
+]    
