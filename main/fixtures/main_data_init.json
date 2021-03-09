@@ -164,7 +164,7 @@
             "order": 50,
             "title": "Клиенты"
         }
-    }
+    },
 
     {
         "model": "main.Meta_ObjectType",        
