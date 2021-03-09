@@ -166,4 +166,241 @@
         }
     }
 
+    {
+        "model": "main.Meta_ObjectType",        
+        "pk": 1,
+        "fields": {  
+           "is_active": 1,
+           "name": "Контент",
+           "name_lang": "Content",
+           "shortname": "cont",
+           "sort": 1,
+           "tablename": "content"
+        }
+    },
+    {
+        "model": "main.Meta_ObjectType",          
+        "pk": 2,
+        "fields": {  
+           "is_active": 1,
+           "name": "Организация",
+           "name_lang": "Company",
+           "shortname": "org",
+           "sort": 5,
+           "tablename": "company"
+        }
+    },
+    {
+        "model": "main.Meta_ObjectType",          
+        "pk": 3,
+        "fields": {  
+           "is_active": 1,
+           "name": "Проект",
+           "name_lang": "Project",
+           "shortname": "prj",
+           "sort": 10,
+           "tablename": "project"
+        }
+    },
+    {
+        "model": "main.Meta_ObjectType",          
+        "pk": 4,
+        "fields": {  
+           "is_active": 1,
+           "name": "Задача",
+           "name_lang": "Task",
+           "shortname": "tsk",
+           "sort": 15,
+           "tablename": "task"
+        }
+    },
+    {
+        "model": "main.Meta_ObjectType",          
+        "pk": 5,
+        "fields": {  
+           "is_active": 1,
+           "name": "Комментарий",
+           "name_lang": "Comment",
+           "shortname": "cmnt",
+           "sort": 20,
+           "tablename": "taskcomments"
+        }
+    },
+    {
+        "model": "main.Meta_ObjectType",          
+        "pk": 7,
+        "fields": {  
+           "is_active": 1,
+           "name": "Клиент",
+           "name_lang": "Client",
+           "shortname": "clnt",
+           "sort": 1,
+           "tablename": "client"
+        }
+    },
+    {
+        "model": "main.Meta_ObjectType",          
+        "pk": 8,
+        "fields": {          
+           "is_active": 1,
+           "name": "Событие",
+           "name_lang": "Event",
+           "shortname": "evnt",
+           "sort": 25,
+           "tablename": "event"
+        }
+    },
+
+    {
+        "model": "main.Dict_ProtocolType",
+        "pk": 1,
+        "fields": {        
+           "is_active": 1,
+           "name": "e-mail",
+           "name_lang": "e-mail",
+           "sort": 1
+        }
+    },
+    {
+        "model": "main.Dict_ProtocolType",        
+        "pk": 2,
+        "fields": {        
+           "is_active": 1,
+           "name": "sms",
+           "name_lang": "sms",
+           "sort": 5
+        }
+    },
+    {
+        "model": "main.Dict_ProtocolType",        
+        "pk": 3,
+        "fields": {        
+           "is_active": 1,
+           "name": "local",
+           "name_lang": "local",
+           "sort": 10
+        }
+    },
+
+    {
+        "model": "main.Component",        
+        "pk": 1,
+        "fields": {           
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Главная",
+           "name": "Main",
+           "parent_id": null,
+           "rght": 2,
+           "description": "Компонент общих данных и настроек",        
+           "tree_id": 2
+        }
+    },
+    {
+        "model": "main.Component",          
+        "pk": 2,
+        "fields": {           
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Админка",
+           "name": "Админка",
+           "parent_id": null,
+           "rght": 2,
+           "description": "Компонент администрирования",        
+           "tree_id": 3
+        }
+    },
+    {
+        "model": "main.Component",          
+        "pk": 3,
+        "fields": {           
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Пользователи",
+           "name": "Пользователи",
+           "parent_id": null,
+           "rght": 2,
+           "description": "Аккаунты, права, роли",        
+           "tree_id": 6
+        }
+    },
+    {
+        "model": "main.Component",  
+        "pk": 4,
+        "fields": {           
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Организации",
+           "name": "Организации",
+           "parent_id": null,
+           "rght": 2,
+           "description": "Оргструктура и связи с пользователями",        
+           "tree_id": 5
+        }
+    },
+    {
+        "model": "main.Component",  
+        "pk": 5,
+        "fields": {           
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Проекты",
+           "name": "Проекты и Задачи",
+           "parent_id": null,
+           "rght": 2,
+           "description": null,        
+           "tree_id": 7
+        }
+    },
+    {
+        "model": "main.Component",  
+        "pk": 6,
+        "fields": {           
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Клиенты",
+           "name": "CRM",
+           "parent_id": null,
+           "rght": 2,
+           "description": "Работа с клиентами",        
+           "tree_id": 1
+        }
+    },
+    {
+        "model": "main.Component",  
+        "pk": 7,
+        "fields": {           
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Документооборот",
+           "name": "Документооборот",
+           "parent_id": null,
+           "rght": 2,
+           "description": null,        
+           "tree_id": 4
+        }
+    },
+    {
+        "model": "main.Component",  
+        "pk": 8,
+        "fields": {           
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Склад",
+           "name": "Склад",
+           "parent_id": null,
+           "rght": 2,
+           "description": null,
+           "tree_id": 8
+        }
+    }
+
 ]    
