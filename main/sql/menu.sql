@@ -1,1 +1,1 @@
-INSERT INTO main_menuitem (order, link_url, title, anonymous_only, menu_id, login_required) VALUES ('40', '/projects/projects_page0/', 'Проекты', '0', '1', '0');
+INSERT INTO main_menuitem (`order`, `link_url`, `title`, `anonymous_only`, `menu_id`, `login_required`) VALUES ('40', '/projects/projects_page0/', 'Проекты', '0', '1', '0');
