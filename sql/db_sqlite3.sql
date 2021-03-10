@@ -22,14 +22,14 @@ INSERT INTO `auth_group` (`id`,`name`) VALUES (5,'Менеджеры подси�
 INSERT INTO `auth_group` (`id`,`name`) VALUES (6,'Руководители организаций');
 INSERT INTO `auth_group` (`id`,`name`) VALUES (7,'Исполнители');
 INSERT INTO `auth_group` (`id`,`name`) VALUES (8,'Гости');
-*/
+
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (1,'В разработке',5,'Planing',0,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (2,'В работе',10,'Working',0,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (3,'Приостановлена',15,'In pause',0,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (4,'Решена',20,'Completed',1,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (5,'Снята',25,'Canceled',1,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (6,'Отклонена',30,'Refused',0,1);
-/*INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (1,'Ожидаемое',5,'',0,1);
+INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (1,'Ожидаемое',5,'',0,1);
 INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (2,'Перенесено',10,'',0,1);
 INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (3,'Состоялось',15,'',0,1);
 INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (4,'Отменено',20,'Canceled',0,1);
