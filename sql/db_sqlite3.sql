@@ -29,11 +29,11 @@ INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_clos
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (4,'Решена',20,'Completed',1,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (5,'Снята',25,'Canceled',1,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (6,'Отклонена',30,'Refused',0,1);
-INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (1,'Ожидаемое',5,'',0,1);
+/*INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (1,'Ожидаемое',5,'',0,1);
 INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (2,'Перенесено',10,'',0,1);
 INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (3,'Состоялось',15,'',0,1);
 INSERT INTO `crm_dict_clienteventstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (4,'Отменено',20,'Canceled',0,1);
-/*INSERT INTO `crm_dict_clienteventtype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Звонок исходящий',10,'',1);
+INSERT INTO `crm_dict_clienteventtype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Звонок исходящий',10,'',1);
 INSERT INTO `crm_dict_clienteventtype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Звонок входящий',15,'',1);
 INSERT INTO `crm_dict_clienteventtype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Встреча онлайн',20,'',1);
 INSERT INTO `crm_dict_clienteventtype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (4,'Встреча офлайн',25,NULL,1);
