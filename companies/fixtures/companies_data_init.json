@@ -155,9 +155,9 @@
         "model": "companies.Dict_ContentPlace",
         "pk": 2,
         "fields": {
-          "name": "Organization Content",
+          "name": "Контент организации",
           "sort": "10",
-          "name_lang": "Partner",
+          "name_lang": "Organization Content",
           "is_active": "1"        
         }
     },
