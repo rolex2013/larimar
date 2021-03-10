@@ -25,6 +25,21 @@ INSERT INTO `menu_menuitem` (`id`,`order`,`link_url`,`title`,`anonymous_only`,`m
 INSERT INTO `main_dict_protocoltype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'e-mail',1,'e-mail',1);
 INSERT INTO `main_dict_protocoltype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'sms',5,'sms',1);
 INSERT INTO `main_dict_protocoltype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'local',10,'local',1);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (1,'Main',1,0,1,2,2,'Главная','Компонент общих данных и настроек',NULL);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (2,'Админка',1,0,1,2,3,'Админка','Компонент администрирования',NULL);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (3,'Пользователи',1,0,1,2,6,'Пользователи','Аккаунты, права, роли',NULL);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (4,'Организации',1,0,1,2,5,'Организации','Оргструктура и связи с пользователями',NULL);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (5,'Проекты и Задачи',1,0,1,2,7,'Проекты','Проекты и трекер задач',NULL);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (6,'CRM',1,0,1,2,1,'Клиенты','Работа с клиентами',NULL);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (7,'Документооборот',1,0,1,2,4,'Документооборот','Работа с документами и файлами',NULL);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (8,'Склад',1,0,1,2,8,'Склад','Перемещение товаров',NULL);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (1,'cont','Контент','content',1,'Content',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (2,'org','Организация','company',5,'Company',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (3,'prj','Проект','project',10,'Project',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (4,'tsk','Задача','task',15,'Task',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (5,'cmnt','Комментарий','taskcomments',20,'Comment',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (7,'clnt','Клиент','client',1,'Client',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (8,'evnt','Событие','event',25,'Event',1);
 
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (1,'В разработке',5,'Planing',0,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (2,'В работе',10,'Working',0,1);

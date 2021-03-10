@@ -1,3 +1,4 @@
+// *** перенесено в sql/db_sqlite3.sql ***
 [
     {
       "model": "companies.Dict_CompanyStructureType",
