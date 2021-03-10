@@ -12,3 +12,12 @@ INSERT INTO menu_menuitem (`id`,`order`,`link_url`,`title`,`anonymous_only`,`men
 INSERT INTO menu_menuitem (`id`,`order`,`link_url`,`title`,`anonymous_only`,`menu_id`,`login_required`) VALUES (10,5,'/site/vacancies_page/','Вакансии',0,2,0);
 INSERT INTO menu_menuitem (`id`,`order`,`link_url`,`title`,`anonymous_only`,`menu_id`,`login_required`) VALUES (11,2,'/','Главная',0,2,0);
 INSERT INTO menu_menuitem (`id`,`order`,`link_url`,`title`,`anonymous_only`,`menu_id`,`login_required`) VALUES (12,50,'/crm/clients_page0/','Клиенты',0,1,1);
+
+INSERT INTO `auth_group` (`id`,`name`) VALUES (1,'Суперадминистраторы');
+INSERT INTO `auth_group` (`id`,`name`) VALUES (2,'Администраторы организаций');
+INSERT INTO `auth_group` (`id`,`name`) VALUES (3,'Администраторы подсистем');
+INSERT INTO `auth_group` (`id`,`name`) VALUES (4,'Менеджеры организаций');
+INSERT INTO `auth_group` (`id`,`name`) VALUES (5,'Менеджеры подсистем');
+INSERT INTO `auth_group` (`id`,`name`) VALUES (6,'Руководители организаций');
+INSERT INTO `auth_group` (`id`,`name`) VALUES (7,'Исполнители');
+INSERT INTO `auth_group` (`id`,`name`) VALUES (8,'Гости');
