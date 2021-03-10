@@ -41,7 +41,7 @@ INSERT INTO `crm_client` (`id`,`is_notify`,`firstname`,`middlename`,`lastname`,`
 INSERT INTO `crm_client` (`id`,`is_notify`,`firstname`,`middlename`,`lastname`,`email`,`phone`,`description`,`datecreate`,`dateclose`,`is_active`,`author_id`,`company_id`,`manager_id`,`protocoltype_id`,`status_id`,`type_id`,`user_id`,`cost`,`currency_id`,`percentage`,`initiator_id`) VALUES (2,1,'Алексей','Борисович','Квазар','quasar.a63@gmail.com','+7(916)5555555','<p>Это второй тестовый клиент!</p>','2021-01-12 16:34:40.183503',NULL,1,3,8,5,NULL,2,1,NULL,0,1,0,1);
 INSERT INTO `crm_dict_clientinitiator` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Клиент',5,'Client',1);
 INSERT INTO `crm_dict_clientinitiator` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Организация',10,'Organization',1);
-INSERT INTO `crm_dict_clientinitiator` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Другое',15,'Other',1);*/
+INSERT INTO `crm_dict_clientinitiator` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Другое',15,'Other',1);
 INSERT INTO `crm_dict_clientstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`,`is_close`) VALUES (1,'Новый',5,NULL,1,NULL,0);
 INSERT INTO `crm_dict_clientstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`,`is_close`) VALUES (2,'Принимает решение',10,NULL,1,NULL,0);
 INSERT INTO `crm_dict_clientstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`,`is_close`) VALUES (3,'Заключил договор',15,NULL,1,NULL,0);
@@ -52,8 +52,8 @@ INSERT INTO `crm_dict_clientstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,
 INSERT INTO `crm_dict_clienttasktype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Поручение',NULL,NULL,1);
 INSERT INTO `crm_dict_clienttasktype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Простая',NULL,NULL,1);
 INSERT INTO `crm_dict_clienttasktype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Сложная',NULL,NULL,1);
-/*INSERT INTO `crm_dict_clienttaskstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Основная задача',5,'Main Task',1);
-INSERT INTO `crm_dict_clienttaskstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Подзадача',10,'SubTask',1);*/
+INSERT INTO `crm_dict_clienttaskstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Основная задача',5,'Main Task',1);
+INSERT INTO `crm_dict_clienttaskstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Подзадача',10,'SubTask',1);
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (1,'Клиент',5,'Client',1,NULL);
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (2,'Конкурент',10,NULL,1,NULL);
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (3,'Контактное лицо',15,NULL,1,NULL);
@@ -62,4 +62,27 @@ INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`d
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (6,'Поставщик',30,NULL,1,NULL);
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (7,'Наша компания',35,NULL,1,NULL);
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (8,'Сотрудник',40,NULL,1,NULL);
+*/
+INSERT INTO `projects_dict_projecttype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (1,'Срочный',1,1,'Immediate');
+INSERT INTO `projects_dict_projecttype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (2,'Обычный',2,1,'Normal');
+INSERT INTO `projects_dict_projecttype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (3,'Простой',3,1,'Simple');
+INSERT INTO `projects_dict_projectstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Проект',1,'Project',1);
+INSERT INTO `projects_dict_projectstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Подпроект',1,'subproject',1);
+INSERT INTO `projects_dict_projectstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Этап',1,'Stage',1);
+INSERT INTO `projects_dict_projectstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (1,'В разработке',1,'Planing',1,0);
+INSERT INTO `projects_dict_projectstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (2,'В работе',2,'Working',1,0);
+INSERT INTO `projects_dict_projectstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (3,'Приостановлен',3,'In pause',1,0);
+INSERT INTO `projects_dict_projectstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (4,'Выполнен',4,'Completed',1,1);
+INSERT INTO `projects_dict_projectstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (5,'Отменён',5,'Canceled',1,1);
+INSERT INTO `projects_dict_tasktype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (1,'Поручение',1,1,'Instruction');
+INSERT INTO `projects_dict_tasktype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (2,'Простая',2,1,'Simple');
+INSERT INTO `projects_dict_tasktype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (3,'Сложная',3,1,'Difficult');
+INSERT INTO `projects_dict_taskstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Основная задача',1,'Main Task',1);
+INSERT INTO `projects_dict_taskstructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Подзадача',1,'Subtask',1);
+INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (1,'В разработке',1,'Planing',1,0);
+INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (2,'В работе',2,'Working',1,0);
+INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (3,'Приостановлена',3,'In pause',1,0);
+INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (4,'Решена',4,'Completed',1,1);
+INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (5,'Снята',5,'Canceled',1,1);
+INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (6,'Отклонена',6,'Refused',1,0);
 
