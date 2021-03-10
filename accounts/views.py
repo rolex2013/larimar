@@ -26,6 +26,8 @@ from companies.models import UserCompanyComponentGroup, Content
 from .models import UserProfile
 from django.db.models import Count
 
+import sys
+
 #from companies.views import publiccontents
 
  
@@ -69,6 +71,17 @@ class ELoginView(View):
             current_company = UserProfile.objects.get(user=request.user.id, is_active=True).company_id
             if current_company == None:
                # === проверяем, даны ли права этому пользователю на какую-нибудь Организацию ===
+               try:
+                  current_company = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))[0]
+               except:
+                  if sys.platform == "win32":
+                     cmp_id = 7
+                  else:
+                     cmp_id = 1
+                  if request.user.is_superuser == True:
+                     UserCompanyComponentGroup.objects.create(user_id=request.user.id, company_id=cmp_id, component_id=1, group_id=1)
+                  else:
+                     UserCompanyComponentGroup.objects.create(user_id=request.user.id, company_id=cmp_id, component_id=1, group_id=8)
                current_company = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))[0]
                if current_company != None:
                   UserProfile.objects.filter(user_id=request.user.id).update(company_id=current_company)               
@@ -85,7 +98,7 @@ class ELoginView(View):
             # ======================
             # получаем предыдущий url
             #next = urlparse(get_next_url(request)).path
-            #next = '/projects/main/'
+            #next = '/projects/main/' # 0,1,0,1,1,1,1,1,0,0,1
             next = '/main/'
             # и если пользователь из числа персонала и заходил через url /admin/login/
             # то перенаправляем пользователя в админ панель

@@ -187,7 +187,7 @@
            "name": "Проекты и Задачи",
            "parent_id": null,
            "rght": 2,
-           "description": null,        
+           "description": "Проекты и трекер задач",        
            "tree_id": 7
         }
     },
@@ -217,7 +217,7 @@
            "name": "Документооборот",
            "parent_id": null,
            "rght": 2,
-           "description": null,        
+           "description": "Работа с документами и файлами",        
            "tree_id": 4
         }
     },
@@ -232,7 +232,7 @@
            "name": "Склад",
            "parent_id": null,
            "rght": 2,
-           "description": null,
+           "description": "Перемещение товаров",
            "tree_id": 8
         }
     }
