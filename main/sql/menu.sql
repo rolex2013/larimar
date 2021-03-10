@@ -1,6 +1,4 @@
-INSERT INTO "menu_menuitem" VALUES 
- /*(1,10,'/main/','Главная',0,1,0),
- (2,40,'/projects/projects_page0/','Проекты',0,1,0),*/
+INSERT INTO "menu_menuitem" VALUES
  (3,70,'/accounts/logout/','Выход',0,1,0),
  (5,60,'/accounts/profile0/','Мой профиль',0,1,0),
  (6,10,'/accounts/login/','Вход',0,2,0),
