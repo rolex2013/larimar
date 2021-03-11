@@ -141,7 +141,7 @@ def logout_view(request):
 def register(request):
     if request.method == 'POST':
        user_form = UserRegistrationForm(request.POST)
-       if user_form.is_valid():
+       if user_form.is_valid() and request.recaptcha_is_valid:
           # Create a new user object but avoid saving it yet
           new_user = user_form.save(commit=False)
           # Set the chosen password

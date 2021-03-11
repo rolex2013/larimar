@@ -234,3 +234,5 @@ else:
       }
    }
 
+GOOGLE_RECAPTCHA_SECRET_KEY = '6LesNnsaAAAAAOVy87nqWSHTsN2XQ_lgbPpKO5_T'   
+
