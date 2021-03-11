@@ -22,7 +22,7 @@ from .forms import UserRegistrationForm, UserProfileForm
 
 from main.models import Notification, Meta_ObjectType
 #from .tables import NotificationTable
-from companies.models import UserCompanyComponentGroup, Content
+from companies.models import Company, UserCompanyComponentGroup, Content
 from .models import UserProfile
 from django.db.models import Count
 
@@ -73,11 +73,12 @@ class ELoginView(View):
                # === проверяем, даны ли права этому пользователю на какую-нибудь Организацию ===
                try:
                   current_company = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))[0]
-               except:
+               except:                  
                   if sys.platform == "win32":
                      cmp_id = 7
                   else:
                      cmp_id = 1
+                  cmp_id=''
                   if request.user.is_superuser == True:
                      UserCompanyComponentGroup.objects.create(user_id=request.user.id, company_id=cmp_id, component_id=1, group_id=1)
                   else:
@@ -139,18 +140,24 @@ def logout_view(request):
 
 def register(request):
     if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        if user_form.is_valid():
-            # Create a new user object but avoid saving it yet
-            new_user = user_form.save(commit=False)
-            # Set the chosen password
-            new_user.set_password(user_form.cleaned_data['password'])
-            # Save the User object
-            new_user.save()
-            #print(new_user)
-            return render(request, 'registration/register_done.html', {'new_user': new_user})
+       user_form = UserRegistrationForm(request.POST)
+       if user_form.is_valid():
+          # Create a new user object but avoid saving it yet
+          new_user = user_form.save(commit=False)
+          # Set the chosen password
+          new_user.set_password(user_form.cleaned_data['password'])
+          # Save the User object
+          new_user.save()
+          #print(new_user)
+          #print(instance.id)
+          #print(new_user.id)
+          if user_form.cleaned_data['is_org_register'] == True:
+             instance_comp = Company.objects.create(name='Ваша новая Компания', description='Создана автоматически при регистрации пользователя', is_active=1, lft=1, rght=1, tree_id=1, level=0, structure_type_id=1, type_id=4, currency_id=1, author_id=new_user.id)
+             UserProfile.objects.create(user_id=new_user.id, company_id=instance_comp.id, is_notify=True, protocoltype_id=3, description='Профиль создан автоматически при регистрации пользователя')
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=instance_comp.id, component_id=1, group_id=2)
+          return render(request, 'registration/register_done.html', {'new_user': new_user})
     else:
-        user_form = UserRegistrationForm()
+       user_form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'user_form': user_form})
 
 #

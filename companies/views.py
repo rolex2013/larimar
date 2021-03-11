@@ -55,13 +55,11 @@ def companies(request, pk=0, razdel='projects'):
        tree_company_id = 0
        project_id = 0
        #template_name = "menu_companies.html"
-       template_name = "companies.html"
     else:
        current_company = Company.objects.get(id=pk)
        tree_company_id = current_company.tree_id  
        root_company_id = current_company.get_root().id
        tree_company_id = current_company.tree_id
-       template_name = "companies.html"
        try:  
           current_project = current_company.resultcompany.all()[0].id
        except (ValueError, IndexError) as e:
@@ -76,6 +74,7 @@ def companies(request, pk=0, razdel='projects'):
 
     component_name = razdel       
     request.session['_auth_user_currentcomponent'] = component_name
+    template_name = "companies.html"
     
     return render(request, template_name, {
                               #'nodes':Company.objects.all(),

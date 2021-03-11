@@ -8,13 +8,18 @@
    <div class="object-detail">
       <h3>Регистрация пользователя</h3>
       <p>Пожалуйста, заполните все поля формы:</p>
+      <!--<div class="col-md-offset-3 col-md-6 voffset-60">-->
       <form action="." method="post">
+          <!--{ load bootstrap4 %}-->
           {{ user_form.as_p }}
+          <!--{ bootstrap_form registration_form %}-->
           {% csrf_token %}
           <div class="object-detail-buttons">
-             <input type="submit" value="Создать">
+             <!--<input type="submit" value="Создать">-->
+             <button type="submit">Создать</button>
           </div>
       </form>
+      <!--</div>-->
    </div>
 
 {% endblock %}

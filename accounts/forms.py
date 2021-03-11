@@ -7,6 +7,7 @@ from mptt.forms import MoveNodeForm, TreeNodeChoiceField
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Повторно', widget=forms.PasswordInput)
+    is_org_register = forms.BooleanField(label='Зарегистрировать свою Компанию?', required=False)
 
     class Meta:
         model = User

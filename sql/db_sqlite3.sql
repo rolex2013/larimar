@@ -32,9 +32,9 @@ INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (5,'Проекты и Задачи',1,0,1,2,7,'Проекты','Проекты и трекер задач',NULL);
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (6,'CRM',1,0,1,2,1,'Клиенты','Работа с клиентами',NULL);
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (7,'Документооборот',1,0,1,2,4,'Документооборот','Работа с документами и файлами',NULL);
-INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (8,'Склад',1,0,1,2,8,'Склад','Перемещение товаров',NULL);*/
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (8,'Склад',1,0,1,2,8,'Склад','Перемещение товаров',NULL);
 INSERT INTO `main_meta_param` (`id`,`name`,`datecreate`,`is_service`,`is_active`) VALUES (1,'Сервис (тестовый)','2021-03-11 13:00:00.239817',1,1);
-/*INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (1,'cont','Контент','content',1,'Content',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (1,'cont','Контент','content',1,'Content',1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (2,'org','Организация','company',5,'Company',1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (3,'prj','Проект','project',10,'Project',1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (4,'tsk','Задача','task',15,'Task',1);
@@ -105,9 +105,11 @@ INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_activ
 INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (5,'Снята',5,'Canceled',1,1);
 INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (6,'Отклонена',6,'Refused',1,0);
 
-INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Поставщик',1,'Provider',1);
-INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Покупатель',2,'Buyer',1);
-INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Головная организация',1,'Main Company',1);
+INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Поставщик',5,'Provider',1);
+INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Покупатель',10,'Buyer',1);*/
+INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Партнёр',15,'Partner',1);
+INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (4,'Тестовая Компания',20,'Test',1);
+/*INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Головная организация',1,'Main Company',1);
 INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Холдинг',1,NULL,1);
 INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Группа компаний',1,NULL,1);
 INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (4,'Филиал',1,NULL,1);
