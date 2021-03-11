@@ -32,8 +32,9 @@ INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (5,'Проекты и Задачи',1,0,1,2,7,'Проекты','Проекты и трекер задач',NULL);
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (6,'CRM',1,0,1,2,1,'Клиенты','Работа с клиентами',NULL);
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (7,'Документооборот',1,0,1,2,4,'Документооборот','Работа с документами и файлами',NULL);
-INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (8,'Склад',1,0,1,2,8,'Склад','Перемещение товаров',NULL);
-INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (1,'cont','Контент','content',1,'Content',1);
+INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (8,'Склад',1,0,1,2,8,'Склад','Перемещение товаров',NULL);*/
+INSERT INTO `main_meta_param` (`id`,`name`,`datecreate`,`is_service`,`is_active`) VALUES (1,'Сервис (тестовый)','2021-03-11 13:00:00.239817',1,1);
+/*INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (1,'cont','Контент','content',1,'Content',1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (2,'org','Организация','company',5,'Company',1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (3,'prj','Проект','project',10,'Project',1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (4,'tsk','Задача','task',15,'Task',1);
@@ -139,3 +140,4 @@ INSERT INTO `finance_dict_currency` (`id`,`code_char`,`code_num`,`name`,`sort`,`
 
 INSERT INTO `companies_company` (`id`,`name`,`description`,`datecreate`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`author_id`,`structure_type_id`,`type_id`,`currency_id`,`parent_id`) VALUES (1,'Larimar IT Group','<p><em><strong><img alt=`` src=`/media/uploads/2020/02/29/larimar_2.png` />&nbsp;Группа компаний Larimar IT Group</strong></em></p>','2020-01-01 00:00:01.490279',1,1,30,1,0,1,1,1,1,NULL);
 */
+

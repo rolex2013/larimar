@@ -3,6 +3,17 @@ from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
+class Meta_Param(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    datecreate = models.DateTimeField("Дата", auto_now_add=True)
+    # *** если is_service==True, то доступна регистрация Организаций пользователями и тестирование Системы в мультипользовательском режиме ***
+    is_service = models.BooleanField("Система, как сервис", default=True) 
+    is_active = models.BooleanField("Активность Системы", default=True) 
+    class Meta:
+        ordering = ('datecreate',)     
+    def __str__(self):
+        return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + '|' + self.name)      
+
 class Meta_ObjectType(models.Model):
     shortname = models.CharField("Код", max_length=8)    
     name = models.CharField("Наименование", max_length=64)
