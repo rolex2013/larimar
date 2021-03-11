@@ -106,10 +106,11 @@ INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_activ
 INSERT INTO `projects_dict_taskstatus` (`id`,`name`,`sort`,`name_lang`,`is_active`,`is_close`) VALUES (6,'Отклонена',6,'Refused',1,0);
 
 INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Поставщик',5,'Provider',1);
-INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Покупатель',10,'Buyer',1);*/
+INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Покупатель',10,'Buyer',1);
 INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Партнёр',15,'Partner',1);
-INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (4,'Тестовая Компания',20,'Test',1);
-/*INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Головная организация',1,'Main Company',1);
+INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (4,'Подрядчик',20,'Partner',1);
+INSERT INTO `companies_dict_companytype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (5,'Тестовая Компания',25,'Test',1);
+INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'Головная организация',1,'Main Company',1);
 INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'Холдинг',1,NULL,1);
 INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'Группа компаний',1,NULL,1);
 INSERT INTO `companies_dict_companystructuretype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (4,'Филиал',1,NULL,1);
