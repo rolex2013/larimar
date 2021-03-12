@@ -1,0 +1,27 @@
+<!--{ load render_table from django_tables2 %}-->  
+
+<!--<div class="user-list">-->
+
+   <!--{ if component_name == 'crm' %}-->
+       
+      <!--<div id="ajax_clientlistresult">-->
+         <ul>
+         {% for unode in unodes %}
+            <!--<div class="d-tr">
+               <div class="d-td-text">-->
+                  <!--<li><span class="hint hint--bottom hint--info" data-hint="{ unode.user.email }}"><b><a href="{ url 'my_crm:clienttasks' unode.pk 0 %}">#{ unode.user.id }}. { unode.user.lastname }} { node.firstname }} { node.middlename }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{ node.datecreate}} | { node.type }} | { node.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.manager.pk ' ' %}">{ node.manager }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>===</i></a></span></span></b></li>-->
+                  <li><span class="hint hint--bottom hint--info" data-hint="{{ unode.user.email }}"><b><a href="{% url 'my_crm:clienttasks' unode.pk 0 %}">#{{ unode.user.id }}. {{ unode.user.username }} | {{ unode.user.last_name }} {{ unode.first_name }} | {{ unode.component.name}}</a></b></span></li>
+               <!--</div>
+            </div>-->
+         {% endfor %}
+         </ul>
+      <!--</div>-->
+
+
+   <!--{ endif %}    -->
+
+   <p><em>{{ object_message }}</em></p>
+
+   <div class="object-list-buttons">
+      <a href="{% url 'my_company:stafflist_create' companyid 0 %}">{{ button_user_create }}</a>
+   </div>

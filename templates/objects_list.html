@@ -19,7 +19,7 @@
                  {% elif component_name == 'crm' %}                    
                      <span class="hint hint--bottom hint--info" data-hint="CRM"><b><a href="{% url 'my_crm:clients' node.pk 0 %}">{{ node.name }}</b></span><br />
                  {% elif component_name == 'companies' %}
-                    <span class="hint hint--bottom hint--info" data-hint="Штатное расписание"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{{ node.parent.name }}--></b></span><br />
+                    <span class="hint hint--bottom hint--info" data-hint="Настройка"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{{ node.parent.name }}--></b></span><br />
                  {% endif %}                    
               {% elif object_list == 'project_list' %}         
                  <!--<div class="object-list-row">-->
@@ -30,7 +30,8 @@
                     <i>{{ node.datecreate|date:"d.m.Y" }}</i> |
                     <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span>
                     </b>
-                 <!--</div>--><br />          
+                 <!--</div>--><br />
+              {% comment %}          
               {% elif object_list == 'stafflist_list' %}
                  {% if node.is_vacancy %}         
                     <b><a href="{% url 'my_company:summaries' node.pk %}">{{ node.name }}</a><span style="font-size: 70%; color: green;"> {{ node.datecreate|date:"d.m.Y" }} | 
@@ -43,6 +44,7 @@
                         {{ node.currency.symbol }}{{ node.salary }} | Кол-во: {{ node.numberemployees }}
                        </span></b><br />
                  {% endif %}
+              {% endcomment %}
               {% else %}
                  <!--<b><a href="{ url 'my_project:task_detail' node.pk %}">-->
                  {% if object_list == 'clienttask_list' %}                       
@@ -58,12 +60,13 @@
                  </span></b>   
         
               {% endif %}       
-
+                
               {% if not node.is_leaf_node %}
                  <ul class="children">{{ children }}</ul>
               {% else %}
                  {{ children }}
               {% endif %}
+              </span>
             </li>
            {% endrecursetree %}
          </ul> 

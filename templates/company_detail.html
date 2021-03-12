@@ -66,11 +66,17 @@
       <div class="object-list">
 
          {% if component_name == 'companies' %}
-
-            <h4>Штатное расписание</h4>  
-
-            <div id="ajax_listresult">{% include 'objects_list.html' %}</div>        
-
+         
+            <div class="object-list-left">
+               <h4>Пользователи</h4>
+               <div id="ajax_userslistresult">{% include 'company_users_list.html' %}</div>          
+            </div>
+            <div class="object-list-right">
+               <h4>Штатное расписание</h4>                    
+               <!--<div id="ajax_listresult">{ include 'objects_list.html' %}</div>-->
+               <div id="ajax_listresult">{% include 'company_stafflist_list.html' %}</div>              
+            </div>
+      
          {% elif component_name == 'crm' %}
 
             <h4>Клиенты</h4> 
@@ -167,12 +173,14 @@
          <div id="ajax_listerrors"></div>
 
       <!--{ endif %}-->
-         <div class="object-list-buttons">
-            <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
-            <a href="{% url 'my_project:project_create' companyid 0 %}">{{ button_project_create }}</a>
-            <a href="{% url 'my_company:stafflist_create' companyid 0 %}">{{ button_stafflist_create }}</a>
-            <a href="{% url 'my_crm:client_create' companyid %}">{{ button_client_create }}</a>
-         </div>
+         {% if component_name != 'companies' %}
+            <div class="object-list-buttons">
+               <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
+               <a href="{% url 'my_project:project_create' companyid 0 %}">{{ button_project_create }}</a>
+               <a href="{% url 'my_company:stafflist_create' companyid 0 %}">{{ button_stafflist_create }}</a>
+               <a href="{% url 'my_crm:client_create' companyid %}">{{ button_client_create }}</a>
+            </div>
+         {% endif %}
       </div>
 
 

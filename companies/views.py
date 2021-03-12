@@ -173,22 +173,28 @@ def stafflist(request, companyid=0, pk=0):
     if len(comps) > 1:
        button_company_select = 'Сменить организацию'  
 
-    component_name = 'companies'  
+    component_name = 'companies'
+    #unodes = User.objects.filter(is_active=True, company_id=companyid).order_by()
+    #unodes = list(UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).values_list("user.username", flat=True))   
+    unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).distinct().order_by('user_id')
     nodes = StaffList.objects.filter(is_active=True, company_id=companyid).order_by()  
 
     button_company_create = ''
     button_company_update = ''
+    button_user_create = ''
     button_stafflist_create = ''  
     #print(currentuser)  
     #print(current_company.author_id)
     if currentuser == current_company.author_id:
        button_company_create = 'Добавить'
        button_company_update = 'Изменить'
+       button_user_create = 'Добавить'
        if len(nodes) == 0:
           # в Компании может быть только один руководитель!
           button_stafflist_create = 'Добавить'
     
     return render(request, template_name, {
+                              'unodes': unodes,
                               'nodes': nodes,
                               'current_stafflist': current_stafflist,
                               'root_stafflist_id': root_stafflist_id,
@@ -200,6 +206,7 @@ def stafflist(request, companyid=0, pk=0):
                               'button_company_create': button_company_create,
                               'button_company_update' : button_company_update,                                             
                               #'button_StaffList': button_stafflist,
+                              'button_user_create': button_user_create,
                               'button_stafflist_create' : button_stafflist_create,
                               'object_list': 'stafflist_list',
                               'component_name': component_name, 
@@ -565,4 +572,5 @@ class ContentUpdate(UpdateView):
        # здесь нужно условие для 'action': 'update'
        kwargs.update({'org': self.request.session['_auth_user_companies_id']})
        return kwargs
+
 
