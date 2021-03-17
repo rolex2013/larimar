@@ -21,9 +21,9 @@ INSERT INTO `menu_menuitem` (`id`,`order`,`link_url`,`title`,`anonymous_only`,`m
 INSERT INTO `menu_menuitem` (`id`,`order`,`link_url`,`title`,`anonymous_only`,`menu_id`,`login_required`) VALUES (10,5,'/site/vacancies_page/','Вакансии',0,2,0);
 INSERT INTO `menu_menuitem` (`id`,`order`,`link_url`,`title`,`anonymous_only`,`menu_id`,`login_required`) VALUES (11,2,'/','Главная',0,2,0);
 INSERT INTO `menu_menuitem` (`id`,`order`,`link_url`,`title`,`anonymous_only`,`menu_id`,`login_required`) VALUES (12,50,'/crm/clients_page0/','Клиенты',0,1,1);
-*/
+
 INSERT INTO `main_menu` (`id`,`name`,`slug`,`base_url`,`description`,`is_active`) VALUES (1,'Вход и регистрация','vhod-i-registratsiya','/accounts/logout/','',1);
-INSERT INTO `main_menu` (`id`,`name`,`slug`,`base_url`,`description`,`is_active`) VALUES (2,'Главное меню','glavnoe-menu','/base.html','Меню после авторизации',1);
+INSERT INTO `main_menu` (`id`,`name`,`slug`,`base_url`,`description`,`is_active`) VALUES (2,'Главное меню','glavnoe-menu','/base.html','Меню после авторизации',1);*/
 INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (1,'Главная','/',5,1,1,2,4,0,1,1,'',NULL);
 INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (2,'Вакансии','/site/vacancies_page/',10,1,1,2,1,0,1,1,'',NULL);
 INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (3,'Вход','/accounts/login/',15,1,1,2,2,0,1,1,'',NULL);
