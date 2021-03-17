@@ -24,17 +24,17 @@ INSERT INTO `menu_menuitem` (`id`,`order`,`link_url`,`title`,`anonymous_only`,`m
 
 INSERT INTO `main_menu` (`id`,`name`,`slug`,`base_url`,`description`,`is_active`) VALUES (1,'Вход и регистрация','vhod-i-registratsiya','/accounts/logout/','',1);
 INSERT INTO `main_menu` (`id`,`name`,`slug`,`base_url`,`description`,`is_active`) VALUES (2,'Главное меню','glavnoe-menu','/base.html','Меню после авторизации',1);*/
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (1,'Главная','/',5,1,1,2,4,0,1,1,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (2,'Вакансии','/site/vacancies_page/',10,1,1,2,1,0,1,1,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (3,'Вход','/accounts/login/',15,1,1,2,2,0,1,1,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (4,'Регистрация','/accounts/register/',20,1,1,2,10,0,1,1,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (5,'Главная','/main/',5,1,1,2,5,0,1,2,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (6,'Организации','/companies/companies_page/0/companies',10,1,1,2,8,0,4,2,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (7,'Финансы','/finance/',15,1,1,2,11,0,4,2,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (8,'Проекты','/projects/projects_page0/',20,1,1,2,9,0,5,2,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (9,'Клиенты','/crm/clients_page0/',25,1,1,2,6,0,6,2,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (10,'Мой профиль','/accounts/profile0/',30,1,1,2,7,0,3,2,'',NULL);
-INSERT INTO `main_menuitem` (`id`,`title`,`description`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`parent_id`) VALUES (11,'Выход','/accounts/logout/',35,1,1,2,3,0,1,2,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (1,'Главная','/',5,1,1,2,4,0,1,1,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (2,'Вакансии','/site/vacancies_page/',10,1,1,2,1,0,1,1,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (3,'Вход','/accounts/login/',15,1,1,2,2,0,1,1,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (4,'Регистрация','/accounts/register/',20,1,1,2,10,0,1,1,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (5,'Главная','/main/',5,1,1,2,5,0,1,2,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (6,'Организации','/companies/companies_page/0/companies',10,1,1,4,8,0,4,2,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (7,'Финансы','/finance/',15,1,2,3,8,1,4,2,'',6);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (8,'Проекты','/projects/projects_page0/',20,1,1,2,9,0,5,2,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (9,'Клиенты','/crm/clients_page0/',25,1,1,2,6,0,6,2,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (10,'Мой профиль','/accounts/profile0/',30,1,1,2,7,0,3,2,'',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (11,'Выход','/accounts/logout/',35,1,1,2,3,0,1,2,'',NULL);
 /*
 INSERT INTO `main_dict_protocoltype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'e-mail',1,'e-mail',1);
 INSERT INTO `main_dict_protocoltype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'sms',5,'sms',1);
