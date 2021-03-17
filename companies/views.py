@@ -173,9 +173,8 @@ def stafflist(request, companyid=0, pk=0):
     if len(comps) > 1:
        button_company_select = 'Сменить организацию'  
 
-    component_name = 'companies'
-    #unodes = User.objects.filter(is_active=True, company_id=companyid).order_by()
-    #unodes = list(UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).values_list("user.username", flat=True))   
+    component_name = 'companies'    
+    #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).exclude(user_id=currentuser).distinct().order_by('user_id')
     unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).distinct().order_by('user_id')
     nodes = StaffList.objects.filter(is_active=True, company_id=companyid).order_by()  
 
@@ -380,6 +379,7 @@ class SummaryCreate(CreateView):
     model = Summary
     form_class = SummaryForm
     template_name = 'object_form.html'
+    #print('===================')
 
     def form_valid(self, form):
        form.instance.stafflist_id = self.kwargs['stafflistid']    

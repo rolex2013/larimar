@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from accounts.models import UserProfile
 
-from main.models import Meta_ObjectType, Component, Dict_ProtocolType, Notification
+from main.models import Meta_ObjectType, Component, Dict_ProtocolType, Notification, Menu, MenuItem
 
 from finance.models import Dict_Currency, CurrencyRate
 
@@ -44,11 +44,15 @@ class TaskAdmin(DjangoMpttAdmin):
 class ComponentAdmin(DjangoMpttAdmin):
     pass
 
+class MenuItemAdmin(DjangoMpttAdmin):
+    pass
+
 class StaffListAdmin(DjangoMpttAdmin):
     pass
 
 class ClientTaskAdmin(DjangoMpttAdmin):
     pass
+
 
 
 admin.site.register(UserProfile)
@@ -61,6 +65,10 @@ admin.site.register(Component, ComponentAdmin)
 admin.site.register(Dict_ProtocolType)
 
 admin.site.register(Notification)
+
+admin.site.register(Menu)
+
+admin.site.register(MenuItem, MenuItemAdmin)
 
 
 admin.site.register(Dict_Currency)

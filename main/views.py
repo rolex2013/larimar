@@ -115,4 +115,4 @@ def objecthistory(request, objtype='prj', pk=0):
                               'user_companies': comps,
                               #'table': table,                                                           
                                                 })  
-     
+

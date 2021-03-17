@@ -105,4 +105,39 @@ class ModelLog(models.Model):
         #unique_together = ('project', 'status', 'date', 'author')
         ordering = ('componentname', 'modelname', 'modelobjectid', 'date')
         verbose_name = 'История Объекта'
-        verbose_name_plural = 'Истории Объектов'        
+        verbose_name_plural = 'Истории Объектов'
+
+class Menu(models.Model):
+    name = models.CharField("Наименование", max_length=128)
+    slug = models.CharField("slug", max_length=64)
+    base_url = models.CharField("Основной URL", max_length=128)
+    description = models.TextField("Описание", blank=True, null=True)
+    #sort = models.PositiveSmallIntegerField(default=5, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)            
+    
+    def __str__(self):
+        return (self.name)
+    
+    class Meta:
+        #ordering = 'sort'
+        verbose_name = 'Список меню'
+        verbose_name_plural = 'Списки меню'
+
+class MenuItem(MPTTModel):    
+    title = models.CharField("Наименование", max_length=128)
+    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='menuitem_menu', verbose_name="Меню")
+    component = models.ForeignKey('Component', null=True, blank=True, on_delete=models.CASCADE, related_name='menuitem_component', verbose_name="Компонент")
+    description = models.TextField("Описание", null=True, blank=True)
+    link_url = models.CharField("URL", max_length=128)
+    parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='menuitem_children', verbose_name="Головной пункт меню")
+    sort = models.PositiveSmallIntegerField(default=5, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)    
+                      
+    def __str__(self):
+        return (self.menu.name + ' ' + self.title)
+    class MPTTMeta:
+        order_insertion_by = ['title']
+    class Meta:
+        ordering = ('menu', 'sort')
+        verbose_name = 'Пункты меню'
+        verbose_name_plural = 'Пункты меню'        

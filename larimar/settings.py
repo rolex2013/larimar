@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'django_tables2',
-    'menu',
+    #'menu',
     'accounts',
     'main', 
     'companies',

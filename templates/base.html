@@ -66,98 +66,80 @@
                
          </div>
 
-          {% if user.is_authenticated %}    
+         {% include 'menu.html' %}         
 
-             <div class="menu">
-                <ul>{% load menubuilder %}{% menu main_menu %}
-                    <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
-                    {% for item in menuitems %}
-                       <p><a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a></p>
-                    {% endfor %}
-                    <br />
-                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' user.id ' ' %}"><b><i>{{ user.username }}</i></b></a></span>
-                    <!--<span align="right"><b><i>{{ user.username }}</i></b></span>-->
-                </ul>
-             </div>
+          <div class="content">
 
-             <div class="content">
-      
-              <!--section id=content>  -->          
-      
-                {% block summary %}
-                {% endblock %}                
-    
-                {% block profile %}
-                {% endblock %}
-    
-                {% block content %}
-                {% endblock %}            
-    
-                {% block company %}
-                {% endblock %}
-    
-                {% block staff %}
-                {% endblock %}            
-    
-                {% block finance %}
-                {% endblock %}            
-    
-                {% block project %}
-                {% endblock %}
+            <!-- Для неавторизованных пользователей -->
+
+            {% block registration %}
+            {% endblock %} 
+
+            {% block registration_done %}
+            {% endblock %}               
+
+            {% block login %}
+            {% endblock %} 
             
-                {% block task %}
-                {% endblock %}     
+            {% block vacancies_list %}
+            {% endblock %}  
+
+            {% block vacancy %}
+            {% endblock %} 
+
+            <!-- Для авторизованных пользователей -->
+
+            {% block summary %}
+            {% endblock %}                
+
+            {% block profile %}
+            {% endblock %}
+
+            {% block company %}
+            {% endblock %}
+
+            {% block staff %}
+            {% endblock %}            
+
+            {% block finance %}
+            {% endblock %}            
+
+            {% block project %}
+            {% endblock %}
+        
+            {% block task %}
+            {% endblock %}     
+        
+            {% block comment %}
+            {% endblock %}
+
+            {% block event %}
+            {% endblock %}  
+
+            {% block client %}
+            {% endblock %}
+
+            {% block list %}
+            {% endblock %}
+                 
+            <!-- Общие блоки -->
             
-                {% block comment %}
-                {% endblock %}
-                {% block event %}
-                {% endblock %}                    
-                {% block client %}
-                {% endblock %}
-    
-                {% block list %}
-                {% endblock %}
-      
-              <!--/section>-->
-      
-             </div>
-      
-          {% else %}
+            {% block forms %}
+            {% endblock %} 
 
-            <!--<div id="menu-logout">-->
-            <div class="menu">          
-               <!--<a href="{ url 'my_account:login' %}">Вход</a> | <a href="{ url 'my_account:register' %}">Регистрация</a>-->
-               <ul>{% load menubuilder %}{% menu logout_menu %}
-                  <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
-                  {% for item in menuitems %}
-                     <p><a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a></p>
-                  {% endfor %}
-               </ul>
-            </div>
+            <!-- Уникальные блоки -->
 
-            <div class="content">
-
-               {% block registration %}
-               {% endblock %} 
-
-               {% block registration_done %}
-               {% endblock %}               
-
-               {% block login %}
-               {% endblock %} 
-
+            {% if user.is_authenticated %}
+               {% block content %}
+               {% endblock %}
+            {% else %}
                {% block public_content %}
-               {% endblock %}    
+               {% endblock %}
+            {% endif %}            
+            
+          </div>             
 
-               {% block vacancies_list %}
-               {% endblock %}  
-   
-               {% block vacancy %}
-               {% endblock %}                
-               
-            </div>   
-
-          {% endif %}
+      
 
        </div>
 

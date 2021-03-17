@@ -1,0 +1,58 @@
+<div class="menu">
+
+{% load main_tags %}
+
+<!--{ left_menu menuid=0 is_auth=user.is_authenticated as nodes %}-->
+{% left_menu menuid=0 is_auth=user.is_authenticated as nodes %}
+
+{% load mptt_tags %}
+ 
+<ul>
+   {% recursetree nodes %}
+      <li>
+
+   {% comment %}
+   <ul>
+      {% for node in nodes %}
+         <p><a href="{{ node.link_url }}">{{ node.title }}</a></p>
+      {% endfor %}
+      <br />
+      <!--<span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{ url 'my_account:userprofile_detail' user.id ' ' %}"><b><i>{ user.username }}</i></b></a></span>-->
+      <span></span><strong><em>{{ user.username }}</em></strong></span>
+   </ul>
+   {% endcomment %}
+
+
+         <p><a href="{{ node.link_url }}">{{ node.title }}</a></p>
+         {% if not node.is_leaf_node %}
+            <ul class="children">{{ children }}</ul>
+         {% else %}
+            {{ children }}
+         {% endif %}
+            <!--</span>-->
+         </li>
+
+   {% endrecursetree %}
+</ul> 
+
+<p style="text-align:right; padding: 15px 15px 15px 0px;"><span></span><strong><em>{{ user.username }}</em></strong></span></p>
+{% comment %}
+   <ul>
+      {% load menubuilder %}
+      {% menu main_menu %}
+       <!--{ for item in menuitems %}<li><a href="{ item.url }}" title="{ item.title|escape }}"{ if item.current %} class='current'{ endif %}>{ item.title }}</a></li>-->
+      {% for item in menuitems %}
+          <p><a href="{{ item.url }}" title="{{ item.title|escape }}"{% if item.current %} class='current'{% endif %}>{{ item.title }}</a></p>
+      {% endfor %}
+      <br />
+      <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' user.id ' ' %}"><b><i>{{ user.username }}</i></b></a></span>
+      <!--<span align="right"><b><i>{{ user.username }}</i></b></span>-->
+   </ul>
+{% endcomment %}   
+
+</div>
+
+
+
+   
+
