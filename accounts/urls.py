@@ -16,6 +16,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     #path('logout/', publiccontents, name = 'logout'),
     path('register/', check_recaptcha(views.register), name='register'),
+    path('register0/<int:companyid>', views.register0, name='register0'),
     path('profile0/', views.UserProfileDetail, name='userprofile_detail0'),
     path('profile/<int:userid>/<param>', views.UserProfileDetail, name='userprofile_detail'),
     path('profile/update/<int:pk>', views.UserProfileUpdate.as_view(), name='userprofile_update'),

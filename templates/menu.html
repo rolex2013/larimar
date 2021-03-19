@@ -1,41 +1,44 @@
 <div class="menu">
 
+{% comment %}
+<!-- Хотелось бы вместо "+" и "-" в узлах использовать красивые иконки -->
+{% load static %}
+<img src="{% static 'images/crest.png' %} size='10%'">
+{% endcomment %}
+
 {% load main_tags %}
 
 <!--{ left_menu menuid=0 is_auth=user.is_authenticated as nodes %}-->
 {% left_menu menuid=0 is_auth=user.is_authenticated as nodes %}
 
 {% load mptt_tags %}
- 
-<ul>
+
+<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1YES!</span>
+<ul class="treeline">
+
    {% recursetree nodes %}
+
       <li>
-
-   {% comment %}
-   <ul>
-      {% for node in nodes %}
-         <p><a href="{{ node.link_url }}">{{ node.title }}</a></p>
-      {% endfor %}
-      <br />
-      <!--<span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{ url 'my_account:userprofile_detail' user.id ' ' %}"><b><i>{ user.username }}</i></b></a></span>-->
-      <span></span><strong><em>{{ user.username }}</em></strong></span>
-   </ul>
-   {% endcomment %}
-
-
-         <p><a href="{{ node.link_url }}">{{ node.title }}</a></p>
+         <a href="{{ node.link_url }}">{{ node.title }}</a>
          {% if not node.is_leaf_node %}
-            <ul class="children">{{ children }}</ul>
+            <ul class="children">
+               {% if node.right|add:left %}
+               <div class="drop">+</div>
+               {% endif %}
+               {{ children }}
+            </ul>
          {% else %}
             {{ children }}
          {% endif %}
-            <!--</span>-->
-         </li>
+      </li>
 
    {% endrecursetree %}
+
 </ul> 
 
-<p style="text-align:right; padding: 15px 15px 15px 0px;"><span></span><strong><em>{{ user.username }}</em></strong></span></p>
+<p style="text-align:right; padding: 15px 15px 15px 0px;"><span><strong><em>{{ user.username }}</em></strong></span></p>
+
+
 {% comment %}
    <ul>
       {% load menubuilder %}
@@ -51,6 +54,38 @@
 {% endcomment %}   
 
 </div>
+
+<script type="text/javascript">
+
+   $(function() {
+   var ul = document.querySelectorAll('.treeline > li:not(:only-child) ul, .treeline ul ul');
+   for (var i = 0; i < ul.length; i++) {
+        var div = document.createElement('div');
+        div.className = 'drop';
+        div.innerHTML = '+';
+        ul[i].parentNode.insertBefore(div, ul[i].previousSibling);
+        div.onclick = function() {
+          this.innerHTML = (this.innerHTML == '+' ? '−' : '+');
+          this.className = (this.className == 'drop' ? 'drop dropM' : 'drop');
+        }
+       }
+   })();
+
+</script>
+
+<!-- Надо попробовать предотвратить сворачивание, если выбран child -->   
+<script>
+$(".leftSideBarElement").click(function(){
+    active_link = $(this).find('a').attr('href');
+    localStorage.setItem('active_link', active_link);
+});
+$(document).ready(function(){        
+    if(localStorage.getItem('active_link')){
+        $('a[href^="' + localStorage.getItem('active_link') + '"]').parent('li.leftSideBarElement').addClass('selected');
+    }
+});
+</script>
+
 
 
 

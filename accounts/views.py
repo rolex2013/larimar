@@ -155,10 +155,39 @@ def register(request):
              instance_comp = Company.objects.create(name='Ваша новая Компания', description='Создана автоматически при регистрации пользователя', is_active=1, lft=1, rght=1, tree_id=1, level=0, structure_type_id=1, type_id=4, currency_id=1, author_id=new_user.id)
              UserProfile.objects.create(user_id=new_user.id, company_id=instance_comp.id, is_notify=True, protocoltype_id=3, description='Профиль создан автоматически при регистрации пользователя')
              UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=instance_comp.id, component_id=1, group_id=2)
-          return render(request, 'registration/register_done.html', {'new_user': new_user})
+          else:
+             comp_id = Company.objects.all()[0].id
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=comp_id, component_id=1, group_id=8)
+          return render(request, 'registration/register_done.html', {'new_user': new_user, 
+                                                                     'companyid': '0',
+                                                                    })
     else:
        user_form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'user_form': user_form})
+
+def register0(request, companyid=1):
+    if request.method == 'POST':
+       user_form = UserRegistrationForm(request.POST)
+       if user_form.is_valid(): #and request.recaptcha_is_valid:
+          # Create a new user object but avoid saving it yet
+          new_user = user_form.save(commit=False)
+          # Set the chosen password
+          new_user.set_password(user_form.cleaned_data['password'])
+          # Save the User object
+          new_user.save()
+          UserProfile.objects.create(user_id=new_user.id, company_id=companyid, is_notify=True, protocoltype_id=1, description='Профиль создан Администратором Организации')
+          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=1, group_id=7)
+          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=4, group_id=7)
+          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=5, group_id=7)
+          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=6, group_id=7)
+          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=7, group_id=7)
+          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=8, group_id=7)
+          return render(request, 'registration/register_done.html', {'new_user': new_user, 
+                                                                     'companyid': companyid,
+                                                                    })
+    else:
+       user_form = UserRegistrationForm()
+    return render(request, 'registration/register.html', {'user_form': user_form})    
 
 #
 #class UserProfileDetail(DetailView):

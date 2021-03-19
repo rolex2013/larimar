@@ -180,6 +180,7 @@ def stafflist(request, companyid=0, pk=0):
 
     button_company_create = ''
     button_company_update = ''
+    button_user_invite = ''
     button_user_create = ''
     button_stafflist_create = ''  
     #print(currentuser)  
@@ -187,6 +188,7 @@ def stafflist(request, companyid=0, pk=0):
     if currentuser == current_company.author_id:
        button_company_create = 'Добавить'
        button_company_update = 'Изменить'
+       button_user_invite = 'Пригласить'
        button_user_create = 'Добавить'
        if len(nodes) == 0:
           # в Компании может быть только один руководитель!
@@ -205,6 +207,7 @@ def stafflist(request, companyid=0, pk=0):
                               'button_company_create': button_company_create,
                               'button_company_update' : button_company_update,                                             
                               #'button_StaffList': button_stafflist,
+                              'button_user_invite': button_user_invite,
                               'button_user_create': button_user_create,
                               'button_stafflist_create' : button_stafflist_create,
                               'object_list': 'stafflist_list',
