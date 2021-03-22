@@ -1,27 +1,57 @@
 {% extends 'base.html' %}
-<!--{ extends "../login_base.html" %}-->
 
-{% block title %}Регистрация пользователя{% endblock %}
+   {% block title %}
 
-{% block registration %}
+      {% if param == 'register' %}
+         Регистрация пользователя
+      {% else %}
+         Приглашение нового пользователя
+      {% endif %}
+
+   {% endblock %}
    
-   <div class="object-detail">
-      <h3>Регистрация пользователя</h3>
-      <p>Пожалуйста, заполните все поля формы:</p>
-      <!--<div class="col-md-offset-3 col-md-6 voffset-60">-->
-      <form action="." method="post">
-          <!--{ load bootstrap4 %}-->
-          {{ user_form.as_p }}
-          <!--{ bootstrap_form registration_form %}-->
-          <script src='https://www.google.com/recaptcha/api.js'></script>
-          <div class="form-group g-recaptcha" data-sitekey="6LesNnsaAAAAAG2Ng07UbXDQzZtsKDHRy8Y2l_E2"></div>
-          {% csrf_token %}
-          <div class="object-detail-buttons">
-             <!--<input type="submit" value="Создать">-->
-             <button type="submit">Создать</button>
-          </div>
-      </form>
-      <!--</div>-->
-   </div>
+   {% block registration %}
 
-{% endblock %}
+      {% if param == 'register' %}
+
+         <div class="object-detail">
+            <h3>Регистрация пользователя</h3>
+            <p>Пожалуйста, заполните все поля формы:</p>
+            <!--<div class="col-md-offset-3 col-md-6 voffset-60">-->
+            <form action="{% url 'my_account:register' %}" method="post">
+                <!--{ load bootstrap4 %}-->
+                {% csrf_token %}
+                {{ user_form.as_p }}
+                <!--{ bootstrap_form registration_form %}-->
+                <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="form-group g-recaptcha" data-sitekey="6LesNnsaAAAAAG2Ng07UbXDQzZtsKDHRy8Y2l_E2"></div>
+                <div class="object-detail-buttons">
+                   <!--<input type="submit" value="Создать">-->
+                   <button type="submit">Создать</button>
+                </div>
+            </form>
+            <!--</div>-->
+         </div>
+
+      {% else %}
+
+         <div class="object-detail">
+            <h3>Приглашение нового пользователя</h3>
+            <p>Пожалуйста, заполните все поля формы:</p>
+            <!--<div class="col-md-offset-3 col-md-6 voffset-60">-->
+            <form action="{% url 'my_account:envite' companyid %}" method="post">
+                <!--{ load bootstrap4 %}-->
+                {% csrf_token %}
+                {{ user_form.as_p }}
+                <!--{ bootstrap_form registration_form %}-->
+                <div class="object-detail-buttons">
+                   <!--<input type="submit" value="Создать">-->
+                   <button type="submit">Создать</button>
+                </div>
+            </form>
+            <!--</div>-->
+         </div>
+
+      {% endif %}
+
+   {% endblock %}      

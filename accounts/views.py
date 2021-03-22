@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
+from django.conf import settings
 from datetime import datetime, date, time
 
 from urllib.parse import urlparse
@@ -18,7 +20,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 #from django.core import serializers
 
-from .forms import UserRegistrationForm, UserProfileForm
+from .forms import UserRegistrationForm, UserEnviteForm, UserProfileForm
 
 from main.models import Notification, Meta_ObjectType
 #from .tables import NotificationTable
@@ -163,16 +165,18 @@ def register(request):
                                                                     })
     else:
        user_form = UserRegistrationForm()
-    return render(request, 'registration/register.html', {'user_form': user_form})
+    return render(request, 'registration/register.html', {'user_form': user_form, 'param': 'register',})
 
-def register0(request, companyid=1):
+def envite(request, companyid=1):
     if request.method == 'POST':
-       user_form = UserRegistrationForm(request.POST)
-       if user_form.is_valid(): #and request.recaptcha_is_valid:
+       #print('===========****************=============')       
+       user_form = UserEnviteForm(request.POST)
+       if user_form.is_valid():
           # Create a new user object but avoid saving it yet
           new_user = user_form.save(commit=False)
           # Set the chosen password
-          new_user.set_password(user_form.cleaned_data['password'])
+          pss = user_form.cleaned_data['password']
+          new_user.set_password(pss)
           # Save the User object
           new_user.save()
           UserProfile.objects.create(user_id=new_user.id, company_id=companyid, is_notify=True, protocoltype_id=1, description='Профиль создан Администратором Организации')
@@ -182,12 +186,18 @@ def register0(request, companyid=1):
           UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=6, group_id=7)
           UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=7, group_id=7)
           UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=8, group_id=7)
+          #print(new_user.username)
+          #print(pss)
+          #print(new_user.email)
+          text_plain = 'Вы приглашены в Систему 1YES! по адресу: http://1yes.larimaritgroup.ru/accounts/login\r\nЛогин: '+new_user.username+'r\n\Пароль: '+pss+'r\n\r\n\Добро пожаловать в нашу команду!'
+          text_html = '<p>Вы приглашены в Систему 1YES! по адресу: <a href="http://1yes.larimaritgroup.ru/accounts/login">http://1yes.larimaritgroup.ru/accounts/login</a></p><p>Логин: '+new_user.username+'</p><p>Пароль: '+pss+'</p><p>Добро пожаловать в нашу команду!</p>'
+          send_mail('1YES! Приглашение в Систему', text_plain, settings.EMAIL_HOST_USER, [new_user.email], html_message=text_html)
           return render(request, 'registration/register_done.html', {'new_user': new_user, 
                                                                      'companyid': companyid,
                                                                     })
     else:
-       user_form = UserRegistrationForm()
-    return render(request, 'registration/register.html', {'user_form': user_form})    
+       user_form = UserEnviteForm()
+    return render(request, 'registration/register.html', {'user_form': user_form, 'param': 'envite', 'companyid': companyid})    
 
 #
 #class UserProfileDetail(DetailView):
