@@ -66,7 +66,8 @@
       <div class="object-list">
 
          {% if component_name == 'companies' %}
-         
+
+         <div class="object-list-wrapper">
             <div class="object-list-left">
                <h4>Пользователи</h4>
                <div id="ajax_userslistresult">{% include 'company_users_list.html' %}</div>          
@@ -76,6 +77,7 @@
                <!--<div id="ajax_listresult">{ include 'objects_list.html' %}</div>-->
                <div id="ajax_listresult">{% include 'company_stafflist_list.html' %}</div>              
             </div>
+         </div>
       
          {% elif component_name == 'crm' %}
 

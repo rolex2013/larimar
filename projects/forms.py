@@ -41,7 +41,7 @@ class ProjectForm(forms.ModelForm):
                     #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)    
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id                                       
-                    send_mail('1Yes. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+                    send_mail('1YES. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
                     #print('==================')
                     Notification.objects.create(type=user_profile.protocoltype,
                                                 objecttype_id=objecttypeid,
@@ -97,7 +97,7 @@ class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
-        fields = ['name', 'description', 'members', 'assigner', 'currency', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id', 'author']
+        fields = ['name', 'description', 'members', 'assigner', 'currency', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'is_active', 'dateclose', 'id', 'author']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
@@ -182,7 +182,7 @@ class TaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'dateclose', 'is_active', 'id', 'author']
+        fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'is_active', 'dateclose', 'id', 'author']
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat

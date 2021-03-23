@@ -309,19 +309,27 @@ body {
        border-radius: 10px; 
        /*float: left;*/
     }
-    .object-list > .object-list-left {
-       float: left;
+    .object-list-wrapper {
+       display: flex;
+    }
+    .object-list-left, .object-list-right {
+       margin: 0px 5px 0px 5px;
+       padding: 15px;
+       /*border: 1px solid #dedede;*/
+       /*box-shadow: 0 10px 10px #b8beb8 inset, 0 10px 10px #b8beb8;*/
+       /*box-shadow: 0.8em 10px #b8beb8;*/
+       box-shadow: 0.4em 0.4em 15px rgba(165, 165, 165, 0.5);
+    }
+    .object-list-left {
+       /*float: left;*/
        text-decoration: none;
        width: 49%;
-       /*height: 100%; 
-       margin-right: 10px;       
-       min-height: 68vh;*/
     }     
     .object-list-right {
        /*float: right;       */
        text-decoration: none;
        width: 49%;        
-       margin-left: 52%;
+       /*margin-left: 52%;*/
     }      
     .object-list-row {
        background: #eee; /* фон */

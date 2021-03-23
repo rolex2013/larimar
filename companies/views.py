@@ -175,7 +175,9 @@ def stafflist(request, companyid=0, pk=0):
 
     component_name = 'companies'    
     #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).exclude(user_id=currentuser).distinct().order_by('user_id')
-    unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).distinct().order_by('user_id')
+    #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).distinct().order_by('user_id')
+    unodes = UserCompanyComponentGroup.objects.raw('SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id WHERE company_id='+str(companyid)+' AND uc.is_active=1 AND u.is_active=1 GROUP BY uc.user_id')
+    #print(unodes)
     nodes = StaffList.objects.filter(is_active=True, company_id=companyid).order_by()  
 
     button_company_create = ''

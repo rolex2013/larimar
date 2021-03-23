@@ -154,12 +154,24 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
+# https://vivazzi.pro/it/translate-django/
+
+LANGUAGES = (
+    ('ru', 'Russian'),
+    ('en', 'English'),
+)
 
 LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
 
-USE_I18N = True
+USE_I18N = True  # активация системы перевода django
+
+# месторасположение файлов перевода
+LOCALE_PATHS = (
+    #'locale',
+    os.path.join(BASE_DIR, 'locale'),
+)
 
 USE_L10N = True
 

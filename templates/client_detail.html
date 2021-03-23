@@ -62,14 +62,18 @@
 
       <div class="object-list">
 
-         <div class="object-list-left">
-              {% include 'clienttasks_list.html' %}           
-         </div>
-         <div class="object-list-right">
-              {% include 'clientevents_list.html' %}              
-         </div>
+         <div class="object-list-wrapper">         
 
-      </div> 
+            <div class="object-list-left">
+                 {% include 'clienttasks_list.html' %}           
+            </div>
+            <div class="object-list-right">
+                 {% include 'clientevents_list.html' %}              
+            </div>
+
+         </div>     
+
+      </div>  
 
    {% else %}
       <h5>Информация о задачах и событиях недоступна!</h5>
