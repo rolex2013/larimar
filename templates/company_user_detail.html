@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block task %}
+
+<div class="object-detail">
+
+      <h4>Пользователь: {{ companyuser.username }}
+        {% if not companyuser.is_active %}
+           (Пользователь перемещен в архив)
+        {% endif %}
+      </h4>      
+      <em>ФИО: {{ companyuser.first_name }} {{ companyuser.last_name }}</em>
+      <em>E-mail: {{ companyuser.email }}</em>
+      <em>Создан: {{ companyuser.date_joined }}</em>
+      <em>Последний вход: {{ companyuser.last_login }}</em>             
+      <p>&nbsp;</p>
+      <div class="object-detail-buttons">
+          <a href="{% url 'my_company:companyuser_update' companyuser.pk %}">{{ button_companyuser_update }}</a>
+      </div>
+
+   </div>
+
+{% endblock task %}
+
+<!--<hr>-->
+
+{% block list %}
+
+   <div class="object-list">
+        
+      <h5>Роли</h5>
+      <div class="object-list-buttons">        
+         <a href="{% url 'my_company:companyuserrole_create' companyuser.pk %}">{{ button_companyuserrole_create }}</a>
+      </div>
+      <br />      
+      {% for companyuserrole in nodes %}
+          <p><b>{{ companyuserrole.component.name }}</b>: {{ companyuserrole.group.name }}</p>
+      {% endfor %}
+
+   </div>
+
+{% endblock list %}

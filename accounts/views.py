@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseNotFound
  
 #from django.shortcuts import redirect, render_to_response
@@ -143,33 +144,30 @@ def logout_view(request):
 def register(request):
     if request.method == 'POST':
        user_form = UserRegistrationForm(request.POST)
-       if user_form.is_valid() and request.recaptcha_is_valid:
-          # Create a new user object but avoid saving it yet
-          new_user = user_form.save(commit=False)
-          # Set the chosen password
-          new_user.set_password(user_form.cleaned_data['password'])
-          # Save the User object
-          new_user.save()
-          #print(new_user)
-          #print(instance.id)
-          #print(new_user.id)
-          if user_form.cleaned_data['is_org_register'] == True:
-             instance_comp = Company.objects.create(name='Ваша новая Компания', description='Создана автоматически при регистрации пользователя', is_active=1, lft=1, rght=1, tree_id=1, level=0, structure_type_id=1, type_id=4, currency_id=1, author_id=new_user.id)
-             UserProfile.objects.create(user_id=new_user.id, company_id=instance_comp.id, is_notify=True, protocoltype_id=3, description='Профиль создан автоматически при регистрации пользователя')
-             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=instance_comp.id, component_id=1, group_id=2)
-          else:
-             comp_id = Company.objects.all()[0].id
-             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=comp_id, component_id=1, group_id=8)
-          return render(request, 'registration/register_done.html', {'new_user': new_user, 
-                                                                     'companyid': '0',
-                                                                    })
+       if user_form.is_valid():
+          if request.recaptcha_is_valid:
+             # Create a new user object but avoid saving it yet
+             new_user = user_form.save(commit=False)
+             # Set the chosen password
+             new_user.set_password(user_form.cleaned_data['password'])
+             # Save the User object
+             new_user.save()
+             if user_form.cleaned_data['is_org_register'] == True:
+                instance_comp = Company.objects.create(name='Ваша новая Компания', description='Создана автоматически при регистрации пользователя', is_active=1, lft=1, rght=1, tree_id=1, level=0, structure_type_id=1, type_id=4, currency_id=1, author_id=new_user.id)
+                UserProfile.objects.create(user_id=new_user.id, company_id=instance_comp.id, is_notify=True, protocoltype_id=3, description='Профиль создан автоматически при регистрации пользователя')
+                UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=instance_comp.id, component_id=1, group_id=2)
+             else:
+                comp_id = Company.objects.all()[0].id
+                UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=comp_id, component_id=1, group_id=8)
+             return render(request, 'registration/register_done.html', {'new_user': new_user, 
+                                                                        'companyid': '0',
+                                                                       })
     else:
        user_form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'user_form': user_form, 'param': 'register',})
 
 def envite(request, companyid=1):
     if request.method == 'POST':
-       #print('===========****************=============')       
        user_form = UserEnviteForm(request.POST)
        if user_form.is_valid():
           # Create a new user object but avoid saving it yet
@@ -189,8 +187,9 @@ def envite(request, companyid=1):
           #print(new_user.username)
           #print(pss)
           #print(new_user.email)
-          text_plain = 'Вы приглашены в Систему 1YES! по адресу: http://1yes.larimaritgroup.ru/accounts/login\r\nЛогин: '+new_user.username+'r\n\Пароль: '+pss+'r\n\r\n\Добро пожаловать в нашу команду!'
-          text_html = '<p>Вы приглашены в Систему 1YES! по адресу: <a href="http://1yes.larimaritgroup.ru/accounts/login">http://1yes.larimaritgroup.ru/accounts/login</a></p><p>Логин: '+new_user.username+'</p><p>Пароль: '+pss+'</p><p>Добро пожаловать в нашу команду!</p>'
+          site_name = get_current_site(request)
+          text_plain = 'Вы приглашены в Систему 1YES! по адресу: http://'+str(site_name)+'/accounts/login\r\nЛогин: '+new_user.username+'r\n\Пароль: '+pss+'r\n\r\n\Добро пожаловать в нашу команду!'
+          text_html = '<p>Вы приглашены в Систему 1YES! по адресу: <a href="http://'+str(site_name)+'/accounts/login">http://'+str(site_name)+'/accounts/login</a></p><p>Логин: '+new_user.username+'</p><p>Пароль: '+pss+'</p><p>Добро пожаловать в нашу команду!</p>'
           send_mail('1YES! Приглашение в Систему', text_plain, settings.EMAIL_HOST_USER, [new_user.email], html_message=text_html)
           return render(request, 'registration/register_done.html', {'new_user': new_user, 
                                                                      'companyid': companyid,

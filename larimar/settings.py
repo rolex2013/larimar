@@ -188,7 +188,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-
+GOOGLE_RECAPTCHA_SECRET_KEY = '6LesNnsaAAAAAOVy87nqWSHTsN2XQ_lgbPpKO5_T'   
 
 if sys.platform == "win32":
    # для разработки
@@ -246,5 +246,4 @@ else:
       }
    }
 
-GOOGLE_RECAPTCHA_SECRET_KEY = '6LesNnsaAAAAAOVy87nqWSHTsN2XQ_lgbPpKO5_T'   
 

@@ -25,6 +25,11 @@
                 <!--{ bootstrap_form registration_form %}-->
                 <script src='https://www.google.com/recaptcha/api.js'></script>
                 <div class="form-group g-recaptcha" data-sitekey="6LesNnsaAAAAAG2Ng07UbXDQzZtsKDHRy8Y2l_E2"></div>
+                {% if messages %}
+                   {% for message in messages %}
+                      {{ message }}
+                   {% endfor %}
+                {% endif %}                
                 <div class="object-detail-buttons">
                    <!--<input type="submit" value="Создать">-->
                    <button type="submit">Создать</button>
