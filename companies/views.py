@@ -578,4 +578,16 @@ class ContentUpdate(UpdateView):
        kwargs.update({'org': self.request.session['_auth_user_companies_id']})
        return kwargs
 
-
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def userroles(request, companyid=1, pk=1):
+    companyuser = User.objects.get(id=pk)
+    roles = UserCompanyComponentGroup.objects.filter(user_id=pk, company_id=companyid).order_by('component_id', 'group_id')
+    #print(roles)
+    button_companyuser_update = 'Изменить'
+    button_companyuserrole_create = 'Добавить'
+    return render(request, 'company_user_detail.html', {
+                                                        'nodes': roles,
+                                                        'companyuser': companyuser,
+                                                        'button_companyuser_update': button_companyuser_update,
+                                                        'button_companyuserrole_create': button_companyuserrole_create,                                                                                     
+                                                       })

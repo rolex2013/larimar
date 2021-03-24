@@ -4,18 +4,23 @@
 
 <div class="object-detail">
 
-      <h4>Пользователь: {{ companyuser.username }}
+      <h4>Пользователь: {{ companyuser.username }} <!--{ companyuser.username }}-->
         {% if not companyuser.is_active %}
            (Пользователь перемещен в архив)
         {% endif %}
       </h4>      
-      <em>ФИО: {{ companyuser.first_name }} {{ companyuser.last_name }}</em>
-      <em>E-mail: {{ companyuser.email }}</em>
-      <em>Создан: {{ companyuser.date_joined }}</em>
-      <em>Последний вход: {{ companyuser.last_login }}</em>             
+      <p><strong>ФИО:</strong> {{ companyuser.first_name }} {{ companyuser.last_name }}</p> <!--*** { request.user.first_name}}<br />-->
+      <p><strong>E-mail:</strong> {{ companyuser.email }}</p>
+      {% if not companyuser.is_staff %}
+         <p><strong>Статус:</strong> Сотрудник</p>
+      {% else %}
+         <p><strong>Статус:</strong> Клиент</p>
+      {% endif %}      
+      <em>Создан: {{ companyuser.date_joined }}</em><br />
+      <em>Последний вход: {{ companyuser.last_login }}</em> <br />            
       <p>&nbsp;</p>
       <div class="object-detail-buttons">
-          <a href="{% url 'my_company:companyuser_update' companyuser.pk %}">{{ button_companyuser_update }}</a>
+          <a href="{ url 'my_company:companyuser_update' companyuser.pk %}">{{ button_companyuser_update }}</a>
       </div>
 
    </div>
@@ -30,7 +35,7 @@
         
       <h5>Роли</h5>
       <div class="object-list-buttons">        
-         <a href="{% url 'my_company:companyuserrole_create' companyuser.pk %}">{{ button_companyuserrole_create }}</a>
+         <a href="{ url 'my_company:companyuserrole_create' companyuser.pk %}">{{ button_companyuserrole_create }}</a>
       </div>
       <br />      
       {% for companyuserrole in nodes %}

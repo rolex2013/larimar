@@ -5,7 +5,8 @@ from .models import Company
 from .views import companies, CompanyDetail, CompanyCreate, CompanyUpdate #, CompaniesList
 from .views import ContentDetail, ContentCreate, ContentUpdate
 from .views import stafflist, StaffListCreate, StaffListUpdate, staffs, summaries, summary_detail, summary_delete #, summary_update,  #, StaffListDetail
-#from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
+from .views import userroles
+##from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
 
 app_name = 'my_company'
@@ -34,5 +35,7 @@ urlpatterns = [
     #path('content_page/<int:pk>', views.ContentList.as_view(), name = 'contents'),  
     path('content_list/content_detail/<int:pk>', views.ContentDetail.as_view(), name = 'content_detail'),               
     path('content_list/content_create/', views.ContentCreate.as_view(), name = 'content_create'),        
-    path('content_list/content_update/<int:pk>', views.ContentUpdate.as_view(), name = 'content_update'),    
+    path('content_list/content_update/<int:pk>', views.ContentUpdate.as_view(), name = 'content_update'),
+
+    path('user_detail/<int:companyid>/<int:pk>', userroles, name = 'user_detail'),   
 ]

@@ -11,7 +11,7 @@
                <div class="d-td-text">-->
                   <!--<li><span class="hint hint--bottom hint--info" data-hint="{ unode.user.email }}"><b><a href="{ url 'my_crm:clienttasks' unode.pk 0 %}">#{ unode.user.id }}. { unode.user.lastname }} { node.firstname }} { node.middlename }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{ node.datecreate}} | { node.type }} | { node.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.manager.pk ' ' %}">{ node.manager }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>===</i></a></span></span></b></li>-->
                   <!--<li><span class="hint hint--bottom hint--info" data-hint="{ unode.user.last_name }} { unode.user.first_name }} { unode.user.email }}"><b><a href="{% url 'my_crm:clienttasks' unode.pk 0 %}">#{{ unode.user.id }}. { unode.user.username }} | { unode.component.name}} | { unode.group.name }}</a></b></span></li>-->
-                  <li><span class="hint hint--bottom hint--info" data-hint="{{ unode.user.last_name }} {{ unode.user.first_name }} {{ unode.user.email }}"><b><a href="{% url 'my_crm:clienttasks' unode.pk 0 %}">#{{ unode.user.id }}. {{ unode.user.username }}</a></b></span></li>
+                  <li><span class="hint hint--bottom hint--info" data-hint="{{ unode.user.last_name }} {{ unode.user.first_name }} {{ unode.user.email }}"><b><a href="{% url 'my_company:user_detail' unode.company_id unode.user.pk %}">#{{ unode.user.id }}. {{ unode.user.username }}</a></b></span></li>
                <!--</div>
             </div>-->
          {% endfor %}
