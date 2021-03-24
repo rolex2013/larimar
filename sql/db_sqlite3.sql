@@ -7,6 +7,7 @@ INSERT INTO `auth_group` (`id`,`name`) VALUES (5,'Менеджеры подси�
 INSERT INTO `auth_group` (`id`,`name`) VALUES (6,'Руководители организаций');
 INSERT INTO `auth_group` (`id`,`name`) VALUES (7,'Исполнители');
 INSERT INTO `auth_group` (`id`,`name`) VALUES (8,'Гости');
+INSERT INTO `auth_group` (`id`,`name`) VALUES (9,'Клиенты');
 
 INSERT INTO `menu_menu` (`id`,`name`,`slug`,`base_url`,`description`) VALUES (1,'Главное меню','main_menu','/base.html','Меню после авторизации');
 INSERT INTO `menu_menu` (`id`,`name`,`slug`,`base_url`,`description`) VALUES (2,'Вход и Регистрация','logout_menu','/accounts/logout/','');

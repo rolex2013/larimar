@@ -36,7 +36,7 @@
 
 </ul> 
 
-<p style="text-align:right; padding: 15px 15px 15px 0px;"><span><strong><em>{{ user.username }}</em></strong></span></p>
+<p style="text-align:right; padding: 15px 15px 15px 0px;"><span><em><strong>{{ user.username }}</strong><br />(Группа "{% group_name is_auth=user.is_authenticated %}")</em></span></p>
 
 
 {% comment %}

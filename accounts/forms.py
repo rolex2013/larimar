@@ -18,7 +18,7 @@ class UserRegistrationForm(forms.ModelForm):
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
+            raise forms.ValidationError('Пароли не совпадают!')
         return cd['password2']
 
     #def clean(self):
@@ -28,16 +28,20 @@ class UserRegistrationForm(forms.ModelForm):
 
 class UserEnviteForm(forms.ModelForm):
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Повторно', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Повторно', widget=forms.PasswordInput) 
+
+    def __init__(self, *args, **kwargs):
+        super(UserEnviteForm, self).__init__(*args, **kwargs)
+        self.fields['is_staff'].help_text = '<br />(отметьте, если это сотрудник вашей Организации)'  
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'email')
+        fields = ('username', 'first_name', 'email', 'is_staff')
 
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
+            raise forms.ValidationError('Пароли не совпадают!')
         return cd['password2']
 
 class UserProfileForm(forms.ModelForm):

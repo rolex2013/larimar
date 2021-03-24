@@ -157,6 +157,7 @@ def register(request):
                 UserProfile.objects.create(user_id=new_user.id, company_id=instance_comp.id, is_notify=True, protocoltype_id=3, description='Профиль создан автоматически при регистрации пользователя')
                 UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=instance_comp.id, component_id=1, group_id=2)
              else:
+                # регистрируется в качестве Гостя первой зарегистрированной Организации                
                 comp_id = Company.objects.all()[0].id
                 UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=comp_id, component_id=1, group_id=8)
              return render(request, 'registration/register_done.html', {'new_user': new_user, 
@@ -177,16 +178,22 @@ def envite(request, companyid=1):
           new_user.set_password(pss)
           # Save the User object
           new_user.save()
+
           UserProfile.objects.create(user_id=new_user.id, company_id=companyid, is_notify=True, protocoltype_id=1, description='Профиль создан Администратором Организации')
-          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=1, group_id=7)
-          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=4, group_id=7)
-          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=5, group_id=7)
-          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=6, group_id=7)
-          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=7, group_id=7)
-          UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=8, group_id=7)
-          #print(new_user.username)
-          #print(pss)
-          #print(new_user.email)
+          if new_user.is_staff == True:
+             # для Сотрудника
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=1, group_id=7)
+             #UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=4, group_id=7)  #доступ к Организации д.б. только у Админа Организации (group_id=2)
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=5, group_id=7)
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=6, group_id=7)
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=7, group_id=7)
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=8, group_id=7)
+          else:
+             # для Клиента
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=1, group_id=9)   # для меню
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=6, group_id=9)   # для своих Задач в CRM
+             UserCompanyComponentGroup.objects.create(user_id=new_user.id, company_id=companyid, component_id=8, group_id=9)   # для заказов товара          
+
           site_name = get_current_site(request)
           text_plain = 'Вы приглашены в Систему 1YES! по адресу: http://'+str(site_name)+'/accounts/login\r\nЛогин: '+new_user.username+'r\n\Пароль: '+pss+'r\n\r\n\Добро пожаловать в нашу команду!'
           text_html = '<p>Вы приглашены в Систему 1YES! по адресу: <a href="http://'+str(site_name)+'/accounts/login">http://'+str(site_name)+'/accounts/login</a></p><p>Логин: '+new_user.username+'</p><p>Пароль: '+pss+'</p><p>Добро пожаловать в нашу команду!</p>'
