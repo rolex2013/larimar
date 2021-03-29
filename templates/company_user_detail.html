@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
-{% block task %}
+<!-- Защита от прямого доступа к ролям пользователей
+{ if current_company.id in user_companies %} -->
+
+{% block detail %}
 
 <div class="object-detail">
 
@@ -25,23 +28,14 @@
 
    </div>
 
-{% endblock task %}
+{% endblock detail %}
 
 <!--<hr>-->
 
 {% block list %}
-
-   <div class="object-list">
-        
-      <h5>Роли</h5>
-      <div class="object-list-buttons">        
-         <a href="{ url 'my_company:companyuserrole_create' companyuser.pk %}">{{ button_companyuserrole_create }}</a>
-      </div>
-      <br />      
-      {% for companyuserrole in nodes %}
-          <p><b>{{ companyuserrole.component.name }}</b>: {{ companyuserrole.group.name }}</p>
-      {% endfor %}
-
-   </div>
+   
+      {% include 'company_user_roles_list.html' %}
+  
+<!--{ endif %}-->
 
 {% endblock list %}

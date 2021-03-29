@@ -12,7 +12,7 @@
 </div>               
 <br /><br />-->
 
-<div id="ajax_listresult">
+
 
 <!--<div class="d-table">-->
 
@@ -37,18 +37,13 @@
          <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>
       </div>
    </form>    
-    
    {% include 'notify_list.html' %}
 
-<!--</div>-->
-
-</div>
-
-
 <script>
-
+/*
    $('input[type="checkbox"]').change(function(){
-
+   
+      console.log("*** === ***")
       // Проверка стоит галочка или нет
       if ($(this).is(':checked')) {
 
@@ -69,8 +64,28 @@
          });
 
       }
-
+   
    });
+
+   $document.querySelector('button').onclick(function() {
+      console.log("*** =///= ***")
+         event.preventDefault(); // *** без этого страница перегружается после возврата data
+         var chk = $(this).attr("name");
+         var chkVal = $(this).attr("value");
+
+         // Ваш запрос
+         $.ajax({
+            url: "{% url 'my_main:notification_read' %}",
+            type: 'GET',
+            //data: { name: chk, val: chkVal },
+            data: { val: chkVal },
+            //beforeSend: function() { alert(chk+ ' '+chkVal); },
+            //success: function(data) { alert(data); }
+            success: function(data) {
+               $('#ajax_listresult').html(data);
+            }
+         });
+   });   
 
    $('#selection-button').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
@@ -93,5 +108,5 @@
                }               
             });
    });
-
+*/
 </script>

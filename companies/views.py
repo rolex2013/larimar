@@ -16,6 +16,8 @@ from django.http import Http404
 from django.db.models import Q
 
 from .models import Company, UserCompanyComponentGroup, StaffList, Staff, Summary, Content, Dict_ContentType, Dict_ContentPlace
+from main.models import Component
+from django.contrib.auth.models import Group
 #from projects.models import Project, Task, TaskComment
 from .forms import CompanyForm, StaffListForm, StaffForm, StaffUpdateForm, SummaryForm, ContentForm
 
@@ -581,13 +583,65 @@ class ContentUpdate(UpdateView):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def userroles(request, companyid=1, pk=1):
     companyuser = User.objects.get(id=pk)
-    roles = UserCompanyComponentGroup.objects.filter(user_id=pk, company_id=companyid).order_by('component_id', 'group_id')
+    roles = UserCompanyComponentGroup.objects.filter(user_id=pk, company_id=companyid, is_active=True).order_by('component_id', 'group_id')
+    componentlist = Component.objects.filter(is_active=True)
+    grouplist = Group.objects.filter().exclude(name='Суперадминистраторы')
     #print(roles)
     button_companyuser_update = 'Изменить'
     button_companyuserrole_create = 'Добавить'
     return render(request, 'company_user_detail.html', {
                                                         'nodes': roles,
                                                         'companyuser': companyuser,
+                                                        'companyid': companyid,
+                                                        'componentlist': componentlist,
+                                                        'grouplist': grouplist,                                                        
                                                         'button_companyuser_update': button_companyuser_update,
                                                         'button_companyuserrole_create': button_companyuserrole_create,                                                                                     
                                                        })
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def userrole_delete(request):
+    roleid = request.GET['roleid']
+    if roleid:
+       role = UserCompanyComponentGroup.objects.get(id=roleid)
+       role.is_active = 0
+       role.save(update_fields=["is_active"])
+    roles = UserCompanyComponentGroup.objects.filter(user_id=role.user_id, company_id=role.company_id, is_active=True).order_by('component_id', 'group_id')
+    componentlist = Component.objects.filter(is_active=True)
+    grouplist = Group.objects.all()    
+    button_companyuserrole_create = 'Добавить'
+    return render(request, 'company_user_roles_list.html', {
+                                                            'nodes': roles,
+                                                            'componentlist': componentlist,
+                                                            'grouplist': grouplist,
+                                                            'button_companyuserrole_create': button_companyuserrole_create,                                                                                     
+                                                           })  
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def userrole_create(request):
+    companyid = request.GET['companyid']
+    userid = request.GET['userid'] 
+    groupid = request.GET['groupid'] 
+    componentid = request.GET['componentid']               
+    companyuser = User.objects.get(id=userid)              
+    message = ''
+    try:
+       role = UserCompanyComponentGroup.objects.create(user_id=userid, company_id=companyid, component_id=componentid, group_id=groupid)
+       role.save()
+    except:
+       message = 'Такая роль уже назначена!'
+    roles = UserCompanyComponentGroup.objects.filter(user_id=userid, company_id=companyid, is_active=True).order_by('component_id', 'group_id')
+    componentlist = Component.objects.filter(is_active=True)
+    grouplist = Group.objects.all()
+    button_companyuserrole_create = 'Добавить роль'
+    return render(request, 'company_user_roles_list.html', {
+                                                            'nodes': roles,
+                                                            'componentlist': componentlist,
+                                                            'grouplist': grouplist,
+                                                            'companyuser': companyuser,
+                                                            'companyid': companyid,
+                                                            'component_selectid': componentid,
+                                                            'group_selectid': groupid,
+                                                            'message': message,
+                                                            'button_companyuserrole_create': button_companyuserrole_create,                                                                                     
+                                                           })                                                             

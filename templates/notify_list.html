@@ -1,9 +1,13 @@
+<div id="ajax_listresult">
 
    <div class="object-list">   
 
       {% for notification in notification_list %}
 
-         <span class="hint hint--bottom hint--info" data-hint="Отметить прочитанным"><input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" /></span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate|date:"d.m.Y H:i:s" }}&nbsp;&nbsp;&nbsp;{{ notification.author.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info" data-hint="{{ notification.text }}">
+         <span class="hint hint--bottom hint--info" data-hint="Отметить прочитанным">
+             <input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" />
+             {% comment %}<button value="{{notification.id}}" name="myButton_{{notification.id}}"> X </button>{% endcomment %}
+         </span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate|date:"d.m.Y H:i:s" }}&nbsp;&nbsp;&nbsp;{{ notification.author.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info" data-hint="{{ notification.text }}">
              {% if notification.objecttype.shortname == 'prj' %}
                 <a href="{% url 'my_project:tasks' notification.objectid 0 %}">{{ notification.theme }}</a>
              {% elif notification.objecttype.shortname == 'tsk' %}
@@ -18,3 +22,37 @@
 
    </div>
 
+</div>
+<div id='ajax_listerrors'></div>
+
+<script>
+
+      $('input[type="checkbox"]').change(function(){
+      
+         //console.log("*** === ***")
+         // Проверка стоит галочка или нет
+         if ($(this).is(':checked')) {
+   
+            var chk = $(this).attr("name");
+            var chkVal = $(this).attr("value");
+   
+            // Ваш запрос
+            $.ajax({
+               url: "{% url 'my_main:notification_read' %}",
+               type: 'GET',
+               data: { val: chkVal },
+               success: function(data) {
+                   $('#ajax_listresult').html(data);
+               },
+               error: function(xhr, errmsg, err) {               
+                   console.log("error")                                  
+                   $('#ajax_listerrors').html('Уведомление не найдено!');            
+            }
+
+            });
+   
+         }
+      
+      });
+
+</script>

@@ -36,9 +36,9 @@
 
 </ul> 
 
-<p style="text-align:right; padding: 15px 15px 15px 0px;"><span><em><strong>{{ user.username }}</strong><br />
-   <span style="font-size:70%;">Группа <br />"{% group_name is_auth=user.is_authenticated %}"</span>
-   </em></span></p>
+<p style="text-align:right; padding: 15px 15px 0px 0px;"><strong>{{ user.username }}</strong></p>
+<p style="font-size: 70%; text-align:right; padding: 0 15px 0 0;">"{% group_name is_auth=user.is_authenticated %}"</p>
+   
 
 
 {% comment %}

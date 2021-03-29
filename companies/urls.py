@@ -5,13 +5,14 @@ from .models import Company
 from .views import companies, CompanyDetail, CompanyCreate, CompanyUpdate #, CompaniesList
 from .views import ContentDetail, ContentCreate, ContentUpdate
 from .views import stafflist, StaffListCreate, StaffListUpdate, staffs, summaries, summary_detail, summary_delete #, summary_update,  #, StaffListDetail
-from .views import userroles
+from .views import userroles, userrole_delete, userrole_create
 ##from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
 
 app_name = 'my_company'
 
 urlpatterns = [    
+
     #path('menu_companies/', views.CompaniesList.as_view(), name = 'menu_companies'),
     path('companies_page/<int:pk>/<str:razdel>', views.companies, name = 'companies'),
     #path('projects_list/<int:pk>', views.ProjectsList.as_view(), name = 'projects'),
@@ -37,5 +38,8 @@ urlpatterns = [
     path('content_list/content_create/', views.ContentCreate.as_view(), name = 'content_create'),        
     path('content_list/content_update/<int:pk>', views.ContentUpdate.as_view(), name = 'content_update'),
 
-    path('user_detail/<int:companyid>/<int:pk>', userroles, name = 'user_detail'),   
+    path('user_detail/<int:companyid>/<int:pk>', userroles, name = 'user_detail'), 
+    path('user_detail/userroles/delete', userrole_delete, name = 'userrole_delete'),  
+    path('user_detail/userroles/create', userrole_create, name = 'userrole_create'),  
+
 ]

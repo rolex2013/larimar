@@ -1,0 +1,109 @@
+
+<div id="ajax_listresult">
+
+   <div class="object-list">
+        
+      <h5>Роли</h5>
+   
+      {% comment %}
+      <div class="object-list-buttons">        
+         <a href="{ url 'my_company:companyuserrole_create' companyuser.pk %}">{{ button_companyuserrole_create }}</a>
+      </div>
+      <br />  
+      {% endcomment %}   
+      
+      <form method="GET">
+         {% csrf_token %}
+         <div class="object-list-filters">
+             <label>Компонент: </label>
+             <select name="select-component" id="componentselectid" class="select-component">
+
+                {% for component in componentlist %}
+                   <option value="{{component.id}}" {% ifequal component.id component_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                     {{component.name}}
+                   </option>   
+                {% endfor %}
+             </select>&nbsp;             
+             <label>Группа: </label>
+             <select name="select-group" id="groupselectid" class="select-group">
+                {% for group in grouplist %}
+                   <option value="{{group.id}}" {% ifequal group.id group_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                      {{group.name}}
+                   </option>   
+                {% endfor %}
+             </select>&nbsp;
+             <!--<button id="selection-button-client" type="submit" method="GET" class="object-filter-button">Применить</button>-->
+             <button id="selection-button-role" type="submit" method="GET" class="object-filter-button">{{ button_companyuserrole_create }}</button>&nbsp;<span style="color:brown">{{ message }}</span>
+         </div>
+      </form>
+
+      {% for companyuserrole in nodes %}
+            <p style="margin: 0 0 10px 10px;"><span class="hint hint--bottom hint--info" data-hint="Удалить эту роль">
+               <input type="checkbox" value="{{companyuserrole.id}}" name="myCheck_{{companyuserrole.id}}" /></span>&nbsp;&nbsp;&nbsp;<b>{{ companyuserrole.component.name }}</b>: {{ companyuserrole.group.name }}</p>
+      {% endfor %}
+   
+   </div>
+
+</div>
+
+<div id="ajax_listerrors"></div>  
+
+
+<script>
+
+   $('input[type="checkbox"]').change(function() {
+      //console.log({{ companyid }})
+      //console.log({{ companyuser.id }})  
+      // Проверка, стоит галочка или нет
+      if ($(this).is(':checked')) {
+
+         var chk = $(this).attr("name");
+         var chkVal = $(this).attr("value");
+         //console.log(chkVal)         
+
+         $.ajax({
+            url: "{% url 'my_company:userrole_delete' %}",
+            type: 'GET',
+            data: { roleid: chkVal,
+                    //companyid: "8",
+                    //pk: {{ companyuser.id }},
+                  },
+            success: function(data) {
+                     $('#ajax_listresult').html(data);
+            },
+            error: function(xhr, errmsg, err) {               
+                   console.log("error")                                  
+                   $('#ajax_listerrors').html('Роль не найдена!');            
+            }
+
+         });
+
+      };  
+
+   });
+
+   $('#selection-button-role').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            var componentSelected = $("#componentselectid option:selected").val()
+            var groupSelected = $("#groupselectid option:selected").val()
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_company:userrole_create' %}",
+               data: {
+                  userid: {{ companyuser.id }},
+                  companyid: {{ companyid }},
+                  componentid: componentSelected,
+                  groupid: groupSelected,
+               },
+               success: function(data){           
+                  $('#ajax_listresult').html(data);              
+               },
+               error: function(xhr, errmsg, err){               
+                  console.log("error")                                  
+                  $('#ajax_listerrors').html('Нет данных!');
+               }               
+            });
+   });           
+
+</script>
+

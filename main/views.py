@@ -22,7 +22,7 @@ def notificationread(request):
     curr_notify = Notification.objects.get(id=notify_id)
     if curr_notify:
        curr_notify.is_read = True
-       curr_notify.save()
+       curr_notify.save(update_fields=["is_read"])
     notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True, is_read=False, type_id=3)
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
     return render(request,  "notify_list.html", {
@@ -37,7 +37,7 @@ def notificationfilter(request):
     notificationstatus = request.GET['notificationstatus']
     notificationobjecttype = request.GET['notificationobjecttype']
 
-    notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True)
+    notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True, type_id=3)
     if notificationstatus == "2":
        notification_list = notification_list.filter(is_read=False)       
     elif notificationstatus == "3":
