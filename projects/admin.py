@@ -15,7 +15,7 @@ from companies.models import Dict_PositionType, StaffList, Staff, Summary
 
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
-from projects.models import Project, Task, TaskComment
+from projects.models import Project, Task, TaskComment, ProjectFile
 #from projects.models import ProjectStatusLog, TaskStatusLog
 
 from crm.models import Dict_ClientTaskStructureType
@@ -124,6 +124,8 @@ admin.site.register(Dict_TaskType)
 admin.site.register(Dict_TaskStatus)
 
 admin.site.register(TaskComment)
+
+admin.site.register(ProjectFile)
 
 #admin.site.register(ProjectStatusLog)
 
