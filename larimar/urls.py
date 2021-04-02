@@ -30,7 +30,8 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('accounts/', include('accounts.urls')),
     path('finance/', include('finance.urls')),
-    path('crm/', include('crm.urls')),    
+    path('crm/', include('crm.urls')),
+    #path('media/', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),    
 ]
 
 if settings.DEBUG:

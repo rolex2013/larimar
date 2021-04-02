@@ -1,0 +1,50 @@
+    <div id="ajax_listresult">
+
+       <p>Файлы проекта:
+        <!--<div>-->
+        {% for file in files %}
+           <p style="margin: 0 0 10px 10px;"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл">
+            <input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span>&nbsp;&nbsp;&nbsp;
+            <a href="{{ file.pfile }}">{{ file.uname }}</a>&nbsp;&nbsp;<em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></p>
+        {% endfor %}
+        <!--</div>-->
+        </p>
+
+    </div>
+    
+    <div id="ajax_listerrors"></div>  
+
+        <script>
+
+            $('input[type="checkbox"]').change(function() {
+               //console.log({{ companyid }})
+               //console.log({{ companyuser.id }})  
+               // Проверка, стоит галочка или нет
+               if ($(this).is(':checked')) {
+         
+                  var chk = $(this).attr("name");
+                  var chkVal = $(this).attr("value");
+                  //console.log(chkVal)         
+         
+                  $.ajax({
+                     url: "{% url 'my_project:projectfile_delete' %}",
+                     type: 'GET',
+                     data: { fileid: chkVal,
+                             //companyid: "8",
+                             //pk: {{ companyuser.id }},
+                           },
+                     success: function(data) {
+                              $('#ajax_listresult').html(data);
+                     },
+                     error: function(xhr, errmsg, err) {               
+                            console.log("error")                                  
+                            $('#ajax_listerrors').html('Файл не найден!');            
+                     }
+         
+                  });
+         
+               };  
+         
+            });
+
+        </script>        

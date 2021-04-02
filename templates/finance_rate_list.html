@@ -5,7 +5,7 @@
 
       {% for currencyrate in currencyrate_list %}
 
-         <p>{{ currencyrate.date }} {{ currencyrate.currency.code_char }} {{ currencyrate.currency.code_num }}  {{ currencyrate.rate }}</p>
+         <p>{{ currencyrate.date|date:'d.m.Y' }} {{ currencyrate.date|time:"H:i" }} &nbsp;&nbsp; {{ currencyrate.currency.code_char }} {{ currencyrate.currency.code_num }}  {{ currencyrate.rate }}</p>
     
       {% endfor %}
 

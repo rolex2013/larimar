@@ -16,7 +16,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from companies.models import Company
 from main.models import ModelLog
 from projects.models import Dict_ProjectStatus, Dict_TaskStatus
-from projects.models import Project, Task, TaskComment #, ProjectStatusLog, TaskStatusLog
+from projects.models import Project, Task, TaskComment, ProjectFile #, ProjectStatusLog, TaskStatusLog
 
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
@@ -177,15 +177,41 @@ class ProjectUpdate(UpdateView):
     template_name = 'object_form.html'
 
     def get_context_data(self, **kwargs):
-       context = super(ProjectUpdate, self).get_context_data(**kwargs)
-       context['header'] = 'Изменить Проект'
-       return context
+        context = super(ProjectUpdate, self).get_context_data(**kwargs)
+        context['header'] = 'Изменить Проект'
+        kwargs = super(ProjectUpdate, self).get_form_kwargs()
+        context['files'] = ProjectFile.objects.filter(project_id=self.kwargs['pk'], is_active=True).order_by('uname')
+        #print(context)
+        #print(kwargs)
+        return context
 
     def get_form_kwargs(self):
-       kwargs = super(ProjectUpdate, self).get_form_kwargs()
-       # здесь нужно условие для 'action': 'update'
-       kwargs.update({'user': self.request.user, 'action': 'update'})
-       return kwargs
+        kwargs = super(ProjectUpdate, self).get_form_kwargs()
+        # здесь нужно условие для 'action': 'update'
+        kwargs.update({'user': self.request.user, 'action': 'update'})
+        return kwargs       
+
+    def form_valid(self, form):
+       files = form.files.getlist('files')
+       self.object = form.save()
+       #print(form.files) 
+       if form.files:
+          for f in files:
+            print(f)
+            fcnt = ProjectFile.objects.filter(project_id=self.object.id, name=f, is_active=True).count()
+            #print(fcnt)
+            fl = ProjectFile(project_id=self.object.id, pfile = f)
+            fl.author = self.request.user
+            if fcnt:
+               f_str = str(f)
+               ext_pos = f_str.rfind('.')
+               fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+               #print(fn)
+            fl.name = f
+            fl.uname = fn
+            fl.save()
+       self.object.save()
+       return super(ProjectUpdate, self).form_valid(form)
 
 #class ProjectDelete(DeleteView):    
 #    model = Project
@@ -267,6 +293,7 @@ def tasks(request, projectid=0, pk=0):
                               'tree_task_id': tree_task_id,
                               'current_project': currentproject,                             
                               'projectid': projectid,
+                              'files': ProjectFile.objects.filter(project=currentproject, is_active=True).order_by('uname'),
                               'user_companies': request.session['_auth_user_companies_id'],                              
                               'button_project_create': button_project_create,
                               'button_project_update': button_project_update,
@@ -600,5 +627,15 @@ def taskfilter(request):
 #         'projects_list.html',
 #         {'nodes': Project.objects.filter(is_active=True, company=companyid).order_by()}
 #         )
-#  return response   
+#  return response
+ 
+def projectfiledelete(request):
+   fileid = request.GET['fileid']
+   object_message = ''
+   if fileid:
+      fl = ProjectFile.objects.get(id=fileid)      
+      fl.is_active=False
+      fl.save(update_fields=['is_active'])
+   files = ProjectFile.objects.filter(project_id=fl.project_id, is_active=True)
+   return render(request, 'projectfile_list.html', {'files': files, 'object_message': object_message})
 

@@ -102,6 +102,7 @@ class Project(MPTTModel):
     structure_type = models.ForeignKey('Dict_ProjectStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_structure_type', verbose_name="Тип в иерархии")
     type = models.ForeignKey('Dict_ProjectType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
+    #docfile = models.ManyToManyField('ProjectFile', blank=True, related_name='file_project', verbose_name="Файлы")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='project_author', verbose_name="Автор")
@@ -113,7 +114,7 @@ class Project(MPTTModel):
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
     def save(self, *args, **kwargs):
-        super(Project, self).save(*args, **kwargs)  
+        super(Project, self).save(*args, **kwargs)
         historyjson = {"Проект":self.name, "Статус":self.status.name, 
                        "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
                        "Тип в иерархии":self.structure_type.name, "Тип":self.type.name,
@@ -125,7 +126,8 @@ class Project(MPTTModel):
         #                                status=self.status, 
         #                                author=self.author,
         #                                description=json.dumps(historyjson)
-        #                               ) 
+        #
+        #print(self.project_file)
         ModelLog.objects.create(componentname='prj', 
                                 modelname="Project",
                                 modelobjectid=self.id,
@@ -203,6 +205,22 @@ class TaskComment(models.Model):
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
+
+class ProjectFile(models.Model):
+    name = models.CharField("Наименование", null=True, blank=True, max_length=255)
+    uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)    
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='project_file', verbose_name="Проект")
+    pfile = models.FileField(upload_to='uploads/docs/project', blank=True, null=True, verbose_name='Файл')
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)    
+    author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
+    is_active = models.BooleanField("Активность", default=True)
+
+    class Meta:
+        verbose_name = "Файлы"
+        verbose_name_plural = "Файлы"
+
+    def __str__(self):
+        return str(self.id) + ' ' + self.uname #file.name
 
 """
 class ProjectStatusLog(models.Model):

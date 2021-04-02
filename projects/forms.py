@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from ckeditor.widgets import CKEditorWidget
 from django import forms
-from .models import Company, Project, Task, TaskComment
+from .models import Company, Project, Task, TaskComment, ProjectFile
 #from .models import ProjectStatusLog, TaskStatusLog
 from .models import Dict_ProjectStatus, Dict_TaskStatus
 from main.models import Notification, Meta_ObjectType
@@ -20,6 +20,8 @@ from django.core.mail import send_mail
 class ProjectForm(forms.ModelForm):
     #datebegin = forms.DateField(widget=AdminDateWidget())
     #datebegin = forms.DateField(widget=AdminSplitDateTime())
+
+    files = forms.FileField(label='Файлы проекта', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
     disabled_fields = ('dateclose', 'author',)
 
@@ -71,7 +73,7 @@ class ProjectForm(forms.ModelForm):
                                           author_id=self.user.id)
 
     def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
+        self.user = kwargs.pop('user')      # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму 
 
         if self.action == 'create':
@@ -93,14 +95,17 @@ class ProjectForm(forms.ModelForm):
         self.fields['author'].initial = self.user.id
 
         for field in self.disabled_fields:
-            self.fields[field].disabled = True
+            self.fields[field].disabled = True       
 
     class Meta:
         model = Project
         fields = ['name', 'description', 'members', 'assigner', 'currency', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'is_active', 'dateclose', 'id', 'author']
+        #labels = {'Files':'Выберите файлы'}
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
+            'dateend': DatePickerInput(format='%d.%m.%Y') # specify date-frmat,
+            #'docfile': forms.ClearableFileInput(attrs={'multiple': True}),
+            #'files': forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
         }
 
 class TaskForm(forms.ModelForm):

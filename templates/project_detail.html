@@ -32,10 +32,14 @@
           <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i></p>
-       <em>Автор: {{ current_project.author }}</em><br /> 
+       <p><em>Автор: {{ current_project.author }}</em></p>
        <!--<em>Участники: { current_project.members.name }}</em><br /> -->
-       <em>Дата: {{ current_project.datecreate }}</em>
-       <p>&nbsp;</p>
+       <p><em>Дата: {{ current_project.datecreate }}</em></p>
+       <!--<p>&nbsp;</p>       -->
+       <br />
+
+       {% include 'projectfile_list.html' %}
+
        <!--{ if user.is_authenticated and user.id == current_project.author_id  %}-->
         <div class="object-detail-buttons">
            <a href="{% url 'my_project:project_create' current_project.company.id current_project.pk %}">{{ button_project_create }}</a>
