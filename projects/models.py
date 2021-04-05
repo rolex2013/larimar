@@ -208,9 +208,10 @@ class TaskComment(models.Model):
 
 class ProjectFile(models.Model):
     name = models.CharField("Наименование", null=True, blank=True, max_length=255)
-    uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)    
+    uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)
     project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='project_file', verbose_name="Проект")
     pfile = models.FileField(upload_to='uploads/docs/project', blank=True, null=True, verbose_name='Файл')
+    psize = models.CharField(editable=False, max_length=64)    
     datecreate = models.DateTimeField("Создан", auto_now_add=True)    
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)

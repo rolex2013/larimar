@@ -1,3 +1,6 @@
+import os
+from django.conf import settings
+
 from django.urls import reverse_lazy
 from django.utils import timezone
 from datetime import datetime, date, time
@@ -197,19 +200,23 @@ class ProjectUpdate(UpdateView):
        #print(form.files) 
        if form.files:
           for f in files:
-            print(f)
-            fcnt = ProjectFile.objects.filter(project_id=self.object.id, name=f, is_active=True).count()
-            #print(fcnt)
-            fl = ProjectFile(project_id=self.object.id, pfile = f)
-            fl.author = self.request.user
-            if fcnt:
-               f_str = str(f)
-               ext_pos = f_str.rfind('.')
-               fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
-               #print(fn)
-            fl.name = f
-            fl.uname = fn
-            fl.save()
+              #print(f)
+              fcnt = ProjectFile.objects.filter(project_id=self.object.id, name=f, is_active=True).count()
+              #print(fcnt)
+              fl = ProjectFile(project_id=self.object.id, pfile = f)
+              fl.author = self.request.user
+              if fcnt:
+                 f_str = str(f)
+                 ext_pos = f_str.rfind('.')
+                 fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+                 #print(fn)
+              fl.name = f
+              fl.uname = fn
+              fl.save()
+              fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
+              fl.psize = os.path.getsize(fullpath)
+              fl.save()
+              #print(fl.psize)
        self.object.save()
        return super(ProjectUpdate, self).form_valid(form)
 
@@ -636,6 +643,6 @@ def projectfiledelete(request):
       fl = ProjectFile.objects.get(id=fileid)      
       fl.is_active=False
       fl.save(update_fields=['is_active'])
-   files = ProjectFile.objects.filter(project_id=fl.project_id, is_active=True)
+   files = ProjectFile.objects.filter(project_id=fl.project_id, is_active=True).order_by('uname')
    return render(request, 'projectfile_list.html', {'files': files, 'object_message': object_message})
 

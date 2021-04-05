@@ -1,14 +1,33 @@
     <div id="ajax_listresult">
 
-       <p>Файлы проекта:
-        <!--<div>-->
+       <!--<p>-->Файлы проекта:
+
+        {% comment %}
         {% for file in files %}
            <p style="margin: 0 0 10px 10px;"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл">
             <input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span>&nbsp;&nbsp;&nbsp;
-            <a href="{{ file.pfile }}">{{ file.uname }}</a>&nbsp;&nbsp;<em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></p>
+            <a href="{{ file.pfile }}">{{ file.uname }}</a>&nbsp;&nbsp;<em style="font-size:80%">{{ file.psize|filesizeformat }} {{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></p>
         {% endfor %}
-        <!--</div>-->
-        </p>
+        {% endcomment %}
+        <div class="table-files">
+           <!--<div class="th-row">
+              <div class="th-cell">Имя файла</div>
+              <div class="th-cell">Размер</div>
+              <div class="th-cell">Дата</div>
+           </div>-->
+           {% for file in files %}
+              <div class="row-files">
+                 <!--<div class="{% cycle 'row1' 'row2' %}">-->
+                    <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div> 
+                    <div class="cell-files"><a href="{{ file.pfile }}">{{ file.uname }}</a></div> 
+                    <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div> 
+                    <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
+                 <!--</div>-->
+              </div>
+           {% endfor %}          
+        </div>
+
+        <!--</p>-->
 
     </div>
     

@@ -365,20 +365,20 @@ body {
     }
 
 
-.object-detail-button {
-	box-shadow: 0px 10px 14px -7px #276873;
-	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
-	background-color:#599bb3;
-	border-radius:8px;
-	display:inline-block;
-	cursor:pointer;
-	color:#ffffff;
-	font-family:Arial;
-	font-size:20px;
-	font-weight:bold;
-	padding:13px 32px;
-	text-decoration:none;
-	text-shadow:0px 1px 0px #3d768a;
+   .object-detail-button {
+   	box-shadow: 0px 10px 14px -7px #276873;
+   	background:linear-gradient(to bottom, #599bb3 5%, #408c99 100%);
+   	background-color:#599bb3;
+   	border-radius:8px;
+   	display:inline-block;
+   	cursor:pointer;
+   	color:#ffffff;
+   	font-family:Arial;
+   	font-size:20px;
+   	font-weight:bold;
+   	padding:13px 32px;
+   	text-decoration:none;
+   	text-shadow:0px 1px 0px #3d768a;
    }
    .object-detail-button:hover {
 	   background:linear-gradient(to bottom, #408c99 5%, #599bb3 100%);
@@ -431,7 +431,32 @@ body {
      text-align: center;
      /*color: grey;*/
    }   
+
+
+   .table-files {
+      display: table;
+      /*margin-bottom: 20px;
+      border: 5px solid #fff;
+      border-top: 5px solid #fff;
+      border-bottom: 3px solid #fff;
+      border-collapse: collapse; 
+      outline: 3px solid #ffd300;
+      background: #fff!important;
+      box-shadow: 0 12px 16px 0 #8e968e;*/
+   } 
    
+   .row-files {
+      display: table-row;
+      /*background-color: grey;*/
+   } 
+
+   .cell-files {
+      display: table-cell;
+      text-align: right;
+      padding: 0 10px 0 10px;
+      /*color: grey;*/
+    } 
+
 
    .tree span:hover {
      font-weight: bold;
