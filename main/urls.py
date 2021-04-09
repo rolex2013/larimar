@@ -21,6 +21,7 @@ urlpatterns = [
    path('main/notify/', notificationread, name = 'notification_read'),
    path('main/notify_filter/', notificationfilter, name = 'notification_filter'),
    path('main/object_history/<objtype>/<int:pk>', objecthistory, name = 'object_history'),
+   path('main/objectfile_delete/<objtype>', views.objectfiledelete, name = 'objectfile_delete'),
    #path('', contents, name = 'main'),
    #path('', contents, name = 'index'),
    #path('', ELogoutView.as_view(), name='logout')

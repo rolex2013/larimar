@@ -114,26 +114,83 @@ class Project(MPTTModel):
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
     def save(self, *args, **kwargs):
-        super(Project, self).save(*args, **kwargs)
-        historyjson = {"Проект":self.name, "Статус":self.status.name, 
-                       "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
-                       "Тип в иерархии":self.structure_type.name, "Тип":self.type.name,
-                       "Стоимость":str(self.cost), "Валюта":self.currency.code_char, "Выполнен на, %":str(self.percentage),
-                       "Исполнитель":self.assigner.username, "Активность":'✓' if self.is_active else '' #, "Участники":self.members.username
-                      }
-        #print(historyjson)
-        #ProjectStatusLog.objects.create(project_id=self.id, 
-        #                                status=self.status, 
-        #                                author=self.author,
-        #                                description=json.dumps(historyjson)
-        #
-        #print(self.project_file)
-        ModelLog.objects.create(componentname='prj', 
-                                modelname="Project",
-                                modelobjectid=self.id,
-                                author=self.author,
-                                log=json.dumps(historyjson)
-                                )                                        
+        # Получаем старые значения для дальнейшей проверки на изменения
+        old = Project.objects.filter(pk=self.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        if old:
+           old_name = old.name
+           old_status_name = old.status.name
+           old_datebegin = datetime.strftime(old.datebegin, '%Y-%m-%d')
+           old_dateend = datetime.strftime(old.dateend, '%Y-%m-%d')
+           old_structure_type_name = old.structure_type.name
+           old_type_name = old.type.name
+           old_cost = str(old.cost)
+           old_currency_code_char = old.currency.code_char
+           old_percentage = str(old.percentage)
+           old_assigner_username = old.assigner.username
+           old_is_active = old.is_active          
+           #print('old_status_name='+old_status_name)        
+        else:
+           old_name = ''
+           old_status_name = ''
+           old_datebegin = ''
+           old_dateend = ''
+           old_structure_type_name = ''
+           old_type_name = ''
+           old_cost = ''
+           old_currency_code_char = ''
+           old_percentage = ''
+           old_assigner_username = ''
+           old_is_active = ''           
+        #super(Project, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
+        self_name = self.name
+        self_status_name = self.status.name
+        self_datebegin = datetime.strftime(self.datebegin, '%Y-%m-%d')
+        self_dateend = datetime.strftime(self.dateend, '%Y-%m-%d')
+        self_structure_type_name = self.structure_type.name
+        self_type_name = self.type.name
+        self_cost = str(self.cost)
+        self_currency_code_char = self.currency.code_char
+        self_percentage = str(self.percentage)
+        self_assigner_username = self.assigner.username
+        self_is_active = self.is_active
+        #print('self_status_name='+self_status_name)         
+        # Проверка на изменения
+        if self_name == old_name:
+           self_name = ''
+        if self_status_name == old_status_name:
+           self_status_name = ''
+        if self_datebegin == old_datebegin:
+           self_datebegin = ''
+        if self_dateend == old_dateend:
+           self_dateend = ''
+        if self_structure_type_name == old_structure_type_name:
+           self_structure_type_name = ''
+        if self_type_name == old_type_name:
+           self_type_name = ''
+        if self_cost == old_cost:
+           self_cost = ''
+        if self_currency_code_char == old_currency_code_char:
+           self_currency_code_char = ''
+        if self_percentage == old_percentage:
+           self_percentage = ''
+        if self_assigner_username == old_assigner_username:
+           self_assigner_username = ''
+        if self_is_active == old_is_active:
+           self_is_active = ''
+        if self_name or self_status_name or self_datebegin or self_dateend or self_structure_type_name or self_type_name or self_cost or self_currency_code_char or self_percentage or self_assigner_username or self_is_active != old_is_active:           
+           historyjson = {"Проект":self_name, "Статус":self_status_name, 
+                          "Начало":self_datebegin, "Окончание":self_dateend,
+                          "Тип в иерархии":self_structure_type_name, "Тип":self_type_name,
+                          "Стоимость":self_cost, "Валюта":self_currency_code_char, "Выполнен на, %":self_percentage,
+                          "Исполнитель":self_assigner_username, "Активность":'✓' if self.is_active else '-' #, "Участники":self.members.username
+                         }
+           ModelLog.objects.create(componentname='prj', 
+                                   modelname="Project",
+                                   modelobjectid=self.id,
+                                   author=self.author,
+                                   log=json.dumps(historyjson)
+                                  )                                
     class MPTTMeta:
         order_insertion_by = ['name']
     class Meta:

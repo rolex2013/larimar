@@ -1,8 +1,12 @@
+import os
+#import socket
+from django.conf import settings
+
 from django.shortcuts import render
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 
 from main.models import Notification, Meta_ObjectType, ModelLog
-from projects.models import Project, Task
+from projects.models import Project, Task, ProjectFile #, TaskFile
 from crm.models import Client, ClientTask, ClientEvent
 
 from django.contrib.auth.decorators import login_required
@@ -116,3 +120,23 @@ def objecthistory(request, objtype='prj', pk=0):
                               #'table': table,                                                           
                                                 })  
 
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def objectfiledelete(request, objtype='prj'):
+   fileid = request.GET['fileid']
+   object_message = ''
+   if fileid:
+      if objtype == 'prj':
+         fl = ProjectFile.objects.get(id=fileid)
+      elif objtype == 'tsk':
+         fl = TaskFile.objects.get(id=fileid)      
+      fl.is_active=False
+      fl.save(update_fields=['is_active'])
+   if objtype == 'prj':
+      files = ProjectFile.objects.filter(project_id=fl.project_id, is_active=True).order_by('uname')
+   elif objtype == 'tsk':
+      files = TaskFile.objects.filter(project_id=fl.project_id, is_active=True).order_by('uname')
+   return render(request, 'objectfile_list.html', {'objtype': objtype, 
+                                                   'files': files, 
+                                                   'object_message': object_message,
+                                                   'media_path': settings.MEDIA_URL,
+                                                  })
