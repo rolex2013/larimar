@@ -228,7 +228,7 @@ def clienttasks(request, clientid=0, pk=0):
 
     is_member = Client.objects.filter(members__in=[currentuser,]).exists()
     if currentuser == currentclient.author_id or currentuser == currentclient.assigner_id or is_member:
-       button_client_create = 'Добавить'
+       #button_client_create = 'Добавить'
        button_client_history = 'История' 
        button_task_create = 'Добавить'
        button_event_create = 'Добавить'                    

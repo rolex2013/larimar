@@ -125,16 +125,24 @@ def objectfiledelete(request, objtype='prj'):
    fileid = request.GET['fileid']
    object_message = ''
    if fileid:
-      if objtype == 'prj':
-         fl = ProjectFile.objects.get(id=fileid)
-      elif objtype == 'tsk':
-         fl = TaskFile.objects.get(id=fileid)      
+      #if objtype == 'prj':
+      fl = ProjectFile.objects.get(id=fileid)
+      #elif objtype == 'tsk':
+      #   fl = TaskFile.objects.get(id=fileid)      
       fl.is_active=False
       fl.save(update_fields=['is_active'])
    if objtype == 'prj':
       files = ProjectFile.objects.filter(project_id=fl.project_id, is_active=True).order_by('uname')
    elif objtype == 'tsk':
-      files = TaskFile.objects.filter(project_id=fl.project_id, is_active=True).order_by('uname')
+      files = ProjectFile.objects.filter(task_id=fl.task_id, is_active=True).order_by('uname')
+   elif objtype == 'cmnt':
+      files = ProjectFile.objects.filter(taskcomment_id=fl.taskcomment_id, is_active=True).order_by('uname')
+   elif objtype == 'clnt':
+      files = ClientFile.objects.filter(client_id=fl.client_id, is_active=True).order_by('uname')
+   elif objtype == 'clnttsk':
+      files = ClientFile.objects.filter(clienttask_id=fl.clienttask_id, is_active=True).order_by('uname')
+   elif objtype == 'clnttaskcomment':
+      files = ClientFile.objects.filter(clienttaskcomment_id=fl.clienttaskcomment_id, is_active=True).order_by('uname')                      
    return render(request, 'objectfile_list.html', {'objtype': objtype, 
                                                    'files': files, 
                                                    'object_message': object_message,

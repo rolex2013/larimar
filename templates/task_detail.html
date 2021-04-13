@@ -43,6 +43,9 @@
       <em>Автор: {{ task.author }}</em><br />
       <em>Дата: {{ task.datecreate }}</em>              
       <p>&nbsp;</p>
+
+      {% include 'objectfile_list.html' %} 
+           
       <div class="object-detail-buttons">
           <a href="{% url 'my_project:task_create' task.project.id task.pk %}">{{ button_task_create }}</a>
           <a href="{% url 'my_project:task_update' task.pk %}">{{ button_task_update }}</a>

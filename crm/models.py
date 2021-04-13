@@ -152,21 +152,51 @@ class Client(models.Model):
         #return (self.user.username)
         return (self.firstname + ' ' + self.middlename +' ' + self.lastname)
     def save(self, *args, **kwargs):
-        super(Client, self).save(*args, **kwargs)          
-        historyjson = {"Имя":self.firstname, "Отчество":self.middlename if self.middlename else '', "Фамилия":self.lastname, "Пользователь":self.user.username if self.user else '',
-                       "E-mail":self.email if self.email else '', "Телефон":self.phone if self.phone else '',  
-                       #"Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
-                       "Тип":self.type.name, "Статус":self.status.name,
-                       "Стоимость":str(self.cost), "Валюта":self.currency.code_char, "Выполнен на, %":str(self.percentage),
-                       "Инициатор":self.initiator.name, "Менеджер":self.manager.username,
-                       "Оповещение":'✓' if self.is_notify else '', "Протокол":self.protocoltype.name if self.protocoltype else '', "Активность":'✓' if self.is_active else ''
-                      }        
-        ModelLog.objects.create(componentname='clnt', 
-                                modelname="Client",
-                                modelobjectid=self.id,
-                                author=self.author,
-                                log=json.dumps(historyjson)
-                                )                                   
+        old = Client.objects.filter(pk=self.pk).first()
+        super().save(*args, **kwargs)
+        old_user_username = ''
+        self_user_username = ''        
+        if self.user:
+           self_user_username = self.user.username
+        if old:
+           if old.user:
+              old_user_username = old.user.username
+           historyjson = {"Имя":'' if self.firstname == old.firstname else self.firstname,
+                          "Отчество":'' if self.middlename == old.middlename else self.middlename,
+                          "Фамилия":'' if self.lastname == old.lastname else self.lastname,
+                          "Пользователь":'' if self_user_username == old_user_username else '-' if self_user_username == '' else self_user_username,                       
+                          "E-mail":'' if self.email == old.email else self.email,
+                          "Телефон":'' if self.phone == old.phone else self.phone,  
+                          "Тип":'' if self.type.name == old.type.name else self.type.name,
+                          "Статус":'' if self.status.name == old.status.name else self.status.name,
+                          "Ст-ть":'' if self.cost == old.cost else str(self.cost),
+                          "Валюта":'' if self.currency.code_char == old.currency.code_char else self.currency.code_char,
+                          "Выполнен на, %":'' if self.percentage == old.percentage else str(self.percentage),
+                          "Инициатор":'' if self.initiator.name == old.initiator.name else self.initiator.name,
+                          "Менеджер":'' if self.manager.username == old.manager.username else self.manager.username,
+                          "Оповещ.":'' if self.is_notify == old.is_notify else '✓' if self.is_notify else '-',
+                          "Протокол":'' if self.protocoltype.name == old.protocoltype.name else self.protocoltype.name,
+                          "Активн.":'' if self.is_active == old.is_active else '✓' if self.is_active else '-'
+                         }
+        else:
+           historyjson = {"Имя": self.firstname,
+                          "Отчество": self.middlename,
+                          "Фамилия": self.lastname,
+                          "Пользователь": '-' if self_user_username == '' else self_user_username,                       
+                          "E-mail": self.email,
+                          "Телефон": self.phone,  
+                          "Тип": self.type.name,
+                          "Статус": self.status.name,
+                          "Ст-ть": str(self.cost),
+                          "Валюта": self.currency.code_char,
+                          "Выполнен на, %": str(self.percentage),
+                          "Инициатор": self.initiator.name,
+                          "Менеджер": self.manager.username,
+                          "Оповещ.": '✓' if self.is_notify else '-',
+                          "Протокол": self.protocoltype.name,
+                          "Активн.": '✓' if self.is_active else '-'
+                         }
+        ModelLog.objects.create(componentname='clnt', modelname="Client", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson))                                   
     class Meta:
         #unique_together = ('user','company')
         #ordering = ('user')
@@ -198,19 +228,38 @@ class ClientTask(MPTTModel):
     def __str__(self):
          return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     def save(self, *args, **kwargs):
-        super(ClientTask, self).save(*args, **kwargs)          
-        historyjson = {"Задача":self.name, "Статус":self.status.name, 
-                       "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
-                       "Тип в иерархии":self.structure_type.name, "Тип":self.type.name if self.type else '',
-                       "Стоимость":str(self.cost), "Выполнен на, %":str(self.percentage),
-                       "Инициатор":self.initiator.name, "Исполнитель":self.assigner.username, "Активность":'✓' if self.is_active else ''
-                      }        
-        ModelLog.objects.create(componentname='cltsk', 
-                                modelname="ClientTask",
-                                modelobjectid=self.id,
-                                author=self.author,
-                                log=json.dumps(historyjson)
-                                )                                         
+        old = ClientTask.objects.filter(pk=self.pk).first()
+        super().save(*args, **kwargs)
+        if old:          
+           historyjson = {"Задача":'' if self.name == old.name else self.name,
+                          "Статус":'' if self.status.name == old.status.name else self.status.name, 
+                          "Начало":'' if self.datebegin == old.datebegin else self.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                          "Окончание":'' if self.dateend == old.dateend else self.dateend.strftime('%d.%m.%Y %H:%M'),
+                          "Тип в иерархии":'' if self.structure_type.name == old.structure_type.name else self.structure_type.name,
+                          "Тип":'' if self.type.name == old.type.name else self.type.name,
+                          "Стоимость":'' if self.cost == old.cost else str(self.cost),
+                          "Выполнен на, %":'' if self.percentage == old.percentage else str(self.percentage),
+                          "Инициатор":'' if self.initiator.name == old.initiator.name else self.initiator.name,
+                          "Исполнитель":'' if self.assigner.username == old.assigner.username else self.assigner.username,
+                          "Активность":'' if self.is_active == old.is_active else '✓' if self.is_active else '-'
+                          #, "Участники":self.members.username
+                         }
+        else:
+           historyjson = {"Задача": self.name,
+                          "Статус": self.status.name, 
+                          "Начало": self.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                          "Окончание": self.dateend.strftime('%d.%m.%Y %H:%M'),
+                          "Тип в иерархии": self.structure_type.name,
+                          "Тип": self.type.name,
+                          "Стоимость": str(self.cost),
+                          "Выполнен на, %": str(self.percentage),
+                          "Инициатор": self.initiator.name,
+                          "Исполнитель": self.assigner.username,
+                          "Активность": '✓' if self.is_active else '-'
+                          #, "Участники":self.members.username
+                         }
+
+        ModelLog.objects.create(componentname='cltsk', modelname="ClientTask", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson))                                         
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     
@@ -230,7 +279,6 @@ class ClientTaskComment(models.Model):
 
     def get_absolute_url(self):
         return reverse('my_crm:clienttaskcomments', kwargs={'taskid': self.task_id})           
-
     def __str__(self):
         return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
 
@@ -259,18 +307,35 @@ class ClientEvent(models.Model):
     def __str__(self):
          return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     def save(self, *args, **kwargs):
-        super(ClientEvent, self).save(*args, **kwargs)          
-        historyjson = {"Событие":self.name, "Задача":('#'+str(self.task.id)+'. '+self.task.name) if self.task else '', "Статус":self.status.name, 
-                       "Начало":datetime.strftime(self.datebegin, '%Y-%m-%d'), "Окончание":datetime.strftime(self.dateend, '%Y-%m-%d'),
-                       "Тип":self.type.name if self.type else '', "Место":self.place if self.place else '',
-                       "Инициатор":self.initiator.name, "Исполнитель":self.assigner.username, "Активность":'✓' if self.is_active else ''
-                      }        
-        ModelLog.objects.create(componentname='clevnt', 
-                                modelname="ClientEvent",
-                                modelobjectid=self.id,
-                                author=self.author,
-                                log=json.dumps(historyjson)
-                                )                                                              
+        old = ClientEvent.objects.filter(pk=self.pk).first()
+        super().save(*args, **kwargs)          
+        if old:
+           historyjson = {"Событие":'' if self.name == old.name else self.name,
+                          "Задача":'' if self.task == old.task else ('#'+str(self.task.id)+'. '+self.task.name) if self.task else '-',        
+                          "Статус":'' if self.status.name == old.status.name else self.status.name, 
+                          "Начало":'' if self.datebegin == old.datebegin else self.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                          "Окончание":'' if self.dateend == old.dateend else self.dateend.strftime('%d.%m.%Y %H:%M'),
+                          "Тип":'' if self.type.name == old.type.name else self.type.name,
+                          "Место":'' if self.place == old.place else self.place,
+                          "Инициатор":'' if self.initiator.name == old.initiator.name else self.initiator.name,
+                          "Исполнитель":'' if self.assigner.username == old.assigner.username else self.assigner.username,
+                          "Активность":'' if self.is_active == old.is_active else '✓' if self.is_active else '-'
+                          #, "Участники":self.members.username
+                         }
+        else:                                                                    
+           historyjson = {"Событие": self.name,
+                          "Задача": '#'+str(self.task.id)+'. '+self.task.name,        
+                          "Статус": self.status.name, 
+                          "Начало": self.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                          "Окончание": self.dateend.strftime('%d.%m.%Y %H:%M'),
+                          "Тип": self.type.name,
+                          "Место": self.place,
+                          "Инициатор": self.initiator.name,
+                          "Исполнитель": self.assigner.username,
+                          "Активность": '✓' if self.is_active else '-'
+                          #, "Участники":self.members.username
+                         }
+        ModelLog.objects.create(componentname='clevnt', modelname="ClientEvent", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson))                                                              
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     

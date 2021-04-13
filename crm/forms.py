@@ -61,11 +61,11 @@ class ClientForm(forms.ModelForm):
               objecttypeid = Meta_ObjectType.objects.get(shortname='clnt').id
               send_mail('1YES! Вы назначены менеджерои Клиента.', 'Уведомляем о назначении Вам Клиента!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
-                                          object_id=objecttypeid,  
+                                          objecttype_id=objecttypeid,  
                                           objectid=self.initial['id'],            
                                           sendfrom=settings.EMAIL_HOST_USER,
                                           theme='Вы назначены менеджером Клиента.',
-                                          text='Уведомляем о назначении Вам Клиента "'+self.cleaned_data['name']+'".',
+                                          text='Уведомляем о назначении Вам Клиента "'+self.cleaned_data['firstname']+' '+self.cleaned_data['middlename']+' '+self.cleaned_data['lastname']+'".',
                                           recipient_id=self.initial['manager'],                                          
                                           sendto=user_profile.email,
                                           author_id=self.user.id)
@@ -186,8 +186,8 @@ class ClientTaskForm(forms.ModelForm):
         model = ClientTask
         fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'cost', 'percentage', 'initiator', 'dateclose', 'is_active', 'id', 'author']
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat
+            'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
+            'dateend': DatePickerInput(format='%d.%m.%Y %H:%M'), # specify date-frmat
         }        
 
 class ClientTaskCommentForm(forms.ModelForm):
@@ -294,8 +294,8 @@ class ClientEventForm(forms.ModelForm):
         model = ClientEvent
         fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'type', 'status', 'initiator', 'dateclose', 'task', 'is_active', 'id', 'author']
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat
+            'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
+            'dateend': DatePickerInput(format='%d.%m.%Y %H:%M'), # specify date-frmat
         }        
 
 class ClientEventCommentForm(forms.ModelForm):

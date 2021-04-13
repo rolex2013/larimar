@@ -110,6 +110,8 @@ class ProjectForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
 
+    files = forms.FileField(label='Файлы задачи', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
     disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
@@ -189,8 +191,8 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'is_active', 'dateclose', 'id', 'author']
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'), # specify date-frmat
+            'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
+            'dateend': DatePickerInput(format='%d.%m.%Y %H:%M'), # specify date-frmat
         }        
 
 class TaskCommentForm(forms.ModelForm):

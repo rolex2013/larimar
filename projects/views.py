@@ -307,6 +307,7 @@ def tasks(request, projectid=0, pk=0):
                               'current_project': currentproject,                             
                               'projectid': projectid,
                               'files': ProjectFile.objects.filter(project=currentproject, is_active=True).order_by('uname'),
+                              'objtype': 'prj',
                               'user_companies': request.session['_auth_user_companies_id'],                              
                               'button_project_create': button_project_create,
                               'button_project_update': button_project_update,
@@ -321,7 +322,6 @@ def tasks(request, projectid=0, pk=0):
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,
                               'len_list': len_list,
                               'media_path': settings.MEDIA_URL,
-                              'objtype': 'prj',
                                                 })       
 
 class TaskDetail___(DetailView):
@@ -381,12 +381,39 @@ class TaskUpdate(UpdateView):
     def get_context_data(self, **kwargs):
        context = super(TaskUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Задачу'
+       context['files'] = ProjectFile.objects.filter(task_id=self.kwargs['pk'], is_active=True).order_by('uname')       
        return context
 
     def get_form_kwargs(self):
        kwargs = super(TaskUpdate, self).get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs       
+
+    def form_valid(self, form):
+       files = form.files.getlist('files')
+       self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
+       #print(form.files) 
+       if form.files:
+          for f in files:
+              #print(f)
+              fcnt = ProjectFile.objects.filter(project_id=self.object.project.id, task_id=self.object.id, name=f, is_active=True).count()
+              #print(fcnt)
+              fl = ProjectFile(project_id=self.object.project.id, task_id=self.object.id, pfile = f)
+              fl.author = self.request.user
+              fn = f
+              if fcnt:
+                 f_str = str(f)
+                 ext_pos = f_str.rfind('.')
+                 fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+                 #print(fn)
+              fl.name = f
+              fl.uname = fn
+              fl.save()
+              fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
+              fl.psize = os.path.getsize(fullpath)
+              fl.save()
+              #print(fl.psize)
+       return super().form_valid(form) #super(TaskUpdate, self).form_valid(form)
 
 #class TaskDelete(DeleteView):    
 #    model = Task
@@ -428,6 +455,8 @@ def taskcomments(request, taskid):
                               'nodes': taskcomment_list.distinct().order_by(),
                               #'current_taskcomment': currenttaskcomment,
                               'task': currenttask,
+                              'files': ProjectFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
+                              'objtype': 'tsk',
                               'button_task_create': button_task_create,
                               'button_task_update': button_task_update,
                               'button_task_history': button_task_history,

@@ -21,13 +21,21 @@
         {% bootstrap_form form layout="horizontal" %}
         {% if files %}
            <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="id_files"></label>
-           <div class="col-md-9">
-           {% for f in files %}
-              <p style="line-height:50%;">{{ f.uname }}&nbsp;&nbsp;&nbsp;<em style="font-size:80%">{{ f.datecreate|date:'d.m.y' }} {{ f.datecreate|time:'H:i:s' }}</em></p>
-           {% endfor %}
-           </div>
-           </div>
+              <label class="col-md-3 col-form-label" for="id_files"></label>
+              <!--<div class="col-md-9">-->
+              <div class="table-files">
+                 {% for f in files %}
+                    <div class="row-files">                          
+                       <!--<p style="line-height:50%;">{ f.uname }}&nbsp;&nbsp;&nbsp;<em style="font-size:80%">{ f.datecreate|date:'d.m.y' }} { f.datecreate|time:'H:i:s' }}</em></p>-->
+                       <div class="cell-files" style="font-size:80%;line-height:50%;">{{ f.uname }}</div>
+                       <div class="cell-files" style="font-size:80%;"><em>{{ f.psize|filesizeformat }}</em></div>
+                       <div class="cell-files" style="font-size:80%;"><em>{{ f.datecreate|date:'d.m.y' }} {{ f.datecreate|time:'H:i:s' }}</em></div>
+                    </div>
+                 {% endfor %}
+              </div>
+              <!--</div>-->
+           </div>          
+           <br />
         {% endif %}
         {% buttons %}
            <button class="btn btn-success" name="submit">Сохранить</button>
