@@ -23,6 +23,8 @@ class ClientForm(forms.ModelForm):
 
     # хотелось бы, если выбран юзер, заполнять данные этой формы (ФИО, email, phone) из его Профиля
 
+    files = forms.FileField(label='Файлы клиента', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
     disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
@@ -105,6 +107,7 @@ class ClientForm(forms.ModelForm):
 
 class ClientTaskForm(forms.ModelForm):
 
+    files = forms.FileField(label='Файлы задачи', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
     disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
@@ -191,6 +194,9 @@ class ClientTaskForm(forms.ModelForm):
         }        
 
 class ClientTaskCommentForm(forms.ModelForm):
+
+    files = forms.FileField(label='Файлы комментария задачи', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
     class Meta:
         model = ClientTaskComment
         fields = ['name', 'description', 'time', 'cost']
@@ -203,6 +209,8 @@ class FilterStatusForm(forms.ModelForm):
 
 
 class ClientEventForm(forms.ModelForm):
+
+    files = forms.FileField(label='Файлы события', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
     disabled_fields = ('dateclose', 'author',)
 
@@ -299,6 +307,9 @@ class ClientEventForm(forms.ModelForm):
         }        
 
 class ClientEventCommentForm(forms.ModelForm):
+
+    files = forms.FileField(label='Файлы комментария события', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
     class Meta:
         model = ClientEventComment
         fields = ['name', 'description']

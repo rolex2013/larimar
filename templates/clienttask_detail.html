@@ -29,6 +29,9 @@
       <em>Автор: {{ clienttask.author }}</em><br />
       <em>Дата: {{ clienttask.datecreate }}</em>              
       <p>&nbsp;</p>
+
+      {% include 'objectfile_list.html' %}
+
       <div class="object-detail-buttons">
           <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}">{{ button_clienttask_create }}</a>
           <a href="{% url 'my_crm:clienttask_update' clienttask.pk %}">{{ button_clienttask_update }}</a>
@@ -64,6 +67,16 @@
                     {{ taskcomment.time }} час. | 
                     {{ clienttask.client.currency.symbol }}{{ taskcomment.cost }}</span></b>
                <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
+               <div class="table-files">
+                  {% for file in files_comment %}
+                     <div class="row-files">
+                         <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div> 
+                         <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div> 
+                         <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div> 
+                         <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
+                     </div>
+                  {% endfor %}          
+               </div>
               <!--</div>           -->
            {% endfor %}
          </div>

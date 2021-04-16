@@ -23,6 +23,9 @@
       <em>Автор: {{ clientevent.author }}</em><br />
       <em>Дата: {{ clientevent.datecreate }}</em>              
       <p>&nbsp;</p>
+
+      {% include 'objectfile_list.html' %}
+
       <div class="object-detail-buttons">
           <!--<a href="{ url 'my_crm:clientevent_create' clientevent.client.id 0 %}">{{ button_clientevent_create }}</a>-->
           <a href="{% url 'my_crm:clientevent_update' clientevent.pk %}">{{ button_clientevent_update }}</a>

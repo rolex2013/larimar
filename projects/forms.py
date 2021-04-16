@@ -78,10 +78,10 @@ class ProjectForm(forms.ModelForm):
 
         if self.action == 'create':
            self.company = kwargs.pop('companyid') 
-           super(ProjectForm, self).__init__(*args, **kwargs)
+           super().__init__(*args, **kwargs)
            companyid = self.company
         else:
-           super(ProjectForm, self).__init__(*args, **kwargs)
+           super().__init__(*args, **kwargs)
            companyid = self.instance.company_id
            # Исполнитель не может менять Исполнителя, если он не Автор
            if self.user.id == self.initial['assigner'] and self.initial['assigner'] != self.initial['author']:
@@ -196,6 +196,9 @@ class TaskForm(forms.ModelForm):
         }        
 
 class TaskCommentForm(forms.ModelForm):
+
+    files = forms.FileField(label='Файлы комментария', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
     class Meta:
         model = TaskComment
         fields = ['name', 'description', 'time', 'cost']

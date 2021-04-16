@@ -7,7 +7,7 @@ from django.views.generic import View, TemplateView, ListView, DetailView, Creat
 
 from main.models import Notification, Meta_ObjectType, ModelLog
 from projects.models import Project, Task, ProjectFile #, TaskFile
-from crm.models import Client, ClientTask, ClientEvent
+from crm.models import Client, ClientTask, ClientEvent, ClientFile
 
 from django.contrib.auth.decorators import login_required
 
@@ -125,24 +125,28 @@ def objectfiledelete(request, objtype='prj'):
    fileid = request.GET['fileid']
    object_message = ''
    if fileid:
-      #if objtype == 'prj':
-      fl = ProjectFile.objects.get(id=fileid)
-      #elif objtype == 'tsk':
-      #   fl = TaskFile.objects.get(id=fileid)      
+      if objtype[:3] == 'prj':
+         fl = ProjectFile.objects.get(id=fileid)
+      elif objtype[:3] == 'cln':
+         fl = ClientFile.objects.get(id=fileid)      
       fl.is_active=False
       fl.save(update_fields=['is_active'])
    if objtype == 'prj':
       files = ProjectFile.objects.filter(project_id=fl.project_id, is_active=True).order_by('uname')
-   elif objtype == 'tsk':
+   elif objtype == 'ptjtsk':
       files = ProjectFile.objects.filter(task_id=fl.task_id, is_active=True).order_by('uname')
-   elif objtype == 'cmnt':
+   elif objtype == 'prjtskcmnt':
       files = ProjectFile.objects.filter(taskcomment_id=fl.taskcomment_id, is_active=True).order_by('uname')
    elif objtype == 'clnt':
       files = ClientFile.objects.filter(client_id=fl.client_id, is_active=True).order_by('uname')
    elif objtype == 'clnttsk':
-      files = ClientFile.objects.filter(clienttask_id=fl.clienttask_id, is_active=True).order_by('uname')
-   elif objtype == 'clnttaskcomment':
-      files = ClientFile.objects.filter(clienttaskcomment_id=fl.clienttaskcomment_id, is_active=True).order_by('uname')                      
+      files = ClientFile.objects.filter(task_id=fl.task_id, is_active=True).order_by('uname')
+   elif objtype == 'clnttskcmnt':
+      files = ClientFile.objects.filter(taskcomment_id=fl.taskcomment_id, is_active=True).order_by('uname')
+   elif objtype == 'clntevnt':
+      files = ClientFile.objects.filter(event_id=fl.event_id, is_active=True).order_by('uname')
+   elif objtype == 'clntevntcmnt':
+      files = ClientFile.objects.filter(teventcomment_id=fl.eventcomment_id, is_active=True).order_by('uname')                            
    return render(request, 'objectfile_list.html', {'objtype': objtype, 
                                                    'files': files, 
                                                    'object_message': object_message,

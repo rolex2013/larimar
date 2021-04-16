@@ -1,3 +1,7 @@
+import os
+#import socket
+from django.conf import settings
+
 from django.urls import reverse_lazy
 from django.utils import timezone
 from datetime import datetime, date, time
@@ -16,7 +20,7 @@ from companies.forms import CompanyForm
 
 from crm.models import Client, Dict_ClientStatus, Dict_ClientType
 from crm.models import ClientTask, ClientTaskComment, Dict_ClientTaskStatus, Dict_ClientTaskType #, ClientStatusLog, ClientTaskStatusLog
-from crm.models import ClientEvent, ClientEventComment, Dict_ClientEventStatus, Dict_ClientEventType #, ClientEventStatusLog
+from crm.models import ClientEvent, ClientEventComment, Dict_ClientEventStatus, Dict_ClientEventType, ClientFile #, ClientEventStatusLog
 
 from .forms import ClientForm, ClientTaskForm, ClientTaskCommentForm
 from .forms import ClientEventForm, ClientEventCommentForm
@@ -28,6 +32,8 @@ from django_tables2 import RequestConfig
 from django.contrib.auth.decorators import login_required
 
 from django.db.models import Q, Count, Min, Max, Sum, Avg
+
+from main.utils import AddFilesMixin
 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
@@ -108,6 +114,9 @@ def clients(request, companyid=0, pk=0):
                               'current_company': current_company,
                               'companyid': companyid,
                               'user_companies': comps,
+                              #'objtype': 'clnt',
+                              #'files': ClientFile.objects.filter(client=currentclient, is_active=True).order_by('uname'),
+                              #'media_path': settings.MEDIA_URL,
                               'button_company_select': button_company_select,
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
@@ -121,10 +130,10 @@ def clients(request, companyid=0, pk=0):
                               #'select_clientstatus': select_clientstatus,
                               'component_name': 'crm',
                               #'table': table,
-                              'len_list': len_list,
+                              'len_list': len_list,                             
                                                 })  
 
-class ClientCreate(CreateView):    
+class ClientCreate(AddFilesMixin, CreateView):    
     model = Client
     form_class = ClientForm
     #template_name = 'client_create.html'
@@ -135,7 +144,10 @@ class ClientCreate(CreateView):
        #if self.kwargs['parentid'] != 0:
        #   form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
-       return super(ClientCreate, self).form_valid(form)
+       self.object = form.save() # Созадём нового клиента
+       af = self.add_files(form, 'crm', 'client') # добавляем файлы из формы (метод из AddFilesMixin)
+       # тут пишем историю
+       return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
        context = super(ClientCreate, self).get_context_data(**kwargs)
@@ -143,12 +155,12 @@ class ClientCreate(CreateView):
        return context
 
     def get_form_kwargs(self):
-       kwargs = super(ClientCreate, self).get_form_kwargs()
+       kwargs = super().get_form_kwargs()
        # здесь нужно условие для 'action': 'create'
        kwargs.update({'user': self.request.user, 'action': 'create', 'companyid': self.kwargs['companyid']})
        return kwargs
 
-class ClientUpdate(UpdateView):    
+class ClientUpdate(AddFilesMixin, UpdateView):    
     model = Client
     form_class = ClientForm
     #template_name = 'client_update.html'
@@ -157,13 +169,37 @@ class ClientUpdate(UpdateView):
     def get_context_data(self, **kwargs):
        context = super(ClientUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Клиента'
+       context['files'] = ClientFile.objects.filter(client_id=self.kwargs['pk'], is_active=True).order_by('uname')       
        return context
 
     def get_form_kwargs(self):
-       kwargs = super(ClientUpdate, self).get_form_kwargs()
+       kwargs = super().get_form_kwargs()
        # здесь нужно условие для 'action': 'update'
        kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs
+
+    def form_valid(self, form):        
+        self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
+        af = self.add_files(form, 'crm', 'client') # добавляем файлы из формы (метод из AddFilesMixin)
+        """
+        # Получаем старые значения для дальнейшей проверки на изменения
+        old = Project.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        historyjson = {"Проект":'' if self.object.name == old.name else self.object.name,
+                       "Статус":'' if self.object.status.name == old.status.name else self.object.status.name, 
+                       "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y'), 
+                       "Окончание":'' if self.object.dateend == old.dateend else self.object.dateend.strftime('%d.%m.%Y'),
+                       "Тип в иерархии":'' if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
+                       "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
+                       "Стоимость":'' if self.object.cost == old.cost else str(self.object.cost),
+                       "Валюта":'' if self.object.currency.code_char == old.currency.code_char else str(self.object.currency.code_char),
+                       "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
+                       "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+                       "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
+                       #, "Участники":self.object.members.username
+                      }                                     
+        ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
+        """         
+        return super().form_valid(form) #super(ProjectUpdate, self).form_valid(form)       
 
 
 
@@ -242,7 +278,10 @@ def clienttasks(request, clientid=0, pk=0):
                               'tree_task_id': tree_task_id,
                               'current_client': currentclient,                             
                               'clientid': clientid,
-                              'user_companies': request.session['_auth_user_companies_id'],                              
+                              'user_companies': request.session['_auth_user_companies_id'],
+                              'files': ClientFile.objects.filter(client=currentclient, is_active=True).order_by('uname'),                                                             
+                              'objtype': 'clnt',
+                              'media_path': settings.MEDIA_URL,                             
                               'button_client_create': button_client_create,
                               'button_client_update': button_client_update,
                               'button_client_history': button_client_history,
@@ -261,10 +300,11 @@ def clienttasks(request, clientid=0, pk=0):
                               'button_event_create': button_event_create,
                               'eventstatus': Dict_ClientEventStatus.objects.filter(is_active=True),
                               'eventtype': Dict_ClientEventType.objects.filter(is_active=True),
-                              #'evntstatus_selectid': evntstatus_selectid,                                                            
+                              #'evntstatus_selectid': evntstatus_selectid, 
+                                                         
                                                 })
 
-class ClientTaskCreate(CreateView):    
+class ClientTaskCreate(AddFilesMixin, CreateView):    
     model = ClientTask
     form_class = ClientTaskForm
     #template_name = 'task_create.html'
@@ -275,7 +315,9 @@ class ClientTaskCreate(CreateView):
        if self.kwargs['parentid'] != 0:
           form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
-       return super(ClientTaskCreate, self).form_valid(form)
+       self.object = form.save() # Созадём новую задачу клиента       
+       af = self.add_files(form, 'crm', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
        context = super(ClientTaskCreate, self).get_context_data(**kwargs)
@@ -287,7 +329,7 @@ class ClientTaskCreate(CreateView):
        kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid']})
        return kwargs   
 
-class ClientTaskUpdate(UpdateView):    
+class ClientTaskUpdate(AddFilesMixin, UpdateView):    
     model = ClientTask
     form_class = ClientTaskForm
     #template_name = 'task_update.html'
@@ -296,12 +338,17 @@ class ClientTaskUpdate(UpdateView):
     def get_context_data(self, **kwargs):
        context = super(ClientTaskUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Задачу'
+       context['files'] = ClientFile.objects.filter(task_id=self.kwargs['pk'], is_active=True).order_by('uname')
        return context
 
     def get_form_kwargs(self):
        kwargs = super(ClientTaskUpdate, self).get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'update'})
-       return kwargs       
+       return kwargs
+
+    def form_valid(self, form):
+       af = self.add_files(form, 'crm', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       return super().form_valid(form)            
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienttaskcomments(request, taskid):
@@ -341,6 +388,8 @@ def clienttaskcomments(request, taskid):
                               'nodes': taskcomment_list.distinct().order_by(),
                               #'current_taskcomment': currenttaskcomment,
                               'clienttask': currenttask,
+                              'files': ClientFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),                              
+                              'objtype': 'clnttsk',
                               'button_clienttask_create': button_task_create,
                               'button_clienttask_update': button_task_update,
                               'button_clienttask_history': button_task_history,
@@ -350,14 +399,15 @@ def clienttaskcomments(request, taskid):
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,                            
                               'button_clienttaskcomment_create': button_taskcomment_create,
                               'enodes': event_list.distinct().order_by(), 
-                              'button_event_create': button_event_create,                                                 
+                              'button_event_create': button_event_create,
+                              'media_path': settings.MEDIA_URL,                                                                               
                               })      
 
 class ClientTaskCommentDetail(DetailView):
     model = ClientTaskComment
     template_name = 'taskcomment_detail.html'
 
-class ClientTaskCommentCreate(CreateView):    
+class ClientTaskCommentCreate(AddFilesMixin, CreateView):    
     model = ClientTaskComment
     form_class = ClientTaskCommentForm
     template_name = 'object_form.html'
@@ -370,6 +420,8 @@ class ClientTaskCommentCreate(CreateView):
     def form_valid(self, form):
        form.instance.task_id = self.kwargs['taskid']
        form.instance.author_id = self.request.user.id
+       self.object = form.save() # Созадём новый коммент задачи клиента
+       af = self.add_files(form, 'crm', 'taskcomment') # добавляем файлы из формы (метод из AddFilesMixin)
        return super(ClientTaskCommentCreate, self).form_valid(form)
 
 class ClientTaskCommentUpdate(UpdateView):    
@@ -380,6 +432,7 @@ class ClientTaskCommentUpdate(UpdateView):
     def get_context_data(self, **kwargs):
        context = super(ClientTaskCommentUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Комментарий'
+       context['files'] = ClientFile.objects.filter(taskcomment_id=self.kwargs['pk'], is_active=True).order_by('uname')       
        return context
 
 
@@ -436,7 +489,9 @@ def clientevents(request, clientid=0, pk=0):
                               'current_event': current_event,
                               'current_client': currentclient,                             
                               'clientid': clientid,
-                              'user_companies': request.session['_auth_user_companies_id'],                              
+                              'user_companies': request.session['_auth_user_companies_id'],
+
+                              'objtype': 'clntevnt',                              
                               'button_event_create': button_client_create,
                               'buttonevent_update': button_client_update,
                               'button_event_history': button_client_history,                              
@@ -447,7 +502,7 @@ def clientevents(request, clientid=0, pk=0):
                               #'len_list': len_list,
                                                 })
 
-class ClientEventCreate(CreateView):    
+class ClientEventCreate(AddFilesMixin, CreateView):    
     model = ClientEvent
     form_class = ClientEventForm
     #template_name = 'event_create.html'
@@ -459,7 +514,9 @@ class ClientEventCreate(CreateView):
        if self.kwargs['taskid'] != 0:
           form.instance.task_id = self.kwargs['taskid']
        form.instance.author_id = self.request.user.id
-       return super(ClientEventCreate, self).form_valid(form)
+       self.object = form.save() # Созадём новое событие клиента
+       af = self.add_files(form, 'crm', 'event') # добавляем файлы из формы (метод из AddFilesMixin)       
+       return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
        context = super(ClientEventCreate, self).get_context_data(**kwargs)
@@ -471,7 +528,7 @@ class ClientEventCreate(CreateView):
        kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid'], 'taskid': self.kwargs['taskid']})
        return kwargs   
 
-class ClientEventUpdate(UpdateView):    
+class ClientEventUpdate(AddFilesMixin, UpdateView):    
     model = ClientEvent
     form_class = ClientEventForm
     #template_name = 'task_update.html'
@@ -480,12 +537,17 @@ class ClientEventUpdate(UpdateView):
     def get_context_data(self, **kwargs):
        context = super(ClientEventUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Событие'
+       context['files'] = ClientFile.objects.filter(event_id=self.kwargs['pk'], is_active=True).order_by('uname')       
        return context
 
     def get_form_kwargs(self):
        kwargs = super(ClientEventUpdate, self).get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'update'})
-       return kwargs       
+       return kwargs
+
+    def form_valid(self, form):
+       af = self.add_files(form, 'crm', 'event') # добавляем файлы из формы (метод из AddFilesMixin)
+       return super().form_valid(form)                 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienteventcomments(request, eventid):
@@ -512,6 +574,8 @@ def clienteventcomments(request, eventid):
                               'nodes': eventcomment_list.distinct().order_by(),
                               #'current_eventcomment': currenteventcomment,
                               'clientevent': currentevent,
+                              'files': ClientFile.objects.filter(event=currentevent, is_active=True).order_by('uname'),                              
+                              'objtype': 'clntevntcmnt',
                               'button_clientevent_create': button_event_create,
                               'button_clientevent_update': button_event_update,
                               'button_clientevent_history': button_event_history,
@@ -523,7 +587,7 @@ class ClientEventCommentDetail(DetailView):
     model = ClientEventComment
     template_name = 'eventcomment_detail.html'
 
-class ClientEventCommentCreate(CreateView):    
+class ClientEventCommentCreate(AddFilesMixin, CreateView):    
     model = ClientEventComment
     form_class = ClientEventCommentForm
     template_name = 'object_form.html'
@@ -536,6 +600,8 @@ class ClientEventCommentCreate(CreateView):
     def form_valid(self, form):
        form.instance.event_id = self.kwargs['eventid']
        form.instance.author_id = self.request.user.id
+       self.object = form.save() # Созадём новый коммент события клиента
+       af = self.add_files(form, 'crm', 'eventcomment') # добавляем файлы из формы (метод из AddFilesMixin)       
        return super(ClientEventCommentCreate, self).form_valid(form)
 
 class ClientEventCommentUpdate(UpdateView):    
@@ -546,6 +612,7 @@ class ClientEventCommentUpdate(UpdateView):
     def get_context_data(self, **kwargs):
        context = super(ClientEventCommentUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Комментарий'
+       context['files'] = ClientFile.objects.filter(eventcomment_id=self.kwargs['pk'], is_active=True).order_by('uname')       
        return context
 
 

@@ -361,6 +361,27 @@ class ClientEventComment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
+class ClientFile(models.Model):
+    name = models.CharField("Наименование", null=True, blank=True, max_length=255)
+    uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)
+    client = models.ForeignKey('Client', null=True, blank=True, on_delete=models.CASCADE, related_name='client_file', verbose_name="Клиент")
+    task = models.ForeignKey('ClientTask', null=True, blank=True, on_delete=models.CASCADE, related_name='clienttask_file', verbose_name="Задача")
+    taskcomment = models.ForeignKey('ClientTaskComment', null=True, blank=True, on_delete=models.CASCADE, related_name='clienttaskcomment_file', verbose_name="Комментарий") 
+    event = models.ForeignKey('ClientEvent', null=True, blank=True, on_delete=models.CASCADE, related_name='clientevent_file', verbose_name="Событие")           
+    eventcomment = models.ForeignKey('ClientEventComment', null=True, blank=True, on_delete=models.CASCADE, related_name='clienteventcomment_file', verbose_name="Комментарий события")   
+    pfile = models.FileField(upload_to='uploads/files/crm', blank=True, null=True, verbose_name='Файл')
+    psize = models.CharField(editable=False, max_length=64)    
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)    
+    author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
+    is_active = models.BooleanField("Активность", default=True)
+
+    class Meta:
+        verbose_name = "Файлы"
+        verbose_name_plural = "Файлы"
+
+    def __str__(self):
+        return str(self.id) + ' ' + self.uname #file.name        
+
 """
 class ClientStatusLog(models.Model):
     #LOG_TYPES = (('P', 'Client'), ('T', 'Task'))

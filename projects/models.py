@@ -113,6 +113,7 @@ class Project(MPTTModel):
         return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '0'})  
     def __str__(self):
         return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
+    """
     def save(self, *args, **kwargs):
         # Получаем старые значения для дальнейшей проверки на изменения
         old = Project.objects.filter(pk=self.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
@@ -145,10 +146,10 @@ class Project(MPTTModel):
                           "Активность": '✓' if self.is_active else '-'
                           #, "Участники":self.members.username
                          }                                     
-        ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson)
-                               )                                
-    class MPTTMeta:
-        order_insertion_by = ['name']
+        ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson))
+    """                               
+    #class MPTTMeta:
+    #    order_insertion_by = ['name']
     class Meta:
         verbose_name = 'Проект'
         verbose_name_plural = 'Проекты'
@@ -238,8 +239,8 @@ class ProjectFile(models.Model):
     uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)
     project = models.ForeignKey('Project', null=True, blank=True, on_delete=models.CASCADE, related_name='project_file', verbose_name="Проект")
     task = models.ForeignKey('Task', null=True, blank=True, on_delete=models.CASCADE, related_name='task_file', verbose_name="Задача")
-    taskcomment = models.ForeignKey('TaskComment', null=True, blank=True, on_delete=models.CASCADE, related_name='taskcomment_file', verbose_name="комментарий")        
-    pfile = models.FileField(upload_to='uploads/docs/project', blank=True, null=True, verbose_name='Файл')
+    taskcomment = models.ForeignKey('TaskComment', null=True, blank=True, on_delete=models.CASCADE, related_name='taskcomment_file', verbose_name="Комментарий")        
+    pfile = models.FileField(upload_to='uploads/files/project', blank=True, null=True, verbose_name='Файл')
     psize = models.CharField(editable=False, max_length=64)    
     datecreate = models.DateTimeField("Создан", auto_now_add=True)    
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")

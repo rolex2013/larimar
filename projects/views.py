@@ -3,6 +3,7 @@ import os
 from django.conf import settings
 
 from django.urls import reverse_lazy
+#from django.core.urlresolvers import reverse
 from django.utils import timezone
 from datetime import datetime, date, time
 import json
@@ -33,7 +34,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.db.models import Q, Count, Min, Max, Sum, Avg
 
-#from .utils import ObjectUpdateMixin
+from main.utils import AddFilesMixin #ObjectUpdateMixin
 
 #class ProjectsHome(TemplateView):
 #   template_name = 'main.html'
@@ -126,7 +127,7 @@ def projects(request, companyid=0, pk=0):
     if current_company in comps:
        button_project_create = 'Добавить'
     return render(request, "company_detail.html", {
-                              'nodes': project_list.distinct().order_by(), # для удаления задвоений и восстановления иерархии
+                              'nodes': project_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
                               'current_project': current_project,
                               'root_project_id': root_project_id,
                               'tree_project_id': tree_project_id,
@@ -151,80 +152,96 @@ class ProjectDetail(DetailView):
     model = Project
     template_name = 'project_detail.html' 
 
-class ProjectCreate(CreateView):    
+class ProjectCreate(AddFilesMixin, CreateView):    
     model = Project
     form_class = ProjectForm
     #template_name = 'project_create.html'
     template_name = 'object_form.html'
 
+    #def get_success_url(self):
+    #    print(self.object) # Prints the name of the submitted user
+    #    print(self.object.id) # Prints None
+    #    return reverse("webApp:project:stepTwo", args=(self.object.id,))    
+
     def form_valid(self, form):
-       form.instance.company_id = self.kwargs['companyid']
-       if self.kwargs['parentid'] != 0:
-          form.instance.parent_id = self.kwargs['parentid']
-       form.instance.author_id = self.request.user.id
-       return super(ProjectCreate, self).form_valid(form)
+        form.instance.company_id = self.kwargs['companyid']
+        if self.kwargs['parentid'] != 0:
+           form.instance.parent_id = self.kwargs['parentid']
+        form.instance.author_id = self.request.user.id
+        self.object = form.save() # Созадём новый проект
+        af = self.add_files(form, 'project', 'project') # добавляем файлы из формы (метод из AddFilesMixin)
+        # Делаем первую запись в историю изменений проекта
+        historyjson = {"Проект": self.object.name,
+                       "Статус": self.object.status.name, 
+                       "Начало": self.object.datebegin.strftime('%d.%m.%Y'), 
+                       "Окончание": self.object.dateend.strftime('%d.%m.%Y'),
+                       "Тип в иерархии": self.object.structure_type.name,
+                       "Тип": self.object.type.name,
+                       "Стоимость": str(self.object.cost),
+                       "Валюта": str(self.object.currency.code_char),
+                       "Выполнен на, %": str(self.object.percentage),
+                       "Исполнитель": self.object.assigner.username,
+                       "Активность": '✓' if self.object.is_active else '-'
+                       #, "Участники":self.object.members.username
+                      }                                     
+        ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))       
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-       context = super(ProjectCreate, self).get_context_data(**kwargs)
-       context['header'] = 'Новый Проект'
-       return context
-
-    def get_form_kwargs(self):
-       kwargs = super(ProjectCreate, self).get_form_kwargs()
-       # здесь нужно условие для 'action': 'create'
-       kwargs.update({'user': self.request.user, 'action': 'create', 'companyid': self.kwargs['companyid']})
-       return kwargs   
-
-class ProjectUpdate(UpdateView):    
-    model = Project
-    form_class = ProjectForm
-    #template_name = 'project_update.html'
-    template_name = 'object_form.html'
-
-    def get_context_data(self, **kwargs):
-        #context = super(ProjectUpdate, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
-        context['header'] = 'Изменить Проект'
-        #kwargs = super(ProjectUpdate, self).get_form_kwargs()
-        kwargs = super().get_form_kwargs()
-        context['files'] = ProjectFile.objects.filter(project_id=self.kwargs['pk'], is_active=True).order_by('uname')
-        #print(context)
-        #print(kwargs)
+        context['header'] = 'Новый Проект'
         return context
 
     def get_form_kwargs(self):
-        #kwargs = super(ProjectUpdate, self).get_form_kwargs()
         kwargs = super().get_form_kwargs()
-        # здесь нужно условие для 'action': 'update'
-        kwargs.update({'user': self.request.user, 'action': 'update'})
-        return kwargs       
+        # здесь нужно условие для 'action': 'create'
+        kwargs.update({'user': self.request.user, 'action': 'create', 'companyid': self.kwargs['companyid']})
+        return kwargs   
 
-    def form_valid(self, form):
-       files = form.files.getlist('files')
-       self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
-       #print(form.files) 
-       if form.files:
-          for f in files:
-              #print(f)
-              fcnt = ProjectFile.objects.filter(project_id=self.object.id, name=f, is_active=True).count()
-              #print(fcnt)
-              fl = ProjectFile(project_id=self.object.id, pfile = f)
-              fl.author = self.request.user
-              fn = f
-              if fcnt:
-                 f_str = str(f)
-                 ext_pos = f_str.rfind('.')
-                 fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
-                 #print(fn)
-              fl.name = f
-              fl.uname = fn
-              fl.save()
-              fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
-              fl.psize = os.path.getsize(fullpath)
-              fl.save()
-              #print(fl.psize)
-       #self.object.save()
-       return super().form_valid(form) #super(ProjectUpdate, self).form_valid(form)
+class ProjectUpdate(AddFilesMixin, UpdateView):    
+      model = Project
+      form_class = ProjectForm
+      #template_name = 'project_update.html'
+      template_name = 'object_form.html'
+  
+      def get_context_data(self, **kwargs):
+          #context = super(ProjectUpdate, self).get_context_data(**kwargs)
+          context = super().get_context_data(**kwargs)
+          context['header'] = 'Изменить Проект'
+          #kwargs = super(ProjectUpdate, self).get_form_kwargs()
+          kwargs = super().get_form_kwargs()
+          context['files'] = ProjectFile.objects.filter(project_id=self.kwargs['pk'], is_active=True).order_by('uname')
+          #print(context)
+          #print(kwargs)
+          return context
+  
+      def get_form_kwargs(self):
+          #kwargs = super(ProjectUpdate, self).get_form_kwargs()
+          kwargs = super().get_form_kwargs()
+          # здесь нужно условие для 'action': 'update'
+          kwargs.update({'user': self.request.user, 'action': 'update'})
+          return kwargs       
+  
+      def form_valid(self, form):        
+          self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
+          af = self.add_files(form, 'project', 'project') # добавляем файлы из формы (метод из AddFilesMixin)
+          # Получаем старые значения для дальнейшей проверки на изменения
+          old = Project.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+          historyjson = {"Проект":'' if self.object.name == old.name else self.object.name,
+                         "Статус":'' if self.object.status.name == old.status.name else self.object.status.name, 
+                         "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y'), 
+                         "Окончание":'' if self.object.dateend == old.dateend else self.object.dateend.strftime('%d.%m.%Y'),
+                         "Тип в иерархии":'' if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
+                         "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
+                         "Стоимость":'' if self.object.cost == old.cost else str(self.object.cost),
+                         "Валюта":'' if self.object.currency.code_char == old.currency.code_char else str(self.object.currency.code_char),
+                         "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
+                         "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+                         "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
+                         #, "Участники":self.object.members.username
+                        }                                     
+          ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))          
+          return super().form_valid(form) #super(ProjectUpdate, self).form_valid(form)
 
 #class ProjectDelete(DeleteView):    
 #    model = Project
@@ -300,7 +317,7 @@ def tasks(request, projectid=0, pk=0):
           button_project_update = 'Изменить'    
      
     return render(request, "project_detail.html", {
-                              'nodes': task_list.distinct().order_by(), #.order_by('tree_id', 'level', '-dateend'),
+                              'nodes': task_list.distinct(), #.order_by(), #.order_by('tree_id', 'level', '-dateend'),
                               'current_task': current_task,
                               'root_task_id': root_task_id,
                               'tree_task_id': tree_task_id,
@@ -308,6 +325,7 @@ def tasks(request, projectid=0, pk=0):
                               'projectid': projectid,
                               'files': ProjectFile.objects.filter(project=currentproject, is_active=True).order_by('uname'),
                               'objtype': 'prj',
+                              'media_path': settings.MEDIA_URL,                              
                               'user_companies': request.session['_auth_user_companies_id'],                              
                               'button_project_create': button_project_create,
                               'button_project_update': button_project_update,
@@ -321,7 +339,6 @@ def tasks(request, projectid=0, pk=0):
                               'taskcomment_timesum': taskcomment_timesum,  
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,
                               'len_list': len_list,
-                              'media_path': settings.MEDIA_URL,
                                                 })       
 
 class TaskDetail___(DetailView):
@@ -349,70 +366,60 @@ class TaskDetail___(DetailView):
        context['button_taskcomment_create'] = button_taskcomment_create      
        return context
 
-class TaskCreate(CreateView):    
+class TaskCreate(AddFilesMixin, CreateView):    
     model = Task
     form_class = TaskForm
     #template_name = 'task_create.html'
     template_name = 'object_form.html'
+
+    #def form_valid(self, form):
+    #   form.instance.project_id = self.kwargs['projectid']
+    #   if self.kwargs['parentid'] != 0:
+    #      form.instance.parent_id = self.kwargs['parentid']
+    #   form.instance.author_id = self.request.user.id
+    #   return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+       context = super(TaskCreate, self).get_context_data(**kwargs)
+       context['header'] = 'Новая Задача'
+       return context      
+
+    def get_form_kwargs(self):
+       kwargs = super().get_form_kwargs()
+       kwargs.update({'user': self.request.user, 'action': 'create', 'projectid': self.kwargs['projectid']})
+       return kwargs
 
     def form_valid(self, form):
        form.instance.project_id = self.kwargs['projectid']
        if self.kwargs['parentid'] != 0:
           form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
-       return super(TaskCreate, self).form_valid(form)
+       #self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели       
+       self.object = form.save()
+       af = self.add_files(form, 'project', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       return super().form_valid(form)        
 
-    def get_context_data(self, **kwargs):
-       context = super(TaskCreate, self).get_context_data(**kwargs)
-       context['header'] = 'Новая Задача'
-       return context
-
-    def get_form_kwargs(self):
-       kwargs = super(TaskCreate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user, 'action': 'create', 'projectid': self.kwargs['projectid']})
-       return kwargs   
-
-class TaskUpdate(UpdateView):    
+class TaskUpdate(AddFilesMixin, UpdateView):    
     model = Task
     form_class = TaskForm
     #template_name = 'task_update.html'
     template_name = 'object_form.html'
 
     def get_context_data(self, **kwargs):
-       context = super(TaskUpdate, self).get_context_data(**kwargs)
+       context = super().get_context_data(**kwargs)
        context['header'] = 'Изменить Задачу'
+       kwargs = super().get_form_kwargs()      
        context['files'] = ProjectFile.objects.filter(task_id=self.kwargs['pk'], is_active=True).order_by('uname')       
        return context
 
     def get_form_kwargs(self):
-       kwargs = super(TaskUpdate, self).get_form_kwargs()
+       kwargs = super().get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs       
 
     def form_valid(self, form):
-       files = form.files.getlist('files')
-       self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
-       #print(form.files) 
-       if form.files:
-          for f in files:
-              #print(f)
-              fcnt = ProjectFile.objects.filter(project_id=self.object.project.id, task_id=self.object.id, name=f, is_active=True).count()
-              #print(fcnt)
-              fl = ProjectFile(project_id=self.object.project.id, task_id=self.object.id, pfile = f)
-              fl.author = self.request.user
-              fn = f
-              if fcnt:
-                 f_str = str(f)
-                 ext_pos = f_str.rfind('.')
-                 fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
-                 #print(fn)
-              fl.name = f
-              fl.uname = fn
-              fl.save()
-              fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
-              fl.psize = os.path.getsize(fullpath)
-              fl.save()
-              #print(fl.psize)
+       #self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
+       af = self.add_files(form, 'project', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
        return super().form_valid(form) #super(TaskUpdate, self).form_valid(form)
 
 #class TaskDelete(DeleteView):    
@@ -456,7 +463,7 @@ def taskcomments(request, taskid):
                               #'current_taskcomment': currenttaskcomment,
                               'task': currenttask,
                               'files': ProjectFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
-                              'objtype': 'tsk',
+                              'objtype': 'prjtsk',
                               'button_task_create': button_task_create,
                               'button_task_update': button_task_update,
                               'button_task_history': button_task_history,
@@ -470,20 +477,22 @@ class TaskCommentDetail(DetailView):
     model = TaskComment
     template_name = 'taskcomment_detail.html'
 
-class TaskCommentCreate(CreateView):    
+class TaskCommentCreate(AddFilesMixin, CreateView):    
     model = TaskComment
     form_class = TaskCommentForm
     template_name = 'object_form.html'
 
     def get_context_data(self, **kwargs):
-       context = super(TaskCommentCreate, self).get_context_data(**kwargs)
+       context = super().get_context_data(**kwargs)
        context['header'] = 'Новый Комментарий'
        return context
 
     def form_valid(self, form):
        form.instance.task_id = self.kwargs['taskid']
        form.instance.author_id = self.request.user.id
-       return super(TaskCommentCreate, self).form_valid(form)
+       self.object = form.save()
+       af = self.add_files(form, 'project', 'taskcomment') # добавляем файлы из формы (метод из AddFilesMixin)
+       return super().form_valid(form)       
 
 class TaskCommentUpdate(UpdateView):    
     model = TaskComment
@@ -491,8 +500,10 @@ class TaskCommentUpdate(UpdateView):
     template_name = 'object_form.html'
 
     def get_context_data(self, **kwargs):
-       context = super(TaskCommentUpdate, self).get_context_data(**kwargs)
+       context = super().get_context_data(**kwargs)
        context['header'] = 'Изменить Комментарий'
+       kwargs = super().get_form_kwargs()
+       context['files'] = ProjectFile.objects.filter(taskcomment_id=self.kwargs['pk'], is_active=True).order_by('uname')       
        return context
 
 #class TaskCommentDelete(DeleteView):    
@@ -617,7 +628,8 @@ def projectfilter(request):
                project_list = project_list.filter(Q(author=request.user.id))               
             elif myprjuser == "2":
                project_list = project_list.filter(Q(assigner=request.user.id)) 
-            nodes = project_list.order_by().distinct()
+            #nodes = project_list.order_by().distinct()
+            nodes = project_list.distinct() #.order_by()
             object_message = ''
             if len(nodes) == 0:
                object_message = 'Проекты не найдены!'
@@ -659,7 +671,7 @@ def taskfilter(request):
     elif mytskuser == "2":
        task_list = task_list.filter(Q(assigner=request.user.id)) 
     # *******************************           
-    nodes = task_list.distinct().order_by()
+    nodes = task_list.distinct() #.order_by()
     object_message = ''
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'                  

@@ -36,6 +36,9 @@
        <!--<em>Участники: { current_client.members.name }}</em><br /> -->
        <em>Дата: {{ current_client.datecreate }}</em>
        <p>&nbsp;</p>
+
+       {% include 'objectfile_list.html' %}
+
        <!--{ if user.is_authenticated and user.id == current_client.author_id  %}-->
        <div class="object-detail-buttons">
            <!--<a href="{% url 'my_crm:client_create' current_client.company.id %}">{{ button_client_create }}</a>-->
