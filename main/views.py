@@ -133,7 +133,7 @@ def objectfiledelete(request, objtype='prj'):
       fl.save(update_fields=['is_active'])
    if objtype == 'prj':
       files = ProjectFile.objects.filter(project_id=fl.project_id, is_active=True).order_by('uname')
-   elif objtype == 'ptjtsk':
+   elif objtype == 'prjtsk':
       files = ProjectFile.objects.filter(task_id=fl.task_id, is_active=True).order_by('uname')
    elif objtype == 'prjtskcmnt':
       files = ProjectFile.objects.filter(taskcomment_id=fl.taskcomment_id, is_active=True).order_by('uname')

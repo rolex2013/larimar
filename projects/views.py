@@ -460,10 +460,12 @@ def taskcomments(request, taskid):
      
     return render(request, "task_detail.html", {
                               'nodes': taskcomment_list.distinct().order_by(),
+                              #'node_files': n_files,
                               #'current_taskcomment': currenttaskcomment,
                               'task': currenttask,
                               'files': ProjectFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
                               'objtype': 'prjtsk',
+                              'media_path': settings.MEDIA_URL,
                               'button_task_create': button_task_create,
                               'button_task_update': button_task_update,
                               'button_task_history': button_task_history,

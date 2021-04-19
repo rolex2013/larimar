@@ -230,6 +230,10 @@ class TaskComment(models.Model):
     def __str__(self):
         return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
 
+    @property
+    def files(self):
+        return ProjectFile.objects.filter(taskcomment_id=self.id, is_active=True)
+
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'

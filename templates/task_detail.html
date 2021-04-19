@@ -68,17 +68,22 @@
         <h5>Комментарии</h5>
         
         <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-       <div class="object-list-buttons">
-          <a href="{% url 'my_project:taskcomment_create' task.pk %}">{{ button_taskcomment_create }}</span></a>
-       </div>
-       <br />
+        <div class="object-list-buttons">
+           <a href="{% url 'my_project:taskcomment_create' task.pk %}">{{ button_taskcomment_create }}</span></a>
+        </div>
+        <br />
         {% for taskcomment in nodes %}
            <div class="comment-entry">
-            <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
+              <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
               <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
                  {{ taskcomment.time }} час. | 
                  {{ task.project.currency.symbol }}{{ taskcomment.cost }}</span></b>
-            <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
+              <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
+              <em style="font-size: 70%;">Файлы</em style="font-size: 70%;">
+              {% for f in taskcomment.files %}
+                 <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
+              {% endfor %}
+              <hr>
            </div>           
         {% endfor %}
 
