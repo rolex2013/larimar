@@ -397,6 +397,19 @@ class TaskCreate(AddFilesMixin, CreateView):
        #self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели       
        self.object = form.save()
        af = self.add_files(form, 'project', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       historyjson = {"Задача": self.object.name,
+                      "Статус": self.object.status.name, 
+                      "Начало": self.object.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                      "Окончание": self.object.dateend.strftime('%d.%m.%Y %H:%M'),
+                      "Тип в иерархии": self.object.structure_type.name,
+                      "Тип": self.object.type.name,
+                      "Стоимость": str(self.object.cost),
+                      "Выполнен на, %": str(self.object.percentage),
+                      "Исполнитель": self.object.assigner.username,
+                      "Активность": '✓' if self.object.is_active else '-'
+                      #, "Участники":self.object.members.username
+                     }
+       ModelLog.objects.create(componentname='tsk', modelname="Task", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))       
        return super().form_valid(form)        
 
 class TaskUpdate(AddFilesMixin, UpdateView):    
@@ -418,8 +431,22 @@ class TaskUpdate(AddFilesMixin, UpdateView):
        return kwargs       
 
     def form_valid(self, form):
-       #self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
+       self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
        af = self.add_files(form, 'project', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       old = Task.objects.filter(pk=self.object.pk).first()
+       historyjson = {"Задача":'' if self.object.name == old.name else self.object.name,
+                      "Статус":'' if self.object.status.name == old.status.name else self.object.status.name, 
+                      "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                      "Окончание":'' if self.object.dateend == old.dateend else self.object.dateend.strftime('%d.%m.%Y %H:%M'),                
+                      "Тип в иерархии":'' if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
+                      "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
+                      "Стоимость":'' if self.object.cost == old.cost else str(self.object.cost),
+                      "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
+                      "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+                      "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
+                      #, "Участники":self.members.username
+                     }
+       ModelLog.objects.create(componentname='tsk', modelname="Task", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))                            
        return super().form_valid(form) #super(TaskUpdate, self).form_valid(form)
 
 #class TaskDelete(DeleteView):    

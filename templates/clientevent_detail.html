@@ -52,9 +52,16 @@
 
         {% for eventcomment in nodes %}
            <div class="comment-entry">
-            <b>{{ eventcomment.name }} : <span style="font-size: 70%; color: blue;">{{ eventcomment.datecreate }} | 
-              <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' eventcomment.author.pk ' ' %}">{{ eventcomment.author.username }}</a></span></i></span></b>
-            <p>{% autoescape off %}{{ eventcomment.description }}{% endautoescape %}</p>
+               <b>{{ eventcomment.name }} : <span style="font-size: 70%; color: blue;">{{ eventcomment.datecreate }} | 
+               <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' eventcomment.author.pk ' ' %}">{{ eventcomment.author.username }}</a></span></i></span></b>
+               <p>{% autoescape off %}{{ eventcomment.description }}{% endautoescape %}</p>
+              {% if taskcomment.files %}
+                 <em style="font-size: 70%;">Файлы</em style="font-size: 70%;">
+              {% endif %}
+              {% for f in eventcomment.files %}
+                 <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
+              {% endfor %}
+              <hr>
            </div>           
         {% endfor %}
 

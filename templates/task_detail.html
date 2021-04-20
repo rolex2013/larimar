@@ -79,7 +79,9 @@
                  {{ taskcomment.time }} час. | 
                  {{ task.project.currency.symbol }}{{ taskcomment.cost }}</span></b>
               <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
-              <em style="font-size: 70%;">Файлы</em style="font-size: 70%;">
+              {% if taskcomment.files %}
+                 <em style="font-size: 70%;">Файлы</em style="font-size: 70%;">
+              {% endif %}
               {% for f in taskcomment.files %}
                  <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
               {% endfor %}

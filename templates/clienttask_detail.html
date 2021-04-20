@@ -61,24 +61,20 @@
            <br />      
    
            {% for taskcomment in nodes %}
-              <!--<div class="comment-entry">-->
                <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} | 
                  <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
                     {{ taskcomment.time }} час. | 
                     {{ clienttask.client.currency.symbol }}{{ taskcomment.cost }}</span></b>
                <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
-               <div class="table-files">
-                  {% for file in files_comment %}
-                     <div class="row-files">
-                         <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div> 
-                         <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div> 
-                         <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div> 
-                         <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
-                     </div>
-                  {% endfor %}          
-               </div>
-              <!--</div>           -->
+               {% if taskcomment.files %}
+                  <em style="font-size: 70%;">Файлы</em>
+               {% endif %}
+               {% for f in taskcomment.files %}
+                  <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
+               {% endfor %}
+               <hr>               
            {% endfor %}
+           
          </div>
    
          <div class="object-list-right">
@@ -91,11 +87,9 @@
             <br />      
     
             {% for event in enodes %}
-               <!--<div class="comment-entry">-->
-                <b><a href="{% url 'my_crm:clienteventcomments' event.pk %}">{{ event.name }}</a> : <span style="font-size: 70%; color: blue;">{{ event.datecreate }} | 
+               <b><a href="{% url 'my_crm:clienteventcomments' event.pk %}">{{ event.name }}</a> : <span style="font-size: 70%; color: blue;">{{ event.datecreate }} | 
                   <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' event.author.pk ' ' %}">{{ event.author.username }}</a></span></i></span></b>
-                <p>{% autoescape off %}{{ event.description }}{% endautoescape %}</p>
-               <!--</div>           -->
+               <p>{% autoescape off %}{{ event.description }}{% endautoescape %}</p>
             {% endfor %}
          </div>
 

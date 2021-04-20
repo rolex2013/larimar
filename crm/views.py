@@ -18,6 +18,7 @@ from companies.models import Company
 #from clients.models import Dict_clientStatus, Dict_TaskStatus
 from companies.forms import CompanyForm
 
+from main.models import ModelLog
 from crm.models import Client, Dict_ClientStatus, Dict_ClientType
 from crm.models import ClientTask, ClientTaskComment, Dict_ClientTaskStatus, Dict_ClientTaskType #, ClientStatusLog, ClientTaskStatusLog
 from crm.models import ClientEvent, ClientEventComment, Dict_ClientEventStatus, Dict_ClientEventType, ClientFile #, ClientEventStatusLog
@@ -146,7 +147,28 @@ class ClientCreate(AddFilesMixin, CreateView):
        form.instance.author_id = self.request.user.id
        self.object = form.save() # Созадём нового клиента
        af = self.add_files(form, 'crm', 'client') # добавляем файлы из формы (метод из AddFilesMixin)
-       # тут пишем историю
+       # Делаем первую запись в историю изменений проекта
+       self_user_username = ''        
+       if self.object.user:
+          self_user_username = self.user.username
+       historyjson = {"Имя": self.object.firstname,
+                      "Отчество": self.object.middlename,
+                      "Фамилия": self.object.lastname,
+                      "Пользователь": '-' if self_user_username == '' else self_user_username,                       
+                      "E-mail": self.object.email,
+                      "Телефон": self.object.phone,  
+                      "Тип": self.object.type.name,
+                      "Статус": self.object.status.name,
+                      "Ст-ть": str(self.object.cost),
+                      "Валюта": self.object.currency.code_char,
+                      "Выполнен на, %": str(self.object.percentage),
+                      "Инициатор": self.object.initiator.name,
+                      "Менеджер": self.object.manager.username,
+                      "Оповещ.": '✓' if self.object.is_notify else '-',
+                      "Протокол": self.object.protocoltype.name,
+                      "Активн.": '✓' if self.object.is_active else '-'
+                     }         
+       ModelLog.objects.create(componentname='clnt', modelname="Client", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))       
        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -180,25 +202,32 @@ class ClientUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):        
         self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
-        af = self.add_files(form, 'crm', 'client') # добавляем файлы из формы (метод из AddFilesMixin)
-        """
-        # Получаем старые значения для дальнейшей проверки на изменения
-        old = Project.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
-        historyjson = {"Проект":'' if self.object.name == old.name else self.object.name,
-                       "Статус":'' if self.object.status.name == old.status.name else self.object.status.name, 
-                       "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y'), 
-                       "Окончание":'' if self.object.dateend == old.dateend else self.object.dateend.strftime('%d.%m.%Y'),
-                       "Тип в иерархии":'' if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
+        af = self.add_files(form, 'crm', 'client') # добавляем файлы из формы (метод из AddFilesMixin)        
+        old = Client.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        old_user_username = ''
+        self_user_username = ''
+        if old.user:
+           old_user_username = old.user.username                 
+        if self.object.user:
+           self_user_username = self.object.user.username                
+        historyjson = {"Имя":'' if self.object.firstname == old.firstname else self.object.firstname,
+                       "Отчество":'' if self.object.middlename == old.middlename else self.object.middlename,
+                       "Фамилия":'' if self.object.lastname == old.lastname else self.object.lastname,
+                       "Пользователь":'' if self_user_username == old_user_username else '-' if self_user_username == '' else self_user_username,                       
+                       "E-mail":'' if self.object.email == old.email else self.object.email,
+                       "Телефон":'' if self.object.phone == old.phone else self.object.phone,  
                        "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
-                       "Стоимость":'' if self.object.cost == old.cost else str(self.object.cost),
-                       "Валюта":'' if self.object.currency.code_char == old.currency.code_char else str(self.object.currency.code_char),
+                       "Статус":'' if self.object.status.name == old.status.name else self.object.status.name,
+                       "Ст-ть":'' if self.object.cost == old.cost else str(self.object.cost),
+                       "Валюта":'' if self.object.currency.code_char == old.currency.code_char else self.object.currency.code_char,
                        "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
-                       "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
-                       "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
-                       #, "Участники":self.object.members.username
-                      }                                     
-        ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
-        """         
+                       "Инициатор":'' if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
+                       "Менеджер":'' if self.object.manager.username == old.manager.username else self.object.manager.username,
+                       "Оповещ.":'' if self.object.is_notify == old.is_notify else '✓' if self.object.is_notify else '-',
+                       "Протокол":'' if self.object.protocoltype.name == old.protocoltype.name else self.object.protocoltype.name,
+                       "Активн.":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
+                      }                           
+        ModelLog.objects.create(componentname='clnt', modelname="Client", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))               
         return super().form_valid(form) #super(ProjectUpdate, self).form_valid(form)       
 
 
@@ -317,6 +346,20 @@ class ClientTaskCreate(AddFilesMixin, CreateView):
        form.instance.author_id = self.request.user.id
        self.object = form.save() # Созадём новую задачу клиента       
        af = self.add_files(form, 'crm', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       historyjson = {"Задача": self.object.name,
+                      "Статус": self.object.status.name, 
+                      "Начало": self.object.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                      "Окончание": self.object.dateend.strftime('%d.%m.%Y %H:%M'),
+                      "Тип в иерархии": self.object.structure_type.name,
+                      "Тип": self.object.type.name,
+                      "Стоимость": str(self.object.cost),
+                      "Выполнен на, %": str(self.object.percentage),
+                      "Инициатор": self.object.initiator.name,
+                      "Исполнитель": self.object.assigner.username,
+                      "Активность": '✓' if self.object.is_active else '-'
+                      #, "Участники":self.object.members.username
+                     }
+       ModelLog.objects.create(componentname='cltsk', modelname="ClientTask", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))       
        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -347,7 +390,23 @@ class ClientTaskUpdate(AddFilesMixin, UpdateView):
        return kwargs
 
     def form_valid(self, form):
+       self.object = form.save(commit=False)
        af = self.add_files(form, 'crm', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       old = ClientTask.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта 
+       historyjson = {"Задача":'' if self.object.name == old.name else self.object.name,
+                      "Статус":'' if self.object.status.name == old.status.name else self.object.status.name, 
+                      "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                      "Окончание":'' if self.object.dateend == old.dateend else self.object.dateend.strftime('%d.%m.%Y %H:%M'),
+                      "Тип в иерархии":'' if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
+                      "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
+                      "Стоимость":'' if self.object.cost == old.cost else str(self.object.cost),
+                      "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
+                      "Инициатор":'' if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
+                      "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+                      "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
+                      #, "Участники":self.members.username
+                     }
+       ModelLog.objects.create(componentname='cltsk', modelname="ClientTask", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))                          
        return super().form_valid(form)            
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
@@ -515,7 +574,34 @@ class ClientEventCreate(AddFilesMixin, CreateView):
           form.instance.task_id = self.kwargs['taskid']
        form.instance.author_id = self.request.user.id
        self.object = form.save() # Созадём новое событие клиента
-       af = self.add_files(form, 'crm', 'event') # добавляем файлы из формы (метод из AddFilesMixin)       
+       af = self.add_files(form, 'crm', 'event') # добавляем файлы из формы (метод из AddFilesMixin)
+       self_task = ''
+       self_task_id = 0
+       self_task_name = ''
+       if self.object.task:
+          self_task = self.object.task
+          self_task_id = self.object.task.id
+          self_task_name = self.object.task.name
+       self_status_name = ''
+       if self.object.status:
+          self_status_name = self.object.status.name          
+       self_type_name = ''
+       if self.object.type:
+          self_type_name = self.object.type.name
+       historyjson = {"Событие": self.object.name,
+                      #"Задача": '#'+str(self_task_id)+'. '+self_task_name,
+                      "Задача": '#'+str(self_task_id)+'. '+self_task_name if self_task else '-',                              
+                      "Статус": self_status_name if self_status_name else '-', 
+                      "Начало": self.object.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                      "Окончание": self.object.dateend.strftime('%d.%m.%Y %H:%M'),
+                      "Тип": self_type_name if self_type_name else '-',
+                      "Место": self.object.place if self.object.place else '-',
+                      "Инициатор": self.object.initiator.name,
+                      "Исполнитель": self.object.assigner.username,
+                      "Активность": '✓' if self.object.is_active else '-'
+                      #, "Участники":self.object.members.username
+                     }
+       ModelLog.objects.create(componentname='clevnt', modelname="ClientEvent", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))                
        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -546,7 +632,35 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
        return kwargs
 
     def form_valid(self, form):
+       self.object = form.save(commit=False)       
        af = self.add_files(form, 'crm', 'event') # добавляем файлы из формы (метод из AddFilesMixin)
+       old = ClientEvent.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+       #old_task_id = 0
+       old_task = ''
+       self_task = ""       
+       self_task_id = 0
+       self_task_name = ''
+       if old.task:
+          old_task = old.task
+          old_task_id = old.task.id
+          #old_task_name = old.task.name
+       if self.object.task:
+          self_task = self.object.task
+          self_task_id = self.object.task.id
+          self_task_name = self.object.task.name          
+       historyjson = {"Событие":'' if self.object.name == old.name else self.name,
+                      "Задача":'' if self_task == old_task else ('#'+str(self_task_id)+'. '+self_task_name) if self_task else '-',        
+                      "Статус":'' if self.object.status.name == old.status.name else self.object.status.name, 
+                      "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y %H:%M'), 
+                      "Окончание":'' if self.object.dateend == old.dateend else self.object.dateend.strftime('%d.%m.%Y %H:%M'),
+                      "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
+                      "Место":'' if self.object.place == old.place else self.object.place,
+                      "Инициатор":'' if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
+                      "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+                      "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
+                      #, "Участники":self.members.username
+                     }              
+       ModelLog.objects.create(componentname='clevnt', modelname="ClientEvent", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
        return super().form_valid(form)                 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

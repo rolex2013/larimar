@@ -175,38 +175,7 @@ class Task(MPTTModel):
         return reverse('my_project:taskcomments', kwargs={'taskid': self.pk})
         #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
     def __str__(self):
-         return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
-    def save(self, *args, **kwargs):  
-        # Получаем старые значения для дальнейшей проверки на изменения
-        old = Task.objects.filter(pk=self.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
-        super().save(*args, **kwargs)
-        if old:
-           historyjson = {"Задача":'' if self.name == old.name else self.name,
-                          "Статус":'' if self.status.name == old.status.name else self.status.name, 
-                          "Начало":'' if self.datebegin == old.datebegin else self.datebegin.strftime('%d.%m.%Y %H:%M'), 
-                          "Окончание":'' if self.dateend == old.dateend else self.dateend.strftime('%d.%m.%Y %H:%M'),
-                          "Тип в иерархии":'' if self.structure_type.name == old.structure_type.name else self.structure_type.name,
-                          "Тип":'' if self.type.name == old.type.name else self.type.name,
-                          "Стоимость":'' if self.cost == old.cost else str(self.cost),
-                          "Выполнен на, %":'' if self.percentage == old.percentage else str(self.percentage),
-                          "Исполнитель":'' if self.assigner.username == old.assigner.username else self.assigner.username,
-                          "Активность":'' if self.is_active == old.is_active else '✓' if self.is_active else '-'
-                          #, "Участники":self.members.username
-                         }
-        else:
-           historyjson = {"Задача": self.name,
-                          "Статус": self.status.name, 
-                          "Начало": self.datebegin.strftime('%d.%m.%Y %H:%M'), 
-                          "Окончание": self.dateend.strftime('%d.%m.%Y %H:%M'),
-                          "Тип в иерархии": self.structure_type.name,
-                          "Тип": self.type.name,
-                          "Стоимость": str(self.cost),
-                          "Выполнен на, %": str(self.percentage),
-                          "Исполнитель": self.assigner.username,
-                          "Активность": '✓' if self.is_active else '-'
-                          #, "Участники":self.members.username
-                         }
-        ModelLog.objects.create(componentname='tsk', modelname="Task", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson))                                            
+         return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')                           
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     
@@ -257,40 +226,3 @@ class ProjectFile(models.Model):
     def __str__(self):
         return str(self.id) + ' ' + self.uname #file.name
 
-"""
-class ProjectStatusLog(models.Model):
-    #LOG_TYPES = (('P', 'Project'), ('T', 'Task'))
-    #logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
-    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='resultprojectlog', verbose_name="Проект")
-    status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status_log', verbose_name="Статус Проекта")
-    date = models.DateTimeField("Дата", auto_now_add=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    description = models.CharField("Комментарий", max_length=1024)
-    is_active = models.BooleanField("Активность", default=True)
-    
-    def __str__(self):
-        return (self.project.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
-    
-    class Meta:
-        unique_together = ('project', 'status', 'date', 'author')
-        ordering = ('project', 'date')
-        verbose_name = 'История Проекта'
-        verbose_name_plural = 'Истории Проектов'
-
-class TaskStatusLog(models.Model):
-    task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='resulttasklog', verbose_name="Задача")
-    status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_status_log', verbose_name="Статус Задачи")
-    date = models.DateTimeField("Дата", auto_now_add=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    description = models.CharField("Комментарий", max_length=1024)
-    is_active = models.BooleanField("Активность", default=True)
-    
-    def __str__(self):
-        return (self.task.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
-    
-    class Meta:
-        unique_together = ('task', 'status', 'date', 'author')
-        ordering = ('task', 'date')
-        verbose_name = 'История Задачи'
-        verbose_name_plural = 'Истории Задач'                
-"""
