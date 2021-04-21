@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'finance', 
     'projects',
     'crm',
+    'docs',
 ]
 
 BOOTSTRAP4 = {
@@ -225,10 +226,10 @@ if sys.platform == "win32":
    }
    """
    sentry_sdk.init(
-      dsn="https://<key>@localhost/larimar",
+      dsn="https://add7d976d667443da9a89bf0064d887e@localhost/5729108",
       integrations=[DjangoIntegration()]
-   )"""
-
+   )
+   """
 else:
 
    ALLOWED_HOSTS = ['1yes.larimaritgroup.ru']
