@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import sys
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -220,6 +223,11 @@ if sys.platform == "win32":
    DEBUG_TOOLBAR_CONFIG = {
      "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
    }
+   """
+   sentry_sdk.init(
+      dsn="https://<key>@localhost/larimar",
+      integrations=[DjangoIntegration()]
+   )"""
 
 else:
 
@@ -246,4 +254,16 @@ else:
       }
    }
 
+sentry_sdk.init(
+    dsn="https://add7d976d667443da9a89bf0064d887e@o576033.ingest.sentry.io/5729108",
+    integrations=[DjangoIntegration()],
 
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
