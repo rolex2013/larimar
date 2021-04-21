@@ -36,7 +36,11 @@ INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`r
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (9,'Клиенты','/crm/clients_page0/',25,1,1,2,6,0,6,2,'',NULL);
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (10,'Мой профиль','/accounts/profile0/',30,1,1,2,7,0,3,2,'',NULL);
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (11,'Выход','/accounts/logout/',35,1,1,2,3,0,1,2,'',NULL);
-
+*/
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (12,Документы,/docs/,17,1,1,6,6,0,7,2,"",NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (13,Документооборот,/docs/doc_list/,18,1,2,3,6,1,7,2,"",12);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (14,Файлы,/docs/file_list/,19,1,4,5,6,1,7,2,"",12);
+/*
 INSERT INTO `main_dict_protocoltype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (1,'e-mail',1,'e-mail',1);
 INSERT INTO `main_dict_protocoltype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (2,'sms',5,'sms',1);
 INSERT INTO `main_dict_protocoltype` (`id`,`name`,`sort`,`name_lang`,`is_active`) VALUES (3,'local',10,'local',1);
