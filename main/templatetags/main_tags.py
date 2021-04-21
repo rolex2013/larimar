@@ -19,7 +19,8 @@ def left_menu(context, menuid=0, is_auth=False):
           nodes = MenuItem.objects.filter(Q(menu_id=menuid) & Q(is_active=True) & (Q(component_id__in=context.request.session['_auth_user_component_id']) | Q(component_id=None)))  
     else:
        nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
-    return (nodes.order_by())
+    #return (nodes.order_by())
+    return (nodes)
 
 @register.simple_tag(takes_context=True)
 def group_name(context, is_auth=False):
