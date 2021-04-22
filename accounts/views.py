@@ -21,7 +21,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 #from django.core import serializers
 
-from .forms import UserRegistrationForm, UserEnviteForm, UserProfileForm
+from .forms import UserRegistrationForm, UserEnviteForm, UserAddForm, UserProfileForm
 
 from main.models import Notification, Meta_ObjectType
 #from .tables import NotificationTable
@@ -167,6 +167,32 @@ def register(request):
        user_form = UserRegistrationForm()
     return render(request, 'registration/register.html', {'user_form': user_form, 'param': 'register',})
 
+def add(request, companyid=1):
+    if request.method == 'POST':
+       user_form = UserAddForm(request.POST)
+       if user_form.is_valid():
+          new_user = user_form.save(commit=False)
+          upr = UserProfile.objects.filter(user_id=new_user.user.id).first()
+          if upr == None:
+             UserProfile.objects.create(user_id=new_user.user.id, company_id=companyid, is_notify=True, protocoltype_id=1, description='Профиль создан Администратором Организации')
+          if user_form['is_staff'].value() == True:
+             # для Сотрудника
+             UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=1, group_id=7)
+             #UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=4, group_id=7)  #доступ к Организации д.б. только у Админа Организации (group_id=2)
+             UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=5, group_id=7)
+             UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=6, group_id=7)
+             UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=7, group_id=7)
+             UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=8, group_id=7)
+          else:
+             # для Клиента
+             UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=1, group_id=9)   # для меню
+             UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=6, group_id=9)   # для своих Задач в CRM
+             UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=8, group_id=9)   # для заказов товара
+          return render(request, 'registration/register_done.html', {'new_user': new_user.user, 'param': 'add', 'companyid': companyid,})
+    else:
+       user_form = UserAddForm()
+    return render(request, 'registration/register.html', {'user_form': user_form, 'param': 'add', 'companyid': companyid})
+
 def envite(request, companyid=1):
     if request.method == 'POST':
        user_form = UserEnviteForm(request.POST)
@@ -198,9 +224,7 @@ def envite(request, companyid=1):
           text_plain = 'Вы приглашены в Систему 1YES! по адресу: http://'+str(site_name)+'/accounts/login\r\nЛогин: '+new_user.username+'r\n\Пароль: '+pss+'r\n\r\n\Добро пожаловать в нашу команду!'
           text_html = '<p>Вы приглашены в Систему 1YES! по адресу: <a href="http://'+str(site_name)+'/accounts/login">http://'+str(site_name)+'/accounts/login</a></p><p>Логин: '+new_user.username+'</p><p>Пароль: '+pss+'</p><p>Добро пожаловать в нашу команду!</p>'
           send_mail('1YES! Приглашение в Систему', text_plain, settings.EMAIL_HOST_USER, [new_user.email], html_message=text_html)
-          return render(request, 'registration/register_done.html', {'new_user': new_user, 
-                                                                     'companyid': companyid,
-                                                                    })
+          return render(request, 'registration/register_done.html', {'new_user': new_user, 'param': 'envite', 'companyid': companyid,})
     else:
        user_form = UserEnviteForm()
     return render(request, 'registration/register.html', {'user_form': user_form, 'param': 'envite', 'companyid': companyid})    

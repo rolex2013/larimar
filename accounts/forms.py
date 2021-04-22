@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import UserProfile
-from companies.models import Company
+from companies.models import Company, UserCompanyComponentGroup
 from mptt.forms import MoveNodeForm, TreeNodeChoiceField
 
 from django.utils.translation import ugettext_lazy as _
@@ -24,7 +24,38 @@ class UserRegistrationForm(forms.ModelForm):
     #def clean(self):
     #    usr = form.save()
     #    UserProfile.objects.create(user_id=usr.id) 
-    #    return super(CompanyCreate, self).form_valid(form)  
+    #    return super(CompanyCreate, self).form_valid(form)
+"""
+class UserAddForm(forms.Select):
+    #user = forms.ChoiceField(UserProfile.objects.filter('is_active=True'))
+    #user = forms.ChoiceField(label="", initial='', widget=forms.Select({"vvfgfg","kkjkjkjkkjk"}), required=True)
+    a = 1
+
+    class Meta:
+        model = User
+        fields = ('username', 'is_staff')
+"""
+class UserSelect(forms.Select):
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        option = super().create_option(name, value, label, selected, index, subindex, attrs)
+        if value:
+            option['attrs']['username'] = value.instance.username
+        return option
+
+class UserAddForm(forms.ModelForm):
+
+    is_staff = forms.BooleanField(label='Отметьте, если это сотрудник, а не клиент', required=False)
+
+    # Надо из выпадающего списка юзеров исключить уже привязанных к этой организации
+    #def __init__(self, *args, **kwargs):
+    #    super().__init__(*args, **kwargs)
+    #    uc = UserCompanyComponentGroup.objects.filter(company_id not companyid).values_list('user_id', flat=True)
+    #    usr = User.objects.filter(id__in=uc, is_active=True)
+
+    class Meta:
+        model = UserCompanyComponentGroup
+        fields = ['user']
+        widgets = {'user': UserSelect}
 
 class UserEnviteForm(forms.ModelForm):
     password = forms.CharField(label='Пароль', widget=forms.PasswordInput)

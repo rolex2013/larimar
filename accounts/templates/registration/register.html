@@ -38,6 +38,24 @@
             <!--</div>-->
          </div>
 
+      {% elif param == 'add' %}
+
+         <div class="object-detail">
+            <h3>Добавить пользователя в организацию</h3>
+            <p>Пожалуйста, выберите пользователя:</p>
+            <!--<div class="col-md-offset-3 col-md-6 voffset-60">-->
+            <form action="{% url 'my_account:add' companyid %}" method="post">
+                <!--{ load bootstrap4 %}-->
+                {% csrf_token %}
+                {{ user_form.as_p }}
+                <!--{ bootstrap_form registration_form %}-->
+                <div class="object-detail-buttons">
+                   <!--<input type="submit" value="Создать">-->
+                   <button type="submit">Добавить</button>
+                </div>
+            </form>
+            <!--</div>-->
+
       {% else %}
 
          <div class="object-detail">

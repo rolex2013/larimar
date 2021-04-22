@@ -136,8 +136,9 @@ class MenuItem(MPTTModel):
     def __str__(self):
         return (self.menu.name + ' ' + self.title)
     class MPTTMeta:
-        order_insertion_by = ['title']
+        #order_insertion_by = ['title']
+        order_insertion_by = ['sort']
     class Meta:
-        ordering = ('menu', 'sort')
+        #ordering = ('menu', 'sort')
         verbose_name = 'Пункты меню'
         verbose_name_plural = 'Пункты меню'        
