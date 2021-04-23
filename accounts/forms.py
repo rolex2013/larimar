@@ -47,11 +47,15 @@ class UserAddForm(forms.ModelForm):
     is_staff = forms.BooleanField(label='Отметьте, если это сотрудник, а не клиент', required=False)
 
     # Надо из выпадающего списка юзеров исключить уже привязанных к этой организации
-    #def __init__(self, *args, **kwargs):
-    #    super().__init__(*args, **kwargs)
-    #    uc = UserCompanyComponentGroup.objects.filter(company_id not companyid).values_list('user_id', flat=True)
-    #    usr = User.objects.filter(id__in=uc, is_active=True)
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        companyid = self.instance.id
+        #uc = UserCompanyComponentGroup.objects.filter(is_active=True).exclude(company_id=companyid, user__is_active=True).values_list('user_id', flat=True).distinct()
+        #usr = User.objects.filter(id__in=uc, is_active=True)
+        uc = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid, user__is_active=True).values_list('user', flat=True).distinct()
+        usr = User.objects.filter(is_active=True).exclude(id__in=uc)
+        self.fields['user'].queryset = usr
+        #print(uc)
     class Meta:
         model = UserCompanyComponentGroup
         fields = ['user']

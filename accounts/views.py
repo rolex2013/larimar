@@ -190,7 +190,8 @@ def add(request, companyid=1):
              UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=8, group_id=9)   # для заказов товара
           return render(request, 'registration/register_done.html', {'new_user': new_user.user, 'param': 'add', 'companyid': companyid,})
     else:
-       user_form = UserAddForm()
+       comp = Company.objects.get(id=companyid)
+       user_form = UserAddForm(instance=comp)
     return render(request, 'registration/register.html', {'user_form': user_form, 'param': 'add', 'companyid': companyid})
 
 def envite(request, companyid=1):
