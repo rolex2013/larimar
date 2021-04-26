@@ -1,86 +1,91 @@
 {% extends 'base.html' %}
 
 {% block client %}
-   <!-- Защита от прямого доступа к проекту -->
-   {% if current_client.company.id in user_companies %}
+    <!-- Защита от прямого доступа к проекту -->
+    {% if current_client.company.id in user_companies %}
 
-   <div class="object-detail">
-       <!--<div class="circle-left"></div><div class="circle-right"></div>-->
-       <h3>{{ current_client.lastname }} {{ current_client.firstname }} {{ current_client.middlename }}
-       {% if not current_client.is_active %}
-          (Клиент перемещён в архив)
-       {% endif %}
-       </h3>
-       <p>{% autoescape off %}{{ current_client.description }}{% endautoescape %}</p>
-       <i><p>Организация: <a href="{% url 'my_crm:clients' current_client.company.pk 0 %}">{{ current_client.company }}</a></p></i>
-       {% if current_client.parent %}
-          <p>Уровень выше: <a href="{% url 'my_crm:clienttasks' current_client.parent.pk 0 %}">{{ current_client.parent.name }}</a></p>
-       {% else %}
-          <!-- <p>: <a href="{ url 'my_crm:clients' current_client.company.pk current_client.parent.pk %}">{{ current_client.parent.name }}</a></p>-->
-       {% endif %}
-       <p>Бюджет: {{ current_client.cost }} {{ current_client.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
-       <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_client.manager.pk ' ' %}">{{ current_client.manager }}</a></p>     
-       <!--<p>Создан: {{ current_client.datecreate }}</p>
-       <p>Закрыт: {{ current_client.dateclose }}</p>-->
-       <p>Тип: {{ current_client.type }}</p>
-       <p>Статус: {{ current_client.status }}</p>
-       <p>Инициатор: {{ current_client.initiator }}</p>
-       <p>Затраченное время, час.: {{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>       
-       <p>Выполнен на: {{ current_client.percentage }} %</p>
-       <p><i>Участники: 
-       {% for u in current_client.members.all %}
-          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
-       {% endfor %}
-       </i></p>
-       <em>Автор: {{ current_client.author }}</em><br /> 
-       <!--<em>Участники: { current_client.members.name }}</em><br /> -->
-       <em>Дата: {{ current_client.datecreate }}</em>
-       <p>&nbsp;</p>
+        <div class="object-detail">
+            <div>
+                <div class="object-detail-header">
+                    <!--<div class="circle-left"></div><div class="circle-right"></div>-->
+                    <h3>{{ current_client.lastname }} {{ current_client.firstname }} {{ current_client.middlename }}=============================
+                        {% if not current_client.is_active %}
+                            (Клиент перемещён в архив)
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="object-detail-left">
+                    <p>{% autoescape off %}{{ current_client.description }}{% endautoescape %}</p>
+                    <i><p>Организация: <a href="{% url 'my_crm:clients' current_client.company.pk 0 %}">{{ current_client.company }}</a></p></i>
+                    {% if current_client.parent %}
+                        <p>Уровень выше: <a href="{% url 'my_crm:clienttasks' current_client.parent.pk 0 %}">{{ current_client.parent.name }}</a></p>
+                    {% else %}
+                        <!-- <p>: <a href="{ url 'my_crm:clients' current_client.company.pk current_client.parent.pk %}">{{ current_client.parent.name }}</a></p>-->
+                    {% endif %}
+                    <p>Бюджет: {{ current_client.cost }} {{ current_client.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
+                    <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_client.manager.pk ' ' %}">{{ current_client.manager }}</a></p>
+                    <!--<p>Создан: {{ current_client.datecreate }}</p>
+                    <p>Закрыт: {{ current_client.dateclose }}</p>-->
+                    <p>Тип: {{ current_client.type }}</p>
+                    <p>Статус: {{ current_client.status }}</p>
+                    <p>Инициатор: {{ current_client.initiator }}</p>
+                    <p>Затраченное время, час.: {{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
+                    <p>Выполнен на: {{ current_client.percentage }} %</p>
+                    <p><i>Участники:
+                        {% for u in current_client.members.all %}
+                            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
+                        {% endfor %}
+                    </i></p>
+                    <em>Автор: {{ current_client.author }}</em><br />
+                    <!--<em>Участники: { current_client.members.name }}</em><br /> -->
+                    <em>Дата: {{ current_client.datecreate }}</em>
+                    <p>&nbsp;</p>
+                </div>
+                <div class="object-detail-right">
+                    {% include 'objectfile_list.html' %}
+                </div>
+            </div>
+            <!--{ if user.is_authenticated and user.id == current_client.author_id  %}-->
+            <div class="object-detail-buttons">
+                <!--<a href="{% url 'my_crm:client_create' current_client.company.id %}">{{ button_client_create }}</a>-->
+                <a href="{% url 'my_crm:client_update' current_client.pk %}">{{ button_client_update }}</a>
+                <!--<a href="{ url 'my_crm:client_history' current_client.pk %}">{ button_client_history }}</a>-->
+                <a href="{% url 'my_main:object_history' 'clnt' current_client.pk %}">{{ button_client_history }}</a>
+            </div>
+            <!--{ endif %}-->
 
-       {% include 'objectfile_list.html' %}
+        </div>
 
-       <!--{ if user.is_authenticated and user.id == current_client.author_id  %}-->
-       <div class="object-detail-buttons">
-           <!--<a href="{% url 'my_crm:client_create' current_client.company.id %}">{{ button_client_create }}</a>-->
-           <a href="{% url 'my_crm:client_update' current_client.pk %}">{{ button_client_update }}</a>
-           <!--<a href="{ url 'my_crm:client_history' current_client.pk %}">{ button_client_history }}</a>-->
-           <a href="{% url 'my_main:object_history' 'clnt' current_client.pk %}">{{ button_client_history }}</a>
-       </div>
-       <!--{ endif %}-->
-       
-       <!--<div class="circle-left"></div><div class="circle-right"></div>       -->
-   </div>
+    {% else %}
 
-  {% else %}
+        <h4>Информация о Клиенте недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
 
-     <h4>Информация о Клиенте недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
-  
-  {% endif %}  
+    {% endif %}
 
 {% endblock client %}
 
 {% block list %}
-   <!-- Защита от прямого доступа к задачам проекта -->
-   {% if current_client.company.id in user_companies %}
+    <!-- Защита от прямого доступа к задачам проекта -->
+    {% if current_client.company.id in user_companies %}
 
-      <div class="object-list">
+        <div class="object-list">
 
-         <div class="object-list-wrapper">         
+            <div class="object-list-wrapper">
 
-            <div class="object-list-left">
-                 {% include 'clienttasks_list.html' %}           
+                <div class="object-list-left">
+                    {% include 'clienttasks_list.html' %}
+                </div>
+                <div class="object-list-right">
+                    {% include 'clientevents_list.html' %}
+                </div>
+
             </div>
-            <div class="object-list-right">
-                 {% include 'clientevents_list.html' %}              
-            </div>
 
-         </div>     
+        </div>
 
-      </div>  
-
-   {% else %}
-      <h5>Информация о задачах и событиях недоступна!</h5>
-   {% endif %}  
+    {% else %}
+        <h5>Информация о задачах и событиях недоступна!</h5>
+    {% endif %}
 
 {% endblock list %}
    

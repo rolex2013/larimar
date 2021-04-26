@@ -2,38 +2,41 @@
 
 {% block event %}
 
-<div class="object-detail">
+    <div class="object-detail">
+        <div>
+            <div class="object-detail-header">
+                <h4>Событие: {{ clientevent.name }}
+                    {% if not clientevent.is_active %}
+                        (Событие перемещено в архив)
+                    {% endif %}
+                </h4>
+            </div>
+            <div class="object-detail-left">
+                <p>{% autoescape off %}{{ clientevent.description }}{% endautoescape %}</p>
+                <i><p>Клиент: <a href="{% url 'my_crm:clienttasks' clientevent.client.pk 0 %}">{{ clientevent.client }}</a></p></i>
+                {% if clientevent.task %}
+                    <p>Связанная задача: <a href="{% url 'my_crm:clienttaskcomments' clientevent.task.id %}">{{ clientevent.task }}</a></p>
+                {% endif %}
+                <p>Исполнитель: <span class="hint hint--bottom hint--info" data-hint="Профиль исполнителя"><a href="{% url 'my_account:userprofile_detail' clientevent.assigner.pk ' ' %}">{{ clientevent.assigner }}</a></span></p>
+                <p>Начало: {{ clientevent.datebegin }}</p>
+                <p>Окончание: {{ clientevent.dateend }}</p>
+                <p>Тип: {{ clientevent.type }}</p>
+                <p>Статус: {{ clientevent.status }}</p>
+                <p>Инициатор: {{ clientevent.initiator }}</p>
+                <em>Автор: {{ clientevent.author }}</em><br />
+                <em>Дата: {{ clientevent.datecreate }}</em>
+                <p>&nbsp;</p>
+            </div>
+            <div class="object-detail-right">{% include 'objectfile_list.html' %}</div>
+        </div>
+        <div class="object-detail-buttons">
+            <!--<a href="{ url 'my_crm:clientevent_create' clientevent.client.id 0 %}">{{ button_clientevent_create }}</a>-->
+            <a href="{% url 'my_crm:clientevent_update' clientevent.pk %}">{{ button_clientevent_update }}</a>
+            <!--<a href="{ url 'my_crm:clientevent_history' clientevent.pk %}">{ button_clientevent_history }}</a>-->
+            <a href="{% url 'my_main:object_history' 'clevnt' clientevent.pk %}">{{ button_clientevent_history }}</a>
+        </div>
 
-      <p><h4>Событие: {{ clientevent.name }}
-        {% if not clientevent.is_active %}
-           (Событие перемещено в архив)
-        {% endif %}
-        </h4></p>      
-      <p>{% autoescape off %}{{ clientevent.description }}{% endautoescape %}</p>
-      <i><p>Клиент: <a href="{% url 'my_crm:clienttasks' clientevent.client.pk 0 %}">{{ clientevent.client }}</a></p></i>
-      {% if clientevent.task %}
-         <p>Связанная задача: <a href="{% url 'my_crm:clienttaskcomments' clientevent.task.id %}">{{ clientevent.task }}</a></p>
-      {% endif %}
-      <p>Исполнитель: <span class="hint hint--bottom hint--info" data-hint="Профиль исполнителя"><a href="{% url 'my_account:userprofile_detail' clientevent.assigner.pk ' ' %}">{{ clientevent.assigner }}</a></span></p>       
-      <p>Начало: {{ clientevent.datebegin }}</p>
-      <p>Окончание: {{ clientevent.dateend }}</p>
-      <p>Тип: {{ clientevent.type }}</p>
-      <p>Статус: {{ clientevent.status }}</p>
-      <p>Инициатор: {{ clientevent.initiator }}</p>        
-      <em>Автор: {{ clientevent.author }}</em><br />
-      <em>Дата: {{ clientevent.datecreate }}</em>              
-      <p>&nbsp;</p>
-
-      {% include 'objectfile_list.html' %}
-
-      <div class="object-detail-buttons">
-          <!--<a href="{ url 'my_crm:clientevent_create' clientevent.client.id 0 %}">{{ button_clientevent_create }}</a>-->
-          <a href="{% url 'my_crm:clientevent_update' clientevent.pk %}">{{ button_clientevent_update }}</a>
-          <!--<a href="{ url 'my_crm:clientevent_history' clientevent.pk %}">{ button_clientevent_history }}</a>-->
-          <a href="{% url 'my_main:object_history' 'clevnt' clientevent.pk %}">{{ button_clientevent_history }}</a>
-      </div>
-
-   </div>
+    </div>
 
 {% endblock %}
 
@@ -41,32 +44,32 @@
 
 {% block list %}
 
-   <div class="object-list">
+    <div class="object-list">
 
         <h5>Комментарии</h5>
 
-        <div class="object-list-buttons">        
-           <a href="{% url 'my_crm:clienteventcomment_create' clientevent.pk %}">{{ button_clienteventcomment_create }}</a>
+        <div class="object-list-buttons">
+            <a href="{% url 'my_crm:clienteventcomment_create' clientevent.pk %}">{{ button_clienteventcomment_create }}</a>
         </div>
-        <br />      
+        <br />
 
         {% for eventcomment in nodes %}
-           <div class="comment-entry">
-               <b>{{ eventcomment.name }} : <span style="font-size: 70%; color: blue;">{{ eventcomment.datecreate }} | 
+            <div class="comment-entry">
+                <b>{{ eventcomment.name }} : <span style="font-size: 70%; color: blue;">{{ eventcomment.datecreate }} |
                <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' eventcomment.author.pk ' ' %}">{{ eventcomment.author.username }}</a></span></i></span></b>
-               <p>{% autoescape off %}{{ eventcomment.description }}{% endautoescape %}</p>
-              {% if taskcomment.files %}
-                 <em style="font-size: 70%;">Файлы</em style="font-size: 70%;">
-              {% endif %}
-              {% for f in eventcomment.files %}
-                 <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
-              {% endfor %}
-              <hr>
-           </div>           
+                <p>{% autoescape off %}{{ eventcomment.description }}{% endautoescape %}</p>
+                {% if taskcomment.files %}
+                    <em style="font-size: 70%;">Файлы</em style="font-size: 70%;">
+                {% endif %}
+                {% for f in eventcomment.files %}
+                    <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
+                {% endfor %}
+                <hr>
+            </div>
         {% endfor %}
 
         <p>&nbsp;</p>
-        
-   </div>
+
+    </div>
 
 {% endblock list %}
