@@ -99,7 +99,21 @@ INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`d
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (6,'Поставщик',30,NULL,1,NULL);
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (7,'Наша компания',35,NULL,1,NULL);
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (8,'Сотрудник',40,NULL,1,NULL);
-
+*/
+INSERT INTO docs_dict_docstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (1, 'В разработке', null, 10, null, 0, 1);
+INSERT INTO docs_dict_doctaskstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (1, 'В очереди', '', 10, null, 0, 1);
+INSERT INTO docs_dict_doctaskstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (2, 'В работе', '', 20, null, 0, 1);
+INSERT INTO docs_dict_doctaskstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (3, 'Возврат', '', 30, null, 1, 1);
+INSERT INTO docs_dict_doctaskstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (4, 'Готово', '', 40, null, 1, 1);
+INSERT INTO docs_dict_doctaskstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (5, 'Отказ', '', 50, null, 1, 1);
+INSERT INTO docs_dict_doctasktype (id, name, description, sort, name_lang, is_active) VALUES (1, 'На подпись', '', 10, null, 1);
+INSERT INTO docs_dict_doctasktype (id, name, description, sort, name_lang, is_active) VALUES (2, 'На согласование', '', 20, null, 1);
+INSERT INTO docs_dict_doctasktype (id, name, description, sort, name_lang, is_active) VALUES (3, 'Для ознакомления', '', 30, null, 1);
+INSERT INTO docs_dict_doctasktype (id, name, description, sort, name_lang, is_active) VALUES (4, 'Для рецензирования', '', 40, null, 1);
+INSERT INTO docs_dict_doctype (id, name, description, sort, name_lang, is_active) VALUES (1, 'Проектный', 'Проектная документация', 10, null, 1);
+INSERT INTO docs_dict_doctype (id, name, description, sort, name_lang, is_active) VALUES (2, 'Финансовый', '', 20, null, 1);
+INSERT INTO docs_dict_doctype (id, name, description, sort, name_lang, is_active) VALUES (3, 'Управленческий', '', 30, null, 1);
+/*
 INSERT INTO `projects_dict_projecttype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (1,'Срочный',1,1,'Immediate');
 INSERT INTO `projects_dict_projecttype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (2,'Обычный',2,1,'Normal');
 INSERT INTO `projects_dict_projecttype` (`id`,`name`,`sort`,`is_active`,`name_lang`) VALUES (3,'Простой',3,1,'Simple');
