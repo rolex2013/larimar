@@ -90,7 +90,8 @@ def finance(request):
     #print(r)
 
     currency_list = Dict_Currency.objects.filter(is_active=True)
-    currencyrate_list = CurrencyRate.objects.filter(is_active=True)    
+    #currencyrate_list = CurrencyRate.objects.filter(is_active=True)
+    currencyrate_list = CurrencyRate.objects.filter(is_active=True, date__gte=(datetime.today() - timedelta(days=30))).exclude(currency_id=1)
 
     button_currencyrate_update = 'Обновить'
 

@@ -61,7 +61,7 @@ class ClientForm(forms.ModelForm):
            elif self.cleaned_data['manager'].id != self.initial['manager']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['manager'].id, is_active=True)
               objecttypeid = Meta_ObjectType.objects.get(shortname='clnt').id
-              send_mail('1YES! Вы назначены менеджерои Клиента.', 'Уведомляем о назначении Вам Клиента!', settings.EMAIL_HOST_USER, [user_profile.email])
+              send_mail('1YES! Вы назначены менеджером Клиента.', 'Уведомляем о назначении Вам Клиента!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           objecttype_id=objecttypeid,  
                                           objectid=self.initial['id'],            

@@ -26,6 +26,10 @@ from crm.models import Client, ClientTask, ClientTaskComment
 from crm.models import ClientEvent, ClientEventComment
 #from crm.models import ClientEventStatusLog
 
+from docs.models import Dict_DocType, Dict_DocStatus, Dict_DocTaskStatus, Dict_DocTaskType
+from docs.models import Doc, DocVer
+from docs.models import DocTask, DocTaskComment
+
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 
@@ -160,3 +164,21 @@ admin.site.register(ClientEventComment)
 #admin.site.register(ClientTaskStatusLog)
 
 #admin.site.register(ClientEventStatusLog)
+
+# docs
+
+admin.site.register(Dict_DocType)
+
+admin.site.register(Dict_DocStatus)
+
+admin.site.register(Dict_DocTaskType)
+
+admin.site.register(Dict_DocTaskStatus)
+
+admin.site.register(Doc)
+
+admin.site.register(DocVer)
+
+admin.site.register(DocTask)
+
+admin.site.register(DocTaskComment)

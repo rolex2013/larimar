@@ -1,3 +1,181 @@
 from django.db import models
 
-# Create your models here.
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+
+from mptt.models import MPTTModel, TreeForeignKey
+
+from ckeditor_uploader.fields import RichTextUploadingField
+
+#from main.models import ModelLog
+from companies.models import Company
+
+
+class Dict_DocType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    description = models.TextField("Описание", blank=True, null=True)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип документ'
+        verbose_name_plural = 'Типы документов'
+    def __str__(self):
+        return (self.name)
+
+class Dict_DocStatus(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    description = models.TextField("Описание", blank=True, null=True)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_close = models.BooleanField("Закрывает документ", default=False)
+    is_active = models.BooleanField("Активность", default=True)
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Статус документа'
+        verbose_name_plural = 'Статусы документов'
+    def __str__(self):
+        return (self.name)
+
+class Dict_DocTaskType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    description = models.TextField("Описание", blank=True, null=True)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип задачи'
+        verbose_name_plural = 'Типы задач'
+    def __str__(self):
+        return (self.name)
+
+class Dict_DocTaskStatus(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    description = models.TextField("Описание", blank=True, null=True)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_close = models.BooleanField("Закрывает задачу", default=False)
+    is_active = models.BooleanField("Активность", default=True)
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Статус задачи'
+        verbose_name_plural = 'Статусы задач'
+    def __str__(self):
+        return (self.name)
+
+class Doc(models.Model):
+    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='result_company_doc', verbose_name="Организация")
+    manager = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='result_manager_doc', verbose_name="Менеджер документа")
+    #user = models.OneToOneField('auth.User', blank=True, null=True, on_delete=models.CASCADE, related_name='result_user_doc', verbose_name="Пользователь")
+    #is_notify = models.BooleanField("Оповещать", default=False)
+    #protocoltype = models.ForeignKey('main.Dict_ProtocolType', blank=True, null=True, on_delete=models.CASCADE, related_name='result_protocoltype_client', verbose_name="Протокол оповещения")
+    name = models.CharField("Наименование", max_length=64)
+    type = models.ForeignKey('Dict_DocType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='doc_type_doc', verbose_name="Тип документа")
+    status = models.ForeignKey('Dict_DocStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='doc_status_doc', verbose_name="Статус документа")
+    description = RichTextUploadingField("Описание", blank=True, null=True)
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    datepublic = models.DateTimeField("Дата публикации", auto_now_add=False, blank=True, null=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='doc_author', verbose_name="Автор")
+    members = models.ManyToManyField('auth.User', related_name='doc_members', verbose_name="Участники")
+    is_active = models.BooleanField("Активность", default=True)
+
+    #def get_absolute_url(self):
+    #     return reverse('my_doc:docdetail', kwargs={'docid': self.pk, 'pk': '0'})
+    #    #return reverse('my_crm:clients0')
+    def __str__(self):
+        return self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ' ' + self.author.username + ')'
+    class Meta:
+        #unique_together = ('user','company')
+        #ordering = ('user')
+        verbose_name = 'Документ'
+
+class DocVer(models.Model):
+    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='docver_company', verbose_name="Организация")
+    manager = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='docver_manager', verbose_name="Менеджер документа")
+    name = models.CharField("Наименование", max_length=64)
+    type = models.ForeignKey('Dict_DocType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='docver_type', verbose_name="Тип документа")
+    status = models.ForeignKey('Dict_DocStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='docver_status', verbose_name="Статус документа")
+    description = RichTextUploadingField("Описание", blank=True, null=True)
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    datepublic = models.DateTimeField("Дата публикации", auto_now_add=False, blank=True, null=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='docver_author', verbose_name="Автор")
+    members = models.ManyToManyField('auth.User', related_name='docver_members', verbose_name="Участники")
+    is_active = models.BooleanField("Активность", default=True)
+
+    #def get_absolute_url(self):
+    #     return reverse('my_doc:docdetail', kwargs={'docid': self.pk, 'pk': '0'})
+    #    #return reverse('my_crm:clients0')
+    def __str__(self):
+        return self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ' ' + self.author.username + ')'
+    class Meta:
+        #unique_together = ('user','company')
+        #ordering = ('user')
+        verbose_name = 'Версия Документа'
+
+class DocTask(models.Model):
+    name = models.CharField("Наименование", max_length=128)
+    description = RichTextUploadingField("Описание", null=True, blank=True)
+    #datebegin = models.DateTimeField("Начало")
+    dateend = models.DateField("Окончание")
+    doc = models.ForeignKey('Doc', on_delete=models.CASCADE, related_name='resultdoc', verbose_name="Документ")
+    docver = models.ForeignKey('DocVer', on_delete=models.CASCADE, related_name='resultdocver', verbose_name="Версия Документа")
+    assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='doctask_assigner', verbose_name="Исполнитель")
+    type = models.ForeignKey('Dict_DocTaskType', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='doctask_type', verbose_name="Тип")
+    status = models.ForeignKey('Dict_DocTaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='doctask_status', verbose_name="Статус")
+    datecreate = models.DateTimeField("Дата создания", auto_now_add=True)
+    dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultdoctaskuser', verbose_name="Автор")
+    is_active = models.BooleanField("Активность", default=True)
+    def get_absolute_url(self):
+        return reverse('my_crm:clientdoccomments', kwargs={'taskid': self.pk})
+    def __str__(self):
+         return (str(self.docver) + '. ' + self.name + ' (Срок: ' + self.dateend.strftime('%d.%m.%Y') + ')')
+    class MPTTMeta:
+        #order_insertion_by = ['name']
+        order_insertion_by = ['-dateend']
+    class Meta:
+        verbose_name = 'Задача'
+        verbose_name_plural = 'Задачи'
+
+class DocTaskComment(models.Model):
+    name = models.CharField("Наименование", max_length=128)
+    description = RichTextUploadingField("Описание")
+    time = models.DecimalField("Время работы, час.", max_digits=6, decimal_places=2, blank=False, null=False, default=0)
+    cost = models.DecimalField("Стоимость", max_digits=9, decimal_places=2, default=0)
+    task = models.ForeignKey('DocTask', on_delete=models.CASCADE, related_name='resultdoctask', verbose_name="Задача")
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    is_active = models.BooleanField("Активность", default=True)
+
+    def get_absolute_url(self):
+        return reverse('my_doc:doctaskcomments', kwargs={'taskid': self.task_id})
+    def __str__(self):
+        return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
+
+    @property
+    def files(self):
+        return DocFile.objects.filter(taskcomment_id=self.id, is_active=True)
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+class DocFile(models.Model):
+    name = models.CharField("Наименование", null=True, blank=True, max_length=255)
+    uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)
+    doc = models.ForeignKey('Doc', null=True, blank=True, on_delete=models.CASCADE, related_name='doc_file', verbose_name="Документ")
+    docver = models.ForeignKey('DocVer', null=True, blank=True, on_delete=models.CASCADE, related_name='docver_file', verbose_name="Версия Документа")
+    pfile = models.FileField(upload_to='uploads/files/docs/doc', blank=True, null=True, verbose_name='Файл')
+    psize = models.CharField(editable=False, max_length=64)
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
+    is_active = models.BooleanField("Активность", default=True)
+
+    class Meta:
+        verbose_name = "Файлы"
+        verbose_name_plural = "Файлы"
+
+    def __str__(self):
+        return str(self.id) + ' ' + self.uname

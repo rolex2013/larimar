@@ -244,40 +244,19 @@ body {
 }
 
 .object-detail-header {
-    /*background: #eee; /* фон */
-    /*background: linear-gradient(to left, #8e968e, #eee);*/
     padding: 10px 15px 10px 15px;
     border: 0px solid;
     border-radius: 10px;
 }
 
-.object-detail .object-detail-th-row {
-    display: table-row;
-    /*background-color: #8e968e;*/
-    font-weight: bold;
-}
-.object-detail .object-detail-th-cell {
-    display: table-cell;
-}
-.object-detail .object-detail-row {
-    display: table-row;
-}
-.object-detail .object-detail-cell {
-    display: table-cell;
-}
 .object-detail .object-detail-left {
     float: left;
-    /*border: 5px solid;*/
 }
 .object-detail .object-detail-right {
     float: right;
-    /*border-radius: 10px;
-    box-shadow: 0 0 2px 1px rgb(78, 78, 78);*/
 }
 .object-detail .object-detail-subcontainer {
     float: left;
-    /*border-radius: 10px;
-    box-shadow: 0 0 2px 1px rgb(78, 78, 78);*/
 }
 
 .object-list {

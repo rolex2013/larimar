@@ -16,7 +16,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from companies.models import Company
 #from clients.models import Dict_clientStatus, Dict_TaskStatus
-from companies.forms import CompanyForm
+#from companies.forms import CompanyForm
 
 from main.models import ModelLog
 from crm.models import Client, Dict_ClientStatus, Dict_ClientType
@@ -28,7 +28,7 @@ from .forms import ClientEventForm, ClientEventCommentForm
 
 #from .tables import ClientTable, ClientStatusLogTable, ClientTaskStatusLogTable, ClientEventStatusLogTable
 #from projects.tables import ProjectStatusLogTable
-from django_tables2 import RequestConfig
+#from django_tables2 import RequestConfig
 
 from django.contrib.auth.decorators import login_required
 

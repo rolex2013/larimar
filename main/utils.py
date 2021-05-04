@@ -3,6 +3,7 @@ from django.conf import settings
 
 from projects.models import Project, Task, TaskComment, ProjectFile
 from crm.models import Client, ClientTask, ClientTaskComment, ClientFile
+from docs.models import Doc, DocFile
 
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -49,7 +50,14 @@ class AddFilesMixin(object):
               if obj == 'eventcomment':
                  client_id = self.object.event.client.id
                  event_id = self.object.event.id
-                 eventcomment_id = self.object.id                                  
+                 eventcomment_id = self.object.id
+           elif app == 'doc':
+              if obj == 'document':
+                 doc_id = self.object.id
+                 docver_id = self.object.docver_id
+              #if obj == 'file':
+              #   doc_id = self.object.doc.id
+              #   task_id = self.object.id
            for f in files:
                if app == 'project':
                   fcnt = ProjectFile.objects.filter(project_id=project_id, task_id=task_id, taskcomment_id=taskcomment_id, name=f, is_active=True).count()
@@ -57,6 +65,10 @@ class AddFilesMixin(object):
                elif app == 'crm':                  
                   fcnt = ClientFile.objects.filter(client_id=client_id, task_id=task_id, taskcomment_id=taskcomment_id, event_id=event_id, eventcomment_id=eventcomment_id, name=f, is_active=True).count()
                   fl = ClientFile(client_id=client_id, task_id=task_id, taskcomment_id=taskcomment_id, event_id=event_id, eventcomment_id=eventcomment_id, pfile = f)
+               elif app == 'doc':
+                  fcnt = DocFile.objects.filter(doc_id=doc_id, docver_id=docver_id, name=f, is_active=True).count()
+                  fl = DocFile(doc_id=doc_id, docver_id=docver_id, pfile = f)
+
                fl.author = self.request.user
                fn = f
                if fcnt:
