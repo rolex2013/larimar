@@ -84,14 +84,14 @@
            <div class="d-td"><b>Автор</b></div>
            <div class="d-td"><b>Комментарий</b></div>
          </div>
-         {% for psl in nodes %}
+         { for psl in nodes %}
             <div class="d-tr">
-               <div class="d-td">{{ psl.date }}</div>
-               <div class="d-td">{{ psl.status }}</div>
-               <div class="d-td">{{ psl.author }}</div>
-               <div class="d-td">{{ psl.description }}</div>
+               <div class="d-td">{ psl.date }}</div>
+               <div class="d-td">{ psl.status }}</div>
+               <div class="d-td">{ psl.author }}</div>
+               <div class="d-td">{ psl.description }}</div>
             </div>
-         {% endfor %}
+         { endfor %}
         </div>
  
       </div>

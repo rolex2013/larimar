@@ -23,7 +23,7 @@
                         <!-- <p>: <a href="{ url 'my_crm:clients' current_client.company.pk current_client.parent.pk %}">{{ current_client.parent.name }}</a></p>-->
                     {% endif %}
                     <p>Бюджет: {{ current_client.cost }} {{ current_client.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
-                    <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_client.manager.pk ' ' %}">{{ current_client.manager }}</a></p>
+                    <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_client.manager.pk ' ' %}">{{ current_client.manager }}</a></span></p>
                     <!--<p>Создан: {{ current_client.datecreate }}</p>
                     <p>Закрыт: {{ current_client.dateclose }}</p>-->
                     <p>Тип: {{ current_client.type }}</p>

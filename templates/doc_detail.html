@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block doc %}
+    <!-- Защита от прямого доступа к проекту -->
+    {% if current_doc.company.id in user_companies %}
+
+        <div class="object-detail">
+            <div>
+                <div class="object-detail-header">
+                    <!--<div class="circle-left"></div><div class="circle-right"></div>-->
+                    <h3>{{ current_doc.name }} <em style="font-size: 70%;">(версия {{ current_docver }})</em>
+                        {% if not current_doc.is_active %}
+                            (Документ перемещён в архив)
+                        {% endif %}
+                    </h3>
+                </div>
+                <div class="object-detail-left">
+                    <p>{% autoescape off %}{{ current_doc.description }}{% endautoescape %}</p>
+                    <i><p>Организация: <a href="{% url 'my_doc:docs' current_doc.company.pk 0 %}">{{ current_doc.company }}</a></p></i>
+                    <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_doc.manager.pk ' ' %}">{{ current_doc.manager }}</a></span></p>
+                    <!--<p>Создан: {{ current_doc.datecreate }}</p>
+                    <p>Закрыт: {{ current_doc.dateclose }}</p>-->
+                    <p>Тип: {{ current_doc.type }}</p>
+                    <p>Статус: {{ current_doc.status }}</p>
+                    <p><i>Участники:
+                        {% for u in current_doc.members.all %}
+                            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
+                        {% endfor %}
+                    </i></p>
+                    <em>Автор: {{ current_doc.author }}</em><br />
+                    <!--<em>Участники: { current_doc.members.name }}</em><br /> -->
+                    <em>Дата: {{ current_doc.datecreate }}</em>
+                    <p>&nbsp;</p>
+                </div>
+                <div class="object-detail-right">
+                    {% include 'objectfile_list.html' %}
+                </div>
+            </div>
+
+            <!--{ if user.is_authenticated and user.id == current_doc.author_id  %}-->
+            <div class="object-detail-buttons">
+                <!--<a href="{% url 'my_doc:doc_create' current_doc.company.id %}">{{ button_doc_create }}</a>-->
+                <a href="{% url 'my_doc:doc_update' current_doc.pk %}">{{ button_doc_update }}</a>
+                <!--<a href="{ url 'my_doc:doc_history' current_doc.pk %}">{ button_doc_history }}</a>-->
+                <a href="{% url 'my_main:object_history' 'doc' current_doc.pk %}">{{ button_doc_history }}</a>
+            </div>
+            <!--{ endif %}-->
+
+        </div>
+
+    {% else %}
+
+        <h4>Информация о Документе недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
+
+    {% endif %}
+
+{% endblock doc %}
+
+{% block list %}
+    <!-- Защита от прямого доступа к задачам проекта -->
+    {% if current_doc.company.id in user_companies %}
+
+        <div class="object-list">
+
+            <div class="object-list-wrapper">
+
+                <div class="object-list-left">
+                    {% include 'doctasks_list.html' %}
+                </div>
+
+            </div>
+
+        </div>
+
+    {% else %}
+        <h5>Информация о движении Документа недоступна!</h5>
+    {% endif %}
+
+{% endblock list %}
+   

@@ -1,9 +1,9 @@
 from django.db import models
 
-from django.urls import reverse, reverse_lazy
-from django.utils import timezone
+from django.urls import reverse #, reverse_lazy
+#from django.utils import timezone
 
-from mptt.models import MPTTModel, TreeForeignKey
+#from mptt.models import MPTTModel, TreeForeignKey
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -79,29 +79,38 @@ class Doc(models.Model):
     datepublic = models.DateTimeField("Дата публикации", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='doc_author', verbose_name="Автор")
     members = models.ManyToManyField('auth.User', related_name='doc_members', verbose_name="Участники")
+    is_public = models.BooleanField("Опубликован", default=False)
     is_active = models.BooleanField("Активность", default=True)
 
-    #def get_absolute_url(self):
-    #     return reverse('my_doc:docdetail', kwargs={'docid': self.pk, 'pk': '0'})
-    #    #return reverse('my_crm:clients0')
+    @property
+    def docver(self):
+        return DocVer.objects.filter(doc_id=self.id, is_active=True, is_actual=True).values_list('id', flat=True).first()
+
+    def get_absolute_url(self):
+        return reverse('my_doc:doctasks', kwargs={'docverid': self.docver, 'pk': self.pk})
+        #return reverse('my_crm:clients0')
     def __str__(self):
-        return self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ' ' + self.author.username + ')'
+        return self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ' ' + self.author.username + ')' + str(self.docver)
     class Meta:
         #unique_together = ('user','company')
         #ordering = ('user')
         verbose_name = 'Документ'
+        verbose_name_plural = 'Документы'
 
 class DocVer(models.Model):
-    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='docver_company', verbose_name="Организация")
-    manager = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='docver_manager', verbose_name="Менеджер документа")
+    #company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='docver_company', verbose_name="Организация")
+    vernumber = models.PositiveIntegerField("Номер версии")
+    doc = models.ForeignKey("Doc", on_delete=models.CASCADE, related_name='docver_doc', verbose_name="Документ")
+    manager = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name='docver_manager', verbose_name="Менеджер документа")
     name = models.CharField("Наименование", max_length=64)
     type = models.ForeignKey('Dict_DocType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='docver_type', verbose_name="Тип документа")
     status = models.ForeignKey('Dict_DocStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='docver_status', verbose_name="Статус документа")
     description = RichTextUploadingField("Описание", blank=True, null=True)
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     datepublic = models.DateTimeField("Дата публикации", auto_now_add=False, blank=True, null=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='docver_author', verbose_name="Автор")
-    members = models.ManyToManyField('auth.User', related_name='docver_members', verbose_name="Участники")
+    author = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name='docver_author', verbose_name="Автор")
+    members = models.ManyToManyField("auth.User", related_name='docver_members', verbose_name="Участники")
+    is_actual = models.BooleanField("Актуальность", default=False)
     is_active = models.BooleanField("Активность", default=True)
 
     #def get_absolute_url(self):
@@ -110,9 +119,10 @@ class DocVer(models.Model):
     def __str__(self):
         return self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ' ' + self.author.username + ')'
     class Meta:
-        #unique_together = ('user','company')
+        #unique_together = ('company', 'is_actual')
         #ordering = ('user')
         verbose_name = 'Версия Документа'
+        verbose_name_plural = 'Версии Документов'
 
 class DocTask(models.Model):
     name = models.CharField("Наименование", max_length=128)

@@ -8,6 +8,7 @@ from django.views.generic import View, TemplateView, ListView, DetailView, Creat
 from main.models import Notification, Meta_ObjectType, ModelLog
 from projects.models import Project, Task, ProjectFile #, TaskFile
 from crm.models import Client, ClientTask, ClientEvent, ClientFile
+from docs.models import Doc, DocTask, DocFile
 
 from django.contrib.auth.decorators import login_required
 
@@ -68,32 +69,44 @@ def objecthistory(request, objtype='prj', pk=0):
        if pk == 0:
           current_object = 0
        else:
-          current_object = Project.objects.get(id=pk)
+          current_object = Project.objects.filter(id=pk).first() #Project.objects.get(id=pk)
        templatename = 'project_history.html'
     elif objtype == 'tsk':
        if pk == 0:
           current_object = 0
        else:
-          current_object = Task.objects.get(id=pk)
+          current_object = Task.objects.filter(id=pk).first()
        templatename = 'task_history.html'             
     elif objtype == 'clnt':
        if pk == 0:
           current_object = 0
        else:
-          current_object = Client.objects.get(id=pk)
+          current_object = Client.objects.filter(id=pk).first()
        templatename = 'client_history.html'            
     elif objtype == 'cltsk':
        if pk == 0:
           current_object = 0
        else:
-          current_object = ClientTask.objects.get(id=pk)
+          current_object = ClientTask.objects.filter(id=pk).first()
        templatename = 'clienttask_history.html'              
     elif objtype == 'clevnt':
        if pk == 0:
           current_object = 0
        else:
-          current_object = ClientEvent.objects.get(id=pk)
-       templatename = 'clientevent_history.html'             
+          current_object = ClientEvent.objects.filter(id=pk).first()
+       templatename = 'clientevent_history.html'
+    elif objtype == 'doc':
+       if pk == 0:
+          current_object = 0
+       else:
+          current_object = Doc.objects.filter(id=pk).first()
+       templatename = 'doc_history.html'
+    elif objtype == 'dctsk':
+       if pk == 0:
+          current_object = 0
+       else:
+          current_object = DocTask.objects.filter(id=pk).first()
+       templatename = 'doctask_history.html'
 
     comps = request.session['_auth_user_companies_id']
 
