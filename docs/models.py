@@ -112,7 +112,6 @@ class DocVer(models.Model):
     members = models.ManyToManyField("auth.User", related_name='docver_members', verbose_name="Участники")
     is_actual = models.BooleanField("Актуальность", default=False)
     is_active = models.BooleanField("Активность", default=True)
-    is_act = models.BooleanField("Акт", default=True)
 
     #def get_absolute_url(self):
     #     return reverse('my_doc:docdetail', kwargs={'docid': self.pk, 'pk': '0'})
