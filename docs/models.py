@@ -68,9 +68,6 @@ class Dict_DocTaskStatus(models.Model):
 class Doc(models.Model):
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='result_company_doc', verbose_name="Организация")
     manager = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='result_manager_doc', verbose_name="Менеджер документа")
-    #user = models.OneToOneField('auth.User', blank=True, null=True, on_delete=models.CASCADE, related_name='result_user_doc', verbose_name="Пользователь")
-    #is_notify = models.BooleanField("Оповещать", default=False)
-    #protocoltype = models.ForeignKey('main.Dict_ProtocolType', blank=True, null=True, on_delete=models.CASCADE, related_name='result_protocoltype_client', verbose_name="Протокол оповещения")
     name = models.CharField("Наименование", max_length=64)
     type = models.ForeignKey('Dict_DocType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='doc_type_doc', verbose_name="Тип документа")
     status = models.ForeignKey('Dict_DocStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='doc_status_doc', verbose_name="Статус документа")
@@ -87,10 +84,11 @@ class Doc(models.Model):
         return DocVer.objects.filter(doc_id=self.id, is_active=True, is_actual=True).values_list('id', flat=True).first()
 
     def get_absolute_url(self):
-        return reverse('my_doc:doctasks', kwargs={'docverid': self.docver, 'pk': self.pk})
+        #return reverse('my_doc:doctasks', kwargs={'docverid': self.docver, 'pk': self.pk})
+        return reverse('my_doc:doctasks', kwargs={'pk': self.pk})
         #return reverse('my_crm:clients0')
     def __str__(self):
-        return self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ' ' + self.author.username + ')' + str(self.docver)
+        return self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ' ' + self.author.username + ') вер. ' + str(self.docver)
     class Meta:
         #unique_together = ('user','company')
         #ordering = ('user')
@@ -166,13 +164,13 @@ class DocTaskComment(models.Model):
 
     @property
     def files(self):
-        return DocFile.objects.filter(taskcomment_id=self.id, is_active=True)
+        return DocVerFile.objects.filter(taskcomment_id=self.id, is_active=True)
 
     class Meta:
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
-class DocFile(models.Model):
+class DocVerFile(models.Model):
     name = models.CharField("Наименование", null=True, blank=True, max_length=255)
     uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)
     doc = models.ForeignKey('Doc', null=True, blank=True, on_delete=models.CASCADE, related_name='doc_file', verbose_name="Документ")

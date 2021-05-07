@@ -1,7 +1,10 @@
 
 <ul>
     {% for node in nodes %}
-        <li><span class="hint hint--bottom hint--info" data-hint="{{ node.description }}"><b><a href="{% url 'my_doc:doctasks' node.pk 0 %}">#{{ node.id }}. {{ node.name }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.type }} | {{ node.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.manager.pk ' ' %}">{{ node.manager }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span></b></li>
+        <li><span class="hint hint--bottom hint--info" data-hint="{{ node.description }}"><b><a href="{% url 'my_doc:doctasks' node.pk %}">#{{ node.id }}. {{ node.name }}</a></b></span>&nbsp;
+            <span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.type }} | {{ node.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.manager.pk ' ' %}">{{ node.manager }}</a></span> |
+            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span>
+        </li>
     {% endfor %}
 </ul>
 

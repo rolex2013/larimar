@@ -8,7 +8,7 @@ from django.views.generic import View, TemplateView, ListView, DetailView, Creat
 from main.models import Notification, Meta_ObjectType, ModelLog
 from projects.models import Project, Task, ProjectFile #, TaskFile
 from crm.models import Client, ClientTask, ClientEvent, ClientFile
-from docs.models import Doc, DocTask, DocFile
+from docs.models import Doc, DocTask, DocVerFile
 
 from django.contrib.auth.decorators import login_required
 

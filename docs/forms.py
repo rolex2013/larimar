@@ -67,6 +67,7 @@ class DocForm(forms.ModelForm):
                                           recipient_id=self.initial['manager'],
                                           sendto=user_profile.email,
                                           author_id=self.user.id)
+           #print(self.cleaned_data['members'])
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)

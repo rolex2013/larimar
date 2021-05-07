@@ -13,7 +13,7 @@ from django.views.generic.edit import UpdateView #, DeleteView
 from django.db.models import Q #, Count, Min, Max, Sum, Avg
 
 from companies.models import Company
-from . models import Doc, DocVer, DocTask, DocTaskComment, Dict_DocType, Dict_DocStatus, Dict_DocTaskType, Dict_DocTaskStatus, DocFile
+from . models import Doc, DocVer, DocTask, DocTaskComment, Dict_DocType, Dict_DocStatus, Dict_DocTaskType, Dict_DocTaskStatus, DocVerFile
 from .forms import DocForm, DocTaskForm #,DocTaskCommentForm
 
 from main.models import ModelLog
@@ -117,15 +117,17 @@ class DocCreate(AddFilesMixin, CreateView):
        #   form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
        self.object = form.save() # Созадём новый документ
-       af = self.add_files(form, 'doc', 'document') # добавляем файлы из формы (метод из AddFilesMixin)
        # Создаём первую версию Документа
        newdocver = DocVer.objects.create(doc_id=self.object.id, vernumber=1, name=self.object.name, description=self.object.description,
                                          datepublic=self.object.datepublic, is_actual=True, is_active=self.object.is_active,
                                          status=self.object.status, type=self.object.type, author=self.object.author,
                                          manager=self.object.manager)
-       memb = self.object.members.values_list('id').all()
+       af = self.add_files(form, 'doc', 'document') # добавляем файлы из формы (метод из AddFilesMixin)
+       memb = self.object.members.values_list('id', 'username').all()
+       membersstr = ''
        for mem in memb:
            newdocver.members.add(mem[0])
+           membersstr = membersstr + mem[1] + ','
        newdocver.save()
        # Делаем первую запись в историю изменений Документа
        historyjson = {"Номер": '1',
@@ -133,6 +135,7 @@ class DocCreate(AddFilesMixin, CreateView):
                       "Тип": self.object.type.name,
                       "Статус": self.object.status.name,
                       "Менеджер": self.object.manager.username,
+                      "Участники": membersstr,
                       "Активн.": '✓' if self.object.is_active else '-'
                      }
        ModelLog.objects.create(componentname='doc', modelname="Doc", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
@@ -158,7 +161,8 @@ class DocUpdate(AddFilesMixin, UpdateView):
     def get_context_data(self, **kwargs):
        context = super().get_context_data(**kwargs)
        context['header'] = 'Изменить Документ'
-       context['files'] = DocFile.objects.filter(doc_id=self.kwargs['pk'], is_active=True).order_by('uname')
+       doc = Doc.objects.filter(id=self.kwargs['pk']).first()
+       context['files'] = DocVerFile.objects.filter(doc_id=self.kwargs['pk'], docver_id=doc.docver, is_active=True).order_by('uname')
        return context
 
     def get_form_kwargs(self):
@@ -169,24 +173,46 @@ class DocUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False) # без commit=False происходит вызов save() Модели
-        af = self.add_files(form, 'doc', 'document') # добавляем файлы из формы (метод из AddFilesMixin)
-        old = Doc.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        old = Doc.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового объекта
+        oldfiles = DocVerFile.objects.filter(docver_id=old.docver, is_active=True)
+        old_memb = old.members.values_list('id', 'username').all()
+        #print(oldfiles)
+        self.object = form.save() # записываем, чтобы посчитать номер версии
         vernumber = DocVer.objects.filter(doc_id=self.object.id).order_by('-vernumber').values_list('vernumber').first()
         vernumber = int(vernumber[0]) + 1
+        docver_unactual = DocVer.objects.filter(doc_id=self.object.id).update(is_actual=False)
         newdocver = DocVer.objects.create(doc_id=self.object.id, vernumber=vernumber, name=self.object.name, description=self.object.description,
                                           datepublic=self.object.datepublic, is_actual=True, is_active=self.object.is_active,
                                           status=self.object.status, type=self.object.type, author=self.object.author,
                                           manager=self.object.manager)
-        memb = self.object.members.values_list('id').all()
-        #print(memb)
+        af = self.add_files(form, 'doc', 'document')  # добавляем файлы из формы (метод из AddFilesMixin)
+        # переносим все файлы из старой версии
+        for f in oldfiles:
+            newfiles = DocVerFile.objects.create(doc_id=self.object.id, docver_id=newdocver.id, is_active=True)
+            #print('old:' + str(f.id) + f.name)
+            newfiles.name = f.name
+            newfiles.uname = f.uname
+            newfiles.psize = f.psize
+            newfiles.pfile = f.pfile
+            newfiles.datecreate = f.datecreate
+            newfiles.author_id = f.author_id
+            newfiles.save()
+
+        # записываем новых Участников
+        memb = self.object.members.values_list('id', 'username').all()
+        #print(list(memb))
+        #print(list(old_memb))
+        membersstr = ''
         for mem in memb:
            newdocver.members.add(mem[0])
+           membersstr = membersstr + mem[1] + ','
         newdocver.save()
         historyjson = {"Номер": newdocver.vernumber,
                        "Наименование":'' if self.object.name == old.name else self.object.name,
                        "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
                        "Статус":'' if self.object.status.name == old.status.name else self.object.status.name,
                        "Менеджер":'' if self.object.manager.username == old.manager.username else self.object.manager.username,
+                       "Участники": '' if memb == old_memb else membersstr,
                        "Активн.":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
                       }
         ModelLog.objects.create(componentname='doc', modelname="Doc", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
@@ -194,10 +220,13 @@ class DocUpdate(AddFilesMixin, UpdateView):
 
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def doctasks(request, docverid=0, pk=0):
+def doctasks(request, pk=0):
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     tskstatus_selectid = 0
+    doc = Doc.objects.filter(id=pk).first()
+    docverid = doc.docver
+
     try:
         tskstatus = request.POST['select_taskstatus']
     except:
@@ -234,6 +263,7 @@ def doctasks(request, docverid=0, pk=0):
     currentdoc = Doc.objects.filter(id=pk).first()
     #currentdocver = DocVer.objects.filter(id=docverid).first()
     currentdocver = DocVer.objects.filter(doc_id=pk, is_actual=True).first()
+    #print(pk)
 
     #try:
     #    current_task = DocTask.objects.get(doc_id=pk, docver_id=docverid)
@@ -260,7 +290,7 @@ def doctasks(request, docverid=0, pk=0):
         'current_docver': currentdocver.vernumber,
         'docverid': docverid,
         'user_companies': request.session['_auth_user_companies_id'],
-        'files': DocFile.objects.filter(docver=currentdocver, is_active=True).order_by('uname'),
+        'files': DocVerFile.objects.filter(docver=currentdocver, is_active=True).order_by('uname'),
         'objtype': 'doc',
         'media_path': settings.MEDIA_URL,
         'button_doc_update': button_doc_update,

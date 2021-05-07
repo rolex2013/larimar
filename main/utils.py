@@ -3,7 +3,7 @@ from django.conf import settings
 
 from projects.models import Project, Task, TaskComment, ProjectFile
 from crm.models import Client, ClientTask, ClientTaskComment, ClientFile
-from docs.models import Doc, DocFile
+from docs.models import DocVerFile #, Doc, DocFile
 
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -13,9 +13,9 @@ class AddFilesMixin(object):
     template = None
 
     def add_files(self, form, app, obj):
-        # Обрабатываем файлы нового проекта
+        # Обрабатываем файлы нового объекта
         files = form.files.getlist('files')
-        #self.object = form.save() # Созадём новый проект
+        #self.object = form.save() # Созадём новый объект
         #print(new_object) 
         if form.files:
            project_id = None
@@ -24,6 +24,8 @@ class AddFilesMixin(object):
            taskcomment_id = None
            event_id = None
            eventcomment_id = None
+           doc_id = None
+           docver_id = None
            if app == 'project':
               if obj == 'project':
                  project_id = self.object.id              
@@ -54,20 +56,20 @@ class AddFilesMixin(object):
            elif app == 'doc':
               if obj == 'document':
                  doc_id = self.object.id
-                 docver_id = self.object.docver_id
+                 docver_id = self.object.docver
               #if obj == 'file':
               #   doc_id = self.object.doc.id
               #   task_id = self.object.id
            for f in files:
                if app == 'project':
                   fcnt = ProjectFile.objects.filter(project_id=project_id, task_id=task_id, taskcomment_id=taskcomment_id, name=f, is_active=True).count()
-                  fl = ProjectFile(project_id=project_id, task_id=task_id, taskcomment_id=taskcomment_id, pfile = f)
+                  fl = ProjectFile(project_id=project_id, task_id=task_id, taskcomment_id=taskcomment_id, pfile=f)
                elif app == 'crm':                  
                   fcnt = ClientFile.objects.filter(client_id=client_id, task_id=task_id, taskcomment_id=taskcomment_id, event_id=event_id, eventcomment_id=eventcomment_id, name=f, is_active=True).count()
-                  fl = ClientFile(client_id=client_id, task_id=task_id, taskcomment_id=taskcomment_id, event_id=event_id, eventcomment_id=eventcomment_id, pfile = f)
+                  fl = ClientFile(client_id=client_id, task_id=task_id, taskcomment_id=taskcomment_id, event_id=event_id, eventcomment_id=eventcomment_id, pfile=f)
                elif app == 'doc':
-                  fcnt = DocFile.objects.filter(doc_id=doc_id, docver_id=docver_id, name=f, is_active=True).count()
-                  fl = DocFile(doc_id=doc_id, docver_id=docver_id, pfile = f)
+                  fcnt = DocVerFile.objects.filter(doc_id=doc_id, docver_id=docver_id, name=f, is_active=True).count()
+                  fl = DocVerFile(doc_id=doc_id, docver_id=docver_id, pfile=f)
 
                fl.author = self.request.user
                fn = f
@@ -80,5 +82,6 @@ class AddFilesMixin(object):
                fl.save()
                fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
                fl.psize = os.path.getsize(fullpath)
-               fl.save()        
+               fl.save()
+
         return True
