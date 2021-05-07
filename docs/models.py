@@ -96,7 +96,7 @@ class Doc(models.Model):
         verbose_name_plural = 'Документы'
 
 class DocVer(models.Model):
-    #company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='docver_company', verbose_name="Организация")
+    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='docver_company', verbose_name="Организация")
     vernumber = models.PositiveIntegerField("Номер версии")
     doc = models.ForeignKey("Doc", on_delete=models.CASCADE, related_name='docver_doc', verbose_name="Документ")
     manager = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name='docver_manager', verbose_name="Менеджер документа")
