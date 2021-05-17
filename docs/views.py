@@ -176,7 +176,10 @@ class DocUpdate(AddFilesMixin, UpdateView):
         old = Doc.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового объекта
         oldfiles = DocVerFile.objects.filter(docver_id=old.docver, is_active=True)
         old_memb = old.members.values_list('id', 'username').all()
+        old_memb_count = old_memb.count()
+        old_memb_list = list(old_memb)
         #print(oldfiles)
+        #print(old_memb_list)
         self.object = form.save() # записываем, чтобы посчитать номер версии
         vernumber = DocVer.objects.filter(doc_id=self.object.id).order_by('-vernumber').values_list('vernumber').first()
         vernumber = int(vernumber[0]) + 1
@@ -200,19 +203,26 @@ class DocUpdate(AddFilesMixin, UpdateView):
 
         # записываем новых Участников
         memb = self.object.members.values_list('id', 'username').all()
+        memb_count = memb.count()
+        is_members_changed = False
+        if old_memb_count != memb_count:
+            is_members_changed = True
         #print(list(memb))
-        #print(list(old_memb))
         membersstr = ''
         for mem in memb:
-           newdocver.members.add(mem[0])
-           membersstr = membersstr + mem[1] + ','
+            newdocver.members.add(mem[0])
+            membersstr = membersstr + mem[1] + ','
+            if is_members_changed == False:
+                if old_memb_list.count(mem) == 0:
+                    is_members_changed = True
         newdocver.save()
         historyjson = {"Номер": newdocver.vernumber,
                        "Наименование":'' if self.object.name == old.name else self.object.name,
                        "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
                        "Статус":'' if self.object.status.name == old.status.name else self.object.status.name,
                        "Менеджер":'' if self.object.manager.username == old.manager.username else self.object.manager.username,
-                       "Участники": '' if memb == old_memb else membersstr,
+                       #"Участники": '' if memb == old_memb else membersstr,
+                       "Участники": '' if is_members_changed == False else membersstr,
                        "Активн.":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
                       }
         ModelLog.objects.create(componentname='doc', modelname="Doc", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
