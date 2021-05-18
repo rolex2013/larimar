@@ -2,7 +2,9 @@
 
     <div class="object-detail--right">
 
-        Файлы:
+        {% if files %}
+            Файлы:
+        {% endif %}
 
         {% comment %}
         {% for file in files %}

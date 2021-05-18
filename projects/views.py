@@ -170,6 +170,11 @@ class ProjectCreate(AddFilesMixin, CreateView):
         form.instance.author_id = self.request.user.id
         self.object = form.save() # Созадём новый проект
         af = self.add_files(form, 'project', 'project') # добавляем файлы из формы (метод из AddFilesMixin)
+        # формируем строку из Участников
+        memb = self.object.members.values_list('id', 'username').all()
+        membersstr = ''
+        for mem in memb:
+            membersstr = membersstr + mem[1] + ','
         # Делаем первую запись в историю изменений проекта
         historyjson = {"Проект": self.object.name,
                        "Статус": self.object.status.name, 
@@ -181,9 +186,9 @@ class ProjectCreate(AddFilesMixin, CreateView):
                        "Валюта": str(self.object.currency.code_char),
                        "Выполнен на, %": str(self.object.percentage),
                        "Исполнитель": self.object.assigner.username,
+                       "Участники": membersstr,
                        "Активность": '✓' if self.object.is_active else '-'
-                       #, "Участники":self.object.members.username
-                      }                                     
+                      }
         ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))       
         return super().form_valid(form)
 
@@ -227,6 +232,23 @@ class ProjectUpdate(AddFilesMixin, UpdateView):
           af = self.add_files(form, 'project', 'project') # добавляем файлы из формы (метод из AddFilesMixin)
           # Получаем старые значения для дальнейшей проверки на изменения
           old = Project.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+          old_memb = old.members.values_list('id', 'username').all()
+          old_memb_count = old_memb.count()
+          old_memb_list = list(old_memb)
+          self.object = form.save()
+          # записываем новых Участников
+          memb = self.object.members.values_list('id', 'username').all()
+          memb_count = memb.count()
+          is_members_changed = False
+          if old_memb_count != memb_count:
+              is_members_changed = True
+          #print(list(memb))
+          membersstr = ''
+          for mem in memb:
+              membersstr = membersstr + mem[1] + ','
+              if is_members_changed == False:
+                  if old_memb_list.count(mem) == 0:
+                      is_members_changed = True
           historyjson = {"Проект":'' if self.object.name == old.name else self.object.name,
                          "Статус":'' if self.object.status.name == old.status.name else self.object.status.name, 
                          "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y'), 
@@ -237,9 +259,10 @@ class ProjectUpdate(AddFilesMixin, UpdateView):
                          "Валюта":'' if self.object.currency.code_char == old.currency.code_char else str(self.object.currency.code_char),
                          "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
                          "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+                         #"Участники": self.object.members.username,
+                         "Участники": '' if is_members_changed == False else membersstr,
                          "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
-                         #, "Участники":self.object.members.username
-                        }                                     
+                        }
           ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))          
           return super().form_valid(form) #super(ProjectUpdate, self).form_valid(form)
 
@@ -443,8 +466,8 @@ class TaskUpdate(AddFilesMixin, UpdateView):
                       "Стоимость":'' if self.object.cost == old.cost else str(self.object.cost),
                       "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
                       "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+                      #"Участники": '' if is_members_changed == False else membersstr,
                       "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
-                      #, "Участники":self.members.username
                      }
        ModelLog.objects.create(componentname='tsk', modelname="Task", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))                            
        return super().form_valid(form) #super(TaskUpdate, self).form_valid(form)

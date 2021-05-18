@@ -150,7 +150,15 @@ class ClientCreate(AddFilesMixin, CreateView):
        # Делаем первую запись в историю изменений проекта
        self_user_username = ''        
        if self.object.user:
-          self_user_username = self.user.username
+          self_user_username = self.object.user.username
+       self_object_protocoltype_name = ''
+       if self.object.protocoltype:
+          self_object_protocoltype_name = self.object.protocoltype.name
+       # формируем строку из Участников
+       memb = self.object.members.values_list('id', 'username').all()
+       membersstr = ''
+       for mem in memb:
+           membersstr = membersstr + mem[1] + ','
        historyjson = {"Имя": self.object.firstname,
                       "Отчество": self.object.middlename,
                       "Фамилия": self.object.lastname,
@@ -164,8 +172,9 @@ class ClientCreate(AddFilesMixin, CreateView):
                       "Выполнен на, %": str(self.object.percentage),
                       "Инициатор": self.object.initiator.name,
                       "Менеджер": self.object.manager.username,
+                      "Участники": membersstr,
                       "Оповещ.": '✓' if self.object.is_notify else '-',
-                      "Протокол": self.object.protocoltype.name,
+                      "Протокол": '-' if self_object_protocoltype_name == '' else self_object_protocoltype_name,
                       "Активн.": '✓' if self.object.is_active else '-'
                      }         
        ModelLog.objects.create(componentname='clnt', modelname="Client", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))       
@@ -209,7 +218,27 @@ class ClientUpdate(AddFilesMixin, UpdateView):
         if old.user:
            old_user_username = old.user.username                 
         if self.object.user:
-           self_user_username = self.object.user.username                
+           self_user_username = self.object.user.username
+        # обрабатываем изменения Участников
+        # старые Участники
+        old_memb = old.members.values_list('id', 'username').all()
+        old_memb_count = old_memb.count()
+        old_memb_list = list(old_memb)
+        self.object = form.save()
+        # новые Участники
+        memb = self.object.members.values_list('id', 'username').all()
+        memb_count = memb.count()
+        is_members_changed = False
+        if old_memb_count != memb_count:
+            is_members_changed = True
+        #print(list(memb))
+        # формируем строку из новых Участников и признак их изменения
+        membersstr = ''
+        for mem in memb:
+            membersstr = membersstr + mem[1] + ','
+            if is_members_changed == False:
+                if old_memb_list.count(mem) == 0:
+                    is_members_changed = True
         historyjson = {"Имя":'' if self.object.firstname == old.firstname else self.object.firstname,
                        "Отчество":'' if self.object.middlename == old.middlename else self.object.middlename,
                        "Фамилия":'' if self.object.lastname == old.lastname else self.object.lastname,
@@ -223,6 +252,7 @@ class ClientUpdate(AddFilesMixin, UpdateView):
                        "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
                        "Инициатор":'' if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
                        "Менеджер":'' if self.object.manager.username == old.manager.username else self.object.manager.username,
+                       "Участники": '' if is_members_changed == False else membersstr,
                        "Оповещ.":'' if self.object.is_notify == old.is_notify else '✓' if self.object.is_notify else '-',
                        "Протокол":'' if self.object.protocoltype.name == old.protocoltype.name else self.object.protocoltype.name,
                        "Активн.":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
