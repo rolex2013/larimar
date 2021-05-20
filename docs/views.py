@@ -103,6 +103,7 @@ def docs(request, companyid=0, pk=0):
                               'object_list': 'doc_list',
                               'component_name': 'docs',
                               'len_list': len_list,
+                              #'is_doc': True,
                                                 })
 
 class DocCreate(AddFilesMixin, CreateView):
@@ -131,6 +132,7 @@ class DocCreate(AddFilesMixin, CreateView):
        newdocver.save()
        # Делаем первую запись в историю изменений Документа
        historyjson = {"Номер": '1',
+                      "Актуальн.": newdocver.id,
                       "Наименование": self.object.name,
                       "Тип": self.object.type.name,
                       "Статус": self.object.status.name,
@@ -217,6 +219,7 @@ class DocUpdate(AddFilesMixin, UpdateView):
                     is_members_changed = True
         newdocver.save()
         historyjson = {"Номер": newdocver.vernumber,
+                       "Актуальн.": newdocver.id,
                        "Наименование":'' if self.object.name == old.name else self.object.name,
                        "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
                        "Статус":'' if self.object.status.name == old.status.name else self.object.status.name,
@@ -231,6 +234,7 @@ class DocUpdate(AddFilesMixin, UpdateView):
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctasks(request, pk=0):
+    #print('======================')
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     tskstatus_selectid = 0
@@ -343,12 +347,12 @@ class DocTaskCreate(AddFilesMixin, CreateView):
        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-       context = super(ClientTaskCreate, self).get_context_data(**kwargs)
+       context = super(DocTaskCreate, self).get_context_data(**kwargs)
        context['header'] = 'Новая Задача'
        return context
 
     def get_form_kwargs(self):
-       kwargs = super(ClientTaskCreate, self).get_form_kwargs()
+       kwargs = super(DocTaskCreate, self).get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid']})
        return kwargs
 
@@ -359,20 +363,20 @@ class DocTaskUpdate(AddFilesMixin, UpdateView):
     template_name = 'object_form.html'
 
     def get_context_data(self, **kwargs):
-       context = super(ClientTaskUpdate, self).get_context_data(**kwargs)
+       context = super(DocTaskUpdate, self).get_context_data(**kwargs)
        context['header'] = 'Изменить Задачу'
-       context['files'] = ClientFile.objects.filter(task_id=self.kwargs['pk'], is_active=True).order_by('uname')
+       context['files'] = DocVerFile.objects.filter(task_id=self.kwargs['pk'], is_active=True).order_by('uname')
        return context
 
     def get_form_kwargs(self):
-       kwargs = super(ClientTaskUpdate, self).get_form_kwargs()
+       kwargs = super(DocTaskUpdate, self).get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'update'})
        return kwargs
 
     def form_valid(self, form):
        self.object = form.save(commit=False)
        af = self.add_files(form, 'crm', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
-       old = ClientTask.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+       old = DocTask.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
        historyjson = {"Задача":'' if self.object.name == old.name else self.object.name,
                       "Статус":'' if self.object.status.name == old.status.name else self.object.status.name,
                       "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y %H:%M'),
@@ -389,11 +393,11 @@ class DocTaskUpdate(AddFilesMixin, UpdateView):
        ModelLog.objects.create(componentname='cltsk', modelname="ClientTask", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
        return super().form_valid(form)
 
-def doc_list(request):
-    return render(request, "docdoc_list.html", {'nodes': nodes,})
+#def doc_list(request):
+#    return render(request, "docdoc_list.html", {'nodes': nodes,})
 
-def file_list(request):
-    return render(request, "docfile_list.html", {'nodes': nodes,})
+#def file_list(request):
+#    return render(request, "docfile_list.html", {'nodes': nodes,})
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctaskfilter(request):
@@ -432,3 +436,19 @@ def doctaskfilter(request):
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'
     return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'doctask_list', 'object_message': object_message})
+
+def docver_change(request):
+    docverid = request.GET['docverid']
+    if docverid == 0:
+        return False
+    # позиционируемся на нужной версии
+    docver = DocVer.objects.filter(id=docverid).first()
+    # делаем все версии Документа неактуальными
+    DocVer.objects.filter(doc_id=docver.doc_id).update(is_actual=False)
+    # делаем текущую версию Документа актуальной
+    docver.is_actual = True
+    docver.save()
+    #return render(request, 'objects_history.html')
+    doctasks(request, docver.doc_id)
+    return True
+    #return render(request, 'doctasks_list.html')

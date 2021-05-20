@@ -128,8 +128,9 @@ def objecthistory(request, objtype='prj', pk=0):
                               #'titles': titles,
                               'nodes': nodes,
                               'mas': mas,
-                              'current_object':current_object,
+                              'current_object': current_object,
                               'user_companies': comps,
+                              'objtype': objtype,
                               #'table': table,                                                           
                                                 })  
 

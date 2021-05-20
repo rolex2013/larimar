@@ -15,6 +15,7 @@ urlpatterns = [
     path('docs_page/<int:companyid>/<int:pk>', views.docs, name='docs'),
     path('docs_list/doc_create/<int:companyid>', views.DocCreate.as_view(), name='doc_create'),
     path('docs_list/doc_update/<int:pk>', views.DocUpdate.as_view(), name='doc_update'),
+    path('docs_list/doc_docver/', views.docver_change, name='docver_change'),
     path('doctasks_page/<int:pk>', views.doctasks, name='doctasks'),
     #path('doctasks_page/<int:pk>', views.doctasks, name='doctasks'),
     path('doctasks_list/doctask_create/<int:docid>', views.DocTaskCreate.as_view(), name='doctask_create'),

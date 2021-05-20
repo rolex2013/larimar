@@ -1,4 +1,4 @@
-
+<div id="ajax_listresult">
    <!--<div class="object-list-tr">
       <div class="object-list-td">-->
          <div class="table">
@@ -26,7 +26,19 @@
                      {% endif %}                  
                   {% endfor %}
                   {% for key, value in rec %}
-                     <div class="cell">{{ value }}</div>
+                      <div class="cell">
+                          {% if objtype == 'doc' %}
+                              {% if key == 'Актуальн.' %}
+                                 {% if current_object.docver != value %}
+                                    <span class="hint hint--bottom hint--info" data-hint="Сделать актуальной"><input type="checkbox" value="{{value}}" name="myCheck_{{value}}" /></span>
+                                 {% endif %}
+                              {% else %}
+                                  {{ value }}
+                              {% endif %}
+                          {% else %}
+                              {{ value }}
+                          {% endif %}
+                      </div>
                   {% endfor %}
                </div>                               
             {% endfor %}
@@ -35,3 +47,40 @@
    </div>-->
 
    <p><em>{{ object_message }}</em></p>
+
+</div>
+
+<div id="ajax_listerrors"></div>
+
+<script>
+
+    $('input[type="checkbox"]').change(function() {
+        // Проверка, стоит галочка или нет
+        if ($(this).is(':checked')) {
+
+            var chk = $(this).attr("name");
+            var chkVal = $(this).attr("value");
+            //console.log(chkVal)
+
+            $.ajax({
+                url: "{% url 'my_doc:docver_change' %}",
+                type: 'GET',
+                data: { docverid: chkVal,
+                    //companyid: "8",
+                    //docverid: {{ value }},
+                },
+                success: function(data) {
+                    $('#ajax_listresult').html(data);
+                },
+                error: function(xhr, errmsg, err) {
+                    console.log("error")
+                    $('#ajax_listerrors').html('Версия не найдена!');
+                }
+
+            });
+
+        };
+
+    });
+
+</script>
