@@ -14,7 +14,7 @@
           {% endif %}
        </h4>
        <p>{% autoescape off %}{{ current_object.description }}{% endautoescape %}</p>
-       <p>Менеджер: {{ current_object.manager }}</p>     
+       <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_object.manager.pk ' ' %}">{{ current_object.manager }}</a></span></p>
        <!--<p>Начало: { current_object.datebegin }}</p>
        <p>Окончание: { current_object.dateend }}</p>-->
        <p>Тип: {{ current_object.type }}</p>
@@ -27,6 +27,11 @@
        <em>Автор: {{ current_object.author }}</em>
        <em>Дата: {{ current_object.datecreate }}</em>
        <p>&nbsp;</p>
+
+       <div class="object-detail-buttons">
+            <a href="{% url 'my_doc:doctasks' current_object.pk %}">{{ button_doc_tasks }}Вернуться</a>
+       </div>
+
        {% if user.is_authenticated and user.id == current_object.author_id  %}
 
        {% endif %}

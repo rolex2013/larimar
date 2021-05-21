@@ -448,7 +448,17 @@ def docver_change(request):
     # делаем текущую версию Документа актуальной
     docver.is_actual = True
     docver.save()
-    #return render(request, 'objects_history.html')
-    doctasks(request, docver.doc_id)
-    return True
-    #return render(request, 'doctasks_list.html')
+    nodes = ModelLog.objects.filter(componentname='doc', modelobjectid=docver.doc_id, is_active=True)
+    i = -1
+    mas = []
+    for node in nodes:
+       i += 1
+       mas.append(json.loads(node.log).items())
+    current_object = Doc.objects.filter(id=docver.doc_id).first()
+    comps = request.session['_auth_user_companies_id']
+    return render(request, 'object_history.html', {'nodes': nodes,
+                                                   'mas': mas,
+                                                   'current_object': current_object,
+                                                   'user_companies': comps,
+                                                   'objtype': 'doc',
+                                                  })

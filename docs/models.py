@@ -78,10 +78,17 @@ class Doc(models.Model):
     members = models.ManyToManyField('auth.User', related_name='doc_members', verbose_name="Участники")
     is_public = models.BooleanField("Опубликован", default=False)
     is_active = models.BooleanField("Активность", default=True)
-
     @property
+    # ссылка на текущую версию Документа
     def docver(self):
         return DocVer.objects.filter(doc_id=self.id, is_active=True, is_actual=True).values_list('id', flat=True).first()
+    @property
+    # кол-во незавершённых задач Документа
+    def doctask(self):
+        #cnt = DocTask.objects.filter(doc_id=self.id, docver_id=self.docver, is_active=True).exclude(dateclose=None).count()
+        #print('cnt='+str(cnt))
+        #return DocTask.objects.filter(doc_id=self.id, docver_id=self.docver, is_active=True).exclude(dateclose=None).count() #cnt
+        return DocTask.objects.filter(doc_id=self.id, is_active=True).exclude(dateclose=None).count()  # cnt
 
     def get_absolute_url(self):
         #return reverse('my_doc:doctasks', kwargs={'docverid': self.docver, 'pk': self.pk})

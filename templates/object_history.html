@@ -29,8 +29,12 @@
                       <div class="cell">
                           {% if objtype == 'doc' %}
                               {% if key == 'Актуальн.' %}
-                                 {% if current_object.docver != value %}
-                                    <span class="hint hint--bottom hint--info" data-hint="Сделать актуальной"><input type="checkbox" value="{{value}}" name="myCheck_{{value}}" /></span>
+                                 {% if current_object.docver == value %}
+                                     <span>✓</span>
+                                 {% else %}
+                                     {% if current_object.doctask == 0%}
+                                        <span class="hint hint--bottom hint--info" data-hint="Сделать актуальной"><input type="checkbox" value="{{value}}" name="myCheck_{{value}}" /></span>
+                                     {% endif %}
                                  {% endif %}
                               {% else %}
                                   {{ value }}
