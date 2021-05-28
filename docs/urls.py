@@ -18,10 +18,11 @@ urlpatterns = [
     path('docs_list/doc_docver/', views.docver_change, name='docver_change'),
     path('doctasks_page/<int:pk>', views.doctasks, name='doctasks'),
     #path('doctasks_page/<int:pk>', views.doctasks, name='doctasks'),
-    path('doctasks_list/doctask_create/<int:docid>', views.DocTaskCreate.as_view(), name='doctask_create'),
+    path('doctasks_list/doctask_create/<int:docid>/<int:docverid>', views.DocTaskCreate.as_view(), name='doctask_create'),
     path('doctasks_list/doctask_update/<int:pk>', views.DocTaskUpdate.as_view(), name='doctask_update'),
-    ##path('projects_list/tasks_list/task_delete/<int:pk>', views.TaskDelete.as_view(), name='task_delete'),
-    #path('doctasks_list/doctask_filter/', views.doctaskfilter, name='doctask_filter'),
-    #path('doc/doc_list', views.doc_list, name='doc_list'),   # для вызова страницы списка Документов текущей Компании
-    #path('doc/file_list', views.file_list, name='file_list'),   # для вызова страницы списка Файлов текущей Компании
+    #path('doctaskcomments_page/<int:taskid>', views.doctaskcomments, name='doctaskcomments'),
+    #path('doctaskcomments_list/doctaskcomment_create/<int:taskid>', views.DocTaskCommentCreate.as_view(),
+    #     name='doctaskcomment_create'),
+    ##path('doctaskcomments_list/doctaskcomment_update/<int:pk>', views.DocTaskCommentUpdate.as_view(),
+    ##     name='doctaskcomment_update'),
 ]

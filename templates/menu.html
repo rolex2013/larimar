@@ -23,7 +23,7 @@
          {% if not node.is_leaf_node %}
             <ul class="children">
                {% if node.right|add:left %}
-               <div class="drop">+</div>
+                  <div class="drop">+</div>
                {% endif %}
                {{ children }}
             </ul>

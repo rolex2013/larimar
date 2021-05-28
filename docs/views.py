@@ -130,7 +130,7 @@ class DocCreate(AddFilesMixin, CreateView):
            newdocver.members.add(mem[0])
            membersstr = membersstr + mem[1] + ','
        newdocver.save()
-       # Делаем первую запись в историю изменений Документа
+       # Делаем первую запись в историю изменений Документа (версии)
        historyjson = {"Номер": '1',
                       "Актуальн.": newdocver.id,
                       "Наименование": self.object.name,
@@ -244,9 +244,11 @@ def doctasks(request, pk=0):
     try:
         tskstatus = request.POST['select_taskstatus']
     except:
+        #task_list = DocTask.objects.filter(
+        #    Q(author=request.user.id) | Q(assigner=request.user.id) | Q(doc__members__in=[currentuser, ]),
+        #    is_active=True, docver=docverid, dateclose__isnull=True)
         task_list = DocTask.objects.filter(
-            Q(author=request.user.id) | Q(assigner=request.user.id) | Q(doc__members__in=[currentuser, ]),
-            is_active=True, docver=docverid, dateclose__isnull=True)
+            Q(author=request.user.id) | Q(assigner=request.user.id), is_active=True, docver=docverid, dateclose__isnull=True)
     else:
         if tskstatus == "0":
             # если в выпадающем списке выбрано "Все активные"
@@ -292,7 +294,7 @@ def doctasks(request, pk=0):
 
     is_member = Doc.objects.filter(members__in=[currentuser, ]).exists()
     if currentuser == currentdocver.author_id or currentuser == currentdocver.assigner_id or is_member:
-        button_doc_history = 'История'
+        button_doc_history = 'Версии'
         button_task_create = 'Добавить'
         if currentuser == currentdocver.author_id or currentuser == currentdocver.assigner_id:
             button_doc_update = 'Изменить'
@@ -321,29 +323,35 @@ class DocTaskCreate(AddFilesMixin, CreateView):
     model = DocTask
     form_class = DocTaskForm
     #template_name = 'task_create.html'
-    template_name = 'object_form.html'
+    template_name = 'doctasks_list.html'
 
     def form_valid(self, form):
-       form.instance.client_id = self.kwargs['clientid']
-       if self.kwargs['parentid'] != 0:
-          form.instance.parent_id = self.kwargs['parentid']
+       form.instance.doc_id = self.kwargs['docid']
+       form.instance.docver_id = self.kwargs['docverid']
+       #if self.kwargs['parentid'] != 0:
+       #   form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
-       self.object = form.save() # Созадём новую задачу клиента
-       af = self.add_files(form, 'crm', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       #self.object.docver_id = self.object.docver
+       #doc = Doc.objects.filter(id=form.instance.doc_id).first()
+       #print(doc)
+       #self.object.docver_id = doc.docver
+       #self.save()
+       self.object = form.save() # Созадём новую задачу Документа
+       af = self.add_files(form, 'doc', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
        historyjson = {"Задача": self.object.name,
                       "Статус": self.object.status.name,
-                      "Начало": self.object.datebegin.strftime('%d.%m.%Y %H:%M'),
-                      "Окончание": self.object.dateend.strftime('%d.%m.%Y %H:%M'),
-                      "Тип в иерархии": self.object.structure_type.name,
+                      #"Начало": self.object.datebegin.strftime('%d.%m.%Y %H:%M'),
+                      "Окончание": self.object.dateend.strftime('%d.%m.%Y'),
+                      #"Тип в иерархии": self.object.structure_type.name,
                       "Тип": self.object.type.name,
-                      "Стоимость": str(self.object.cost),
-                      "Выполнен на, %": str(self.object.percentage),
-                      "Инициатор": self.object.initiator.name,
+                      #"Стоимость": str(self.object.cost),
+                      #"Выполнен на, %": str(self.object.percentage),
+                      #"Инициатор": self.object.initiator.name,
                       "Исполнитель": self.object.assigner.username,
                       "Активность": '✓' if self.object.is_active else '-'
                       #, "Участники":self.object.members.username
                      }
-       ModelLog.objects.create(componentname='cltsk', modelname="ClientTask", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
+       ModelLog.objects.create(componentname='dctsk', modelname="DocTask", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -353,7 +361,7 @@ class DocTaskCreate(AddFilesMixin, CreateView):
 
     def get_form_kwargs(self):
        kwargs = super(DocTaskCreate, self).get_form_kwargs()
-       kwargs.update({'user': self.request.user, 'action': 'create', 'clientid': self.kwargs['clientid']})
+       kwargs.update({'user': self.request.user, 'action': 'create', 'docid': self.kwargs['docid'], 'docverid': self.kwargs['docverid']})
        return kwargs
 
 class DocTaskUpdate(AddFilesMixin, UpdateView):
@@ -375,22 +383,22 @@ class DocTaskUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
        self.object = form.save(commit=False)
-       af = self.add_files(form, 'crm', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       af = self.add_files(form, 'doc', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
        old = DocTask.objects.filter(pk=self.object.pk).first() # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
        historyjson = {"Задача":'' if self.object.name == old.name else self.object.name,
                       "Статус":'' if self.object.status.name == old.status.name else self.object.status.name,
-                      "Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y %H:%M'),
+                      #"Начало":'' if self.object.datebegin == old.datebegin else self.object.datebegin.strftime('%d.%m.%Y %H:%M'),
                       "Окончание":'' if self.object.dateend == old.dateend else self.object.dateend.strftime('%d.%m.%Y %H:%M'),
-                      "Тип в иерархии":'' if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
+                      #"Тип в иерархии":'' if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
                       "Тип":'' if self.object.type.name == old.type.name else self.object.type.name,
-                      "Стоимость":'' if self.object.cost == old.cost else str(self.object.cost),
-                      "Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
-                      "Инициатор":'' if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
+                      #"Стоимость":'' if self.object.cost == old.cost else str(self.object.cost),
+                      #"Выполнен на, %":'' if self.object.percentage == old.percentage else str(self.object.percentage),
+                      #"Инициатор":'' if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
                       "Исполнитель":'' if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
                       "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
                       #, "Участники":self.members.username
                      }
-       ModelLog.objects.create(componentname='cltsk', modelname="ClientTask", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
+       ModelLog.objects.create(componentname='dctsk', modelname="DocTask", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
        return super().form_valid(form)
 
 #def doc_list(request):

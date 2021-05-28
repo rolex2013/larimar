@@ -57,7 +57,7 @@
 {% endblock doc %}
 
 {% block list %}
-    <!-- Защита от прямого доступа к задачам проекта -->
+    <!-- Защита от прямого доступа к задачам Документа -->
     {% if current_doc.company.id in user_companies %}
 
         <div class="object-list">

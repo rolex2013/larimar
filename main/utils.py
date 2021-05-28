@@ -57,6 +57,13 @@ class AddFilesMixin(object):
               if obj == 'document':
                  doc_id = self.object.id
                  docver_id = self.object.docver
+              if obj == 'task':
+                 doc_id = self.object.doc.id
+                 task_id = self.object.id
+              if obj == 'taskcomment':
+                 doc_id = self.object.task.doc.id
+                 task_id = self.object.task.id
+                 taskcomment_id = self.object.id
               #if obj == 'file':
               #   doc_id = self.object.doc.id
               #   task_id = self.object.id

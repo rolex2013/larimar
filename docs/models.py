@@ -144,7 +144,7 @@ class DocTask(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultdoctaskuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
     def get_absolute_url(self):
-        return reverse('my_crm:clientdoccomments', kwargs={'taskid': self.pk})
+        return reverse('my_doc:doctaskcomments', kwargs={'taskid': self.pk})
     def __str__(self):
          return (str(self.docver) + '. ' + self.name + ' (Срок: ' + self.dateend.strftime('%d.%m.%Y') + ')')
     class MPTTMeta:

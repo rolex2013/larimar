@@ -105,11 +105,11 @@ class DocForm(forms.ModelForm):
 class DocTaskForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы задачи', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
-    disabled_fields = ('dateclose', 'author',)
+    disabled_fields = ('dateclose', 'author')
 
     def clean(self):
-        if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
-           self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
+        #if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
+        #   self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == 'update':
            if self.cleaned_data['status'].id != self.initial['status']:
@@ -159,22 +159,25 @@ class DocTaskForm(forms.ModelForm):
         #is_event = bool(self.is_event)
 
         if self.action == 'create':
-           self.client = kwargs.pop('clientid')
-           super(ClientTaskForm, self).__init__(*args, **kwargs)
-           clnt = Client.objects.get(id=self.client)
-           companyid = clnt.company_id
+           self.doc = kwargs.pop('docid')
+           self.docver = kwargs.pop('docverid')
+           super(DocTaskForm, self).__init__(*args, **kwargs)
+           doc = Doc.objects.get(id=self.doc)
+           companyid = doc.company_id
+           print(self.docver)
         else:
-           super(ClientTaskForm, self).__init__(*args, **kwargs)
-           companyid = self.instance.client.company_id
-           self.client = self.instance.client_id
+           super(DocTaskForm, self).__init__(*args, **kwargs)
+           companyid = self.instance.doc.company_id
+           self.doc = self.instance.doc_id
+           self.docver = self.instance.docver_id
            # Исполнитель не может менять Исполнителя
            if self.user.id == self.initial['assigner']:
               self.fields['assigner'].disabled = True
 
-        # выцепляем id юзеров-участников Клиента
-        members_list = list(Client.objects.filter(id=self.client).values_list('members', flat=True))
+        # выцепляем id юзеров-участников Документа
+        members_list = list(Doc.objects.filter(id=self.doc).values_list('members', flat=True))
         #print(members_list)
-        # в выпадающий список для выбора Исполнителя Задачи подбираем только тех юзеров, которые являются участниками этого Клиента
+        # в выпадающий список для выбора Исполнителя Задачи подбираем только тех юзеров, которые являются участниками этого Документа
         usr = User.objects.filter(id__in=members_list, is_active=True)
         #print (usr)
         self.fields['assigner'].queryset = usr
@@ -186,6 +189,6 @@ class DocTaskForm(forms.ModelForm):
         model = DocTask
         fields = ['name', 'description', 'assigner', 'dateend', 'type', 'status', 'dateclose', 'is_active', 'id', 'author']
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y %H:%M'), # specify date-frmat
+            #'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
+            'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
         }

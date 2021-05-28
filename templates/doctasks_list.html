@@ -38,7 +38,19 @@
     </div>
  </form>
 
- <div id="ajax_doctasklistresult">{% include 'objects_list.html' %}</div>
+ <div id="ajax_doctasklistresult">
+    <ul>
+    {% for node in nodes %}
+        <li><span class="hint hint--bottom hint--info" data-hint="{{ node.description }}"><b><a href="{ url 'my_doc:doctaskcomments' node.pk %}">#{{ node.id }}. {{ node.name }}</a></b></span>&nbsp;
+            <span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.type }} | {{ node.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.manager.pk ' ' %}">{{ node.manager }}</a></span> |
+            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span>
+        </li>
+    {% endfor %}
+    </ul>
+
+    <p><em>{{ object_message }}</em></p>
+ </div>
+
  <div id="ajax_doctasklisterrors"></div>
 
  <!--{ else %}
@@ -48,7 +60,7 @@
  { endif %}-->
  
  <div class="object-list-buttons">
-    <a href="{ url 'my_doc:doctask_create' docid 0 %}">{{ button_task_create }}</a>
+    <a href="{% url 'my_doc:doctask_create' current_doc.id current_doc.docver %}">{{ button_task_create }}</a>
  </div>
 
 
