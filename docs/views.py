@@ -303,6 +303,7 @@ def doctasks(request, pk=0):
         'nodes': task_list.distinct().order_by(),  # .order_by('tree_id', 'level', '-dateend'),
         'current_task': current_task,
         'current_doc': currentdoc,
+        'docid': currentdoc.id,
         'current_docver': currentdocver.vernumber,
         'docverid': docverid,
         'user_companies': request.session['_auth_user_companies_id'],
@@ -323,7 +324,8 @@ class DocTaskCreate(AddFilesMixin, CreateView):
     model = DocTask
     form_class = DocTaskForm
     #template_name = 'task_create.html'
-    template_name = 'doctasks_list.html'
+    #template_name = 'doctasks_list.html'
+    template_name = 'object_form.html'
 
     def form_valid(self, form):
        form.instance.doc_id = self.kwargs['docid']
@@ -362,6 +364,7 @@ class DocTaskCreate(AddFilesMixin, CreateView):
     def get_form_kwargs(self):
        kwargs = super(DocTaskCreate, self).get_form_kwargs()
        kwargs.update({'user': self.request.user, 'action': 'create', 'docid': self.kwargs['docid'], 'docverid': self.kwargs['docverid']})
+       #kwargs.update({'user': self.request.user, 'action': 'create', 'docid': self.kwargs['docid']})
        return kwargs
 
 class DocTaskUpdate(AddFilesMixin, UpdateView):

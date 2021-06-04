@@ -164,7 +164,7 @@ class DocTaskForm(forms.ModelForm):
            super(DocTaskForm, self).__init__(*args, **kwargs)
            doc = Doc.objects.get(id=self.doc)
            companyid = doc.company_id
-           print(self.docver)
+           #print(self.docver)
         else:
            super(DocTaskForm, self).__init__(*args, **kwargs)
            companyid = self.instance.doc.company_id

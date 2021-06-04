@@ -95,7 +95,11 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 
 CKEDITOR_CONFIGS = {
     'default': {
-       'toolbar': 'None'
+        'toolbar': 'None',
+        #'height': 500,
+        'width': '100%'
+        #'toolbarCanCollapse': False,
+        #'forcePasteAsPlainText': True
     },
 }
 
