@@ -5,13 +5,18 @@
       <div class="object-detail">
 
          <h3>Профиль пользователя</h3>
-         <p>Пользователь: {{ user_profile.user.username }}</p>
-         <p>Описание: {% autoescape off %}{{ user_profile.description }}{% endautoescape %}</p>
+
+         {% if user_profile.user.username == None %}
+             Профиль пользователя не найден!
+         {% else %}
+             <p>Пользователь: {{ user_profile.user.username }}</p>
+             <p>Описание: {% autoescape off %}{{ user_profile.description }}{% endautoescape %}</p>
+         {% endif %}
 
          {% if user_profile.user.id == user.id %}
             <h5>Настройки</h5>
             <p>Компания: {{ user_profile.company.name }}</p>
-            <p>Оповещения: {{ prompt_is_notify }} </p>   
+            <p>Оповещения: {{ prompt_is_notify }} </p>
             <p>Протокол: {{ user_profile.protocoltype.name }}</p>
             <p>E-mail: {{ user_profile.email }}</p>
             <p>Телефон: {{ user_profile.phone }}</p>                                            
@@ -22,8 +27,9 @@
 
       </div>
 
-      <div class="object-list">
+      {% if user_profile.user.username != None %}
 
+      <div class="object-list">
 
          <h4>Блог пользователя</h4>
 
@@ -55,14 +61,14 @@
          </div>
 
          <hr>
-{% comment %}
+
          {% if user_profile.user.id == user.id %}
             {% include 'notifies.html' %}            
          {% endif %}
-{% endcomment %}
-         {% include 'notifies.html' %}
-         
+
       </div>
+
+      {% endif %}
 
 {% endblock profile %}
 

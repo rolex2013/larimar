@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q, Sum
 
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -107,7 +108,16 @@ class Project(MPTTModel):
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='project_author', verbose_name="Автор")
     members = models.ManyToManyField('auth.User', related_name='project_members', verbose_name="Участники")
-    is_active = models.BooleanField("Активность", default=True)    
+    is_active = models.BooleanField("Активность", default=True)
+
+    @property
+    # суммарная стоимость по Комментам (сколько освоено средств)
+    def costsum(self):
+        return TaskComment.objects.filter(task__project_id=self.id).aggregate(Sum('cost'))
+    @property
+    # суммарная затраченное время по Комметам
+    def timesum(self):
+        return TaskComment.objects.filter(task__project_id=self.id).aggregate(Sum('time'))
          
     def get_absolute_url(self):
         return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '0'})  
@@ -171,6 +181,16 @@ class Task(MPTTModel):
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
+
+    @property
+    # суммарная стоимость по Комментариям (сколько освоено средств)
+    def costsum(self):
+        return TaskComment.objects.filter(task_id=self.id).aggregate(Sum('cost'))
+    @property
+    # суммарная затраченное время по Комментариям
+    def timesum(self):
+        return TaskComment.objects.filter(task_id=self.id).aggregate(Sum('time'))
+
     def get_absolute_url(self):
         return reverse('my_project:taskcomments', kwargs={'taskid': self.pk})
         #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})

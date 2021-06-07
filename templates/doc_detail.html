@@ -61,15 +61,7 @@
     {% if current_doc.company.id in user_companies %}
 
         <div class="object-list">
-
-            <div class="object-list-wrapper">
-
-                <div class="object-list-left">
-                    {% include 'doctasks_list.html' %}
-                </div>
-
-            </div>
-
+            {% include 'doctasks_list.html' %}
         </div>
 
     {% else %}

@@ -305,8 +305,10 @@ def tasks(request, projectid=0, pk=0):
 
     currentproject = Project.objects.get(id=projectid)
 
-    taskcomment_costsum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('cost'))
-    taskcomment_timesum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('time'))
+    #taskcomment_costsum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('cost'))
+    #taskcomment_timesum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('time'))
+    taskcomment_costsum = currentproject.costsum
+    taskcomment_timesum = currentproject.timesum
     try:
        sec = taskcomment_timesum["time__sum"]*3600
     except:
@@ -484,8 +486,10 @@ def taskcomments(request, taskid):
     currenttask = Task.objects.get(id=taskid)
     currentuser = request.user.id
     
-    taskcomment_costsum = TaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
-    taskcomment_timesum = TaskComment.objects.filter(task=taskid).aggregate(Sum('time'))
+    #taskcomment_costsum = TaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
+    #taskcomment_timesum = TaskComment.objects.filter(task=taskid).aggregate(Sum('time'))
+    taskcomment_costsum = currenttask.costsum
+    taskcomment_timesum = currenttask.timesum
     try:
        sec = taskcomment_timesum["time__sum"]*3600
     except:
@@ -520,7 +524,7 @@ def taskcomments(request, taskid):
                               'button_task_update': button_task_update,
                               'button_task_history': button_task_history,
                               'taskcomment_costsum': taskcomment_costsum,
-                              'taskcomment_timesum': taskcomment_timesum,  
+                              'taskcomment_timesum': taskcomment_timesum,
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,                            
                               'button_taskcomment_create': button_taskcomment_create,
                                                 })      

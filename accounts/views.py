@@ -253,8 +253,8 @@ def UserProfileDetail(request, userid=0, param=''):
           content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), place_id=3).annotate(cnt=Count('id'))
     else:
        content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), place_id=3).annotate(cnt=Count('id'))          
-    user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
-
+    #user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
+    user_profile = UserProfile.objects.filter(user=userid, is_active=True).first()
     notification_list = Notification.objects.filter(recipient_id=userid, is_active=True, is_read=False, type_id=3)
     #print(notification_list)
     #table = NotificationTable(notification_list)
@@ -263,8 +263,9 @@ def UserProfileDetail(request, userid=0, param=''):
     #button_project_create = ''
     button_userprofile_update = 'Изменить'
     prompt_is_notify = 'Вкл.'
-    if user_profile.is_notify == False:
-       prompt_is_notify = 'Выкл.'
+    if user_profile:
+        if user_profile.is_notify == False:
+            prompt_is_notify = 'Выкл.'
 
     return render(request, 'userprofile_detail.html', {
                                                        'user_profile': user_profile,
@@ -275,7 +276,7 @@ def UserProfileDetail(request, userid=0, param=''):
                                                        'notification_list': notification_list.distinct().order_by("-datecreate"),
                                                        'metaobjecttype_list': metaobjecttype_list.distinct().order_by(),
                                                        'status_selectid': '2',
-                                                       'metaobjecttype_selectid': '0',                                                       
+                                                       'metaobjecttype_selectid': '0',
                                                        #'table': table,
                                                       })
 
