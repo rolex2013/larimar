@@ -36,20 +36,20 @@ def docs(request, companyid=0, pk=0):
     try:
        docstatus = request.POST['select_docstatus']
     except:
-       doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
+       doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid)
     else:
        if docstatus == "0":
           # если в выпадающем списке выбрано "Все активные"
-          doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
+          doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid)
        else:
           if docstatus == "-1":
              # если в выпадающем списке выбрано "Все"
-             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
+             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid)
           elif docstatus == "-2":
              # если в выпадающем списке выбрано "Просроченные"
-             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
+             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid)
           else:
-             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=docstatus)
+             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid, status=docstatus)
        docstatus_selectid = docstatus
     #docstatus_myselectid = mydocstatus
     # *******************************
@@ -234,7 +234,6 @@ class DocUpdate(AddFilesMixin, UpdateView):
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctasks(request, pk=0):
-    #print('======================')
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     tskstatus_selectid = 0
@@ -292,11 +291,11 @@ def doctasks(request, pk=0):
     button_doc_history = ''
     button_task_create = ''
 
-    is_member = Doc.objects.filter(members__in=[currentuser, ]).exists()
-    if currentuser == currentdocver.author_id or currentuser == currentdocver.assigner_id or is_member:
+    is_member = Doc.objects.filter(id=pk, members__in=[currentuser, ]).exists()
+    if currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id or is_member:
         button_doc_history = 'Версии'
         button_task_create = 'Добавить'
-        if currentuser == currentdocver.author_id or currentuser == currentdocver.assigner_id:
+        if (currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id) and currentdoc.is_public == False and currentdoc.doctask == 0:
             button_doc_update = 'Изменить'
 
     return render(request, "doc_detail.html", {
@@ -333,6 +332,7 @@ class DocTaskCreate(AddFilesMixin, CreateView):
        #if self.kwargs['parentid'] != 0:
        #   form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
+       #form.instance.comment = self.comment
        #self.object.docver_id = self.object.docver
        #doc = Doc.objects.filter(id=form.instance.doc_id).first()
        #print(doc)
@@ -340,6 +340,8 @@ class DocTaskCreate(AddFilesMixin, CreateView):
        #self.save()
        self.object = form.save() # Созадём новую задачу Документа
        af = self.add_files(form, 'doc', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
+       # создаём Комментарий к Задаче
+       c#omment = DocTaskComment.objects.create(task_id=self.object.id, name=form.instance.comment)
        historyjson = {"Задача": self.object.name,
                       "Статус": self.object.status.name,
                       #"Начало": self.object.datebegin.strftime('%d.%m.%Y %H:%M'),

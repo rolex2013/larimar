@@ -105,6 +105,7 @@ class DocForm(forms.ModelForm):
 class DocTaskForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы задачи', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+    comment = forms.CharField(label='Комментарий', widget=forms.Textarea)
     disabled_fields = ('dateclose', 'author')
 
     def clean(self):

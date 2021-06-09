@@ -15,7 +15,7 @@ class Meta_Param(models.Model):
         return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + '|' + self.name)      
 
 class Meta_ObjectType(models.Model):
-    shortname = models.CharField("Код", max_length=8)    
+    shortname = models.CharField("Код", max_length=16)
     name = models.CharField("Наименование", max_length=64)
     tablename = models.CharField("Таблица", max_length=64)    
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)

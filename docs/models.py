@@ -88,7 +88,8 @@ class Doc(models.Model):
         #cnt = DocTask.objects.filter(doc_id=self.id, docver_id=self.docver, is_active=True).exclude(dateclose=None).count()
         #print('cnt='+str(cnt))
         #return DocTask.objects.filter(doc_id=self.id, docver_id=self.docver, is_active=True).exclude(dateclose=None).count() #cnt
-        return DocTask.objects.filter(doc_id=self.id, is_active=True).exclude(dateclose=None).count()  # cnt
+        #return DocTask.objects.filter(doc_id=self.id, is_active=True).exclude(dateclose=None).count()  # cnt
+        return DocTask.objects.filter(doc_id=self.id, is_active=True, dateclose=None).count()
 
     def get_absolute_url(self):
         #return reverse('my_doc:doctasks', kwargs={'docverid': self.docver, 'pk': self.pk})

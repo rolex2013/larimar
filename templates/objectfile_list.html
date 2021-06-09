@@ -16,7 +16,9 @@
         <div class="table-files">
             {% for file in files %}
                 <div class="row-files">
-                    <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                    {% if current_doc.doctask == 0 %}
+                        <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                    {% endif %}
                     <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
                     <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div>
                     <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
