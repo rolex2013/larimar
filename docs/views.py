@@ -14,7 +14,7 @@ from django.db.models import Q #, Count, Min, Max, Sum, Avg
 
 from companies.models import Company
 from . models import Doc, DocVer, DocTask, DocTaskComment, Dict_DocType, Dict_DocStatus, Dict_DocTaskType, Dict_DocTaskStatus, DocVerFile
-from .forms import DocForm, DocTaskForm #,DocTaskCommentForm
+from .forms import DocForm, DocTaskForm, DocTaskCommentForm #, DocTaskUpdateForm #,DocTaskCommentForm
 
 from main.models import ModelLog
 
@@ -333,15 +333,11 @@ class DocTaskCreate(AddFilesMixin, CreateView):
        #   form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
        #form.instance.comment = self.comment
-       #self.object.docver_id = self.object.docver
-       #doc = Doc.objects.filter(id=form.instance.doc_id).first()
-       #print(doc)
-       #self.object.docver_id = doc.docver
-       #self.save()
+       comment = form.cleaned_data["comment"]
        self.object = form.save() # Созадём новую задачу Документа
        af = self.add_files(form, 'doc', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
        # создаём Комментарий к Задаче
-       c#omment = DocTaskComment.objects.create(task_id=self.object.id, name=form.instance.comment)
+       cmnt = DocTaskComment.objects.create(task_id=self.object.id, author_id=form.instance.author_id, name=comment)
        historyjson = {"Задача": self.object.name,
                       "Статус": self.object.status.name,
                       #"Начало": self.object.datebegin.strftime('%d.%m.%Y %H:%M'),
@@ -406,11 +402,64 @@ class DocTaskUpdate(AddFilesMixin, UpdateView):
        ModelLog.objects.create(componentname='dctsk', modelname="DocTask", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
        return super().form_valid(form)
 
-#def doc_list(request):
-#    return render(request, "docdoc_list.html", {'nodes': nodes,})
 
-#def file_list(request):
-#    return render(request, "docfile_list.html", {'nodes': nodes,})
+@login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def doctaskcomments(request, taskid):
+    currenttask = DocTask.objects.get(id=taskid)
+    currentuser = request.user.id
+
+    taskcomment_list = DocTaskComment.objects.filter(
+        Q(author=request.user.id) | Q(task__doc__members__in=[currentuser, ]), is_active=True, task=taskid)
+
+    button_taskcomment_create = ''
+    # button_taskcomment_update = ''
+    button_task_create = ''
+    button_task_update = ''
+    button_task_history = ''
+    is_member = Doc.objects.filter(members__in=[currentuser, ]).exists()
+    if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id or is_member:
+        button_task_create = 'Добавить'
+        button_task_history = 'История'
+        button_taskcomment_create = 'Добавить'
+        if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
+            button_task_update = 'Изменить'
+
+    return render(request, "doctask_detail.html", {
+        'nodes': taskcomment_list.distinct().order_by(),
+        # 'node_files': n_files,
+        # 'current_taskcomment': currenttaskcomment,
+        'task': currenttask,
+        'files': DocVerFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
+        'objtype': 'prjtsk',
+        'media_path': settings.MEDIA_URL,
+        'button_task_create': button_task_create,
+        'button_task_update': button_task_update,
+        'button_task_history': button_task_history,
+        'button_taskcomment_create': button_taskcomment_create,
+    })
+
+
+class DocTaskCommentDetail(DetailView):
+    model = DocTaskComment
+    template_name = 'doctaskcomment_detail.html'
+
+
+class DocTaskCommentCreate(AddFilesMixin, CreateView):
+    model = DocTaskComment
+    form_class = DocTaskCommentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['header'] = 'Новый Комментарий'
+        return context
+
+    def form_valid(self, form):
+        form.instance.task_id = self.kwargs['taskid']
+        form.instance.author_id = self.request.user.id
+        self.object = form.save()
+        af = self.add_files(form, 'doc', 'doctaskcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
+        return super().form_valid(form)
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctaskfilter(request):

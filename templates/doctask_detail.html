@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block task %}
+
+    <div class="object-detail">
+
+        <div>
+            <div class="object-detail-header">
+                <h4>Задача: {{ task.name }}
+                    {% if not task.is_active %}
+                        (Задача перемещена в архив)
+                    {% endif %}
+                </h4>
+            </div>
+
+            <div class="object-detail-left">
+                <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p>
+                <i><p>Проект: <a href="{% url 'my_doc:doctasks' task.doc.pk %}">{{ task.doc.name }}</a></p></i>
+                {% if task.parent %}
+                    <p>Уровень выше: <a href="{% url 'my_doc:doctaskcomments' task.parent.pk %}">{{ task.parent.name }}</a></p>
+                {% else %}
+                    <!-- <p>: <a href="{ url 'my_doc:docs' current_doc.company.pk current_doc.parent.pk %}">{{ current_doc.parent.name }}</a></p>-->
+                {% endif %}
+                <p>Бюджет: {{ task.cost }} {{ task.doc.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
+                {%  comment %}<p>Бюджет: {{ task.cost }} {{ task.doc.currency.shortname }}<i> (Освоено: {{ task.costsum|floatformat:2 }})</i></p>{% endcomment %}
+                <p>Исполнитель: <span class="hint hint--bottom hint--info" data-hint="Профиль исполнителя"><a href="{% url 'my_account:userprofile_detail' task.assigner.pk ' ' %}">{{ task.assigner }}</a></span></p>
+                <p>Начало: {{ task.datebegin }}</p>
+                <p>Окончание: {{ task.dateend }}</p>
+                <p>Тип в иерархии: {{ task.structure_type }}</p>
+                <p>Тип: {{ task.type }}</p>
+                <p>Статус: {{ task.status }}</p>
+                <p>Затраченное время, час.: <!--{ taskcomment_timesum.time__sum|floatformat:2 }}-->{{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
+                <p>Выполнена на: {{ task.percentage }} %</p>
+                <em>Автор: {{ task.author }}</em><br />
+                <em>Дата: {{ task.datecreate }}</em>
+                <p>&nbsp;</p>
+            </div>
+            <div class="object-detail-right">{% include 'objectfile_list.html' %}</div>
+        </div>
+        <div class="object-detail-buttons">
+            <a href="{% url 'my_doc:doctask_create' task.doc.id task.pk %}">{{ button_task_create }}</a>
+            <a href="{% url 'my_doc:doctask_update' task.pk %}">{{ button_task_update }}</a>
+            <!-- <div style="float: left;"><a href="{ url 'my_doc:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
+            <!--<div style="float: left;"><a href="{ url 'my_doc:doc_delete' doc.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
+            <!--<a href="{ url 'my_doc:task_history' task.pk %}">{ button_task_history }}</a>-->
+            <a href="{% url 'my_main:object_history' 'tsk' task.pk %}">{{ button_task_history }}</a>
+        </div>
+
+    </div>
+
+{% endblock task %}
+
+<!--<hr>-->
+
+{% block list %}
+
+    <div class="object-list">
+
+        <h5>Комментарии</h5>
+
+        <!--<a href="{ url 'my_doc:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
+        <div class="object-list-buttons">
+            <a href="{% url 'my_doc:doctaskcomment_create' task.pk %}">{{ button_taskcomment_create }}</a>
+        </div>
+        <br />
+        {% for taskcomment in nodes %}
+            <div class="comment-entry">
+                <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} |
+                <span>
+                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> |
+                </span></b>
+                <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
+                {% if taskcomment.files %}
+                    <em style="font-size: 70%;">Файлы</em style="font-size: 70%;">
+                {% endif %}
+                {% for f in taskcomment.files %}
+                    <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
+                {% endfor %}
+                <hr>
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock list %}

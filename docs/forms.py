@@ -114,11 +114,6 @@ class DocTaskForm(forms.ModelForm):
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == 'update':
            if self.cleaned_data['status'].id != self.initial['status']:
-              # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели)
-              #dict_status = Dict_ClientTaskStatus.objects.get(pk=self.cleaned_data['status'].id)
-              #ClientTaskStatusLog.objects.create(task_id=self.initial['id'],
-              #                                   status_id=dict_status.id,
-              #                                   author_id=self.user.id)
               if self.cleaned_data['status'].is_close:
                  if self.user.id != self.initial['author']:
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
@@ -153,22 +148,20 @@ class DocTaskForm(forms.ModelForm):
                                           author_id=self.user.id)
 
     def __init__(self, *args, **kwargs):
-
-        self.user = kwargs.pop('user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
-        self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
-        #self.is_event = kwargs.pop('is_event')  # Узнаём, что за модель
-        #is_event = bool(self.is_event)
+        self.user = kwargs.pop('user', None)  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
+        self.action = kwargs.pop('action', None)  # Узнаём, какая вьюха вызвала эту форму
 
         if self.action == 'create':
            self.doc = kwargs.pop('docid')
            self.docver = kwargs.pop('docverid')
-           super(DocTaskForm, self).__init__(*args, **kwargs)
+           super().__init__(*args, **kwargs)
            doc = Doc.objects.get(id=self.doc)
-           companyid = doc.company_id
+           #companyid = doc.company_id
            #print(self.docver)
         else:
-           super(DocTaskForm, self).__init__(*args, **kwargs)
-           companyid = self.instance.doc.company_id
+           self.fields['comment'].disabled = True
+           super().__init__(*args, **kwargs)
+           #companyid = self.instance.doc.company_id
            self.doc = self.instance.doc_id
            self.docver = self.instance.docver_id
            # Исполнитель не может менять Исполнителя
@@ -193,3 +186,11 @@ class DocTaskForm(forms.ModelForm):
             #'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
         }
+
+class DocTaskCommentForm(forms.ModelForm):
+
+    files = forms.FileField(label='Файлы комментария', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
+    class Meta:
+        model = DocTaskComment
+        fields = ['name', 'description']

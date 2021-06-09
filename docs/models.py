@@ -183,6 +183,8 @@ class DocVerFile(models.Model):
     uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)
     doc = models.ForeignKey('Doc', null=True, blank=True, on_delete=models.CASCADE, related_name='doc_file', verbose_name="Документ")
     docver = models.ForeignKey('DocVer', null=True, blank=True, on_delete=models.CASCADE, related_name='docver_file', verbose_name="Версия Документа")
+    task = models.ForeignKey('DocTask', null=True, blank=True, on_delete=models.CASCADE, related_name='doctask_file', verbose_name="Задача")
+    taskcomment = models.ForeignKey('DocTaskComment', null=True, blank=True, on_delete=models.CASCADE, related_name='doctaskcomment_file', verbose_name="Комментарий")
     pfile = models.FileField(upload_to='uploads/files/docs/doc', blank=True, null=True, verbose_name='Файл')
     psize = models.CharField(editable=False, max_length=64)
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
