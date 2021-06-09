@@ -60,9 +60,9 @@ INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (7,'clnt','Клиент','client',1,'Client',1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (8,'evnt','Событие','event',25,'Event',1);
 */
-INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (8,'doc','Документ','Doc',30,'Document',1);
-INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (8,'doctsk','Задача Документа','DocTask',35,'Task of Document',1);
-INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (8,'doctskcmnt','Комментарий к Задаче Документа','DocTaskComment',40,'Comment',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (9,'doc','Документ','Doc',30,'Document',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (10,'doctsk','Задача Документа','DocTask',35,'Task of Document',1);
+INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (11,'doctskcmnt','Комментарий к Задаче Документа','DocTaskComment',40,'Comment',1);
 /*
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (1,'В разработке',5,'Planing',0,1);
 INSERT INTO `crm_dict_clienttaskstatus` (`id`,`name`,`sort`,`name_lang`,`is_close`,`is_active`) VALUES (2,'В работе',10,'Working',0,1);
