@@ -22,8 +22,8 @@ urlpatterns = [
     #path('doctasks_list/doctask_create/<int:docid>', views.DocTaskCreate.as_view(), name='doctask_create'),
     path('doctasks_list/doctask_update/<int:pk>', views.DocTaskUpdate.as_view(), name='doctask_update'),
     path('doctaskcomments_page/<int:taskid>', views.doctaskcomments, name='doctaskcomments'),
-    #path('doctaskcomments_list/doctaskcomment_create/<int:taskid>', views.DocTaskCommentCreate.as_view(),
-    #     name='doctaskcomment_create'),
+    path('doctaskcomments_list/doctaskcomment_create/<int:taskid>', views.DocTaskCommentCreate.as_view(),
+         name='doctaskcomment_create'),
     ##path('doctaskcomments_list/doctaskcomment_update/<int:pk>', views.DocTaskCommentUpdate.as_view(),
     ##     name='doctaskcomment_update'),
 ]

@@ -96,7 +96,7 @@ class DocForm(forms.ModelForm):
 
     class Meta:
         model = Doc
-        fields = ['name', 'description', 'manager', 'type', 'status', 'members', 'datepublic', 'is_active', 'id', 'author']
+        fields = ['name', 'description', 'manager', 'type', 'status', 'members', 'is_public', 'datepublic', 'is_active', 'id', 'author']
         #widgets = {
         #    'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
         #    'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
@@ -105,7 +105,8 @@ class DocForm(forms.ModelForm):
 class DocTaskForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы задачи', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
-    comment = forms.CharField(label='Комментарий', widget=forms.Textarea)
+    #comment = forms.CharField(label='Комментарий', widget=forms.Textarea, required=False)
+    comment = forms.CharField(label='Комментарий', widget=CKEditorWidget(), required=False)
     disabled_fields = ('dateclose', 'author')
 
     def clean(self):
@@ -159,13 +160,12 @@ class DocTaskForm(forms.ModelForm):
            #companyid = doc.company_id
            #print(self.docver)
         else:
-           self.fields['comment'].disabled = True
            super().__init__(*args, **kwargs)
            #companyid = self.instance.doc.company_id
            self.doc = self.instance.doc_id
            self.docver = self.instance.docver_id
-           # Исполнитель не может менять Исполнителя
-           if self.user.id == self.initial['assigner']:
+           # Исполнитель не может менять Исполнителя, если он не Автор
+           if self.user.id == self.initial['assigner'] and self.user.id != self.initial['author']:
               self.fields['assigner'].disabled = True
 
         # выцепляем id юзеров-участников Документа
@@ -187,10 +187,15 @@ class DocTaskForm(forms.ModelForm):
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
         }
 
+class DocTaskFormUpdate(DocTaskForm):
+
+    comment = None
+
 class DocTaskCommentForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы комментария', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
     class Meta:
         model = DocTaskComment
-        fields = ['name', 'description']
+        #fields = ['name', 'description']
+        fields = ['description']

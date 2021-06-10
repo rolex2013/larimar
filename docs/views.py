@@ -14,7 +14,7 @@ from django.db.models import Q #, Count, Min, Max, Sum, Avg
 
 from companies.models import Company
 from . models import Doc, DocVer, DocTask, DocTaskComment, Dict_DocType, Dict_DocStatus, Dict_DocTaskType, Dict_DocTaskStatus, DocVerFile
-from .forms import DocForm, DocTaskForm, DocTaskCommentForm #, DocTaskUpdateForm #,DocTaskCommentForm
+from .forms import * #DocForm, DocTaskForm, DocTaskCommentForm #, DocTaskUpdateForm #,DocTaskCommentForm
 
 from main.models import ModelLog
 
@@ -336,8 +336,9 @@ class DocTaskCreate(AddFilesMixin, CreateView):
        comment = form.cleaned_data["comment"]
        self.object = form.save() # Созадём новую задачу Документа
        af = self.add_files(form, 'doc', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
-       # создаём Комментарий к Задаче
-       cmnt = DocTaskComment.objects.create(task_id=self.object.id, author_id=form.instance.author_id, name=comment)
+       if comment != '':
+          # создаём Комментарий к Задаче
+          cmnt = DocTaskComment.objects.create(task_id=self.object.id, author_id=form.instance.author_id, description=comment)
        historyjson = {"Задача": self.object.name,
                       "Статус": self.object.status.name,
                       #"Начало": self.object.datebegin.strftime('%d.%m.%Y %H:%M'),
@@ -367,7 +368,7 @@ class DocTaskCreate(AddFilesMixin, CreateView):
 
 class DocTaskUpdate(AddFilesMixin, UpdateView):
     model = DocTask
-    form_class = DocTaskForm
+    form_class = DocTaskFormUpdate
     #template_name = 'task_update.html'
     template_name = 'object_form.html'
 
@@ -418,7 +419,7 @@ def doctaskcomments(request, taskid):
     button_task_history = ''
     is_member = Doc.objects.filter(members__in=[currentuser, ]).exists()
     if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id or is_member:
-        button_task_create = 'Добавить'
+        #button_task_create = 'Добавить'
         button_task_history = 'История'
         button_taskcomment_create = 'Добавить'
         if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
@@ -432,7 +433,7 @@ def doctaskcomments(request, taskid):
         'files': DocVerFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
         'objtype': 'prjtsk',
         'media_path': settings.MEDIA_URL,
-        'button_task_create': button_task_create,
+        #'button_task_create': button_task_create,
         'button_task_update': button_task_update,
         'button_task_history': button_task_history,
         'button_taskcomment_create': button_taskcomment_create,
@@ -458,7 +459,7 @@ class DocTaskCommentCreate(AddFilesMixin, CreateView):
         form.instance.task_id = self.kwargs['taskid']
         form.instance.author_id = self.request.user.id
         self.object = form.save()
-        af = self.add_files(form, 'doc', 'doctaskcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, 'doc', 'taskcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
         return super().form_valid(form)
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

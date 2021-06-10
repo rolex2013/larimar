@@ -21,7 +21,7 @@
 
         <div>
             <div class="object-detail-header">
-                <h4>Задача: {{ task..name }}
+                <h4>Задача: {{ task.name }}
                     {% if not task.is_active %}
                         (Задача перемещена в архив)
                     {% endif %}
@@ -29,7 +29,7 @@
             </div>
 
             <div class="object-detail-left">
-                <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p>
+                <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p><br />
                 <i><p>Проект: <a href="{% url 'my_project:tasks' task.project.pk 0 %}">{{ task.project.name }}</a></p></i>
                 {% if task.parent %}
                     <p>Уровень выше: <a href="{% url 'my_project:taskcomments' task.parent.pk %}">{{ task.parent.name }}</a></p>
@@ -79,20 +79,24 @@
         </div>
         <br />
         {% for taskcomment in nodes %}
-            <div class="comment-entry">
+            {% if taskcomment.author == taskcomment.task.author %}
+                <div class="object-list-left">
+            {% else %}
+                <div class="object-list-right">
+            {%  endif %}
                 <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} |
               <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
                  {{ taskcomment.time }} час. |
                   {{ task.project.currency.symbol }}{{ taskcomment.cost }}</span></b>
                 <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
                 {% if taskcomment.files %}
-                    <em style="font-size: 70%;">Файлы</em style="font-size: 70%;">
+                    <em style="font-size: 70%;">Файлы:</em>
                 {% endif %}
                 {% for f in taskcomment.files %}
                     <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
                 {% endfor %}
-                <hr>
             </div>
+            <hr>
         {% endfor %}
 
     </div>

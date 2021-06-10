@@ -331,23 +331,25 @@ body {
 .object-list-wrapper {
     display: flex;
 }
-.object-list-left, .object-list-right {
+/*.object-list-left, .object-list-right {
     margin: 0px 5px 0px 5px;
-    padding: 15px;
+    padding: 15px;*/
     /*border: 1px solid #dedede;*/
     /*box-shadow: 0 10px 10px #b8beb8 inset, 0 10px 10px #b8beb8;*/
     /*box-shadow: 0.8em 10px #b8beb8;*/
-    box-shadow: 0.4em 0.4em 15px rgba(165, 165, 165, 0.5);
-}
-.object-list-left {
+    /*box-shadow: 0.4em 0.4em 15px rgba(165, 165, 165, 0.5);*/
+/*}*/
+.object-list .object-list-left {
     /*float: left;*/
+    padding: 0px 0px 0px 0px;
     text-decoration: none;
-    width: 49%;
+    /*width: 49%;*/
 }
-.object-list-right {
-    /*float: right;       */
+.object-list .object-list-right {
+    /*float: right;*/
+    padding: 0px 0px 0px 35px;
     text-decoration: none;
-    width: 49%;
+    /*width: 49%;*/
     /*margin-left: 52%;*/
 }
 .object-list-row {

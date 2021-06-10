@@ -59,9 +59,11 @@ class AddFilesMixin(object):
                  docver_id = self.object.docver
               if obj == 'task':
                  doc_id = self.object.doc.id
+                 docver_id = self.object.doc.docver
                  task_id = self.object.id
               if obj == 'taskcomment':
                  doc_id = self.object.task.doc.id
+                 docver_id = self.object.task.doc.docver
                  task_id = self.object.task.id
                  taskcomment_id = self.object.id
               #if obj == 'file':
@@ -76,7 +78,7 @@ class AddFilesMixin(object):
                   fl = ClientFile(client_id=client_id, task_id=task_id, taskcomment_id=taskcomment_id, event_id=event_id, eventcomment_id=eventcomment_id, pfile=f)
                elif app == 'doc':
                   fcnt = DocVerFile.objects.filter(doc_id=doc_id, docver_id=docver_id, name=f, is_active=True).count()
-                  fl = DocVerFile(doc_id=doc_id, docver_id=docver_id, pfile=f)
+                  fl = DocVerFile(doc_id=doc_id, docver_id=docver_id, task_id=task_id, taskcomment_id=taskcomment_id, pfile=f)
 
                fl.author = self.request.user
                fn = f

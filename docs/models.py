@@ -156,8 +156,8 @@ class DocTask(models.Model):
         verbose_name_plural = 'Задачи'
 
 class DocTaskComment(models.Model):
-    name = models.CharField("Наименование", max_length=128)
-    description = RichTextUploadingField("Описание")
+    #name = models.CharField("Наименование", max_length=128)
+    description = RichTextUploadingField("Текст")
     time = models.DecimalField("Время работы, час.", max_digits=6, decimal_places=2, blank=False, null=False, default=0)
     cost = models.DecimalField("Стоимость", max_digits=9, decimal_places=2, default=0)
     task = models.ForeignKey('DocTask', on_delete=models.CASCADE, related_name='resultdoctask', verbose_name="Задача")
@@ -168,7 +168,8 @@ class DocTaskComment(models.Model):
     def get_absolute_url(self):
         return reverse('my_doc:doctaskcomments', kwargs={'taskid': self.task_id})
     def __str__(self):
-        return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
+        #return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
+        return (str(self.task) + '. ' + ' (' + self.author + ' | ' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
 
     @property
     def files(self):

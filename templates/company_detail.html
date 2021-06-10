@@ -25,9 +25,9 @@
 
         <p>Тип в оргструктуре: {{ current_company.structure_type }}</p>
         <p>Тип: {{ current_company.type }}</p>
-        <em>Автор: {{ current_company.author }}</em><br /> 
+        <em>Автор: {{ current_company.author }}</em>
         <em>Дата: {{ current_company.datecreate }}</em>
-        <br /><br />
+        <br />
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
           <div class="object-detail-buttons">
               {% if component_name == 'companies' %}
