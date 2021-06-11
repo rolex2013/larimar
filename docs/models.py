@@ -29,7 +29,8 @@ class Dict_DocStatus(models.Model):
     description = models.TextField("Описание", blank=True, null=True)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
-    is_close = models.BooleanField("Закрывает документ", default=False)
+    #is_close = models.BooleanField("Закрывает документ", default=False)
+    is_public = models.BooleanField("Публикует документ", default=False)
     is_active = models.BooleanField("Активность", default=True)
     class Meta:
         ordering = ('sort',)

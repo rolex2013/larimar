@@ -19,27 +19,22 @@ class DocForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы документа', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
-    disabled_fields = ('datepublic', 'author')
+    disabled_fields = ('datepublic', 'author', 'is_public')
     #disabled_fields = ('datecreate', 'author',)
 
     def clean(self):
 
         if self.action == 'update':
-           if self.cleaned_data['is_public'] == True:
-              self.cleaned_data['datepublic'] = datetime.datetime.today()
-           else:
-              self.cleaned_data['datepublic'] = None
+           #if self.cleaned_data['is_public'] == True:
+           #   self.cleaned_data['datepublic'] = datetime.datetime.today()
+           #else:
+           #   self.cleaned_data['datepublic'] = None
            if self.cleaned_data['status'].id != self.initial['status']:
-              # если вызов пришёл из DocUpdate и статус Документа был изменён, то пишем лог изменения
-              #dict_status = Dict_DocStatus.objects.get(pk=self.cleaned_data['status'].id)
-              #DocStatusLog.objects.create(doc_id=self.initial['id'],
-              #                                status_id=dict_status.id,
-              #                                author_id=self.user.id)
               if self.cleaned_data['status'].is_public:
-                 '''
+                 self.cleaned_data['datepublic'] = datetime.datetime.today()
+                 self.cleaned_data['is_public'] = True
                  if self.user.id != self.initial['author']:
                     # если Документ публикуется Менеджером, то уведомление отсылается Автору
-                    self.cleaned_data['datepublic'] = datetime.datetime.today()
                     #self.cleaned_data['percentage'] = 100
                     #self.cleaned_data['phone'] = '+7(999)999-9998'
                     ##user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
@@ -55,9 +50,10 @@ class DocForm(forms.ModelForm):
                                                 recipient_id=self.initial['author'],
                                                 sendto=user_profile.email,
                                                 author_id=self.user.id)
-                 '''
+
               else:
                  self.cleaned_data['datepublic'] = None
+                 self.cleaned_data['is_public'] = False
            elif self.cleaned_data['manager'].id != self.initial['manager']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['manager'].id, is_active=True)
               objecttypeid = Meta_ObjectType.objects.get(shortname='doc').id

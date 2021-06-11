@@ -36,10 +36,10 @@ class ProjectForm(forms.ModelForm):
               #                                status_id=dict_status.id, 
               #                                author_id=self.user.id)
               if self.cleaned_data['status'].is_close: # == "Выполнен":
-                 if self.user.id != self.initial['author']: 
+                  self.cleaned_data['dateclose'] = datetime.datetime.today()
+                  self.cleaned_data['percentage'] = 100
+                  if self.user.id != self.initial['author']:
                     # если проект закрывается Исполнителем, то уведомление отсылается Автору
-                    self.cleaned_data['dateclose'] = datetime.datetime.today()
-                    self.cleaned_data['percentage'] = 100  
                     #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)    
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id                                       
