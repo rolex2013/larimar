@@ -294,7 +294,8 @@ def doctasks(request, pk=0):
     is_member = Doc.objects.filter(id=pk, members__in=[currentuser, ]).exists()
     if currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id or is_member:
         button_doc_history = 'Версии'
-        button_task_create = 'Добавить'
+        if currentdoc.is_public == False:
+            button_task_create = 'Добавить'
         if (currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id) and currentdoc.is_public == False and currentdoc.doctask == 0:
             button_doc_update = 'Изменить'
 

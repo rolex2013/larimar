@@ -15,7 +15,7 @@
                     </h3>
                 </div>
                 <div class="object-detail-left">
-                    <p>{% autoescape off %}{{ current_doc.description }}{% endautoescape %}</p>
+                    <p>{% autoescape off %}{{ current_doc.description }}{% endautoescape %}</p><br />
                     <i><p>Организация: <a href="{% url 'my_doc:docs' current_doc.company.pk 0 %}">{{ current_doc.company }}</a></p></i>
                     <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_doc.manager.pk ' ' %}">{{ current_doc.manager }}</a></span></p>
                     <!--<p>Создан: {{ current_doc.datecreate }}</p>

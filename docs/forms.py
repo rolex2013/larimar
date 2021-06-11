@@ -19,12 +19,16 @@ class DocForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы документа', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
 
-    disabled_fields = ('datepublic', 'author',)
+    disabled_fields = ('datepublic', 'author')
     #disabled_fields = ('datecreate', 'author',)
 
     def clean(self):
 
         if self.action == 'update':
+           if self.cleaned_data['is_public'] == True:
+              self.cleaned_data['datepublic'] = datetime.datetime.today()
+           else:
+              self.cleaned_data['datepublic'] = None
            if self.cleaned_data['status'].id != self.initial['status']:
               # если вызов пришёл из DocUpdate и статус Документа был изменён, то пишем лог изменения
               #dict_status = Dict_DocStatus.objects.get(pk=self.cleaned_data['status'].id)
@@ -83,6 +87,9 @@ class DocForm(forms.ModelForm):
            # Менеджер не может менять Менеджера
            if self.user.id == self.initial['manager']:
               self.fields['manager'].disabled = True
+           dc = Doc.objects.filter(id=self.instance.id).first()
+           if dc.doctask != 0:
+              self.fields["is_public"].disabled = True
 
         # в выпадающие списки для выбора Менеджера и Участников Документа подбираем только тех юзеров, которые привязаны к этой организации (в админке)
         uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
