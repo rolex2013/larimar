@@ -36,20 +36,20 @@ def docs(request, companyid=0, pk=0):
     try:
        docstatus = request.POST['select_docstatus']
     except:
-       doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid)
+       doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(docver_doc__is_public=True), is_active=True, company=companyid)
     else:
        if docstatus == "0":
           # если в выпадающем списке выбрано "Все активные"
-          doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid)
+          doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(docver_doc__is_public=True), is_active=True, company=companyid)
        else:
           if docstatus == "-1":
              # если в выпадающем списке выбрано "Все"
-             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid)
+             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(docver_doc__is_public=True), is_active=True, company=companyid)
           elif docstatus == "-2":
              # если в выпадающем списке выбрано "Просроченные"
-             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid)
+             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(docver_doc__is_public=True), is_active=True, company=companyid)
           else:
-             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(is_public=True), is_active=True, company=companyid, status=docstatus)
+             doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]) | Q(docver_doc__is_public=True), is_active=True, company=companyid, status=docstatus)
        docstatus_selectid = docstatus
     #docstatus_myselectid = mydocstatus
     # *******************************
@@ -117,10 +117,11 @@ class DocCreate(AddFilesMixin, CreateView):
        #if self.kwargs['parentid'] != 0:
        #   form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
+       is_public = form.cleaned_data["is_public"]
        self.object = form.save() # Созадём новый документ
        # Создаём первую версию Документа
        newdocver = DocVer.objects.create(doc_id=self.object.id, vernumber=1, name=self.object.name, description=self.object.description,
-                                         datepublic=self.object.datepublic, is_actual=True, is_active=self.object.is_active,
+                                         datepublic=self.object.datepublic, is_public=is_public, is_actual=True, is_active=self.object.is_active,
                                          status=self.object.status, type=self.object.type, author=self.object.author,
                                          manager=self.object.manager)
        af = self.add_files(form, 'doc', 'document') # добавляем файлы из формы (метод из AddFilesMixin)
@@ -182,12 +183,13 @@ class DocUpdate(AddFilesMixin, UpdateView):
         old_memb_list = list(old_memb)
         #print(oldfiles)
         #print(old_memb_list)
+        is_public = form.cleaned_data["is_public"]
         self.object = form.save() # записываем, чтобы посчитать номер версии
         vernumber = DocVer.objects.filter(doc_id=self.object.id).order_by('-vernumber').values_list('vernumber').first()
         vernumber = int(vernumber[0]) + 1
         docver_unactual = DocVer.objects.filter(doc_id=self.object.id).update(is_actual=False)
         newdocver = DocVer.objects.create(doc_id=self.object.id, vernumber=vernumber, name=self.object.name, description=self.object.description,
-                                          datepublic=self.object.datepublic, is_actual=True, is_active=self.object.is_active,
+                                          datepublic=self.object.datepublic, is_public=is_public, is_actual=True, is_active=self.object.is_active,
                                           status=self.object.status, type=self.object.type, author=self.object.author,
                                           manager=self.object.manager)
         af = self.add_files(form, 'doc', 'document')  # добавляем файлы из формы (метод из AddFilesMixin)
@@ -294,9 +296,9 @@ def doctasks(request, pk=0):
     is_member = Doc.objects.filter(id=pk, members__in=[currentuser, ]).exists()
     if currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id or is_member:
         button_doc_history = 'Версии'
-        if currentdoc.is_public == False:
+        if currentdocver.is_public == False:
             button_task_create = 'Добавить'
-        if (currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id) and currentdoc.is_public == False and currentdoc.doctask == 0:
+        if (currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id) and currentdocver.is_public == False and currentdoc.doctask == 0:
             button_doc_update = 'Изменить'
 
     return render(request, "doc_detail.html", {

@@ -30,7 +30,7 @@ class Dict_DocStatus(models.Model):
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
     #is_close = models.BooleanField("Закрывает документ", default=False)
-    is_public = models.BooleanField("Публикует документ", default=False)
+    is_public = models.BooleanField("Публикует версию документа", default=False)
     is_active = models.BooleanField("Активность", default=True)
     class Meta:
         ordering = ('sort',)
@@ -77,7 +77,6 @@ class Doc(models.Model):
     datepublic = models.DateTimeField("Дата публикации", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='doc_author', verbose_name="Автор")
     members = models.ManyToManyField('auth.User', related_name='doc_members', verbose_name="Участники")
-    is_public = models.BooleanField("Опубликован", default=False)
     is_active = models.BooleanField("Активность", default=True)
     @property
     # ссылка на текущую версию Документа
@@ -117,6 +116,7 @@ class DocVer(models.Model):
     datepublic = models.DateTimeField("Дата публикации", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name='docver_author', verbose_name="Автор")
     members = models.ManyToManyField("auth.User", related_name='docver_members', verbose_name="Участники")
+    is_public = models.BooleanField("Опубликована", default=False)
     is_actual = models.BooleanField("Актуальность", default=False)
     is_active = models.BooleanField("Активность", default=True)
 

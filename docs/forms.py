@@ -18,17 +18,19 @@ from django.core.mail import send_mail
 class DocForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы документа', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+    #is_public = forms.BooleanField(label='Отметьте, если хотите опубликовать эту версию Документа', required=False)
+    is_public = forms.BooleanField(label='Опубликован', required=False)
 
-    disabled_fields = ('datepublic', 'author', 'is_public')
+    disabled_fields = ('datepublic', 'author') #, 'is_public')
     #disabled_fields = ('datecreate', 'author',)
 
     def clean(self):
 
         if self.action == 'update':
-           #if self.cleaned_data['is_public'] == True:
-           #   self.cleaned_data['datepublic'] = datetime.datetime.today()
-           #else:
-           #   self.cleaned_data['datepublic'] = None
+           if self.cleaned_data['is_public'] == True:
+              self.cleaned_data['datepublic'] = datetime.datetime.today()
+           else:
+              self.cleaned_data['datepublic'] = None
            if self.cleaned_data['status'].id != self.initial['status']:
               if self.cleaned_data['status'].is_public:
                  self.cleaned_data['datepublic'] = datetime.datetime.today()
@@ -99,7 +101,7 @@ class DocForm(forms.ModelForm):
 
     class Meta:
         model = Doc
-        fields = ['name', 'description', 'manager', 'type', 'status', 'members', 'is_public', 'datepublic', 'is_active', 'id', 'author']
+        fields = ['name', 'description', 'manager', 'type', 'status', 'members', 'datepublic', 'is_active', 'id', 'author']
         #widgets = {
         #    'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
         #    'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
