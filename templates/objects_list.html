@@ -52,7 +52,7 @@
                  {% if object_list == 'clienttask_list' %}                       
                     <b><a href="{% url 'my_crm:clienttaskcomments' node.pk %}">
                  {% else %}
-                    <b><a href="{% url 'my_project:taskcomments' node.pk %}">  
+                    <b><a href="{% url 'my_project:taskcomments' node.pk %}">
                  {% endif %}                                          
                  <!-- <a href="{ url 'my_project:tasks' current_project.id node.pk %}">-->
                  #{{ node.id }}. {{ node.name }}</a> <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
@@ -76,4 +76,5 @@
 
 
 <!--{ endif %}-->
+
       

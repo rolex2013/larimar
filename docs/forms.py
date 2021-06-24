@@ -186,7 +186,7 @@ class DocTaskForm(forms.ModelForm):
 
     class Meta:
         model = DocTask
-        fields = ['name', 'description', 'assigner', 'dateend', 'type', 'status', 'dateclose', 'is_active', 'id', 'author']
+        fields = ['description', 'assigner', 'dateend', 'type', 'status', 'dateclose', 'is_active', 'id', 'author']
         widgets = {
             #'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
             'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat

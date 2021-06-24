@@ -26,4 +26,5 @@ urlpatterns = [
          name='doctaskcomment_create'),
     ##path('doctaskcomments_list/doctaskcomment_update/<int:pk>', views.DocTaskCommentUpdate.as_view(),
     ##     name='doctaskcomment_update'),
+    path('doctasks_list/doctask_filter/', views.doctaskfilter, name='doctask_filter'),
 ]

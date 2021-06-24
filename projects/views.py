@@ -69,7 +69,7 @@ def projects(request, companyid=0, pk=0):
              project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
           elif prjstatus == "-2":
              # если в выпадающем списке выбрано "Просроченные"
-             project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.now())                         
+             project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.datetime.now())
           else:             
              project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
        prjstatus_selectid = prjstatus
@@ -293,7 +293,7 @@ def tasks(request, projectid=0, pk=0):
              task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid)
           elif tskstatus == "-2":
              # если в выпадающем списке выбрано "Просроченные"
-             task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True, dateend__lt=datetime.now())                         
+             task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True, dateend__lt=datetime.datetime.now())
           else:             
              task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, status=tskstatus) #, dateclose__isnull=True)
 

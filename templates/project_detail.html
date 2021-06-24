@@ -5,9 +5,7 @@
     {% if current_project.company.id in user_companies %}
 
         <div class="object-detail">
-
             <div>
-
                 <div class="object-detail-header">
                     <h3>{{ current_project.name }}
                         {% if not current_project.is_active %}
@@ -44,8 +42,9 @@
                     <!--<p>&nbsp;</p>       -->
                     <br />
                 </div>
-                <div class="object-detail-right">{% include 'objectfile_list.html' %}</div>
-
+                <div class="object-detail-right">
+                    {% include 'objectfile_list.html' %}
+                </div>
             </div>
 
             <!--{ if user.is_authenticated and user.id == current_project.author_id  %}-->

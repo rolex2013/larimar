@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from datetime import datetime, date, time
+from datetime import datetime, timedelta, date, time
 import json
 import requests
 from django.db import connection
@@ -62,7 +62,8 @@ def docs(request, companyid=0, pk=0):
     if pk == 0:
        current_doc = 0
     else:
-       current_doc = Doc.objects.get(id=pk)
+       #current_doc = Doc.objects.get(id=pk)
+       current_doc = Doc.objects.filter(id=pk).first()
 
     button_company_select = ''
     button_company_create = ''
@@ -236,11 +237,14 @@ class DocUpdate(AddFilesMixin, UpdateView):
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctasks(request, pk=0):
-    # *** фильтруем по статусу ***
     currentuser = request.user.id
+    # *** фильтруем по статусу ***
     tskstatus_selectid = 0
     doc = Doc.objects.filter(id=pk).first()
     docverid = doc.docver
+
+    #if currentuser != doc.author and currentuser not in doc.members:
+    #    print("не член!")
 
     try:
         tskstatus = request.POST['select_taskstatus']
@@ -311,13 +315,14 @@ def doctasks(request, pk=0):
         'user_companies': request.session['_auth_user_companies_id'],
         'files': DocVerFile.objects.filter(docver=currentdocver, is_active=True).order_by('uname'),
         'objtype': 'doc',
+        'is_member': is_member,
         'media_path': settings.MEDIA_URL,
         'button_doc_update': button_doc_update,
         'button_doc_history': button_doc_history,
         'button_task_create': button_task_create,
         # 'button_task_history': button_task_history,
-        #'taskstatus': Dict_DocTaskStatus.objects.filter(is_active=True),
-        #'tasktype': Dict_DocTaskType.objects.filter(is_active=True),
+        'taskstatus': Dict_DocTaskStatus.objects.filter(is_active=True),
+        'tasktype': Dict_DocTaskType.objects.filter(is_active=True),
         'tskstatus_selectid': tskstatus_selectid,
         'object_list': 'doctask_list',
     })
@@ -336,6 +341,8 @@ class DocTaskCreate(AddFilesMixin, CreateView):
        #   form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
        #form.instance.comment = self.comment
+       form.instance.name = str(form.cleaned_data["type"])
+       print(str(form.cleaned_data["type"]))
        comment = form.cleaned_data["comment"]
        self.object = form.save() # Созадём новую задачу Документа
        af = self.add_files(form, 'doc', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
@@ -467,41 +474,46 @@ class DocTaskCommentCreate(AddFilesMixin, CreateView):
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctaskfilter(request):
-    clientid = request.GET['clientid']
+    docid = request.GET['docid']
     taskstatus = request.GET['taskstatus']
     tasktype = request.GET['tasktype']
+    currentdoc = Doc.objects.filter(id=docid).first()
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     #tskstatus_selectid = 0
     if taskstatus == "0":
        # если в выпадающем списке выбрано "Все активные"
-       task_list = DocTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True)
+       task_list = DocTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(doc__members__in=[currentuser,]), is_active=True, doc=docid, dateclose__isnull=True)
     else:
        if taskstatus == "-1":
           # если в выпадающем списке выбрано "Все"
-          task_list = DocTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid)
+          task_list = DocTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(doc__members__in=[currentuser,]), is_active=True, doc=docid)
        elif taskstatus == "-2":
           # если в выпадающем списке выбрано "Просроченные"
-          task_list = DocTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, dateclose__isnull=True, dateend__lt=datetime.now())
+          #date_format = '%Y-%m-%d'
+          today = datetime.datetime.now()
+          #yesterday = today - timedelta(days=1)
+          task_list = DocTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(doc__members__in=[currentuser,]), is_active=True, doc=docid, dateclose__isnull=True, dateend__lt=today)
+          print(today)
        else:
-          task_list = DocTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(client__members__in=[currentuser,]), is_active=True, client=clientid, status=taskstatus)
+          task_list = DocTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(doc__members__in=[currentuser,]), is_active=True, doc=docid, status=taskstatus)
     # *** фильтр по типу ***
     if tasktype != "-1":
        task_list = task_list.filter(Q(type=tasktype))
     # *** фильтр по принадлежности ***
-    mytskuser = request.GET['mytaskuser']
-    if mytskuser == "0":
-       task_list = task_list.filter(Q(client__members__in=[currentuser,]))
-    elif mytskuser == "1":
-       task_list = task_list.filter(Q(author=request.user.id))
-    elif mytskuser == "2":
-       task_list = task_list.filter(Q(assigner=request.user.id))
+    #mytskuser = request.GET['mytaskuser']
+    #if mytskuser == "0":
+    #   task_list = task_list.filter(Q(doc__members__in=[currentuser,]))
+    #elif mytskuser == "1":
+    #   task_list = task_list.filter(Q(author=request.user.id))
+    #elif mytskuser == "2":
+    #   task_list = task_list.filter(Q(assigner=request.user.id))
     # *******************************
     nodes = task_list.distinct().order_by()
     object_message = ''
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'
-    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'doctask_list', 'object_message': object_message})
+    return render(request, 'doctasks_list.html', {'nodes': nodes, 'object_list': 'doctask_list', 'current_doc': currentdoc, 'object_message': object_message})
 
 def docver_change(request):
     docverid = request.GET['docverid']
