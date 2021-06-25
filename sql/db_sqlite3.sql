@@ -103,10 +103,8 @@ INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`d
 INSERT INTO `crm_dict_clienttype` (`id`,`name`,`sort`,`name_lang`,`is_active`,`description`) VALUES (8,'Сотрудник',40,NULL,1,NULL);
 
 INSERT INTO docs_dict_docstatus (id, name, description, sort, name_lang, is_public, is_active) VALUES (1, 'В разработке', null, 10, null, 0, 1);
-*/
 INSERT INTO docs_dict_docstatus (id, name, description, sort, name_lang, is_public, is_active) VALUES (2, 'На согласовании', null, 15, null, 0, 1);
 INSERT INTO docs_dict_docstatus (id, name, description, sort, name_lang, is_public, is_active) VALUES (3, 'Опубликован', null, 20, null, 1, 1);
-/*
 INSERT INTO docs_dict_doctaskstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (1, 'В очереди', '', 10, null, 0, 1);
 INSERT INTO docs_dict_doctaskstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (2, 'В работе', '', 20, null, 0, 1);
 INSERT INTO docs_dict_doctaskstatus (id, name, description, sort, name_lang, is_close, is_active) VALUES (3, 'Возврат', '', 30, null, 1, 1);

@@ -143,11 +143,11 @@
                {% csrf_token %}
                <div class="object-list-filters">
                    <label>По статусу: </label>
-                   <select name="select-clientstatus" id="statusselectid" class="select-client-status">
-                      <option value="-1" {% ifequal "-1" clntstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                      <!--<option value="0" { ifequal 0 clntstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                      <option value="-2" { ifequal "-2" clntstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
-                      {% for dctatus in docstatus %}
+                   <select name="select-docstatus" id="statusselectid" class="select-doc-status">
+                      <option value="-1" {% ifequal "-1" dcstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                      <!--<option value="0" { ifequal 0 dcstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
+                      <option value="-2" { ifequal "-2" dctstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                      {% for dcstatus in docstatus %}
                          <option value="{{dcstatus.id}}" {% ifequal dcstatus.id dcstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
                             {{dcstatus.name}}
                          </option>
@@ -156,8 +156,8 @@
                    <label>По типу: </label>
                    <select name="select-doctype" id="typeselectid" class="select-doc-type">
                       <option value="-1" {% ifequal "-1" dctype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                      {% for dcttype in doctype %}
-                         <option value="{{dcttype.id}}" {% ifequal dctype.id dcttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                      {% for dctype in doctype %}
+                         <option value="{{dctype.id}}" {% ifequal dctype.id dcttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
                             {{dctype.name}}
                          </option>
                       {% endfor %}
@@ -166,7 +166,8 @@
                    <select name="select-mydoc" id="myselectid" class="select-my-doc">
                       <option value="-1" {% ifequal "-1" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
                       <option value="0" {% ifequal "0" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>
-                      <option value="1" {% ifequal "1" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                      <option value="1" {% ifequal "1" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>
+                      <option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
                       {% comment %}<option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>{% endcomment %}
                    </select>
                    <button id="selection-button-doc" type="submit" method="GET" class="object-filter-button">Применить</button>
@@ -322,7 +323,31 @@
                   $('#ajax_listerrors').html('Нет данных!');
                }               
             });
-         });         
+         });
+
+         $('#selection-button-doc').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            var statusSelected = $("#statusselectid option:selected").val()
+            var typeSelected = $("#typeselectid option:selected").val()
+            var mydocSelected = $("#myselectid option:selected").val()
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_doc:doc_filter' %}",
+               data: {
+                  companyid: {{ current_company.id }},
+                  docstatus: statusSelected,
+                  doctype: typeSelected,
+                  mydocuser: mydocSelected
+               },
+               success: function(data){
+                  $('#ajax_doclistresult').html(data);
+               },
+               error: function(xhr, errmsg, err){
+                  console.log("error")
+                  $('#ajax_doclisterrors').html('Нет данных!');
+               }
+            });
+         });
 
       </script>
 

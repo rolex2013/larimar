@@ -341,8 +341,9 @@ class DocTaskCreate(AddFilesMixin, CreateView):
        #   form.instance.parent_id = self.kwargs['parentid']
        form.instance.author_id = self.request.user.id
        #form.instance.comment = self.comment
-       form.instance.name = str(form.cleaned_data["type"])
-       print(str(form.cleaned_data["type"]))
+       doc = Doc.objects.filter(id=form.instance.doc_id).first()
+       form.instance.name = doc.name + '. ' + str(form.cleaned_data["type"])
+       #print(form.instance.name)
        comment = form.cleaned_data["comment"]
        self.object = form.save() # Созадём новую задачу Документа
        af = self.add_files(form, 'doc', 'task') # добавляем файлы из формы (метод из AddFilesMixin)
@@ -471,6 +472,50 @@ class DocTaskCommentCreate(AddFilesMixin, CreateView):
         self.object = form.save()
         af = self.add_files(form, 'doc', 'taskcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
         return super().form_valid(form)
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def docfilter(request):
+    companyid = request.GET['companyid']
+    docstatus = request.GET['docstatus']
+    doctype = request.GET['doctype']
+    #currentdoc = Doc.objects.filter(id=docid).first()
+    # *** фильтруем по статусу ***
+    currentuser = request.user.id
+    #tskstatus_selectid = 0
+    if docstatus == "0":
+       # если в выпадающем списке выбрано "Все активные"
+       doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True)
+    else:
+       if docstatus == "-1":
+          # если в выпадающем списке выбрано "Все"
+          doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
+       #elif docstatus == "-2":
+          # если в выпадающем списке выбрано "Просроченные"
+          #date_format = '%Y-%m-%d'
+          #today = datetime.datetime.now()
+          #yesterday = today - timedelta(days=1)
+       #   doc_list = DocTask.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, doc=docid, dateclose__isnull=True, dateend__lt=today)
+       #   print(today)
+       else:
+          doc_list = Doc.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=docstatus)
+    # *** фильтр по типу ***
+    if doctype != "-1":
+       doc_list = doc_list.filter(Q(type=doctype))
+    # *** фильтр по принадлежности ***
+    mydocuser = request.GET['mydocuser']
+    if mydocuser == "0":
+       doc_list = doc_list.filter(Q(doc__members__in=[currentuser,]))
+    elif mydocuser == "1":
+       doc_list = doc_list.filter(Q(manager=request.user.id))
+    elif mydocuser == "2":
+       doc_list = doc_list.filter(Q(author=request.user.id))
+    # *******************************
+    nodes = doc_list.distinct().order_by()
+    object_message = ''
+    if len(nodes) == 0:
+       object_message = 'Задачи не найдены!'
+    return render(request, 'docs_list.html', {'nodes': nodes, 'object_list': 'doc_list', 'object_message': object_message})
+
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctaskfilter(request):

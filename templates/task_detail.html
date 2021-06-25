@@ -30,7 +30,7 @@
 
             <div class="object-detail-left">
                 <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p><br />
-                <i><p>Проект: <a href="{% url 'my_project:tasks' task.project.pk 0 %}">{{ task.project.name }}</a></p></i>
+                <i><p>Проект: <span class="hint hint--bottom hint--info" data-hint="Задачи проекта"><a href="{% url 'my_project:tasks' task.project.pk 0 %}">{{ task.project.name }}</a></span></p></i>
                 {% if task.parent %}
                     <p>Уровень выше: <a href="{% url 'my_project:taskcomments' task.parent.pk %}">{{ task.parent.name }}</a></p>
                 {% else %}

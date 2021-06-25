@@ -4,7 +4,7 @@
     <!-- Защита от прямого доступа к Документу -->
 
     {% comment %}{% if current_doc.company.id in user_companies and (user.id == current_doc.author or is_member) %}{% endcomment %}
-    {% if user.id == current_doc.author.id or is_member %}
+    {% if user.id == current_doc.author.id or is_member or user.id == current_doc.manager.id %}
 
         <div class="object-detail">
             <div>
@@ -18,7 +18,7 @@
                 </div>
                 <div class="object-detail-left">
                     <p>{% autoescape off %}{{ current_doc.description }}{% endautoescape %}</p><br />
-                    <i><p>Организация: <a href="{% url 'my_doc:docs' current_doc.company.pk 0 %}">{{ current_doc.company }}</a></p></i>
+                    <i><p>Организация: <span class="hint hint--bottom hint--info" data-hint="Документы организации"><a href="{% url 'my_doc:docs' current_doc.company.pk 0 %}">{{ current_doc.company }}</a></span></p></i>
                     <p>Менеджер: <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' current_doc.manager.pk ' ' %}">{{ current_doc.manager }}</a></span></p>
                     <!--<p>Создан: {{ current_doc.datecreate }}</p>
                     <p>Закрыт: {{ current_doc.dateclose }}</p>-->
@@ -61,7 +61,7 @@
 {% block list %}
     <!-- Защита от прямого доступа к задачам Документа -->
     {% comment %}{% if current_doc.company.id in user_companies %}{% endcomment %}
-    {% if user.id == current_doc.author.id or is_member %}
+    {% if user.id == current_doc.author.id or is_member or user.id == current_doc.manager.id %}
 
         <div class="object-list">
 

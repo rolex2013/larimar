@@ -15,7 +15,7 @@
 
             <div class="object-detail-left">
                 <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p><br />
-                <i><p>Документ: <a href="{% url 'my_doc:doctasks' task.doc.pk %}">{{ task.doc.name }}</a></p></i>
+                <p><i>Документ: <span class="hint hint--bottom hint--info" data-hint="Движение документа"><a href="{% url 'my_doc:doctasks' task.doc.pk %}">{{ task.doc.name }}</a></span></i></p>
                 <p>Тип: {{ task.type }}</p>
                 <p>Исполнитель: <span class="hint hint--bottom hint--info" data-hint="Профиль исполнителя"><a href="{% url 'my_account:userprofile_detail' task.assigner.pk ' ' %}">{{ task.assigner }}</a></span></p>
                 <p>Окончание: {{ task.dateend }}</p>

@@ -16,7 +16,7 @@
 
                 <div class="object-detail-left">
                     <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
-                    <i><p>Организация: <a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></p></i>
+                    <i><p>Организация: <span class="hint hint--bottom hint--info" data-hint="Проекты организации"><a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></span></p></i>
                     {% if current_project.parent %}
                         <p>Уровень выше: <a href="{% url 'my_project:tasks' current_project.parent.pk 0 %}">{{ current_project.parent.name }}</a></p>
                     {% else %}

@@ -16,7 +16,7 @@
                 </div>
                 <div class="object-detail-left">
                     <p>{% autoescape off %}{{ current_client.description }}{% endautoescape %}</p>
-                    <i><p>Организация: <a href="{% url 'my_crm:clients' current_client.company.pk 0 %}">{{ current_client.company }}</a></p></i>
+                    <i><p>Организация: <span class="hint hint--bottom hint--info" data-hint="Клиенты организации"><a href="{% url 'my_crm:clients' current_client.company.pk 0 %}">{{ current_client.company }}</a></span></p></i>
                     {% if current_client.parent %}
                         <p>Уровень выше: <a href="{% url 'my_crm:clienttasks' current_client.parent.pk 0 %}">{{ current_client.parent.name }}</a></p>
                     {% else %}

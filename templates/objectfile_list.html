@@ -1,4 +1,4 @@
-<div id="ajax_listresult">
+<div id="ajax_filelistresult">
 
     <div class="object-detail--right">
 
@@ -34,7 +34,7 @@
 
 </div>
 
-<div id="ajax_listerrors"></div>
+<div id="ajax_filelisterrors"></div>
 
 <script>
 
@@ -56,11 +56,11 @@
                     //pk: {{ companyuser.id }},
                 },
                 success: function(data) {
-                    $('#ajax_listresult').html(data);
+                    $('#ajax_filelistresult').html(data);
                 },
                 error: function(xhr, errmsg, err) {
                     console.log("error")
-                    $('#ajax_listerrors').html('Файл не найден!');
+                    $('#ajax_filelisterrors').html('Файл не найден!');
                 }
 
             });
