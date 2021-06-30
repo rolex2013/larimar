@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'projects',
     'crm',
     'docs',
+    'files',
 ]
 
 BOOTSTRAP4 = {

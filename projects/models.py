@@ -115,7 +115,7 @@ class Project(MPTTModel):
     def costsum(self):
         return TaskComment.objects.filter(task__project_id=self.id).aggregate(Sum('cost'))
     @property
-    # суммарная затраченное время по Комметам
+    # суммарная затраченное время по Комментам
     def timesum(self):
         return TaskComment.objects.filter(task__project_id=self.id).aggregate(Sum('time'))
          

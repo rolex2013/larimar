@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from accounts.models import UserProfile
 
-from main.models import Meta_ObjectType, Component, Dict_ProtocolType, Notification, Menu, MenuItem
+from main.models import Meta_ObjectType, Component, Dict_ProtocolType, Dict_Theme, Notification, Menu, MenuItem
 
 from finance.models import Dict_Currency, CurrencyRate
 
@@ -30,6 +30,8 @@ from docs.models import Dict_DocType, Dict_DocStatus, Dict_DocTaskStatus, Dict_D
 from docs.models import Doc, DocVer
 from docs.models import DocTask, DocTaskComment
 
+from files.models import Dict_FolderType, Folder
+
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 
@@ -51,12 +53,17 @@ class ComponentAdmin(DjangoMpttAdmin):
 class MenuItemAdmin(DjangoMpttAdmin):
     pass
 
+class Dict_ThemeAdmin(DjangoMpttAdmin):
+    pass
+
 class StaffListAdmin(DjangoMpttAdmin):
     pass
 
 class ClientTaskAdmin(DjangoMpttAdmin):
     pass
 
+class FolderAdmin(DjangoMpttAdmin):
+    pass
 
 
 admin.site.register(UserProfile)
@@ -67,6 +74,8 @@ admin.site.register(Meta_ObjectType)
 admin.site.register(Component, ComponentAdmin)
 
 admin.site.register(Dict_ProtocolType)
+
+admin.site.register(Dict_Theme)
 
 admin.site.register(Notification)
 
@@ -182,3 +191,10 @@ admin.site.register(DocVer)
 admin.site.register(DocTask)
 
 admin.site.register(DocTaskComment)
+
+# files
+
+admin.site.register(Dict_FolderType)
+
+admin.site.register(Folder)
+

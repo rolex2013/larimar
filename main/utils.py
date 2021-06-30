@@ -4,6 +4,7 @@ from django.conf import settings
 from projects.models import Project, Task, TaskComment, ProjectFile
 from crm.models import Client, ClientTask, ClientTaskComment, ClientFile
 from docs.models import DocVerFile #, Doc, DocFile
+from files.models import FolderFile
 
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -69,6 +70,9 @@ class AddFilesMixin(object):
               #if obj == 'file':
               #   doc_id = self.object.doc.id
               #   task_id = self.object.id
+           elif app == 'file':
+              if obj == 'folder':
+                 folder_id = self.object.id
            for f in files:
                if app == 'project':
                   fcnt = ProjectFile.objects.filter(project_id=project_id, task_id=task_id, taskcomment_id=taskcomment_id, name=f, is_active=True).count()
@@ -79,6 +83,9 @@ class AddFilesMixin(object):
                elif app == 'doc':
                   fcnt = DocVerFile.objects.filter(doc_id=doc_id, docver_id=docver_id, name=f, is_active=True).count()
                   fl = DocVerFile(doc_id=doc_id, docver_id=docver_id, task_id=task_id, taskcomment_id=taskcomment_id, pfile=f)
+               elif app == 'file':
+                  fcnt = FolderFile.objects.filter(folder_id=doc_id, name=f, is_active=True).count()
+                  fl = FolderFile(folder_id=doc_id, pfile=f)
 
                fl.author = self.request.user
                fn = f

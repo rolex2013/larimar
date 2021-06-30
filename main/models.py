@@ -141,4 +141,24 @@ class MenuItem(MPTTModel):
     class Meta:
         #ordering = ('menu', 'sort')
         verbose_name = 'Пункты меню'
-        verbose_name_plural = 'Пункты меню'        
+        verbose_name_plural = 'Пункты меню'
+
+
+class Dict_Theme(MPTTModel):
+    parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active': True},
+                            on_delete=models.CASCADE, related_name='theme_children',
+                            verbose_name="Головная тематика")
+    name = models.CharField("Наименование", max_length=64)
+    # description = RichTextUploadingField("Описание")
+    description = models.CharField("Описание", max_length=256, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)
+
+    def __str__(self):
+        return (self.name)
+
+    class MPTTMeta:
+        order_insertion_by = ['name']
+
+    class Meta:
+        verbose_name = 'Тематика'
+        verbose_name_plural = 'Тематика'
