@@ -267,6 +267,7 @@ body {
     /*border: 1px solid;
     border-radius: 10px;*/
 }
+.object-list img { width: 25px; border: none; }
 .object-list ap {
     /*height: 300px; /* высота контента */
     background: #8e968e; /* фон */

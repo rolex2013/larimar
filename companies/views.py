@@ -57,6 +57,7 @@ def companies(request, pk=0, razdel='projects'):
        tree_company_id = 0
        project_id = 0
        #template_name = "menu_companies.html"
+       #print(comps)
     else:
        current_company = Company.objects.get(id=pk)
        tree_company_id = current_company.tree_id  

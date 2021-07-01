@@ -6,31 +6,15 @@
             Файлы:
         {% endif %}
 
-        {% comment %}
-        {% for file in files %}
-           <p style="margin: 0 0 10px 10px;"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл">
-            <input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span>&nbsp;&nbsp;&nbsp;
-            <a href="{{ file.pfile }}">{{ file.uname }}</a>&nbsp;&nbsp;<em style="font-size:80%">{{ file.psize|filesizeformat }} {{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></p>
-        {% endfor %}
-        {% endcomment %}
         <div class="table-files">
             {% for file in files %}
                 <div class="row-files">
-                    {% if objtype == 'fldr' %}
-                        {% if user.id == file.author.id %}
-                            <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
-                        {% endif %}
-                    {% else %}
-                        {% if current_doc.doctask == 0 or task.name %}
-                            <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
-                        {% endif %}
+                    {% if current_user == file.author %}
+                        <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                     {% endif %}
                     <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
                     <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div>
                     <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
-                    {% if file.taskcomment_id != None %}
-                        <em>(к)</em>
-                    {%  endif %}
                 </div>
             {% endfor %}
         </div>

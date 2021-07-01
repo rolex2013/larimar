@@ -1,11 +1,29 @@
+{% load static %}
 
-<ul>
-    {% for node in nodes %}
-        <li><span class="hint hint--bottom hint--info" data-hint="{{ node.description }}"><b><a href="{% url 'my_doc:doctasks' node.pk %}">#{{ node.id }}. {{ node.name }}</a></b></span>&nbsp;
+{% load mptt_tags %}
+
+<ul style="list-style:none;">
+    {% recursetree nodes %}
+    <!--{ for node in nodes %}-->
+        <li>
+            {% if node.filecount == 0 %}
+                <img src="{% static 'pngwing.com.png' %}" />
+            {%  else %}
+                <img src="{% static 'pngegg.png' %}" />
+            {%  endif %}
+            <span class="hint hint--bottom hint--info" data-hint="Открыть папку"><b><a href="{% url 'my_file:folders' 0 node.pk %}">{{ node.name }}</a></b></span>&nbsp;
             <span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.theme }} |{{ node.type }} |
-            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span>
+            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a> | Файлов: {{ node.filecount }}</span></span>
+
+            {% if not node.is_leaf_node %}
+                <ul class="children" style="list-style:none;">{{ children }}</ul>
+            {% else %}
+                {{ children }}
+            {% endif %}
+
         </li>
-    {% endfor %}
+    <!--{ endfor %}-->
+    {% endrecursetree %}
 </ul>
 
 <p><em>{{ object_message }}</em></p>

@@ -20,6 +20,8 @@
                      <span class="hint hint--bottom hint--info" data-hint="CRM"><b><a href="{% url 'my_crm:clients' node.pk 0 %}">{{ node.name }}</b></span><br />
                  {% elif component_name == 'docs' %}
                      <span class="hint hint--bottom hint--info" data-hint="Документы"><b><a href="{% url 'my_doc:docs' node.pk 0 %}">{{ node.name }}</b></span><br />
+                 {% elif component_name == 'files' %}
+                    <span class="hint hint--bottom hint--info" data-hint="Файлы"><b><a href="{% url 'my_file:folders' node.pk 0 %}">{{ node.name }}</b></span><br />
                  {% elif component_name == 'companies' %}
                     <span class="hint hint--bottom hint--info" data-hint="Настройка"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{{ node.parent.name }}--></b></span><br />
                  {% endif %}                    
@@ -68,7 +70,7 @@
               {% else %}
                  {{ children }}
               {% endif %}
-              </span>
+              <!--</span>-->
             </li>
            {% endrecursetree %}
          </ul> 

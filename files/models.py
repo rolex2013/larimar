@@ -27,7 +27,7 @@ class Dict_FolderType(models.Model):
 class Folder(MPTTModel):
     name = models.CharField("Наименование", max_length=64)
     description = RichTextUploadingField("Описание")
-    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='folder_company',
+    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='result_company_folder',
                                 verbose_name="Компания")
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active': True},
                             on_delete=models.CASCADE, related_name='folder_children',
@@ -48,7 +48,7 @@ class Folder(MPTTModel):
     @property
     # всего файлов в Папке
     def filecount(self):
-        return FolderFile.objects.filter(folder_id=self.id, is_active=True).count('id')
+        return FolderFile.objects.filter(folder_id=self.id, is_active=True).count()
 
     def get_absolute_url(self):
         #return reverse('my_file:files', kwargs={'folderid': self.pk, 'pk': '0'})

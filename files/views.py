@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, Min, Max, Sum, Avg
@@ -10,7 +11,7 @@ from main.utils import AddFilesMixin #ObjectUpdateMixin
 from main.models import Dict_Theme
 from companies.models import Company
 
-from files.models import Folder, Dict_FolderType
+from files.models import Folder, FolderFile, Dict_FolderType
 
 from .forms import FolderForm
 
@@ -20,7 +21,7 @@ def folders(request, companyid=0, pk=0):
     if companyid == 0:
        companyid = request.session['_auth_user_currentcompany_id']
 
-    request.session['_auth_user_currentcomponent'] = 'folders'
+    request.session['_auth_user_currentcomponent'] = 'files'
 
     # *** фильтруем по тематике ***
     currentuser = request.user.id
@@ -48,7 +49,7 @@ def folders(request, companyid=0, pk=0):
     # *******************************
     #project_list = project_list.order_by('dateclose')
 
-    len_list = len(folder_list)
+
 
     current_company = Company.objects.get(id=companyid)
 
@@ -57,13 +58,18 @@ def folders(request, companyid=0, pk=0):
        tree_folder_id = 0
        root_folder_id = 0
        #tree_project_id = 0
+       template = "company_detail.html"
     else:
-       current_folder = Folder.objects.get(id=pk)
+       current_folder = Folder.objects.filter(id=pk).first()
        #idpk = 'id=pk'
        #current_folder = Folder.objects.get({idpk})
        tree_folder_id = current_folder.tree_id
        root_folder_id = current_folder.get_root().id
        #tree_folder_id = current_folder.tree_id
+       folder_list = current_folder.get_children()
+       template = "folder_detail.html"
+
+    len_list = len(folder_list)
 
     button_company_select = ''
     button_company_create = ''
@@ -84,10 +90,10 @@ def folders(request, companyid=0, pk=0):
     if currentuser == current_company.author_id:
        button_company_create = 'Добавить'
        button_company_update = 'Изменить'
-       button_folder_create = 'Добавить'
+       button_folder_create = 'Добавить папку'
     if current_company in comps:
        button_folder_create = 'Добавить'
-    return render(request, "company_detail.html", {
+    return render(request, template, {
                               'nodes': folder_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
                               'current_folder': current_folder,
                               'root_folder_id': root_folder_id,
@@ -96,6 +102,9 @@ def folders(request, companyid=0, pk=0):
                               'companyid': companyid,
                               'user_companies': comps,
                               'component_name': 'files',
+                              'files': FolderFile.objects.filter(folder=current_folder, is_active=True),
+                              'objtype': 'fldr',
+                              'media_path': settings.MEDIA_URL,
                               'button_company_select': button_company_select,
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
@@ -155,13 +164,12 @@ class FolderUpdate(AddFilesMixin, UpdateView):
         context['header'] = 'Изменить Проект'
         # kwargs = super(ProjectUpdate, self).get_form_kwargs()
         kwargs = super().get_form_kwargs()
-        context['files'] = FolderFile.objects.filter(project_id=self.kwargs['pk'], is_active=True).order_by('uname')
+        context['files'] = FolderFile.objects.filter(folder_id=self.kwargs['pk'], is_active=True).order_by('uname')
         # print(context)
         # print(kwargs)
         return context
 
     def get_form_kwargs(self):
-        # kwargs = super(ProjectUpdate, self).get_form_kwargs()
         kwargs = super().get_form_kwargs()
         # здесь нужно условие для 'action': 'update'
         kwargs.update({'user': self.request.user, 'action': 'update'})
@@ -170,11 +178,10 @@ class FolderUpdate(AddFilesMixin, UpdateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)  # без commit=False происходит вызов save() Модели
         af = self.add_files(form, 'project', 'project')  # добавляем файлы из формы (метод из AddFilesMixin)
-        # Получаем старые значения для дальнейшей проверки на изменения
-        old = Folder.objects.filter(
-            pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
-        old_memb = old.members.values_list('id', 'username').all()
-        old_memb_count = old_memb.count()
-        old_memb_list = list(old_memb)
+        ## Получаем старые значения для дальнейшей проверки на изменения
+        #old = Folder.objects.filter(pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        #old_memb = old.members.values_list('id', 'username').all()
+        #old_memb_count = old_memb.count()
+        #old_memb_list = list(old_memb)
         self.object = form.save()
-        return super().form_valid(form)  # super(ProjectUpdate, self).form_valid(form)
+        return super().form_valid(form)
