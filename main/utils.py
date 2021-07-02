@@ -67,9 +67,6 @@ class AddFilesMixin(object):
                  docver_id = self.object.task.doc.docver
                  task_id = self.object.task.id
                  taskcomment_id = self.object.id
-              #if obj == 'file':
-              #   doc_id = self.object.doc.id
-              #   task_id = self.object.id
            elif app == 'file':
               if obj == 'folder':
                  folder_id = self.object.id
@@ -84,8 +81,8 @@ class AddFilesMixin(object):
                   fcnt = DocVerFile.objects.filter(doc_id=doc_id, docver_id=docver_id, name=f, is_active=True).count()
                   fl = DocVerFile(doc_id=doc_id, docver_id=docver_id, task_id=task_id, taskcomment_id=taskcomment_id, pfile=f)
                elif app == 'file':
-                  fcnt = FolderFile.objects.filter(folder_id=doc_id, name=f, is_active=True).count()
-                  fl = FolderFile(folder_id=doc_id, pfile=f)
+                  fcnt = FolderFile.objects.filter(folder_id=folder_id, name=f, is_active=True).count()
+                  fl = FolderFile(folder_id=folder_id, pfile=f)
 
                fl.author = self.request.user
                fn = f

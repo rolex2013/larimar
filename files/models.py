@@ -52,7 +52,7 @@ class Folder(MPTTModel):
 
     def get_absolute_url(self):
         #return reverse('my_file:files', kwargs={'folderid': self.pk, 'pk': '0'})
-        return reverse('my_file:folders0')
+        return reverse('my_file:folders', kwargs={'companyid': self.company_id, 'pk': self.pk})
 
     def __str__(self):
         #return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime(

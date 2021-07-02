@@ -9,6 +9,7 @@ from main.models import Notification, Meta_ObjectType, ModelLog
 from projects.models import Project, Task, ProjectFile #, TaskFile
 from crm.models import Client, ClientTask, ClientEvent, ClientFile
 from docs.models import Doc, DocTask, DocVerFile
+from files.models import Folder, FolderFile
 
 from django.contrib.auth.decorators import login_required
 
@@ -138,11 +139,16 @@ def objecthistory(request, objtype='prj', pk=0):
 def objectfiledelete(request, objtype='prj'):
    fileid = request.GET['fileid']
    object_message = ''
+   template = 'objectfile_list.html'
    if fileid:
       if objtype[:3] == 'prj':
-         fl = ProjectFile.objects.get(id=fileid)
+         fl = ProjectFile.objects.filter(id=fileid).first()
       elif objtype[:3] == 'cln':
-         fl = ClientFile.objects.get(id=fileid)      
+         fl = ClientFile.objects.filter(id=fileid).first()
+      elif objtype[:3] == 'doc':
+         fl = DocVerFile.objects.filter(id=fileid).first()
+      elif objtype[:3] == 'fld':
+         fl = FolderFile.objects.filter(id=fileid).first()
       fl.is_active=False
       fl.save(update_fields=['is_active'])
    if objtype == 'prj':
@@ -160,8 +166,17 @@ def objectfiledelete(request, objtype='prj'):
    elif objtype == 'clntevnt':
       files = ClientFile.objects.filter(event_id=fl.event_id, is_active=True).order_by('uname')
    elif objtype == 'clntevntcmnt':
-      files = ClientFile.objects.filter(teventcomment_id=fl.eventcomment_id, is_active=True).order_by('uname')                            
-   return render(request, 'objectfile_list.html', {'objtype': objtype, 
+      files = ClientFile.objects.filter(teventcomment_id=fl.eventcomment_id, is_active=True).order_by('uname')
+   elif objtype == 'doc':
+      files = DocVerFile.objects.filter(docver_id=fl.docver_id, is_active=True).order_by('uname')
+   elif objtype == 'doctsk':
+      files = DocVerFile.objects.filter(task_id=fl.task_id, is_active=True).order_by('uname')
+   elif objtype == 'doctskcmnt':
+      files = DocVerFile.objects.filter(taskcomment_id=fl.taskcomment_id, is_active=True).order_by('uname')
+   elif objtype == 'fldr':
+      files = FolderFile.objects.filter(folder_id=fl.folder_id, is_active=True).order_by('uname')
+      template = 'folderfile_list.html'
+   return render(request, template, {'objtype': objtype,
                                                    'files': files, 
                                                    'object_message': object_message,
                                                    'media_path': settings.MEDIA_URL,

@@ -357,6 +357,15 @@ body {
     background: #eee; /* фон */
     background: linear-gradient(to top, #eee, #8e968e);
 }
+.object-list .object-filelist-left {
+    float: left;
+}
+.object-list .object-filelist-right {
+    float: right;
+}
+.object-list .object-filelist-subcontainer {
+    float: left;
+}
 
 .object-filter-button {
     text-decoration: none;

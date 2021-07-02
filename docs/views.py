@@ -442,7 +442,7 @@ def doctaskcomments(request, taskid):
         # 'current_taskcomment': currenttaskcomment,
         'task': currenttask,
         'files': DocVerFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
-        'objtype': 'prjtsk',
+        'objtype': 'doctsk',
         'media_path': settings.MEDIA_URL,
         #'button_task_create': button_task_create,
         'button_task_update': button_task_update,

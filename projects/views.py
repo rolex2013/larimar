@@ -124,7 +124,7 @@ def projects(request, companyid=0, pk=0):
        button_company_create = 'Добавить'
        button_company_update = 'Изменить'
        button_project_create = 'Добавить'        
-    if current_company in comps:
+    if current_company.id in comps:
        button_project_create = 'Добавить'
     return render(request, "company_detail.html", {
                               'nodes': project_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии

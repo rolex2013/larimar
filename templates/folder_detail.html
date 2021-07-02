@@ -32,7 +32,6 @@
 
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
           <div class="object-detail-buttons">
-              <a href="{% url 'my_file:folder_create' current_company.pk current_folder.pk %}">{{ button_folder_create }}</a>
               <a href="{% url 'my_file:folder_update' current_folder.pk %}">{{ button_folder_update }}</a>
           </div>
           <br />
@@ -59,59 +58,69 @@
    {% if current_company.id in user_companies %}
 
       <div class="object-list">
+        <div class="object-list-wrapper">
+            <div class="object-list-left">
+                <h4>Папки</h4>
+                {% if len_list %}
 
-            <!--<h4>Файлы</h4>-->
+                    <!--<form action="{ url 'my_doc:docs' current_company.pk 0 %}" method="post">-->
+                    <form method="GET">
+                       {% csrf_token %}
+                       <div class="object-list-filters">
+                           <label>По тематике: </label>
+                           <select name="select-d" id="statusselectid" class="select-doc-status">
+                              <option value="-1" {% ifequal "-1" dcstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                              <!--<option value="0" { ifequal 0 dcstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
+                              <option value="-2" { ifequal "-2" dctstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                              {% for dcstatus in docstatus %}
+                                 <option value="{{dcstatus.id}}" {% ifequal dcstatus.id dcstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                    {{dcstatus.name}}
+                                 </option>
+                              {% endfor %}
+                           </select>
+                           <label>По типу: </label>
+                           <select name="select-doctype" id="typeselectid" class="select-doc-type">
+                              <option value="-1" {% ifequal "-1" dctype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                              {% for dctype in doctype %}
+                                 <option value="{{dctype.id}}" {% ifequal dctype.id dcttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                    {{dctype.name}}
+                                 </option>
+                              {% endfor %}
+                           </select>
+                           <label>Мои папки: </label>
+                           <select name="select-mydoc" id="myselectid" class="select-my-doc">
+                              <option value="-1" {% ifequal "-1" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                               <option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                              {% comment %}<option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>{% endcomment %}
+                           </select>
+                           <button id="selection-button-doc" type="submit" method="GET" class="object-filter-button">Применить</button>
+                       </div>
+                    </form>
 
-            {% if len_list %}
+                    <div id="ajax_folderlistresult">{% include 'folders_list.html' %}</div>
 
-            <!--<form action="{ url 'my_doc:docs' current_company.pk 0 %}" method="post">-->
-            <form method="GET">
-               {% csrf_token %}
-               <div class="object-list-filters">
-                   <label>По тематике: </label>
-                   <select name="select-d" id="statusselectid" class="select-doc-status">
-                      <option value="-1" {% ifequal "-1" dcstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                      <!--<option value="0" { ifequal 0 dcstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                      <option value="-2" { ifequal "-2" dctstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
-                      {% for dcstatus in docstatus %}
-                         <option value="{{dcstatus.id}}" {% ifequal dcstatus.id dcstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                            {{dcstatus.name}}
-                         </option>
-                      {% endfor %}
-                   </select>
-                   <label>По типу: </label>
-                   <select name="select-doctype" id="typeselectid" class="select-doc-type">
-                      <option value="-1" {% ifequal "-1" dctype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                      {% for dctype in doctype %}
-                         <option value="{{dctype.id}}" {% ifequal dctype.id dcttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                            {{dctype.name}}
-                         </option>
-                      {% endfor %}
-                   </select>
-                   <label>Мои папки: </label>
-                   <select name="select-mydoc" id="myselectid" class="select-my-doc">
-                      <option value="-1" {% ifequal "-1" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                       <option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                      {% comment %}<option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>{% endcomment %}
-                   </select>
-                   <button id="selection-button-doc" type="submit" method="GET" class="object-filter-button">Применить</button>
-               </div>
-            </form>
+                {% else %}
 
-            <div id="ajax_folderlistresult">{% include 'folders_list.html' %}</div>
+                    <p>Папок пока нет...</p>
 
-            {% comment %}
-            {% else %}
+                {% endif %}
 
-               <p>Папок пока нет...</p>
-            {% endcomment %}
-            {% endif %}
+                <div class="object-list-buttons">
+                     <a href="{% url 'my_file:folder_create' current_company.pk current_folder.pk %}">{{ button_folder_create }}</a>
+                </div>
 
-            {% include 'objectfile_list.html' %}
-
-            <div class="object-list-buttons">
-               <a href="{ url 'my_file:file_create' current_folder.id %}">{{ button_file_create }}</a>
             </div>
+                <!--{ include 'objectfile_list.html' %}-->
+            <div class="object-list-right">
+                 <div id="ajax_filelistresult">{% include 'folderfile_list.html' %}</div>
+                 <div id="ajax_filelisterrors"></div>
+
+                 <div class="object-list-buttons">
+                     <a href="{ url 'my_file:file_create' current_folder.id %}">Добавить{{ button_file_create }}</a>
+                 </div>
+            </div>
+
+        </div>
 
       </div>
 

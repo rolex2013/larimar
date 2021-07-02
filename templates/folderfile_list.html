@@ -1,30 +1,31 @@
-<div id="ajax_filelistresult">
+<!--<div id="ajax_filelistresult">
 
-    <div class="object-detail--right">
+    <div class="object-filelist-right">-->
 
+        <h4>Файлы</h4>
         {% if files %}
-            Файлы:
+            <div class="table-files">
+                {% for file in files %}
+                    <div class="row-files">
+                        {% if user.id == file.author.id %}
+                            <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                        {% endif %}
+                        <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
+                        <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div>
+                        <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Файлов пока нет...</p>
         {% endif %}
-
-        <div class="table-files">
-            {% for file in files %}
-                <div class="row-files">
-                    {% if current_user == file.author %}
-                        <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
-                    {% endif %}
-                    <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
-                    <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div>
-                    <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
-                </div>
-            {% endfor %}
-        </div>
         <br />
 
-    </div>
+    <!--</div>
 
-</div>
+</div>-->
 
-<div id="ajax_filelisterrors"></div>
+<!--<div id="ajax_filelisterrors"></div>-->
 
 <script>
 

@@ -49,8 +49,6 @@ def folders(request, companyid=0, pk=0):
     # *******************************
     #project_list = project_list.order_by('dateclose')
 
-
-
     current_company = Company.objects.get(id=companyid)
 
     if pk == 0:
@@ -75,6 +73,7 @@ def folders(request, companyid=0, pk=0):
     button_company_create = ''
     button_company_update = ''
     button_folder_create = ''
+    button_folder_update = ''
 
     # здесь нужно условие для button_company_create
     # если текущий пользователь не является автором созданной текущей организации, то добавлять и изменять Компанию можно только в приложении Организации
@@ -87,12 +86,14 @@ def folders(request, companyid=0, pk=0):
     comps = request.session['_auth_user_companies_id']
     if len(comps) > 1:
        button_company_select = 'Сменить организацию'
-    if currentuser == current_company.author_id:
-       button_company_create = 'Добавить'
-       button_company_update = 'Изменить'
-       button_folder_create = 'Добавить папку'
-    if current_company in comps:
+    #if currentuser == current_company.author_id:
+    #   button_company_create = 'Добавить'
+    #   button_company_update = 'Изменить'
+    #   button_folder_create = 'Добавить папку'
+    #print(current_company.id)
+    if current_company.id in comps:
        button_folder_create = 'Добавить'
+       button_folder_update = 'Изменить'
     return render(request, template, {
                               'nodes': folder_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
                               'current_folder': current_folder,
@@ -106,9 +107,10 @@ def folders(request, companyid=0, pk=0):
                               'objtype': 'fldr',
                               'media_path': settings.MEDIA_URL,
                               'button_company_select': button_company_select,
-                              'button_company_create': button_company_create,
-                              'button_company_update': button_company_update,
+                              #'button_company_create': button_company_create,
+                              #'button_company_update': button_company_update,
                               'button_folder_create': button_folder_create,
+                              'button_folder_update': button_folder_update,
                               #'button_folder_history': button_folder_history,
                               'foldertheme': Dict_Theme.objects.filter(is_active=True),
                               'ftheme_selectid': ftheme_selectid,
@@ -161,7 +163,7 @@ class FolderUpdate(AddFilesMixin, UpdateView):
     def get_context_data(self, **kwargs):
         # context = super(ProjectUpdate, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
-        context['header'] = 'Изменить Проект'
+        context['header'] = 'Изменить Папку'
         # kwargs = super(ProjectUpdate, self).get_form_kwargs()
         kwargs = super().get_form_kwargs()
         context['files'] = FolderFile.objects.filter(folder_id=self.kwargs['pk'], is_active=True).order_by('uname')
@@ -177,7 +179,7 @@ class FolderUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)  # без commit=False происходит вызов save() Модели
-        af = self.add_files(form, 'project', 'project')  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, 'file', 'folder')  # добавляем файлы из формы (метод из AddFilesMixin)
         ## Получаем старые значения для дальнейшей проверки на изменения
         #old = Folder.objects.filter(pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
         #old_memb = old.members.values_list('id', 'username').all()
