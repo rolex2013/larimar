@@ -16,15 +16,23 @@
         <div class="table-files">
             {% for file in files %}
                 <div class="row-files">
+                    {% comment %}
                     {% if objtype == 'fldr' %}
                         {% if user.id == file.author.id %}
                             <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                         {% endif %}
                     {% else %}
+                        {{ current_doc.doctask }}/{{ task.name }}
                         {% if current_doc.doctask == 0 or task.name %}
                             <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                         {% endif %}
                     {% endif %}
+                    {% endcomment %}
+                    <!--+++/{ obj_files_rights }}/+++-->
+                    {% if obj_files_rights != 0 %}
+                        <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                    {% endif %}
+
                     <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
                     <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div>
                     <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
@@ -58,6 +66,7 @@
                 url: "{% url 'my_main:objectfile_delete' objtype %}",
                 type: 'GET',
                 data: { fileid: chkVal,
+                        obj_files_rights: {{ obj_files_rights }}
                     //companyid: "8",
                     //pk: {{ companyuser.id }},
                 },

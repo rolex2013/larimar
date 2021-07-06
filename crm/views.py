@@ -74,6 +74,7 @@ def clients(request, companyid=0, pk=0):
     len_list = len(client_list)
 
     current_company = Company.objects.get(id=companyid)
+    obj_files_rights = 0
 
     if pk == 0:
        current_client = 0
@@ -81,6 +82,8 @@ def clients(request, companyid=0, pk=0):
        #root_client_id = 0
     else:
        current_client = Client.objects.get(id=pk)
+       if currentuser == current_client.author_id or currentuser == current_client.manager_id:
+           obj_files_rights = 1
        #tree_client_id = current_client.tree_id  
        #root_client_id = current_client.get_root().id
 
@@ -115,6 +118,7 @@ def clients(request, companyid=0, pk=0):
                               'current_company': current_company,
                               'companyid': companyid,
                               'user_companies': comps,
+                              'obj_files_rights': obj_files_rights,
                               #'objtype': 'clnt',
                               #'files': ClientFile.objects.filter(client=currentclient, is_active=True).order_by('uname'),
                               #'media_path': settings.MEDIA_URL,
@@ -303,18 +307,25 @@ def clienttasks(request, clientid=0, pk=0):
        sec = 0
     hours, sec = divmod(sec, 3600)
     minutes, sec = divmod(sec, 60)
-    seconds = sec    
-    
+    seconds = sec
+
+    # права на удаление файлов
+    obj_files_rights = 0
+
     if pk == 0:
        current_task = 0
        tree_task_id = 0  
        root_task_id = 0
-       tree_task_id = 0 
+       tree_task_id = 0
+       if currentuser == currentclient.author_id or currentuser == currentclient.manager_id:
+           obj_files_rights = 1
     else:
-       current_task = ClientTask.objects.get(id=pk)
+       current_task = ClientTask.objects.filter(id=pk).first()
        tree_task_id = current_task.tree_id  
        root_task_id = current_task.get_root().id
        tree_task_id = current_task.tree_id
+       if currentuser == current_task.author_id or currentuser == current_task.assigner_id:
+           obj_files_rights = 1
 
     button_client_create = ''
     button_client_update = ''
@@ -322,12 +333,12 @@ def clienttasks(request, clientid=0, pk=0):
     button_task_create = ''
 
     is_member = Client.objects.filter(members__in=[currentuser,]).exists()
-    if currentuser == currentclient.author_id or currentuser == currentclient.assigner_id or is_member:
+    if currentuser == currentclient.author_id or currentuser == currentclient.manager_id or is_member:
        #button_client_create = 'Добавить'
        button_client_history = 'История' 
        button_task_create = 'Добавить'
        button_event_create = 'Добавить'                    
-       if currentuser == currentclient.author_id or currentuser == currentclient.assigner_id:
+       if currentuser == currentclient.author_id or currentuser == currentclient.manager_id:
           button_client_update = 'Изменить'    
      
     return render(request, "client_detail.html", {
@@ -338,6 +349,7 @@ def clienttasks(request, clientid=0, pk=0):
                               'current_client': currentclient,                             
                               'clientid': clientid,
                               'user_companies': request.session['_auth_user_companies_id'],
+                              'obj_files_rights': obj_files_rights,
                               'files': ClientFile.objects.filter(client=currentclient, is_active=True).order_by('uname'),                                                             
                               'objtype': 'clnt',
                               'media_path': settings.MEDIA_URL,                             
@@ -442,9 +454,13 @@ class ClientTaskUpdate(AddFilesMixin, UpdateView):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienttaskcomments(request, taskid):
 
-    currenttask = ClientTask.objects.get(id=taskid)
+    currenttask = ClientTask.objects.filter(id=taskid).first()
     currentuser = request.user.id
-    
+    if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
+        obj_files_rights = 1
+    else:
+        obj_files_rights = 0
+
     taskcomment_costsum = ClientTaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
     taskcomment_timesum = ClientTaskComment.objects.filter(task=taskid).aggregate(Sum('time'))
     try:
@@ -477,6 +493,7 @@ def clienttaskcomments(request, taskid):
                               'nodes': taskcomment_list.distinct().order_by(),
                               #'current_taskcomment': currenttaskcomment,
                               'clienttask': currenttask,
+                              'obj_files_rights': obj_files_rights,
                               'files': ClientFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),                              
                               'objtype': 'clnttsk',
                               'button_clienttask_create': button_task_create,
@@ -553,12 +570,17 @@ def clientevents(request, clientid=0, pk=0):
 
     #len_list = len(event_list)
 
-    currentclient = Client.objects.get(id=clientid)  
-    
+    currentclient = Client.objects.get(id=clientid)
+
+    obj_files_rights = 0
+
     if pk == 0:
-       current_event = 0 
+        current_event = 0
+
     else:
-       current_event = ClientEvent.objects.get(id=pk)
+        current_event = ClientEvent.objects.filter(id=pk).first()
+        if currentuser == current_event.author_id or currentuser == current_event.assigner_id:
+            obj_files_rights = 1
 
     button_client_create = ''
     button_client_update = ''
@@ -579,7 +601,7 @@ def clientevents(request, clientid=0, pk=0):
                               'current_client': currentclient,                             
                               'clientid': clientid,
                               'user_companies': request.session['_auth_user_companies_id'],
-
+                              'obj_files_rights': obj_files_rights,
                               'objtype': 'clntevnt',                              
                               'button_event_create': button_client_create,
                               'buttonevent_update': button_client_update,
@@ -696,8 +718,11 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienteventcomments(request, eventid):
 
-    currentevent = ClientEvent.objects.get(id=eventid)
+    currentevent = ClientEvent.objects.filter(id=eventid).first()
     currentuser = request.user.id
+    obj_files_rights = 0
+    if currentuser == currentevent.author_id or currentuser == currentevent.assigner_id:
+        obj_files_rights = 1
     
     eventcomment_list = ClientEventComment.objects.filter(Q(author=request.user.id) | Q(event__client__members__in=[currentuser,]), is_active=True, event=eventid)
     #print(taskcomment_list)
@@ -718,6 +743,7 @@ def clienteventcomments(request, eventid):
                               'nodes': eventcomment_list.distinct().order_by(),
                               #'current_eventcomment': currenteventcomment,
                               'clientevent': currentevent,
+                              'obj_files_rights': obj_files_rights,
                               'files': ClientFile.objects.filter(event=currentevent, is_active=True).order_by('uname'),                              
                               'objtype': 'clntevntcmnt',
                               'button_clientevent_create': button_event_create,
@@ -846,7 +872,8 @@ def clientfilter(request):
     #if request.user.is_authenticated():
             companyid = request.GET['companyid']
             clntstatus = request.GET['clientstatus']
-            clnttype = request.GET['clienttype']            
+            clnttype = request.GET['clienttype']
+            #_rights = request.GET['obj_files_rights']
             if companyid == 0:
                companyid = request.session['_auth_user_currentcompany_id']
             # *** фильтруем по статусу ***
@@ -881,7 +908,7 @@ def clientfilter(request):
             object_message = ''
             if len(nodes) == 0:
                object_message = 'Клиенты не найдены!'
-            return render(request, 'clients_list.html', {'nodes': nodes, 'object_list': 'client_list', 'object_message': object_message})           
+            return render(request, 'clients_list.html', {'nodes': nodes, 'object_list': 'client_list', 'object_message': object_message})
     #else:
     #    return JsonResponse({'error': 'Only authenticated users'}, status=404) 
         #return render(request, 'clients_list.html', 'Информация недоступна') 
@@ -922,7 +949,7 @@ def clienttaskfilter(request):
     object_message = ''
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'                  
-    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'clienttask_list', 'object_message': object_message})     
+    return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'clienttask_list', 'object_message': object_message})
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienteventfilter(request):
@@ -965,4 +992,4 @@ def clienteventfilter(request):
     if len_elist == 0:
        event_message = 'События не найдены!'   
     #print(event_message)               
-    return render(request, 'clientevents_objects_list.html', {'enodes': enodes, 'event_list': 'clientevent_list', 'event_message': event_message, 'clientid': clientid})    
+    return render(request, 'clientevents_objects_list.html', {'enodes': enodes, 'event_list': 'clientevent_list', 'event_message': event_message, 'clientid': clientid})

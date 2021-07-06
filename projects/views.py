@@ -91,6 +91,8 @@ def projects(request, companyid=0, pk=0):
     #print(current_company[9])
     # ***
 
+    obj_files_rights = 0
+
     if pk == 0:
        current_project = 0
        tree_project_id = 0
@@ -103,6 +105,8 @@ def projects(request, companyid=0, pk=0):
        tree_project_id = current_project.tree_id  
        root_project_id = current_project.get_root().id
        #tree_project_id = current_project.tree_id
+       if currentuser == current_project.author_id or currentuser == current_project.assigner_id:
+           obj_files_rights = 1
 
     button_company_select = ''
     button_company_create = ''
@@ -134,6 +138,7 @@ def projects(request, companyid=0, pk=0):
                               'current_company': current_company,
                               'companyid': companyid,
                               'user_companies': comps,
+                              'obj_files_rights': obj_files_rights,
                               'button_company_select': button_company_select,
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
@@ -303,7 +308,7 @@ def tasks(request, projectid=0, pk=0):
     len_list = len(task_list)
     #print(len_list)    
 
-    currentproject = Project.objects.get(id=projectid)
+    currentproject = Project.objects.filter(id=projectid).first()
 
     #taskcomment_costsum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('cost'))
     #taskcomment_timesum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('time'))
@@ -315,18 +320,24 @@ def tasks(request, projectid=0, pk=0):
        sec = 0
     hours, sec = divmod(sec, 3600)
     minutes, sec = divmod(sec, 60)
-    seconds = sec    
-    
+    seconds = sec
+
+    obj_files_rights = 0
+
     if pk == 0:
        current_task = 0
        tree_task_id = 0  
        root_task_id = 0
-       tree_task_id = 0 
+       tree_task_id = 0
+       if currentuser == currentproject.author_id or currentuser == currentproject.assigner_id:
+           obj_files_rights = 1
     else:
        current_task = Task.objects.get(id=pk)
        tree_task_id = current_task.tree_id  
        root_task_id = current_task.get_root().id
        tree_task_id = current_task.tree_id
+       if currentuser == current_task.author_id or currentuser == current_task.assigner_id:
+           obj_files_rights = 1
 
     button_project_create = ''
     button_project_update = ''
@@ -348,6 +359,7 @@ def tasks(request, projectid=0, pk=0):
                               'tree_task_id': tree_task_id,
                               'current_project': currentproject,                             
                               'projectid': projectid,
+                              'obj_files_rights': obj_files_rights,
                               'files': ProjectFile.objects.filter(project=currentproject, is_active=True).order_by('uname'),
                               'objtype': 'prj',
                               'media_path': settings.MEDIA_URL,                              
@@ -505,18 +517,22 @@ def taskcomments(request, taskid):
     button_task_update = ''    
     button_task_history = ''
     is_member = Project.objects.filter(members__in=[currentuser,]).exists()
+    obj_files_rights = 0
+    if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
+        obj_files_rights = 1
     if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id or is_member:
-       button_task_create = 'Добавить'
-       button_task_history = 'История' 
-       button_taskcomment_create = 'Добавить'             
-       if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
-          button_task_update = 'Изменить'
+        button_task_create = 'Добавить'
+        button_task_history = 'История'
+        button_taskcomment_create = 'Добавить'
+        if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
+            button_task_update = 'Изменить'
      
     return render(request, "task_detail.html", {
                               'nodes': taskcomment_list.distinct().order_by(),
                               #'node_files': n_files,
                               #'current_taskcomment': currenttaskcomment,
                               'task': currenttask,
+                              'obj_files_rights': obj_files_rights,
                               'files': ProjectFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
                               'objtype': 'prjtsk',
                               'media_path': settings.MEDIA_URL,

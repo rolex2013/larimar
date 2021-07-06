@@ -57,13 +57,17 @@ def docs(request, companyid=0, pk=0):
     #print(doc_list)
     len_list = len(doc_list)
 
-    current_company = Company.objects.get(id=companyid)
+    current_company = Company.objects.filter(id=companyid).first()
+
+    obj_files_rights = 0
 
     if pk == 0:
        current_doc = 0
     else:
        #current_doc = Doc.objects.get(id=pk)
        current_doc = Doc.objects.filter(id=pk).first()
+       if currentuser == current_doc.author_id or currentuser == current_doc.manager_id:
+           obj_files_rights = 1
 
     button_company_select = ''
     button_company_create = ''
@@ -94,6 +98,7 @@ def docs(request, companyid=0, pk=0):
                               'current_company': current_company,
                               'companyid': companyid,
                               'user_companies': comps,
+                              'obj_files_rights': obj_files_rights,
                               'button_company_select': button_company_select,
                               'button_company_create': button_company_create,
                               'button_company_update': button_company_update,
@@ -297,6 +302,10 @@ def doctasks(request, pk=0):
     button_doc_history = ''
     button_task_create = ''
 
+    obj_files_rights = 0
+    if currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id:
+        obj_files_rights = 1
+
     is_member = Doc.objects.filter(id=pk, members__in=[currentuser, ]).exists()
     if currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id or is_member:
         button_doc_history = 'Версии'
@@ -313,6 +322,7 @@ def doctasks(request, pk=0):
         'current_docver': currentdocver.vernumber,
         'docverid': docverid,
         'user_companies': request.session['_auth_user_companies_id'],
+        'obj_files_rights': obj_files_rights,
         'files': DocVerFile.objects.filter(docver=currentdocver, is_active=True).order_by('uname'),
         'objtype': 'doc',
         'is_member': is_member,
@@ -417,7 +427,7 @@ class DocTaskUpdate(AddFilesMixin, UpdateView):
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctaskcomments(request, taskid):
-    currenttask = DocTask.objects.get(id=taskid)
+    currenttask = DocTask.objects.filter(id=taskid).first()
     currentuser = request.user.id
 
     taskcomment_list = DocTaskComment.objects.filter(
@@ -429,6 +439,9 @@ def doctaskcomments(request, taskid):
     button_task_update = ''
     button_task_history = ''
     is_member = Doc.objects.filter(members__in=[currentuser, ]).exists()
+    obj_files_rights = 0
+    if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
+        obj_files_rights = 1
     if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id or is_member:
         #button_task_create = 'Добавить'
         button_task_history = 'История'
@@ -441,6 +454,7 @@ def doctaskcomments(request, taskid):
         # 'node_files': n_files,
         # 'current_taskcomment': currenttaskcomment,
         'task': currenttask,
+        'obj_files_rights': obj_files_rights,
         'files': DocVerFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
         'objtype': 'doctsk',
         'media_path': settings.MEDIA_URL,

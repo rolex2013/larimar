@@ -138,6 +138,7 @@ def objecthistory(request, objtype='prj', pk=0):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def objectfiledelete(request, objtype='prj'):
    fileid = request.GET['fileid']
+   obj_files_rights = request.GET['obj_files_rights']
    object_message = ''
    template = 'objectfile_list.html'
    if fileid:
@@ -177,7 +178,8 @@ def objectfiledelete(request, objtype='prj'):
       files = FolderFile.objects.filter(folder_id=fl.folder_id, is_active=True).order_by('uname')
       template = 'folderfile_list.html'
    return render(request, template, {'objtype': objtype,
-                                                   'files': files, 
+                                                   'files': files,
+                                                   'obj_files_rights': obj_files_rights,
                                                    'object_message': object_message,
                                                    'media_path': settings.MEDIA_URL,
                                                   })
