@@ -75,7 +75,7 @@ admin.site.register(Component, ComponentAdmin)
 
 admin.site.register(Dict_ProtocolType)
 
-admin.site.register(Dict_Theme)
+admin.site.register(Dict_Theme, Dict_ThemeAdmin)
 
 admin.site.register(Notification)
 
@@ -196,5 +196,5 @@ admin.site.register(DocTaskComment)
 
 admin.site.register(Dict_FolderType)
 
-admin.site.register(Folder)
+admin.site.register(Folder, FolderAdmin)
 
