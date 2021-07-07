@@ -138,6 +138,7 @@ def objecthistory(request, objtype='prj', pk=0):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def objectfiledelete(request, objtype='prj'):
    fileid = request.GET['fileid']
+   print(fileid)
    obj_files_rights = request.GET['obj_files_rights']
    object_message = ''
    template = 'objectfile_list.html'

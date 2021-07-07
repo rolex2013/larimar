@@ -7,7 +7,8 @@
             <div class="table-files">
                 {% for file in files %}
                     <div class="row-files">
-                        {% if user.id == file.author.id %}
+                        <!--{ if user.id == file.author.id %}-->
+                        {% if obj_files_rights and obj_files_rights != 0 %}
                             <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                         {% endif %}
                         <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
@@ -30,31 +31,34 @@
 <script>
 
     $('input[type="checkbox"]').change(function() {
-        //console.log({{ companyid }})
-        //console.log({{ companyuser.id }})
+
         // Проверка, стоит галочка или нет
         if ($(this).is(':checked')) {
 
-            var chk = $(this).attr("name");
-            var chkVal = $(this).attr("value");
-            //console.log(chkVal)
+            if (confirm("Внимание! Этот файл будет удалён!")) {
 
-            $.ajax({
-                url: "{% url 'my_main:objectfile_delete' objtype %}",
-                type: 'GET',
-                data: { fileid: chkVal,
-                    //companyid: "8",
-                    //pk: {{ companyuser.id }},
-                },
-                success: function(data) {
-                    $('#ajax_filelistresult').html(data);
-                },
-                error: function(xhr, errmsg, err) {
-                    console.log("error")
-                    $('#ajax_filelisterrors').html('Файл не найден!');
-                }
+                var chk = $(this).attr("name");
+                var chkVal = $(this).attr("value");
+                //console.log(chkVal)
 
-            });
+                $.ajax({
+                    url: "{% url 'my_main:objectfile_delete' objtype %}",
+                    type: 'GET',
+                    data: { fileid: chkVal,
+                            obj_files_rights: {{ obj_files_rights }},
+                    },
+                    success: function(data) {
+                        $('#ajax_filelistresult').html(data);
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log("error")
+                        $('#ajax_filelisterrors').html('Файл не найден!');
+                    }
+
+                });
+            } else {
+                $(this).prop("checked", false);
+            }
 
         };
 

@@ -51,6 +51,8 @@ def folders(request, companyid=0, pk=0):
 
     current_company = Company.objects.get(id=companyid)
 
+    obj_files_rights = 0
+
     if pk == 0:
        current_folder = 0
        tree_folder_id = 0
@@ -65,6 +67,8 @@ def folders(request, companyid=0, pk=0):
        root_folder_id = current_folder.get_root().id
        #tree_folder_id = current_folder.tree_id
        folder_list = current_folder.get_children()
+       if currentuser == current_folder.author_id: # or currentuser == current_folder.assigner_id:
+           obj_files_rights = 1
        template = "folder_detail.html"
 
     len_list = len(folder_list)
@@ -105,6 +109,7 @@ def folders(request, companyid=0, pk=0):
                               'component_name': 'files',
                               'files': FolderFile.objects.filter(folder=current_folder, is_active=True),
                               'objtype': 'fldr',
+                              'obj_files_rights': obj_files_rights,
                               'media_path': settings.MEDIA_URL,
                               'button_company_select': button_company_select,
                               #'button_company_create': button_company_create,
