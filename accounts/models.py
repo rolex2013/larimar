@@ -9,7 +9,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE, related_name='result_user_profile', verbose_name="Пользователь")
     company = models.ForeignKey('companies.Company', blank=True, null=True, on_delete=models.CASCADE, related_name='result_company_profile', verbose_name="Организация")
     is_notify = models.BooleanField("Оповещать", default=True)
-    protocoltype = models.ForeignKey('main.Dict_ProtocolType', blank=True, null=True, on_delete=models.CASCADE, related_name='result_protocol_type', verbose_name="Протокол оповещения")    
+    protocoltype = models.ForeignKey('main.Dict_ProtocolType', default=3, on_delete=models.CASCADE, related_name='result_protocol_type', verbose_name="Протокол оповещения")
     email = models.CharField("E-mail", max_length=64, blank=True, null=True)
     phone = models.CharField("Телефон", max_length=16, blank=True, null=True)
     description = RichTextUploadingField("Описание", blank=True, null=True)    
