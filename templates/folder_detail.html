@@ -32,6 +32,7 @@
 
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
           <div class="object-detail-buttons">
+              <a href="{% url 'my_company:companies' 0 'files' %}">{{ button_company_select }}</a>
               <a href="{% url 'my_file:folder_update' current_folder.pk %}">{{ button_folder_update }}</a>
           </div>
           <br />
@@ -116,7 +117,7 @@
                  <div id="ajax_filelisterrors"></div>
 
                  <div class="object-list-buttons">
-                     <a href="{ url 'my_file:file_create' current_folder.id %}">Добавить{{ button_file_create }}</a>
+                     <a href="{% url 'my_file:files_upload' current_folder.id %}">{{ button_file_create }}</a>
                  </div>
             </div>
 

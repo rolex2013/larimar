@@ -41,3 +41,10 @@ class FolderForm(forms.ModelForm):
         model = Folder
         fields = ['name', 'description', 'theme', 'type', 'is_active', 'id', 'author']
         #labels = {'Files':'Выберите файлы'}
+
+
+class UploadFilesForm(forms.Form):
+
+    files = forms.FileField(label='Файлы папки', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+
+

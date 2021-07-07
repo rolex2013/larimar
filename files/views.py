@@ -1,9 +1,10 @@
 from django.conf import settings
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count, Min, Max, Sum, Avg
 
-from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
+from django.views.generic import View, TemplateView, ListView, DetailView, CreateView, FormView
 from django.views.generic.edit import UpdateView
 
 from main.utils import AddFilesMixin #ObjectUpdateMixin
@@ -13,7 +14,7 @@ from companies.models import Company
 
 from files.models import Folder, FolderFile, Dict_FolderType
 
-from .forms import FolderForm
+from .forms import FolderForm, UploadFilesForm
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def folders(request, companyid=0, pk=0):
@@ -78,6 +79,7 @@ def folders(request, companyid=0, pk=0):
     button_company_update = ''
     button_folder_create = ''
     button_folder_update = ''
+    button_file_create = ''
 
     # здесь нужно условие для button_company_create
     # если текущий пользователь не является автором созданной текущей организации, то добавлять и изменять Компанию можно только в приложении Организации
@@ -98,6 +100,7 @@ def folders(request, companyid=0, pk=0):
     if current_company.id in comps:
        button_folder_create = 'Добавить'
        button_folder_update = 'Изменить'
+       button_file_create = 'Добавить'
     return render(request, template, {
                               'nodes': folder_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
                               'current_folder': current_folder,
@@ -116,6 +119,7 @@ def folders(request, companyid=0, pk=0):
                               #'button_company_update': button_company_update,
                               'button_folder_create': button_folder_create,
                               'button_folder_update': button_folder_update,
+                              'button_file_create': button_file_create,
                               #'button_folder_history': button_folder_history,
                               'foldertheme': Dict_Theme.objects.filter(is_active=True),
                               'ftheme_selectid': ftheme_selectid,
@@ -192,3 +196,22 @@ class FolderUpdate(AddFilesMixin, UpdateView):
         #old_memb_list = list(old_memb)
         self.object = form.save()
         return super().form_valid(form)
+
+class UploadFiles(FormView):
+    form_class = UploadFilesForm
+    template_name = 'object_form.html'  # Replace with your template.
+    #success_url = '/files/files_page0/' #reverse('my_file:folders0')  # Replace with your URL or reverse().
+    success_url = reverse_lazy('my_file:folders', kwargs={'companyid':'0', 'pk':'8'})
+    #success_url = reverse('views.folders')
+    #success_url = reverse(folder_detail.html)
+
+    def post(self, request, *args, **kwargs):
+        form_class = self.get_form_class()
+        form = self.get_form(form_class)
+        files = request.FILES.getlist('files')
+        if form.is_valid():
+            #for f in files:
+            #    ...  # Do something with each file.
+            return super().form_valid(form)
+        else:
+            return super().form_invalid(form)

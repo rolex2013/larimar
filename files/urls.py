@@ -15,6 +15,7 @@ urlpatterns = [
     path('files_page/<int:companyid>/<int:pk>', views.folders, name='folders'),
     path('files_list/folder_create/<int:companyid>/<int:parentid>', views.FolderCreate.as_view(), name='folder_create'),
     path('files_list/folder_update/<int:pk>', views.FolderUpdate.as_view(), name='folder_update'),
+    path('files_list/files_upload/<int:pk>', views.UploadFiles.as_view(), name='files_upload'),
 
     #path('files_page/<int:pk>', views.doctasks, name='doctasks'),
     #path('filetasks_list/doctask_create/<int:docid>/<int:docverid>', views.DocTaskCreate.as_view(), name='file_create'),

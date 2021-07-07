@@ -11,7 +11,7 @@
             {%  else %}
                 <img src="{% static 'pngegg.png' %}" />
             {%  endif %}
-            <span class="hint hint--bottom hint--info" data-hint="Открыть папку"><b><a href="{% url 'my_file:folders' 0 node.pk %}">{{ node.name }}</a></b></span>&nbsp;
+            <span class="hint hint--bottom hint--info" data-hint="Открыть папку"><b><a href="{% url 'my_file:folders' current_company.pk node.pk %}">{{ node.name }}</a></b></span>&nbsp;
             <span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.theme }} |{{ node.type }} |
             <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a> | Файлов: {{ node.filecount }}</span></span>
 
