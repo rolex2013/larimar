@@ -2,18 +2,23 @@
 
     <div class="object-filelist-right">-->
 
-        <h4>Файлы</h4>
+        <!--<h4>Файлы</h4>-->
         {% if files %}
             <div class="table-files">
                 {% for file in files %}
                     <div class="row-files">
                         <!--{ if user.id == file.author.id %}-->
                         {% if obj_files_rights and obj_files_rights != 0 %}
-                            <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                            {% if file.is_active == True %}
+                                <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                            {% else %}
+                                <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Восстановить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                            {% endif %}
                         {% endif %}
-                        <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
+                        <div class="cell-files-left"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
                         <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div>
                         <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
+                        <div class="cell-files-left"><em style="font-size:80%">{{ file.author }}</em></div>
                     </div>
                 {% endfor %}
             </div>
@@ -35,7 +40,13 @@
         // Проверка, стоит галочка или нет
         if ($(this).is(':checked')) {
 
-            if (confirm("Внимание! Этот файл будет удалён!")) {
+            /*if ({ file.is_active }}) {
+                var stroka = "Внимание! Этот файл будет восстановлен!";
+            } else {
+                var stroka = "Внимание! Этот файл будет удалён!";
+            };*/
+
+            if (confirm("Внимание! Активность этого файла будет изменена!")) {
 
                 var chk = $(this).attr("name");
                 var chkVal = $(this).attr("value");

@@ -487,7 +487,17 @@ body {
     padding: 0 10px 0 10px;
     /*color: grey;*/
 }
-
+.cell-files-left {
+    display: table-cell;
+    text-align: left;
+    padding: 0 10px 0 10px;
+    /*color: grey;*/
+}
+.cell-files-left a:hover{
+    color: darkblue;
+    /*font-weight: bold;*/
+    text-decoration: none;
+}
 
 .tree span:hover {
     font-weight: bold;

@@ -33,9 +33,10 @@
                         <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                     {% endif %}
 
-                    <div class="cell-files"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
+                    <div class="cell-files-left"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
                     <div class="cell-files"><em style="font-size:80%">{{ file.psize|filesizeformat }}</em></div>
                     <div class="cell-files"><em style="font-size:80%">{{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></div>
+                    <div class="cell-files-left"><em style="font-size:80%">{{ file.author }}</em></div>
                     {% if file.taskcomment_id != None %}
                         <em>(к)</em>
                     {%  endif %}

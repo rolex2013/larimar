@@ -16,15 +16,16 @@
 
         <i>
         {% if current_folder.parent.pk %}
-            <p>Папка:
+            <p>Папка верхнего уровня:
              <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{ current_folder.parent.name }}</a>-->
-             <a href="{% url 'my_file:folders' 0 current_folder.parent.pk %}">{{ current_folder.parent.name }}</a>
+             <a href="{% url 'my_file:folders' current_folder.company.id current_folder.parent.pk %}">{{ current_folder.parent.name }}</a>
              </p></i>
         {% else %}
              <p><a href="{% url 'my_file:folders0' %}">Корневая папка</a></p>
         {% endif %}
         </i>
 
+        <p>Тематика: {{ current_folder.theme }}</p>
         <p>Тип: {{ current_folder.type }}</p>
         <em>Автор: {{ current_folder.author }}</em>
         <em>Дата: {{ current_folder.datecreate }}</em>
@@ -69,32 +70,30 @@
                        {% csrf_token %}
                        <div class="object-list-filters">
                            <label>По тематике: </label>
-                           <select name="select-d" id="statusselectid" class="select-doc-status">
-                              <option value="-1" {% ifequal "-1" dcstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                              <!--<option value="0" { ifequal 0 dcstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                              <option value="-2" { ifequal "-2" dctstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
-                              {% for dcstatus in docstatus %}
-                                 <option value="{{dcstatus.id}}" {% ifequal dcstatus.id dcstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                                    {{dcstatus.name}}
+                           <select name="select-folder-theme" id="themeselectid" class="select-folder-theme">
+                              <option value="-1" {% ifequal "-1" theme_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                              {% for fldrtheme in foldertheme %}
+                                 <option value="{{fldrtheme.id}}" {% ifequal fldrtheme.id fldrtheme_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                    {{fldrtheme.name}}
                                  </option>
                               {% endfor %}
                            </select>
                            <label>По типу: </label>
-                           <select name="select-doctype" id="typeselectid" class="select-doc-type">
-                              <option value="-1" {% ifequal "-1" dctype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                              {% for dctype in doctype %}
-                                 <option value="{{dctype.id}}" {% ifequal dctype.id dcttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                                    {{dctype.name}}
+                           <select name="select-folder-type" id="typeselectid" class="select-folder-type">
+                              <option value="-1" {% ifequal "-1" type_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                              {% for fldrtype in foldertype %}
+                                 <option value="{{fldrtype.id}}" {% ifequal fldrtype.id fldrtype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                    {{fldrtype.name}}
                                  </option>
                               {% endfor %}
                            </select>
-                           <label>Мои папки: </label>
-                           <select name="select-mydoc" id="myselectid" class="select-my-doc">
-                              <option value="-1" {% ifequal "-1" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                               <option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                              {% comment %}<option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>{% endcomment %}
+                           <label>Автор: </label>
+                           <select name="select-myfolder" id="myselectid" class="select-my-doc">
+                              <option value="-1" {% ifequal "-1" my_selectid %} selected="selected" {% endifequal %}>Все активные</option>
+                              <option value="1" {% ifequal "1" my_selectid %} selected="selected" {% endifequal %}>Мои активные</option>
+                              <option value="2" {% ifequal "2" my_selectid %} selected="selected" {% endifequal %}>Мои неактивные</option>
                            </select>
-                           <button id="selection-button-doc" type="submit" method="GET" class="object-filter-button">Применить</button>
+                           <button id="selection-button-folder" type="submit" method="GET" class="object-filter-button">Применить</button>
                        </div>
                     </form>
 
@@ -113,6 +112,34 @@
             </div>
                 <!--{ include 'objectfile_list.html' %}-->
             <div class="object-list-right">
+                    <h4>Файлы</h4>
+                    <form method="GET">
+                       {% csrf_token %}
+                       <div class="object-list-filters">
+                           <label>Упорядочить: </label>
+                           <select name="select-sort" id="sortselectid" class="select-sort">
+                                <option value="1" {% ifequal "1" sort_selectid %} selected="selected" {% endifequal %}>По имени</option>
+                                <option value="2" {% ifequal "3" sort_selectid %} selected="selected" {% endifequal %}>По размеру</option>
+                                <option value="3" {% ifequal "4" sort_selectid %} selected="selected" {% endifequal %}>По дате</option>
+                                {% comment %}<option value="4" {% ifequal "2" fl_sort_selectid %} selected="selected" {% endifequal %}>По расширению</option>{% endcomment %}
+                           </select>
+                           <!--<label>Порядок: </label>-->
+                           <select name="select-sort" id="sortdirselectid" class="select-sortdir">
+                                <option value="1" {% ifequal "1" sortdir_selectid %} selected="selected" {% endifequal %}>По возрастанию</option>
+                                <option value="2" {% ifequal "2" sortdir_selectid %} selected="selected" {% endifequal %}>По убыванию</option>
+                                <option value="-1" {% ifequal "-1" sortdir_selectid %} selected="selected" {% endifequal %}>Без сортировки</option>
+                           </select>
+                           <!--<button id="selection-button-filesort" type="submit" method="GET" class="object-filter-button">Сортировать</button>-->
+                           <label>Автор: </label>
+                           <select name="select-myfile" id="myfileselectid" class="select-my-file">
+                                <option value="-1" {% ifequal "-1" myfileselectid %} selected="selected" {% endifequal %}>Все активные</option>
+                                <option value="1" {% ifequal "1" myfileselectid %} selected="selected" {% endifequal %}>Мои активные</option>
+                                <option value="2" {% ifequal "2" myfileselectid %} selected="selected" {% endifequal %}>Мои неактивные</option>
+                           </select>
+                           <button id="selection-button-file" type="submit" method="GET" class="object-filter-button">Выбрать</button>
+                       </div>
+                    </form>
+
                  <div id="ajax_filelistresult">{% include 'folderfile_list.html' %}</div>
                  <div id="ajax_filelisterrors"></div>
 
@@ -127,103 +154,22 @@
 
 
       <script>
-         // *** это обработка отдельного select - отключено ***
-         //$("#selection-button-project").on('click',function(){
-         $(document).on('change', '.select-project-status---', function() {
-         //$("#selection-button-project").click(function(event) {
-             event.preventDefault();
-             var statusSelected = $('#select-projectstatus').find(":selected").val();            
-            //console.log(this.value);
-            //console.log(this.text);
-            //$('.projects_list').html('').load("{ url 'my_project:project_filter' 8 %}" /*+ this.value*/);
-            //var statusSelected = $('#select-projectstatus').find(":selected").val();   
-            //var statusSelected = document.getElementById('selectid').value; 
-            var statusSelected = $(this).val();
-               //var myprojectSelected = $(this).val();  
-            //console.log(statusSelected);            
-            $.ajax({
-                 url: "{% url 'my_project:project_filter' %}",
-                 method: 'GET',
-                 data : {
-                         //filter_category: parseInt(statusSelected)
-                         companyid: {{ current_company.id }},
-                         projectstatus: statusSelected
-                         //myprojectuser: myprojectSelected
-                        },
-                 success: function(data) 
-                        {
-                         //console.log(data)
-                         $('#ajax_listresult').html(data);
-                        },
-                 error: function(xhr, errmsg, err) 
-                        {
-                         console.log("error")
-                         console.log(error_data)
-                         $('#ajax_listerrors').html('Нет данных!');
-                        }
-             });            
-         });         
-         // ***
 
-         $('#selection-button-project').click(function(){
+         $('#selection-button-folder').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
-            var statusSelected = $("#selectid option:selected").val()
-            var myprojectSelected = $("#myselectid option:selected").val()
-            $.ajax({
-               type: 'GET',
-               url: "{% url 'my_project:project_filter' %}",
-               data: {
-                  companyid: {{ current_company.id }},
-                  projectstatus: statusSelected,
-                  myprojectuser: myprojectSelected
-               },
-               success: function(data){           
-                  $('#ajax_listresult').html(data);                  
-               },
-               error: function(xhr, errmsg, err){               
-                  console.log("error")                                  
-                  $('#ajax_listerrors').html('Нет данных!');
-               }               
-            });
-         });
-
-         $('#selection-button-client').click(function(){
-            event.preventDefault(); // *** без этого страница перегружается после возврата data
-            var statusSelected = $("#statusselectid option:selected").val()
+            var themeSelected = $("#themeselectid option:selected").val()
             var typeSelected = $("#typeselectid option:selected").val()
-            var myclientSelected = $("#myselectid option:selected").val()
+            var mySelected = $("#myselectid option:selected").val()
+             console.log(themeSelected)
             $.ajax({
                type: 'GET',
-               url: "{% url 'my_crm:client_filter' %}",
+               url: "{% url 'my_file:folder_filter' %}",
                data: {
-                  companyid: {{ current_company.id }},
-                  clientstatus: statusSelected,
-                  clienttype: typeSelected,
-                  myclientuser: myclientSelected
-               },
-               success: function(data){           
-                  $('#ajax_clientlistresult').html(data);              
-               },
-               error: function(xhr, errmsg, err){               
-                  console.log("error")                                  
-                  $('#ajax_listerrors').html('Нет данных!');
-               }               
-            });
-         });
-
-         $('#selection-button-doc').click(function(){
-            event.preventDefault(); // *** без этого страница перегружается после возврата data
-            var statusSelected = $("#statusselectid option:selected").val()
-            var typeSelected = $("#typeselectid option:selected").val()
-            var mydocSelected = $("#myselectid option:selected").val()
-            $.ajax({
-               type: 'GET',
-               url: "{% url 'my_doc:doc_filter' %}",
-               data: {
-                  companyid: {{ current_company.id }},
-                  docstatus: statusSelected,
-                  doctype: typeSelected,
-                  mydocuser: mydocSelected
+                  //companyid: { current_company.id }},
+                  folderid: {{ current_folder.id }},
+                  themeid: themeSelected,
+                  typeid: typeSelected,
+                  my: mySelected
                },
                success: function(data){
                   $('#ajax_folderlistresult').html(data);
@@ -231,6 +177,54 @@
                error: function(xhr, errmsg, err){
                   console.log("error")
                   $('#ajax_folderlisterrors').html('Нет данных!');
+               }
+            });
+         });
+/*
+         $('#selection-button-filesort').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            var sortSelected = $("#sortselectid option:selected").val()
+            var sortdirSelected = $("#sortdirselectid option:selected").val()
+            var myfileSelected = $("#myfileselectid option:selected").val()
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_file:file_filter' %}",
+               data: {
+                  folderid: {{ current_folder.id }},
+                  sort: sortSelected,
+                  sortdir: sortdirSelected,
+                  my: myfileSelected
+               },
+               success: function(data){
+                  $('#ajax_filelistresult').html(data);
+               },
+               error: function(xhr, errmsg, err){
+                  console.log("error")
+                  $('#ajax_filelisterrors').html('Нет данных!');
+               }
+            });
+         });
+*/
+         $('#selection-button-file').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            var sortSelected = $("#sortselectid option:selected").val()
+            var sortdirSelected = $("#sortdirselectid option:selected").val()
+            var myfileSelected = $("#myfileselectid option:selected").val()
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_file:file_filter' %}",
+               data: {
+                  folderid: {{ current_folder.id }},
+                  sort: sortSelected,
+                  sortdir: sortdirSelected,
+                  my: myfileSelected
+               },
+               success: function(data){
+                  $('#ajax_filelistresult').html(data);
+               },
+               error: function(xhr, errmsg, err){
+                  console.log("error")
+                  $('#ajax_filelisterrors').html('Нет данных!');
                }
             });
          });

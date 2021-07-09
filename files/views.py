@@ -26,31 +26,39 @@ def folders(request, companyid=0, pk=0):
 
     # *** фильтруем по тематике ***
     currentuser = request.user.id
-    ftheme_selectid = 0
+    theme_selectid = 0
     #myprjstatus = 0 # для фильтра "Мои проекты"
     try:
-       ftheme = request.POST['select_ftheme']
+       themeid = request.POST['theme']
     except:
        folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
     else:
-       if ftheme == "0":
+       if themeid == "0":
           # если в выпадающем списке выбрано "Все активные"
           folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
        else:
-          if ftheme == "-1":
+          if themeid == "-1":
              # если в выпадающем списке выбрано "Все"
              folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
-          #elif ftheme == "-2":
-          #   # если в выпадающем списке выбрано "Просроченные"
-          #   project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.datetime.now())
           else:
-             folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, theme=ftheme) #, dateclose__isnull=True)
-       ftheme_selectid = ftheme
+             folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, theme=themeid) #, dateclose__isnull=True)
+       theme_selectid = themeid
     #prjstatus_myselectid = myprjstatus
+    # *******************************
+    type_selectid = 0
+    #myprjstatus = 0 # для фильтра "Мои проекты"
+    try:
+       typeid = request.POST['typeid']
+    except:
+       folder_list = folder_list
+    else:
+       if typeid != "-1":
+         folder_list = folder_list.filter(type=typeid)
+       fldrtype_selectid = type
     # *******************************
     #project_list = project_list.order_by('dateclose')
 
-    current_company = Company.objects.get(id=companyid)
+    current_company = Company.objects.filter(id=companyid).first()
 
     obj_files_rights = 0
 
@@ -67,7 +75,8 @@ def folders(request, companyid=0, pk=0):
        tree_folder_id = current_folder.tree_id
        root_folder_id = current_folder.get_root().id
        #tree_folder_id = current_folder.tree_id
-       folder_list = current_folder.get_children()
+       folder_list = current_folder.get_children().filter(is_active=True)
+       #folder_list = folder_list.filter(is_active=True)
        if currentuser == current_folder.author_id: # or currentuser == current_folder.assigner_id:
            obj_files_rights = 1
        template = "folder_detail.html"
@@ -97,6 +106,13 @@ def folders(request, companyid=0, pk=0):
     #   button_company_update = 'Изменить'
     #   button_folder_create = 'Добавить папку'
     #print(current_company.id)
+    #foldertheme = Dict_Theme.objects.filter(is_active=True)
+    themes_list = Folder.objects.filter(is_active=True, parent_id=current_folder).values('theme').distinct()
+    foldertheme = Dict_Theme.objects.filter(id__in=themes_list)
+    types_list = Folder.objects.filter(is_active=True, parent_id=current_folder).values('type').distinct()
+    foldertype = Dict_FolderType.objects.filter(id__in=types_list)
+    #print(themes_list)
+    #print(foldertheme)
     if current_company.id in comps:
        button_folder_create = 'Добавить'
        button_folder_update = 'Изменить'
@@ -121,8 +137,11 @@ def folders(request, companyid=0, pk=0):
                               'button_folder_update': button_folder_update,
                               'button_file_create': button_file_create,
                               #'button_folder_history': button_folder_history,
-                              'foldertheme': Dict_Theme.objects.filter(is_active=True),
-                              'ftheme_selectid': ftheme_selectid,
+                              #'foldertheme': Dict_Theme.objects.filter(is_active=True),
+                              'foldertheme': foldertheme,
+                              'theme_selectid': theme_selectid,
+                              'foldertype': foldertype, #Dict_FolderType.objects.filter(is_active=True),
+                              'type_selectid': type_selectid,
                               #'prjstatus_myselectid': prjstatus_myselectid,
                               'object_list': 'folder_list',
                               #'select_projectstatus': select_projectstatus,
@@ -197,7 +216,7 @@ class FolderUpdate(AddFilesMixin, UpdateView):
         self.object = form.save()
         return super().form_valid(form)
 
-class UploadFiles(FormView):
+class UploadFiles(AddFilesMixin, FormView):
     form_class = UploadFilesForm
     template_name = 'object_form.html'  # Replace with your template.
     #success_url = '/files/files_page0/' #reverse('my_file:folders0')  # Replace with your URL or reverse().
@@ -212,6 +231,106 @@ class UploadFiles(FormView):
         if form.is_valid():
             #for f in files:
             #    ...  # Do something with each file.
+            #form.instance.author_id = self.request.user.id
+            #self.object = form.save()  # Созадём новую папку
+            self.object = Folder.objects.filter(id=self.kwargs['pk']).first()
+            #print(self.object)
+            af = self.add_files(form, 'file', 'folder')  # добавляем файлы из формы (метод из AddFilesMixin)
             return super().form_valid(form)
         else:
             return super().form_invalid(form)
+
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def folderfilter(request):
+        folderid = request.GET['folderid']
+        themeid = request.GET['themeid']
+        typeid = request.GET['typeid']
+        my = request.GET['my']
+        currentuser = request.user.id
+        folder = Folder.objects.filter(id=folderid).first()
+        companyid = folder.company_id
+        current_company = Company.objects.filter(id=companyid).first()
+        if companyid == 0:
+           companyid = request.session['_auth_user_currentcompany_id']
+        parent_folder = Folder.objects.filter(id=folderid).first()
+        folder_list = parent_folder.get_children()
+        # *** фильтруем по тематике ***
+        if themeid == "-1":
+            # если в выпадающем списке выбрано "Все"
+            #folder_list = Folder.objects.filter(company_id=companyid)
+            folder_list = folder_list.filter(parent_id=folderid)
+        else:
+            folder_list = folder_list.filter(company=companyid, theme_id=themeid)
+        # *** фильтруем по типу ***
+        if typeid != "-1":
+            folder_list = folder_list.filter(type_id=typeid)
+        # *** фильтр по принадлежности ***
+        if my == "-1":
+           folder_list = folder_list.filter(is_active=True)
+           #themes_list = Folder.objects.filter(is_active=True, parent_id=folderid).values('theme').distinct()
+        elif my == "1":
+           folder_list = folder_list.filter(author_id=currentuser, is_active=True)
+           #themes_list = Folder.objects.filter(is_active=True, parent_id=folderid).values('theme').distinct()
+        elif my == "2":
+           folder_list = folder_list.filter(author_id=currentuser, is_active=False)
+           #themes_list = Folder.objects.filter(is_active=False, parent_id=folderid).values('theme').distinct()
+        # **********
+
+        nodes = folder_list.distinct() #.order_by()
+
+        object_message = ''
+        if len(nodes) == 0:
+           object_message = 'Папки не найдены!'
+
+        return render(request, 'folders_list.html', {'nodes': nodes, 'current_company': current_company, 'object_message': object_message})
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def filefilter(request):
+    folderid = request.GET['folderid']
+    sort = request.GET['sort']
+    sortdir = request.GET['sortdir']
+    my = request.GET['my']
+    currentuser = request.user.id
+    if my == "-1":
+        file_list = FolderFile.objects.filter(folder_id=folderid, is_active=True)
+    elif my == "1":
+        file_list = FolderFile.objects.filter(folder_id=folderid, is_active=True, author_id=currentuser)
+    elif my == "2":
+        file_list = FolderFile.objects.filter(folder_id=folderid, is_active=False, author_id=currentuser)
+    #print(file_list)
+    if sort == "1":
+        if sortdir == "-1":
+            file_list = file_list.order_by()
+        elif sortdir == "1":
+            file_list = file_list.order_by('uname')
+        else:
+            file_list = file_list.order_by('-uname')
+    elif sort == "2":
+        if sortdir == "-1":
+            file_list = file_list.order_by()
+        elif sortdir == "1":
+            file_list = file_list.order_by('psize')
+        else:
+            file_list = file_list.order_by('-psize')
+    elif sort == "3":
+        if sortdir == "-1":
+            file_list = file_list.order_by()
+        elif sortdir == "1":
+            file_list = file_list.order_by('datecreate')
+        elif sortdir == "2":
+            file_list = file_list.order_by('-datecreate')
+
+    nodes = file_list.distinct()  # .order_by()
+
+    obj_files_rights = 0
+    current_folder = Folder.objects.filter(id=folderid).first()
+    if currentuser == current_folder.author_id:
+        obj_files_rights = 1
+
+    object_message = ''
+    if len(nodes) == 0:
+        object_message = 'Файлы не найдены!'
+
+    return render(request, 'folderfile_list.html',
+                  {'files': nodes, 'objtype': 'fldr', 'obj_files_rights': obj_files_rights, 'object_message': object_message})

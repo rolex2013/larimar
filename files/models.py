@@ -26,7 +26,7 @@ class Dict_FolderType(models.Model):
 
 class Folder(MPTTModel):
     name = models.CharField("Наименование", max_length=64)
-    description = RichTextUploadingField("Описание")
+    description = RichTextUploadingField("Описание", blank=True, null=True)
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='result_company_folder',
                                 verbose_name="Компания")
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active': True},

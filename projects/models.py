@@ -233,7 +233,7 @@ class ProjectFile(models.Model):
     project = models.ForeignKey('Project', null=True, blank=True, on_delete=models.CASCADE, related_name='project_file', verbose_name="Проект")
     task = models.ForeignKey('Task', null=True, blank=True, on_delete=models.CASCADE, related_name='task_file', verbose_name="Задача")
     taskcomment = models.ForeignKey('TaskComment', null=True, blank=True, on_delete=models.CASCADE, related_name='taskcomment_file', verbose_name="Комментарий")        
-    pfile = models.FileField(upload_to='uploads/files/project', blank=True, null=True, verbose_name='Файл')
+    pfile = models.FileField(upload_to='uploads/files/projects', blank=True, null=True, verbose_name='Файл')
     psize = models.CharField(editable=False, max_length=64)    
     datecreate = models.DateTimeField("Создан", auto_now_add=True)    
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")

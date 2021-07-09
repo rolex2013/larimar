@@ -181,41 +181,7 @@ class ClientTask(MPTTModel):
         #return reverse('my_crm:clienttaskcomments, kwargs={'taskid': self.pk})
     def __str__(self):
          return (str(self.client) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
-    """         
-    def save(self, *args, **kwargs):
-        old = ClientTask.objects.filter(pk=self.pk).first()
-        super().save(*args, **kwargs)
-        if old:          
-           historyjson = {"Задача":'' if self.name == old.name else self.name,
-                          "Статус":'' if self.status.name == old.status.name else self.status.name, 
-                          "Начало":'' if self.datebegin == old.datebegin else self.datebegin.strftime('%d.%m.%Y %H:%M'), 
-                          "Окончание":'' if self.dateend == old.dateend else self.dateend.strftime('%d.%m.%Y %H:%M'),
-                          "Тип в иерархии":'' if self.structure_type.name == old.structure_type.name else self.structure_type.name,
-                          "Тип":'' if self.type.name == old.type.name else self.type.name,
-                          "Стоимость":'' if self.cost == old.cost else str(self.cost),
-                          "Выполнен на, %":'' if self.percentage == old.percentage else str(self.percentage),
-                          "Инициатор":'' if self.initiator.name == old.initiator.name else self.initiator.name,
-                          "Исполнитель":'' if self.assigner.username == old.assigner.username else self.assigner.username,
-                          "Активность":'' if self.is_active == old.is_active else '✓' if self.is_active else '-'
-                          #, "Участники":self.members.username
-                         }
-        else:
-           historyjson = {"Задача": self.name,
-                          "Статус": self.status.name, 
-                          "Начало": self.datebegin.strftime('%d.%m.%Y %H:%M'), 
-                          "Окончание": self.dateend.strftime('%d.%m.%Y %H:%M'),
-                          "Тип в иерархии": self.structure_type.name,
-                          "Тип": self.type.name,
-                          "Стоимость": str(self.cost),
-                          "Выполнен на, %": str(self.percentage),
-                          "Инициатор": self.initiator.name,
-                          "Исполнитель": self.assigner.username,
-                          "Активность": '✓' if self.is_active else '-'
-                          #, "Участники":self.members.username
-                         }
 
-        ModelLog.objects.create(componentname='cltsk', modelname="ClientTask", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson))
-    """                                        
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['-dateend']     
@@ -315,58 +281,3 @@ class ClientFile(models.Model):
 
     def __str__(self):
         return str(self.id) + ' ' + self.uname #file.name        
-
-"""
-class ClientStatusLog(models.Model):
-    #LOG_TYPES = (('P', 'Client'), ('T', 'Task'))
-    #logtype = models.CharField(max_length = 1, choices=LOG_TYPES)
-    client = models.ForeignKey('Client', on_delete=models.CASCADE, related_name='resultclientlog', verbose_name="Клиент")
-    status = models.ForeignKey('Dict_ClientStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='client_status_log', verbose_name="Статус Клиента")
-    date = models.DateTimeField("Дата", auto_now_add=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    description = models.CharField("Комментарий", max_length=1024)
-    is_active = models.BooleanField("Активность", default=True)
-    
-    def __str__(self):
-        return (self.client.lastname + '. ' + self.client.firstname + '. ' + self.client.middlename + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
-    
-    class Meta:
-        unique_together = ('client', 'status', 'date', 'author')
-        ordering = ('client', 'date')
-        verbose_name = 'История Клиента'
-        verbose_name_plural = 'Истории Клиентов'
-
-class ClientTaskStatusLog(models.Model):
-    task = models.ForeignKey('ClientTask', on_delete=models.CASCADE, related_name='resultclienttasklog', verbose_name="Задача")
-    status = models.ForeignKey('Dict_ClientTaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_status_log', verbose_name="Статус Задачи")
-    date = models.DateTimeField("Дата", auto_now_add=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    description = models.CharField("Комментарий", max_length=1024)
-    is_active = models.BooleanField("Активность", default=True)
-    
-    def __str__(self):
-        return (self.clienttask.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
-    
-    class Meta:
-        unique_together = ('task', 'status', 'date', 'author')
-        ordering = ('task', 'date')
-        verbose_name = 'История Задачи'
-        verbose_name_plural = 'Истории Задач'                
-
-class ClientEventStatusLog(models.Model):
-    event = models.ForeignKey('ClientEvent', on_delete=models.CASCADE, related_name='resultclienteventlog', verbose_name="Событие")
-    status = models.ForeignKey('Dict_ClientEventStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clientevent_status_log', verbose_name="Статус События")
-    date = models.DateTimeField("Дата", auto_now_add=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    description = models.CharField("Комментарий", max_length=1024)
-    is_active = models.BooleanField("Активность", default=True)
-    
-    def __str__(self):
-        return (self.clienttask.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.status.name + ' (' + self.author.username + ')')
-    
-    class Meta:
-        unique_together = ('event', 'status', 'date', 'author')
-        ordering = ('event', 'date')
-        verbose_name = 'История События'
-        verbose_name_plural = 'Истории Событий'            
-"""
