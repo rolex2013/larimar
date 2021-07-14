@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'django_tables2',
+    'rest_framework',
     #'menu',
     'accounts',
     'main', 
@@ -65,6 +66,7 @@ INSTALLED_APPS = [
     'crm',
     'docs',
     'files',
+    'feedback',
 ]
 
 BOOTSTRAP4 = {
