@@ -270,7 +270,7 @@ class ClientFile(models.Model):
     event = models.ForeignKey('ClientEvent', null=True, blank=True, on_delete=models.CASCADE, related_name='clientevent_file', verbose_name="Событие")           
     eventcomment = models.ForeignKey('ClientEventComment', null=True, blank=True, on_delete=models.CASCADE, related_name='clienteventcomment_file', verbose_name="Комментарий события")   
     pfile = models.FileField(upload_to='uploads/files/crm', blank=True, null=True, verbose_name='Файл')
-    psize = models.CharField(editable=False, max_length=64)    
+    psize = models.PositiveIntegerField(editable=False, null=True, blank=True)
     datecreate = models.DateTimeField("Создан", auto_now_add=True)    
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)

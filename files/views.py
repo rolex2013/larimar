@@ -311,6 +311,7 @@ def filefilter(request):
             file_list = file_list.order_by()
         elif sortdir == "1":
             file_list = file_list.order_by('psize')
+            print(file_list)
         else:
             file_list = file_list.order_by('-psize')
     elif sort == "3":
