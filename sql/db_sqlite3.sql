@@ -39,9 +39,7 @@ INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`r
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (12,'Документы','/docs/',17,1,1,6,6,0,7,2,'',NULL);
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (13,'Документооборот','/docs/docs_page0/',18,1,2,3,6,1,7,2,'',12);
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (14,'Файлы','/files/files_page0/',19,1,4,5,6,1,7,2,'',12);
-*/
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (15,'Техподдержка','/feedback/tasks_page0/',33,1,1,2,12,0,10,2,'Техническая поддержка',NULL);
-/*
 
 insert into `main_dict_theme` (`id`, `name`, `description`, `is_active`, `lft`, `rght`, `tree_id`, `level`, `parent_id`) values (1, 'Архитектура', null, 1, 1, 4, 1, 0, null);
 insert into `main_dict_theme` (`id`, `name`, `description`, `is_active`, `lft`, `rght`, `tree_id`, `level`, `parent_id`) values (2, 'Античная архитектура', null, 1, 2, 3, 1, 1, 1);
@@ -57,10 +55,9 @@ INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (6,'CRM',1,0,1,2,1,'Клиенты','Работа с клиентами',NULL);
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (7,'Документооборот',1,0,1,2,4,'Документооборот','Работа с документами и файлами',NULL);
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (8,'Склад',1,0,1,2,8,'Склад','Перемещение товаров',NULL);
-*/
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (9,'Техподдержка',1,0,1,2,9,'Техподдержка','Техническая поддержка',NULL);
 INSERT INTO `main_component` (`id`,`name`,`is_active`,`level`,`lft`,`rght`,`tree_id`,`menu`,`description`,`parent_id`) VALUES (10,'Файлы',1,0,1,2,10,'Файлы','Файлы',NULL);
-/*
+
 INSERT INTO `main_meta_param` (`id`,`name`,`datecreate`,`is_service`,`is_active`) VALUES (1,'Сервис (тестовый)','2021-03-11 13:00:00.239817',1,1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (1,'cont','Контент','content',1,'Content',1);
 INSERT INTO `main_meta_objecttype` (`id`,`shortname`,`name`,`tablename`,`sort`,`name_lang`,`is_active`) VALUES (2,'org','Организация','company',5,'Company',1);
