@@ -33,6 +33,7 @@ urlpatterns = [
     path('crm/', include('crm.urls')),
     path('docs/', include('docs.urls')),
     path('files/', include('files.urls')),
+    path('feedback/', include('feedback.urls')),
     #path('media/', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),    
 ]
 

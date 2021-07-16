@@ -13,18 +13,18 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from companies.models import Company
 
 class Dict_System(models.Model):
-    code = models.CharField("Код системы", max_length=128)
+    code = models.CharField("Код системы", editable=False, max_length=128)
     name = models.CharField("Наименование системы", max_length=128)
     domain = models.CharField("Наименование домена", max_length=64, blank=True, null=True)
     url = models.CharField("url", max_length=128)
     ip = models.CharField("ip-адрес", max_length=15, blank=True, null=True)
     email = models.CharField("Контактный e-mail", max_length=15, blank=True, null=True)
     phone = models.CharField("Контактный телефон", max_length=15, blank=True, null=True)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=128, blank=True, null=True)
+    datecreate = models.DateTimeField("Создана", auto_now_add=True)
+    dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)
     class Meta:
-        ordering = ('sort',)
+        #ordering = ('sort',)
         verbose_name = 'Система'
         verbose_name_plural = 'Системы'
     def __str__(self):
@@ -57,19 +57,13 @@ class Dict_FeedbackTaskStatus(models.Model):
         return (self.name)
 
 class FeedbackTicket(models.Model):
-    name = models.CharField("Наименование", max_length=128)
-    description = RichTextUploadingField("Описание")
-    #datebegin = models.DateTimeField("Начало")
-    #dateend = models.DateTimeField("Окончание")
     system = models.ForeignKey('Dict_System', on_delete=models.CASCADE, related_name='feedback_system',
                                 verbose_name="Система")
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='feedback_company',
                                 verbose_name="Компания")
-    #assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='task_assigner', verbose_name="Исполнитель")
-    #cost = models.DecimalField("Стоимость", max_digits=12, decimal_places=2)
-    #percentage = models.DecimalField("Процент выполнения", max_digits=5, decimal_places=2, default=0)
-    #structure_type = models.ForeignKey('Dict_TaskStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_structure_type', verbose_name="Тип задачи в иерархии")
-    #type = models.ForeignKey('Dict_TaskType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
+    id_local = models.PositiveIntegerField("Локальный ID")
+    name = models.CharField("Наименование", max_length=128)
+    description = RichTextUploadingField("Описание")
     status = models.ForeignKey('Dict_FeedbackTicketStatus', limit_choices_to={'is_active': True}, on_delete=models.CASCADE, related_name='feedback_ticketstatus', verbose_name="Статус")
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
