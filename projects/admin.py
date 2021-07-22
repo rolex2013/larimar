@@ -32,7 +32,7 @@ from docs.models import DocTask, DocTaskComment
 
 from files.models import Dict_FolderType, Folder
 
-from feedback.models import Dict_System
+from feedback.models import Dict_System, Dict_FeedbackTicketStatus, Dict_FeedbackTicketType, Dict_FeedbackTaskStatus, FeedbackTicket
 
 from django_mptt_admin.admin import DjangoMpttAdmin
 
@@ -203,4 +203,12 @@ admin.site.register(Folder, FolderAdmin)
 # feedback
 
 admin.site.register(Dict_System)
+
+admin.site.register(Dict_FeedbackTicketType)
+
+admin.site.register(Dict_FeedbackTicketStatus)
+
+admin.site.register(Dict_FeedbackTaskStatus)
+
+admin.site.register(FeedbackTicket)
 

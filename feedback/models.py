@@ -43,6 +43,18 @@ class Dict_FeedbackTicketStatus(models.Model):
     def __str__(self):
         return (self.name)
 
+class Dict_FeedbackTicketType(models.Model):
+    name = models.CharField("Наименование", max_length=64)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    is_active = models.BooleanField("Активность", default=True)
+    class Meta:
+        ordering = ('sort',)
+        verbose_name = 'Тип тикета'
+        verbose_name_plural = 'Типы тикетов'
+    def __str__(self):
+        return (self.name)
+
 class Dict_FeedbackTaskStatus(models.Model):
     name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
@@ -64,6 +76,8 @@ class FeedbackTicket(models.Model):
     id_local = models.PositiveIntegerField("Локальный ID")
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")
+    type = models.ForeignKey('Dict_FeedbackTicketType', limit_choices_to={'is_active': True},
+                               on_delete=models.CASCADE, related_name='feedback_tickettype', verbose_name="Тип")
     status = models.ForeignKey('Dict_FeedbackTicketStatus', limit_choices_to={'is_active': True}, on_delete=models.CASCADE, related_name='feedback_ticketstatus', verbose_name="Статус")
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)

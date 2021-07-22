@@ -10,5 +10,9 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
     serializer_class = Dict_SystemSerializer
 
 class FeedbackTicketViewSet(viewsets.ModelViewSet):
-    queryset = FeedbackTicket.objects.all().order_by('-datecreate')
+    queryset = FeedbackTicket.objects.filter(is_active=True).order_by('-datecreate')
     serializer_class = FeedbackTicketSerializer
+    #filter_fields = ('username', 'is_player', 'first_name', 'last_name', 'team', 'email',)
+
+#def FeedbackTicketCreateAPI(request):
+#    return
