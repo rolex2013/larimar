@@ -232,13 +232,53 @@
 
             {% endif %}
 
+         {% elif component_name == 'feedback' %}
+
+            <h4>Тикеты</h4>
+
+            {% if len_list %}
+
+            <!--<form action="{ url 'my_feedback:feedbacktickets' current_company.pk 0 %}" method="post">-->
+            <form method="GET">
+               {% csrf_token %}
+               <div class="object-list-filters">
+                  <label>По статусу: </label>
+                  <select name="select-feedbackticketstatus" id="selectid" class="select-feedbackticket-status">
+                     <option value="-1" {% ifequal "-1" tktstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                     <option value="0" {% ifequal 0 tktstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
+                     <!--<option value="-2" { ifequal "-2" tktstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                     {% for tktstatus in feedbackticketstatus %}
+                        <option value="{{tktstatus.id}}" {% ifequal tktstatus.id tktstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                           {{tktstatus.name}}
+                        </option>
+                     {% endfor %}
+                  </select>
+                  <label>Мои проекты: </label>
+                  <select name="select-myfeedbackticket" id="myselectid" class="select-my-feedbackticket">
+                     <option value="-1" {% ifequal "-1" tktstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                     <!--<option value="0" { ifequal "0" tktstatus_myselectid %} selected="selected" { endifequal %}>- Я участник</option>-->
+                     <option value="1" {% ifequal "1" tktstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                     <!--<option value="2" { ifequal "2" tktstatus_myselectid %} selected="selected" { endifequal %}>- Я исполнитель</option>-->
+                  </select>
+                  <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">Применить</button>
+               </div>
+            </form>
+
+            <div id="ajax_listresult">{% include 'feedbacktickets_list.html' %}</div>
+
+            {% else %}
+
+               <p>Тикетов пока нет...</p>
+
+            {% endif %}
+
          {% else %}
 
             <h4>Проекты</h4>  
             
             {% if len_list %}
 
-            <!--<form action="{% url 'my_project:projects' current_company.pk 0 %}" method="post">-->
+            <!--<form action="{ url 'my_project:projects' current_company.pk 0 %}" method="post">-->
             <form method="GET">
                {% csrf_token %}
                <div class="object-list-filters">
@@ -285,6 +325,7 @@
                <a href="{% url 'my_crm:client_create' companyid %}">{{ button_client_create }}</a>
                <a href="{% url 'my_doc:doc_create' companyid %}">{{ button_doc_create }}</a>
                <a href="{% url 'my_file:folder_create' companyid 0 %}">{{ button_folder_create }}</a>
+               <a href="{% url 'my_feedback:feedbackticket_create' 1 companyid %}">{{ button_feedbackticket_create }}</a>
             </div>
          {% endif %}
          

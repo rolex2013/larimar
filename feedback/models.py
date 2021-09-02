@@ -73,7 +73,7 @@ class FeedbackTicket(models.Model):
                                 verbose_name="Система")
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='feedback_company',
                                 verbose_name="Компания")
-    id_local = models.PositiveIntegerField("Локальный ID")
+    #id_local = models.PositiveIntegerField("Локальный ID")
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")
     type = models.ForeignKey('Dict_FeedbackTicketType', limit_choices_to={'is_active': True},
@@ -95,7 +95,8 @@ class FeedbackTicket(models.Model):
     """
 
     def get_absolute_url(self):
-        return reverse('my_feedback:ticketcomments', kwargs={'taskid': self.pk})
+        #return reverse('my_feedback:ticketcomments', kwargs={'taskid': self.pk})
+        return reverse('my_feedback:tickets0')
     def __str__(self):
         return (self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
     class MPTTMeta:

@@ -39,7 +39,7 @@ INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`r
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (12,'Документы','/docs/',17,1,1,6,6,0,7,2,'',NULL);
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (13,'Документооборот','/docs/docs_page0/',18,1,2,3,6,1,7,2,'',12);
 INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (14,'Файлы','/files/files_page0/',19,1,4,5,6,1,7,2,'',12);
-INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (15,'Техподдержка','/feedback/tasks_page0/',33,1,1,2,12,0,10,2,'Техническая поддержка',NULL);
+INSERT INTO `main_menuitem` (`id`,`title`,`link_url`,`sort`,`is_active`,`lft`,`rght`,`tree_id`,`level`,`component_id`,`menu_id`,`description`,`parent_id`) VALUES (15,'Техподдержка','/feedback/tickets_page0/',33,1,1,2,12,0,9,2,'Техническая поддержка',NULL);
 
 insert into `main_dict_theme` (`id`, `name`, `description`, `is_active`, `lft`, `rght`, `tree_id`, `level`, `parent_id`) values (1, 'Архитектура', null, 1, 1, 4, 1, 0, null);
 insert into `main_dict_theme` (`id`, `name`, `description`, `is_active`, `lft`, `rght`, `tree_id`, `level`, `parent_id`) values (2, 'Античная архитектура', null, 1, 2, 3, 1, 1, 1);

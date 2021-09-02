@@ -5,6 +5,7 @@ from projects.models import Project, Task, TaskComment, ProjectFile
 from crm.models import Client, ClientTask, ClientTaskComment, ClientFile
 from docs.models import DocVerFile #, Doc, DocFile
 from files.models import FolderFile
+from feedback.models import FeedbackFile
 
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -70,6 +71,20 @@ class AddFilesMixin(object):
            elif app == 'file':
               if obj == 'folder':
                  folder_id = self.object.id
+           elif app == 'feedback':
+              if obj == 'ticket':
+                 ticket_id = self.object.id
+              if obj == 'ticketcomment':
+                 ticket_id = self.object.ticket.id
+                 ticketcomment_id = self.object.id
+              if obj == 'task':
+                 ticket_id = self.object.ticket.id
+                 task_id = self.object.id
+              if obj == 'taskcomment':
+                 ticket_id = self.object.task.ticket.id
+                 task_id = self.object.task.id
+                 taskcomment_id = self.object.id
+                   
            for f in files:
                if app == 'project':
                   fcnt = ProjectFile.objects.filter(project_id=project_id, task_id=task_id, taskcomment_id=taskcomment_id, name=f, is_active=True).count()
@@ -83,6 +98,9 @@ class AddFilesMixin(object):
                elif app == 'file':
                   fcnt = FolderFile.objects.filter(folder_id=folder_id, name=f, is_active=True).count()
                   fl = FolderFile(folder_id=folder_id, pfile=f)
+               elif app == 'feedback':
+                  fcnt = FeedbackFile.objects.filter(ticket_id=project_id, ticketcomment_id=ticketcomment_id, task_id=task_id, taskcomment_id=taskcomment_id, name=f, is_active=True).count()
+                  fl = FeedbackFile(ticket_id=ticket_id, ticketcomment_id=ticketcomment_id, task_id=task_id, taskcomment_id=taskcomment_id, pfile=f)
 
                fl.author = self.request.user
                fn = f

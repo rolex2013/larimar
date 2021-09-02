@@ -236,6 +236,36 @@
            "description": "Перемещение товаров",
            "tree_id": 8
         }
+    },
+    {
+        "model": "main.Component",
+        "pk": 9,
+        "fields": {
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Техподдержка",
+           "name": "Техподдержка",
+           "parent_id": null,
+           "rght": 2,
+           "description": "Работа с тикетами техподдержки",
+           "tree_id": 9
+        }
+    },
+    {
+        "model": "main.Component",
+        "pk": 10,
+        "fields": {
+           "is_active": 1,
+           "level": 0,
+           "lft": 1,
+           "menu": "Файлы",
+           "name": "Файлы",
+           "parent_id": null,
+           "rght": 2,
+           "description": "Работа с файлами",
+           "tree_id": 10
+        }
     }
 
 ]    
