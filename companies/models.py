@@ -58,10 +58,11 @@ class Company(MPTTModel):
     currency = models.ForeignKey('finance.Dict_Currency', on_delete=models.CASCADE, related_name='company_currency', verbose_name="Валюта")   
     structure_type = models.ForeignKey('Dict_CompanyStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_structure_type', verbose_name="Тип в оргструктуре")
     type = models.ForeignKey('Dict_CompanyType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='company_type', verbose_name="Тип")
+    is_support = models.BooleanField("Служба техподдержки", default=False)
     #groups = models.ManyToManyField('auth.Group', related_name='company_groups', verbose_name="Группы")
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    is_active = models.BooleanField("Активность", default=True)    
+    is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
         #return reverse('my_project:projects', kwargs={'companyid': self.pk, 'pk': '1'})  

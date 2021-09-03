@@ -31,14 +31,17 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def feedbacktickets(request, companyid=0, pk=0):
 
+    currentuser = request.user.id
+
     if companyid == 0:
-        companyid = request.session['_auth_user_currentcompany_id']
+        #companyid = request.session['_auth_user_currentcompany_id']
+        mylastticket = FeedbackTicket.objects.filter(is_active=True, author_id=currentuser).order_by('-id')[0]
+        companyid = mylastticket.company_id
     #print(companyid)
 
     request.session['_auth_user_currentcomponent'] = 'feedbacktickets'
 
     # *** фильтруем по статусу ***
-    currentuser = request.user.id
     tktstatus_selectid = 0
     #mytktstatus = 0 # для фильтра "Мои проекты"
     try:
@@ -66,16 +69,6 @@ def feedbacktickets(request, companyid=0, pk=0):
     len_list = len(feedbackticket_list)
 
     current_company = Company.objects.get(id=companyid)
-    # *** немного потискал прямые запросы к БД
-    #cursor = connection.cursor()
-    #sql = 'SELECT * FROM companies_company WHERE id=%s'
-    #cursor.execute(sql, [companyid])
-    #current_company = cursor.fetchone() #.fetchall()
-    #idcomp = '''id=companyid'''
-    #current_company = Company.objects.get(idcomp)
-    #print(current_company)
-    #print(current_company[9])
-    # ***
 
     obj_files_rights = 0
 
@@ -87,25 +80,26 @@ def feedbacktickets(request, companyid=0, pk=0):
            obj_files_rights = 1
 
     button_company_select = ''
-    button_feedbackticket_create = ''
+    button_feedbackticket_create = 'Добавить'
 
     comps = request.session['_auth_user_companies_id']
-    if len(comps) > 1:
+
+    # Проверяем кол-во компаний - служб техподдержки
+    comps_support = Company.objects.filter(is_active=True, is_support=True)
+    if len(comps_support) > 1:
        button_company_select = 'Сменить службу техподдержки'
-    if currentuser == current_company.author_id:
-       button_feedbackticket_create = 'Добавить'
-    if current_company.id in comps:
-       button_feedbackticket_create = 'Добавить'
+    #if currentuser == current_company.author_id:
+    #   button_feedbackticket_create = 'Добавить'
+    #if current_company.id in comps:
+    #   button_feedbackticket_create = 'Добавить'
 
     # Добавляем Систему в справочник
-    #print(request.META['HTTP_HOST'])
-    #request.META['HTTP_HOST']
     dsys_cnt = Dict_System.objects.filter(is_active=True).count()
     if dsys_cnt == 0:
-        print(dsys_cnt)
+        #print(dsys_cnt)
         http_host = request.META['HTTP_HOST']
-        print(http_host)
-        dsys = Dict_System.objects.create(code='===', name='***', domain=http_host, url=http_host, is_active=True)
+        #print(http_host)
+        dsys = Dict_System.objects.create(code='===', name='1YES!', domain=http_host, url=http_host, is_active=True)
         dsys.save()
 
     return render(request, "company_detail.html", {

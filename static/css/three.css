@@ -529,6 +529,9 @@ body {
     line-height: 1;
     list-style: none;
 }
+/*.treeline li a:active {
+  color: #e0a800 !important;
+}*/
 .treeline ul {
     margin: 0 0 0 -2.2em; /* вести линию вниз где-то с полбуквы родителя */
 }
