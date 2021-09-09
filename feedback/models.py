@@ -73,6 +73,8 @@ class FeedbackTicket(models.Model):
                                 verbose_name="Система")
     company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='feedback_company',
                                 verbose_name="Компания")
+    companyfrom = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='feedback_companyfrom',
+                                verbose_name="Компания автора")
     #id_local = models.PositiveIntegerField("Локальный ID")
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")

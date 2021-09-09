@@ -28,6 +28,7 @@ class AddFilesMixin(object):
            eventcomment_id = None
            doc_id = None
            docver_id = None
+           ticketcomment_id = None
            if app == 'project':
               if obj == 'project':
                  project_id = self.object.id              

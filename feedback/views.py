@@ -9,7 +9,7 @@ from datetime import datetime, date, time
 from rest_framework import viewsets
 
 from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer
-from companies.models import Company
+from companies.models import Company, UserCompanyComponentGroup
 from .models import Dict_System, Dict_FeedbackTicketStatus, Dict_FeedbackTicketType, Dict_FeedbackTaskStatus
 from .models import FeedbackTicket, FeedbackTicketComment, FeedbackTask, FeedbackTaskComment
 from .forms import FeedbackTicketForm #, TaskForm, TaskCommentForm
@@ -32,6 +32,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
 def feedbacktickets(request, companyid=0, pk=0):
 
     currentuser = request.user.id
+    currentusercompanyid = request.session['_auth_user_currentcompany_id']
 
     if companyid == 0:
         #companyid = request.session['_auth_user_currentcompany_id']
@@ -40,6 +41,32 @@ def feedbacktickets(request, companyid=0, pk=0):
     #print(companyid)
 
     request.session['_auth_user_currentcomponent'] = 'feedbacktickets'
+
+    # Видимость пункта "- Все" в фильтрах
+    is_support_member = False
+    is_support_admin_org = False
+    is_superadmin = False
+    is_admin_org = False
+    is_admin = False
+    # Является ли юзер сотрудником этой Службы поддержки?
+    if companyid in request.session['_auth_user_companies_id']:
+        is_support_member = True
+    # Является ли юзер Администратором этой Службы поддержки?
+    is_support_admin_org = UserCompanyComponentGroup.objects.filter(user_id=currentuser, company_id=companyid,
+                                                            group_id=2)
+    if is_support_admin_org:
+        is_support_admin_org = True
+    # Является ли юзер Администратором своей организации?
+    is_admin_org = UserCompanyComponentGroup.objects.filter(user_id=currentuser, company_id=currentusercompanyid, group_id=2)
+    if is_admin_org:
+        is_admin_org = True
+        is_admin = True
+    # Является ли юзер Суперадмином?
+    if 1 in request.session['_auth_user_group_id']:
+        #print(usergroupid)
+        is_superadmin = True
+        is_admin = True
+    print(is_support_member, is_support_admin_org, is_superadmin, is_admin_org, is_admin)
 
     # *** фильтруем по статусу ***
     tktstatus_selectid = 0
@@ -55,7 +82,13 @@ def feedbacktickets(request, companyid=0, pk=0):
        else:
           if tktstatus == "-1":
              # если в выпадающем списке выбрано "Все"
-             feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+             if is_superadmin:
+                # Суперадмин видит все тикеты всех организаций этой Службы поддержки
+                feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+             elif is_admin_org:
+                 # Админ Организации видит все тикеты своей организации этой Службы поддержки
+                feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True,
+                                                                     company=companyid, companyfrom=currentusercompanyid)
           elif tktstatus == "-2":
              # если в выпадающем списке выбрано "Просроченные"
              feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.datetime.now())
@@ -118,6 +151,8 @@ def feedbacktickets(request, companyid=0, pk=0):
                               'object_list': 'feedbackticket_list',
                               #'select_feedbackticketstatus': select_feedbackticketstatus,
                               'len_list': len_list,
+                              'is_support_member': is_support_member,
+                              'is_admin': is_admin,
                               #'fullpath': os.path.join(settings.MEDIA_ROOT, '///'),
                                                 })
 
@@ -140,6 +175,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         form.instance.system_id = self.kwargs['systemid']
         form.instance.company_id = self.kwargs['companyid']
         form.instance.author_id = self.request.user.id
+        form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
         form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
         #form.instance.system_id = 1  # Новый Тикет временно приписываем к локальной Системе
         self.object = form.save() # Созадём новый тикет

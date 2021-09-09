@@ -93,11 +93,11 @@ class ELoginView(View):
             #print(current_company)
             request.session['_auth_user_currentcompany_id'] = current_company
             companies_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
-            request.session['_auth_user_companies_id'] = companies_list
+            request.session['_auth_user_companies_id'] = list(set(companies_list))
             components_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("component", flat=True))         
-            request.session['_auth_user_component_id'] = components_list
+            request.session['_auth_user_component_id'] = list(set(components_list))
             usergroups_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("group", flat=True))            
-            request.session['_auth_user_group_id'] = usergroups_list
+            request.session['_auth_user_group_id'] = list(set(usergroups_list))
             request.session.modified = True
             # ======================
             # получаем предыдущий url

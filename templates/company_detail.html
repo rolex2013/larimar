@@ -269,7 +269,9 @@
                   </select>
                   <label>Мои проекты: </label>
                   <select name="select-myfeedbackticket" id="myselectid" class="select-my-feedbackticket">
-                     <option value="-1" {% ifequal "-1" tktstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                     {% if is_admin %}
+                        <option value="-1" {% ifequal "-1" tktstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                     {% endif %}
                      <!--<option value="0" { ifequal "0" tktstatus_myselectid %} selected="selected" { endifequal %}>- Я участник</option>-->
                      <option value="1" {% ifequal "1" tktstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
                      <!--<option value="2" { ifequal "2" tktstatus_myselectid %} selected="selected" { endifequal %}>- Я исполнитель</option>-->

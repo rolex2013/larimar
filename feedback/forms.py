@@ -24,7 +24,7 @@ class FeedbackTicketForm(forms.ModelForm):
     files = forms.FileField(label='Файлы тикета', widget=forms.ClearableFileInput(attrs={'multiple': True}),
                             required=False)
 
-    disabled_fields = ('dateclose', 'author',)
+    #disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
         #if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
@@ -75,16 +75,16 @@ class FeedbackTicketForm(forms.ModelForm):
             companyid = self.instance.company_id
             #systemid = self.instance.system_id
 
-        uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
-        usr = User.objects.filter(id__in=uc, is_active=True)
-        self.fields['author'].initial = self.user.id
+        #uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
+        #usr = User.objects.filter(id__in=uc, is_active=True)
+        #self.fields['author'].initial = self.user.id
 
-        for field in self.disabled_fields:
-            self.fields[field].disabled = True
+        #for field in self.disabled_fields:
+        #    self.fields[field].disabled = True
 
     class Meta:
         model = FeedbackTicket
-        fields = ['name', 'description', 'type', 'is_active', 'dateclose', 'id', 'author']
+        fields = ['name', 'description', 'type', 'is_active']
         # labels = {'Files':'Выберите файлы'}
         widgets = {
             'datebegin': DatePickerInput(format='%d.%m.%Y'),  # default date-format %m/%d/%Y will be used
