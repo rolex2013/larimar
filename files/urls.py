@@ -10,7 +10,6 @@ from . import views
 app_name = 'my_file'
 
 urlpatterns = [
-    #path('docs/docs', views.docs, name='doc_docs'),  # для вызова главной страницы приложения Файлы
     path('files_page0/', views.folders, name='folders0'),  # для вызова страницы списка файлов для текущей компании
     path('files_page/<int:companyid>/<int:pk>', views.folders, name='folders'),
     path('files_list/folder_create/<int:companyid>/<int:parentid>', views.FolderCreate.as_view(), name='folder_create'),
@@ -18,8 +17,4 @@ urlpatterns = [
     path('files_list/files_upload/<int:pk>', views.UploadFiles.as_view(), name='files_upload'),
     path('files_list/folder_filter/', views.folderfilter, name='folder_filter'),
     path('files_list/file_filter/', views.filefilter, name='file_filter'),
-
-    #path('files_page/<int:pk>', views.doctasks, name='doctasks'),
-    #path('filetasks_list/doctask_create/<int:docid>/<int:docverid>', views.DocTaskCreate.as_view(), name='file_create'),
-    #path('filefiles_list/doctask_update/<int:pk>', views.DocTaskUpdate.as_view(), name='file_update'),
 ]

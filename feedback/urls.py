@@ -24,7 +24,7 @@ urlpatterns = [
          name='feedbackticket_create'),
     #path('tickets_page/ticket_create/<int:systemid>/<int:companyid>/<int:pk>', views.TicketUpdate.as_view(),
     #     name='ticket_update'),
-    #path('tickets_list/ticket_filter/', views.ticketfilter, name='ticket_filter'),
+    path('tickets_list/ticket_filter/', views.ticketfilter, name='ticket_filter'),
 
     #path('tickets_page/<int:companyid>', views.FeedbackTicketViewSet.as_view({'get': 'list'}), name='tickets'),
     #path('tickets_list/ticket_create/<int:companyid>', views.FeedbackTicketViewSet.as_view({'get': 'create'}), name='ticket_create'),

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta, date, time
 from django.db.models import Q
 
 from datetime import datetime, date, time
@@ -66,7 +67,7 @@ def feedbacktickets(request, companyid=0, pk=0):
         #print(usergroupid)
         is_superadmin = True
         is_admin = True
-    print(is_support_member, is_support_admin_org, is_superadmin, is_admin_org, is_admin)
+    #print(is_support_member, is_support_admin_org, is_superadmin, is_admin_org, is_admin)
 
     # *** фильтруем по статусу ***
     tktstatus_selectid = 0
@@ -117,6 +118,15 @@ def feedbacktickets(request, companyid=0, pk=0):
 
     comps = request.session['_auth_user_companies_id']
 
+    # Заполняем списки справочников для фильтров
+    # Статусы и Типы берём из списка тикетов всей компании
+    all_list = FeedbackTicket.objects.filter(is_active=True, company=companyid)
+    #status_list = feedbackticket_list.values('status_id')
+    status_list = all_list.values('status_id')
+    types_list = all_list.values('type_id')
+    ticketstatus = Dict_FeedbackTicketStatus.objects.filter(id__in=status_list)
+    tickettype = Dict_FeedbackTicketType.objects.filter(id__in=types_list)
+
     # Проверяем кол-во компаний - служб техподдержки
     comps_support = Company.objects.filter(is_active=True, is_support=True)
     if len(comps_support) > 1:
@@ -145,8 +155,11 @@ def feedbacktickets(request, companyid=0, pk=0):
                               'obj_files_rights': obj_files_rights,
                               'button_company_select': button_company_select,
                               'button_feedbackticket_create': button_feedbackticket_create,
-                              'feedbackticketstatus': Dict_FeedbackTicketStatus.objects.filter(is_active=True),
-                              'tktstatus_selectid': tktstatus_selectid,
+                              'feedbackticketstatus': ticketstatus,
+                              'feedbackticketstatus_selectid': '0',
+                              'feedbacktickettype': tickettype,
+                              'feedbacktickettype_selectid': '-1',
+                              'feedbackticket_myselectid': '1',
                               #'tktstatus_myselectid': tktstatus_myselectid,
                               'object_list': 'feedbackticket_list',
                               #'select_feedbackticketstatus': select_feedbackticketstatus,
@@ -192,3 +205,48 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         # здесь нужно условие для 'action': 'create'
         kwargs.update({'user': self.request.user, 'action': 'create', 'systemid': self.kwargs['systemid'], 'companyid': self.kwargs['companyid']})
         return kwargs
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def ticketfilter(request):
+        companyid = request.GET['companyid']
+        statusid = request.GET['statusid']
+        typeid = request.GET['typeid']
+        my = request.GET['my']
+        currentuser = request.user.id
+        current_company = Company.objects.filter(id=companyid).first()
+        if companyid == 0:
+            companyid = request.session['_auth_user_currentcompany_id']
+        ticket_list = FeedbackTicket.objects.filter(is_active=True, company_id=companyid)
+        # *** фильтруем по статусу ***
+        if statusid == "0":
+            ticket_list = ticket_list.filter(dateclose__isnull=True)
+        elif statusid == "1":
+            ticket_list = ticket_list.filter(dateclose__lte=datetime.now())
+        # *** фильтруем по типу ***
+        if typeid != "-1":
+            ticket_list = ticket_list.filter(type_id=typeid)
+        # *** фильтр по принадлежности ***
+        if my == "1":
+            ticket_list = ticket_list.filter(author_id=currentuser)
+        # **********
+        #print(currentuser, my)
+        nodes = ticket_list.distinct() #.order_by()
+
+        status_list = ticket_list.values('status_id')
+        ticketstatus = Dict_FeedbackTicketStatus.objects.filter(id__in=status_list)
+        types_list = ticket_list.values('type_id')
+        tickettype = Dict_FeedbackTicketType.objects.filter(id__in=types_list)
+        #print(statuss_list, ticketstatus)
+
+        object_message = ''
+        if len(nodes) == 0:
+           object_message = 'Тикеты не найдены!'
+
+        return render(request, 'feedbacktickets_list.html', {'nodes': nodes,
+                                                     'current_company': current_company,
+                                                     'object_message': object_message,
+                                                     'ticketstatus': ticketstatus,
+                                                     'tickettype': tickettype,
+                                                     'myticketselectid': my,
+                                                     }
+                      )

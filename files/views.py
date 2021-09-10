@@ -27,21 +27,24 @@ def folders(request, companyid=0, pk=0):
     # *** фильтруем по тематике ***
     currentuser = request.user.id
     theme_selectid = 0
-    #myprjstatus = 0 # для фильтра "Мои проекты"
     try:
        themeid = request.POST['theme']
     except:
-       folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+       #folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+       folder_list = Folder.objects.filter(is_active=True, company=companyid)
     else:
        if themeid == "0":
           # если в выпадающем списке выбрано "Все активные"
-          folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+          #folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+          folder_list = Folder.objects.filter(is_active=True, company=companyid)
        else:
           if themeid == "-1":
              # если в выпадающем списке выбрано "Все"
-             folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+             #folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+             folder_list = Folder.objects.filter(is_active=True, company=companyid)
           else:
-             folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, theme=themeid) #, dateclose__isnull=True)
+             #folder_list = Folder.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, theme=themeid) #, dateclose__isnull=True)
+             folder_list = Folder.objects.filter(is_active=True, company=companyid, theme=themeid)
        theme_selectid = themeid
     #prjstatus_myselectid = myprjstatus
     # *******************************
@@ -107,9 +110,16 @@ def folders(request, companyid=0, pk=0):
     #   button_folder_create = 'Добавить папку'
     #print(current_company.id)
     #foldertheme = Dict_Theme.objects.filter(is_active=True)
-    themes_list = Folder.objects.filter(is_active=True, parent_id=current_folder).values('theme').distinct()
+    #if current_folder == 0:
+    #    themes_list = Folder.objects.filter(is_active=True, level=0).values('theme') #.distinct()
+    #else:
+        #themes_list = Folder.objects.filter(is_active=True, parent_id=current_folder).values('theme') #.distinct()
+    #themes = Folder.objects.get(is_active=True, level=0) #.values('theme')
+    #themes_list = themes.get_children().values('theme_id')  # .distinct()
+    themes_list = folder_list.values('theme_id')
     foldertheme = Dict_Theme.objects.filter(id__in=themes_list)
-    types_list = Folder.objects.filter(is_active=True, parent_id=current_folder).values('type').distinct()
+    #types_list = Folder.objects.filter(is_active=True, parent_id=current_folder).values('type').distinct()
+    types_list = folder_list.values('type_id')
     foldertype = Dict_FolderType.objects.filter(id__in=types_list)
     #print(themes_list)
     #print(foldertheme)
@@ -139,14 +149,12 @@ def folders(request, companyid=0, pk=0):
                               #'button_folder_history': button_folder_history,
                               #'foldertheme': Dict_Theme.objects.filter(is_active=True),
                               'foldertheme': foldertheme,
-                              'theme_selectid': theme_selectid,
+                              'foldertheme_selectid': theme_selectid,
                               'foldertype': foldertype, #Dict_FolderType.objects.filter(is_active=True),
-                              'type_selectid': type_selectid,
-                              #'prjstatus_myselectid': prjstatus_myselectid,
+                              'foldertype_selectid': type_selectid,
+                              'folder_myselectid': '-1',
                               'object_list': 'folder_list',
-                              #'select_projectstatus': select_projectstatus,
                               'len_list': len_list,
-                              #'fullpath': os.path.join(settings.MEDIA_ROOT, '///'),
                                                 })
 
 
@@ -243,47 +251,51 @@ class UploadFiles(AddFilesMixin, FormView):
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def folderfilter(request):
-        folderid = request.GET['folderid']
+        #folderid = request.GET['folderid']
+        companyid = request.GET['companyid']
         themeid = request.GET['themeid']
         typeid = request.GET['typeid']
         my = request.GET['my']
         currentuser = request.user.id
-        folder = Folder.objects.filter(id=folderid).first()
-        companyid = folder.company_id
+        #folder = Folder.objects.filter(id=folderid).first()
+        #companyid = folder.company_id
         current_company = Company.objects.filter(id=companyid).first()
         if companyid == 0:
            companyid = request.session['_auth_user_currentcompany_id']
-        parent_folder = Folder.objects.filter(id=folderid).first()
-        folder_list = parent_folder.get_children()
+        #parent_folder = Folder.objects.filter(id=folderid).first()
+        #folder_list = parent_folder.get_children()
+        folder_list = Folder.objects.filter(is_active=True, company_id=companyid)
         # *** фильтруем по тематике ***
-        if themeid == "-1":
-            # если в выпадающем списке выбрано "Все"
-            #folder_list = Folder.objects.filter(company_id=companyid)
-            folder_list = folder_list.filter(parent_id=folderid)
-        else:
-            folder_list = folder_list.filter(company=companyid, theme_id=themeid)
+        if themeid != "-1":
+            folder_list = folder_list.filter(theme_id=themeid)
         # *** фильтруем по типу ***
         if typeid != "-1":
             folder_list = folder_list.filter(type_id=typeid)
         # *** фильтр по принадлежности ***
-        if my == "-1":
-           folder_list = folder_list.filter(is_active=True)
-           #themes_list = Folder.objects.filter(is_active=True, parent_id=folderid).values('theme').distinct()
-        elif my == "1":
-           folder_list = folder_list.filter(author_id=currentuser, is_active=True)
-           #themes_list = Folder.objects.filter(is_active=True, parent_id=folderid).values('theme').distinct()
-        elif my == "2":
-           folder_list = folder_list.filter(author_id=currentuser, is_active=False)
-           #themes_list = Folder.objects.filter(is_active=False, parent_id=folderid).values('theme').distinct()
+        if my == "1":
+           folder_list = folder_list.filter(author_id=currentuser)
         # **********
-
+        #print(currentuser, my)
         nodes = folder_list.distinct() #.order_by()
+
+        themes_list = folder_list.values('theme_id')
+        foldertheme = Dict_Theme.objects.filter(id__in=themes_list)
+        types_list = folder_list.values('type_id')
+        foldertype = Dict_FolderType.objects.filter(id__in=types_list)
+        #print(themes_list, foldertheme)
 
         object_message = ''
         if len(nodes) == 0:
            object_message = 'Папки не найдены!'
 
-        return render(request, 'folders_list.html', {'nodes': nodes, 'current_company': current_company, 'object_message': object_message})
+        return render(request, 'folders_list.html', {'nodes': nodes,
+                                                     'current_company': current_company,
+                                                     'object_message': object_message,
+                                                     'foldertheme': foldertheme,
+                                                     'foldertype': foldertype,
+                                                     'myfolderselectid': my,
+                                                     }
+                      )
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def filefilter(request):
