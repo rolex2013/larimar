@@ -245,6 +245,10 @@
 
          {% elif component_name == 'feedback' %}
 
+            <div class="object-list-wrapper">
+
+            <div class="object-list-left">
+
             <h4>Тикеты</h4>
 
             {% if len_list %}
@@ -292,6 +296,20 @@
                <p>Тикетов пока нет...</p>
 
             {% endif %}
+
+            </div>
+
+            {% if len_task_list %}
+
+                <div class="object-list-right">
+
+                    <h4>Задачи</h4>
+
+                </div>
+
+            {% endif %}
+
+            </div>
 
          {% else %}
 

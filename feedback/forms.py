@@ -27,16 +27,9 @@ class FeedbackTicketForm(forms.ModelForm):
     #disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
-        #if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
-        #    self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
         if self.action == 'update':
             if self.cleaned_data['status'].id != self.initial['status']:
-                # если вызов пришёл из FeedbackTicketUpdate и статус проекта был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели)
-                # dict_status = Dict_FeedbackTicketStatus.objects.get(pk=self.cleaned_data['status'].id)
-                # FeedbackTicketStatusLog.objects.create(feedbackticket_id=self.initial['id'],
-                #                                status_id=dict_status.id,
-                #                                author_id=self.user.id)
-                if self.cleaned_data['status'].is_close:  # == "Выполнен":
+                if self.cleaned_data['status'].is_close:  # Выполнен
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
                     #self.cleaned_data['percentage'] = 100
                     if self.user.id != self.initial['author']:
@@ -84,11 +77,11 @@ class FeedbackTicketForm(forms.ModelForm):
 
     class Meta:
         model = FeedbackTicket
-        fields = ['name', 'description', 'type', 'is_active']
+        fields = ['name', 'description', 'type', 'status', 'is_active']
         # labels = {'Files':'Выберите файлы'}
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y'),  # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y')  # specify date-frmat,
+            #'datebegin': DatePickerInput(format='%d.%m.%Y'),  # default date-format %m/%d/%Y will be used
+            #'dateend': DatePickerInput(format='%d.%m.%Y')  # specify date-frmat,
             # 'docfile': forms.ClearableFileInput(attrs={'multiple': True}),
             # 'files': forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
         }
