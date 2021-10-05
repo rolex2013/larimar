@@ -60,12 +60,50 @@
 {% endblock ticket %}
 
 {% block list %}
-    <!-- Защита от прямого доступа к задачам проекта -->
+    <!-- Защита от прямого доступа к комментам и задачам Тикета -->
     {% if current_feedbackticket.company.id in user_companies %}
 
         <div class="object-list">
 
-            <h4>Задачи</h4>
+        <div class="object-list-wrapper">
+
+            <div class="object-list-left">
+
+                <h5>Комментарии</h5>
+
+                <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
+                <div class="object-list-buttons">
+                    <a href="{ url 'my_feedback:feedbacktaskcomment_create' feedbacktask.pk %}">{{ button_taskcomment_create }}</a>
+                </div>
+                <br />
+                {% for taskcomment in nodes %}
+                    {% if taskcomment.author == taskcomment.task.author %}
+                        <div class="object-list-left">
+                    {% else %}
+                        <div class="object-list-right">
+                    {%  endif %}
+                        <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} |
+                      <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> |
+                         {{ taskcomment.time }} час. |
+                          {{ task.project.currency.symbol }}{{ taskcomment.cost }}</span></b>
+                        <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
+                        {% if taskcomment.files %}
+                            <em style="font-size: 70%;">Файлы:</em>
+                        {% endif %}
+                        {% for f in taskcomment.files %}
+                            <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                {% endfor %}
+
+            </div>
+
+         {% if len_task_list %}
+
+          <div class="object-list-right">
+
+            <h5>Задачи</h5>
 
             <!--{ if len_list %}-->
 
@@ -97,6 +135,11 @@
             </form>
 
             <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
+
+         {% endif %}
+
+        </div>
+
             <div id="ajax_listerrors"></div>
 
             <!--{ else %}

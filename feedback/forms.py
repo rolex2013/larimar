@@ -23,8 +23,10 @@ class FeedbackTicketForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы тикета', widget=forms.ClearableFileInput(attrs={'multiple': True}),
                             required=False)
+    #comment = forms.CharField(label='Комментарий', widget=CKEditorWidget(), required=False)
+    comment = forms.CharField(label='Комментарий', widget=forms.Textarea, required=False)
 
-    #disabled_fields = ('dateclose', 'author',)
+    disabled_fields = ('name', 'description',)
 
     def clean(self):
         if self.action == 'update':
@@ -33,22 +35,13 @@ class FeedbackTicketForm(forms.ModelForm):
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
                     #self.cleaned_data['percentage'] = 100
                     if self.user.id != self.initial['author']:
-                        # если проект закрывается Исполнителем, то уведомление отсылается Автору
+                        # если Тикет закрывается Исполнителем из Службы Техподдержки, то уведомление отсылается Автору
                         # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                         user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                         objecttypeid = Meta_ObjectType.objects.get(shortname='fbtkt').id
                         send_mail('1YES. Ваш Тикет закрыт.', 'Уведомляем о закрытии Вашего Тикета!',
                                   settings.EMAIL_HOST_USER, [user_profile.email])
                         # print('==================')
-                        Notification.objects.create(type=user_profile.protocoltype,
-                                                    objecttype_id=objecttypeid,
-                                                    objectid=self.initial['id'],
-                                                    sendfrom=settings.EMAIL_HOST_USER,
-                                                    theme='Ваш Тикет закрыт!',
-                                                    text='Уведомляем о закрытии Вашего тикета.',
-                                                    recipient_id=self.initial['author'],
-                                                    sendto=user_profile.email,
-                                                    author_id=self.user.id)
                 else:
                     self.cleaned_data['dateclose'] = None
 
@@ -67,6 +60,8 @@ class FeedbackTicketForm(forms.ModelForm):
             super().__init__(*args, **kwargs)
             companyid = self.instance.company_id
             #systemid = self.instance.system_id
+            for field in self.disabled_fields:
+                self.fields[field].disabled = True
 
         #uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
         #usr = User.objects.filter(id__in=uc, is_active=True)

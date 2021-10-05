@@ -245,8 +245,15 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)  # без commit=False происходит вызов save() Модели
+        #af = self.add_files(form, 'feedback',
+        #                    'ticketcomment')  # добавляем файлы из формы (метод из AddFilesMixin) в Комментарий
         af = self.add_files(form, 'feedback', 'ticket')  # добавляем файлы из формы (метод из AddFilesMixin)
+        comment = form.cleaned_data["comment"]
         self.object = form.save()
+        if comment != '':
+            # создаём Комментарий к Тикету
+            cmnt = FeedbackTicketComment.objects.create(ticket_id=self.object.id, author_id=form.instance.author_id,
+                                                 description=comment)
         return super().form_valid(form)  # super(ProjectUpdate, self).form_valid(form)
 
 

@@ -97,8 +97,8 @@ class FeedbackTicket(models.Model):
     """
 
     def get_absolute_url(self):
-        #return reverse('my_feedback:ticketcomments', kwargs={'taskid': self.pk})
-        return reverse('my_feedback:tickets0')
+        return reverse('my_feedback:feedbacktasks', kwargs={'ticketid': self.pk, 'pk': 0})
+        #return reverse('my_feedback:feedbacktasks')
     def __str__(self):
         return (self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
     class MPTTMeta:

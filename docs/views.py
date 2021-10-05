@@ -309,10 +309,13 @@ def doctasks(request, pk=0):
     is_member = Doc.objects.filter(id=pk, members__in=[currentuser, ]).exists()
     if currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id or is_member:
         button_doc_history = 'Версии'
-        if currentdocver.is_public == False:
-            button_task_create = 'Добавить'
-        if (currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id) and currentdocver.is_public == False and currentdoc.doctask == 0:
-            button_doc_update = 'Изменить'
+        # Версия док-та создаётся всегда, но мало-ли... )))
+        if currentdocver:
+            #print(currentdocver)
+            if currentdocver and currentdocver.is_public == False:
+                button_task_create = 'Добавить'
+            if (currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id) and currentdocver.is_public == False and currentdoc.doctask == 0:
+                button_doc_update = 'Изменить'
 
     return render(request, "doc_detail.html", {
         'nodes': task_list.distinct().order_by(),  # .order_by('tree_id', 'level', '-dateend'),
