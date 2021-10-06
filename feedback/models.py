@@ -135,7 +135,7 @@ class FeedbackTask(MPTTModel):
         return FeedbackTaskComment.objects.filter(task_id=self.id).aggregate(Sum('time'))
 
     def get_absolute_url(self):
-        return reverse('my_feedback:taskcomments', kwargs={'taskid': self.pk})
+        return reverse('my_feedback:feedbacktaskcomments', kwargs={'taskid': self.pk})
         #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
     def __str__(self):
          return (str(self.ticket) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
@@ -157,7 +157,7 @@ class FeedbackTicketComment(models.Model):
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
-        return reverse('my_ticket:feedbacktaskcomments', kwargs={'taskid': self.ticket_id})
+        return reverse('my_feedback:feedbacktasks', kwargs={'ticketid': self.ticket_id, 'pk': 0})
 
     def __str__(self):
         return (str(self.ticket) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')

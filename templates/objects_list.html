@@ -55,6 +55,8 @@
                  <!--<b><a href="{ url 'my_project:task_detail' node.pk %}">-->
                  {% if object_list == 'clienttask_list' %}                       
                     <b><a href="{% url 'my_crm:clienttaskcomments' node.pk %}">
+                 {% elif object_list == 'feedbacktask_list' %}
+                    <b><a href="{% url 'my_feedback:feedbacktaskcomments' node.pk %}">
                  {% else %}
                     <b><a href="{% url 'my_project:taskcomments' node.pk %}">
                  {% endif %}                                          
@@ -66,7 +68,7 @@
                  </span></b>   
         
               {% endif %}       
-                
+
               {% if not node.is_leaf_node %}
                  <ul class="children">{{ children }}</ul>
               {% else %}

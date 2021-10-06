@@ -14,7 +14,7 @@ from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer
 from companies.models import Company, UserCompanyComponentGroup
 from .models import Dict_System, Dict_FeedbackTicketStatus, Dict_FeedbackTicketType, Dict_FeedbackTaskStatus
 from .models import FeedbackTicket, FeedbackTicketComment, FeedbackTask, FeedbackTaskComment, FeedbackFile
-from .forms import FeedbackTicketForm, FeedbackTaskForm, FeedbackTaskCommentForm
+from .forms import FeedbackTicketForm, FeedbackTaskForm, FeedbackTicketCommentForm, FeedbackTaskCommentForm
 
 from main.utils import AddFilesMixin
 
@@ -297,6 +297,8 @@ def feedbacktasks(request, ticketid=0, pk=0):
 
     currentticket = FeedbackTicket.objects.get(id=ticketid)
 
+    ticketcomment_list = FeedbackTicketComment.objects.filter(ticket_id=ticketid, is_active=True)
+
     taskcomment_costsum = FeedbackTaskComment.objects.filter(task__ticket_id=currentticket.id).aggregate(Sum('cost'))
     taskcomment_timesum = FeedbackTaskComment.objects.filter(task__ticket_id=currentticket.id).aggregate(Sum('time'))
     try:
@@ -326,15 +328,18 @@ def feedbacktasks(request, ticketid=0, pk=0):
             obj_files_rights = 1
 
     button_feedbackticket_update = ''
+    button_ticketcomment_create = ''
     if currentuser == currentticket.author_id or currentuser == currentticket.manager_id: # or is_member:
         if currentuser == currentticket.author_id or currentuser == currentticket.manager_id:
             button_feedbackticket_update = 'Изменить'
+            button_ticketcomment_create = 'Создать'
     button_feedbacktask_create = ''
     if currentticket.company_id in request.session['_auth_user_companies_id']:
         button_feedbacktask_create = 'Создать'
 
     return render(request, "feedbackticket_detail.html", {
         'nodes': task_list.distinct().order_by(),  # .order_by('tree_id', 'level', '-dateend'),
+        'ticketcommentnodes': ticketcomment_list.distinct().order_by(),
         'current_task': current_task,
         'root_task_id': root_task_id,
         'tree_task_id': tree_task_id,
@@ -349,15 +354,32 @@ def feedbacktasks(request, ticketid=0, pk=0):
         'button_feedbackticket_update': button_feedbackticket_update,
         #'button_client_history': button_client_history,
         'button_feedbacktask_create': button_feedbacktask_create,
+        'button_ticketcomment_create': button_ticketcomment_create,
         'taskstatus': Dict_FeedbackTaskStatus.objects.filter(is_active=True),
         'tskstatus_selectid': tskstatus_selectid,
-        'object_list': 'clienttask_list',
+        'object_list': 'feedbacktask_list',
         'taskcomment_costsum': taskcomment_costsum,
         'taskcomment_timesum': taskcomment_timesum,
         'hours': hours, 'minutes': minutes, 'seconds': seconds,
 
     })
 
+class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
+    model = FeedbackTicketComment
+    form_class = FeedbackTicketCommentForm
+    template_name = 'object_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(FeedbackTicketCommentCreate, self).get_context_data(**kwargs)
+        context['header'] = 'Новый комментарий Тикета'
+        return context
+
+    def form_valid(self, form):
+        form.instance.ticket_id = self.kwargs['ticketid']
+        form.instance.author_id = self.request.user.id
+        self.object = form.save()  # Созадём новый коммент Тикета
+        af = self.add_files(form, 'feedback', 'ticketcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
+        return super().form_valid(form)
 
 class FeedbackTaskCreate(AddFilesMixin, CreateView):
     model = FeedbackTask
@@ -366,11 +388,11 @@ class FeedbackTaskCreate(AddFilesMixin, CreateView):
     template_name = 'object_form.html'
 
     def form_valid(self, form):
-        form.instance.client_id = self.kwargs['clientid']
+        form.instance.ticket_id = self.kwargs['ticketid']
         if self.kwargs['parentid'] != 0:
             form.instance.parent_id = self.kwargs['parentid']
         form.instance.author_id = self.request.user.id
-        self.object = form.save()  # Созадём новую задачу клиента       
+        self.object = form.save()  # Созадём новую задачу Тикета
         af = self.add_files(form, 'feedback', 'task')  # добавляем файлы из формы (метод из AddFilesMixin)
         return super().form_valid(form)
 
@@ -412,7 +434,7 @@ class FeedbackTaskUpdate(AddFilesMixin, UpdateView):
 
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def clienttaskcomments(request, taskid):
+def feedbacktaskcomments(request, taskid):
     currenttask = FeedbackTask.objects.filter(id=taskid).first()
     currentuser = request.user.id
     if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
@@ -439,30 +461,29 @@ def clienttaskcomments(request, taskid):
     button_task_create = ''
     button_task_update = ''
     button_task_history = ''
-    #is_member = Client.objects.filter(members__in=[currentuser, ]).exists()
+    #print(currentuser, currenttask.author_id, currenttask.assigner_id)
     if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id: # or is_member:
         button_task_create = 'Добавить'
-        button_task_history = 'История'
+        #button_task_history = 'История'
         button_taskcomment_create = 'Добавить'
-        button_event_create = 'Добавить'
         if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
             button_task_update = 'Изменить'
 
-    return render(request, "clienttask_detail.html", {
+    return render(request, "feedbacktask_detail.html", {
         'nodes': taskcomment_list.distinct().order_by(),
         # 'current_taskcomment': currenttaskcomment,
-        'clienttask': currenttask,
+        'task': currenttask,
         'obj_files_rights': obj_files_rights,
         'files': FeedbackFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
         'objtype': 'fbtsk',
-        'button_clienttask_create': button_task_create,
-        'button_clienttask_update': button_task_update,
-        'button_clienttask_history': button_task_history,
-        # 'object_list': 'clienttask_list',
-        'clienttaskcomment_costsum': taskcomment_costsum,
-        'clienttaskcomment_timesum': taskcomment_timesum,
+        'button_task_create': button_task_create,
+        'button_task_update': button_task_update,
+        #'button_task_history': button_task_history,
+        #'object_list': 'clienttask_list',
+        'taskcomment_costsum': taskcomment_costsum,
+        'taskcomment_timesum': taskcomment_timesum,
         'hours': hours, 'minutes': minutes, 'seconds': seconds,
-        'button_clienttaskcomment_create': button_taskcomment_create,
+        'button_taskcomment_create': button_taskcomment_create,
         #'enodes': event_list.distinct().order_by(),
         #'button_event_create': button_event_create,
         'media_path': settings.MEDIA_URL,

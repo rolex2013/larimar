@@ -1,0 +1,23 @@
+<h4>Комментарии</h4>
+
+ {% if ticketcommentnodes %}
+    <br />
+     {% for node in ticketcommentnodes %}
+         <b><a href="{ url 'my_feedback:feedbackticketcomments' node.pk %}">
+         #{{ node.id }}. {{ node.name }}</a> <span style="font-size: 70%; color: brown;"> |
+         <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | {{ node.datecreate }}
+               <!-- | {{ node.time }} час. | {{ node.cost }}-->
+         </span></b><br /><br />
+         <p>{{ node.description|safe }}</p>
+         <hr>
+     {% endfor %}
+
+ {% else %}
+
+    <p>Комментариев пока нет...</p>
+
+ {% endif %}
+ 
+ <div class="object-list-buttons">
+    <a href="{% url 'my_feedback:feedbackticketcomment_create' ticketid %}">{{ button_ticketcomment_create }}</a>
+ </div>

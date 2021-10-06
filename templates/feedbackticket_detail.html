@@ -65,174 +65,21 @@
 
         <div class="object-list">
 
-        <div class="object-list-wrapper">
+            <div class="object-list-wrapper">
 
-            <div class="object-list-left">
-
-                <h5>Комментарии</h5>
-
-                <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-                <div class="object-list-buttons">
-                    <a href="{ url 'my_feedback:feedbacktaskcomment_create' feedbacktask.pk %}">{{ button_taskcomment_create }}</a>
+                <div class="object-list-left">
+                    {% include 'feedbackticketcomments_list.html' %}
                 </div>
-                <br />
-                {% for taskcomment in nodes %}
-                    {% if taskcomment.author == taskcomment.task.author %}
-                        <div class="object-list-left">
-                    {% else %}
-                        <div class="object-list-right">
-                    {%  endif %}
-                        <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} |
-                      <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> |
-                         {{ taskcomment.time }} час. |
-                          {{ task.project.currency.symbol }}{{ taskcomment.cost }}</span></b>
-                        <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
-                        {% if taskcomment.files %}
-                            <em style="font-size: 70%;">Файлы:</em>
-                        {% endif %}
-                        {% for f in taskcomment.files %}
-                            <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>
-                        {% endfor %}
-                    </div>
-                    <hr>
-                {% endfor %}
+                <div class="object-list-right">
+                    {% include 'feedbacktasks_list.html' %}
+                </div>
 
             </div>
 
-         {% if len_task_list %}
-
-          <div class="object-list-right">
-
-            <h5>Задачи</h5>
-
-            <!--{ if len_list %}-->
-
-            <!--<form action="{ url 'my_feedback:tasks' current_feedbackticket.pk 0 %}" method="post">-->
-            <form method="GET">
-                {% csrf_token %}
-                <div class="object-list-filters">
-                    <label>Фильтр по статусу: </label>
-                    <select name="select_taskstatus" id="selectid" class="select-task-status">
-                        <option value="-1" {% ifequal "-1" tskstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                        <option value="0" {% ifequal 0 tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
-                        <option value="-2" {% ifequal "-2" tskstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>
-                        {% for tskstatus in taskstatus %}
-                            <option value="{{tskstatus.id}}" {% ifequal tskstatus.id tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                                {{tskstatus.name}}
-                            </option>
-                        {% endfor %}
-                    </select>
-                    <label>Мои задачи: </label>
-                    <select name="select-mytask" id="myselectid" class="select-my-task">
-                        <option value="-1" {% ifequal "-1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                        <option value="0" {% ifequal "0" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>
-                        <option value="1" {% ifequal "1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                        <option value="2" {% ifequal "2" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
-                    </select>
-                    <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>
-                </div>
-                <!--<button type="submit">Применить</button>-->
-            </form>
-
-            <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
-
-         {% endif %}
-
         </div>
-
-            <div id="ajax_listerrors"></div>
-
-            <!--{ else %}
-
-               <p>Задач пока нет...</p>
-
-            { endif %}         -->
-
-            <!--
-                    { load mptt_tags %}
-
-                    <ul>
-                      { recursetree nodes %}
-                         <!-{ ifequal node.project_id projectid %}->
-                            { if user.is_authenticated and node.is_active %}
-                               <li>
-                                 <b><a href="{ url 'my_feedback:task_detail' node.pk %}">
-                                 <!- <a href="{ url 'my_feedback:tasks' current_feedbackticket.id node.pk %}">->
-                                 { node.name }}</a> : <span style="font-size: 70%; color: brown;">{ node.datebegin }} - { node.dateend }} |
-                                    { node.status.name }} |
-                                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{ node.author.username }}</i></a></span> |
-                                    { node.cost }}</span></b>
-                                 { if not node.is_leaf_node %}
-                                    <ul class="children">
-                                       { children }}
-                                    </ul>
-                                 { endif %}
-                               </li>
-                            { endif %}
-                         <!-{ endifequal %}->
-                      { endrecursetree %}
-                    </ul>
-            -->
-            <!--<a href="{ url 'my_feedback:feedbacktask_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
-            <div class="object-list-buttons">
-                <a href="{% url 'my_feedback:feedbacktask_create' ticketid %}">{{ button_feedbacktask_create }}</a>
-            </div>
-
-        </div>
-
-        <script>
-            // *** отключено ***
-            $(document).on('change', '.select-task-status---', function() {
-                var statusSelected = $(this).val();
-                //console.log(statusSelected);
-                $.ajax({
-                    url: "{ url 'my_feedback:feedbacktask_filter' %}",
-                    method: 'GET',
-                    data : {
-                        projectid: {{ current_feedbackticket.id }},
-                        taskstatus: statusSelected
-                    },
-                    success: function(data)
-                    {
-                        //console.log(data)
-                        $('#ajax_listresult').html(data);
-                    },
-                    error: function(xhr, errmsg, err)
-                    {
-                        console.log("error")
-                        console.log(error_data)
-                    }
-                });
-            });
-            // ***
-            $('#selection-button').click(function(){
-                event.preventDefault(); // *** без этого страница перегружается после возврата data
-                var statusSelected = $("#selectid option:selected").val()
-                var mytaskSelected = $("#myselectid option:selected").val()
-                $.ajax({
-                    type: 'GET',
-                    url: "{ url 'my_feedback:feedbacktask_filter' %}",
-                    data: {
-                        projectid: {{ current_feedbackticket.id }},
-                        taskstatus: statusSelected,
-                        mytaskuser: mytaskSelected
-                    },
-                    success: function(data){
-                        $('#ajax_listresult').html(data);
-                        //alert(data);
-                    },
-                    error: function(xhr, errmsg, err){
-                        console.log("error")
-                        console.log(error_data)
-                        $('#ajax_listerrors').html('Нет данных!');
-                    }
-                });
-            });
-
-        </script>
 
     {% else %}
-        <h5>Информация о задачах недоступна!</h5>
+        <h5>Информация о задачах и событиях недоступна!</h5>
     {% endif %}
 
 {% endblock list %}
