@@ -74,7 +74,7 @@
 
         <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
         <div class="object-list-buttons">
-            <a href="{% url 'my_project:taskcomment_create' task.pk %}">{{ button_taskcomment_create }}</a>
+            <a href="{% url 'my_feedback:feedbacktaskcomment_create' task.pk %}">{{ button_taskcomment_create }}</a>
         </div>
         <br />
         {% for taskcomment in nodes %}
