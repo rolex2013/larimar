@@ -32,22 +32,9 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
 #def FeedbackTicketCreateAPI(request):
 #    return
 
-
-@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def feedbacktickets(request, companyid=0, pk=0):
-
+def definerights(request, companyid):
     currentuser = request.user.id
     currentusercompanyid = request.session['_auth_user_currentcompany_id']
-
-    if companyid == 0:
-        #companyid = request.session['_auth_user_currentcompany_id']
-        mylastticket = FeedbackTicket.objects.filter(is_active=True, author_id=currentuser).order_by('-id')[0]
-        companyid = mylastticket.company_id
-    #print(companyid)
-
-    request.session['_auth_user_currentcomponent'] = 'feedbacktickets'
-
-    # Видимость пункта "- Все" в фильтрах
     is_support_member = False
     is_support_admin_org = False
     is_superadmin = False
@@ -71,7 +58,28 @@ def feedbacktickets(request, companyid=0, pk=0):
         #print(usergroupid)
         is_superadmin = True
         is_admin = True
-    #print(is_support_member, is_support_admin_org, is_superadmin, is_admin_org, is_admin)
+    return(is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin)
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def feedbacktickets(request, companyid=0, pk=0):
+
+    currentuser = request.user.id
+    currentusercompanyid = request.session['_auth_user_currentcompany_id']
+
+    if companyid == 0:
+
+        try:
+            mylastticket = FeedbackTicket.objects.filter(is_active=True, author_id=currentuser).order_by('-id')[0]
+            companyid = mylastticket.company_id
+        except:
+            companyid = currentusercompanyid
+
+        #print(companyid)
+
+    request.session['_auth_user_currentcomponent'] = 'feedbacktickets'
+
+    # Видимость пункта "- Все" в фильтрах
+    (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request,companyid)
 
     # *** фильтруем по статусу ***
     tktstatus_selectid = 0
@@ -79,11 +87,17 @@ def feedbacktickets(request, companyid=0, pk=0):
     try:
        tktstatus = request.POST['select_feedbackticketstatus']
     except:
-       feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, dateclose__isnull=True)
+        if is_support_member:
+            feedbackticket_list = FeedbackTicket.objects.filter(is_active=True,
+                                                                company=companyid, dateclose__isnull=True)
+        else:
+            feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True,
+                                                                company=companyid, dateclose__isnull=True)
+       #print('===')
     else:
        if tktstatus == "0":
-          # если в выпадающем списке выбрано "Все активные"
-          feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, dateclose__isnull=True)
+           # если в выпадающем списке выбрано "Все активные"
+           feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, dateclose__isnull=True)
        else:
           if tktstatus == "-1":
              # если в выпадающем списке выбрано "Все"
@@ -109,6 +123,7 @@ def feedbacktickets(request, companyid=0, pk=0):
         feedbackticket_task_list = FeedbackTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id), is_active=True, ticket__company=companyid,
                                                         dateclose__isnull=True)
         len_task_list = len(feedbackticket_task_list)
+        #print(len_task_list)
 
     len_list = len(feedbackticket_list)
 
@@ -262,6 +277,8 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
 def feedbacktasks(request, ticketid=0, pk=0):
     # *** фильтруем по статусу ***
     currentuser = request.user.id
+    currentusercompanyid = request.session['_auth_user_currentcompany_id']
+    #print(currentusercompanyid)
     tskstatus_selectid = 0
     try:
         tskstatus = request.POST['select_taskstatus']
@@ -317,7 +334,7 @@ def feedbacktasks(request, ticketid=0, pk=0):
         tree_task_id = 0
         root_task_id = 0
         tree_task_id = 0
-        if currentuser == currentticket.author_id or currentuser == currentticket.manager_id:
+        if currentuser == currentticket.author_id:
             obj_files_rights = 1
     else:
         current_task = FeedbackTask.objects.filter(id=pk).first()
@@ -327,14 +344,17 @@ def feedbacktasks(request, ticketid=0, pk=0):
         if currentuser == current_task.author_id or currentuser == current_task.assigner_id:
             obj_files_rights = 1
 
+    (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request,currentticket.company_id)
+
     button_feedbackticket_update = ''
     button_ticketcomment_create = ''
-    if currentuser == currentticket.author_id or currentuser == currentticket.manager_id: # or is_member:
-        if currentuser == currentticket.author_id or currentuser == currentticket.manager_id:
+    #print(is_support_member)
+    if currentuser == currentticket.author_id or is_support_member: # or is_member:
+        button_ticketcomment_create = 'Создать'
+        if currentuser == currentticket.author_id:
             button_feedbackticket_update = 'Изменить'
-            button_ticketcomment_create = 'Создать'
     button_feedbacktask_create = ''
-    if currentticket.company_id in request.session['_auth_user_companies_id']:
+    if currentticket.company_id in request.session['_auth_user_companies_id'] or is_support_member:
         button_feedbacktask_create = 'Создать'
 
     return render(request, "feedbackticket_detail.html", {
@@ -343,6 +363,7 @@ def feedbacktasks(request, ticketid=0, pk=0):
         'current_task': current_task,
         'root_task_id': root_task_id,
         'tree_task_id': tree_task_id,
+        'is_support_member': is_support_member,
         'current_feedbackticket': currentticket,
         'ticketid': ticketid,
         'user_companies': request.session['_auth_user_companies_id'],
@@ -376,6 +397,7 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.ticket_id = self.kwargs['ticketid']
+        form.instance.company_id = self.kwargs['companyid']
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новый коммент Тикета
         af = self.add_files(form, 'feedback', 'ticketcomment')  # добавляем файлы из формы (метод из AddFilesMixin)

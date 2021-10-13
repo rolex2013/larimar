@@ -3,13 +3,24 @@
  {% if ticketcommentnodes %}
     <br />
      {% for node in ticketcommentnodes %}
-         <b><a href="{ url 'my_feedback:feedbackticketcomments' node.pk %}">
-         #{{ node.id }}. {{ node.name }}</a> <span style="font-size: 70%; color: brown;"> |
-         <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | {{ node.datecreate }}
-               <!-- | {{ node.time }} час. | {{ node.cost }}-->
-         </span></b><br /><br />
-         <p>{{ node.description|safe }}</p>
+         <!--{node.ticket.companyfrom_id}}
+         {current_feedbackticket.company_id}}-->
+         <div class="object-list-list-wrapper">
+             {% if node.ticket.companyfrom_id == node.company_id %}
+                 <div class="object-list-list-left" >
+             {% else %}
+                 <div class="object-list-list-right" >
+             {% endif %}
+             <b><a href="{ url 'my_feedback:feedbackticketcomments' node.pk %}">
+             #{{ node.id }}. {{ node.name }}</a> <span style="font-size: 70%; color: brown;"> |
+             <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | {{ node.datecreate }}
+                   <!-- | {{ node.time }} час. | {{ node.cost }}-->
+             </span></b><br /><br />
+             <p>{{ node.description|safe }}</p>
+             </div>
+         </div>
          <hr>
+         <!--<br>-->
      {% endfor %}
 
  {% else %}
@@ -19,5 +30,5 @@
  {% endif %}
  
  <div class="object-list-buttons">
-    <a href="{% url 'my_feedback:feedbackticketcomment_create' ticketid %}">{{ button_ticketcomment_create }}</a>
+    <a href="{% url 'my_feedback:feedbackticketcomment_create' ticketid current_feedbackticket.company_id %}">{{ button_ticketcomment_create }}</a>
  </div>

@@ -153,6 +153,8 @@ class FeedbackTicketComment(models.Model):
     cost = models.DecimalField("Стоимость", max_digits=9, decimal_places=2, default=0)
     ticket = models.ForeignKey('FeedbackTicket', on_delete=models.CASCADE, related_name='feedback_ticket', verbose_name="Тикет")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='feedback_commentcompany',
+                                verbose_name="Компания")
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
 

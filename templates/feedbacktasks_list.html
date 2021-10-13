@@ -1,6 +1,6 @@
 <h4>Задачи</h4>
 
-<!--{ if len_list %}-->
+{% if len_list %}
 
  <!--<form action="{ url 'my_crm:tasks' current_client.pk 0 %}" method="post">-->
  <form method="GET">           
@@ -43,11 +43,11 @@
  <div id="ajax_clienttasklistresult">{% include 'objects_list.html' %}</div>
  <div id="ajax_clienttasklisterrors"></div>
 
- <!--{ else %}
+{% else %}
 
     <p>Задач пока нет...</p>
 
- { endif %}-->
+{% endif %}
  
  <div class="object-list-buttons">
     <a href="{% url 'my_feedback:feedbacktask_create' ticketid 0 %}">{{ button_feedbacktask_create }}</a>

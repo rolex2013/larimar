@@ -4,8 +4,8 @@
 
 {% block company %}
    
-   <!-- Защита от прямого доступа к компании -->
-   {% if current_company.id in user_companies %}
+   <!-- Защита от прямого доступа к компании, если это не Служба техподдержки -->
+   {% if current_company.id in user_companies or current_company.is_support %}
 
       <div class="object-detail">
 
@@ -78,8 +78,8 @@
 
 {% block list %}
 
-   <!-- Защита от прямого доступа к сотрудникам компании -->
-   {% if current_company.id in user_companies %}
+   <!-- Защита от прямого доступа к сотрудникам компании, если это не Служба техподдержки -->
+   {% if current_company.id in user_companies or current_company.is_support %}
 
       <div class="object-list">
 

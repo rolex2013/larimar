@@ -353,6 +353,22 @@ body {
     /*width: 49%;*/
     /*margin-left: 52%;*/
 }
+.object-list-list-wrapper {
+    display: flex;
+}
+.object-list .object-list-list-left {
+    padding: 0px 0px 0px 0px;
+    text-decoration: none;
+    /*background: #eee;
+    background: linear-gradient(to left, #eee, #8e968e);*/
+}
+.object-list .object-list-list-right {
+    padding: 0px 0px 0px 35px;
+    text-decoration: none;
+    /*background: #eee;
+    background: linear-gradient(to right, #eee, #8e968e);*/
+}
+
 .object-list-row {
     background: #eee; /* фон */
     background: linear-gradient(to top, #eee, #8e968e);

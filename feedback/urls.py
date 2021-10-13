@@ -36,7 +36,7 @@ urlpatterns = [
 
     #path('ticketcomments_page/<int:ticketid>', views.feedbackticketcomments, name='feedbackticketcomments'),
     #path('ticketcomments_list/<int:pk>', views.FeedbackTicketCommentDetail.as_view(), name='feedbacktaskcomment_detail'),
-    path('tickets_page/ticketcomment_create/<int:ticketid>', views.FeedbackTicketCommentCreate.as_view(),
+    path('tickets_page/ticketcomment_create/<int:ticketid>/<int:companyid>', views.FeedbackTicketCommentCreate.as_view(),
          name='feedbackticketcomment_create'),
     path('tickets_page/taskcomments_page/<int:taskid>', views.feedbacktaskcomments, name='feedbacktaskcomments'),
     #path('taskcomments_list/<int:pk>', views.FeedbackTaskCommentDetail.as_view(), name='feedbacktaskcomment_detail'),

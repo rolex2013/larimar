@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 
 {% block ticket %}
-    <!-- Защита от прямого доступа к Тикету -->
-    {% if current_feedbackticket.company.id in user_companies %}
+    <!-- Защита от прямого доступа к Тикету, если это его просматривает не сотрудник компании, создавшей Тикет или не Служба техподдержки -->
+    {% if current_feedbackticket.companyfrom.id in user_companies or current_company.is_support %}
 
         <div class="object-detail">
             <div>
@@ -60,8 +60,8 @@
 {% endblock ticket %}
 
 {% block list %}
-    <!-- Защита от прямого доступа к комментам и задачам Тикета -->
-    {% if current_feedbackticket.company.id in user_companies %}
+    <!-- Защита от прямого доступа к комментам и задачам Тикета, если это его просматривает не сотрудник компании, создавшей Тикет или не Служба техподдержки -->
+    {% if current_feedbackticket.companyfrom.id in user_companies or current_company.is_support %}
 
         <div class="object-list">
 
@@ -70,16 +70,18 @@
                 <div class="object-list-left">
                     {% include 'feedbackticketcomments_list.html' %}
                 </div>
-                <div class="object-list-right">
-                    {% include 'feedbacktasks_list.html' %}
-                </div>
+                {% if is_support_member %}
+                    <div class="object-list-right">
+                        {% include 'feedbacktasks_list.html' %}
+                    </div>
+                {% endif %}
 
             </div>
 
         </div>
 
     {% else %}
-        <h5>Информация о задачах и событиях недоступна!</h5>
+        <h5>Информация о комментариях и задачах недоступна!</h5>
     {% endif %}
 
 {% endblock list %}
