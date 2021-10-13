@@ -30,5 +30,9 @@
  {% endif %}
  
  <div class="object-list-buttons">
-    <a href="{% url 'my_feedback:feedbackticketcomment_create' ticketid current_feedbackticket.company_id %}">{{ button_ticketcomment_create }}</a>
+    {% if is_support_member %}
+        <a href="{% url 'my_feedback:feedbackticketcomment_create' ticketid current_feedbackticket.company_id %}">{{ button_ticketcomment_create }}</a>
+    {% else %}
+        <a href="{% url 'my_feedback:feedbackticketcomment_create' ticketid current_feedbackticket.companyfrom_id %}">{{ button_ticketcomment_create }}</a>
+    {% endif %}
  </div>

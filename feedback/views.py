@@ -81,6 +81,12 @@ def feedbacktickets(request, companyid=0, pk=0):
     # Видимость пункта "- Все" в фильтрах
     (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request,companyid)
 
+    request.session['_auth_user_issupportmember'] = is_support_member
+    if is_support_member:
+        request.session['_auth_user_supportcompany_id'] = companyid
+    else:
+        request.session['_auth_user_supportcompany_id'] = currentusercompanyid
+
     # *** фильтруем по статусу ***
     tktstatus_selectid = 0
     #mytktstatus = 0 # для фильтра "Мои проекты"
@@ -93,7 +99,6 @@ def feedbacktickets(request, companyid=0, pk=0):
         else:
             feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True,
                                                                 company=companyid, dateclose__isnull=True)
-       #print('===')
     else:
        if tktstatus == "0":
            # если в выпадающем списке выбрано "Все активные"
@@ -254,8 +259,9 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
     def get_form_kwargs(self):
         # kwargs = super(ProjectUpdate, self).get_form_kwargs()
         kwargs = super().get_form_kwargs()
+        is_support_member = self.request.session['_auth_user_issupportmember']
         # здесь нужно условие для 'action': 'update'
-        kwargs.update({'user': self.request.user, 'action': 'update'})
+        kwargs.update({'user': self.request.user, 'action': 'update', 'is_support_member': is_support_member})
         return kwargs
 
     def form_valid(self, form):
@@ -267,7 +273,8 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
         self.object = form.save()
         if comment != '':
             # создаём Комментарий к Тикету
-            cmnt = FeedbackTicketComment.objects.create(ticket_id=self.object.id, author_id=form.instance.author_id,
+            company_id = self.request.session['_auth_user_supportcompany_id']
+            cmnt = FeedbackTicketComment.objects.create(ticket_id=self.object.id, company_id=company_id, author_id=form.instance.author_id,
                                                  description=comment)
         return super().form_valid(form)  # super(ProjectUpdate, self).form_valid(form)
 
@@ -286,6 +293,7 @@ def feedbacktasks(request, ticketid=0, pk=0):
         task_list = FeedbackTask.objects.filter(
             Q(author=request.user.id) | Q(assigner=request.user.id),
             is_active=True, ticket=ticketid, dateclose__isnull=True)
+        #print(task_list)
     else:
         if tskstatus == "0":
             # если в выпадающем списке выбрано "Все активные"
@@ -310,7 +318,7 @@ def feedbacktasks(request, ticketid=0, pk=0):
         tskstatus_selectid = tskstatus
     # *******************************
 
-    # len_list = len(task_list)
+    len_list = len(task_list)
 
     currentticket = FeedbackTicket.objects.get(id=ticketid)
 
@@ -351,8 +359,8 @@ def feedbacktasks(request, ticketid=0, pk=0):
     #print(is_support_member)
     if currentuser == currentticket.author_id or is_support_member: # or is_member:
         button_ticketcomment_create = 'Создать'
-        if currentuser == currentticket.author_id:
-            button_feedbackticket_update = 'Изменить'
+        #if currentuser == currentticket.author_id:
+        button_feedbackticket_update = 'Изменить'
     button_feedbacktask_create = ''
     if currentticket.company_id in request.session['_auth_user_companies_id'] or is_support_member:
         button_feedbacktask_create = 'Создать'
@@ -360,6 +368,7 @@ def feedbacktasks(request, ticketid=0, pk=0):
     return render(request, "feedbackticket_detail.html", {
         'nodes': task_list.distinct().order_by(),  # .order_by('tree_id', 'level', '-dateend'),
         'ticketcommentnodes': ticketcomment_list.distinct().order_by(),
+        'len_list': len_list,
         'current_task': current_task,
         'root_task_id': root_task_id,
         'tree_task_id': tree_task_id,
@@ -395,9 +404,17 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
         context['header'] = 'Новый комментарий Тикета'
         return context
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        is_support_member = self.request.session['_auth_user_issupportmember']
+        kwargs.update({'is_support_member': is_support_member})
+        return kwargs
+
     def form_valid(self, form):
         form.instance.ticket_id = self.kwargs['ticketid']
         form.instance.company_id = self.kwargs['companyid']
+        #currentusercompanyid = request.session['_auth_user_currentcompany_id']
+        #form.instance.company_id = currentusercompanyid
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новый коммент Тикета
         af = self.add_files(form, 'feedback', 'ticketcomment')  # добавляем файлы из формы (метод из AddFilesMixin)

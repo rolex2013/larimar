@@ -26,7 +26,7 @@ class FeedbackTicketForm(forms.ModelForm):
     #comment = forms.CharField(label='Комментарий', widget=CKEditorWidget(), required=False)
     comment = forms.CharField(label='Комментарий', widget=forms.Textarea, required=False)
 
-    disabled_fields = ('name', 'description',)
+    #disabled_fields = ('name', 'description', 'type', 'files', 'status', 'is_active')
 
     def clean(self):
         if self.action == 'update':
@@ -49,6 +49,7 @@ class FeedbackTicketForm(forms.ModelForm):
         self.user = kwargs.pop(
             'user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
+        self.is_support_member = kwargs.pop('is_support_member')
 
         if self.action == 'create':
             self.system = kwargs.pop('systemid')
@@ -60,8 +61,16 @@ class FeedbackTicketForm(forms.ModelForm):
             super().__init__(*args, **kwargs)
             companyid = self.instance.company_id
             #systemid = self.instance.system_id
-            for field in self.disabled_fields:
-                self.fields[field].disabled = True
+            #for field in self.disabled_fields:
+            #    self.fields[field].disabled = True
+            self.fields['name'].disabled = True
+            self.fields['description'].disabled = True
+            #self.fields['type'].disabled = True
+            if self.is_support_member:
+                self.fields['files'].disabled = True
+                self.fields['is_active'].disabled = True
+            else:
+                self.fields['status'].disabled = True
 
         #uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
         #usr = User.objects.filter(id__in=uc, is_active=True)
@@ -84,6 +93,13 @@ class FeedbackTicketForm(forms.ModelForm):
 class FeedbackTicketCommentForm(forms.ModelForm):
     files = forms.FileField(label='Файлы комментария тикета', widget=forms.ClearableFileInput(attrs={'multiple': True}),
                             required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.is_support_member = kwargs.pop('is_support_member')
+        super().__init__(*args, **kwargs)
+        if not self.is_support_member:
+            self.fields['time'].widget = forms.HiddenInput()
+            self.fields['cost'].widget = forms.HiddenInput()
 
     class Meta:
         model = FeedbackTicketComment
