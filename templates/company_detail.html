@@ -81,7 +81,7 @@
 {% endblock company %}
 
 {% block list %}
-               ==={{ is_support_member }}===
+
    <!-- Защита от прямого доступа к сотрудникам компании, если это не Служба техподдержки -->
    {% if current_company.id in user_companies or current_company.is_support %}
 
