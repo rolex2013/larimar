@@ -26,7 +26,6 @@
            {% elif component_name == 'files' %}
                <a href="{% url 'my_file:folders' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
            {% elif component_name == 'feedback' %}
-               {{ is_support_member }}
                {% if is_many_support_member %}
                    <a href="{% url 'my_feedback:tickets' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
                {% else %}
@@ -39,7 +38,7 @@
         <!--{ else %}
            Это головная организация-->
         {% endif %}
-
+               ==={{ is_support_member }}===
         <p>Тип в оргструктуре: {{ current_company.structure_type }}</p>
         <p>Тип: {{ current_company.type }}</p>
         <em>Автор: {{ current_company.author }}</em>
