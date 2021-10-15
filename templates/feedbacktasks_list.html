@@ -45,12 +45,12 @@
 
 {% else %}
 
-    <p>Задач пока нет...</p>
+    {% if is_support_member %}<p>Задач пока нет...</p>{% endif %}
 
 {% endif %}
  
  <div class="object-list-buttons">
-    <a href="{% url 'my_feedback:feedbacktask_create' ticketid 0 %}">{{ button_feedbacktask_create }}</a>
+    <a href="{ url 'my_feedback:feedbacktask_create' ticketid 0 %}">{{ button_feedbacktask_create }}</a>
  </div>
 
 

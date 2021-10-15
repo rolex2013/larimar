@@ -169,7 +169,7 @@ class FeedbackTaskForm(forms.ModelForm):
             companyid = tkt.company_id
         else:
             super().__init__(*args, **kwargs)
-            companyid = self.instance.feedbackticket.company_id
+            companyid = self.instance.ticket.company_id
             self.ticket = self.instance.ticket_id
             # Исполнитель не может менять Исполнителя, если он не Автор
             if self.user.id == self.initial['assigner'] and self.initial['assigner'] != self.initial['author']:

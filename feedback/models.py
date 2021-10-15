@@ -1,6 +1,7 @@
 from django.db import models
 
 #from django.db.models import Q, Sum
+from django.db.models import Sum
 
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -85,16 +86,23 @@ class FeedbackTicket(models.Model):
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='feedback_ticket_user', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
-    """
+
+    @property
+    # суммарная стоимость по Комментам к Тикету
+    def costcommentsum(self):
+        return FeedbackTicketComment.objects.filter(ticket_id=self.id).aggregate(Sum('cost'))
+    # суммарная стоимость по Задачам (сколько запланировано средств)
+    def costtasksum(self):
+        return FeedbackTask.objects.filter(ticket_id=self.id).aggregate(Sum('cost'))
     @property
     # суммарная стоимость по Комментариям (сколько освоено средств)
-    def costsum(self):
-        return TicketComment.objects.filter(task_id=self.id).aggregate(Sum('cost'))
+    def costtaskcommentsum(self):
+        return FeedbackTaskComment.objects.filter(task__ticket_id=self.id).aggregate(Sum('cost'))
     @property
     # суммарная затраченное время по Комментариям
     def timesum(self):
-        return TaskComment.objects.filter(task_id=self.id).aggregate(Sum('time'))
-    """
+        return FeedbackTaskComment.objects.filter(task__ticket_id=self.id).aggregate(Sum('time'))
+
 
     def get_absolute_url(self):
         return reverse('my_feedback:feedbacktasks', kwargs={'ticketid': self.pk, 'pk': 0})

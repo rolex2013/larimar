@@ -168,16 +168,16 @@ def feedbacktickets(request, companyid=0, pk=0):
             # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
             is_many_support_member = False
             button_company_select = ''
+
+        # Список всех задач этого сотрудника техподдержки
+        task_list = FeedbackTask.objects.filter(
+                            Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id=currentusercompanyid,
+                            is_active=True, dateclose__isnull=True)
     else:
         comps_support = Company.objects.filter(is_active=True, is_support=True)
-        #if len(comps_support) > 1:
-        #    button_company_select = 'Сменить службу техподдержки'
         if len(comps_support) < 2:
             button_company_select = ''
-    #if currentuser == current_company.author_id:
-    #   button_feedbackticket_create = 'Добавить'
-    #if current_company.id in comps:
-    #   button_feedbackticket_create = 'Добавить'
+        task_list = ''
 
     # Добавляем Систему в справочник
     dsys_cnt = Dict_System.objects.filter(is_active=True).count()
@@ -189,7 +189,8 @@ def feedbacktickets(request, companyid=0, pk=0):
         dsys.save()
 
     return render(request, "company_detail.html", {
-                              'nodes': feedbackticket_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
+                              'nodes_tickets': feedbackticket_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
+                              'nodes': task_list, #.distinct(), #.order_by(),
                               'component_name': 'feedback',
                               'current_feedbackticket': current_feedbackticket,
                               'current_company': current_company,
@@ -204,7 +205,7 @@ def feedbacktickets(request, companyid=0, pk=0):
                               'feedbacktickettype_selectid': '-1',
                               'feedbackticket_myselectid': '1',
                               #'tktstatus_myselectid': tktstatus_myselectid,
-                              'object_list': 'feedbackticket_list',
+                              'object_list': 'feedbacktask_list',
                               #'select_feedbackticketstatus': select_feedbackticketstatus,
                               'len_list': len_list,
                               'len_task_list': len_task_list,
@@ -331,12 +332,16 @@ def feedbacktasks(request, ticketid=0, pk=0):
 
     len_list = len(task_list)
 
-    currentticket = FeedbackTicket.objects.get(id=ticketid)
+    currentticket = FeedbackTicket.objects.filter(id=ticketid).first()
 
     ticketcomment_list = FeedbackTicketComment.objects.filter(ticket_id=ticketid, is_active=True)
 
-    taskcomment_costsum = FeedbackTaskComment.objects.filter(task__ticket_id=currentticket.id).aggregate(Sum('cost'))
-    taskcomment_timesum = FeedbackTaskComment.objects.filter(task__ticket_id=currentticket.id).aggregate(Sum('time'))
+    #taskcomment_costsum = FeedbackTaskComment.objects.filter(task__ticket_id=currentticket.id).aggregate(Sum('cost'))
+    #taskcomment_timesum = FeedbackTaskComment.objects.filter(task__ticket_id=currentticket.id).aggregate(Sum('time'))
+    ticketcomment_costsum = currentticket.costcommentsum
+    task_costsum = currentticket.costtasksum
+    taskcomment_costsum = currentticket.costtaskcommentsum
+    taskcomment_timesum = currentticket.timesum
     try:
         sec = taskcomment_timesum["time__sum"] * 3600
     except:
@@ -367,7 +372,7 @@ def feedbacktasks(request, ticketid=0, pk=0):
 
     button_feedbackticket_update = ''
     button_ticketcomment_create = ''
-    #print(is_support_member)
+
     if currentuser == currentticket.author_id or is_support_member: # or is_member:
         button_ticketcomment_create = 'Создать'
         #if currentuser == currentticket.author_id:
@@ -399,6 +404,8 @@ def feedbacktasks(request, ticketid=0, pk=0):
         'taskstatus': Dict_FeedbackTaskStatus.objects.filter(is_active=True),
         'tskstatus_selectid': tskstatus_selectid,
         'object_list': 'feedbacktask_list',
+        'ticketcomment_costsum': ticketcomment_costsum,
+        'task_costsum': task_costsum,
         'taskcomment_costsum': taskcomment_costsum,
         'taskcomment_timesum': taskcomment_timesum,
         'hours': hours, 'minutes': minutes, 'seconds': seconds,
@@ -476,7 +483,7 @@ class FeedbackTaskUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        af = self.add_files(form, 'crm', 'task')  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, 'feedback', 'task')  # добавляем файлы из формы (метод из AddFilesMixin)
         old = FeedbackTask.objects.filter(
             pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
 
@@ -492,8 +499,11 @@ def feedbacktaskcomments(request, taskid):
     else:
         obj_files_rights = 0
 
-    taskcomment_costsum = FeedbackTaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
-    taskcomment_timesum = FeedbackTaskComment.objects.filter(task=taskid).aggregate(Sum('time'))
+    #taskcomment_costsum = FeedbackTaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
+    #taskcomment_timesum = FeedbackTaskComment.objects.filter(task=taskid).aggregate(Sum('time'))
+    taskcomment_costsum = currenttask.costsum
+    taskcomment_timesum = currenttask.timesum
+
     try:
         sec = taskcomment_timesum["time__sum"] * 3600
     except:
@@ -559,7 +569,7 @@ class FeedbackTaskCommentCreate(AddFilesMixin, CreateView):
         form.instance.task_id = self.kwargs['taskid']
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новый коммент задачи клиента
-        af = self.add_files(form, 'crm', 'taskcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, 'feedback', 'taskcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
         return super(FeedbackTaskCommentCreate, self).form_valid(form)
 
 

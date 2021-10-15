@@ -78,6 +78,7 @@ def companies(request, pk=0, razdel='projects'):
     component_name = razdel       
     request.session['_auth_user_currentcomponent'] = component_name
     template_name = "companies.html"
+
     is_many_support_member = True
     if razdel == 'feedback':
         is_support_member = request.session['_auth_user_issupportmember']
@@ -91,7 +92,7 @@ def companies(request, pk=0, razdel='projects'):
             nodes = Company.objects.filter(is_active=True, is_support=True)
     else:
         nodes = Company.objects.filter(is_active=True, id__in=comps)
-    
+
     return render(request, template_name, {
                               'nodes': nodes,
                               'current_company': current_company,

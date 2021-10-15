@@ -251,67 +251,79 @@
 
             <div class="object-list-wrapper">
 
-            <div class="object-list-left">
+                <div class="object-list-left">
 
-            <h4>Тикеты</h4>
+                    <h4>Тикеты</h4>
 
-            {% if len_list %}
+                    {% if len_list %}
 
-            <!--<form action="{ url 'my_feedback:feedbacktickets' current_company.pk 0 %}" method="post">-->
-            <form method="GET">
-               {% csrf_token %}
-               <div class="object-list-filters">
-                  <label>По статусу: </label>
-                  <select name="select-feedbackticketstatus" id="feedbackticketstatusselectid" class="select-feedbackticket-status">
-                     <option value="-1" {% ifequal "-1" feedbackticketstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                     <option value="0" {% ifequal 0 feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
-                     <option value="1" {% ifequal 1 feedbackticketstatus_selectid %} selected="selected" {% endifequal %}>- Все закрытые</option>
-                     <!--<option value="-2" { ifequal "-2" tktstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
-                     {% for tktstatus in feedbackticketstatus %}
-                        <option value="{{tktstatus.id}}" {% ifequal tktstatus.id feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                           {{tktstatus.name}}
-                        </option>
-                     {% endfor %}
-                  </select>
-                  <label>По типу: </label>
-                  <select name="select-feedbacktickettype" id="feedbacktickettypeselectid" class="select-feedbackticket-type">
-                     <option value="-1" {% ifequal "-1" feedbacktickettype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                     <!--<option value="0" { ifequal 0 feedbacktickettype_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                     <option value="-2" { ifequal "-2" feedbacktickettype_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
-                     {% for tkttype in feedbacktickettype %}
-                        <option value="{{tkttype.id}}" {% ifequal tkttype.id feedbacktickettype_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                           {{tkttype.name}}
-                        </option>
-                     {% endfor %}
-                  </select>
-                  <label>Мои тикеты: </label>
-                   <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
-                       <option value="-1" {% ifequal "-1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                       <option value="1" {% ifequal "1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                   </select>
-                  <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">Применить</button>
-               </div>
-            </form>
+                    <!--<form action="{ url 'my_feedback:feedbacktickets' current_company.pk 0 %}" method="post">-->
+                    <form method="GET">
+                       {% csrf_token %}
+                       <div class="object-list-filters">
+                          <label>По статусу: </label>
+                          <select name="select-feedbackticketstatus" id="feedbackticketstatusselectid" class="select-feedbackticket-status">
+                             <option value="-1" {% ifequal "-1" feedbackticketstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                             <option value="0" {% ifequal 0 feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
+                             <option value="1" {% ifequal 1 feedbackticketstatus_selectid %} selected="selected" {% endifequal %}>- Все закрытые</option>
+                             <!--<option value="-2" { ifequal "-2" tktstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                             {% for tktstatus in feedbackticketstatus %}
+                                <option value="{{tktstatus.id}}" {% ifequal tktstatus.id feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                   {{tktstatus.name}}
+                                </option>
+                             {% endfor %}
+                          </select>
+                          <label>По типу: </label>
+                          <select name="select-feedbacktickettype" id="feedbacktickettypeselectid" class="select-feedbackticket-type">
+                             <option value="-1" {% ifequal "-1" feedbacktickettype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                             <!--<option value="0" { ifequal 0 feedbacktickettype_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
+                             <option value="-2" { ifequal "-2" feedbacktickettype_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                             {% for tkttype in feedbacktickettype %}
+                                <option value="{{tkttype.id}}" {% ifequal tkttype.id feedbacktickettype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                   {{tkttype.name}}
+                                </option>
+                             {% endfor %}
+                          </select>
+                          <label>Мои тикеты: </label>
+                           <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
+                               <option value="-1" {% ifequal "-1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                               <option value="1" {% ifequal "1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                           </select>
+                          <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">Применить</button>
+                       </div>
+                    </form>
 
-            <div id="ajax_feedbackticketlistresult">{% include 'feedbacktickets_list.html' %}</div>
+                    <div id="ajax_feedbackticketlistresult">{% include 'feedbacktickets_list.html' %}</div>
 
-            {% else %}
+                    {% else %}
 
-               <p>Тикетов пока нет...</p>
+                       <p>Тикетов пока нет...</p>
 
-            {% endif %}
-
-            </div>
-
-            {% if len_task_list %}
-
-                <div class="object-list-right">
-
-                    <h4>Задачи</h4>
+                    {% endif %}
 
                 </div>
 
-            {% endif %}
+                    <div class="object-list-right">
+
+                        {% comment %}
+                        {% if len_task_list %}
+
+                            <h4>Задачи</h4>
+
+                            <div id="ajax_feedbackticketlistresult">{% include 'feedbacktasks_list.html' %}</div>
+
+                        {% else %}
+
+                            {% if is_support_member %}
+                                <p>Задач пока нет...</p>
+                            {% endif %}
+
+                        {% endif %}
+                        {% endcomment %}
+
+                        <div id="ajax_feedbackticketlistresult">{% include 'feedbacktasks_list.html' %}</div>
+
+                    </div>
 
             </div>
 

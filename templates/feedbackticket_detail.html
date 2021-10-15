@@ -24,11 +24,14 @@
                         <!-- <p>: <a href="{ url 'my_feedback:projects' current_feedbackticket.company.pk current_feedbackticket.parent.pk %}">{{ current_feedbackticket.parent.name }}</a></p>-->
                     {% endif %}
                     {% endcomment %}
-                    <!--<p>Бюджет: { current_feedbackticket.cost }} { current_feedbackticket.currency.shortname }}<i> (Освоено: { taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>-->
                     <p>Тип: {{ current_feedbackticket.type }}</p>
                     <p>Статус: {{ current_feedbackticket.status }}</p>
                     <!--<p>Затраченное время, час.: { hours }} час { minutes }}  мин { seconds|floatformat:0 }} сек</p>
                     <p>Выполнен на: { current_feedbackticket.percentage }} %</p>-->
+                    {% if is_support_member %}
+                        <p>Бюджет: {{ task_costsum.cost__sum|floatformat:2 }} {{ current_feedbackticket.company.currency.shortname }}
+                            <i>(Освоено: {{ ticketcomment_costsum.cost__sum|floatformat:2 }} + {{ taskcomment_costsum.cost__sum|floatformat:2 }} {{ current_feedbackticket.company.currency.shortname }})</i></p>
+                    {% endif %}
                     <p><em>Автор: {{ current_feedbackticket.author }}</em></p>
                     <!--<em>Участники: { current_feedbackticket.members.name }}</em><br /> -->
                     <p><em>Дата: {{ current_feedbackticket.datecreate }}</em></p>
