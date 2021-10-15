@@ -250,8 +250,9 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        is_support_member = self.request.session['_auth_user_issupportmember']
         # здесь нужно условие для 'action': 'create'
-        kwargs.update({'user': self.request.user, 'action': 'create', 'systemid': self.kwargs['systemid'], 'companyid': self.kwargs['companyid']})
+        kwargs.update({'user': self.request.user, 'action': 'create', 'systemid': self.kwargs['systemid'], 'companyid': self.kwargs['companyid'], 'is_support_member': is_support_member})
         return kwargs
 
 
