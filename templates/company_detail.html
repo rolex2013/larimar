@@ -26,7 +26,11 @@
            {% elif component_name == 'files' %}
                <a href="{% url 'my_file:folders' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
            {% elif component_name == 'feedback' %}
-               <a href="{% url 'my_feedback:tickets' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% if is_many_support_member %}
+                   <a href="{% url 'my_feedback:tickets' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% else %}
+                   {{ current_company.parent.name }}
+               {%  endif %}
            {% elif component_name == 'projects' %}
                <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
            {% endif %}

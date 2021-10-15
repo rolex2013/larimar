@@ -78,14 +78,21 @@ def companies(request, pk=0, razdel='projects'):
     component_name = razdel       
     request.session['_auth_user_currentcomponent'] = component_name
     template_name = "companies.html"
-
+    is_many_support_member = True
     if razdel == 'feedback':
-        nodes = Company.objects.filter(is_active=True, is_support=True)
+        is_support_member = request.session['_auth_user_issupportmember']
+        # сотрудникам Техподдержки показывать только те компании, где они работают
+        if is_support_member:
+            nodes = Company.objects.filter(is_active=True, is_support=True, id__in=comps)
+            if len(nodes) == 1:
+                # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
+                is_many_support_member = False
+        else:
+            nodes = Company.objects.filter(is_active=True, is_support=True)
     else:
         nodes = Company.objects.filter(is_active=True, id__in=comps)
     
     return render(request, template_name, {
-                              #'nodes':Company.objects.all(),
                               'nodes': nodes,
                               'current_company': current_company,
                               'root_company_id': root_company_id,
@@ -95,7 +102,8 @@ def companies(request, pk=0, razdel='projects'):
                               'button_company_create': button_company_create,
                               'button_StaffList': button_StaffList,
                               'object_list': 'company_list',
-                              'component_name': component_name,                              
+                              'component_name': component_name,
+                              'is_many_support_member': is_many_support_member,
                                             })  
 
 def tree_get_root(request, pk):
@@ -213,7 +221,7 @@ def stafflist(request, companyid=0, pk=0):
                               'current_company': current_company,
                               'companyid': companyid,
                               'user_companies': comps, 
-                              'button_company_select' : button_company_select,                                                        
+                              'button_company_select' : button_company_select,
                               'button_company_create': button_company_create,
                               'button_company_update' : button_company_update,                                             
                               #'button_StaffList': button_stafflist,

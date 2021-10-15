@@ -143,9 +143,6 @@ def feedbacktickets(request, companyid=0, pk=0):
        if currentuser == current_feedbackticket.author_id or currentuser == current_feedbackticket.assigner_id:
            obj_files_rights = 1
 
-    button_company_select = ''
-    button_feedbackticket_create = 'Добавить'
-
     comps = request.session['_auth_user_companies_id']
 
     # Заполняем списки справочников для фильтров
@@ -157,10 +154,26 @@ def feedbacktickets(request, companyid=0, pk=0):
     ticketstatus = Dict_FeedbackTicketStatus.objects.filter(id__in=status_list)
     tickettype = Dict_FeedbackTicketType.objects.filter(id__in=types_list)
 
+    #button_company_select = ''
+    button_company_select = 'Сменить службу техподдержки'
+    button_feedbackticket_create = 'Добавить'
     # Проверяем кол-во компаний - служб техподдержки
-    comps_support = Company.objects.filter(is_active=True, is_support=True)
-    if len(comps_support) > 1:
-       button_company_select = 'Сменить службу техподдержки'
+    #comps_support = Company.objects.filter(is_active=True, is_support=True)
+    is_many_support_member = True
+    is_support_member = request.session['_auth_user_issupportmember']
+    if is_support_member:
+        # сотрудникам Техподдержки показывать только те компании, где они работают
+        comps_support = Company.objects.filter(is_active=True, is_support=True, id__in=comps)
+        if len(comps_support) == 1:
+            # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
+            is_many_support_member = False
+            button_company_select = ''
+    else:
+        comps_support = Company.objects.filter(is_active=True, is_support=True)
+        #if len(comps_support) > 1:
+        #    button_company_select = 'Сменить службу техподдержки'
+        if len(comps_support) < 2:
+            button_company_select = ''
     #if currentuser == current_company.author_id:
     #   button_feedbackticket_create = 'Добавить'
     #if current_company.id in comps:
@@ -197,6 +210,7 @@ def feedbacktickets(request, companyid=0, pk=0):
                               'len_task_list': len_task_list,
                               'is_support_member': is_support_member,
                               'is_admin': is_admin,
+                              'is_many_support_member': is_many_support_member,
                               #'fullpath': os.path.join(settings.MEDIA_ROOT, '///'),
                                                 })
 
@@ -257,7 +271,6 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
         return context
 
     def get_form_kwargs(self):
-        # kwargs = super(ProjectUpdate, self).get_form_kwargs()
         kwargs = super().get_form_kwargs()
         is_support_member = self.request.session['_auth_user_issupportmember']
         # здесь нужно условие для 'action': 'update'
@@ -266,8 +279,6 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)  # без commit=False происходит вызов save() Модели
-        #af = self.add_files(form, 'feedback',
-        #                    'ticketcomment')  # добавляем файлы из формы (метод из AddFilesMixin) в Комментарий
         af = self.add_files(form, 'feedback', 'ticket')  # добавляем файлы из формы (метод из AddFilesMixin)
         comment = form.cleaned_data["comment"]
         self.object = form.save()
@@ -275,8 +286,8 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
             # создаём Комментарий к Тикету
             company_id = self.request.session['_auth_user_supportcompany_id']
             cmnt = FeedbackTicketComment.objects.create(ticket_id=self.object.id, company_id=company_id, author_id=form.instance.author_id,
-                                                 description=comment)
-        return super().form_valid(form)  # super(ProjectUpdate, self).form_valid(form)
+                                                        description=comment)
+        return super().form_valid(form)
 
 
 # *** FeedbackTask ***
