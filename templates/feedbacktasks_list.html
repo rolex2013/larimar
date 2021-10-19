@@ -17,17 +17,6 @@
              </option>   
           {% endfor %}
        </select>
-       {% comment %}
-       <label>По типу: </label>
-       <select name="select-tasktype" id="typeselectid" class="select-task-type">
-          <option value="-1" {% ifequal "-1" tsktype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-          {% for tsktype in tasktype %}
-             <option value="{{tsktype.id}}" {% ifequal tsktype.id tsktype_selectid|add:"0" %} selected="selected" {% endifequal %}>
-                {{tsktype.name}}
-             </option>   
-          {% endfor %}
-       </select>
-       {%  endcomment %}
        <label>Мои: </label>
        <select name="select-mytask" id="myselectid" class="select-my-task">
           <option value="-1" {% ifequal "-1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
@@ -40,8 +29,8 @@
     </div>
  </form>
 
- <div id="ajax_clienttasklistresult">{% include 'objects_list.html' %}</div>
- <div id="ajax_clienttasklisterrors"></div>
+ <div id="ajax_tickettasklistresult">{% include 'objects_list.html' %}</div>
+ <div id="ajax_tickettasklisterrors"></div>
 
 {% else %}
 
@@ -64,21 +53,21 @@
           console.log('===' + typeSelected)            
           $.ajax({
              type: 'GET',
-             url: "{% url 'my_crm:clienttask_filter' %}",
+             url: "{% url 'my_feedback:tickettask_filter' %}",
              data: {
-                clientid: {{ current_client.id }},                  
-                taskstatus: statusSelected,
-                tasktype: typeSelected,
-                mytaskuser: mytaskSelected
+                companyid: {{ current_company.id }},
+                ticketid: {{ current_ticketid }},
+                statusid: statusSelected,
+                my: mytaskSelected
              },
              success: function(data){
-                $('#ajax_clienttasklistresult').html(data);                  
+                $('#ajax_tickettasklistresult').html(data);
                 //alert(data);
              },
              error: function(xhr, errmsg, err){
                 console.log("error")
                 console.log(error_data)
-                $('#ajax_clienttasklisterrors').html('Нет данных!');
+                $('#ajax_tickettasklisterrors').html('Нет данных!');
              }               
           });
        });

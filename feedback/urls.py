@@ -29,6 +29,7 @@ urlpatterns = [
     path('tickettasks_page/<int:ticketid>/<int:pk>', views.feedbacktasks, name='feedbacktasks'),
 
     path('tickets_list/ticket_filter/', views.ticketfilter, name='ticket_filter'),
+    path('tickettasks_page/task_filter/', views.tickettaskfilter, name='tickettask_filter'),
 
     #path('tickets_page/<int:companyid>', views.FeedbackTicketViewSet.as_view({'get': 'list'}), name='tickets'),
     #path('tickets_list/ticket_create/<int:companyid>', views.FeedbackTicketViewSet.as_view({'get': 'create'}), name='ticket_create'),
