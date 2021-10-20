@@ -12,7 +12,7 @@
           <option value="0" {% ifequal 0 tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option> 
           <option value="-2" {% ifequal "-2" tskstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>                    
           {% for tskstatus in taskstatus %}
-             <option value="{{tskstatus.id}}" {% ifequal tskstatus.id tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+             <option value="{{ tskstatus.id }}" {% ifequal tskstatus.id tskstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
                 {{tskstatus.name}}
              </option>   
           {% endfor %}
@@ -20,7 +20,7 @@
        <label>Мои: </label>
        <select name="select-mytask" id="myselectid" class="select-my-task">
           <option value="-1" {% ifequal "-1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-          <option value="0" {% ifequal "0" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
+          <!--<option value="0" { ifequal "0" tskstatus_myselectid %} selected="selected" { endifequal %}>- Я участник</option>-->
           <option value="1" {% ifequal "1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
           <option value="2" {% ifequal "2" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
        </select>            
@@ -39,9 +39,9 @@
 {% endif %}
  
  <div class="object-list-buttons">
-    <a href="{ url 'my_feedback:feedbacktask_create' ticketid 0 %}">{{ button_feedbacktask_create }}</a>
+    <a href="{% url 'my_feedback:feedbacktask_create' current_ticketid 0 %}">{{ button_feedbacktask_create }}</a>
  </div>
-
+ <br />
 
  <script>
 

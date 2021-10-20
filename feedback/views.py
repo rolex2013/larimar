@@ -597,7 +597,7 @@ def ticketfilter(request):
         companyid = request.GET['companyid']
         statusid = request.GET['statusid']
         typeid = request.GET['typeid']
-        my = request.GET['my']
+        mytskuser = request.GET['my']
 
         currentuser = request.user.id
         current_company = Company.objects.filter(id=companyid).first()
@@ -618,8 +618,9 @@ def ticketfilter(request):
         if typeid != "-1":
             ticket_list = ticket_list.filter(type_id=typeid)
         # *** фильтр по принадлежности ***
-        if my == "1":
-            ticket_list = ticket_list.filter(author_id=currentuser)
+        if mytskuser == "1":
+            #ticket_list = ticket_list.filter(author_id=currentuser)
+            ticket_list = ticket_list.filter(Q(author=request.user.id))
         # **********
         #print(companyid, currentuser, statusid, typeid, my)
         nodes = ticket_list.distinct() #.order_by()
@@ -632,18 +633,23 @@ def ticketfilter(request):
         tickettype = Dict_FeedbackTicketType.objects.filter(is_active=True)
         #print(statuss_list, ticketstatus)
 
+        button_feedbackticket_create = 'Добавить'
+
+        len_list = len(nodes)
         object_message = ''
-        if len(nodes) == 0:
+        if len_list == 0:
            object_message = 'Тикеты не найдены!'
 
         return render(request, 'feedbacktickets_list.html', {'nodes_tickets': nodes,
                                                              'object_list': 'feedbacktask_list',
+                                                             'len_list': len_list,
                                                              'current_company': current_company,
                                                              'current_ticketid': 0,
                                                              'object_message': object_message,
                                                              'ticketstatus': ticketstatus,
                                                              'tickettype': tickettype,
-                                                             'myticketselectid': my,
+                                                             'myticketselectid': mytskuser,
+                                                             'button_feedbackticket_create': button_feedbackticket_create,
                                                             }
                       )
 
@@ -654,47 +660,51 @@ def tickettaskfilter(request):
         companyid = request.GET['companyid']
         ticketid = request.GET['ticketid']
         statusid = request.GET['statusid']
-        my = request.GET['my']
-        print(companyid,ticketid,statusid,my)
+        mytskuser = request.GET['my']
 
-        currentuser = request.user.id
+        #currentuser = request.user.id
         current_company = Company.objects.filter(id=companyid).first()
         if companyid == "0":
             companyid = request.session['_auth_user_currentcompany_id']
-        current_ticket = ''
+        #current_ticket = ''
         if ticketid == "0":
-            current_ticket = FeedbackTicket.objects.filter(id=ticketid).first()
             tickettask_list = FeedbackTask.objects.filter(is_active=True, ticket__company_id=companyid)
+            current_ticketid = 0
         else:
             current_ticket = FeedbackTicket.objects.filter(id=ticketid).first()
+            current_ticketid = current_ticket.id
             tickettask_list = FeedbackTask.objects.filter(is_active=True, ticket_id=ticketid)
-        print(tickettask_list)
+
         # *** фильтруем по статусу ***
         if statusid == "0":
             tickettask_list = tickettask_list.filter(dateclose__isnull=True)
         elif statusid == "-2":
-            tickettask_list = tickettask_list.filter(dateclose__lte=datetime.now())
+            tickettask_list = tickettask_list.filter(dateclose__isnull=True, dateend__lte=datetime.now())
         elif statusid != "-1":
             tickettask_list = tickettask_list.filter(status_id=statusid)
         # **********
-        #print(companyid, currentuser, statusid, typeid, my)
-        nodes = tickettask_list #.distinct() #.order_by()
-        #print(ticket_list, nodes)
-        #status_list = ticket_list.values('status_id')
-        #ticketstatus = Dict_FeedbackTicketStatus.objects.filter(id__in=status_list)
-        taskstatus = Dict_FeedbackTaskStatus.objects.filter(is_active=True)
-        print(nodes)
 
+        # *** фильтр по принадлежности ***
+        if mytskuser == "1":
+            tickettask_list = tickettask_list.filter(Q(author=request.user.id))
+        elif mytskuser == "2":
+            tickettask_list = tickettask_list.filter(Q(assigner=request.user.id))
+        # *******************************
+
+        nodes = tickettask_list.distinct() #.order_by()
+        taskstatus = Dict_FeedbackTaskStatus.objects.filter(is_active=True)
+
+        len_list = len(nodes)
         object_message = ''
-        if len(nodes) == 0:
+        if len_list == 0:
            object_message = 'Задачи не найдены!'
 
-        return render(request, 'feedbacktasks_list.html', {'nodes': nodes,
+        return render(request, 'objects_list.html', {'nodes': nodes,
                                                            'current_company': current_company,
-                                                           'current_ticketid': current_ticket.id,
+                                                           'current_ticketid': current_ticketid,
+                                                           'len_list': len_list,
                                                            'object_message': object_message,
                                                            'taskstatus': taskstatus,
-                                                           #'tickettype': tickettype,
-                                                           'mytickettaskselectid': my,
+                                                           'mytickettaskselectid': mytskuser,
                                                           }
                       )
