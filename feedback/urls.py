@@ -19,7 +19,7 @@ urlpatterns = [
     #path('systems_page/system_reg', views.SystemCreate.as_view(), name='system_reg'),
     path('systems_page/system_reg', views.Dict_SystemViewSet.as_view({'get': 'create'}), name='system_reg'),
     path('tickets_page0/', views.feedbacktickets, name='tickets0'),
-    path('tickets_page/<int:companyid>/<int:pk>', views.feedbacktickets, name='tickets'),
+    path('tickets_page/<int:companyid>', views.feedbacktickets, name='tickets'),
     path('tickets_page/ticket_create/<int:systemid>/<int:companyid>', views.FeedbackTicketCreate.as_view(),
          name='feedbackticket_create'),
     path('tickets_page/ticket_update/<int:pk>', views.FeedbackTicketUpdate.as_view(), name='feedbackticket_update'),

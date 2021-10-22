@@ -80,6 +80,7 @@ def companies(request, pk=0, razdel='projects'):
     template_name = "companies.html"
 
     is_many_support_member = True
+
     if razdel == 'feedback':
         is_support_member = request.session['_auth_user_issupportmember']
         # сотрудникам Техподдержки показывать только те компании, где они работают
@@ -95,6 +96,7 @@ def companies(request, pk=0, razdel='projects'):
 
     return render(request, template_name, {
                               'nodes': nodes,
+                              'len_list': len(nodes),
                               'current_company': current_company,
                               'root_company_id': root_company_id,
                               'tree_company_id': tree_company_id,
@@ -597,17 +599,18 @@ class ContentUpdate(UpdateView):
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def userroles(request, companyid=1, pk=1):
-    companyuser = User.objects.get(id=pk)
+    companyuser = User.objects.filter(id=pk).first()
+    companyname = Company.objects.filter(id=companyid).first()
     roles = UserCompanyComponentGroup.objects.filter(user_id=pk, company_id=companyid, is_active=True).order_by('component_id', 'group_id')
     componentlist = Component.objects.filter(is_active=True)
     grouplist = Group.objects.filter().exclude(name='Суперадминистраторы')
-    #print(roles)
     button_companyuser_update = 'Изменить'
     button_companyuserrole_create = 'Добавить'
     return render(request, 'company_user_detail.html', {
                                                         'nodes': roles,
                                                         'companyuser': companyuser,
                                                         'companyid': companyid,
+                                                        'companyname': companyname,
                                                         'componentlist': componentlist,
                                                         'grouplist': grouplist,                                                        
                                                         'button_companyuser_update': button_companyuser_update,

@@ -22,8 +22,16 @@
    <div class="object-list">
 
       <h3>Организации <!--{ current_company.name }}--></h3>
+
+      {% if len_list %}
    
-      <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
+        <div id="ajax_listresult">{% include 'objects_list.html' %}</div>
+
+      {% else %}
+
+          <div><b>В Системе нет ни одной Службы техподдержки!<br />Пожалуйста, обратитесь к Администратору Системы.</b></div>
+
+      {% endif %}
 
       <!--<div class="task-entry"></div><a href="{ url 'my_company:company_create' current_company.id %}" class="top-menu"><span class="badge badge-secondary">{ button_company_create }}</span></a></div>    -->
 

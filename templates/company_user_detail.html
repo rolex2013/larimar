@@ -7,11 +7,12 @@
 
 <div class="object-detail">
 
-      <h4>Пользователь: {{ companyuser.username }} <!--{ companyuser.username }}-->
+    <h4>Организация: {{ companyname }}</h4>
+      <h5>Пользователь: {{ companyuser.username }} <!--{ companyuser.username }}-->
         {% if not companyuser.is_active %}
            (Пользователь перемещен в архив)
         {% endif %}
-      </h4>      
+      </h5>
       <p><strong>ФИО:</strong> {{ companyuser.first_name }} {{ companyuser.last_name }}</p> <!--*** { request.user.first_name}}<br />-->
       <p><strong>E-mail:</strong> {{ companyuser.email }}</p>
       {% if not companyuser.is_staff %}

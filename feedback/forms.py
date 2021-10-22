@@ -57,6 +57,7 @@ class FeedbackTicketForm(forms.ModelForm):
             super().__init__(*args, **kwargs)
             companyid = self.company
             #systemid = self.system
+            self.fields['comment'].widget = forms.HiddenInput()
         else:
             super().__init__(*args, **kwargs)
             companyid = self.instance.company_id

@@ -40,14 +40,19 @@ def definerights(request, companyid):
     is_superadmin = False
     is_admin_org = False
     is_admin = False
-    # Является ли юзер сотрудником этой Службы поддержки?
-    if companyid in request.session['_auth_user_companies_id']:
-        is_support_member = True
-    # Является ли юзер Администратором этой Службы поддержки?
-    is_support_admin_org = UserCompanyComponentGroup.objects.filter(user_id=currentuser, company_id=companyid,
-                                                            group_id=2)
-    if is_support_admin_org:
-        is_support_admin_org = True
+
+    current_company = Company.objects.filter(id=companyid).first()
+
+    if current_company.is_support == True:
+        # Является ли юзер сотрудником этой Службы поддержки?
+        if companyid in request.session['_auth_user_companies_id']:
+            is_support_member = True
+        # Является ли юзер Администратором этой Службы поддержки?
+        is_support_admin_org = UserCompanyComponentGroup.objects.filter(user_id=currentuser, company_id=companyid,
+                                                                group_id=2)
+        if is_support_admin_org:
+            is_support_admin_org = True
+
     # Является ли юзер Администратором своей организации?
     is_admin_org = UserCompanyComponentGroup.objects.filter(user_id=currentuser, company_id=currentusercompanyid, group_id=2)
     if is_admin_org:
@@ -61,31 +66,51 @@ def definerights(request, companyid):
     return(is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin)
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def feedbacktickets(request, companyid=0, pk=0):
+def feedbacktickets(request, companyid=0):
 
     currentuser = request.user.id
     currentusercompanyid = request.session['_auth_user_currentcompany_id']
-
+    #print(companyid)
     if companyid == 0:
+        #companyid = currentusercompanyid
+        # Проверяем наличие хоть одной Службы поддержки в Системе
+        support_list = Company.objects.filter(is_active=True, is_support=True)
+        support_count = len(support_list)
+        #print(support_count)
+        if support_count == 0:
+            # В системе нет ни одной Службы техподдержки!
+            return render(request, "companies.html", {'len_list':0})
+        elif support_count == 1:
+            # В системе только одна Служба техподдержки
+            companyid = support_list[0].id
+            #print('1/',support_list[0].name)
+        else:
+            # В системе несколько Служб техподдержки.
+            try:
+                # Пробуем выбрать по последнему отправленному тикету
+                mylastticket = FeedbackTicket.objects.filter(is_active=True, author_id=currentuser).order_by('-id')[0]
+                companyid = mylastticket.company_id
+                #print('2/+++', mylastticket.company.name)
+            except:
+                # если тикет не найден, то выбираем первую Службу техподдержки
+                companyid = support_list[0].id
+                #print('2/---',support_list[0].name)
 
-        try:
-            mylastticket = FeedbackTicket.objects.filter(is_active=True, author_id=currentuser).order_by('-id')[0]
-            companyid = mylastticket.company_id
-        except:
-            companyid = currentusercompanyid
+    #mycompanies = '_auth_user_companies_id'
+    #mysupportcompany = Company.objects.filter(is_active=True, id__in=mycompanies)[0]
+    current_company = Company.objects.filter(id=companyid).first()
 
-        #print(companyid)
-
-    request.session['_auth_user_currentcomponent'] = 'feedbacktickets'
+    request.session['_auth_user_currentcomponent'] = 'feedback'
 
     # Видимость пункта "- Все" в фильтрах
     (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request,companyid)
 
     request.session['_auth_user_issupportmember'] = is_support_member
-    if is_support_member:
-        request.session['_auth_user_supportcompany_id'] = companyid
-    else:
-        request.session['_auth_user_supportcompany_id'] = currentusercompanyid
+    #if is_support_member:
+    #    request.session['_auth_user_supportcompany_id'] = companyid
+    #else:
+    #    request.session['_auth_user_supportcompany_id'] = currentusercompanyid
+    request.session['_auth_user_supportcompany_id'] = companyid
 
     # *** фильтруем по статусу ***
     tktstatus_selectid = 0
@@ -123,25 +148,24 @@ def feedbacktickets(request, companyid=0, pk=0):
     # *******************************
     #feedbackticket_list = feedbackticket_list.order_by('dateclose')
 
+    button_feedbackticketdev_create = ''
     len_task_list = 0
     if is_support_member == True:
         feedbackticket_task_list = FeedbackTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id), is_active=True, ticket__company=companyid,
                                                         dateclose__isnull=True)
         len_task_list = len(feedbackticket_task_list)
         #print(len_task_list)
+        button_feedbackticketdev_create = 'Обращение к разработчику'
 
     len_list = len(feedbackticket_list)
 
-    current_company = Company.objects.get(id=companyid)
-
-    obj_files_rights = 0
-
-    if pk == 0:
-       current_feedbackticket = 0
-    else:
-       current_feedbackticket = FeedbackTicket.objects.get(id=pk)
-       if currentuser == current_feedbackticket.author_id or currentuser == current_feedbackticket.assigner_id:
-           obj_files_rights = 1
+    #obj_files_rights = 0
+    #if pk == 0:
+    #   current_feedbackticket = 0
+    #else:
+    #   current_feedbackticket = FeedbackTicket.objects.get(id=pk)
+    #   if currentuser == current_feedbackticket.author_id or currentuser == current_feedbackticket.assigner_id:
+    #       obj_files_rights = 1
 
     comps = request.session['_auth_user_companies_id']
 
@@ -170,10 +194,13 @@ def feedbacktickets(request, companyid=0, pk=0):
             is_many_support_member = False
             button_company_select = ''
 
-        # Список всех задач этого сотрудника техподдержки
+        # Список всех задач этого сотрудника этой техподдержки
+        #task_list = FeedbackTask.objects.filter(
+        #                    Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id=currentusercompanyid,
+        #                    is_active=True, dateclose__isnull=True)
         task_list = FeedbackTask.objects.filter(
-                            Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id=currentusercompanyid,
-                            is_active=True, dateclose__isnull=True)
+            Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id=current_company.id,
+            is_active=True, dateclose__isnull=True)
     else:
         comps_support = Company.objects.filter(is_active=True, is_support=True)
         if len(comps_support) < 2:
@@ -190,32 +217,33 @@ def feedbacktickets(request, companyid=0, pk=0):
         dsys.save()
 
     return render(request, "company_detail.html", {
-                              'nodes_tickets': feedbackticket_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
-                              'nodes': task_list, #.distinct(), #.order_by(),
-                              'component_name': 'feedback',
-                              'current_feedbackticket': current_feedbackticket,
-                              'current_company': current_company,
-                              'current_ticketid': 0,
-                              'companyid': companyid,
-                              'user_companies': comps,
-                              'obj_files_rights': obj_files_rights,
-                              'button_company_select': button_company_select,
-                              'button_feedbackticket_create': button_feedbackticket_create,
-                              'feedbackticketstatus': ticketstatus,
-                              'feedbackticketstatus_selectid': '0',
-                              'feedbacktickettype': tickettype,
-                              'feedbacktickettype_selectid': '-1',
-                              'feedbackticket_myselectid': '1',
-                              #'tktstatus_myselectid': tktstatus_myselectid,
-                              'object_list': 'feedbacktask_list',
-                              #'select_feedbackticketstatus': select_feedbackticketstatus,
-                              'taskstatus': Dict_FeedbackTaskStatus.objects.filter(is_active=True),
-                              'len_list': len_list,
-                              'len_task_list': len_task_list,
-                              'is_support_member': is_support_member,
-                              'is_admin': is_admin,
-                              'is_many_support_member': is_many_support_member,
-                              #'fullpath': os.path.join(settings.MEDIA_ROOT, '///'),
+                                                  'nodes_tickets': feedbackticket_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
+                                                  'nodes': task_list, #.distinct(), #.order_by(),
+                                                  'component_name': 'feedback',
+                                                  #'current_feedbackticket': current_feedbackticket,
+                                                  'current_company': current_company,
+                                                  'current_ticketid': 0,
+                                                  'companyid': companyid,
+                                                  'user_companies': comps,
+                                                  #'obj_files_rights': obj_files_rights,
+                                                  'button_company_select': button_company_select,
+                                                  'button_feedbackticket_create': button_feedbackticket_create,
+                                                  'button_feedbackticketdev_create': button_feedbackticketdev_create,
+                                                  'feedbackticketstatus': ticketstatus,
+                                                  'feedbackticketstatus_selectid': '0',
+                                                  'feedbacktickettype': tickettype,
+                                                  'feedbacktickettype_selectid': '-1',
+                                                  'feedbackticket_myselectid': '1',
+                                                  #'tktstatus_myselectid': tktstatus_myselectid,
+                                                  'object_list': 'feedbacktask_list',
+                                                  #'select_feedbackticketstatus': select_feedbackticketstatus,
+                                                  'taskstatus': Dict_FeedbackTaskStatus.objects.filter(is_active=True),
+                                                  'len_list': len_list,
+                                                  'len_task_list': len_task_list,
+                                                  'is_support_member': is_support_member,
+                                                  'is_admin': is_admin,
+                                                  'is_many_support_member': is_many_support_member,
+                                                  #'fullpath': os.path.join(settings.MEDIA_ROOT, '///'),
                                                 })
 
 

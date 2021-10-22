@@ -16,7 +16,7 @@
 
                 <div class="object-detail-left">
                     <p>{% autoescape off %}{{ current_feedbackticket.description }}{% endautoescape %}</p>
-                    <i><p>Организация: <span class="hint hint--bottom hint--info" data-hint="Тикеты организации"><a href="{% url 'my_feedback:tickets' current_feedbackticket.company.pk 0 %}">{{ current_feedbackticket.company }}</a></span></p></i>
+                    <i><p>Организация: <span class="hint hint--bottom hint--info" data-hint="Тикеты организации"><a href="{% url 'my_feedback:tickets' current_feedbackticket.company.pk %}">{{ current_feedbackticket.company }}</a></span></p></i>
                     {% comment %}
                     {% if current_feedbackticket.parent %}
                         <p>Уровень выше: <a href="{% url 'my_feedback:tasks' current_feedbackticket.parent.pk 0 %}">{{ current_feedbackticket.parent.name }}</a></p>
