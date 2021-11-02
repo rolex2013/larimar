@@ -3,7 +3,7 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 from .models import Company, FeedbackTicket, FeedbackTask, FeedbackTaskComment, FeedbackTicketComment, FeedbackFile
 # from .models import FeedbackTicketStatusLog, TaskStatusLog
-from .models import Dict_FeedbackTicketStatus, Dict_FeedbackTaskStatus
+from .models import Dict_System, Dict_FeedbackTicketStatus, Dict_FeedbackTaskStatus
 from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
@@ -16,6 +16,21 @@ import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 
+
+class Dict_SystemForm(forms.ModelForm):
+    #files = forms.FileField(label='Файлы комментария тикета', widget=forms.ClearableFileInput(attrs={'multiple': True}),
+    #                        required=False)
+
+    #def __init__(self, *args, **kwargs):
+    #    self.is_support_member = kwargs.pop('is_support_member')
+    #    super().__init__(*args, **kwargs)
+    #    if not self.is_support_member:
+    #        self.fields['time'].widget = forms.HiddenInput()
+    #        self.fields['cost'].widget = forms.HiddenInput()
+
+    class Meta:
+        model = Dict_System
+        fields = ['name', 'domain', 'url', 'ip', 'email', 'phone']
 
 class FeedbackTicketForm(forms.ModelForm):
     # datebegin = forms.DateField(widget=AdminDateWidget())

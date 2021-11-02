@@ -1,7 +1,7 @@
 # serializers.py
 from rest_framework import serializers
 
-from .models import Dict_System, FeedbackTicket
+from .models import Dict_System, FeedbackTicket, FeedbackTicketComment
 from companies.models import Company
 
 class Dict_SystemSerializer(serializers.HyperlinkedModelSerializer):
@@ -10,18 +10,34 @@ class Dict_SystemSerializer(serializers.HyperlinkedModelSerializer):
         model = Dict_System
         fields = ('code', 'name', 'domain', 'url', 'ip', 'email', 'phone', 'datecreate', 'dateclose', 'is_active')
 
+class CompanySerializer(serializers.HyperlinkedModelSerializer):
+    #url = serializers.HyperlinkedIdentityField(view_name="company_detail", lookup_field='name', read_only=True)
+    class Meta:
+        model = Company
+        #fields = ('code', 'name', 'domain', 'url', 'ip', 'email', 'phone', 'datecreate', 'dateclose', 'is_active')
+        exclude = ('is_active',)
+
 class FeedbackTicketSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="my_feedback:feedbackticket-detail")
     system = serializers.HyperlinkedIdentityField(view_name="my_feedback:dict_system-detail")
-    #company = serializers.HyperlinkedIdentityField(view_name="my_company:company-detail")
-    company = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    #company = serializers.HyperlinkedRelatedField(view_name="my_company:company_detail", lookup_field='name', read_only=True)
+    company = CompanySerializer()
+    #company = serializers.SlugRelatedField(slug_field="name", read_only=True)
     #type = serializers.HyperlinkedIdentityField(view_name="my_feedback:dict_feedbacktype-detail")
     type = serializers.SlugRelatedField(slug_field="name", read_only=True)
     #status = serializers.HyperlinkedIdentityField(view_name="my_feedback:dict_feedbackstatus-detail")
     status = serializers.SlugRelatedField(slug_field="name", read_only=True)
     author = serializers.SlugRelatedField(slug_field="username", read_only=True)
-
     class Meta:
         model = FeedbackTicket
         #fields = ('url', 'id_local', 'name', 'description', 'system', 'company', 'type', 'status', 'datecreate', 'dateclose', 'author', 'is_active')
+        exclude = ('is_active',)
+
+class FeedbackTicketCommentSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name="my_feedback:feedbackticketcomment-detail")
+    system = serializers.HyperlinkedIdentityField(view_name="my_feedback:dict_system-detail")
+    ticket = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    author = serializers.SlugRelatedField(slug_field="username", read_only=True)
+    class Meta:
+        model = FeedbackTicketComment
         exclude = ('is_active',)

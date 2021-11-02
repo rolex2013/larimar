@@ -1,13 +1,3 @@
-   <!-- Защита от прямого доступа к проектам компании - декоратор @login_required во view -->
-
-      <!--<div class="object-list">-->
-
-<!--{ if data == 'Нет данных!'%}
-
-   <p><strong>Нет данных!!!</strong></p>
-
-{ else %}   -->
-
          {% load mptt_tags %}
  
          <ul>
@@ -79,8 +69,5 @@
            {% endrecursetree %}
          </ul> 
          <p><em>{{ object_message }}</em></p>
-
-
-<!--{ endif %}-->
 
       

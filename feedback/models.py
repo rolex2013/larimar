@@ -29,7 +29,9 @@ class Dict_System(models.Model):
         verbose_name = 'Система'
         verbose_name_plural = 'Системы'
     def __str__(self):
-        return (self.name)
+        return (self.name + '. ' + self.code + '. ' + self.domain)
+    def get_absolute_url(self):
+        return reverse('my_feedback:tickets0')
 
 class Dict_FeedbackTicketStatus(models.Model):
     name = models.CharField("Наименование", max_length=64)

@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.shortcuts import render
+import json, requests
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.decorators import login_required
@@ -8,29 +9,114 @@ from django.db.models import Q, Count, Min, Max, Sum, Avg
 
 from datetime import datetime, date, time
 
-from rest_framework import viewsets
 
-from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer
+from .serializers import Dict_SystemSerializer, CompanySerializer, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
 from companies.models import Company, UserCompanyComponentGroup
 from .models import Dict_System, Dict_FeedbackTicketStatus, Dict_FeedbackTicketType, Dict_FeedbackTaskStatus
 from .models import FeedbackTicket, FeedbackTicketComment, FeedbackTask, FeedbackTaskComment, FeedbackFile
-from .forms import FeedbackTicketForm, FeedbackTaskForm, FeedbackTicketCommentForm, FeedbackTaskCommentForm
+from .forms import Dict_SystemForm, FeedbackTicketForm, FeedbackTaskForm, FeedbackTicketCommentForm, FeedbackTaskCommentForm
 
 from main.utils import AddFilesMixin
 
+from rest_framework.generics import get_object_or_404
+from rest_framework import viewsets
+from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
+from rest_framework.response import Response
+
+# *** API техподдержки ***
 
 class Dict_SystemViewSet(viewsets.ModelViewSet):
     queryset = Dict_System.objects.all() #.order_by('name')
     serializer_class = Dict_SystemSerializer
 
+class CompanyViewSet(viewsets.ModelViewSet):
+    queryset = Company.objects.all() #.order_by('name')
+    serializer_class = CompanySerializer
 
 class FeedbackTicketViewSet(viewsets.ModelViewSet):
     queryset = FeedbackTicket.objects.filter(is_active=True).order_by('-datecreate')
     serializer_class = FeedbackTicketSerializer
+    filter_fields = ('name', 'description',)
+    """
+    #def get(self, request):
+    def list(self, request):
+        tickets = FeedbackTicket.objects.all()
+        serializer = FeedbackTicketSerializer(tickets, many=True)
+        return Response({"tickets": serializer.data})
+    #def post(self, request):
+    def create(self, request):
+        ticket = request.data.get("ticket")
+        # Create an ticket from the above data
+        serializer = FeedbackTicketSerializer(data=ticket)
+        if serializer.is_valid(raise_exception=True):
+            ticket_saved = serializer.save()
+        return Response({"success": "Ticket '{}' created successfully".format(ticket_saved.title)})
+    #def put(self, request, pk):
+    def retrieve(self, request, pk):
+        saved_ticket = get_object_or_404(FeedbackTicket.objects.all(), pk=pk)
+        data = request.data.get('ticket')
+        serializer = FeedbackTicketSerializer(instance=saved_ticket, data=data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            ticket_saved = serializer.save()
+        return Response({
+            "success": "Ticket '{}' updated successfully".format(ticket_saved.title)
+        })
+    """
+class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
+    queryset = FeedbackTicketComment.objects.filter(is_active=True).order_by('-datecreate')
+    serializer_class = FeedbackTicketCommentSerializer
     #filter_fields = ('username', 'is_player', 'first_name', 'last_name', 'team', 'email',)
 
 #def FeedbackTicketCreateAPI(request):
 #    return
+
+# ******
+
+class Dict_SystemCreate(CreateView):
+    model = Dict_System
+    form_class = Dict_SystemForm
+    #template_name = 'feedbackticket_create.html'
+    template_name = 'object_form.html'
+
+    #def get_success_url(self):
+    #    print(self.object) # Prints the name of the submitted user
+    #    print(self.object.id) # Prints None
+    #    return reverse("webApp:feedbackticket:stepTwo", args=(self.object.id,))
+
+    def form_valid(self, form):
+    #    form.instance.system_id = self.kwargs['systemid']
+    #    form.instance.company_id = self.kwargs['companyid']
+    #    form.instance.author_id = self.request.user.id
+    #    form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
+    #    form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
+    #    #form.instance.system_id = 1  # Новый Тикет временно приписываем к локальной Системе
+        self.object = form.save() # Созадём новую Систему
+        ##print(dsys_cnt)
+        # http_host = request.META['HTTP_HOST']
+        ##print(http_host)
+        ##dsys = Dict_System.objects.create(code='===', name='1YES!', domain=http_host, url=http_host, is_active=True)
+        ##dsys.save()
+        # *** Добавление системы в удалённую БД ***
+        headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+        system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': self.object.ip, 'email': self.object.email, 'phone': self.object.phone}
+        r = requests.post('http://1yes.larimaritgroup.ru/feedback/system/', headers=headers, data=json.dumps(system_data))
+        print(r.status_code)
+        #print(self.object.name)
+        # ***
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['header'] = 'Регистрация новой Системы'
+        return context
+
+    #def get_form_kwargs(self):
+    #    kwargs = super().get_form_kwargs()
+    #    is_support_member = self.request.session['_auth_user_issupportmember']
+    #    # здесь нужно условие для 'action': 'create'
+    #    kwargs.update({'action': 'create', 'name': self.kwargs['systemid'], 'companyid': self.kwargs['companyid'], 'is_support_member': is_support_member})
+    #    return kwargs
+
 
 def definerights(request, companyid):
     currentuser = request.user.id
@@ -208,13 +294,10 @@ def feedbacktickets(request, companyid=0):
         task_list = ''
 
     # Добавляем Систему в справочник
+    is_system_reged = True
     dsys_cnt = Dict_System.objects.filter(is_active=True).count()
     if dsys_cnt == 0:
-        #print(dsys_cnt)
-        http_host = request.META['HTTP_HOST']
-        #print(http_host)
-        dsys = Dict_System.objects.create(code='===', name='1YES!', domain=http_host, url=http_host, is_active=True)
-        dsys.save()
+        is_system_reged = False
 
     return render(request, "company_detail.html", {
                                                   'nodes_tickets': feedbackticket_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
@@ -227,6 +310,7 @@ def feedbacktickets(request, companyid=0):
                                                   'user_companies': comps,
                                                   #'obj_files_rights': obj_files_rights,
                                                   'button_company_select': button_company_select,
+                                                  'is_system_reged': is_system_reged,
                                                   'button_feedbackticket_create': button_feedbackticket_create,
                                                   'button_feedbackticketdev_create': button_feedbackticketdev_create,
                                                   'feedbackticketstatus': ticketstatus,

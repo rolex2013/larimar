@@ -11,13 +11,21 @@ app_name = 'my_feedback'
 
 router = routers.DefaultRouter()
 router.register(r'system', views.Dict_SystemViewSet)
+#router.register(r'company', views.CompanyViewSet)
 router.register(r'ticket', views.FeedbackTicketViewSet)
+router.register(r'ticketcomment', views.FeedbackTicketCommentViewSet)
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     #path('systems_page/system_reg', views.SystemCreate.as_view(), name='system_reg'),
-    path('systems_page/system_reg', views.Dict_SystemViewSet.as_view({'get': 'create'}), name='system_reg'),
+    #path('api/system_reg', views.Dict_SystemViewSet.as_view({'get': 'create'}), name='system_reg'),
+    #path('api/ticket_create', views.FeedbackTicketViewSet.as_view({'get': 'list'}), name='ticket_create'),
+    #path('api/tickets', views.FeedbackTicketViewSet.as_view({'get': 'create'}), name='ticket_create'),
+    #path('api/ticketcomment_create', views.FeedbackTicketCommentViewSet.as_view({'get': 'create'}), name='ticketcomment_create'),
+    #path('company_detail/', views.CompanyViewSet.as_view({'get': 'create'}), name='company_detail'),
+
+    path('system_page/system_create/', views.Dict_SystemCreate.as_view(), name='feedbacksystem_create'),
     path('tickets_page0/', views.feedbacktickets, name='tickets0'),
     path('tickets_page/<int:companyid>', views.feedbacktickets, name='tickets'),
     path('tickets_page/ticket_create/<int:systemid>/<int:companyid>', views.FeedbackTicketCreate.as_view(),

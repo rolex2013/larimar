@@ -15,7 +15,7 @@ from companies.models import Dict_PositionType, StaffList, Staff, Summary
 
 from projects.models import Dict_ProjectStructureType, Dict_TaskStructureType
 from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType, Dict_TaskStatus
-from projects.models import Project, Task, TaskComment, ProjectFile
+#from projects.models import Project, Task, TaskComment, ProjectFile
 #from projects.models import ProjectStatusLog, TaskStatusLog
 
 from crm.models import Dict_ClientTaskStructureType
@@ -40,11 +40,11 @@ from django_mptt_admin.admin import DjangoMpttAdmin
 class CompanyAdmin(DjangoMpttAdmin):
     pass
 
-class ProjectAdmin(DjangoMpttAdmin):
-    pass
+#class ProjectAdmin(DjangoMpttAdmin):
+#    pass
 
-class TaskAdmin(DjangoMpttAdmin):
-    pass
+#class TaskAdmin(DjangoMpttAdmin):
+#    pass
 
 #class TaskCommentAdmin(DjangoMpttAdmin):
 #    pass
@@ -58,14 +58,14 @@ class MenuItemAdmin(DjangoMpttAdmin):
 class Dict_ThemeAdmin(DjangoMpttAdmin):
     pass
 
-class StaffListAdmin(DjangoMpttAdmin):
-    pass
+#class StaffListAdmin(DjangoMpttAdmin):
+#    pass
 
-class ClientTaskAdmin(DjangoMpttAdmin):
-    pass
+#class ClientTaskAdmin(DjangoMpttAdmin):
+#    pass
 
-class FolderAdmin(DjangoMpttAdmin):
-    pass
+#class FolderAdmin(DjangoMpttAdmin):
+#    pass
 
 
 admin.site.register(UserProfile)
@@ -79,7 +79,7 @@ admin.site.register(Dict_ProtocolType)
 
 admin.site.register(Dict_Theme, Dict_ThemeAdmin)
 
-admin.site.register(Notification)
+#admin.site.register(Notification)
 
 admin.site.register(Menu)
 
@@ -96,11 +96,11 @@ admin.site.register(Company, CompanyAdmin)
 admin.site.register(UserCompanyComponentGroup)
 
 
-admin.site.register(Project, ProjectAdmin)
+#admin.site.register(Project, ProjectAdmin)
 
-admin.site.register(Task, TaskAdmin)
+#admin.site.register(Task, TaskAdmin)
 
-admin.site.register(ClientTask, ClientTaskAdmin)
+#admin.site.register(ClientTask, ClientTaskAdmin)
 
 #admin.site.register(TaskComment, TaskCommentAdmin)
 
@@ -112,7 +112,7 @@ admin.site.register(Dict_CompanyType)
 
 admin.site.register(Dict_PositionType)
 
-admin.site.register(StaffList, StaffListAdmin)
+#admin.site.register(StaffList, StaffListAdmin)
 
 admin.site.register(Staff)
 
@@ -138,9 +138,9 @@ admin.site.register(Dict_TaskType)
 
 admin.site.register(Dict_TaskStatus)
 
-admin.site.register(TaskComment)
+#admin.site.register(TaskComment)
 
-admin.site.register(ProjectFile)
+#admin.site.register(ProjectFile)
 
 #admin.site.register(ProjectStatusLog)
 
@@ -162,13 +162,13 @@ admin.site.register(Dict_ClientEventType)
 
 admin.site.register(Dict_ClientEventStatus)
 
-admin.site.register(Client)
+#admin.site.register(Client)
 
-admin.site.register(ClientEvent)
+#admin.site.register(ClientEvent)
 
-admin.site.register(ClientTaskComment)
+#admin.site.register(ClientTaskComment)
 
-admin.site.register(ClientEventComment)
+#admin.site.register(ClientEventComment)
 
 #admin.site.register(ClientStatusLog)
 
@@ -186,19 +186,19 @@ admin.site.register(Dict_DocTaskType)
 
 admin.site.register(Dict_DocTaskStatus)
 
-admin.site.register(Doc)
+#admin.site.register(Doc)
 
-admin.site.register(DocVer)
+#admin.site.register(DocVer)
 
-admin.site.register(DocTask)
+#admin.site.register(DocTask)
 
-admin.site.register(DocTaskComment)
+#admin.site.register(DocTaskComment)
 
 # files
 
 admin.site.register(Dict_FolderType)
 
-admin.site.register(Folder, FolderAdmin)
+#admin.site.register(Folder, FolderAdmin)
 
 # feedback
 
@@ -210,5 +210,5 @@ admin.site.register(Dict_FeedbackTicketStatus)
 
 admin.site.register(Dict_FeedbackTaskStatus)
 
-admin.site.register(FeedbackTicket)
+#admin.site.register(FeedbackTicket)
 
