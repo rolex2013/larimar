@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'django_tables2',
     'rest_framework',
+    #'corsheaders',
     #'menu',
     'accounts',
     'main', 
@@ -72,6 +73,8 @@ INSTALLED_APPS = [
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 'PAGE_SIZE': 10
 }
+
+#CORS_ORIGIN_WHITELIST = ('localhost:8000',)
 
 BOOTSTRAP4 = {
     'include_jquery': True,
