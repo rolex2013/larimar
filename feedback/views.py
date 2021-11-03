@@ -19,7 +19,7 @@ from .forms import Dict_SystemForm, FeedbackTicketForm, FeedbackTaskForm, Feedba
 from main.utils import AddFilesMixin
 
 from rest_framework.generics import get_object_or_404
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
 from rest_framework.response import Response
 
@@ -28,6 +28,20 @@ from rest_framework.response import Response
 class Dict_SystemViewSet(viewsets.ModelViewSet):
     queryset = Dict_System.objects.all() #.order_by('name')
     serializer_class = Dict_SystemSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def create(self, request):
+        #print("запись добавлена!")
+        #pass
+        sys_data = request.data
+        ip = sys_data["ip"]
+        # здесь надо вставить определение ip пришедшего запроса!
+        ip = 'кроказябра!'
+        new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=ip, email=sys_data["email"], phone=sys_data["phone"])
+        new_sys.save()
+        serializer = Dict_SystemSerializer(new_sys)
+        return Response(serializer.data)
+
 
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all() #.order_by('name')
@@ -99,7 +113,9 @@ class Dict_SystemCreate(CreateView):
         # *** Добавление системы в удалённую БД ***
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
         system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': self.object.ip, 'email': self.object.email, 'phone': self.object.phone}
-        r = requests.post('http://1yes.larimaritgroup.ru/feedback/system/', headers=headers, data=json.dumps(system_data))
+        url = 'http://1yes.larimaritgroup.ru/feedback/api/system/'
+        #url = 'http://localhost:8000/feedback/api/system/'
+        r = requests.post(url, headers=headers, data=json.dumps(system_data))
         print(r.status_code)
         #print(self.object.name)
         # ***

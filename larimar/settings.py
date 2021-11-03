@@ -69,6 +69,10 @@ INSTALLED_APPS = [
     'feedback',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 'PAGE_SIZE': 10
+}
+
 BOOTSTRAP4 = {
     'include_jquery': True,
 }
