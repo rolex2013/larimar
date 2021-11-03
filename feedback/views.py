@@ -36,6 +36,16 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
     serializer_class = Dict_SystemSerializer
     #permission_classes = [permissions.IsAuthenticated]
 
+    def get_serializer_context(self):
+        """
+        Extra context provided to the serializer class.
+        """
+        return {
+            'request': self.request,
+            'format': self.format_kwarg,
+            'view': self
+        }
+
     #@csrf_exempt
     def create(self, request):
         #print("запись добавлена!")
