@@ -48,8 +48,6 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
 
     #@csrf_exempt
     def create(self, request):
-        #print("запись добавлена!")
-        #pass
         sys_data = request.data
         ip = sys_data["ip"]
         # здесь надо вставить определение ip пришедшего запроса!
