@@ -31,7 +31,7 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
     serializer_class = Dict_SystemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    @csrf_exempt
+    #@csrf_exempt
     def create(self, request):
         #print("запись добавлена!")
         #pass
