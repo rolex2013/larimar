@@ -27,13 +27,14 @@ from django.views.decorators.csrf import csrf_protect, requires_csrf_token, csrf
 
 # *** API техподдержки ***
 
-decorators = [csrf_exempt, requires_csrf_token]
+#decorators = [csrf_exempt, requires_csrf_token]
+decorators = [csrf_exempt]
 
 @method_decorator(decorators, name='create')
 class Dict_SystemViewSet(viewsets.ModelViewSet):
     queryset = Dict_System.objects.all() #.order_by('name')
     serializer_class = Dict_SystemSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated]
 
     #@csrf_exempt
     def create(self, request):
