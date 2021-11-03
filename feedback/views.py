@@ -22,16 +22,18 @@ from rest_framework.generics import get_object_or_404
 from rest_framework import viewsets, permissions
 from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
 from rest_framework.response import Response
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 
 # *** API техподдержки ***
 
+@method_decorator(csrf_exempt, name='create')
 class Dict_SystemViewSet(viewsets.ModelViewSet):
     queryset = Dict_System.objects.all() #.order_by('name')
     serializer_class = Dict_SystemSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    @csrf_exempt
+    #@csrf_exempt
     def create(self, request):
         #print("запись добавлена!")
         #pass
