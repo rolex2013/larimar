@@ -54,9 +54,9 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
         ip = sys_data["ip"]
         # здесь надо вставить определение ip пришедшего запроса!
         ip = 'кроказябра!'
-        #new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=ip, email=sys_data["email"], phone=sys_data["phone"])
-        new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"],
-                                             email=sys_data["email"], phone=sys_data["phone"])
+        new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=ip, email=sys_data["email"], phone=sys_data["phone"])
+        #new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"],
+        #                                     email=sys_data["email"], phone=sys_data["phone"])
         new_sys.save()
         serializer = Dict_SystemSerializer(new_sys, context={'request': request})
         return Response(serializer.data)
