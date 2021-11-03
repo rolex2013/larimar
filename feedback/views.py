@@ -123,7 +123,8 @@ class Dict_SystemCreate(CreateView):
         system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': self.object.ip, 'email': self.object.email, 'phone': self.object.phone}
         url = 'http://1yes.larimaritgroup.ru/feedback/api/system/'
         #url = 'http://localhost:8000/feedback/api/system/'
-        r = requests.post(url, headers=headers, csrfmiddlewaretoken=csrftoken, data=json.dumps(system_data))
+        r = requests.post(url, headers=headers, data=json.dumps(system_data))
+        #r = requests.post(url, headers=headers, csrfmiddlewaretoken=csrftoken, data=json.dumps(system_data))
         print(r.status_code)
         #print(self.object.name)
         # ***
