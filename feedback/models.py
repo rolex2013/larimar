@@ -23,7 +23,7 @@ class Dict_System(models.Model):
     phone = models.CharField("Контактный телефон", max_length=15, blank=True, null=True)
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
-    requestcode = models.IntegerField("Код завершения операции", blank=True, null=True)
+    requeststatuscode = models.IntegerField("Код завершения операции", blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)
     class Meta:
         #ordering = ('sort',)

@@ -164,7 +164,7 @@ class Dict_SystemCreate(CreateView):
         #r = requests.post(url, headers=headers, csrfmiddlewaretoken=csrftoken, data=json.dumps(system_data))
         print(r.status_code)
         #print(self.object.name)
-        sys_cur = Dict_System.objects.filter(id=self.object.id).update(code=code, request_status=r.status_code)
+        sys_cur = Dict_System.objects.filter(id=self.object.id).update(code=code, ip=ip, requeststatuscode=r.status_code)
         sys_cur.save()
         # ***
         return super().form_valid(form)
