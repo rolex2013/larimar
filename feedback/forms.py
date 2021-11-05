@@ -30,7 +30,8 @@ class Dict_SystemForm(forms.ModelForm):
 
     class Meta:
         model = Dict_System
-        fields = ['name', 'domain', 'url', 'ip', 'email', 'phone']
+        #fields = ['name', 'domain', 'url', 'ip', 'email', 'phone']
+        fields = ['name', 'domain', 'url', 'email', 'phone']
 
 class FeedbackTicketForm(forms.ModelForm):
     # datebegin = forms.DateField(widget=AdminDateWidget())

@@ -1,6 +1,9 @@
 from django.conf import settings
 from django.shortcuts import render
 import json, requests
+
+import random, string
+
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView
 from django.contrib.auth.decorators import login_required
@@ -24,6 +27,21 @@ from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer, Feedba
 from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, requires_csrf_token, csrf_exempt
+
+
+def get_client_ip(request):
+    """  Getting client Ip"""
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+def generate_alphanum_random_string(length):
+    letters_and_digits = string.ascii_letters + string.digits
+    rand_string = ''.join(random.sample(letters_and_digits, length))
+    print("Alphanum Random string of length", length, "is:", rand_string)
 
 # *** API техподдержки ***
 
@@ -50,14 +68,19 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
     def create(self, request):
         sys_data = request.data
         ip = sys_data["ip"]
-        # здесь надо вставить определение ip пришедшего запроса!
-        ip = 'кроказябра!'
-        new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=ip, email=sys_data["email"], phone=sys_data["phone"])
+        # Определение ip пришедшего запроса
+        #ip = 'кроказябра!'
+        # Генерация уникального кода для регистрируемой Системы
+        code = generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4)
+        new_sys = Dict_System.objects.create(code=code, name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=ip, email=sys_data["email"], phone=sys_data["phone"])
         #new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"],
         #                                     email=sys_data["email"], phone=sys_data["phone"])
         new_sys.save()
         serializer = Dict_SystemSerializer(new_sys, context={'request': request})
         return Response(serializer.data)
+
+    #def update(self, request, pk=None):
+    #    return Response(serializer.data)
 
 
 class CompanyViewSet(viewsets.ModelViewSet):
@@ -128,8 +151,12 @@ class Dict_SystemCreate(CreateView):
         ##dsys = Dict_System.objects.create(code='===', name='1YES!', domain=http_host, url=http_host, is_active=True)
         ##dsys.save()
         # *** Добавление системы в удалённую БД ***
+        ip = get_client_ip(self.request)
+        print('ip=', ip)
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-        system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': self.object.ip, 'email': self.object.email, 'phone': self.object.phone}
+        #system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': self.object.ip, 'email': self.object.email, 'phone': self.object.phone}
+        system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': ip,
+                       'email': self.object.email, 'phone': self.object.phone}
         url = 'http://1yes.larimaritgroup.ru/feedback/api/system/'
         #url = 'http://localhost:8000/feedback/api/system/'
         r = requests.post(url, headers=headers, data=json.dumps(system_data))
