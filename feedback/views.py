@@ -137,35 +137,26 @@ class Dict_SystemCreate(CreateView):
     #    return reverse("webApp:feedbackticket:stepTwo", args=(self.object.id,))
 
     def form_valid(self, form):
-    #    form.instance.system_id = self.kwargs['systemid']
-    #    form.instance.company_id = self.kwargs['companyid']
-    #    form.instance.author_id = self.request.user.id
-    #    form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
-    #    form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
-    #    #form.instance.system_id = 1  # Новый Тикет временно приписываем к локальной Системе
-        self.object = form.save() # Созадём новую Систему
-        ##print(dsys_cnt)
-        # http_host = request.META['HTTP_HOST']
-        ##print(http_host)
-        ##dsys = Dict_System.objects.create(code='===', name='1YES!', domain=http_host, url=http_host, is_active=True)
-        ##dsys.save()
+        #self.object = form.save() # Созадём новую Систему
         # *** Добавление системы в удалённую БД ***
         ip = get_client_ip(self.request)
         # генерация уникального кода для регистрируемой Системы
         code = generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4)
-        print('ip=', ip, '   code=', code)
+        #print('ip=', ip, '   code=', code)
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
         #system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': self.object.ip, 'email': self.object.email, 'phone': self.object.phone}
-        system_data = {'code': code, 'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': ip,
-                       'email': self.object.email, 'phone': self.object.phone}
+        #system_data = {'code': code, 'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': ip,
+        #               'email': self.object.email, 'phone': self.object.phone}
+        system_data = {'code': code, 'name': form.cleaned_data["name"], 'domain': form.cleaned_data["domain"], 'url': form.cleaned_data["url"],
+                       'ip': ip, 'email': form.cleaned_data["email"], 'phone': form.cleaned_data["phone"]}
         url = 'http://1yes.larimaritgroup.ru/feedback/api/system/'
         #url = 'http://localhost:8000/feedback/api/system/'
         r = requests.post(url, headers=headers, data=json.dumps(system_data))
         #r = requests.post(url, headers=headers, csrfmiddlewaretoken=csrftoken, data=json.dumps(system_data))
-        print(r.status_code)
-        #print(self.object.name)
-        sys_cur = Dict_System.objects.filter(id=self.object.id).update(code=code, ip=ip, requeststatuscode=r.status_code)
-        sys_cur.save()
+        form.instance.code = code
+        form.instance.ip = ip
+        form.instance.requeststatuscode = r.status_code
+        self.object = form.save()  # Создаём новую Систему
         # ***
         return super().form_valid(form)
 
