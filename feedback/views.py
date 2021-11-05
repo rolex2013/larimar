@@ -70,9 +70,7 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
         ip = sys_data["ip"]
         # Определение ip пришедшего запроса
         #ip = 'кроказябра!'
-        # Генерация уникального кода для регистрируемой Системы
-        code = generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4)
-        new_sys = Dict_System.objects.create(code=code, name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=ip, email=sys_data["email"], phone=sys_data["phone"])
+        new_sys = Dict_System.objects.create(code=sys_data["code"], name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=ip, email=sys_data["email"], phone=sys_data["phone"])
         #new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"],
         #                                     email=sys_data["email"], phone=sys_data["phone"])
         new_sys.save()
@@ -152,10 +150,12 @@ class Dict_SystemCreate(CreateView):
         ##dsys.save()
         # *** Добавление системы в удалённую БД ***
         ip = get_client_ip(self.request)
-        print('ip=', ip)
+        # генерация уникального кода для регистрируемой Системы
+        code = generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4)
+        print('ip=', ip, '   code=', code)
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
         #system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': self.object.ip, 'email': self.object.email, 'phone': self.object.phone}
-        system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': ip,
+        system_data = {'code': code, 'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': ip,
                        'email': self.object.email, 'phone': self.object.phone}
         url = 'http://1yes.larimaritgroup.ru/feedback/api/system/'
         #url = 'http://localhost:8000/feedback/api/system/'
