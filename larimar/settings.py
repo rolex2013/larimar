@@ -262,7 +262,8 @@ else:
          },
          'NAME': 'larimarit_1yes',
          'USER': 'larimarit_1yes',
-         'PASSWORD': 'CucumbeR@000',
+         #'PASSWORD': 'CucumbeR@000',
+         'PASSWORD': 'NikolaevnA@@@1959',
          'HOST': '127.0.0.1',
          #'PORT': '5432'
          'PORT': '3306'
