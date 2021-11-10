@@ -246,11 +246,11 @@ if sys.platform == "win32":
    """
 else:
 
-   ALLOWED_HOSTS = ['1yes.larimaritgroup.ru']
+   ALLOWED_HOSTS = ['larimaritgroup.ru']
 
    STATIC_URL = '/larimar/static/'
-   STATICFILES_DIRS = ('/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static',)
-   STATIC_ROOT = '/home/l/larimarit/1yes.larimaritgroup.ru/public_html/larimar/static/static_collected'
+   STATICFILES_DIRS = ('/home/l/larimagu/larimaritgroup.ru/public_html/larimar/static',)
+   STATIC_ROOT = '/home/l/larimargu/larimaritgroup.ru/public_html/larimar/static/static_collected'
 
    DATABASES = {
       'default': {
