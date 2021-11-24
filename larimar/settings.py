@@ -15,6 +15,7 @@ import sys
 
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+import logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -81,7 +82,7 @@ BOOTSTRAP4 = {
 }
 
 MIDDLEWARE = [
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -209,9 +210,30 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 GOOGLE_RECAPTCHA_SECRET_KEY = '6LesNnsaAAAAAOVy87nqWSHTsN2XQ_lgbPpKO5_T'   
 
 if sys.platform == "win32":
+#if_os = 1
+#if if_os == 0:
    # для разработки
+   """ 
+   LOGGING = {
+       'version': 1,
+       'disable_existing_loggers': False,
+       'handlers': {
+           'console': {
+               'class': 'logging.StreamHandler',
+           },
+       },
+       'loggers': {
+           'django': {
+               'handlers': ['console'],
+               'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+           },
+       },
+   }
+   """
 
    DEBUG = True
+   MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
+
    INTERNAL_IPS = [
        '127.0.0.1',
        '192.168.88.153',
@@ -260,10 +282,10 @@ else:
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
          },
-         'NAME': 'larimarit_1yes',
-         'USER': 'larimarit_1yes',
-         #'PASSWORD': 'CucumbeR@000',
-         'PASSWORD': 'NikolaevnA@@@1959',
+         'NAME': 'larimagu_1yes',
+         'USER': 'larimagu_1yes',
+         'PASSWORD': 'CucumbeR@000',
+         #'PASSWORD': 'NikolaevnA@@@1959',
          'HOST': '127.0.0.1',
          #'PORT': '5432'
          'PORT': '3306'
