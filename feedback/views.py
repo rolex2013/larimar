@@ -81,6 +81,7 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
                            'ip': sys_local.ip, 'email': sys_local.email, 'phone': sys_local.phone, 'is_local': False, 'req': False}
             url = url + '/feedback/api/system/'
             r = requests.post(url, headers=headers, data=json.dumps(system_data))
+            new_sys = Dict_System.objects.filter(id=new_sys.id)
             new_sys.requeststatuscode = r.status_code
             new_sys.save()
 
