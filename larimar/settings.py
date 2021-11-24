@@ -268,7 +268,7 @@ if sys.platform == "win32":
    """
 else:
 
-   ALLOWED_HOSTS = ['larimaritgroup.ru']
+   ALLOWED_HOSTS = ['larimaritgroup.ru', '1yes.larimaritgroup.ru']
 
    STATIC_URL = '/larimar/static/'
    STATICFILES_DIRS = ('/home/l/larimagu/larimaritgroup.ru/public_html/larimar/static',)
