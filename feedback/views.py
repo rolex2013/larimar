@@ -69,7 +69,7 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
     def create(self, request):
         sys_data = request.data
         new_sys = Dict_System.objects.create(code=sys_data["code"], name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=sys_data["ip"], email=sys_data["email"], phone=sys_data["phone"], is_local=sys_data["is_local"])
-        new_sys.save()
+        #new_sys.save()
         serializer = Dict_SystemSerializer(new_sys, context={'request': request})
         sys_local = Dict_System.objects.filter(is_local=True, is_active=True).first()
         if sys_data["req"] == True:
