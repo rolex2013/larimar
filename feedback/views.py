@@ -75,11 +75,11 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
         if sys_data["req"] == True:
             # *** Добавление системы разработчика в удалённую БД ***
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            ip = get_client_ip(self.request)
-            url = self.request.build_absolute_uri('/')[:-1]
+            #ip = get_client_ip(self.request)
+            #url = self.request.build_absolute_uri('/')[:-1]
             system_data = {'code': sys_local.code, 'name': sys_local.name, 'domain': sys_local.domain, 'url': sys_local.url,
                            'ip': sys_local.ip, 'email': sys_local.email, 'phone': sys_local.phone, 'is_local': False, 'req': False}
-            url = url + '/feedback/api/system/'
+            url = sys_data["url"] + '/feedback/api/system/'
             r = requests.post(url, headers=headers, data=json.dumps(system_data))
             upd_sys = Dict_System.objects.filter(id=new_sys.id)
             upd_sys.requeststatuscode = r.status_code
