@@ -53,4 +53,10 @@ urlpatterns = [
          name='feedbacktaskcomment_create'),
     #path('taskcomments_list/taskcomment_update/<int:pk>', views.FeedbackTaskCommentUpdate.as_view(), name='feedbacktaskcomment_update'),
 
+    # Тикеты с Разработчиком
+    #path('ticketsdev_page0/', views.feedbackticketsdev, name='ticketsdev0'),
+    #path('ticketsdev_page/<int:systemid>', views.feedbackticketsdev, name='ticketsdev'),
+    #path('ticketsdev_page/ticketdev_create/<int:systemid>/<int:systemid>', views.FeedbackTicketDevCreate.as_view(), name='feedbackticketdev_create'),
+    # ***
+
 ]

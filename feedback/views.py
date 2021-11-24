@@ -68,14 +68,22 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
     #@csrf_exempt
     def create(self, request):
         sys_data = request.data
-        ip = sys_data["ip"]
-        # Определение ip пришедшего запроса
-        #ip = 'кроказябра!'
-        new_sys = Dict_System.objects.create(code=sys_data["code"], name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=ip, email=sys_data["email"], phone=sys_data["phone"])
-        #new_sys = Dict_System.objects.create(name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"],
-        #                                     email=sys_data["email"], phone=sys_data["phone"])
+        new_sys = Dict_System.objects.create(code=sys_data["code"], name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=sys_data["ip"], email=sys_data["email"], phone=sys_data["phone"], is_local=sys_data["is_local"])
         new_sys.save()
         serializer = Dict_SystemSerializer(new_sys, context={'request': request})
+        sys_local = Dict_System.objects.filter(is_local=True, is_active=True).first()
+        if sys_data["req"] == True:
+            # *** Добавление системы разработчика в удалённую БД ***
+            headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+            ip = get_client_ip(self.request)
+            url = self.request.build_absolute_uri('/')[:-1]
+            system_data = {'code': sys_local.code, 'name': sys_local.name, 'domain': sys_local.domain, 'url': sys_local.url,
+                           'ip': sys_local.ip, 'email': sys_local.email, 'phone': sys_local.phone, 'is_local': False, 'req': False}
+            url = url + '/feedback/api/system/'
+            r = requests.post(url, headers=headers, data=json.dumps(system_data))
+            new_sys.requeststatuscode = r.status_code
+            new_sys.save()
+
         return Response(serializer.data)
 
     #def update(self, request, pk=None):
@@ -140,6 +148,8 @@ class Dict_SystemCreate(CreateView):
         #self.object = form.save() # Созадём новую Систему
         # *** Добавление системы в удалённую БД ***
         ip = get_client_ip(self.request)
+        url = self.request.build_absolute_uri('/')[:-1]
+        #print(self.request.build_absolute_uri('/')[:-1])
         # генерация уникального кода для регистрируемой Системы
         code = generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4) + '-' + generate_alphanum_random_string(4)
         #print('ip=', ip, '   code=', code)
@@ -147,14 +157,17 @@ class Dict_SystemCreate(CreateView):
         #system_data = {'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': self.object.ip, 'email': self.object.email, 'phone': self.object.phone}
         #system_data = {'code': code, 'name': self.object.name, 'domain': self.object.domain, 'url': self.object.url, 'ip': ip,
         #               'email': self.object.email, 'phone': self.object.phone}
-        system_data = {'code': code, 'name': form.cleaned_data["name"], 'domain': form.cleaned_data["domain"], 'url': form.cleaned_data["url"],
-                       'ip': ip, 'email': form.cleaned_data["email"], 'phone': form.cleaned_data["phone"]}
-        url = 'http://1yes.larimaritgroup.ru/feedback/api/system/'
+        #system_data = {'code': code, 'name': form.cleaned_data["name"], 'domain': form.cleaned_data["domain"], 'url': form.cleaned_data["url"],
+        #               'ip': ip, 'email': form.cleaned_data["email"], 'phone': form.cleaned_data["phone"]}
+        system_data = {'code': code, 'name': form.cleaned_data["name"], 'domain': form.cleaned_data["domain"], 'url': url,
+                       'ip': ip, 'email': form.cleaned_data["email"], 'phone': form.cleaned_data["phone"], 'is_local': False, 'req': True}
+        url_dev = 'http://1yes.larimaritgroup.ru/feedback/api/system/'
         #url = 'http://localhost:8000/feedback/api/system/'
-        r = requests.post(url, headers=headers, data=json.dumps(system_data))
+        r = requests.post(url_dev, headers=headers, data=json.dumps(system_data))
         #r = requests.post(url, headers=headers, csrfmiddlewaretoken=csrftoken, data=json.dumps(system_data))
         form.instance.code = code
         form.instance.ip = ip
+        form.instance.url = url
         form.instance.requeststatuscode = r.status_code
         self.object = form.save()  # Создаём новую Систему
         # ***
@@ -289,6 +302,7 @@ def feedbacktickets(request, companyid=0):
     # *******************************
     #feedbackticket_list = feedbackticket_list.order_by('dateclose')
 
+    button_feedbackticketdev = ''
     button_feedbackticketdev_create = ''
     len_task_list = 0
     if is_support_member == True:
@@ -296,7 +310,8 @@ def feedbacktickets(request, companyid=0):
                                                         dateclose__isnull=True)
         len_task_list = len(feedbackticket_task_list)
         #print(len_task_list)
-        button_feedbackticketdev_create = 'Обращение к разработчику'
+        button_feedbackticketdev = 'Обращение к разработчику'
+        button_feedbackticketdev_create = 'Добавить'
 
     len_list = len(feedbackticket_list)
 
@@ -345,7 +360,7 @@ def feedbacktickets(request, companyid=0):
     else:
         comps_support = Company.objects.filter(is_active=True, is_support=True)
         if len(comps_support) < 2:
-            button_company_select = ''
+            button_feedbackcompany_select = ''
         task_list = ''
 
     # Добавляем Систему в справочник
@@ -366,6 +381,7 @@ def feedbacktickets(request, companyid=0):
                                                   #'obj_files_rights': obj_files_rights,
                                                   'button_company_select': button_company_select,
                                                   'is_system_reged': is_system_reged,
+                                                  'button_feedbackticketdev': button_feedbackticketdev,
                                                   'button_feedbackticket_create': button_feedbackticket_create,
                                                   'button_feedbackticketdev_create': button_feedbackticketdev_create,
                                                   'feedbackticketstatus': ticketstatus,

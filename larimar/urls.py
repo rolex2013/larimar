@@ -19,8 +19,10 @@ from django.contrib import admin
 from django.urls import path, include
 
 from django.conf.urls.static import static
+from django.views.generic import RedirectView
 
 urlpatterns = [
+    path('favicon.ico/', RedirectView.as_view(url='/static/image/favicon.ico')),
     path('admin/', admin.site.urls),
     #path('', include('accounts.urls')),
     #path('main/', include('main.urls')),

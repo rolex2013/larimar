@@ -19,11 +19,12 @@ class Dict_System(models.Model):
     domain = models.CharField("Наименование домена", max_length=64, blank=True, null=True)
     url = models.CharField("url", max_length=128)
     ip = models.CharField("ip-адрес", max_length=15, blank=True, null=True)
-    email = models.CharField("Контактный e-mail", max_length=15, blank=True, null=True)
+    email = models.CharField("Контактный e-mail", max_length=64, blank=True, null=True)
     phone = models.CharField("Контактный телефон", max_length=15, blank=True, null=True)
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     requeststatuscode = models.IntegerField("Код завершения операции", blank=True, null=True)
+    is_local = models.BooleanField("Локальность", default=True)
     is_active = models.BooleanField("Активность", default=True)
     class Meta:
         #ordering = ('sort',)
