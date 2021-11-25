@@ -78,7 +78,7 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
             #ip = get_client_ip(self.request)
             #url = self.request.build_absolute_uri('/')[:-1]
             system_data = {'code': sys_local.code, 'name': sys_local.name, 'domain': sys_local.domain, 'url': sys_local.url,
-                           'ip': sys_local.ip, 'email': sys_local.email, 'phone': sys_local.phone, 'is_local': False, 'req': False}
+                           'ip': sys_local.ip, 'email': sys_local.email, 'phone': sys_local.phone, 'requeststatuscode': '200', 'is_local': False, 'req': False}
             url = sys_data["url"] + '/feedback/api/system/'
             url = 'http://larimaritgroup.ru/feedback/api/system/'
             r = requests.post(url, headers=headers, data=json.dumps(system_data))
