@@ -8,7 +8,7 @@ class Dict_SystemSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(view_name="my_feedback:dict_system-detail")
     class Meta:
         model = Dict_System
-        fields = ('code', 'name', 'domain', 'url', 'ip', 'email', 'phone', 'datecreate', 'dateclose', 'is_active')
+        fields = ('code', 'name', 'domain', 'url', 'ip', 'email', 'phone', 'datecreate', 'dateclose', 'is_local', 'requeststatuscode', 'is_active')
 
 class CompanySerializer(serializers.HyperlinkedModelSerializer):
     #url = serializers.HyperlinkedIdentityField(view_name="company_detail", lookup_field='name', read_only=True)
