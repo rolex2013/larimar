@@ -126,7 +126,17 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
     """
     def create(self, request):
         ticket_data = request.data
-        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], status=ticket_data["status"], type=ticket_data["type"])
+        try:
+            type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
+            type_id = type.id
+        except:
+            type_id = 1
+        try:
+            status = Dict_FeedbackTicketStatus.objects.filter(name=ticket_data["status"]).first()
+            status_id = status.id
+        except:
+            status_id = 1
+        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], status=status_id, type=type_id)
         #new_ticket.save()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
         return Response(serializer.data)
@@ -449,10 +459,10 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         sys = Dict_System.objects.filter(id=form.instance.system_id).first()
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': form.instance.status, 'type': form.instance.type} #, 'companyfrom': form.instance.companyfrom_id}
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type)} #, 'companyfrom': form.instance.companyfrom_id}
             url_dev = 'http://1yes.larimaritgroup.ru/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
-            form.instance.requeststatuscode = r.status_code
+            #form.instance.requeststatuscode = r.status_code
         self.object = form.save()  # Созадём новый тикет
         af = self.add_files(form, 'feedback', 'ticket')  # добавляем файлы из формы (метод из AddFilesMixin)
         return super().form_valid(form)
