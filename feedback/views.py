@@ -85,7 +85,6 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
             upd_sys = Dict_System.objects.filter(id=new_sys.id)
             upd_sys.requeststatuscode = r.status_code
             upd_sys.save()
-
         return Response(serializer.data)
 
     #def update(self, request, pk=None):
@@ -125,6 +124,13 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             "success": "Ticket '{}' updated successfully".format(ticket_saved.title)
         })
     """
+    def create(self, request):
+        ticket_data = request.data
+        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], status=ticket_data["status"], type=ticket_data["type"])
+        #new_ticket.save()
+        serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
+        return Response(serializer.data)
+
 class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
     queryset = FeedbackTicketComment.objects.filter(is_active=True).order_by('-datecreate')
     serializer_class = FeedbackTicketCommentSerializer
@@ -222,7 +228,7 @@ def definerights(request, companyid):
     return(is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin)
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def feedbacktickets(request, companyid=0):
+def feedbacktickets(request, systemid=1, companyid=0):
 
     currentuser = request.user.id
     currentusercompanyid = request.session['_auth_user_currentcompany_id']
@@ -259,7 +265,7 @@ def feedbacktickets(request, companyid=0):
     request.session['_auth_user_currentcomponent'] = 'feedback'
 
     # Видимость пункта "- Все" в фильтрах
-    (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request,companyid)
+    (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request, companyid)
 
     request.session['_auth_user_issupportmember'] = is_support_member
     #if is_support_member:
@@ -275,30 +281,30 @@ def feedbacktickets(request, companyid=0):
        tktstatus = request.POST['select_feedbackticketstatus']
     except:
         if is_support_member:
-            feedbackticket_list = FeedbackTicket.objects.filter(is_active=True,
+            feedbackticket_list = FeedbackTicket.objects.filter(is_active=True, system_id=systemid,
                                                                 company=companyid, dateclose__isnull=True)
         else:
-            feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True,
+            feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, system_id=systemid,
                                                                 company=companyid, dateclose__isnull=True)
     else:
        if tktstatus == "0":
            # если в выпадающем списке выбрано "Все активные"
-           feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, dateclose__isnull=True)
+           feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, system_id=systemid, company=companyid, dateclose__isnull=True)
        else:
           if tktstatus == "-1":
              # если в выпадающем списке выбрано "Все"
              if is_superadmin:
                 # Суперадмин видит все тикеты всех организаций этой Службы поддержки
-                feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid)
+                feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, system_id=systemid, company=companyid)
              elif is_admin_org:
                  # Админ Организации видит все тикеты своей организации этой Службы поддержки
-                feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True,
+                feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, system_id=systemid,
                                                                      company=companyid, companyfrom=currentusercompanyid)
           elif tktstatus == "-2":
              # если в выпадающем списке выбрано "Просроченные"
-             feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.datetime.now())
+             feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, system_id=systemid, company=companyid, dateclose__isnull=True, dateend__lt=datetime.datetime.now())
           else:
-             feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, company=companyid, status=tktstatus) #, dateclose__isnull=True)
+             feedbackticket_list = FeedbackTicket.objects.filter(Q(author=request.user.id), is_active=True, system_id=systemid, company=companyid, status=tktstatus) #, dateclose__isnull=True)
        tktstatus_selectid = tktstatus
     #tktstatus_myselectid = mytktstatus
     # *******************************
@@ -371,13 +377,23 @@ def feedbacktickets(request, companyid=0):
     if dsys_cnt == 0:
         is_system_reged = False
 
-    return render(request, "company_detail.html", {
+    systemdev = Dict_System.objects.filter(is_active=True, is_local=False).first()
+
+    if systemid == 1:
+        template_name = "company_detail.html"
+    else:
+        template_name = "feedbacksystemdev_detail.html"
+
+    return render(request, template_name, {
                                                   'nodes_tickets': feedbackticket_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
                                                   'nodes': task_list, #.distinct(), #.order_by(),
                                                   'component_name': 'feedback',
                                                   #'current_feedbackticket': current_feedbackticket,
                                                   'current_company': current_company,
                                                   'current_ticketid': 0,
+                                                  'systemdev': systemdev,
+                                                  'systemid': systemid,
+                                                  #'systemdevid': systemdev.id,
                                                   'companyid': companyid,
                                                   'user_companies': comps,
                                                   #'obj_files_rights': obj_files_rights,
@@ -427,8 +443,18 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
         form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
         #form.instance.system_id = 1  # Новый Тикет временно приписываем к локальной Системе
-        self.object = form.save() # Созадём новый тикет
-        af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
+        #self.object = form.save() # Созадём новый тикет
+        #af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
+        # отправляем тикет разработчику
+        sys = Dict_System.objects.filter(id=form.instance.system_id).first()
+        if sys.is_local == False:
+            headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+            ticket_data = {'name': self.name, 'description': self.description, 'status': form.instance.status_id, 'type': self.type} #, 'companyfrom': form.instance.companyfrom_id}
+            url_dev = 'http://1yes.larimaritgroup.ru/feedback/api/ticket/'
+            r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
+            form.instance.requeststatuscode = r.status_code
+        self.object = form.save()  # Созадём новый тикет
+        af = self.add_files(form, 'feedback', 'ticket')  # добавляем файлы из формы (метод из AddFilesMixin)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -440,6 +466,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         kwargs = super().get_form_kwargs()
         is_support_member = self.request.session['_auth_user_issupportmember']
         # здесь нужно условие для 'action': 'create'
+        #print(self.kwargs['systemid'])
         kwargs.update({'user': self.request.user, 'action': 'create', 'systemid': self.kwargs['systemid'], 'companyid': self.kwargs['companyid'], 'is_support_member': is_support_member})
         return kwargs
 
@@ -779,6 +806,7 @@ class FeedbackTaskCommentUpdate(UpdateView):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def ticketfilter(request):
 
+        systemid = request.GET['systemid']
         companyid = request.GET['companyid']
         statusid = request.GET['statusid']
         typeid = request.GET['typeid']
@@ -789,7 +817,7 @@ def ticketfilter(request):
         if companyid == 0:
             companyid = request.session['_auth_user_currentcompany_id']
 
-        ticket_list = FeedbackTicket.objects.filter(is_active=True, company_id=companyid)
+        ticket_list = FeedbackTicket.objects.filter(is_active=True, system_id=systemid, company_id=companyid)
 
         # *** фильтруем по статусу ***
         if statusid == "0":
@@ -817,6 +845,7 @@ def ticketfilter(request):
         ticketstatus = Dict_FeedbackTicketStatus.objects.filter(is_active=True)
         tickettype = Dict_FeedbackTicketType.objects.filter(is_active=True)
         #print(statuss_list, ticketstatus)
+        #print(systemid, companyid, ticket_list)
 
         button_feedbackticket_create = 'Добавить'
 

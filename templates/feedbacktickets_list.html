@@ -11,5 +11,5 @@
 <p><em>{{ object_message }}</em></p>
 
 <div class="object-list-buttons">
-    <a href="{% url 'my_feedback:feedbackticket_create' 1 current_company.id %}">{{ button_feedbackticket_create }}</a>
+    <a href="{% url 'my_feedback:feedbackticket_create' systemid current_company.id %}">{{ button_feedbackticket_create }}</a>
 </div>

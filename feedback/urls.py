@@ -26,8 +26,8 @@ urlpatterns = [
     #path('company_detail/', views.CompanyViewSet.as_view({'get': 'create'}), name='company_detail'),
 
     path('system_page/system_create/', views.Dict_SystemCreate.as_view(), name='feedbacksystem_create'),
-    path('tickets_page0/', views.feedbacktickets, name='tickets0'),
-    path('tickets_page/<int:companyid>', views.feedbacktickets, name='tickets'),
+    path('tickets_page0/<int:systemid>', views.feedbacktickets, name='tickets0'),
+    path('tickets_page/<int:systemid>/<int:companyid>', views.feedbacktickets, name='tickets'),
     path('tickets_page/ticket_create/<int:systemid>/<int:companyid>', views.FeedbackTicketCreate.as_view(),
          name='feedbackticket_create'),
     path('tickets_page/ticket_update/<int:pk>', views.FeedbackTicketUpdate.as_view(), name='feedbackticket_update'),
@@ -54,7 +54,7 @@ urlpatterns = [
     #path('taskcomments_list/taskcomment_update/<int:pk>', views.FeedbackTaskCommentUpdate.as_view(), name='feedbacktaskcomment_update'),
 
     # Тикеты с Разработчиком
-    #path('ticketsdev_page0/', views.feedbackticketsdev, name='ticketsdev0'),
+    #path('ticketsdev_page0/', views.FeedbackTicketDevCreate.as_view(), name='ticketsdev0'),
     #path('ticketsdev_page/<int:systemid>', views.feedbackticketsdev, name='ticketsdev'),
     #path('ticketsdev_page/ticketdev_create/<int:systemid>/<int:systemid>', views.FeedbackTicketDevCreate.as_view(), name='feedbackticketdev_create'),
     # ***

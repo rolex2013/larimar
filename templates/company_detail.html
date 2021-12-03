@@ -28,7 +28,7 @@
            {% elif component_name == 'feedback' %}
                {% if is_many_support_member %}
                    {% if current_company.parent.is_support %}
-                        <a href="{% url 'my_feedback:tickets' current_company.parent.pk %}">{{ current_company.parent.name }}</a>
+                        <a href="{% url 'my_feedback:tickets' systemid current_company.parent.pk %}">{{ current_company.parent.name }}</a>
                    {% else %}
                        {{ current_company.parent.name }}
                    {% endif %}
@@ -63,7 +63,7 @@
               {% elif component_name == 'feedback' %}
                  <a href="{% url 'my_company:companies' 0 'feedback' %}">{{ button_company_select }}</a>
                   {% if is_system_reged %}
-                    <!--<a href="{ url 'my_feedback:feedbackticketsdev0' %}">-->
+                    <a href="{% url 'my_feedback:tickets0' systemdev.id %}">
                   {% else %}
                     <a href="{% url 'my_feedback:feedbacksystem_create' %}">
                   {% endif %}
@@ -539,6 +539,7 @@
                type: 'GET',
                url: "{% url 'my_feedback:ticket_filter' %}",
                data: {
+                  systemid: {{ systemid }},
                   companyid: {{ current_company.id }},
                   statusid: statusSelected,
                   typeid: typeSelected,
