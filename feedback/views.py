@@ -458,18 +458,17 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
         form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
         #form.instance.system_id = 1  # Новый Тикет временно приписываем к локальной Системе
-        #self.object = form.save() # Созадём новый тикет
-        #af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
+        self.object = form.save() # Созадём новый тикет
+        af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
         # отправляем тикет разработчику
         sys = Dict_System.objects.filter(id=form.instance.system_id).first()
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type)} #, 'companyfrom': form.instance.companyfrom_id}
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id)} #, 'companyfrom': form.instance.companyfrom_id}
             url_dev = 'http://1yes.larimaritgroup.ru/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             #form.instance.requeststatuscode = r.status_code
-        self.object = form.save()  # Созадём новый тикет
-        af = self.add_files(form, 'feedback', 'ticket')  # добавляем файлы из формы (метод из AddFilesMixin)
+
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
