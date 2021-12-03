@@ -449,7 +449,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         sys = Dict_System.objects.filter(id=form.instance.system_id).first()
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            ticket_data = {'name': self.name, 'description': self.description, 'status': form.instance.status_id, 'type': self.type} #, 'companyfrom': form.instance.companyfrom_id}
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': form.instance.status, 'type': form.instance.type} #, 'companyfrom': form.instance.companyfrom_id}
             url_dev = 'http://1yes.larimaritgroup.ru/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             form.instance.requeststatuscode = r.status_code

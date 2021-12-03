@@ -1,7 +1,7 @@
 # serializers.py
 from rest_framework import serializers
 
-from .models import Dict_System, FeedbackTicket, FeedbackTicketComment
+from .models import Dict_System, FeedbackTicket, FeedbackTicketComment, Dict_FeedbackTicketStatus, Dict_FeedbackTicketType
 from companies.models import Company
 
 class Dict_SystemSerializer(serializers.HyperlinkedModelSerializer):
@@ -40,4 +40,14 @@ class FeedbackTicketCommentSerializer(serializers.HyperlinkedModelSerializer):
     author = serializers.SlugRelatedField(slug_field="username", read_only=True)
     class Meta:
         model = FeedbackTicketComment
+        exclude = ('is_active',)
+
+class Dict_FeedbackTicketStatusSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Dict_FeedbackTicketStatus
+        exclude = ('is_active',)
+
+class Dict_FeedbackTicketTypeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Dict_FeedbackTicketType
         exclude = ('is_active',)
