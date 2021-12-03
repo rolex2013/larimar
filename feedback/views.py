@@ -128,15 +128,15 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         ticket_data = request.data
         try:
             type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
-            type_id = type.id
+            typeid = type.id
         except:
-            type_id = 1
+            typeid = 1
         try:
             status = Dict_FeedbackTicketStatus.objects.filter(name=ticket_data["status"]).first()
-            status_id = status.id
+            statusid = status.id
         except:
-            status_id = 1
-        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], status=status_id, type=type_id)
+            statusid = 1
+        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], status_id=statusid, type_id=typeid)
         #new_ticket.save()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
         return Response(serializer.data)
