@@ -127,6 +127,11 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
     def create(self, request):
         ticket_data = request.data
         try:
+            sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+            systemid = sys.id
+        except:
+            systemid = 1
+        try:
             type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
             typeid = type.id
         except:
@@ -136,7 +141,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             statusid = status.id
         except:
             statusid = 1
-        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], status_id=statusid, type_id=typeid)
+        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid)
         #new_ticket.save()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
         return Response(serializer.data)

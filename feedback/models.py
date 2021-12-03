@@ -76,9 +76,9 @@ class Dict_FeedbackTaskStatus(models.Model):
 class FeedbackTicket(models.Model):
     system = models.ForeignKey('Dict_System', on_delete=models.CASCADE, related_name='feedback_system',
                                 verbose_name="Система")
-    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='feedback_company',
+    company = models.ForeignKey('companies.Company', null=True, blank=True, on_delete=models.CASCADE, related_name='feedback_company',
                                 verbose_name="Компания")
-    companyfrom = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='feedback_companyfrom',
+    companyfrom = models.ForeignKey('companies.Company', null=True, blank=True, on_delete=models.CASCADE, related_name='feedback_companyfrom',
                                 verbose_name="Компания автора")
     #id_local = models.PositiveIntegerField("Локальный ID")
     name = models.CharField("Наименование", max_length=128)
@@ -88,7 +88,7 @@ class FeedbackTicket(models.Model):
     status = models.ForeignKey('Dict_FeedbackTicketStatus', limit_choices_to={'is_active': True}, on_delete=models.CASCADE, related_name='feedback_ticketstatus', verbose_name="Статус")
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='feedback_ticket_user', verbose_name="Автор")
+    author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, related_name='feedback_ticket_user', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
 
     @property
