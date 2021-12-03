@@ -141,7 +141,8 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             statusid = status.id
         except:
             statusid = 1
-        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid)
+        idremote = int(ticket_data["id_remote"])
+        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
         #new_ticket.save()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
         return Response(serializer.data)
