@@ -63,7 +63,7 @@
               {% elif component_name == 'feedback' %}
                  <a href="{% url 'my_company:companies' 0 'feedback' %}">{{ button_company_select }}</a>
                   {% if is_system_reged %}
-                    <a href="{% url 'my_feedback:tickets0' systemdev.id %}">
+                    <a href="{% url 'my_feedback:tickets0' systemdevid %}">
                   {% else %}
                     <a href="{% url 'my_feedback:feedbacksystem_create' %}">
                   {% endif %}

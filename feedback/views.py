@@ -248,6 +248,15 @@ def feedbacktickets(request, systemid=1, companyid=0):
 
     currentuser = request.user.id
     currentusercompanyid = request.session['_auth_user_currentcompany_id']
+
+    try:
+        #systemdev = Dict_System.objects.filter(is_active=True, is_local=False).first()
+        systemdev = Dict_System.objects.filter(is_active=True, code='1YES-1YES-1YES-1YES').first()
+        if systemdev.is_local:
+            companyid = ''
+    except:
+        systemdevid = 0
+
     #print(companyid)
     if companyid == 0:
         #companyid = currentusercompanyid
@@ -393,8 +402,6 @@ def feedbacktickets(request, systemid=1, companyid=0):
     if dsys_cnt == 0:
         is_system_reged = False
 
-    systemdev = Dict_System.objects.filter(is_active=True, is_local=False).first()
-
     if systemid == 1:
         template_name = "company_detail.html"
     else:
@@ -407,7 +414,7 @@ def feedbacktickets(request, systemid=1, companyid=0):
                                                   #'current_feedbackticket': current_feedbackticket,
                                                   'current_company': current_company,
                                                   'current_ticketid': 0,
-                                                  'systemdev': systemdev,
+                                                  'systemdevid': systemdevid,
                                                   'systemid': systemid,
                                                   #'systemdevid': systemdev.id,
                                                   'companyid': companyid,
