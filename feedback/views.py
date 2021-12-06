@@ -185,7 +185,7 @@ class Dict_SystemCreate(CreateView):
         #               'ip': ip, 'email': form.cleaned_data["email"], 'phone': form.cleaned_data["phone"]}
         system_data = {'code': code, 'name': form.cleaned_data["name"], 'domain': form.cleaned_data["domain"], 'url': url,
                        'ip': ip, 'email': form.cleaned_data["email"], 'phone': form.cleaned_data["phone"], 'is_local': False, 'req': True}
-        url_dev = 'http://1yes.larimaritgroup.ru/feedback/api/system/'
+        url_dev = 'http://larimaritgroup.ru/feedback/api/system/'
         #url = 'http://localhost:8000/feedback/api/system/'
         r = requests.post(url_dev, headers=headers, data=json.dumps(system_data))
         #r = requests.post(url, headers=headers, csrfmiddlewaretoken=csrftoken, data=json.dumps(system_data))
@@ -474,7 +474,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id)} #, 'companyfrom': form.instance.companyfrom_id}
-            url_dev = 'http://1yes.larimaritgroup.ru/feedback/api/ticket/'
+            url_dev = 'http://larimaritgroup.ru/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             #form.instance.requeststatuscode = r.status_code
 
