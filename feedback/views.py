@@ -253,7 +253,7 @@ def feedbacktickets(request, systemid=1, companyid=0):
         #systemdev = Dict_System.objects.filter(is_active=True, is_local=False).first()
         systemdev = Dict_System.objects.filter(is_active=True, code='1YES-1YES-1YES-1YES').first()
         if systemdev.is_local:
-            companyid = ''
+            companyid = 0
     except:
         systemdevid = 0
 
