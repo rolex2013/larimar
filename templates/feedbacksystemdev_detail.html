@@ -4,8 +4,8 @@
 
 {% block company %}
    
-   <!-- Защита от прямого доступа к компании, если это не Служба техподдержки -->
-   {% if current_company.id in user_companies or current_company.is_support %}
+   <!-- Защита от прямого доступа к компании, если это не Служба техподдержки
+   { if current_company.id in user_companies or current_company.is_support %} -->
 
       <div class="object-detail">
 
@@ -22,19 +22,19 @@
 
       </div>
 
-   {% else %}
+   <!--{ else %}
 
      <h4>Информация об организации недоступна!</h4>
      <em>Пожалуйста, обратитесь к администратору.</em>
 
-   {% endif %}  
+   { endif %}-->
 
 {% endblock company %}
 
 {% block list %}
 
    <!-- Защита от прямого доступа к сотрудникам компании, если это не Служба техподдержки -->
-   {% if current_company.id in user_companies or current_company.is_support %}
+   <!--{ if current_company.id in user_companies or current_company.is_support %}-->
 
       <div class="object-list">
 
@@ -82,7 +82,7 @@
                            </div>
                         </form>
 
-                        <div id="ajax_feedbackticketlistresult">{% include 'feedbacktickets_list.html' %}</div>
+                        <div id="ajax_feedbackticketlistresult">{% include 'feedbackticketsdev_list.html' %}</div>
 
                     <!--{ else %}
 
@@ -98,6 +98,7 @@
          <div id="ajax_listerrors"></div>
 
       <!--{ endif %}-->
+         {% comment %}
          {% if component_name != 'companies' and component_name != 'feedback' %}
             <div class="object-list-buttons">
                <!--<div class="project-entry"><a href="{ url 'my_project:project_create' companyid 0 %}" class="top-menu"><span class="badge badge-secondary">Добавить</span></a></div>-->
@@ -109,6 +110,7 @@
                <!--<a href="{ url 'my_feedback:feedbackticket_create' 1 companyid %}">{ button_feedbackticket_create }}</a>-->
             </div>
          {% endif %}
+         {% endcomment %}
          
       </div>
 
@@ -141,11 +143,11 @@
 
       </script>
 
-   {% else %}
+   <!--{ else %}
 
       <h5>Информация о тикетах Вам недоступна!</h5>
 
-   {% endif %}  
+   { endif %}-->
 
 {% endblock list %}
 

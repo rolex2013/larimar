@@ -26,8 +26,11 @@ urlpatterns = [
     #path('company_detail/', views.CompanyViewSet.as_view({'get': 'create'}), name='company_detail'),
 
     path('system_page/system_create/', views.Dict_SystemCreate.as_view(), name='feedbacksystem_create'),
-    path('tickets_page0/<int:systemid>', views.feedbacktickets, name='tickets0'),
-    path('tickets_page/<int:systemid>/<int:companyid>', views.feedbacktickets, name='tickets'),
+    #path('tickets_page0/<int:systemid>', views.feedbacktickets, name='tickets0'),
+    #path('tickets_page/<int:systemid>/<int:companyid>', views.feedbacktickets, name='tickets'),
+    path('tickets_page0', views.feedbacktickets, name='tickets0'),
+    path('tickets_page/<int:companyid>', views.feedbacktickets, name='tickets'),
+    path('ticketsdev_page', views.feedbackticketsdev, name='ticketsdev'),   # Тикеты разработчику
     path('tickets_page/ticket_create/<int:systemid>/<int:companyid>', views.FeedbackTicketCreate.as_view(),
          name='feedbackticket_create'),
     path('tickets_page/ticket_update/<int:pk>', views.FeedbackTicketUpdate.as_view(), name='feedbackticket_update'),
@@ -45,7 +48,10 @@ urlpatterns = [
 
     #path('ticketcomments_page/<int:ticketid>', views.feedbackticketcomments, name='feedbackticketcomments'),
     #path('ticketcomments_list/<int:pk>', views.FeedbackTicketCommentDetail.as_view(), name='feedbacktaskcomment_detail'),
-    path('tickets_page/ticketcomment_create/<int:ticketid>/<int:companyid>', views.FeedbackTicketCommentCreate.as_view(),
+    #path('tickets_page/ticketcomment_create/<int:ticketid>/<int:companyid>', views.FeedbackTicketCommentCreate.as_view(),
+    #     name='feedbackticketcomment_create'),
+    path('tickets_page/ticketcomment_create/<int:ticketid>',
+         views.FeedbackTicketCommentCreate.as_view(),
          name='feedbackticketcomment_create'),
     path('tickets_page/taskcomments_page/<int:taskid>', views.feedbacktaskcomments, name='feedbacktaskcomments'),
     #path('taskcomments_list/<int:pk>', views.FeedbackTaskCommentDetail.as_view(), name='feedbacktaskcomment_detail'),
