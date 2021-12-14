@@ -26,6 +26,7 @@ from .forms import UserRegistrationForm, UserEnviteForm, UserAddForm, UserProfil
 from main.models import Notification, Meta_ObjectType
 #from .tables import NotificationTable
 from companies.models import Company, UserCompanyComponentGroup, Content
+from feedback.models import Dict_System
 from .models import UserProfile
 from django.db.models import Count
 
@@ -91,6 +92,16 @@ class ELoginView(View):
                   UserProfile.objects.filter(user_id=request.user.id).update(company_id=current_company)               
             # ========================================         
             #print(current_company)
+            # *** проверяем, является ли эта система системой разработчика 1YES!
+            try:
+                systemdev = Dict_System.objects.filter(is_active=True, code='1YES-1YES-1YES-1YES').first()
+                systemdevid = systemdev.id
+                is_system_dev = systemdev.is_local
+            except:
+                systemdevid = 2
+                is_system_dev = False
+            request.session['system_dev'] = (systemdevid, is_system_dev)
+            # ***
             request.session['_auth_user_currentcompany_id'] = current_company
             companies_list = list(UserCompanyComponentGroup.objects.filter(user=request.user.id, is_active=True).values_list("company", flat=True))
             request.session['_auth_user_companies_id'] = list(set(companies_list))

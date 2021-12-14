@@ -73,11 +73,6 @@
                                     </option>
                                  {% endfor %}
                               </select>
-                              <label>Мои тикеты: </label>
-                               <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
-                                   <option value="-1" {% ifequal "-1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                                   <option value="1" {% ifequal "1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                               </select>
                               <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">Применить</button>
                            </div>
                         </form>
@@ -120,7 +115,6 @@
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             var statusSelected = $("#feedbackticketstatusselectid option:selected").val()
             var typeSelected = $("#feedbacktickettypeselectid option:selected").val()
-            var mySelected = $("#myfeedbackticketselectid option:selected").val()
             $.ajax({
                type: 'GET',
                url: "{% url 'my_feedback:ticket_filter' %}",
@@ -128,8 +122,7 @@
                   systemid: {{ systemdev.id }},
                   companyid: {{ current_company.id }},
                   statusid: statusSelected,
-                  typeid: typeSelected,
-                  my: mySelected
+                  typeid: typeSelected
                },
                success: function(data){
                   $('#ajax_feedbackticketlistresult').html(data);
