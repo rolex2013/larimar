@@ -34,7 +34,7 @@ urlpatterns = [
     path('tickets_page/ticket_create/<int:systemid>/<int:companyid>', views.FeedbackTicketCreate.as_view(),
          name='feedbackticket_create'),
     path('tickets_page/ticket_update/<int:pk>', views.FeedbackTicketUpdate.as_view(), name='feedbackticket_update'),
-    path('tickets_page/task_create/<int:ticketid>/<int:parentid>', views.FeedbackTaskCreate.as_view(), name='feedbacktask_create'),
+    path('tickets_page/task_create/<int:ticketid>/<int:parentid>/<int:companyid>', views.FeedbackTaskCreate.as_view(), name='feedbacktask_create'),
     path('tickets_page/task_update/<int:pk>', views.FeedbackTaskUpdate.as_view(), name='feedbacktask_update'),
 
     path('tickettasks_page/<int:ticketid>/<int:pk>', views.feedbacktasks, name='feedbacktasks'),

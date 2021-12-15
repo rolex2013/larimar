@@ -182,9 +182,10 @@ class FeedbackTaskForm(forms.ModelForm):
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
         if self.action == 'create':
             self.ticket = kwargs.pop('ticketid')
+            companyid = kwargs.pop('companyid')
             super().__init__(*args, **kwargs)
-            tkt = FeedbackTicket.objects.get(id=self.ticket)
-            companyid = tkt.company_id
+            #tkt = FeedbackTicket.objects.filter(id=self.ticket).first()
+            #companyid = tkt.company_id
         else:
             super().__init__(*args, **kwargs)
             companyid = self.instance.ticket.company_id
@@ -193,12 +194,9 @@ class FeedbackTaskForm(forms.ModelForm):
             if self.user.id == self.initial['assigner'] and self.initial['assigner'] != self.initial['author']:
                 self.fields['assigner'].disabled = True
         # в выпадающий список для выбора Исполнителя подбираем только тех юзеров, которые привязаны к этой организации (в админке)
-        uc = UserCompanyComponentGroup.objects.filter(company_id=companyid).values_list('user_id', flat=True)
+        uc = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).values_list('user_id', flat=True)
         usr = User.objects.filter(id__in=uc, is_active=True)
-        # в выпадающий список для выбора Исполнителя Задачи подбираем только тех юзеров, которые являются участниками этого Проекта
-        # выцепляем id юзеров-участников Проекта
-        #members_list = list(FeedbackTicket.objects.filter(id=self.ticket).values_list('members', flat=True))
-        usr = User.objects.filter(id__in=usr, is_active=True)
+        #usr = User.objects.filter(id__in=usr, is_active=True)
         self.fields['assigner'].queryset = usr
         self.fields['author'].initial = self.user.id
 

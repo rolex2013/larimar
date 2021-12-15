@@ -395,6 +395,8 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
     if dsys_cnt == 0:
         is_system_reged = False
 
+    current_companyid = request.session["_auth_user_supportcompany_id"]
+
     #if is_system_dev:
     #    template_name = "feedbacksystemdev_detail.html"
     #else:
@@ -405,6 +407,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
                                           'nodes': task_list, #.distinct(), #.order_by(),
                                           'component_name': 'feedback',
                                           'current_company': current_company,
+                                          'current_companyid': current_companyid,
                                           'current_ticketid': 0,
                                           'is_system_dev': is_system_dev,
                                           'systemdevid': systemdevid,
@@ -631,6 +634,7 @@ def feedbacktasks(request, ticketid=0, pk=0):
         button_feedbacktask_create = 'Создать'
 
     is_system_dev = request.session['system_dev'][1]
+    current_companyid = request.session["_auth_user_supportcompany_id"]
 
     return render(request, "feedbackticket_detail.html", {
         'nodes': task_list.distinct().order_by(),  # .order_by('tree_id', 'level', '-dateend'),
@@ -643,6 +647,7 @@ def feedbacktasks(request, ticketid=0, pk=0):
         'is_support_member': is_support_member,
         'current_feedbackticket': currentticket,
         'current_company': currentticket.company,
+        'current_companyid': current_companyid,
         'ticketid': ticketid,
         'current_ticketid': ticketid,
         'user_companies': request.session['_auth_user_companies_id'],
@@ -715,7 +720,7 @@ class FeedbackTaskCreate(AddFilesMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(FeedbackTaskCreate, self).get_form_kwargs()
-        kwargs.update({'user': self.request.user, 'action': 'create', 'ticketid': self.kwargs['ticketid']})
+        kwargs.update({'user': self.request.user, 'action': 'create', 'companyid': self.kwargs['companyid'], 'ticketid': self.kwargs['ticketid']})
         return kwargs
 
 
@@ -788,10 +793,13 @@ def feedbacktaskcomments(request, taskid):
         if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
             button_task_update = 'Изменить'
 
+    current_companyid = request.session["_auth_user_supportcompany_id"]
+
     return render(request, "feedbacktask_detail.html", {
         'nodes': taskcomment_list.distinct().order_by(),
         # 'current_taskcomment': currenttaskcomment,
         'task': currenttask,
+        'current_companyid': current_companyid,
         'is_ticketslist_dev': is_ticketslist_dev,
         'obj_files_rights': obj_files_rights,
         'files': FeedbackFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),

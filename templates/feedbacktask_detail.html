@@ -30,7 +30,7 @@
 
             <div class="object-detail-left">
                 <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p><br />
-                <i><p>Служба техподдержки: <span class="hint hint--bottom hint--info" data-hint="Служба техподдержки"><a href="{% url 'my_feedback:tickets' is_ticketslist_dev 1 task.ticket.company.pk %}">{{ task.ticket.company.name }}</a></span></p></i>
+                <i><p>Служба техподдержки: <span class="hint hint--bottom hint--info" data-hint="Служба техподдержки"><a href="{% url 'my_feedback:tickets' is_ticketslist_dev 1 current_companyid %}">{{ task.ticket.company.name }}</a></span></p></i>
                 <i><p>Тикет: <span class="hint hint--bottom hint--info" data-hint="Задачи тикета"><a href="{% url 'my_feedback:feedbacktasks' task.ticket.pk 0 %}">{{ task.ticket.name }}</a></span></p></i>
                 {% if task.parent %}
                     <p>Уровень выше: <a href="{% url 'my_feedback:feedbacktaskcomments' task.parent.pk %}">{{ task.parent.name }}</a></p>
@@ -53,7 +53,7 @@
             <div class="object-detail-right">{% include 'objectfile_list.html' %}</div>
         </div>
         <div class="object-detail-buttons">
-            <a href="{% url 'my_feedback:feedbacktask_create' task.ticket.id task.id %}">{{ button_task_create }}</a>
+            <a href="{% url 'my_feedback:feedbacktask_create' task.ticket.id task.id current_companyid %}">{{ button_task_create }}</a>
             <a href="{% url 'my_feedback:feedbacktask_update' task.pk %}">{{ button_task_update }}</a>
             <!-- <div style="float: left;"><a href="{ url 'my_project:task_delete' task.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
             <!--<div style="float: left;"><a href="{ url 'my_project:project_delete' project.pk %}" class="top-menu"><span class="badge badge-secondary">Удалить</span></a></div> -->
