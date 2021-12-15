@@ -58,7 +58,7 @@
 
 {% block list %}
     <!-- Защита от прямого доступа к комментам и задачам Тикета, если это его просматривает не сотрудник компании, создавшей Тикет или не Служба техподдержки -->
-    {% if current_feedbackticket.companyfrom.id in user_companies or current_company.is_support %}
+    {% if current_feedbackticket.companyfrom.id in user_companies or current_company.is_support or is_system_dev %}
 
         <div class="object-list">
 
