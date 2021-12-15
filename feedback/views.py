@@ -266,13 +266,6 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
 
     feedbackticket_list = FeedbackTicket.objects.filter(is_active=True)
 
-    #is_ticketslist_dev = False
-    #if companyid == 0: is_ticketslist_dev = True
-
-    #print(is_ticketslist_dev)
-    current_company = ''
-
-
     if companyid == 0:
         # Проверяем наличие хоть одной Службы поддержки в Системе
         support_list = Company.objects.filter(is_active=True, is_support=True)
@@ -313,7 +306,6 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
         else:
             # список тикетов разработчику в локальной системе
             feedbackticket_list = feedbackticket_list.filter(is_active=True, system_id=systemdevid, company_id__isnull=True, companyfrom_id=companyid)
-            #print('***')
         template_name = "feedbacksystemdev_detail.html"
     else:
         # список тикетов внутри системы
@@ -356,7 +348,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
         feedbackticket_task_list = FeedbackTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id), is_active=True, ticket__company=companyid,
                                                         dateclose__isnull=True).exclude(ticket__system=systemdevid)
         len_task_list = len(feedbackticket_task_list)
-        button_feedbackticketdev = 'Обращение к разработчику'
+        button_feedbackticketdev = 'Обращения к разработчику'
         button_feedbackticketdev_create = 'Добавить'
 
     len_list = len(feedbackticket_list)
@@ -380,11 +372,17 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
             # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
             is_many_support_member = False
             button_company_select = ''
-
-        # Список всех задач этого сотрудника этой техподдержки
-        task_list = FeedbackTask.objects.filter(
-            Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id=companyid,
-            is_active=True, dateclose__isnull=True)
+        if is_ticketslist_dev == 1:
+            # Список всех задач тикетов разработчику
+            task_list = FeedbackTask.objects.filter(
+                Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id__isnull=True,
+                is_active=True, dateclose__isnull=True)
+        else:
+            # Список всех задач этого сотрудника этой техподдержки
+            task_list = FeedbackTask.objects.filter(
+                Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id=companyid,
+                is_active=True, dateclose__isnull=True)
+            #print(task_list)
     else:
         comps_support = Company.objects.filter(is_active=True, is_support=True)
         if len(comps_support) < 2:

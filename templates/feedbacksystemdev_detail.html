@@ -38,9 +38,9 @@
 
       <div class="object-list">
 
-            <div class="object-list---wrapper">
+            <div class="object-list-wrapper">
 
-                <div class="object---list-left">
+                <div class="object-list-left">
 
                     <h4>Тикеты</h4>
 
@@ -86,6 +86,12 @@
                     { endif %}-->
 
                 </div>
+
+                {% if is_system_dev %}
+                    <div class="object-list-right">
+                        <div id="ajax_feedbacktaskresult">{% include 'feedbacktasks_list.html' %}</div>
+                    </div>
+                {% endif %}
 
             </div>
 
