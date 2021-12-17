@@ -303,11 +303,13 @@
                                     </option>
                                  {% endfor %}
                               </select>
-                              <label>Мои тикеты: </label>
-                               <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
-                                   <option value="-1" {% ifequal "-1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                                   <option value="1" {% ifequal "1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                               </select>
+                              {% if is_admin_org %}
+                                  <label>Мои тикеты: </label>
+                                   <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
+                                       <option value="-1" {% ifequal "-1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Все</option>
+                                       <option value="1" {% ifequal "1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                                   </select>
+                               {% endif %}
                               <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">Применить</button>
                            </div>
                         </form>
@@ -532,11 +534,12 @@
                type: 'GET',
                url: "{% url 'my_feedback:ticket_filter' %}",
                data: {
-                  systemid: {{ systemid }},
+                  //systemid: {{ systemid }},
                   companyid: {{ current_company.id }},
                   statusid: statusSelected,
                   typeid: typeSelected,
-                  my: mySelected
+                  my: mySelected,
+                  is_ticketslist_dev: {{ is_ticketslist_dev }}
                },
                success: function(data){
                   $('#ajax_feedbackticketlistresult').html(data);

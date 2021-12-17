@@ -44,6 +44,7 @@ class FeedbackTicketForm(forms.ModelForm):
     comment = forms.CharField(label='Комментарий', widget=forms.Textarea, required=False)
 
     #disabled_fields = ('name', 'description', 'type', 'files', 'status', 'is_active')
+    #disabled_fields = ('dateclose', 'author')
 
     def clean(self):
         if self.action == 'update':
