@@ -166,7 +166,7 @@ class FeedbackTicketComment(models.Model):
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     company = models.ForeignKey('companies.Company', null=True, blank=True, on_delete=models.CASCADE, related_name='feedback_commentcompany',
                                 verbose_name="Компания")
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
+    author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
