@@ -294,7 +294,7 @@
                                  {% endfor %}
                               </select>
                               {% if is_admin_org %}
-                                  <label>Мои тикеты: </label>
+                                  <label>Мои: </label>
                                    <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
                                        <option value="-1" {% ifequal "-1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Все</option>
                                        <option value="1" {% ifequal "1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>

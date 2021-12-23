@@ -150,7 +150,13 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
 class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
     queryset = FeedbackTicketComment.objects.filter(is_active=True).order_by('-datecreate')
     serializer_class = FeedbackTicketCommentSerializer
-    #filter_fields = ('username', 'is_player', 'first_name', 'last_name', 'team', 'email',)
+    filter_fields = ('name', 'description',)
+
+    def create(self, request):
+        ticket_data = request.data
+        new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticket_data["ticketid"], name=ticket_data["name"], description=ticket_data["description"])
+        serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
+        return Response(serializer.data)
 
 #def FeedbackTicketCreateAPI(request):
 #    return
@@ -449,29 +455,6 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
                                                 })
 
 
-#@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-#def feedbackticketsdev(request):
-#
-#    try:
-#        systemdev = Dict_System.objects.filter(is_active=True, code='1YES-1YES-1YES-1YES').first()
-#        systemdevid = systemdev.id
-#        system_local = systemdev.is_local
-#    except:
-#        systemdevid = None
-#        system_local = True
-#
-#    button_feedbackticketdev_create = 'Добавить'
-#    if system_local == True:
-#        button_feedbackticketdev_create = ''
-#
-#    return render(request, 'feedbacksystemdev_detail.html', {
-#        'nodes_tickets': FeedbackTicket.objects.filter(is_active=True, system_id=systemdevid),
-#        'systemdev': systemdev,
-#        'companyid': 0,
-#        'button_feedbackticketdev_create': button_feedbackticketdev_create,
-#                                                             }
-#                  )
-
 class FeedbackTicketDetail(DetailView):
     model = FeedbackTicket
     template_name = 'feedbackticket_detail.html'
@@ -705,13 +688,16 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.ticket_id = self.kwargs['ticketid']
-        #if self.kwargs['companyid'] != 0:
-        #    form.instance.company_id = self.kwargs['companyid']
-        #currentusercompanyid = request.session['_auth_user_currentcompany_id']
-        #form.instance.company_id = currentusercompanyid
         form.instance.author_id = self.request.user.id
-        self.object = form.save()  # Созадём новый коммент Тикета
+        #self.object = form.save()  # Созадём новый коммент Тикета
         af = self.add_files(form, 'feedback', 'ticketcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
+        # отправляем коммент удалённому автору тикета
+        #print('/',str(form.instance.ticket.id_remote),'/')
+        if form.instance.ticket.company_id == None:
+            headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'ticketid': str(form.instance.ticket.id_remote)}
+            url_dev = form.instance.ticket.system.url + '/feedback/api/ticketcomment/'
+            r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
         return super().form_valid(form)
 
 class FeedbackTaskCreate(AddFilesMixin, CreateView):

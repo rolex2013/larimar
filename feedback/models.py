@@ -110,7 +110,7 @@ class FeedbackTicket(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse('my_feedback:feedbacktasks', kwargs={'ticketid': self.pk, 'pk': 0})
+        return reverse('my_feedback:feedbacktasks', kwargs={'is_ticketslist_dev': 0, 'ticketid': self.pk, 'pk': 0})
         #return reverse('my_feedback:feedbacktasks')
     def __str__(self):
         return (self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
@@ -170,7 +170,7 @@ class FeedbackTicketComment(models.Model):
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
-        return reverse('my_feedback:feedbacktasks', kwargs={'ticketid': self.ticket_id, 'pk': 0})
+        return reverse('my_feedback:feedbacktasks', kwargs={'is_ticketslist_dev': 0, 'ticketid': self.ticket_id, 'pk': 0})
 
     def __str__(self):
         return (str(self.ticket) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
