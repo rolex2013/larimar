@@ -153,8 +153,21 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
     filter_fields = ('name', 'description',)
 
     def create(self, request):
-        ticket_data = request.data
-        new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticket_data["ticketid"], name=ticket_data["name"], description=ticket_data["description"])
+        comment_data = request.data
+        ticketid = int(comment_data["ticketid"])
+        commentdescription = comment_data["description"]
+        commentname = comment_data["name"]
+        try:
+            ticket = FeedbackTicketComment.objects.filter(ticket_id=ticketid).first()
+        except:
+            try:
+                ticket = FeedbackTicketComment.objects.filter(name=commentname).first()
+                ticketid = ticket.id
+            except:
+                # тут надо сообщить отправителю, что такого тикета у разработчика нет!
+                print('Нет такого тикета!')
+                return
+        new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
         serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
         return Response(serializer.data)
 
