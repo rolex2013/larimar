@@ -153,11 +153,13 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
     filter_fields = ('name', 'description',)
 
     def create(self, request):
+
         comment_data = request.data
         systemcode = comment_data["systemcode"]
         ticketremoteid = int(comment_data["ticketid"])
         commentdescription = comment_data["description"]
         commentname = comment_data["name"]
+
         try:
             #ticket = FeedbackTicket.objects.filter(ticket_id=ticketid).first()
             sys = Dict_System.objects.filter(code=systemcode).first()
@@ -185,7 +187,12 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
             # тут надо сообщить отправителю, что такого тикета у разработчика нет!
             print("Система с кодом '" + systemcode + "' не зарегистрирована!")
             return
-        return
+
+        #new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
+        new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
+                                                                 description=commentdescription)
+        serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
+        return Response(serializer.data)
 
 #def FeedbackTicketCreateAPI(request):
 #    return
