@@ -31,6 +31,7 @@ from .models import UserProfile
 from django.db.models import Count
 
 import sys
+import pytz
 
 #from companies.views import publiccontents
 
@@ -39,9 +40,9 @@ class ELoginView(View):
  
     def get(self, request):
         # если пользователь авторизован, то делаем редирект на главную страницу
-        if auth.get_user(request).is_authenticated:
-            return redirect('/')
-        else:
+        #if auth.get_user(request).is_authenticated:
+        #    return redirect('/')
+        #else:
             # Иначе формируем контекст с формой авторизации и отдаём страницу 
             # с этим контекстом.
             # работает, как для url - /admin/login/ так и для /account/login/ 
@@ -303,6 +304,8 @@ def envite(request, companyid=1):
 def UserProfileDetail(request, userid=0, param=''):
 
     companies_id = request.session['_auth_user_companies_id']
+    OurTZ = pytz.timezone('Europe/Moscow')
+
     if userid == 0:
        userid = request.user.id 
        if param == 'all':
@@ -310,9 +313,10 @@ def UserProfileDetail(request, userid=0, param=''):
           #content_list = Content.objects.filter(author_id=userid, place_id=3).annotate(cnt=Count('id'))  
           content_list = Content.objects.filter(author_id=userid).annotate(cnt=Count('id'))        
        else:
-          content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), place_id=3).annotate(cnt=Count('id'))
+          content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(OurTZ), dateend__gte=datetime.now(OurTZ), place_id=3).annotate(cnt=Count('id'))
     else:
-       content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), place_id=3).annotate(cnt=Count('id'))          
+       content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(OurTZ), dateend__gte=datetime.now(OurTZ), place_id=3).annotate(cnt=Count('id'))
+
     #user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
     user_profile = UserProfile.objects.filter(user=userid, is_active=True).first()
     notification_list = Notification.objects.filter(recipient_id=userid, is_active=True, is_read=False, type_id=3)

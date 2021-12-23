@@ -62,21 +62,11 @@
                  <a href="{% url 'my_company:companies' 0 'files' %}">{{ button_company_select }}</a>
               {% elif component_name == 'feedback' %}
                  <a href="{% url 'my_company:companies' 0 'feedback' %}">{{ button_company_select }}</a>
-                  {% if is_system_reged %}
-                    <!--<a href="{ url 'my_feedback:tickets0' systemdevid %}">-->
-                    <!--<a href="{ url 'my_feedback:ticketsdev' %}">-->
-                      {% comment %}
-                      {% if is_system_dev %}
-                          <a href="{ url 'my_feedback:ticketsdev' %}">
-                      {% else %}
-                          <a href="{ url 'my_feedback:tickets' companyid %}">
-                      {% endif %}
-                      {% endcomment %}
-                      <a href="{% url 'my_feedback:tickets0' 1 systemdevid %}">{{ button_feedbackticketdev}}</a>
-                  {% else %}
-                    <a href="{% url 'my_feedback:feedbacksystem_create' %}">{{ button_feedbackticketdev}}</a>
-                  {% endif %}
-
+                 {% if is_system_reged %}
+                     <a href="{% url 'my_feedback:tickets0' 1 systemdevid %}">{{ button_feedbackticketdev}}</a>
+                 {% else %}
+                   <a href="{% url 'my_feedback:feedbacksystem_create' %}">{{ button_feedbackticketdev}}</a>
+                 {% endif %}
               {% else %}
                  <a href="{% url 'my_company:companies' 0 'projects' %}">{{ button_company_select }}</a>
               {% endif %}              
@@ -534,7 +524,7 @@
                type: 'GET',
                url: "{% url 'my_feedback:ticket_filter' %}",
                data: {
-                  //systemid: {{ systemid }},
+                  //systemid: { systemid }},
                   companyid: {{ current_company.id }},
                   statusid: statusSelected,
                   typeid: typeSelected,

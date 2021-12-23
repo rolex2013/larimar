@@ -149,12 +149,10 @@ class FeedbackTask(MPTTModel):
 
     def get_absolute_url(self):
         return reverse('my_feedback:feedbacktaskcomments', kwargs={'taskid': self.pk})
-        #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
     def __str__(self):
          return (str(self.ticket) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')
     class MPTTMeta:
-        #order_insertion_by = ['name']
-        order_insertion_by = ['-dateend']
+        order_insertion_by = ['dateend']
     class Meta:
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'

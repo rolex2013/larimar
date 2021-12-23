@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db import IntegrityError
+
 from django.contrib.auth.decorators import login_required
 #from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 import requests
 #from lxml import etree as et
 from datetime import datetime, timedelta
+#from django.utils.formats import get_format
 from dateutil.parser import *
 
 from .models import Dict_Currency, CurrencyRate
@@ -12,6 +14,16 @@ from companies.models import Company
 
 # Create your views here.
 
+#def parse_date(date_str):
+#    """Parse date from string by DATE_INPUT_FORMATS of current language"""
+#    for item in get_format('DATE_INPUT_FORMATS'):
+#        #print(date_str, get_format('DATETIME_INPUT_FORMATS'))
+#        try:
+#            return datetime.strptime(date_str, item).date()
+#        except (ValueError, TypeError):
+#            continue
+#
+#    return None
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def finance(request):
@@ -38,7 +50,15 @@ def finance(request):
     # на всякий случай загружаем курсы на предыдущую дату
     r_date = r['PreviousDate']
     r_date = parse(r_date)
-    #r_base = 'RUB'   
+    # ***
+    #r_date = parse_date(r_date)
+    #r_date = r_date[0:10]+' '+r_date[11:19]
+    #print(r_date)
+    #r_date = datetime.strptime(r_date, '%Y-%m-%d %H:%M:%S').date()
+    #print(r['PreviousDate'], r_date)
+    #r_base = 'RUB'
+    #print(r['PreviousDate'], get_format('DATE_INPUT_FORMATS'))
+    # ***
     r_curr = r['Valute']
     currents_list = Dict_Currency.objects.filter(is_active=True)    
     for curr in currents_list:
@@ -61,7 +81,8 @@ def finance(request):
     r_date = parse(r_date)
     #r_base = 'RUB'   
     r_curr = r['Valute']
-    currents_list = Dict_Currency.objects.filter(is_active=True) #.exclude(code_char='RUB')    
+    currents_list = Dict_Currency.objects.filter(is_active=True) #.exclude(code_char='RUB')
+
     for curr in currents_list:
         if curr.code_char == 'RUB':
            r_value = 1            

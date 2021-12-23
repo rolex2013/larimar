@@ -51,10 +51,10 @@
                     <b><a href="{% url 'my_project:taskcomments' node.pk %}">
                  {% endif %}                                          
                  <!-- <a href="{ url 'my_project:tasks' current_project.id node.pk %}">-->
-                 #{{ node.id }}. {{ node.name }}</a> <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} | 
-                 {{ node.status.name }} | 
+                 #{% if object_list == 'feedbacktask_list' %}{{ node.ticket.id}}.{% endif %}{{ node.id }}. {{ node.name }}</a> <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} |
+                 {{ node.status.name }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}">{{ node.assigner.username }}</a></span> |
                  <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | 
-                    {{ node.project.currency.symbol }}{{ node.cost }}
+                    {{ node.project.currency.symbol }}{{ node.ticket.company.currency.symbol }}{{ node.cost }}
                  </span></b>   
         
               {% endif %}       

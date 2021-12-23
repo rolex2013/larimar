@@ -11,14 +11,19 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def left_menu(context, menuid=0, is_auth=False):
     #group_name = ''
-    if is_auth == True:
-       #group = UserCompanyComponentGroup.objects.get(user_id=context.request.user, company_id=, component_id='1').order_by('-group_id')
-       if menuid == 0:
-          nodes = MenuItem.objects.filter(Q(menu_id=2) & Q(is_active=True) & (Q(component_id__in=context.request.session['_auth_user_component_id']) | Q(component_id__in=[]) | Q(component_id=1)))   # Главное (левое) меню
-       else:
-          nodes = MenuItem.objects.filter(Q(menu_id=menuid) & Q(is_active=True) & (Q(component_id__in=context.request.session['_auth_user_component_id']) | Q(component_id=None)))  
-    else:
-       nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
+    try:
+        compid = context.request.session['_auth_user_component_id']
+        if is_auth == True:
+           #group = UserCompanyComponentGroup.objects.get(user_id=context.request.user, company_id=, component_id='1').order_by('-group_id')
+           if menuid == 0:
+              nodes = MenuItem.objects.filter(Q(menu_id=2) & Q(is_active=True) & (Q(component_id__in=compid) | Q(component_id__in=[]) | Q(component_id=1)))   # Главное (левое) меню
+           else:
+              nodes = MenuItem.objects.filter(Q(menu_id=menuid) & Q(is_active=True) & (Q(component_id__in=compid) | Q(component_id=None)))
+        else:
+           nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
+    except:
+        nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
+        #print(nodes)
     return (nodes.order_by('sort'))
     #return (nodes)
 

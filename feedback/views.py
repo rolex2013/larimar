@@ -256,13 +256,14 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
     currentuser = request.user.id
     currentusercompanyid = request.session['_auth_user_currentcompany_id']
 
-    #try:
-    #    systemdev = Dict_System.objects.filter(is_active=True, code='1YES-1YES-1YES-1YES').first()
+    try:
+        systemdev = Dict_System.objects.filter(is_active=True, code='1YES-1YES-1YES-1YES').first()
     #    systemdevid = systemdev.id
     #    is_system_dev = systemdev.is_local
-    #except:
+    except:
     #    systemdevid = 2
     #    is_system_dev = False
+         systemdev = ''
 
     systemdevid = request.session['system_dev'][0]
     is_system_dev = request.session['system_dev'][1]
@@ -311,43 +312,43 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
     else:
         # список тикетов внутри системы
         template_name = "company_detail.html"
+        feedbackticket_list = feedbackticket_list.exclude(system=systemdevid)
         # *** фильтруем по статусу и принадлежности ***
         try:
            tktstatus = request.POST['select_feedbackticketstatus']
         except:
             if is_support_member:
-                feedbackticket_list = feedbackticket_list.filter(company=companyid, dateclose__isnull=True).exclude(system=systemdevid)
+                feedbackticket_list = feedbackticket_list.filter(company=companyid, dateclose__isnull=True)
             else:
                 feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id),
-                                                                    company=companyid, dateclose__isnull=True).exclude(system=systemdevid)
+                                                                    company=companyid, dateclose__isnull=True)
         else:
            if tktstatus == "0":
                # если в выпадающем списке выбрано "Все активные"
-               feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id), company=companyid, dateclose__isnull=True).exclude(system=systemdevid)
+               feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id), company=companyid, dateclose__isnull=True)
            else:
-              if tktstatus == "-1":
+               # Суперадмин видит все тикеты всех организаций этой Службы поддержки
+               feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id), company=companyid)
+               if tktstatus == "-1":
                  # если в выпадающем списке выбрано "Все"
-                 if is_superadmin:
-                    # Суперадмин видит все тикеты всех организаций этой Службы поддержки
-                    feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id), company=companyid).exclude(system=systemdevid)
-                 elif is_admin_org:
+                 if is_admin_org:
                      # Админ Организации видит все тикеты своей организации этой Службы поддержки
-                    feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id),
-                                                                         company=companyid, companyfrom=currentusercompanyid).exclude(system=systemdevid)
-              elif tktstatus == "-2":
+                    feedbackticket_list = feedbackticket_list.filter(companyfrom=currentusercompanyid)
+               elif tktstatus == "-2":
                  # если в выпадающем списке выбрано "Просроченные"
-                 feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id), company=companyid, dateclose__isnull=True, dateend__lt=datetime.datetime.now()).exclude(system=systemdevid)
-              else:
-                 feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id), company=companyid, status=tktstatus).exclude(system=systemdevid) #, dateclose__isnull=True)
+                 feedbackticket_list = feedbackticket_list.filter(dateclose__isnull=True, dateend__lt=datetime.datetime.now())
+               else:
+                 feedbackticket_list = feedbackticket_list.filter(status=tktstatus)
         # *******************************
 
     button_feedbackticketdev = ''
     button_feedbackticketdev_create = ''
-    len_task_list = 0
+    #len_task_list = 0
     if is_support_member == True:
-        feedbackticket_task_list = FeedbackTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company=companyid,
-                                                        dateclose__isnull=True).exclude(ticket__system=systemdevid)
-        len_task_list = len(feedbackticket_task_list)
+        #feedbackticket_task_list = FeedbackTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company=companyid,
+        #                                                dateclose__isnull=True) #.exclude(ticket__system=systemdevid)
+        #feedbackticket_task_list = tickettasklist(request, companyid, "-1", "-1", "-1", is_ticketslist_dev)
+        #len_task_list = len(feedbackticket_task_list)
         button_feedbackticketdev = 'Обращения к разработчику'
         button_feedbackticketdev_create = 'Добавить'
 
@@ -359,35 +360,45 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
     ticketstatus = Dict_FeedbackTicketStatus.objects.filter(is_active=True)
     tickettype = Dict_FeedbackTicketType.objects.filter(is_active=True)
 
-    #button_company_select = ''
-    button_company_select = 'Сменить службу техподдержки'
+    comps_support = Company.objects.filter(is_active=True, is_support=True)
+    if len(comps_support) < 2:
+        button_company_select = ''
+    else:
+        button_company_select = 'Сменить службу техподдержки'
     button_feedbackticket_create = 'Добавить'
     # Проверяем кол-во компаний - служб техподдержки
     is_many_support_member = True
     is_support_member = request.session['_auth_user_issupportmember']
+    len_task_list = 0
+
+    tskstatus_selectid = "0" # - Все активные задачи
+    tskstatus_myselectid = "3" # - Все мои задачи
     if is_support_member:
         # сотрудникам Техподдержки показывать только те компании, где они работают
         comps_support = Company.objects.filter(is_active=True, is_support=True, id__in=comps)
         if len(comps_support) == 1:
-            # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
+            ## если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
             is_many_support_member = False
-            button_company_select = ''
-        if is_ticketslist_dev == 1:
-            # Список всех задач тикетов разработчику
-            task_list = FeedbackTask.objects.filter(
-                Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id__isnull=True,
-                is_active=True, dateclose__isnull=True)
-        else:
-            # Список всех задач этого сотрудника этой техподдержки
-            task_list = FeedbackTask.objects.filter(
-                Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id=companyid,
-                is_active=True, dateclose__isnull=True)
-            #print(task_list)
+            #button_company_select = ''
+        #if is_ticketslist_dev == 1:
+        #    # Список всех задач тикетов разработчику
+        #    task_list = FeedbackTask.objects.filter(
+        #        Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id__isnull=True,
+        #        is_active=True, dateclose__isnull=True)
+        #else:
+        #    # Список всех задач этого сотрудника этой техподдержки
+        #    task_list = FeedbackTask.objects.filter(
+        #        Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company_id=companyid,
+        #        is_active=True, dateclose__isnull=True)
+        #    #print(task_list)
+        task_list = tickettasklist(request, companyid, "0", tskstatus_selectid, tskstatus_myselectid, is_ticketslist_dev)
+        #len_task_list = len(task_list)
     else:
-        comps_support = Company.objects.filter(is_active=True, is_support=True)
-        if len(comps_support) < 2:
-            button_feedbackcompany_select = ''
+        #comps_support = Company.objects.filter(is_active=True, is_support=True)
+        #if len(comps_support) < 2:
+        #    button_company_select = ''
         task_list = ''
+    len_task_list = len(task_list)
 
     # Добавляем Систему в справочник
     is_system_reged = True
@@ -404,13 +415,14 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
 
     return render(request, template_name, {
                                           'nodes_tickets': feedbackticket_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
-                                          'nodes': task_list, #.distinct(), #.order_by(),
+                                          'nodes': task_list.distinct(), #order_by(),
                                           'component_name': 'feedback',
                                           'current_company': current_company,
                                           'current_companyid': current_companyid,
                                           'current_ticketid': 0,
                                           'is_system_dev': is_system_dev,
                                           'is_ticketslist_dev': is_ticketslist_dev,
+                                          'systemdev': systemdev,
                                           'systemdevid': systemdevid,
                                           'companyid': companyid,
                                           'user_companies': comps,
@@ -424,6 +436,8 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
                                           'feedbacktickettype': tickettype,
                                           'feedbacktickettype_selectid': '-1',
                                           'myfeedbackticket_myselectid': '1',
+                                          'tskstatus_selectid': tskstatus_selectid,
+                                          'tskstatus_myselectid': tskstatus_myselectid,
                                           'object_list': 'feedbacktask_list',
                                           'taskstatus': Dict_FeedbackTaskStatus.objects.filter(is_active=True),
                                           'len_list': len_list,
@@ -476,7 +490,8 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.system_id = self.kwargs['systemid']
-        if self.kwargs['companyid'] != 0:
+        sys = Dict_System.objects.filter(id=form.instance.system_id).first()
+        if self.kwargs['companyid'] != 0 and sys.is_local == True:
             form.instance.company_id = self.kwargs['companyid']
         form.instance.author_id = self.request.user.id
         form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
@@ -485,7 +500,6 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         self.object = form.save() # Созадём новый тикет
         af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
         # отправляем тикет разработчику
-        sys = Dict_System.objects.filter(id=form.instance.system_id).first()
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id)} #, 'companyfrom': form.instance.companyfrom_id}
@@ -547,46 +561,43 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
 
 # *** FeedbackTask ***
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
-def feedbacktasks(request, ticketid=0, pk=0):
+def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
     # *** фильтруем по статусу ***
     currentuser = request.user.id
-    currentusercompanyid = request.session['_auth_user_currentcompany_id']
+    #currentusercompanyid = request.session['_auth_user_currentcompany_id']
     #print(currentusercompanyid)
     tskstatus_selectid = 0
+    """
     try:
         tskstatus = request.POST['select_taskstatus']
     except:
         task_list = FeedbackTask.objects.filter(
             Q(author=request.user.id) | Q(assigner=request.user.id),
             is_active=True, ticket=ticketid, dateclose__isnull=True)
-        #print(task_list)
     else:
+        task_list = FeedbackTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id), is_active=True, ticket=ticketid)
         if tskstatus == "0":
             # если в выпадающем списке выбрано "Все активные"
-            task_list = FeedbackTask.objects.filter(
-                Q(author=request.user.id) | Q(assigner=request.user.id),
-                is_active=True, ticket=ticketid, dateclose__isnull=True)
+            task_list = task_list.filter(dateclose__isnull=True)
         else:
             if tskstatus == "-1":
                 # если в выпадающем списке выбрано "Все"
-                task_list = FeedbackTask.objects.filter(
-                    Q(author=request.user.id) | Q(assigner=request.user.id),
-                    is_active=True, ticket=ticketid)
+                task_list = task_list
             elif tskstatus == "-2":
                 # если в выпадающем списке выбрано "Просроченные"
-                task_list = FeedbackTask.objects.filter(
-                    Q(author=request.user.id) | Q(assigner=request.user.id),
-                    is_active=True, ticket=ticketid, dateclose__isnull=True, dateend__lt=datetime.now())
+                task_list = task_list.filter(dateclose__isnull=True, dateend__lt=datetime.now())
             else:
-                task_list = FeedbackTask.objects.filter(
-                    Q(author=request.user.id) | Q(assigner=request.user.id),
-                    is_active=True, ticket=ticketid, status=tskstatus)  # , dateclose__isnull=True)
+                task_list = task_list.filter(status=tskstatus)  # , dateclose__isnull=True)
         tskstatus_selectid = tskstatus
     # *******************************
-
-    len_list = len(task_list)
+    """
 
     currentticket = FeedbackTicket.objects.filter(id=ticketid).first()
+
+    # показываем только "Мои задачи"
+    tskstatus_myselectid = "3"
+    task_list = tickettasklist(request, currentticket.company_id, ticketid, "0", tskstatus_myselectid, is_ticketslist_dev)
+    len_list = len(task_list)
 
     ticketcomment_list = FeedbackTicketComment.objects.filter(ticket_id=ticketid, is_active=True)
 
@@ -609,20 +620,18 @@ def feedbacktasks(request, ticketid=0, pk=0):
 
     if pk == 0:
         current_task = 0
-        tree_task_id = 0
         root_task_id = 0
         tree_task_id = 0
         if currentuser == currentticket.author_id:
             obj_files_rights = 1
     else:
         current_task = FeedbackTask.objects.filter(id=pk).first()
-        tree_task_id = current_task.tree_id
         root_task_id = current_task.get_root().id
         tree_task_id = current_task.tree_id
         if currentuser == current_task.author_id or currentuser == current_task.assigner_id:
             obj_files_rights = 1
 
-    (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request,currentticket.company_id)
+    (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request, currentticket.company_id)
 
     button_feedbackticket_update = ''
     button_ticketcomment_create = ''
@@ -638,8 +647,10 @@ def feedbacktasks(request, ticketid=0, pk=0):
     is_system_dev = request.session['system_dev'][1]
     current_companyid = request.session["_auth_user_supportcompany_id"]
 
+    #task_list.refresh_from_db()
+
     return render(request, "feedbackticket_detail.html", {
-        'nodes': task_list.distinct().order_by(),  # .order_by('tree_id', 'level', '-dateend'),
+        'nodes': task_list.distinct(),
         'ticketcommentnodes': ticketcomment_list.distinct().order_by(),
         'len_list': len_list,
         'is_system_dev': is_system_dev,
@@ -664,6 +675,9 @@ def feedbacktasks(request, ticketid=0, pk=0):
         'button_ticketcomment_create': button_ticketcomment_create,
         'taskstatus': Dict_FeedbackTaskStatus.objects.filter(is_active=True),
         'tskstatus_selectid': tskstatus_selectid,
+        'tskstatus_myselectid': tskstatus_myselectid,
+        'is_ticketslist_dev:': 0,
+        'is_ticketslist_dev': is_ticketslist_dev,
         'object_list': 'feedbacktask_list',
         'ticketcomment_costsum': ticketcomment_costsum,
         'task_costsum': task_costsum,
@@ -866,7 +880,7 @@ def ticketfilter(request):
             myticketuser = request.GET['my']
         except:
             myticketuser = "0"
-        is_ticketslist_dev = request.GET['is_ticketslist_dev']
+        is_ticketslist_dev = int(request.GET['is_ticketslist_dev'])
 
         currentuser = request.user.id
 
@@ -900,7 +914,7 @@ def ticketfilter(request):
         """
         (is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin) = definerights(request,
                                                                                                         companyid)
-        print(is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin)
+        #print(is_support_member, is_support_admin_org, is_admin_org, is_admin, is_superadmin)
         #currentusercompanyid = request.session['_auth_user_currentcompany_id']
         systemdevid = request.session['system_dev'][0]
         is_system_dev = request.session['system_dev'][1]
@@ -939,7 +953,7 @@ def ticketfilter(request):
             feedbackticket_list = feedbackticket_list.filter(Q(author=request.user.id))
         # **********
 
-        print(companyid, currentuser, statusid, typeid, myticketuser, is_ticketslist_dev)
+        #print(companyid, currentuser, statusid, typeid, myticketuser, is_ticketslist_dev)
         #nodes = ticket_list.distinct() #.order_by()
         nodes = feedbackticket_list.distinct()  # .order_by()
         #print(ticket_list, nodes)
@@ -979,22 +993,34 @@ def tickettaskfilter(request):
         companyid = request.GET['companyid']
         ticketid = request.GET['ticketid']
         statusid = request.GET['statusid']
-        mytskuser = request.GET['my']
-
-        #print("======================")
+        #mytskuser = request.GET['my']
+        try:
+            mytskuser = request.GET['my']
+        except:
+            mytskuser = "0"
+        is_ticketslist_dev = int(request.GET['is_ticketslist_dev'])
 
         #currentuser = request.user.id
         current_company = Company.objects.filter(id=companyid).first()
+        current_ticketid = 0
+        if ticketid != "0":
+            current_ticket = FeedbackTicket.objects.filter(id=ticketid).first()
+            current_ticketid = current_ticket.id
+        """
         if companyid == "0":
             companyid = request.session['_auth_user_currentcompany_id']
         #current_ticket = ''
+        tickettask_list = FeedbackTask.objects.filter(is_active=True)
         if ticketid == "0":
-            tickettask_list = FeedbackTask.objects.filter(is_active=True, ticket__company_id=companyid)
+            if is_ticketslist_dev == 1:
+                tickettask_list = tickettask_list.filter(ticket__company_id__isnull=True)
+            else:
+                tickettask_list = tickettask_list.filter(ticket__company_id=companyid)
             current_ticketid = 0
         else:
             current_ticket = FeedbackTicket.objects.filter(id=ticketid).first()
             current_ticketid = current_ticket.id
-            tickettask_list = FeedbackTask.objects.filter(is_active=True, ticket_id=ticketid)
+            tickettask_list = tickettask_list.filter(ticket_id=ticketid)
 
         # *** фильтруем по статусу ***
         if statusid == "0":
@@ -1004,15 +1030,17 @@ def tickettaskfilter(request):
         elif statusid != "-1":
             tickettask_list = tickettask_list.filter(status_id=statusid)
         # **********
-
+        #print(tickettask_list)
         # *** фильтр по принадлежности ***
         if mytskuser == "1":
             tickettask_list = tickettask_list.filter(Q(author=request.user.id))
         elif mytskuser == "2":
             tickettask_list = tickettask_list.filter(Q(assigner=request.user.id))
         # *******************************
+        """
+        tickettask_list = tickettasklist(request, companyid, ticketid, statusid, mytskuser, is_ticketslist_dev)
 
-        nodes = tickettask_list.distinct() #.order_by()
+        nodes = tickettask_list.distinct()
         taskstatus = Dict_FeedbackTaskStatus.objects.filter(is_active=True)
 
         len_list = len(nodes)
@@ -1024,8 +1052,44 @@ def tickettaskfilter(request):
                                                            'current_company': current_company,
                                                            'current_ticketid': current_ticketid,
                                                            'len_list': len_list,
+                                                           'object_list': 'feedbacktask_list',
                                                            'object_message': object_message,
-                                                           'taskstatus': taskstatus,
-                                                           'mytickettaskselectid': mytskuser,
+                                                           'tskstatus_selectid': taskstatus,
+                                                           'tskstatus_myselectid': mytskuser,
+                                                           'is_ticketslist_dev': is_ticketslist_dev,
                                                           }
                       )
+
+def tickettasklist(request, companyid, ticketid="0", statusid="0", mytskuser="0", is_ticketslist_dev=0):
+
+    tickettask_list = FeedbackTask.objects.filter(is_active=True)
+    if ticketid == "0":
+        if is_ticketslist_dev == 1:
+            tickettask_list = tickettask_list.filter(ticket__company_id__isnull=True)
+        else:
+            tickettask_list = tickettask_list.filter(ticket__company_id=companyid)
+        #current_ticketid = 0
+    else:
+        #current_ticket = FeedbackTicket.objects.filter(id=ticketid).first()
+        #current_ticketid = current_ticket.id
+        tickettask_list = tickettask_list.filter(ticket_id=ticketid)
+
+    # *** фильтруем по статусу ***
+    if statusid == "0":
+        tickettask_list = tickettask_list.filter(dateclose__isnull=True)
+    elif statusid == "-2":
+        tickettask_list = tickettask_list.filter(dateclose__isnull=True, dateend__lte=datetime.now())
+    elif statusid != "-1":
+        tickettask_list = tickettask_list.filter(status_id=statusid)
+    # **********
+    # print(tickettask_list)
+    # *** фильтр по принадлежности ***
+    if mytskuser == "1":
+        tickettask_list = tickettask_list.filter(Q(author=request.user.id))
+    elif mytskuser == "2":
+        tickettask_list = tickettask_list.filter(Q(assigner=request.user.id))
+    elif mytskuser == "3":
+        tickettask_list = tickettask_list.filter(Q(author=request.user.id) | Q(assigner=request.user.id))
+    # *******************************
+
+    return (tickettask_list)

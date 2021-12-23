@@ -327,14 +327,12 @@ def tasks(request, projectid=0, pk=0):
 
     if pk == 0:
        current_task = 0
-       tree_task_id = 0  
        root_task_id = 0
        tree_task_id = 0
        if currentuser == currentproject.author_id or currentuser == currentproject.assigner_id:
            obj_files_rights = 1
     else:
        current_task = Task.objects.get(id=pk)
-       tree_task_id = current_task.tree_id  
        root_task_id = current_task.get_root().id
        tree_task_id = current_task.tree_id
        if currentuser == current_task.author_id or currentuser == current_task.assigner_id:

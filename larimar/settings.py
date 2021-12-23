@@ -183,6 +183,7 @@ LANGUAGES = (
 LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
+USE_TZ = True
 
 USE_I18N = True  # активация системы перевода django
 
@@ -193,8 +194,6 @@ LOCALE_PATHS = (
 )
 
 USE_L10N = True
-
-USE_TZ = True
 
 EMAIL_HOST = 'smtp.beget.com'
 EMAIL_PORT = 2525

@@ -198,7 +198,7 @@ class Task(MPTTModel):
          return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')                           
     class MPTTMeta:
         #order_insertion_by = ['name']    
-        order_insertion_by = ['-dateend']     
+        order_insertion_by = ['dateend']
     class Meta:
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'         

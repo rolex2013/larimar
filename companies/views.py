@@ -82,15 +82,16 @@ def companies(request, pk=0, razdel='projects'):
     is_many_support_member = True
 
     if razdel == 'feedback':
-        is_support_member = request.session['_auth_user_issupportmember']
+        #is_support_member = request.session['_auth_user_issupportmember']
         # сотрудникам Техподдержки показывать только те компании, где они работают
-        if is_support_member:
-            nodes = Company.objects.filter(is_active=True, is_support=True, id__in=comps)
-            if len(nodes) == 1:
-                # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
-                is_many_support_member = False
-        else:
-            nodes = Company.objects.filter(is_active=True, is_support=True)
+        # это неправильно, ибо они тоже должны иметь возможность обращаться в другие техподдержки!
+        #if is_support_member:
+        #    nodes = Company.objects.filter(is_active=True, is_support=True, id__in=comps)
+        #    if len(nodes) == 1:
+        #        # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
+        #        is_many_support_member = False
+        #else:
+        nodes = Company.objects.filter(is_active=True, is_support=True)
     else:
         nodes = Company.objects.filter(is_active=True, id__in=comps)
 

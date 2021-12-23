@@ -125,10 +125,11 @@
                type: 'GET',
                url: "{% url 'my_feedback:ticket_filter' %}",
                data: {
-                  systemid: {{ systemdev.id }},
+                  //systemid: { systemdev.id }},
                   companyid: {{ current_company.id }},
                   statusid: statusSelected,
-                  typeid: typeSelected
+                  typeid: typeSelected,
+                  is_ticketslist_dev: {{ is_ticketslist_dev }}
                },
                success: function(data){
                   $('#ajax_feedbackticketlistresult').html(data);

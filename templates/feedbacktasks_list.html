@@ -20,7 +20,7 @@
        <label>Мои: </label>
        <select name="select-mytask" id="myselectid" class="select-my-task">
           <option value="-1" {% ifequal "-1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-          <!--<option value="0" { ifequal "0" tskstatus_myselectid %} selected="selected" { endifequal %}>- Я участник</option>-->
+          <option value="3" {% ifequal "3" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Все мои</option>
           <option value="1" {% ifequal "1" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
           <option value="2" {% ifequal "2" tskstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
        </select>            
@@ -50,7 +50,7 @@
           var statusSelected = $("#statusselectid option:selected").val()
           var typeSelected = $("#typeselectid option:selected").val()
           var mytaskSelected = $("#myselectid option:selected").val()
-          console.log('===' + typeSelected)            
+          //console.log('===' + typeSelected)
           $.ajax({
              type: 'GET',
              url: "{% url 'my_feedback:tickettask_filter' %}",
@@ -58,7 +58,8 @@
                 companyid: {{ current_company.id }},
                 ticketid: {{ current_ticketid }},
                 statusid: statusSelected,
-                my: mytaskSelected
+                my: mytaskSelected,
+                is_ticketslist_dev: {{ is_ticketslist_dev }}
              },
              success: function(data){
                 $('#ajax_tickettasklistresult').html(data);
