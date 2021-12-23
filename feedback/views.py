@@ -154,22 +154,38 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         comment_data = request.data
-        ticketid = int(comment_data["ticketid"])
+        systemcode = comment_data["systemcode"]
+        ticketremoteid = int(comment_data["ticketid"])
         commentdescription = comment_data["description"]
         commentname = comment_data["name"]
         try:
-            ticket = FeedbackTicketComment.objects.filter(ticket_id=ticketid).first()
-        except:
+            #ticket = FeedbackTicket.objects.filter(ticket_id=ticketid).first()
+            sys = Dict_System.objects.filter(code=systemcode).first()
+            systemid = sys.id
             try:
-                ticket = FeedbackTicketComment.objects.filter(name=commentname).first()
+                ticket = FeedbackTicket.objects.filter(system_id=systemid, id_remote=ticketremoteid).first()
                 ticketid = ticket.id
+                # new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
+                new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
+                                                                         description=commentdescription)
+                serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
+                return Response(serializer.data)
             except:
                 # тут надо сообщить отправителю, что такого тикета у разработчика нет!
                 print('Нет такого тикета!')
                 return
-        new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
-        serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
-        return Response(serializer.data)
+        except:
+            #try:
+            #    ticket = FeedbackTicket.objects.filter(name=commentname).first()
+            #    ticketid = ticket.id
+            #except:
+            #    # тут надо сообщить отправителю, что такого тикета у разработчика нет!
+            #    print('Нет такого тикета!')
+            #    return
+            # тут надо сообщить отправителю, что такого тикета у разработчика нет!
+            print("Система с кодом '" + systemcode + "' не зарегистрирована!")
+            return
+        return
 
 #def FeedbackTicketCreateAPI(request):
 #    return
@@ -707,8 +723,11 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
         # отправляем коммент удалённому автору тикета
         #print('/',str(form.instance.ticket.id_remote),'/')
         if form.instance.ticket.company_id == None:
+            sys = Dict_System.objects.filter(is_local=True).first()
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'ticketid': str(form.instance.ticket.id_remote)}
+            #ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'ticketid': str(form.instance.ticket.id_remote)}
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description,
+                           'systemcode': sys.code,'ticketid': str(form.instance.ticket_id)}
             url_dev = form.instance.ticket.system.url + '/feedback/api/ticketcomment/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
         return super().form_valid(form)
