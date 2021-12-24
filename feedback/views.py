@@ -174,8 +174,10 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data)
             except:
                 # тут надо сообщить отправителю, что такого тикета у разработчика нет!
-                print('Нет такого тикета!')
-                return Response()
+                text = "Нет такого тикета!"
+                response_data = {'text': text}
+                #print("Система с кодом '" + systemcode + "' не зарегистрирована!")
+                return Response(response_data)
         except:
             #try:
             #    ticket = FeedbackTicket.objects.filter(name=commentname).first()
@@ -185,8 +187,10 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
             #    print('Нет такого тикета!')
             #    return
             # тут надо сообщить отправителю, что такого тикета у разработчика нет!
-            print("Система с кодом '" + systemcode + "' не зарегистрирована!")
-            return Response()
+            text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
+            response_data = {'text': text}
+            #print("Система с кодом '" + systemcode + "' не зарегистрирована!")
+            return Response(response_data)
 
         #new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
         new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
