@@ -132,7 +132,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
             systemid = sys.id
         except:
-            #systemid = 1
+            systemid = 1
             text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
             response_data = {'text': text}
             return Response(response_data)
@@ -519,7 +519,8 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.system_id = self.kwargs['systemid']
-        sys = Dict_System.objects.filter(id=form.instance.system_id).first()
+        sys = Dict_System.objects.filter(is_active=True, id=form.instance.system_id).first()
+        sysloc = Dict_System.objects.filter(is_active=True, is_local=True).first()
         if self.kwargs['companyid'] != 0 and sys.is_local == True:
             form.instance.company_id = self.kwargs['companyid']
         form.instance.author_id = self.request.user.id
@@ -532,9 +533,11 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             # ToDo необходимо передать сюда system.code
-            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sys.code}
+            print(sysloc.code)
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
+            print(r, json.dumps(r.json()))
             #form.instance.requeststatuscode = r.status_code
 
         return super().form_valid(form)
