@@ -355,7 +355,8 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
         # список тикетов разработчику
         if is_system_dev:
             # список тикетов разработчику в системе разработчика 1YES!
-            feedbackticket_list = feedbackticket_list.filter(system_id=systemdevid)
+            #feedbackticket_list = feedbackticket_list.filter(system_id=systemdevid)
+            feedbackticket_list = feedbackticket_list.exclude(system_id=systemdevid)
         else:
             # список тикетов разработчику в локальной системе
             feedbackticket_list = feedbackticket_list.filter(system_id=systemdevid, company_id__isnull=True, companyfrom_id=companyid)
