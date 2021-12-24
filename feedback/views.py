@@ -169,7 +169,7 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
                 ticketid = ticket.id
                 # new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
                 new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
-                                                                         description=commentdescription)
+                                                                         description=commentdescription, is_active=True)
                 serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
                 return Response(serializer.data)
             except:
@@ -194,7 +194,7 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
 
         #new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
         new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
-                                                                 description=commentdescription)
+                                                                 description=commentdescription, is_active=True)
         serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
         return Response(serializer.data)
 
