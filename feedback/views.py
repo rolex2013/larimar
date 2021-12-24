@@ -741,6 +741,7 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
                            'systemcode': sys.code,'ticketid': str(form.instance.ticket_id)}
             url_dev = form.instance.ticket.system.url + '/feedback/api/ticketcomment/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
+            print(r)
         return super().form_valid(form)
 
 class FeedbackTaskCreate(AddFilesMixin, CreateView):

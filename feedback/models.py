@@ -160,8 +160,8 @@ class FeedbackTask(MPTTModel):
 class FeedbackTicketComment(models.Model):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")
-    time = models.DecimalField("Время работы, час.", max_digits=6, decimal_places=2, blank=False, null=False, default=0)
-    cost = models.DecimalField("Стоимость", max_digits=9, decimal_places=2, default=0)
+    time = models.DecimalField("Время работы, час.", null=True, blank=True, max_digits=6, decimal_places=2, default=0)
+    cost = models.DecimalField("Стоимость", null=True, blank=True, max_digits=9, decimal_places=2, default=0)
     ticket = models.ForeignKey('FeedbackTicket', on_delete=models.CASCADE, related_name='feedback_ticket', verbose_name="Тикет")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     company = models.ForeignKey('companies.Company', null=True, blank=True, on_delete=models.CASCADE, related_name='feedback_commentcompany',
