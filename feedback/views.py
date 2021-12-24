@@ -699,7 +699,6 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
         'taskstatus': Dict_FeedbackTaskStatus.objects.filter(is_active=True),
         'tskstatus_selectid': tskstatus_selectid,
         'tskstatus_myselectid': tskstatus_myselectid,
-        'is_ticketslist_dev:': 0,
         'is_ticketslist_dev': is_ticketslist_dev,
         'object_list': 'feedbacktask_list',
         'ticketcomment_costsum': ticketcomment_costsum,
@@ -723,7 +722,8 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         is_support_member = self.request.session['_auth_user_issupportmember']
-        kwargs.update({'is_support_member': is_support_member})
+        is_ticketslist_dev = self.kwargs['is_ticketslist_dev']
+        kwargs.update({'is_support_member': is_support_member, 'is_ticketslist_dev': is_ticketslist_dev})
         return kwargs
 
     def form_valid(self, form):
@@ -741,7 +741,7 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
                            'systemcode': sys.code,'ticketid': str(form.instance.ticket_id)}
             url_dev = form.instance.ticket.system.url + '/feedback/api/ticketcomment/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
-            print(r)
+            #print(r)
         return super().form_valid(form)
 
 class FeedbackTaskCreate(AddFilesMixin, CreateView):
@@ -1012,6 +1012,7 @@ def ticketfilter(request):
                                                              'ticketstatus': ticketstatus,
                                                              'tickettype': tickettype,
                                                              'myticketselectid': myticketuser,
+                                                             'is_ticketslist_dev': is_ticketslist_dev,
                                                              'button_feedbackticket_create': button_feedbackticket_create,
                                                             }
                       )

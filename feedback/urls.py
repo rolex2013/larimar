@@ -50,13 +50,10 @@ urlpatterns = [
     #path('ticketcomments_list/<int:pk>', views.FeedbackTicketCommentDetail.as_view(), name='feedbacktaskcomment_detail'),
     #path('tickets_page/ticketcomment_create/<int:ticketid>/<int:companyid>', views.FeedbackTicketCommentCreate.as_view(),
     #     name='feedbackticketcomment_create'),
-    path('tickets_page/ticketcomment_create/<int:ticketid>',
-         views.FeedbackTicketCommentCreate.as_view(),
-         name='feedbackticketcomment_create'),
+    path('tickets_page/ticketcomment_create/<int:is_ticketslist_dev>/<int:ticketid>', views.FeedbackTicketCommentCreate.as_view(), name='feedbackticketcomment_create'),
     path('tickets_page/taskcomments_page/<int:taskid>', views.feedbacktaskcomments, name='feedbacktaskcomments'),
     #path('taskcomments_list/<int:pk>', views.FeedbackTaskCommentDetail.as_view(), name='feedbacktaskcomment_detail'),
-    path('tickets_page/taskcomment_create/<int:taskid>', views.FeedbackTaskCommentCreate.as_view(),
-         name='feedbacktaskcomment_create'),
+    path('tickets_page/taskcomment_create/<int:taskid>', views.FeedbackTaskCommentCreate.as_view(), name='feedbacktaskcomment_create'),
     #path('taskcomments_list/taskcomment_update/<int:pk>', views.FeedbackTaskCommentUpdate.as_view(), name='feedbacktaskcomment_update'),
 
     # Тикеты с Разработчиком

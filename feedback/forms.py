@@ -115,8 +115,10 @@ class FeedbackTicketCommentForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.is_support_member = kwargs.pop('is_support_member')
+        self.is_ticketslist_dev = kwargs.pop('is_ticketslist_dev')
+        print(self.is_ticketslist_dev)
         super().__init__(*args, **kwargs)
-        if not self.is_support_member:
+        if not self.is_support_member or self.is_ticketslist_dev == 1:
             self.fields['time'].widget = forms.HiddenInput()
             self.fields['cost'].widget = forms.HiddenInput()
 

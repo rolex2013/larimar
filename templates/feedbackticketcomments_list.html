@@ -33,10 +33,10 @@
  
  <div class="object-list-buttons">
     {% if is_support_member %}
-        <!--<a href="{ url 'my_feedback:feedbackticketcomment_create' ticketid current_feedbackticket.company_id %}">{{ button_ticketcomment_create }}</a>-->
-        <a href="{% url 'my_feedback:feedbackticketcomment_create' ticketid %}">{{ button_ticketcomment_create }}</a>
+        <!--<a href="{ url 'my_feedback:feedbackticketcomment_create' ticketid current_feedbackticket.company_id %}">{ button_ticketcomment_create }}</a>-->
+        <a href="{% url 'my_feedback:feedbackticketcomment_create' is_ticketslist_dev ticketid %}">{{ button_ticketcomment_create }}</a>
     {% else %}
         <!--<a href="{ url 'my_feedback:feedbackticketcomment_create' ticketid current_feedbackticket.companyfrom_id %}">{ button_ticketcomment_create }}</a>-->
-        <a href="{% url 'my_feedback:feedbackticketcomment_create' ticketid %}">{{ button_ticketcomment_create }}</a>
+        <a href="{% url 'my_feedback:feedbackticketcomment_create' is_ticketslist_dev ticketid %}">{{ button_ticketcomment_create }}</a>
     {% endif %}
  </div>
