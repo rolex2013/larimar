@@ -147,11 +147,10 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         except:
             statusid = 1
         idremote = int(ticket_data["id_remote"])
-        # ToDo надо сделать поиск по полученному system.code и записать его id в ticket.system_id
         new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
         #new_ticket.save()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
-        return Response(serializer.data, {'systemid': systemid})
+        return Response(serializer.data)
 
 class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
     queryset = FeedbackTicketComment.objects.filter(is_active=True).order_by('-datecreate')
@@ -524,7 +523,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         if self.kwargs['companyid'] != 0 and sys.is_local == True:
             form.instance.company_id = self.kwargs['companyid']
         form.instance.author_id = self.request.user.id
-        form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
+        #form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
         form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
         #form.instance.system_id = 1  # Новый Тикет временно приписываем к локальной Системе
         self.object = form.save() # Созадём новый тикет
@@ -532,14 +531,16 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         # отправляем тикет разработчику
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            # ToDo необходимо передать сюда system.code
-            print(sysloc.code)
+            #print(sysloc.code)
             ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             print(r, json.dumps(r.json()))
-            print(r["systemid"])
+            #print(r["systemid"])
             #form.instance.requeststatuscode = r.status_code
+        else:
+            self.object.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
+            self.object = form.save()
 
         return super().form_valid(form)
 
