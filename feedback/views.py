@@ -523,7 +523,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         if self.kwargs['companyid'] != 0 and sys.is_local == True:
             form.instance.company_id = self.kwargs['companyid']
         form.instance.author_id = self.request.user.id
-        #form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
+        form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
         form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
         #form.instance.system_id = 1  # Новый Тикет временно приписываем к локальной Системе
         self.object = form.save() # Созадём новый тикет
@@ -538,9 +538,9 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
             print(r, json.dumps(r.json()))
             #print(r["systemid"])
             #form.instance.requeststatuscode = r.status_code
-        else:
-            self.object.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
-            self.object = form.save()
+        #else:
+        #    self.object.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
+        #    self.object = form.save()
 
         return super().form_valid(form)
 
