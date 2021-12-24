@@ -151,7 +151,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
         #new_ticket.save()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
-        return Response(serializer.data)
+        return Response(serializer.data, {'systemid': systemid})
 
 class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
     queryset = FeedbackTicketComment.objects.filter(is_active=True).order_by('-datecreate')
@@ -538,6 +538,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             print(r, json.dumps(r.json()))
+            print(r["systemid"])
             #form.instance.requeststatuscode = r.status_code
 
         return super().form_valid(form)
