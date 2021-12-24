@@ -173,8 +173,8 @@ class FeedbackTicketComment(models.Model):
         return reverse('my_feedback:feedbacktasks', kwargs={'is_ticketslist_dev': 0, 'ticketid': self.ticket_id, 'pk': 0})
 
     def __str__(self):
-        #return (str(self.ticket) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
-        return (self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
+        return (str(self.ticket) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
+        #return (self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
 
     @property
     def files(self):
