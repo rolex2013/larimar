@@ -126,11 +126,16 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
     """
     def create(self, request):
         ticket_data = request.data
+        systemcode = ticket_data["systemcode"]
         try:
-            sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+            #sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+            sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
             systemid = sys.id
         except:
-            systemid = 1
+            #systemid = 1
+            text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
+            response_data = {'text': text}
+            return Response(response_data)
         try:
             type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
             typeid = type.id
@@ -142,6 +147,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         except:
             statusid = 1
         idremote = int(ticket_data["id_remote"])
+        # ToDo надо сделать поиск по полученному system.code и записать его id в ticket.system_id
         new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
         #new_ticket.save()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
@@ -525,7 +531,8 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         # отправляем тикет разработчику
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id)} #, 'companyfrom': form.instance.companyfrom_id}
+            # ToDo необходимо передать сюда system.code
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sys.code}
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             #form.instance.requeststatuscode = r.status_code
