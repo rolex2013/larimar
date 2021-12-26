@@ -11,7 +11,7 @@
              {% else %}
                  <div class="object-list-list-right" >
              {% endif %}
-             <b><!--<a href="{ url 'my_feedback:feedbackticketcomments' node.pk %}">-->
+             <b>
              #{{ node.id }}. {{ node.name }} <span style="font-size: 70%; color: brown;"> |
              {% if is_ticketslist_dev == 1 and is_system_dev %}
                 <span class="hint hint--bottom hint--info" data-hint="Система"><i>{{ node.ticket.system.name }}</i></span> | {{ node.datecreate }}
