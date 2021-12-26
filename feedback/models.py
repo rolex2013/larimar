@@ -89,6 +89,7 @@ class FeedbackTicket(models.Model):
     datecreate = models.DateTimeField("Создана", auto_now_add=True)
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, related_name='feedback_ticket_user', verbose_name="Автор")
+    requeststatuscode = models.IntegerField("Код завершения операции", blank=True, null=True)
     id_remote = models.IntegerField("ID тикета в удалённой системе", null=True, blank=True)
     is_active = models.BooleanField("Активность", default=True)
 
@@ -167,6 +168,7 @@ class FeedbackTicketComment(models.Model):
     company = models.ForeignKey('companies.Company', null=True, blank=True, on_delete=models.CASCADE, related_name='feedback_commentcompany',
                                 verbose_name="Компания")
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
+    requeststatuscode = models.IntegerField("Код завершения операции", blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):

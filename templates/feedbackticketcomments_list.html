@@ -14,7 +14,7 @@
              <b>
              #{{ node.id }}. {{ node.name }} <span style="font-size: 70%; color: brown;"> |
              {% if is_ticketslist_dev == 1 and is_system_dev %}
-                <span class="hint hint--bottom hint--info" data-hint="Система"><i>{{ node.ticket.system.name }}</i></span> | {{ node.datecreate }}
+                <span class="hint hint--bottom hint--info" data-hint="{{ node.ticket.system.domain }}"><i>{{ node.ticket.system.name }}</i></span> | {{ node.datecreate }}
              {% else %}
                 <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | {{ node.datecreate }}
              {% endif %}
