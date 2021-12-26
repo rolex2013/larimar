@@ -70,10 +70,11 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
         sys_data = request.data
         new_sys = Dict_System.objects.create(code=sys_data["code"], name=sys_data["name"], domain=sys_data["domain"], url=sys_data["url"], ip=sys_data["ip"], email=sys_data["email"], phone=sys_data["phone"], is_local=sys_data["is_local"])
         #new_sys.save()
-        serializer = Dict_SystemSerializer(new_sys, context={'request': request})
+        #serializer = Dict_SystemSerializer(new_sys, context={'request': request})
         sys_local = Dict_System.objects.filter(is_local=True, is_active=True).first()
         if sys_data["req"] == True:
             # *** Добавление системы разработчика в удалённую БД ***
+            """
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             #ip = get_client_ip(self.request)
             #url = self.request.build_absolute_uri('/')[:-1]
@@ -85,6 +86,9 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
             upd_sys = Dict_System.objects.filter(id=new_sys.id)
             upd_sys.requeststatuscode = r.status_code
             upd_sys.save()
+            """
+            #sys = Dict_System.objects.filter(code="1YES-1YES-1YES-1YES", is_local=True, is_active=True).first()
+            serializer = Dict_SystemSerializer(sys_local, context={'request': request})
         return Response(serializer.data)
 
     #def update(self, request, pk=None):
@@ -149,7 +153,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         idremote = int(ticket_data["id_remote"])
         new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
         #new_ticket.save()
-        new_ticket = FeedbackTicket.objects.filter(id=3).first()
+        #new_ticket = FeedbackTicket.objects.filter(id=3).first()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
         return Response(serializer.data)
 
@@ -246,6 +250,11 @@ class Dict_SystemCreate(CreateView):
         form.instance.url = url
         form.instance.requeststatuscode = r.status_code
         self.object = form.save()  # Создаём новую Систему
+        rj = r.json()
+        print(r.get("code"), rj.get("name"), rj.get("domain"), rj.get("url"), rj.get("ip"), rj.get("email"), rj.get("phone"), rj.get("is_local"))
+        sys_dev = Dict_System.objects.create(code=rj.get("code"), name=rj.get("name"), domain=rj.get("domain"),
+                                             url=rj.get("url"), ip=rj.get("ip"), email=rj.get("email"),
+                                             phone=rj.get("phone"), is_local=rj.get("is_local"))
         # ***
         return super().form_valid(form)
 
@@ -524,7 +533,11 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
             ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
-            print(r, json.dumps(r.json()))
+            #jsr = r.json()
+            #print(r, json.dumps(r.json()))
+            #print(jsr.get("name"))
+            #print(r, jsr["name"])
+            #print(r, jsr.name)
             # тикету для разработчика прописываем id текущей компании техподдержки
             self.object.companyfrom_id = compid
             self.object.requeststatuscode = r.status_code
