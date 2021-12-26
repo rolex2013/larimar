@@ -13,7 +13,11 @@
              {% endif %}
              <b><!--<a href="{ url 'my_feedback:feedbackticketcomments' node.pk %}">-->
              #{{ node.id }}. {{ node.name }} <span style="font-size: 70%; color: brown;"> |
-             <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | {{ node.datecreate }}
+             {% if is_ticketlist_dev and is_system_dev %}
+                <span class="hint hint--bottom hint--info" data-hint="Система"><i>{{ node.ticket.system.name }}</i></span> | {{ node.datecreate }}
+             {% else %}
+                <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | {{ node.datecreate }}
+             {% endif %}
                     {% if is_support_member %}
                      | {{ node.time }} час. | {{ node.ticket.company.currency.symbol }}{{ node.cost }}
                     {%  endif %}

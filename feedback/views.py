@@ -521,8 +521,13 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         form.instance.system_id = self.kwargs['systemid']
         sys = Dict_System.objects.filter(is_active=True, id=form.instance.system_id).first()
         sysloc = Dict_System.objects.filter(is_active=True, is_local=True).first()
-        if self.kwargs['companyid'] != 0 and sys.is_local == True:
-            form.instance.company_id = self.kwargs['companyid']
+        compid = self.kwargs['companyid']
+        if compid != 0 and sys.is_local == True:
+            form.instance.company_id = compid
+            form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
+        else:
+            # в тикет разработчику пишем id текущей службы техподдержки
+            form.instance.companyfrom_id = compid
         form.instance.author_id = self.request.user.id
         form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
         form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
@@ -537,11 +542,17 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             print(r, json.dumps(r.json()))
+            self.object.companyfrom_id = compid #self.request.company.id
+            self.object = form.save()
+            #print(self.object.companyfrom_id)
             #print(r["systemid"])
             #form.instance.requeststatuscode = r.status_code
         #else:
-        #    self.object.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
+        #    # чтобы отображался список тикетов только этой компании техподдержки
+        #    #curticket = FeedbackTicket.objects.filter()
+        #    self.object.companyfrom_id = self.request['companyid']
         #    self.object = form.save()
+        #    print(self.object.companyfrom_id)
 
         return super().form_valid(form)
 
@@ -712,6 +723,7 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
         'taskstatus': Dict_FeedbackTaskStatus.objects.filter(is_active=True),
         'tskstatus_selectid': tskstatus_selectid,
         'tskstatus_myselectid': tskstatus_myselectid,
+        'is_system_dev': request.session["system_dev"][1],
         'is_ticketslist_dev': is_ticketslist_dev,
         'object_list': 'feedbacktask_list',
         'ticketcomment_costsum': ticketcomment_costsum,
