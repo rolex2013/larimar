@@ -695,6 +695,7 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
     current_companyid = request.session["_auth_user_supportcompany_id"]
 
     #task_list.refresh_from_db()
+    print(is_ticketslist_dev)
 
     return render(request, "feedbackticket_detail.html", {
         'nodes': task_list.distinct(),
