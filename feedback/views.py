@@ -243,18 +243,22 @@ class Dict_SystemCreate(CreateView):
                        'ip': ip, 'email': form.cleaned_data["email"], 'phone': form.cleaned_data["phone"], 'is_local': False, 'req': True}
         url_dev = 'http://larimaritgroup.ru/feedback/api/system/'
         #url = 'http://localhost:8000/feedback/api/system/'
-        r = requests.post(url_dev, headers=headers, data=json.dumps(system_data))
-        #r = requests.post(url, headers=headers, csrfmiddlewaretoken=csrftoken, data=json.dumps(system_data))
-        form.instance.code = code
-        form.instance.ip = ip
-        form.instance.url = url
-        form.instance.requeststatuscode = r.status_code
-        self.object = form.save()  # Создаём новую Систему
-        rj = r.json()
-        print(r.get("code"), rj.get("name"), rj.get("domain"), rj.get("url"), rj.get("ip"), rj.get("email"), rj.get("phone"), rj.get("is_local"))
-        sys_dev = Dict_System.objects.create(code=rj.get("code"), name=rj.get("name"), domain=rj.get("domain"),
-                                             url=rj.get("url"), ip=rj.get("ip"), email=rj.get("email"),
-                                             phone=rj.get("phone"), is_local=rj.get("is_local"))
+        try:
+            r = requests.post(url_dev, headers=headers, data=json.dumps(system_data))
+            #r = requests.post(url, headers=headers, csrfmiddlewaretoken=csrftoken, data=json.dumps(system_data))
+            form.instance.code = code
+            form.instance.ip = ip
+            form.instance.url = url
+            form.instance.requeststatuscode = r.status_code
+            self.object = form.save()  # Создаём новую Систему
+            rj = r.json()
+            #print(rj)
+            #print(rj.get("code"), rj.get("name"), rj.get("domain"), rj.get("url"), rj.get("ip"), rj.get("email"), rj.get("phone"), rj.get("is_local"))
+            sys_dev = Dict_System.objects.create(code=rj.get("code"), name=rj.get("name"), domain=rj.get("domain"),
+                                                 url=rj.get("url"), ip=rj.get("ip"), email=rj.get("email"),
+                                                 phone=rj.get("phone"), is_local=False, requeststatuscode=200)
+        except:
+            print('Что-то пошло не так с сервером...')
         # ***
         return super().form_valid(form)
 

@@ -33,7 +33,7 @@ class Dict_System(models.Model):
     def __str__(self):
         return (self.name + '. ' + self.code + '. ' + self.domain)
     def get_absolute_url(self):
-        return reverse('my_feedback:tickets0')
+        return reverse('my_feedback:tickets0', kwargs={'is_ticketslist_dev': 1, 'systemid': self.pk})
 
 class Dict_FeedbackTicketStatus(models.Model):
     name = models.CharField("Наименование", max_length=64)
