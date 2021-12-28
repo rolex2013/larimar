@@ -100,7 +100,7 @@ class AddFilesMixin(object):
                   fcnt = FolderFile.objects.filter(folder_id=folder_id, name=f, is_active=True).count()
                   fl = FolderFile(folder_id=folder_id, pfile=f)
                elif app == 'feedback':
-                  fcnt = FeedbackFile.objects.filter(ticket_id=project_id, ticketcomment_id=ticketcomment_id, task_id=task_id, taskcomment_id=taskcomment_id, name=f, is_active=True).count()
+                  fcnt = FeedbackFile.objects.filter(ticket_id=ticket_id, ticketcomment_id=ticketcomment_id, task_id=task_id, taskcomment_id=taskcomment_id, name=f, is_active=True).count()
                   fl = FeedbackFile(ticket_id=ticket_id, ticketcomment_id=ticketcomment_id, task_id=task_id, taskcomment_id=taskcomment_id, pfile=f)
 
                fl.author = self.request.user

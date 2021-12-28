@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.shortcuts import render
 import json, requests
+import os # для записи путей к файлам
 
 import random, string
 
@@ -152,6 +153,24 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             statusid = 1
         idremote = int(ticket_data["id_remote"])
         new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
+        # *** добавление файлов ***
+        files = ticket_data["files"]
+        for f in files:
+            fcnt = FeedbackFile.objects.filter(ticket_id=new_ticket, name=f, is_active=True).count()
+            fl = FeedbackFile(ticket_id=self.object.id, pfile=f)
+            # fl.author = self.request.user
+            fn = f
+            if fcnt:
+                f_str = str(f)
+                ext_pos = f_str.rfind('.')
+                fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+            fl.name = f
+            fl.uname = fn
+            fl.save()
+            fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
+            fl.psize = os.path.getsize(fullpath)
+            fl.save()
+        # ***
         #new_ticket.save()
         #new_ticket = FeedbackTicket.objects.filter(id=3).first()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
@@ -532,9 +551,11 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
         # отправляем тикет разработчику
         if sys.is_local == False:
+            files = form.files.getlist('files')
+            print(files)
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             #print(sysloc.code)
-            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code, 'files': files}
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             #jsr = r.json()
