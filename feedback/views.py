@@ -14,7 +14,7 @@ from django.db.models import Q, Count, Min, Max, Sum, Avg
 from datetime import datetime, date, time
 
 
-from .serializers import Dict_SystemSerializer, CompanySerializer, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
+from .serializers import Dict_SystemSerializer, CompanySerializer #, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
 from companies.models import Company, UserCompanyComponentGroup
 from .models import Dict_System, Dict_FeedbackTicketStatus, Dict_FeedbackTicketType, Dict_FeedbackTaskStatus
 from .models import FeedbackTicket, FeedbackTicketComment, FeedbackTask, FeedbackTaskComment, FeedbackFile
@@ -24,7 +24,11 @@ from main.utils import AddFilesMixin
 
 from rest_framework.generics import get_object_or_404
 from rest_framework import viewsets, permissions
-from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
+from .serializers import Dict_SystemSerializer, FeedbackTicketSerializer, FeedbackTicketCommentSerializer, FeedbackFileSerializer
+#from django.core.serializers.json import DjangoJSONEncoder
+#from django.core.files.uploadedfile import InMemoryUploadedFile
+from io import BytesIO #, StringIO
+import base64
 from rest_framework.response import Response
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_protect, requires_csrf_token, csrf_exempt
@@ -95,10 +99,11 @@ class Dict_SystemViewSet(viewsets.ModelViewSet):
     #def update(self, request, pk=None):
     #    return Response(serializer.data)
 
-
+#""
 class CompanyViewSet(viewsets.ModelViewSet):
     queryset = Company.objects.all() #.order_by('name')
     serializer_class = CompanySerializer
+#""
 
 class FeedbackTicketViewSet(viewsets.ModelViewSet):
     queryset = FeedbackTicket.objects.filter(is_active=True).order_by('-datecreate')
@@ -131,26 +136,34 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
     """
     def create(self, request):
         ticket_data = request.data
-        systemcode = ticket_data["systemcode"]
+
         try:
-            #sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
-            sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
-            systemid = sys.id
+            systemcode = ticket_data["systemcode"]
+            try:
+                #sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+                sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
+                systemid = sys.id
+            except:
+                systemid = 1
+                text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
+                response_data = {'text': text}
+                return Response(response_data)
         except:
-            systemid = 1
-            text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
-            response_data = {'text': text}
-            return Response(response_data)
+            sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+            systemid = sys.id
+
         try:
             type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
             typeid = type.id
         except:
             typeid = 1
+
         try:
             status = Dict_FeedbackTicketStatus.objects.filter(name=ticket_data["status"]).first()
             statusid = status.id
         except:
             statusid = 1
+
         idremote = int(ticket_data["id_remote"])
         new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
         # *** добавление файлов ***
@@ -229,6 +242,16 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
 
 #def FeedbackTicketCreateAPI(request):
 #    return
+
+class FeedbackFileViewSet(viewsets.ModelViewSet):
+    queryset = FeedbackFile.objects.all()
+    serializer_class = FeedbackFileSerializer
+    #filter_fields = ('name', 'description',)
+    filter_fields = ('name', 'ticket')
+    def list(self, request):
+        files = FeedbackFile.objects.filter(is_active=True)
+        serializer = FeedbackFileSerializer(files, context={'request': request}, many=True)
+        return Response({"files": serializer.data})
 
 # ******
 
@@ -520,6 +543,11 @@ class FeedbackTicketDetail(DetailView):
     model = FeedbackTicket
     template_name = 'feedbackticket_detail.html'
 
+#class MyJsonEncoder(DjangoJSONEncoder):
+#    def default(self, o):
+#        if isinstance(o, InMemoryUploadedFile):
+#           return o.read()
+#        return str(o)
 
 class FeedbackTicketCreate(AddFilesMixin, CreateView):
     model = FeedbackTicket
@@ -551,18 +579,18 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
         # отправляем тикет разработчику
         if sys.is_local == False:
-            files = form.files.getlist('files')
-            print(files)
+            #files = form.files.getlist('files')
+            #f = files[0]
+            #print(files, f)
+            #f.seek(0)
+            #file_handle = BytesIO(f.read())
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             #print(sysloc.code)
-            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code, 'files': files}
+            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
+            #dt = base64.b64encode(f.read())
+            #ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code, 'files': dt}
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
-            #jsr = r.json()
-            #print(r, json.dumps(r.json()))
-            #print(jsr.get("name"))
-            #print(r, jsr["name"])
-            #print(r, jsr.name)
             # тикету для разработчика прописываем id текущей компании техподдержки
             self.object.companyfrom_id = compid
             self.object.requeststatuscode = r.status_code

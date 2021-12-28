@@ -6,6 +6,7 @@ from rest_framework import routers
 #from .models import Dict_System, FeedbackTicket, FeedbackTicketComment, FeedbackTask, FeedbackTaskComment
 
 from . import views
+#from companies.views import CompanyDetail
 
 app_name = 'my_feedback'
 
@@ -14,10 +15,12 @@ router.register(r'system', views.Dict_SystemViewSet)
 #router.register(r'company', views.CompanyViewSet)
 router.register(r'ticket', views.FeedbackTicketViewSet)
 router.register(r'ticketcomment', views.FeedbackTicketCommentViewSet)
+router.register(r'file', views.FeedbackFileViewSet)
 
 urlpatterns = [
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    #path('companies_list/company_detail/<int:pk>', CompanyDetail.as_view(), name='company-detail'),
     #path('systems_page/system_reg', views.SystemCreate.as_view(), name='system_reg'),
     #path('api/system_reg', views.Dict_SystemViewSet.as_view({'get': 'create'}), name='system_reg'),
     #path('api/ticket_create', views.FeedbackTicketViewSet.as_view({'get': 'list'}), name='ticket_create'),
