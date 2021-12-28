@@ -166,6 +166,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
 
         idremote = int(ticket_data["id_remote"])
         new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
+        """
         # *** добавление файлов ***
         files = ticket_data["files"]
         for f in files:
@@ -184,6 +185,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             fl.psize = os.path.getsize(fullpath)
             fl.save()
         # ***
+        """
         #new_ticket.save()
         #new_ticket = FeedbackTicket.objects.filter(id=3).first()
         serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
