@@ -143,7 +143,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             new_ticket = 39 #ticket_data["newticket"]
             for f in files:
                 fcnt = FeedbackFile.objects.filter(ticket_id=new_ticket, name=f, is_active=True).count()
-                fl = FeedbackFile(ticket_id=self.object.id, pfile=f)
+                fl = FeedbackFile(ticket_id=new_ticket, pfile=f)
                 # fl.author = self.request.user
                 fn = f
                 if fcnt:
