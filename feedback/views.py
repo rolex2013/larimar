@@ -138,9 +138,9 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         ticket_data = request.data
 
         # *** добавление файлов ***
-        files = ticket_data["feedbackticket_file"]
-        if files:
-            new_ticket = ticket_data["newticket"]
+        try:
+            files = ticket_data["feedbackticket_file"]
+            new_ticket = 39 #ticket_data["newticket"]
             for f in files:
                 fcnt = FeedbackFile.objects.filter(ticket_id=new_ticket, name=f, is_active=True).count()
                 fl = FeedbackFile(ticket_id=self.object.id, pfile=f)
@@ -158,7 +158,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
                 fl.save()
 
             serializer = FeedbackFileSerializer(new_ticket, context={'request': request})
-        else:
+        except:
 
             try:
                 systemcode = ticket_data["systemcode"]
