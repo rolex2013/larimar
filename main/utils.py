@@ -116,4 +116,6 @@ class AddFilesMixin(object):
                fl.psize = os.path.getsize(fullpath)
                fl.save()
 
-        return True
+           return True
+
+        return False

@@ -137,58 +137,63 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
     def create(self, request):
         ticket_data = request.data
 
-        try:
-            systemcode = ticket_data["systemcode"]
-            try:
-                #sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
-                sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
-                systemid = sys.id
-            except:
-                systemid = 1
-                text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
-                response_data = {'text': text}
-                return Response(response_data)
-        except:
-            sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
-            systemid = sys.id
-
-        try:
-            type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
-            typeid = type.id
-        except:
-            typeid = 1
-
-        try:
-            status = Dict_FeedbackTicketStatus.objects.filter(name=ticket_data["status"]).first()
-            statusid = status.id
-        except:
-            statusid = 1
-
-        idremote = int(ticket_data["id_remote"])
-        new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
-        """
         # *** добавление файлов ***
-        files = ticket_data["files"]
-        for f in files:
-            fcnt = FeedbackFile.objects.filter(ticket_id=new_ticket, name=f, is_active=True).count()
-            fl = FeedbackFile(ticket_id=self.object.id, pfile=f)
-            # fl.author = self.request.user
-            fn = f
-            if fcnt:
-                f_str = str(f)
-                ext_pos = f_str.rfind('.')
-                fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
-            fl.name = f
-            fl.uname = fn
-            fl.save()
-            fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
-            fl.psize = os.path.getsize(fullpath)
-            fl.save()
-        # ***
-        """
-        #new_ticket.save()
-        #new_ticket = FeedbackTicket.objects.filter(id=3).first()
-        serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
+        files = ticket_data["feedbackticket_file"]
+        if files:
+            new_ticket = ticket_data["newticket"]
+            for f in files:
+                fcnt = FeedbackFile.objects.filter(ticket_id=new_ticket, name=f, is_active=True).count()
+                fl = FeedbackFile(ticket_id=self.object.id, pfile=f)
+                # fl.author = self.request.user
+                fn = f
+                if fcnt:
+                    f_str = str(f)
+                    ext_pos = f_str.rfind('.')
+                    fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+                fl.name = f
+                fl.uname = fn
+                fl.save()
+                fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
+                fl.psize = os.path.getsize(fullpath)
+                fl.save()
+
+            serializer = FeedbackFileSerializer(new_ticket, context={'request': request})
+        else:
+
+            try:
+                systemcode = ticket_data["systemcode"]
+                try:
+                    #sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+                    sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
+                    systemid = sys.id
+                except:
+                    systemid = 1
+                    text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
+                    response_data = {'text': text}
+                    return Response(response_data)
+            except:
+                sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+                systemid = sys.id
+
+            try:
+                type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
+                typeid = type.id
+            except:
+                typeid = 1
+
+            try:
+                status = Dict_FeedbackTicketStatus.objects.filter(name=ticket_data["status"]).first()
+                statusid = status.id
+            except:
+                statusid = 1
+
+            idremote = int(ticket_data["id_remote"])
+            new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
+
+            #new_ticket.save()
+            #new_ticket = FeedbackTicket.objects.filter(id=3).first()
+            serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
+
         return Response(serializer.data)
 
 class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
@@ -581,18 +586,30 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
         # отправляем тикет разработчику
         if sys.is_local == False:
-            #files = form.files.getlist('files')
-            #f = files[0]
-            #print(files, f)
-            #f.seek(0)
-            #file_handle = BytesIO(f.read())
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            #print(sysloc.code)
             ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
-            #dt = base64.b64encode(f.read())
-            #ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code, 'files': dt}
             url_dev = sys.url + '/feedback/api/ticket/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
+            if af and r.status_code < 300:
+                # *** отправляем вдогонку файлы ***
+                # files_all = form.files.getlist('files')
+                files = form.files.getlist('files')
+                #files_all = form.files
+                # print(files_all)
+                #for f in files_all:
+                    #files = base64(f.read())
+                    #files = f.read()
+                #    print(f, f.read(), files)
+                # f = files[0]
+                # print(files, f)
+                # f.seek(0)
+                # file_handle = BytesIO(f.read())
+                headers_f = {'Content-type': 'multipart/form-data'}
+                file = files[0].read()
+                ticketfile_data = {'feedbackticket_file': file}
+                #url_dev = sys.url + '/feedback/api/ticket/'
+                r_f = requests.post(url_dev, headers=headers_f, files=ticketfile_data)
+
             # тикету для разработчика прописываем id текущей компании техподдержки
             self.object.companyfrom_id = compid
             self.object.requeststatuscode = r.status_code
@@ -715,7 +732,7 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
     current_companyid = request.session["_auth_user_supportcompany_id"]
 
     #task_list.refresh_from_db()
-    print(is_ticketslist_dev)
+    #print(is_ticketslist_dev)
 
     return render(request, "feedbackticket_detail.html", {
         'nodes': task_list.distinct(),
