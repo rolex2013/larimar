@@ -249,23 +249,26 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             f = files
             #for f in files:
             print(f)
-            ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
-            fcnt = FeedbackFile.objects.filter(ticket_id=ticket.id, name=f, is_active=True).count()
-            fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
-            #fl.author = self.request.user
-            fn = f
-            if fcnt:
-                f_str = str(f)
-                ext_pos = f_str.rfind('.')
-                fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
-            fl.name = f
-            fl.uname = fn
-            fl.save()
-            fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
-            fl.psize = os.path.getsize(fullpath)
-            fl.save()
+            try:
+                ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+                fcnt = FeedbackFile.objects.filter(ticket_id=ticket.id, name=f, is_active=True).count()
+                fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
+                #fl.author = self.request.user
+                fn = f
+                if fcnt:
+                    f_str = str(f)
+                    ext_pos = f_str.rfind('.')
+                    fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+                fl.name = f
+                fl.uname = fn
+                fl.save()
+                fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
+                fl.psize = os.path.getsize(fullpath)
+                fl.save()
 
-            serializer = FeedbackFileSerializer(fl, context={'request': request})
+                serializer = FeedbackFileSerializer(fl, context={'request': request})
+            except:
+                return Response({"files": False})
         #except:
         #    return Response({"files": True})
 
