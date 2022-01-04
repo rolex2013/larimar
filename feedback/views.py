@@ -137,66 +137,42 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
     def create(self, request):
         ticket_data = request.data
 
-        # *** добавление файлов ***
         try:
-            files = ticket_data["feedbackticket_file"]
-            new_ticket = ticket_data["ticketid"]
-            for f in files:
-                print(f)
-                fcnt = FeedbackFile.objects.filter(ticket_id=new_ticket, name=f, is_active=True).count()
-                fl = FeedbackFile(ticket_id=new_ticket, pfile=f)
-                # fl.author = self.request.user
-                fn = f
-                if fcnt:
-                    f_str = str(f)
-                    ext_pos = f_str.rfind('.')
-                    fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
-                fl.name = f
-                fl.uname = fn
-                fl.save()
-                fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
-                fl.psize = os.path.getsize(fullpath)
-                fl.save()
-
-            serializer = FeedbackFileSerializer(fl, context={'request': request})
-        except:
-
+            systemcode = ticket_data["systemcode"]
             try:
-                systemcode = ticket_data["systemcode"]
-                try:
-                    #sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
-                    sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
-                    systemid = sys.id
-                except:
-                    systemid = 1
-                    text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
-                    response_data = {'text': text}
-                    return Response(response_data)
-            except:
-                sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+                #sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+                sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
                 systemid = sys.id
-
-            try:
-                type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
-                typeid = type.id
             except:
-                typeid = 1
+                systemid = 1
+                text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
+                response_data = {'text': text}
+                return Response(response_data)
+        except:
+            sys = Dict_System.objects.filter(is_local=True, is_active=True).first()
+            systemid = sys.id
 
-            try:
-                status = Dict_FeedbackTicketStatus.objects.filter(name=ticket_data["status"]).first()
-                statusid = status.id
-            except:
-                statusid = 1
+        try:
+            type = Dict_FeedbackTicketType.objects.filter(name=ticket_data["type"]).first()
+            typeid = type.id
+        except:
+            typeid = 1
 
-            try:
-                idremote = int(ticket_data["id_remote"])
-                new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
-                #new_ticket.save()
-                #new_ticket = FeedbackTicket.objects.filter(id=3).first()
-            except:
-                new_ticket = FeedbackTicket(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid)
+        try:
+            status = Dict_FeedbackTicketStatus.objects.filter(name=ticket_data["status"]).first()
+            statusid = status.id
+        except:
+            statusid = 1
 
-            serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
+        try:
+            idremote = int(ticket_data["id_remote"])
+            new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
+            #new_ticket.save()
+            #new_ticket = FeedbackTicket.objects.filter(id=3).first()
+        except:
+            new_ticket = FeedbackTicket(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid)
+
+        serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
 
         return Response(serializer.data)
 
@@ -259,6 +235,37 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
     serializer_class = FeedbackFileSerializer
     #filter_fields = ('name', 'description',)
     filter_fields = ('name', 'ticket')
+
+    def create(self, request):
+        files_data = request.files
+
+        # *** добавление файлов ***
+        try:
+            files = files_data["feedbackticket_file"]
+            ticketid = files_data["ticketid"]
+            for f in files:
+                print(f)
+                fcnt = FeedbackFile.objects.filter(ticket_id=ticketid, name=f, is_active=True).count()
+                fl = FeedbackFile(ticket_id=ticketid, pfile=f)
+                # fl.author = self.request.user
+                fn = f
+                if fcnt:
+                    f_str = str(f)
+                    ext_pos = f_str.rfind('.')
+                    fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+                fl.name = f
+                fl.uname = fn
+                fl.save()
+                fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
+                fl.psize = os.path.getsize(fullpath)
+                fl.save()
+
+            serializer = FeedbackFileSerializer(fl, context={'request': request})
+        except:
+            return Response({"files": False})
+
+        return Response({"files": serializer.data})
+
     def list(self, request):
         files = FeedbackFile.objects.filter(is_active=True)
         serializer = FeedbackFileSerializer(files, context={'request': request}, many=True)
@@ -626,7 +633,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
                 file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'), 'ticketid': self.object.id}
                 #ticket_data = {'ticketid': f.id}
                 print(file_data, f.pfile)
-                url_dev = sys.url + '/feedback/api/ticket/'
+                url_dev = sys.url + '/feedback/api/file/'
                 r_f = requests.post(url_dev, files=file_data)
 
 
