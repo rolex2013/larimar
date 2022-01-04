@@ -237,11 +237,14 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
     filter_fields = ('name', 'ticket')
 
     def create(self, request):
-        files_data = request.FILES
+        #files = request.FILES['feedbackticket_file']
+        #ticketid = request.FILES['ticketid']
         # *** добавление файлов ***
         try:
-            files = files_data["feedbackticket_file"]
-            ticketid = files_data["ticketid"]
+            #files = files_data["feedbackticket_file"]
+            #ticketid = files_data["ticketid"]
+            files = request.FILES['feedbackticket_file']
+            ticketid = request.FILES['ticketid']
             for f in files:
                 print(f)
                 fcnt = FeedbackFile.objects.filter(ticket_id=ticketid, name=f, is_active=True).count()
