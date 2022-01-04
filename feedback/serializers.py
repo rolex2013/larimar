@@ -76,7 +76,7 @@ class FeedbackFileSerializer(serializers.ModelSerializer):
     author = serializers.SlugRelatedField(slug_field="username", read_only=True)
     class Meta:
         model = FeedbackFile
-        fields = ('name', 'uname', 'pfile', 'psize', 'datecreate', 'author', 'ticket', 'task', 'taskcomment')
+        fields = ('pfile', 'psize', 'datecreate', 'author', 'ticket', 'task', 'taskcomment')
         #exclude = ('is_active',)
 
 """
