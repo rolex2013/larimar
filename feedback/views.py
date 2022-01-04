@@ -250,9 +250,10 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             #for f in files:
             print(f)
             try:
-                ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+                #ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
                 fcnt = FeedbackFile.objects.filter(name=f, is_active=True).count()
-                fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
+                #fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
+                fl = FeedbackFile(ticket_id=58, pfile=f)
                 #fl.author = self.request.user
                 fn = f
                 if fcnt:
@@ -638,7 +639,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
                 files = FeedbackFile.objects.filter(ticket_id=self.object.id)
                 #for f in files:
                 f = files[0]
-                file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb')}
+                file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'), 'ticketid': str(self.object.id)}
                 #ticket_data = {'ticketid': f.id}
                 print(file_data)
                 url_dev = sys.url + '/feedback/api/file/'
