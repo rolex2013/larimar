@@ -269,7 +269,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
 
                 serializer = FeedbackFileSerializer(fl, context={'request': request})
             except:
-                return Response({"files": f, "tickets": FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()})
+                return Response({"files": False})
         #except:
         #    return Response({"files": True})
 
