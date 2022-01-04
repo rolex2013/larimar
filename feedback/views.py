@@ -237,7 +237,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
     filter_fields = ('name', 'ticket')
 
     def create(self, request):
-        files_data = request.files
+        files_data = request.data
 
         # *** добавление файлов ***
         try:
