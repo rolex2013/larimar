@@ -237,8 +237,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
     filter_fields = ('name', 'ticket')
 
     def create(self, request):
-        files_data = request.data
-
+        files_data = request.FILES
         # *** добавление файлов ***
         try:
             files = files_data["feedbackticket_file"]
@@ -247,7 +246,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
                 print(f)
                 fcnt = FeedbackFile.objects.filter(ticket_id=ticketid, name=f, is_active=True).count()
                 fl = FeedbackFile(ticket_id=ticketid, pfile=f)
-                # fl.author = self.request.user
+                #fl.author = self.request.user
                 fn = f
                 if fcnt:
                     f_str = str(f)
