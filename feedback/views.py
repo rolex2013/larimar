@@ -140,8 +140,9 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         # *** добавление файлов ***
         try:
             files = ticket_data["feedbackticket_file"]
-            new_ticket = 39 #ticket_data["newticket"]
+            new_ticket = ticket_data["ticketid"]
             for f in files:
+                print(f)
                 fcnt = FeedbackFile.objects.filter(ticket_id=new_ticket, name=f, is_active=True).count()
                 fl = FeedbackFile(ticket_id=new_ticket, pfile=f)
                 # fl.author = self.request.user
@@ -157,7 +158,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
                 fl.psize = os.path.getsize(fullpath)
                 fl.save()
 
-            serializer = FeedbackFileSerializer(new_ticket, context={'request': request})
+            serializer = FeedbackFileSerializer(fl, context={'request': request})
         except:
 
             try:
@@ -187,11 +188,14 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             except:
                 statusid = 1
 
-            idremote = int(ticket_data["id_remote"])
-            new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
+            try:
+                idremote = int(ticket_data["id_remote"])
+                new_ticket = FeedbackTicket.objects.create(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid, id_remote=idremote)
+                #new_ticket.save()
+                #new_ticket = FeedbackTicket.objects.filter(id=3).first()
+            except:
+                new_ticket = FeedbackTicket(name=ticket_data["name"], description=ticket_data["description"], system_id=systemid, status_id=statusid, type_id=typeid)
 
-            #new_ticket.save()
-            #new_ticket = FeedbackTicket.objects.filter(id=3).first()
             serializer = FeedbackTicketSerializer(new_ticket, context={'request': request})
 
         return Response(serializer.data)
@@ -592,6 +596,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             if af and r.status_code < 300:
                 # *** отправляем вдогонку файлы ***
+                """
                 # files_all = form.files.getlist('files')
                 files = form.files.getlist('files')
                 #files_all = form.files
@@ -604,11 +609,26 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
                 # print(files, f)
                 # f.seek(0)
                 # file_handle = BytesIO(f.read())
-                headers_f = {'Content-type': 'multipart/form-data'}
-                file = files[0].read()
-                ticketfile_data = {'feedbackticket_file': file}
+                #headers_f = {'Content-type': 'multipart/form-data'}
+                #file = files[0].read()
+                file = {'uploaded_file': open(f.pfile, 'rb')}
+                print(file)
+                #ticketfile_data = {'feedbackticket_file': file}
+                ticket_data = {'ticketid': "123"}
                 #url_dev = sys.url + '/feedback/api/ticket/'
-                r_f = requests.post(url_dev, headers=headers_f, files=ticketfile_data)
+                #r_f = requests.post(url_dev, headers=headers_f, files=ticketfile_data)
+                r_f = requests.post(url_dev, files=file, data=ticket_data)
+                """
+                #files = form.files.getlist('files')
+                files = FeedbackFile.objects.filter(ticket_id=self.object.id)
+                #for f in files:
+                f = files[0]
+                file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'), 'ticketid': self.object.id}
+                #ticket_data = {'ticketid': f.id}
+                print(file_data, f.pfile)
+                url_dev = sys.url + '/feedback/api/ticket/'
+                r_f = requests.post(url_dev, files=file_data)
+
 
             # тикету для разработчика прописываем id текущей компании техподдержки
             self.object.companyfrom_id = compid
