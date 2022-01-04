@@ -639,11 +639,13 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
                 files = FeedbackFile.objects.filter(ticket_id=self.object.id)
                 #for f in files:
                 f = files[0]
-                file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'), 'ticketid': str(self.object.id)}
+                #file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'), 'ticketid': str(self.object.id)}
                 #ticket_data = {'ticketid': f.id}
-                print(file_data)
+                #print(file_data)
                 url_dev = sys.url + '/feedback/api/file/'
-                r_f = requests.post(url_dev, data=file_data)
+                #r_f = requests.post(url_dev, data=file_data)
+                files = [('feedbackticket_file', (str(f.pfile), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb')))]
+                r_f = requests.request("POST", url_dev, headers={}, data={'ticketid': str(self.object.id)}, files=files)
                 print(r_f.text)
 
             # тикету для разработчика прописываем id текущей компании техподдержки
