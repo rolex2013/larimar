@@ -245,15 +245,15 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             #ticketid = files_data["ticketid"]
             files = request.data['feedbackticket_file']
             #print(files)
-            ticketremoteid = 118 #int(request.data['ticketid'])
+            ticketremoteid = int(request.data['ticketid'])
             f = files
             #for f in files:
             print(f)
             try:
-                #ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+                ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
                 fcnt = FeedbackFile.objects.filter(name=f, is_active=True).count()
-                #fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
-                fl = FeedbackFile(ticket_id=58, pfile=f)
+                fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
+                #fl = FeedbackFile(ticket_id=58, pfile=f)
                 #fl.author = self.request.user
                 fn = f
                 if fcnt:
