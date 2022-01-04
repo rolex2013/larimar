@@ -251,7 +251,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             print(f)
             try:
                 ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
-                fcnt = FeedbackFile.objects.filter(ticket_id=ticket.id, name=f, is_active=True).count()
+                fcnt = FeedbackFile.objects.filter(name=f, is_active=True).count()
                 fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
                 #fl.author = self.request.user
                 fn = f
@@ -268,7 +268,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
 
                 serializer = FeedbackFileSerializer(fl, context={'request': request})
             except:
-                return Response({"files": False})
+                return Response({"files": f, "tickets": FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()})
         #except:
         #    return Response({"files": True})
 
