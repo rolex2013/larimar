@@ -244,9 +244,8 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             #files = files_data["feedbackticket_file"]
             #ticketid = files_data["ticketid"]
             files = request.data['feedbackticket_file']
-
             #print(files)
-            ticketremoteid = 58 #int(request.data['ticketid'])
+            ticketremoteid = 118 #int(request.data['ticketid'])
             f = files
             #for f in files:
             print(f)
