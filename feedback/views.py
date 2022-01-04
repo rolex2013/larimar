@@ -246,7 +246,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             files = request.data['feedbackticket_file']
 
             #print(files)
-            ticketremoteid = request.data['ticketid']
+            ticketremoteid = 58 #int(request.data['ticketid'])
             f = files
             #for f in files:
             print(f)
@@ -636,12 +636,12 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
                 files = FeedbackFile.objects.filter(ticket_id=self.object.id)
                 #for f in files:
                 f = files[0]
-                file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'), 'ticketid': self.object.id}
+                file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb')}
                 #ticket_data = {'ticketid': f.id}
-                print(file_data, f.pfile)
+                print(file_data)
                 url_dev = sys.url + '/feedback/api/file/'
                 r_f = requests.post(url_dev, data=file_data)
-
+                print(r_f.text)
 
             # тикету для разработчика прописываем id текущей компании техподдержки
             self.object.companyfrom_id = compid
