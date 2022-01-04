@@ -240,33 +240,36 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         #files = request.FILES['feedbackticket_file']
         #ticketid = request.FILES['ticketid']
         # *** добавление файлов ***
-        try:
+        #try:
             #files = files_data["feedbackticket_file"]
             #ticketid = files_data["ticketid"]
             files = request.data['feedbackticket_file']
+
+            #print(files)
             ticketid = request.data['ticketid']
-            for f in files:
-                print(f)
-                fcnt = FeedbackFile.objects.filter(ticket_id=ticketid, name=f, is_active=True).count()
-                fl = FeedbackFile(ticket_id=ticketid, pfile=f)
-                #fl.author = self.request.user
-                fn = f
-                if fcnt:
-                    f_str = str(f)
-                    ext_pos = f_str.rfind('.')
-                    fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
-                fl.name = f
-                fl.uname = fn
-                fl.save()
-                fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
-                fl.psize = os.path.getsize(fullpath)
-                fl.save()
+            f = files
+            #for f in files:
+            print(f)
+            fcnt = FeedbackFile.objects.filter(ticket_id=ticketid, name=f, is_active=True).count()
+            fl = FeedbackFile(ticket_id=ticketid, pfile=f)
+            #fl.author = self.request.user
+            fn = f
+            if fcnt:
+                f_str = str(f)
+                ext_pos = f_str.rfind('.')
+                fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+            fl.name = f
+            fl.uname = fn
+            fl.save()
+            fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
+            fl.psize = os.path.getsize(fullpath)
+            fl.save()
 
             serializer = FeedbackFileSerializer(fl, context={'request': request})
-        except:
-            return Response({"files": False})
+        #except:
+        #    return Response({"files": True})
 
-        return Response({"files": serializer.data})
+            return Response({"files": serializer.data})
 
     def list(self, request):
         files = FeedbackFile.objects.filter(is_active=True)
