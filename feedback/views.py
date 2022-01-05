@@ -258,9 +258,9 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         # *** добавление файлов ***
         files = request.data.getlist('feedbackticket_file')
         #print(files)
-        ticketremoteid = request.data['ticketid']
+        ticketremoteid = int(request.data['ticketid'])
         try:
-            ticketcommentremoteid = request.data['ticketcommentid']
+            ticketcommentremoteid = int(request.data['ticketcommentid'])
             try:
                 ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
                 ticketcommentid = ticketcomment
