@@ -199,8 +199,7 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
                 # new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
                 new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
                                                                          description=commentdescription, is_active=True)
-                #serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
-                serializer = add_files(request, files, ticket.id, ticketcommentid)
+                serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
                 return Response(serializer.data)
             except:
                 # тут надо сообщить отправителю, что такого тикета у разработчика нет!
@@ -223,8 +222,14 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
             return Response(response_data)
 
         #new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
-        new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
-                                                                 description=commentdescription, is_active=True)
+        try:
+            idremote = int(comment_data["id_remote"])
+            new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
+                                                                    description=commentdescription, id_remote=idremote, is_active=True)
+        except:
+            new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
+                                                                     description=commentdescription,
+                                                                     is_active=True)
         serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
         return Response(serializer.data)
 
