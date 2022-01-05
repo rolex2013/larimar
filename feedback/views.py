@@ -230,6 +230,26 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
 #def FeedbackTicketCreateAPI(request):
 #    return
 
+def add_files(request, files, ticketid, commentid=None):
+    for f in files:
+        # print('===', f)
+        fcnt = FeedbackFile.objects.filter(name=f, is_active=True).count()
+        fl = FeedbackFile(ticket_id=ticketid, ticketcomment_id=commentid, pfile=f)
+        # fl.author = self.request.user
+        fn = f
+        if fcnt:
+            f_str = str(f)
+            ext_pos = f_str.rfind('.')
+            fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
+        fl.name = f
+        fl.uname = fn
+        fl.save()
+        fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
+        fl.psize = os.path.getsize(fullpath)
+        # print('+++', fl)
+        fl.save()
+    return FeedbackFileSerializer(fl, context={'request': request})
+
 class FeedbackFileViewSet(viewsets.ModelViewSet):
     queryset = FeedbackFile.objects.all()
     serializer_class = FeedbackFileSerializer
@@ -241,27 +261,18 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         files = request.data.getlist('feedbackticket_file')
         #print(files)
         ticketremoteid = int(request.data['ticketid'])
+        try:
+            ticketcommentremoteid = int(request.data['ticketcommentid'])
+            try:
+                ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
+            except:
+                ticketcomment = None
+        except:
+            ticketcommentid = None
         #print(ticketremoteid)
         try:
             ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
-            for f in files:
-                #print('===', f)
-                fcnt = FeedbackFile.objects.filter(name=f, is_active=True).count()
-                fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
-                #fl.author = self.request.user
-                fn = f
-                if fcnt:
-                    f_str = str(f)
-                    ext_pos = f_str.rfind('.')
-                    fn = f_str[0:ext_pos] + ' (' + str(fcnt) + ')' + f_str[ext_pos:len(f_str)]
-                fl.name = f
-                fl.uname = fn
-                fl.save()
-                fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
-                fl.psize = os.path.getsize(fullpath)
-                #print('+++', fl)
-                fl.save()
-            serializer = FeedbackFileSerializer(fl, context={'request': request})
+            serializer = add_files(request, files, ticket.id, ticketcommentid)
         except:
             return Response({"files": 'Тикет id_remote='+str(ticketremoteid)+' не найден!'})
         return Response({"files": serializer.data})
@@ -603,41 +614,16 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             if af and r.status_code < 300:
                 # *** отправляем вдогонку файлы ***
-                """
-                # files_all = form.files.getlist('files')
-                files = form.files.getlist('files')
-                #files_all = form.files
-                # print(files_all)
-                #for f in files_all:
-                    #files = base64(f.read())
-                    #files = f.read()
-                #    print(f, f.read(), files)
-                # f = files[0]
-                # print(files, f)
-                # f.seek(0)
-                # file_handle = BytesIO(f.read())
-                #headers_f = {'Content-type': 'multipart/form-data'}
-                #file = files[0].read()
-                file = {'uploaded_file': open(f.pfile, 'rb')}
-                print(file)
-                #ticketfile_data = {'feedbackticket_file': file}
-                ticket_data = {'ticketid': "123"}
-                #url_dev = sys.url + '/feedback/api/ticket/'
-                #r_f = requests.post(url_dev, headers=headers_f, files=ticketfile_data)
-                r_f = requests.post(url_dev, files=file, data=ticket_data)
-                """
-                #files = form.files.getlist('files')
                 files = FeedbackFile.objects.filter(ticket_id=self.object.id)
-                #for f in files:
-                f = files[0]
-                #file_data = {'feedbackticket_file': open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'), 'ticketid': str(self.object.id)}
-                #ticket_data = {'ticketid': f.id}
-                #print(file_data)
+                fl = []
+                for f in files:
+                    #f = files[0]
+                    #fl = [('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb')))]
+                    fl.append(('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'))))
+                    #print(fl)
                 url_dev = sys.url + '/feedback/api/file/'
-                #r_f = requests.post(url_dev, data=file_data)
-                files = [('feedbackticket_file', (str(f.pfile), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb')))]
-                r_f = requests.request("POST", url_dev, headers={}, data={'ticketid': str(self.object.id)}, files=files)
-                print(r_f.text)
+                r_f = requests.request("POST", url_dev, headers={}, data={'ticketid': str(self.object.id)}, files=fl)
+                #print(r_f.text)
 
             # тикету для разработчика прописываем id текущей компании техподдержки
             self.object.companyfrom_id = compid
@@ -821,7 +807,7 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
     def form_valid(self, form):
         form.instance.ticket_id = self.kwargs['ticketid']
         form.instance.author_id = self.request.user.id
-        #self.object = form.save()  # Созадём новый коммент Тикета
+        self.object = form.save()  # Созадём новый коммент Тикета
         af = self.add_files(form, 'feedback', 'ticketcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
         # отправляем коммент удалённому автору тикета
         #print('/',str(form.instance.ticket.id_remote),'/')
@@ -830,7 +816,7 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             #ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'ticketid': str(form.instance.ticket.id_remote)}
             ticket_data = {'name': form.instance.name, 'description': form.instance.description,
-                           'systemcode': sys.code,'ticketid': str(form.instance.ticket_id)}
+                           'systemcode': sys.code,'ticketid': str(form.instance.ticket_id), 'id_remote': str(self.object.id)}
             url_dev = form.instance.ticket.system.url + '/feedback/api/ticketcomment/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             #print(r)

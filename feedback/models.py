@@ -169,6 +169,7 @@ class FeedbackTicketComment(models.Model):
                                 verbose_name="Компания")
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
     requeststatuscode = models.IntegerField("Код завершения операции", blank=True, null=True)
+    id_remote = models.IntegerField("ID комментария в удалённой системе", null=True, blank=True)
     is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
