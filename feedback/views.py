@@ -199,7 +199,8 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
                 # new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
                 new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
                                                                          description=commentdescription, is_active=True)
-                serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
+                #serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
+                serializer = add_files(request, files, ticket.id, ticketcommentid)
                 return Response(serializer.data)
             except:
                 # тут надо сообщить отправителю, что такого тикета у разработчика нет!
@@ -262,9 +263,9 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         #print(files)
         ticketremoteid = int(request.data['ticketid'])
         try:
-            ticketcommentremoteid = int(request.data['ticketcommentid'])
+            ticketcommentid = int(request.data['ticketcommentid'])
             try:
-                ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
+                ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentid).first()
             except:
                 ticketcomment = None
         except:
