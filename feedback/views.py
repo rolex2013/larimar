@@ -269,10 +269,10 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             ticketcommentid = None
         #print(ticketremoteid)
         try:
-            ticket = FeedbackTicket.objects.filter(id_remote=134).first()
-            serializer = add_files(request, files, ticket.id, ticketcommentid)
+            ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
         except:
             return Response({"files": 'Тикет id_remote='+ticketremoteid+' не найден!'})
+        serializer = add_files(request, files, ticket.id, ticketcommentid)
         return Response({"files": serializer.data})
 
     def list(self, request):
