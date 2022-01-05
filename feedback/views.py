@@ -259,23 +259,31 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         files = request.data.getlist('feedbackticket_file')
         #print(files)
         ticketremoteid = int(request.data['ticketid'])
+        ticketcommentremoteid = int(request.data['ticketcommentid'])
+        """
         try:
             ticketcommentremoteid = int(request.data['ticketcommentid'])
             try:
                 ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
-                ticketcommentid = ticketcomment
+                ticketcommentid = ticketcomment.id
             except:
                 ticketcommentid = None
         except:
             ticketcommentid = None
         #print(ticketremoteid)
+        """
         try:
             ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
         except:
-            return Response({"files": 'Тикет id_remote='+ticketremoteid+' не найден!'})
+            return Response({"files": 'Тикет id_remote='+str(ticketremoteid)+' не найден!'})
+
+        try:
+            ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
+        except:
+            return Response({"files": 'Комментарий id_remote='+str(ticketcommentremoteid)+' тикета id_remote='+str(ticketremoteid)+' не найден!'})
 
         #ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentid).first()
-        serializer = add_files(request, files, ticket.id, ticketcommentid)
+        serializer = add_files(request, files, ticket.id, ticketcomment.id)
         return Response({"files": serializer.data})
 
     def list(self, request):
