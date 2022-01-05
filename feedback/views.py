@@ -260,11 +260,12 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         #print(files)
         ticketremoteid = request.data['ticketid']
         try:
-            ticketcommentid = int(request.data['ticketcommentid'])
+            ticketcommentremoteid = request.data['ticketcommentid']
             try:
-                ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentid).first()
+                ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
+                ticketcommentid = ticketcomment
             except:
-                ticketcomment = None
+                ticketcommentid = None
         except:
             ticketcommentid = None
         #print(ticketremoteid)
@@ -272,6 +273,8 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
         except:
             return Response({"files": 'Тикет id_remote='+ticketremoteid+' не найден!'})
+
+        #ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentid).first()
         serializer = add_files(request, files, ticket.id, ticketcommentid)
         return Response({"files": serializer.data})
 
