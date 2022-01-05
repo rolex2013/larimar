@@ -184,7 +184,7 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
     def create(self, request):
 
         comment_data = request.data
-        systemcode = comment_data["systemcode"]
+        systemcode = int(comment_data["systemcode"])
         ticketremoteid = int(comment_data["ticketid"])
         commentdescription = comment_data["description"]
         commentname = comment_data["name"]
