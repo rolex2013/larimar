@@ -830,8 +830,9 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
                     fl.append(('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'))))
                     #print(fl)
                 url_dev = sys.url + '/feedback/api/file/'
-                r_f = requests.request("POST", url_dev, headers={}, data={'ticketid': str(self.object.ticket_id), 'ticketcommentid': str(self.object.id)}, files=fl)
-                #print(r_f.text)
+                dt = {'ticketid': str(form.instance.ticket_id), 'ticketcommentid': str(self.object.id)}
+                r_f = requests.request("POST", url_dev, headers={}, data=dt, files=fl)
+                print(r_f.text, dt, fl)
             #print(r)
             self.object.requeststatuscode = r.status_code
             self.object = form.save()
