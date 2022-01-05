@@ -184,13 +184,15 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
     def create(self, request):
 
         comment_data = request.data
-        systemcode = int(comment_data["systemcode"])
+        systemcode = comment_data["systemcode"]
         ticketremoteid = int(comment_data["ticketid"])
         commentdescription = comment_data["description"]
         commentname = comment_data["name"]
+        idremote = int(comment_data["id_remote"])
 
         try:
             #ticket = FeedbackTicket.objects.filter(ticket_id=ticketid).first()
+            #print(systemcode)
             sys = Dict_System.objects.filter(code=systemcode).first()
             systemid = sys.id
             try:
@@ -198,38 +200,28 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
                 ticketid = ticket.id
                 # new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
                 new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
-                                                                         description=commentdescription, is_active=True)
+                                                                         description=commentdescription, id_remote=idremote, is_active=True)
                 serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
                 return Response(serializer.data)
             except:
                 # тут надо сообщить отправителю, что такого тикета у разработчика нет!
                 text = "Нет такого тикета!"
                 response_data = {'text': text}
-                #print("Система с кодом '" + systemcode + "' не зарегистрирована!")
                 return Response(response_data)
         except:
-            #try:
-            #    ticket = FeedbackTicket.objects.filter(name=commentname).first()
-            #    ticketid = ticket.id
-            #except:
-            #    # тут надо сообщить отправителю, что такого тикета у разработчика нет!
-            #    print('Нет такого тикета!')
-            #    return
-            # тут надо сообщить отправителю, что такого тикета у разработчика нет!
             text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
             response_data = {'text': text}
-            #print("Система с кодом '" + systemcode + "' не зарегистрирована!")
             return Response(response_data)
 
         #new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname, description=commentdescription)
-        try:
-            idremote = int(comment_data["id_remote"])
-            new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
-                                                                    description=commentdescription, id_remote=idremote, is_active=True)
-        except:
-            new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
-                                                                     description=commentdescription,
-                                                                     is_active=True)
+        #try:
+        #    idremote = int(comment_data["id_remote"])
+        new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
+                                                                 description=commentdescription, id_remote=idremote, is_active=True)
+        #except:
+        #    new_ticketcomment = FeedbackTicketComment.objects.create(ticket_id=ticketid, name=commentname,
+        #                                                             description=commentdescription,
+        #                                                             is_active=True)
         serializer = FeedbackTicketCommentSerializer(new_ticketcomment, context={'request': request})
         return Response(serializer.data)
 
