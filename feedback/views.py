@@ -258,7 +258,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         # *** добавление файлов ***
         files = request.data.getlist('feedbackticket_file')
         #print(files)
-        ticketremoteid = int(request.data['ticketid'])
+        ticketremoteid = request.data['ticketid']
         try:
             ticketcommentid = int(request.data['ticketcommentid'])
             try:
@@ -272,7 +272,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
             serializer = add_files(request, files, ticket.id, ticketcommentid)
         except:
-            return Response({"files": 'Тикет id_remote='+str(ticketremoteid)+' не найден!'})
+            return Response({"files": 'Тикет id_remote='+ticketremoteid+' не найден!'})
         return Response({"files": serializer.data})
 
     def list(self, request):
