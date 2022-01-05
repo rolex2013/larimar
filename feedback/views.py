@@ -269,7 +269,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
             ticketcommentid = None
         #print(ticketremoteid)
         try:
-            ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+            ticket = FeedbackTicket.objects.filter(id_remote=134).first()
             serializer = add_files(request, files, ticket.id, ticketcommentid)
         except:
             return Response({"files": 'Тикет id_remote='+ticketremoteid+' не найден!'})
@@ -815,7 +815,7 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
         #if form.instance.ticket.company_id == None:
         if sys.is_local == False:
             # отправляем коммент разработчику
-            print(sys)
+            #print(sysloc)
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             #ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'ticketid': str(form.instance.ticket.id_remote)}
             ticket_data = {'name': form.instance.name, 'description': form.instance.description,
