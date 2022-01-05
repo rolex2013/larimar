@@ -193,7 +193,7 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
         try:
             #ticket = FeedbackTicket.objects.filter(ticket_id=ticketid).first()
             #print(systemcode)
-            sys = Dict_System.objects.filter(code=systemcode).first()
+            sys = Dict_System.objects.filter(code=systemcode, is_active=True).first()
             systemid = sys.id
             try:
                 ticket = FeedbackTicket.objects.filter(system_id=systemid, id_remote=ticketremoteid).first()
@@ -809,15 +809,32 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
         af = self.add_files(form, 'feedback', 'ticketcomment')  # добавляем файлы из формы (метод из AddFilesMixin)
         # отправляем коммент удалённому автору тикета
         #print('/',str(form.instance.ticket.id_remote),'/')
-        if form.instance.ticket.company_id == None:
-            sys = Dict_System.objects.filter(is_local=True).first()
+        #sys = Dict_System.objects.filter(id=form.instance.ticket.system_id).first()
+        sys = Dict_System.objects.filter(id=form.instance.ticket.system_id).first()
+        sysloc = Dict_System.objects.filter(is_active=True, is_local=True).first()
+        #if form.instance.ticket.company_id == None:
+        if sys.is_local == False:
+            # отправляем коммент разработчику
+            print(sys)
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             #ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'ticketid': str(form.instance.ticket.id_remote)}
             ticket_data = {'name': form.instance.name, 'description': form.instance.description,
-                           'systemcode': sys.code,'ticketid': str(form.instance.ticket_id), 'id_remote': str(self.object.id)}
+                           'systemcode': sysloc.code, 'ticketid': str(form.instance.ticket_id), 'id_remote': str(self.object.id)}
             url_dev = form.instance.ticket.system.url + '/feedback/api/ticketcomment/'
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
+            if af and r.status_code < 300:
+                # *** отправляем вдогонку файлы ***
+                files = FeedbackFile.objects.filter(ticketcomment_id=self.object.id)
+                fl = []
+                for f in files:
+                    fl.append(('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'))))
+                    #print(fl)
+                url_dev = sys.url + '/feedback/api/file/'
+                r_f = requests.request("POST", url_dev, headers={}, data={'ticketid': str(self.object.ticket_id), 'ticketcommentid': str(self.object.id)}, files=fl)
+                #print(r_f.text)
             #print(r)
+            self.object.requeststatuscode = r.status_code
+            self.object = form.save()
         return super().form_valid(form)
 
 class FeedbackTaskCreate(AddFilesMixin, CreateView):
