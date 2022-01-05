@@ -237,23 +237,17 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
     filter_fields = ('name', 'ticket')
 
     def create(self, request):
-        #files = request.FILES['feedbackticket_file']
-        #ticketid = request.FILES['ticketid']
         # *** добавление файлов ***
-        #try:
-            #files = files_data["feedbackticket_file"]
-            #ticketid = files_data["ticketid"]
-            files = request.data['feedbackticket_file']
-            #print(files)
-            ticketremoteid = int(request.data['ticketid'])
-            f = files
-            #for f in files:
-            print(f)
-            try:
-                ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+        files = request.data.getlist('feedbackticket_file')
+        #print(files)
+        ticketremoteid = int(request.data['ticketid'])
+        #print(ticketremoteid)
+        try:
+            ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+            for f in files:
+                #print('===', f)
                 fcnt = FeedbackFile.objects.filter(name=f, is_active=True).count()
                 fl = FeedbackFile(ticket_id=ticket.id, pfile=f)
-                #fl = FeedbackFile(ticket_id=58, pfile=f)
                 #fl.author = self.request.user
                 fn = f
                 if fcnt:
@@ -265,15 +259,12 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
                 fl.save()
                 fullpath = os.path.join(settings.MEDIA_ROOT, str(fl.pfile))
                 fl.psize = os.path.getsize(fullpath)
+                #print('+++', fl)
                 fl.save()
-
-                serializer = FeedbackFileSerializer(fl, context={'request': request})
-            except:
-                return Response({"files": False})
-        #except:
-        #    return Response({"files": True})
-
-            return Response({"files": serializer.data})
+            serializer = FeedbackFileSerializer(fl, context={'request': request})
+        except:
+            return Response({"files": 'Тикет id_remote='+str(ticketremoteid)+' не найден!'})
+        return Response({"files": serializer.data})
 
     def list(self, request):
         files = FeedbackFile.objects.filter(is_active=True)
