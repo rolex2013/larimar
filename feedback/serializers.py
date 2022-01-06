@@ -1,7 +1,7 @@
 # serializers.py
 from rest_framework import serializers
 
-from .models import Dict_System, FeedbackTicket, FeedbackTicketComment, FeedbackFile #Dict_FeedbackTicketStatus, Dict_FeedbackTicketType
+from .models import Dict_System, FeedbackTicket, FeedbackTicketComment, FeedbackFile, Dict_FeedbackTicketStatus, Dict_FeedbackTicketType
 from companies.models import Company
 
 class Dict_SystemSerializer(serializers.HyperlinkedModelSerializer):
@@ -24,6 +24,11 @@ class CompanySerializer(serializers.ModelSerializer):
         exclude = ('is_active', 'lft', 'rght', 'tree_id', 'level', 'author')
 #""
 
+class Dict_FeedbackTicketTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Dict_FeedbackTicketType
+        fields = ('name',)
+
 #class FeedbackTicketSerializer(serializers.HyperlinkedModelSerializer):
 class FeedbackTicketSerializer(serializers.ModelSerializer):
 #class FeedbackTicketSerializer(serializers.Serializer):
@@ -32,12 +37,14 @@ class FeedbackTicketSerializer(serializers.ModelSerializer):
     company = CompanySerializer(read_only=True)
     #company = serializers.SlugRelatedField(slug_field="name", read_only=True)
     type = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    #type = Dict_FeedbackTicketTypeSerializer(read_only=True)
     #status = serializers.HyperlinkedIdentityField(view_name="my_feedback:dict_feedbackstatus-detail")
     status = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    #status = serializers.RelatedField(read_only=True)
     author = serializers.SlugRelatedField(slug_field="username", read_only=True)
     class Meta:
         model = FeedbackTicket
-        fields = ('url', 'name', 'description', 'system', 'company', 'type', 'status', 'datecreate', 'dateclose', 'author', 'feedbackticket_file')
+        fields = ('url', 'id', 'name', 'description', 'system', 'company', 'type', 'status', 'datecreate', 'dateclose', 'author', 'feedbackticket_file')
         #exclude = ('is_active', 'company')
 
 #class FeedbackTicketCommentSerializer(serializers.HyperlinkedModelSerializer):
