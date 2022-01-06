@@ -260,18 +260,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         #print(files)
         ticketremoteid = int(request.data['ticketid'])
         ticketcommentremoteid = int(request.data['ticketcommentid'])
-        """
-        try:
-            ticketcommentremoteid = int(request.data['ticketcommentid'])
-            try:
-                ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
-                ticketcommentid = ticketcomment.id
-            except:
-                ticketcommentid = None
-        except:
-            ticketcommentid = None
-        #print(ticketremoteid)
-        """
+
         try:
             ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
         except:
