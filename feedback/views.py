@@ -181,6 +181,8 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
     def put(self, request):
         data = request.data
         pk = data["id"]
+        sys = Dict_System.objects.filter(code=data["systemcode"], is_active=True).first()
+        data["system_id"] = sys.id
         saved_ticket = FeedbackTicket.objects.filter(pk=pk).first()
         serializer = FeedbackTicketSerializer(instance=saved_ticket, data=data, partial=True)
         if serializer.is_valid(raise_exception=True):
@@ -692,7 +694,8 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
             url_dev = sys.url + '/feedback/api/ticket/'
-            r = requests.put(url_dev, headers=headers, data=json.dumps(ticket_data))
+            print(sys.url, ticket_data)
+            #r = requests.put(url_dev, headers=headers, data=json.dumps(ticket_data))
             if af and r.status_code < 300:
                 # *** отправляем вдогонку файлы ***
                 #files = FeedbackFile.objects.filter(ticket_id=self.object.id)
