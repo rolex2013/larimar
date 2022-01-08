@@ -276,22 +276,28 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
         # *** добавление файлов ***
         files = request.data.getlist('feedbackticket_file')
         #print(files)
-        ticketremoteid = int(request.data['ticketid'])
-        ticketcommentremoteid = int(request.data['ticketcommentid'])
 
         try:
-            ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+            ticketremoteid = int(request.data['ticketid'])
             try:
-                ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
-                ticketcommentid = ticketcomment.id
+                ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+                ticketid = ticket.id
             except:
-                #return Response({"files": 'Комментарий id_remote='+str(ticketcommentremoteid)+' тикета id_remote='+str(ticketremoteid)+' не найден!'})
+                return Response({"files": 'Тикет id_remote='+str(ticketremoteid)+' не найден!'})
+
+            try:
+                ticketcommentremoteid = int(request.data['ticketcommentid'])
+                try:
+                    ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
+                    ticketcommentid = ticketcomment.id
+                except:
+                    return Response({"files": 'Комментарий id_remote='+str(ticketcommentremoteid)+' тикета id_remote='+str(ticketremoteid)+' не найден!'})
+            except:
                 ticketcommentid = None
         except:
-            return Response({"files": 'Тикет id_remote='+str(ticketremoteid)+' не найден!'})
+            return Response({"files": 'Не передан id Тикета!'})
 
-        #ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentid).first()
-        serializer = add_files(request, files, ticket.id, ticketcommentid)
+        serializer = add_files(request, files, ticketid, ticketcommentid)
         return Response({"files": serializer.data})
 
     def list(self, request):
