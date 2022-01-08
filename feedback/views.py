@@ -704,17 +704,20 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
             #print(sys.url, ticket_data)
             r = requests.put(url_dev, headers=headers, data=json.dumps(ticket_data))
             #print(r.status_code, r.json())
+            """
             if af and r.status_code < 300:
                 # *** отправляем вдогонку файлы ***
                 files = form.files.getlist('files')
+                print(form.files, '/', form.files.getlist('files'), '/')
+                #files = FeedbackFile.objects.filter(ticket_id=self.object.id)
                 fl = []
                 for f in files:
-                    fl.append(('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'))))
+                    fl.append(('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f), 'rb'))))
                     #print(fl)
                 url_dev = sys.url + '/feedback/api/file/'
                 r_f = requests.request("POST", url_dev, headers={}, data={'ticketid': str(self.object.id)}, files=fl)
                 #print(r_f.text)
-
+            """
             self.object.requeststatuscode = r.status_code
             self.object = form.save()
         # *** ***

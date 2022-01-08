@@ -78,6 +78,8 @@ class FeedbackTicketForm(forms.ModelForm):
             companyid = self.company
             #systemid = self.system
             self.fields['comment'].widget = forms.HiddenInput()
+            self.fields['author'].widget = forms.HiddenInput()
+            self.fields['is_active'].disabled = True
         else:
             super().__init__(*args, **kwargs)
             companyid = self.instance.company_id
@@ -88,6 +90,7 @@ class FeedbackTicketForm(forms.ModelForm):
             self.fields['name'].disabled = True
             self.fields['description'].disabled = True
             self.fields['author'].widget = forms.HiddenInput()
+            self.fields['files'].widget = forms.HiddenInput()
             #self.fields['name'].widget = forms.HiddenInput()
             #self.fields['description'].widget = forms.HiddenInput()
 

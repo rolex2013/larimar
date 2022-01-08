@@ -69,9 +69,11 @@
                     {% include 'feedbackticketcomments_list.html' %}
                 </div>
                 {% if is_support_member %}
-                    <div class="object-list-right">
-                        {% include 'feedbacktasks_list.html' %}
-                    </div>
+                    {% if is_system_dev %}
+                        <div class="object-list-right">
+                            {% include 'feedbacktasks_list.html' %}
+                        </div>
+                    {%  endif %}
                 {% endif %}
 
             </div>
