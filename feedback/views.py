@@ -281,16 +281,17 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
 
         try:
             ticket = FeedbackTicket.objects.filter(id_remote=ticketremoteid).first()
+            try:
+                ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
+                ticketcommentid = ticketcomment.id
+            except:
+                #return Response({"files": 'Комментарий id_remote='+str(ticketcommentremoteid)+' тикета id_remote='+str(ticketremoteid)+' не найден!'})
+                ticketcommentid = None
         except:
             return Response({"files": 'Тикет id_remote='+str(ticketremoteid)+' не найден!'})
 
-        try:
-            ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentremoteid).first()
-        except:
-            return Response({"files": 'Комментарий id_remote='+str(ticketcommentremoteid)+' тикета id_remote='+str(ticketremoteid)+' не найден!'})
-
         #ticketcomment = FeedbackTicketComment.objects.filter(id_remote=ticketcommentid).first()
-        serializer = add_files(request, files, ticket.id, ticketcomment.id)
+        serializer = add_files(request, files, ticket.id, ticketcommentid)
         return Response({"files": serializer.data})
 
     def list(self, request):
@@ -655,7 +656,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         is_support_member = self.request.session['_auth_user_issupportmember']
         # здесь нужно условие для 'action': 'create'
         #print(self.kwargs['systemid'])
-        kwargs.update({'user': self.request.user, 'action': 'create', 'systemid': self.kwargs['systemid'], 'companyid': self.kwargs['companyid'], 'is_support_member': is_support_member})
+        kwargs.update({'user': self.request.user, 'action': 'create', 'systemid': self.kwargs['systemid'], 'companyid': self.kwargs['companyid'], 'is_support_member': is_support_member, 'is_system_dev': self.request.session["system_dev"][1]})
         return kwargs
 
 
@@ -679,7 +680,7 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
         kwargs = super().get_form_kwargs()
         is_support_member = self.request.session['_auth_user_issupportmember']
         # здесь нужно условие для 'action': 'update'
-        kwargs.update({'user': self.request.user, 'action': 'update', 'is_support_member': is_support_member})
+        kwargs.update({'user': self.request.user, 'action': 'update', 'is_support_member': is_support_member, 'is_system_dev': self.request.session["system_dev"][1]})
         return kwargs
 
     def form_valid(self, form):
@@ -725,24 +726,10 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
                                'systemcode': sysloc.code, 'ticketid': str(cmnt.ticket_id), 'id_remote': str(cmnt.id)}
                 url_dev = cmnt.ticket.system.url + '/feedback/api/ticketcomment/'
                 r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
-                """
-                if af and r.status_code < 300:
-                    # *** отправляем вдогонку файлы ***
-                    #files = FeedbackFile.objects.filter(ticketcomment_id=cmnt.id)
-                    files = form.files.getlist('files')
-                    fl = []
-                    for f in files:
-                        fl.append(('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'))))
-                        #print(fl)
-                    url_dev = sys.url + '/feedback/api/file/'
-                    dt = {'ticketid': str(form.instance.ticket_id), 'ticketcommentid': str(cmnt.id)}
-                    r_f = requests.request("POST", url_dev, headers={}, data=dt, files=fl)
-                    print(r_f.text, dt, fl)
-                """
                 #print(r)
                 #self.object.requeststatuscode = r.status_code
                 #self.object = form.save()
-                cmnt = FeedbackTicketComment(id=cmnt.id)
+                #cmnt = FeedbackTicketComment(id=cmnt.id)
                 cmnt.id_remote = r.json()["id"]
                 cmnt.requeststatuscode = r.status_code
                 cmnt.save()

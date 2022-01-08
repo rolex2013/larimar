@@ -69,6 +69,7 @@ class FeedbackTicketForm(forms.ModelForm):
             'user')  # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
         self.action = kwargs.pop('action')  # Узнаём, какая вьюха вызвала эту форму
         self.is_support_member = kwargs.pop('is_support_member')
+        self.is_system_dev = kwargs.pop('is_system_dev')
 
         if self.action == 'create':
             self.system = kwargs.pop('systemid')
@@ -86,13 +87,14 @@ class FeedbackTicketForm(forms.ModelForm):
             #self.fields['author'].disabled = True
             self.fields['name'].disabled = True
             self.fields['description'].disabled = True
-            #self.fields['author'].widget = forms.HiddenInput()
+            self.fields['author'].widget = forms.HiddenInput()
             #self.fields['name'].widget = forms.HiddenInput()
             #self.fields['description'].widget = forms.HiddenInput()
 
             #self.fields['type'].disabled = True
             if self.is_support_member:
-                self.fields['files'].disabled = True
+                #if not self.is_system_dev:
+                #    self.fields['files'].disabled = True
                 self.fields['is_active'].disabled = True
             else:
                 self.fields['status'].disabled = True
