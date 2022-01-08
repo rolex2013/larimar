@@ -187,7 +187,9 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         serializer = FeedbackTicketSerializer(instance=saved_ticket, data=data, partial=True)
         if serializer.is_valid(raise_exception=True):
             ticket_saved = serializer.save()
-            saved_ticket = FeedbackTicket.objects.filter(pk=pk).update(status=data["status"], type=data["type"])
+            status = Dict_FeedbackTicketStatus.objects.filter(name=data["status"]).first()
+            type = Dict_FeedbackTicketType.objects.filter(name=data["type"]).first()
+            saved_ticket = FeedbackTicket.objects.filter(pk=pk).update(status=status.id, type=type.id)
         return Response({
             "success": "Тикет '{}' успешно изменён!".format(str(ticket_saved.id)+'. '+ticket_saved.name)
         })
