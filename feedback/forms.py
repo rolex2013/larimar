@@ -52,6 +52,7 @@ class FeedbackTicketForm(forms.ModelForm):
                 if self.cleaned_data['status'].is_close:  # Выполнен
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
                     #self.cleaned_data['percentage'] = 100
+                    #print(self.initial['author'])
                     if self.user.id != self.initial['author']:
                         # если Тикет закрывается Исполнителем из Службы Техподдержки, то уведомление отсылается Автору
                         # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
@@ -82,6 +83,7 @@ class FeedbackTicketForm(forms.ModelForm):
             #systemid = self.instance.system_id
             #for field in self.disabled_fields:
             #    self.fields[field].disabled = True
+            self.fields['author'].disabled = True
             self.fields['name'].disabled = True
             self.fields['description'].disabled = True
             #self.fields['type'].disabled = True
@@ -100,7 +102,7 @@ class FeedbackTicketForm(forms.ModelForm):
 
     class Meta:
         model = FeedbackTicket
-        fields = ['name', 'description', 'type', 'status', 'is_active']
+        fields = ['name', 'description', 'type', 'status', 'is_active', 'author']
         # labels = {'Files':'Выберите файлы'}
         widgets = {
             #'datebegin': DatePickerInput(format='%d.%m.%Y'),  # default date-format %m/%d/%Y will be used

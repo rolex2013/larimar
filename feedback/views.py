@@ -187,6 +187,7 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
         serializer = FeedbackTicketSerializer(instance=saved_ticket, data=data, partial=True)
         if serializer.is_valid(raise_exception=True):
             ticket_saved = serializer.save()
+            saved_ticket = FeedbackTicket.objects.filter(pk=pk).update(status=data["status"], type=data["type"])
         return Response({
             "success": "Тикет '{}' успешно изменён!".format(str(ticket_saved.id)+'. '+ticket_saved.name)
         })
@@ -597,17 +598,12 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
     #template_name = 'feedbackticket_create.html'
     template_name = 'object_form.html'
 
-    #def get_success_url(self):
-    #    print(self.object) # Prints the name of the submitted user
-    #    print(self.object.id) # Prints None
-    #    return reverse("webApp:feedbackticket:stepTwo", args=(self.object.id,))
-
     def form_valid(self, form):
         form.instance.system_id = self.kwargs['systemid']
         sys = Dict_System.objects.filter(is_active=True, id=form.instance.system_id).first()
         sysloc = Dict_System.objects.filter(is_active=True, is_local=True).first()
         compid = self.kwargs['companyid']
-        if compid != 0 and sys.is_local == True:
+        if compid != 0 and sys.is_local: # is True # == True
             form.instance.company_id = compid
             form.instance.companyfrom_id = self.request.session['_auth_user_currentcompany_id']
         else:
@@ -620,7 +616,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         self.object = form.save() # Созадём новый тикет
         af = self.add_files(form, 'feedback', 'ticket') # добавляем файлы из формы (метод из AddFilesMixin)
         # отправляем тикет разработчику
-        if sys.is_local == False:
+        if not sys.is_local: # == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
             ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
             url_dev = sys.url + '/feedback/api/ticket/'
@@ -640,6 +636,8 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
 
             # тикету для разработчика прописываем id текущей компании техподдержки
             self.object.companyfrom_id = compid
+            #print(r, r.content, r.json()["id"])
+            self.object.id_remote = r.json()["id"]
             self.object.requeststatuscode = r.status_code
             self.object = form.save()
 
@@ -692,13 +690,13 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
         # *** отправляем изменения тикета разработчику ***
         if sys.is_local == False:
             headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
-            ticket_data = {'name': form.instance.name, 'description': form.instance.description, 'status': str(form.instance.status), 'type': str(form.instance.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
+            ticket_data = {'id': self.object.id_remote, 'name': self.object.name, 'description': self.object.description, 'status': str(self.object.status), 'type': str(self.object.type), 'id_remote': str(self.object.id), 'systemcode': sysloc.code}
             url_dev = sys.url + '/feedback/api/ticket/'
-            print(sys.url, ticket_data)
-            #r = requests.put(url_dev, headers=headers, data=json.dumps(ticket_data))
+            #print(sys.url, ticket_data)
+            r = requests.put(url_dev, headers=headers, data=json.dumps(ticket_data))
+            #print(r.status_code, r.json())
             if af and r.status_code < 300:
                 # *** отправляем вдогонку файлы ***
-                #files = FeedbackFile.objects.filter(ticket_id=self.object.id)
                 files = form.files.getlist('files')
                 fl = []
                 for f in files:
@@ -714,7 +712,7 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
         if comment != '':
             # создаём Комментарий к Тикету
             company_id = self.request.session['_auth_user_supportcompany_id']
-            cmnt = FeedbackTicketComment.objects.create(ticket_id=self.object.id, company_id=company_id, author_id=form.instance.author_id,
+            cmnt = FeedbackTicketComment.objects.create(ticket_id=self.object.id, company_id=company_id, author_id=self.object.author_id,
                                                         description=comment)
             """
             if sys.is_local == False:
@@ -901,6 +899,7 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
                 r_f = requests.request("POST", url_dev, headers={}, data=dt, files=fl)
                 print(r_f.text, dt, fl)
             #print(r)
+            self.object.id_remote = r.json()["id"]
             self.object.requeststatuscode = r.status_code
             self.object = form.save()
         return super().form_valid(form)
