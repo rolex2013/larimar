@@ -538,9 +538,11 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
             #button_company_select = ''
         task_list = tickettasklist(request, companyid, "0", tskstatus_selectid, tskstatus_myselectid, is_ticketslist_dev)
         #len_task_list = len(task_list)
+        task_list_distinct = task_list.distinct()
+        len_task_list = len(task_list_distinct)
     else:
-        task_list = ''
-    len_task_list = len(task_list)
+        task_list_distinct = None
+        len_task_list = 0
 
     # Добавляем Систему в справочник
     is_system_reged = True
@@ -557,7 +559,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
 
     return render(request, template_name, {
                                           'nodes_tickets': feedbackticket_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
-                                          'nodes': task_list.distinct(), #order_by(),
+                                          'nodes': task_list_distinct, #order_by(),
                                           'component_name': 'feedback',
                                           'current_company': current_company,
                                           'current_companyid': current_companyid,
