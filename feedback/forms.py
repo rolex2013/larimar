@@ -83,9 +83,13 @@ class FeedbackTicketForm(forms.ModelForm):
             #systemid = self.instance.system_id
             #for field in self.disabled_fields:
             #    self.fields[field].disabled = True
-            self.fields['author'].disabled = True
+            #self.fields['author'].disabled = True
             self.fields['name'].disabled = True
             self.fields['description'].disabled = True
+            #self.fields['author'].widget = forms.HiddenInput()
+            #self.fields['name'].widget = forms.HiddenInput()
+            #self.fields['description'].widget = forms.HiddenInput()
+
             #self.fields['type'].disabled = True
             if self.is_support_member:
                 self.fields['files'].disabled = True

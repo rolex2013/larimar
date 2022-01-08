@@ -716,7 +716,7 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
             company_id = self.request.session['_auth_user_supportcompany_id']
             cmnt = FeedbackTicketComment.objects.create(ticket_id=self.object.id, company_id=company_id, author_id=self.object.author_id,
                                                         description=comment)
-            """
+
             if sys.is_local == False:
                 # отправляем коммент разработчику
                 #print(sysloc)
@@ -725,6 +725,7 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
                                'systemcode': sysloc.code, 'ticketid': str(cmnt.ticket_id), 'id_remote': str(cmnt.id)}
                 url_dev = cmnt.ticket.system.url + '/feedback/api/ticketcomment/'
                 r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
+                """
                 if af and r.status_code < 300:
                     # *** отправляем вдогонку файлы ***
                     #files = FeedbackFile.objects.filter(ticketcomment_id=cmnt.id)
@@ -737,13 +738,15 @@ class FeedbackTicketUpdate(AddFilesMixin, UpdateView):
                     dt = {'ticketid': str(form.instance.ticket_id), 'ticketcommentid': str(cmnt.id)}
                     r_f = requests.request("POST", url_dev, headers={}, data=dt, files=fl)
                     print(r_f.text, dt, fl)
+                """
                 #print(r)
                 #self.object.requeststatuscode = r.status_code
                 #self.object = form.save()
                 cmnt = FeedbackTicketComment(id=cmnt.id)
+                cmnt.id_remote = r.json()["id"]
                 cmnt.requeststatuscode = r.status_code
                 cmnt.save()
-            """
+
         return super().form_valid(form)
 
 
