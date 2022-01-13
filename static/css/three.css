@@ -346,6 +346,7 @@ body {
     text-decoration: none;
     /*width: 49%;*/
 }
+
 .object-list .object-list-right {
     /*float: right;*/
     padding: 0px 0px 0px 35px;
@@ -353,6 +354,24 @@ body {
     /*width: 49%;*/
     /*margin-left: 52%;*/
 }
+
+.object-list .object-chats-chats {
+    padding: 0px 0px 0px 0px;
+    text-decoration: none;
+    width: 25%;
+}
+.object-list .object-chats-messages {
+    float: right;
+    padding: 0px 0px 0px 0px;
+    text-decoration: none;
+    width: 50%;
+}
+.object-list .object-chats-members {
+    padding: 0px 0px 0px 35px;
+    text-decoration: none;
+    width: 25%;
+}
+
 .object-list-list-wrapper {
     display: flex;
 }

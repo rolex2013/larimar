@@ -34,6 +34,8 @@ from files.models import Dict_FolderType, Folder
 
 from feedback.models import Dict_System, Dict_FeedbackTicketStatus, Dict_FeedbackTicketType, Dict_FeedbackTaskStatus, FeedbackTicket
 
+from chats.models import Dict_ChatType
+
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 
@@ -211,4 +213,8 @@ admin.site.register(Dict_FeedbackTicketStatus)
 admin.site.register(Dict_FeedbackTaskStatus)
 
 #admin.site.register(FeedbackTicket)
+
+# chats
+
+admin.site.register(Dict_ChatType)
 

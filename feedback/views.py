@@ -634,16 +634,12 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
             r = requests.post(url_dev, headers=headers, data=json.dumps(ticket_data))
             if af and r.status_code < 300:
                 # *** отправляем вдогонку файлы ***
-                files = FeedbackFile.objects.filter(ticket_id=self.object.id)
+                files = FeedbackFile.objects.filter(ticket_id=self.object.id).prefetch
                 fl = []
                 for f in files:
-                    #f = files[0]
-                    #fl = [('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb')))]
                     fl.append(('feedbackticket_file', (str(f.name), open(settings.MEDIA_ROOT+'/'+str(f.pfile), 'rb'))))
-                    #print(fl)
                 url_dev = sys.url + '/feedback/api/file/'
                 r_f = requests.request("POST", url_dev, headers={}, data={'ticketid': str(self.object.id)}, files=fl)
-                #print(r_f.text)
 
             # тикету для разработчика прописываем id текущей компании техподдержки
             self.object.companyfrom_id = compid

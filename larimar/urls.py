@@ -36,6 +36,7 @@ urlpatterns = [
     path('docs/', include('docs.urls')),
     path('files/', include('files.urls')),
     path('feedback/', include('feedback.urls')),
+    path('chats/', include('chats.urls')),
     #path('media/', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),    
 ]
 
