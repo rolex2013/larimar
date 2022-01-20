@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'django_tables2',
     'rest_framework',
-    #'corsheaders',
+    'channels',
     #'menu',
     'accounts',
     'main', 
@@ -69,10 +69,12 @@ INSTALLED_APPS = [
     'docs',
     'files',
     'feedback',
+    'chats',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination', 'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework.authentication.BasicAuthentication',),
 }
 
 #CORS_ORIGIN_WHITELIST = ('localhost:8000',)
@@ -150,6 +152,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'larimar.wsgi.application'
+ASGI_APPLICATION = 'larimar.routing.application'
 
 
 # Password validation
@@ -202,6 +205,8 @@ EMAIL_HOST_PASSWORD = "CucumbeR---000"
 EMAIL_USE_TLS = False
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -271,7 +276,7 @@ else:
 
    STATIC_URL = '/larimar/static/'
    STATICFILES_DIRS = ('/home/l/larimagu/larimaritgroup.ru/public_html/larimar/static',)
-   STATIC_ROOT = '/home/l/larimargu/larimaritgroup.ru/public_html/larimar/static/static_collected'
+   STATIC_ROOT = '/home/l/larimagu/larimaritgroup.ru/public_html/larimar/static/static_collected'
 
    DATABASES = {
       'default': {

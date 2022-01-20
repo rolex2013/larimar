@@ -49,7 +49,8 @@ class ChatMember(models.Model):
     is_active = models.BooleanField("Активность", default=True)
 
     def __str__(self):
-        return (self.chat__name + '. ' + self.member__username)
+        #return (self.chat__name + '. ' + self.member__username)
+        return (self.member.username)
         #return (self.chat + '. ' + self.member)
     class Meta:
         verbose_name = 'Участник Чата'
@@ -67,7 +68,7 @@ class Message(models.Model):
     #def get_absolute_url(self):
     #    return reverse('my_chat:chat_detail', kwargs={'chatid': self.chat.pk})
     def __str__(self):
-        return (self.author + " (" + self.text + ") " + self.name)
+        return (str(self.author.username) + " (" + self.text + ") ")
     class Meta:
         verbose_name = 'Сообщение пользователя'
         verbose_name_plural = 'Сообщения пользователей'

@@ -1,0 +1,89 @@
+
+            <div class="object-list-wrapper">
+
+                <div class="object-chats-chats">
+                    <div id="ajax_chatlistresult">{% include 'chats_list.html' %}</div>
+                    <div id="ajax_chatlisterrors"></div>
+                </div>
+
+                <div class="object-chats-messages">
+                    {% include 'chat_messages_list.html' %}
+                </div>
+
+                <div class="object-chats-members">
+
+                    <h4>Участники</h4>
+
+                    {% for node in nodes_members %}
+                        <p>{{ node.member.username }} <i>{{ node.datecreate|date:"d.m.Y" }}</i></p>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+
+<script>
+    /*
+    $( document ).ready(function() {
+        $("#addchatbutton").click(
+            function() {
+                sendChatAjaxForm('chat_result_form', 'ajax_chat_form');
+                return false;
+            }
+        );
+        $("#addmessagebutton").click(
+            function() {
+                sendMessageAjaxForm('message_result_form', 'ajax_message_form');
+                return false;
+            }
+        );
+    });
+    */
+    //function sendChatAjaxForm(result_form, ajax_form) {
+    $('#addchatbutton').click(function() {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        var chattypeSelected = $('#chattypeselectid').find(":selected").val();
+        //if (document.getElementById('chatname') != null) {
+            var chatname = document.getElementById("chatname").value;
+        //}
+        var chatdescription = document.getElementById("chatdescription").value;
+        //console.log('==============='+chatdescription);
+        $.ajax({
+            url: "{% url 'my_chat:chat_create' %}",
+            type: "GET",
+            //dataType: "html",
+            //data: $("#" + ajax_form).serialize(),
+            data : {
+                companyid: {{ current_company.id }},
+                typeid: chattypeSelected,
+                name: chatname,
+                description: chatdescription
+            },
+            /*
+            success: function(response) {
+                result = $.parseJSON(response);
+                $('#result_form').html('Название: ' + result.name + '<br />Описание: ' + result.description);
+            },
+            error: function(response) {
+                $('#result_form').html('Ошибка. Данные не отправлены!');
+            }
+            */
+             success: function(data)
+                    {
+                     //console.log(data)
+                     $('#ajax_chatlistresult').html(data);
+                    },
+             error: function(xhr, errmsg, err)
+                    {
+                     console.log("error")
+                     console.log(error_data)
+                     $('#ajax_chatlisterrors').html('Нет данных!');
+                    }
+        });
+    });
+
+
+
+</script>

@@ -327,7 +327,7 @@
             </div>
 
          {% elif component_name == 'chats' %}
-
+            <!--
             <div class="object-list-wrapper">
 
                 <div class="object-chats-chats">
@@ -349,6 +349,8 @@
                 </div>
 
             </div>
+            -->
+            <div id="chats">{% include 'chats.html' %}</div>
 
          {% else %}
 
@@ -403,7 +405,7 @@
                <a href="{% url 'my_crm:client_create' companyid %}">{{ button_client_create }}</a>
                <a href="{% url 'my_doc:doc_create' companyid %}">{{ button_doc_create }}</a>
                <a href="{% url 'my_file:folder_create' companyid 0 %}">{{ button_folder_create }}</a>
-               <a href="{% url 'my_chat:chat_create' companyid %}">{{ button_chat_create }}</a>
+               <!--<a href="{ url 'my_chat:chat_create' companyid %}">{ button_chat_create }}</a>-->
                <!--<a href="{ url 'my_feedback:feedbackticket_create' 1 companyid %}">{ button_feedbackticket_create }}</a>-->
             </div>
          {% endif %}
