@@ -1,36 +1,5 @@
 
-<script>
-
-    function MessagesList(chatid) {
-
-        $.ajax({
-            url: "{% url 'my_chat:messages' %}",
-            type: "GET",
-            data : {
-                chatid: chatid,
-            },
-             success: function(data)
-                    {
-                     //console.log(data)
-                     $('#ajax_messagelistresult').html(data);
-                    },
-             error: function(xhr, errmsg, err)
-                    {
-                     console.log("error")
-                     console.log(error_data)
-                     $('#ajax_messagelisterrors').html('Нет данных!');
-                    }
-        });
-
-    };
-
-</script>
-
         <h4>Чаты</h4>
-
-        {% for node in nodes_chats %}
-            <p><a href="" id="chat_{{ node.id }}" onclick="MessagesList({{ node.id }}); return false;">{{ node.name }}</a> <i>({{ node.type }} - {{ node.author }} {{ node.datecreate|date:"d.m.Y" }})</i></p>
-        {% endfor %}
 
         <div>
             <form method="GET" id="ajax_chat_form" action="">
@@ -47,3 +16,7 @@
                 <input type="button" id="addchatbutton" value="Создать" />
             </form>
         </div>
+
+        {% for node in nodes_chats %}
+            <p><a href="" id="chat_{{ node.id }}" onclick="MessagesList({{ node.id }}); return false;">{{ node.name }}</a> <i>({{ node.type }} - {{ node.author }} {{ node.datecreate|date:"d.m.Y" }})</i></p>
+        {% endfor %}

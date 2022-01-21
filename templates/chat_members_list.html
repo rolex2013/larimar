@@ -1,0 +1,12 @@
+
+        {% if currentchat %}
+
+            <h4>Участники</h4>
+
+            {% for node in nodes_members %}
+                <p>{{ node.member.username }} <i>{{ node.datecreate|date:"d.m.Y" }}</i></p>
+            {% endfor %}
+
+        {% endif %}
+
+

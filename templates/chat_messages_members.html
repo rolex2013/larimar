@@ -1,0 +1,44 @@
+
+    <div id="ajax_messagelistresult" class="object-chats-messages">
+        {% include 'chat_messages_list.html' %}
+    </div>
+    <div id="ajax_messagelisterorr"></div>
+
+    <div  id="ajax_memberlistresult" class="object-chats-members">
+        {% include 'chat_members_list.html' %}
+    </div>
+    <div id="ajax_memberlisterror"></div>
+
+    {% if currentchat %}
+
+        <script>
+
+            //function sendMessageAjaxForm(result_form, ajax_form) {
+            $('#addmessagebutton').click(function() {
+                event.preventDefault(); // *** без этого страница перегружается после возврата data
+                var messagetext = document.getElementById("messagetext").value;
+                //console.log("==="+messagetext);
+                $.ajax({
+                    url: "{% url 'my_chat:message_create' %}",
+                    type: "GET",
+                    data : {
+                        chatid: {{ currentchatid }},
+                        text: messagetext,
+                    },
+                     success: function(data)
+                            {
+                             //console.log(data)
+                             $('#ajax_messagelistresult').html(data);
+                            },
+                     error: function(xhr, errmsg, err)
+                            {
+                             console.log("error")
+                             console.log(error_data)
+                             $('#ajax_messagelisterror').html('Нет данных!');
+                            }
+                });
+            });
+
+        </script>
+
+    {% endif %}

@@ -327,30 +327,9 @@
             </div>
 
          {% elif component_name == 'chats' %}
-            <!--
-            <div class="object-list-wrapper">
 
-                <div class="object-chats-chats">
-
-                    <h4>Чаты</h4>
-
-                </div>
-
-                <div class="object-chats-messages">
-
-                    <h4>Сообщения</h4>
-
-                </div>
-
-                <div class="object-chats-members">
-
-                    <h4>Участники</h4>
-
-                </div>
-
-            </div>
-            -->
-            <div id="chats">{% include 'chats.html' %}</div>
+            <!--<div id="chats">{ include 'chats.html' %}</div>-->
+            {% include 'chats.html' %}
 
          {% else %}
 

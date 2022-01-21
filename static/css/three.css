@@ -331,6 +331,7 @@ body {
 }
 .object-list-wrapper {
     display: flex;
+    width: 100%;
 }
 /*.object-list-left, .object-list-right {
     margin: 0px 5px 0px 5px;
@@ -356,20 +357,39 @@ body {
 }
 
 .object-list .object-chats-chats {
+    float: left;
     padding: 0px 0px 0px 0px;
+    margin: 0px 1px 0px 0px;
     text-decoration: none;
     width: 25%;
+    min-height: 100%;
+    border: 1px solid;
+    border-radius: 10px;
+    /*background: red;*/
 }
 .object-list .object-chats-messages {
-    float: right;
+    /*float: right;*/
     padding: 0px 0px 0px 0px;
+    margin: 0px 1px 0px 0px;
     text-decoration: none;
-    width: 50%;
+    /*width: max-content;*/
+    min-height: 100%;
+    float: left;
+    /*background: green;*/
+    width: 75%;
+    border: 1px solid;
+    border-radius: 10px;
+    /*min-width: 500px;*/
 }
 .object-list .object-chats-members {
+    float: left;
     padding: 0px 0px 0px 35px;
     text-decoration: none;
     width: 25%;
+    min-height: 100%;
+    border: 1px solid;
+    border-radius: 10px;
+    /*background: blue;*/
 }
 
 .object-list-list-wrapper {

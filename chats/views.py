@@ -35,17 +35,17 @@ def chats_messages_members_lists(request, companyid=0, chatid=0):
         currentchat = None
         template_name = "company_detail.html"
     else:
-        messages_list = Message.objects.filter(chat_id=chatid, is_active=True, chat__members__in=[currentuser,]).select_related("chat", "author") #.prefetch_related("chat__members")
+        #messages_list = Message.objects.filter(chat_id=chatid, is_active=True, chat__members__in=[currentuser,]).select_related("chat", "author") #.prefetch_related("chat__members")
         currentchat = Chat.objects.filter(id=chatid).first() #messages_list[0].chat
 
-        members_list = ChatMember.objects.filter(chat=currentchat, is_active=True, dateclose__isnull=True).select_related("member", "author")
+        #members_list = ChatMember.objects.filter(chat=currentchat, is_active=True, dateclose__isnull=True).select_related("member", "author")
 
     chat_type_list = Dict_ChatType.objects.filter(is_active=True)
 
     return {
             'nodes_chats': chats_list.distinct(),
-            'nodes_messages': messages_list,
-            'nodes_members': members_list,
+            #'nodes_messages': messages_list,
+            #'nodes_members': members_list,
             'component_name': 'chats',
             'current_company': current_company,
             'companyid': current_company.id,
@@ -83,23 +83,26 @@ def chatcreate(request):
     chat_new = Chat.objects.create(company_id=companyid, name=name, description=description, type_id=type, author_id=currentuserid)
     if chat_new:
         member_new = ChatMember.objects.create(chat_id=chat_new.id, author_id=currentuserid, member_id=currentuserid)
-    #render_list = chats_messages_members_lists(request, companyid=0, chatid=0)
-    chats_list = Chat.objects.filter(Q(author=currentuserid) | Q(members__in=[currentuserid,]) | Q(type=3), company_id=companyid, is_active=True).select_related("company", "author", "type")
-    chat_type_list = Dict_ChatType.objects.filter(is_active=True)
+    render_list = chats_messages_members_lists(request, companyid=0, chatid=0)
+    #chats_list = Chat.objects.filter(Q(author=currentuserid) | Q(members__in=[currentuserid,]) | Q(type=3), company_id=companyid, is_active=True).select_related("company", "author", "type")
+    #chat_type_list = Dict_ChatType.objects.filter(is_active=True)
 
-    #return render(request, 'chats_list.html', render_list, {'object_message': 'Ok!'})
-    return render(request, 'chats_list.html', {'nodes_chats': chats_list.distinct(),
-                                               'companyid': companyid,
-                                               'chat_type_list': chat_type_list,
-                                               }, {'object_message': 'Ok!'})
+    return render(request, 'chats.html', render_list, {'object_message': 'Ok!'})
+    #return render(request, 'chats_list.html', {'nodes_chats': chats_list.distinct(),
+    #                                           'companyid': companyid,
+    #                                           'chat_type_list': chat_type_list,
+    #                                           }, {'object_message': 'Ok!'})
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def messages(request):
 
     chatid = request.GET['chatid']
-
-    return render(request, 'chat_messages_list.html', {
+    #print(chatid)
+    #print(Chat.objects.filter(id=chatid).first())
+    #print(ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author"))
+    return render(request, 'chat_messages_members.html', {
                                             'nodes_messages': Message.objects.filter(chat_id=chatid, is_active=True).distinct(),
+                                            'nodes_members': ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author"),
                                             'currentchat': Chat.objects.filter(id=chatid).first(),
                                             'currentchatid': chatid,
                                           }
@@ -119,14 +122,20 @@ def messagecreate(request):
     messages_list = Message.objects.filter(chat_id=chatid, is_active=True,
                                            chat__members__in=[currentuserid, ]).select_related("chat",
                                                                                              "author")  # .prefetch_related("chat__members")
-    currentchat = Chat.objects.filter(id=chatid).first()
-    print(currentchat)
+    #messages_list = Message.objects.filter(chat_id=chatid, is_active=True).distinct()
 
-    return render(request, 'chat_messages_list.html', {'object_message': 'Ok!'},
-                                                                       {'nodes_messages': messages_list.distinct(),
-                                                                        'currentchat': currentchat,
-                                                                        'currentchatid': chatid,
-                                                                        #'chat_type_list': chat_type_list,
-                                                                        },
+    currentchat = Chat.objects.filter(id=chatid).first()
+    #print(currentchat, chatid)
+    #print(messages_list)
+
+    return render(request, 'chat_messages_members.html', {'nodes_messages': messages_list.distinct(),
+                                                          'nodes_members': ChatMember.objects.filter(chat=chatid,
+                                                                                                     is_active=True,
+                                                                                                     dateclose__isnull=True).select_related("member", "author"),
+                                                          'currentchat': currentchat,
+                                                          'currentchatid': chatid,
+                                                          'object_message': 'Ok!'
+                                                          #'chat_type_list': chat_type_list,
+                                                         },
 
                   )

@@ -1,27 +1,18 @@
 
-            <div class="object-list-wrapper">
 
-                <div class="object-chats-chats">
-                    <div id="ajax_chatlistresult">{% include 'chats_list.html' %}</div>
-                    <div id="ajax_chatlisterrors"></div>
-                </div>
+        <div id="ajax_chatlistresult" class="object-list-wrapper">
 
-                <div class="object-chats-messages">
-                    {% include 'chat_messages_list.html' %}
-                </div>
-
-                <div class="object-chats-members">
-
-                    <h4>Участники</h4>
-
-                    {% for node in nodes_members %}
-                        <p>{{ node.member.username }} <i>{{ node.datecreate|date:"d.m.Y" }}</i></p>
-                    {% endfor %}
-
-                </div>
-
+            <div class="object-chats-chats">
+                {% include 'chats_list.html' %}
             </div>
 
+            <div id="ajax_messagelistresult" class="object-list-wrapper">
+                {% include 'chat_messages_members.html' %}
+            </div>
+            <div id="ajax_messagelisterrors"></div>
+
+        </div>
+        <div id="ajax_chatlisterrors"></div>
 
 
 <script>
@@ -84,6 +75,30 @@
         });
     });
 
+
+
+    function MessagesList(chatid) {
+
+        $.ajax({
+            url: "{% url 'my_chat:messages' %}",
+            type: "GET",
+            data : {
+                chatid: chatid,
+            },
+             success: function(data)
+                    {
+                     //console.log(data)
+                     $('#ajax_messagelistresult').html(data);
+                    },
+             error: function(xhr, errmsg, err)
+                    {
+                     console.log("error")
+                     console.log(error_data)
+                     $('#ajax_messagelisterrors').html('Нет данных!');
+                    }
+        });
+
+    };
 
 
 </script>
