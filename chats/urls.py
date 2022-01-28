@@ -13,5 +13,8 @@ urlpatterns = [
     #path('chats_page/message_list/<int:chatid>', views.messages, name='messages'),
     path('chats_page/message_list/', views.messages, name='messages'),
     path('chats_page/message_create/', views.messagecreate, name='message_create'),
+    path('chats_page/message_form/', views.messageform, name='messageform'),
+    path('chats_page/member_create/', views.membercreate, name='member_create'),
+    path('chats_page/member_form/', views.memberform, name='memberform'),
 
 ]

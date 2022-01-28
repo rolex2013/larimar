@@ -38,7 +38,7 @@
            {% elif component_name == 'projects' %}
                <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
            {% elif component_name == 'chats' %}
-               <a href="{% url 'my_chat:chats' current_company.parent.pk %}">{{ current_company.parent.name }}</a>
+               <a href="{% url 'my_chat:chats' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
            {% endif %}
            </p></i>
         <!--{ else %}
@@ -328,8 +328,10 @@
 
          {% elif component_name == 'chats' %}
 
-            <!--<div id="chats">{ include 'chats.html' %}</div>-->
-            {% include 'chats.html' %}
+            <!--<div class="object-list-chat">-->
+                <!--<div id="chats">{ include 'chats.html' %}</div>-->
+                {% include 'chats.html' %}
+            <!--</div>-->
 
          {% else %}
 

@@ -1,22 +1,11 @@
 
             {% if currentchat %}
 
-                <!--<h4>Сообщения</h4>-->
                 <h4>#{{ currentchatid }}. {{ currentchat.name }}</h4>
                 <h5>{{ currentchat.description }}</h5>
 
                 {% for node in nodes_messages %}
                     <p>{{ node.author }} {{ node.datecreate }}<br />{{ node.text }}</p>
                 {% endfor %}
-
-                <!--<p><em>{ object_message }}</em></p>-->
-
-                <div>
-                    <form method="GET" id="ajax_message_form" action="">
-                        {% csrf_token %}
-                        <input type="text" id="messagetext" placeholder="Текст сообщения" /><br />
-                        <input type="button" id="addmessagebutton" value="Отправить" />
-                    </form>
-                </div>
 
             {% endif %}

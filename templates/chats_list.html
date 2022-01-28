@@ -1,22 +1,6 @@
 
         <h4>Чаты</h4>
 
-        <div>
-            <form method="GET" id="ajax_chat_form" action="">
-                {% csrf_token %}
-                <select name="select-chattype" id="chattypeselectid" class="select-chat-type">
-                     {% for chattype in chat_type_list %}
-                        <option value="{{chattype.id}}">
-                           {{chattype.name}}
-                        </option>
-                     {% endfor %}
-                </select>
-                <input type="text" id="chatname" placeholder="Название чата" /><br />
-                <input type="text" id="chatdescription" placeholder="Описание" />
-                <input type="button" id="addchatbutton" value="Создать" />
-            </form>
-        </div>
-
         {% for node in nodes_chats %}
             <p><a href="" id="chat_{{ node.id }}" onclick="MessagesList({{ node.id }}); return false;">{{ node.name }}</a> <i>({{ node.type }} - {{ node.author }} {{ node.datecreate|date:"d.m.Y" }})</i></p>
         {% endfor %}

@@ -1,6 +1,7 @@
 import os
 #import socket
 from django.conf import settings
+from django.http import HttpResponseNotFound
 
 from django.shortcuts import render
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
@@ -14,6 +15,13 @@ from files.models import Folder, FolderFile
 from django.contrib.auth.decorators import login_required
 
 import json
+
+
+def pageNotFound(request, exception):
+    return HttpResponseNotFound('<h1>Страница не найдена!</h1>')
+
+#def accessDenided(request, exception):
+#    return HttpResponseNotFound('<h1>Доступ запрещён!</h1>')
 
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

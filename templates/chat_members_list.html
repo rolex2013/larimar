@@ -4,7 +4,25 @@
             <h4>Участники</h4>
 
             {% for node in nodes_members %}
-                <p>{{ node.member.username }} <i>{{ node.datecreate|date:"d.m.Y" }}</i></p>
+
+                {% if node.chat.author_id == node.member_id %}
+                    <span style="font-weight:bold; color:blue;">   <!-- Админ чата -->
+                {% elif node.member_id == request.user.id %}
+                    <span style="font-weight:bold; color:green;">  <!-- Текущий пользователь -->
+                {% else %}
+                    <span>
+                {% endif %}
+                {% if node.is_online %}
+                    <b>                                         <!-- Если OnLine -->
+                {% endif %}
+                {{ node.member.username }}
+                {% if node.is_online %}
+                    </b>
+                {% endif %}
+                </span>
+                <i>({{ node.dateonline|date:"d.m.Y" }})</i>
+                <br />
+
             {% endfor %}
 
         {% endif %}

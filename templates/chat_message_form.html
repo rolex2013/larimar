@@ -1,0 +1,39 @@
+
+        {% if currentchat %}
+
+            <form method="GET" id="ajax_message_form" action="">
+                {% csrf_token %}
+                <input type="text" id="messagetext" placeholder="Текст сообщения" />
+                <input type="button" id="addmessagebutton" value="Отправить" />
+            </form>
+
+        {% endif %}
+
+<script>
+        $('#addmessagebutton').click(function() {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        var messagetext = document.getElementById("messagetext").value;
+        console.log("==="+messagetext);
+        $.ajax({
+            url: "{% url 'my_chat:message_create' %}",
+            type: "GET",
+            data : {
+                chatid: {{ currentchatid }},
+                text: messagetext,
+            },
+             success: function(data)
+                    {
+                     //console.log(data)
+                     $('#ajax_messagelistresult').html(data);
+                     document.getElementById("messagetext").value = "";
+                    },
+             error: function(xhr, errmsg, err)
+                    {
+                     console.log("error")
+                     console.log(error_data)
+                     $('#ajax_messagelisterror').html('Нет данных!');
+                    }
+        });
+    });
+
+</script>

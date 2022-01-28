@@ -1,5 +1,8 @@
 from django.db import models
 
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 from django.db import models
 from django.urls import reverse, reverse_lazy
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -45,8 +48,17 @@ class ChatMember(models.Model):
     member = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='chats_chatmember_member', verbose_name="Участник")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)                                                                                         # Момент вступления в чат
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)                                                           # Момент выхода из члентства
+    dateonline = models.DateTimeField("Момент последней активности", auto_now_add=False, blank=True, null=True)
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, related_name='chats_chatmember_author', verbose_name="Автор") # Пригласивший в чат
     is_active = models.BooleanField("Активность", default=True)
+
+    @property
+    def is_online(self):
+        online = False
+        if not self.dateonline is None:
+            if (timezone.now()-self.dateonline <= timedelta(milliseconds=10000)):
+                online = True
+        return online
 
     def __str__(self):
         #return (self.chat__name + '. ' + self.member__username)

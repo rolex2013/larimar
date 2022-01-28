@@ -1,43 +1,45 @@
 
-    <div id="ajax_messagelistresult" class="object-chats-messages">
+    <div id="ajax_messagelistresult_" class="object-chats-messages">
         {% include 'chat_messages_list.html' %}
     </div>
-    <div id="ajax_messagelisterorr"></div>
+    <div id="ajax_messagelisterorr_"></div>
 
-    <div  id="ajax_memberlistresult" class="object-chats-members">
+    <div id="ajax_memberlistresult_" class="object-chats-members">
         {% include 'chat_members_list.html' %}
     </div>
-    <div id="ajax_memberlisterror"></div>
+    <div id="ajax_memberlisterror_"></div>
 
     {% if currentchat %}
 
         <script>
 
-            //function sendMessageAjaxForm(result_form, ajax_form) {
-            $('#addmessagebutton').click(function() {
-                event.preventDefault(); // *** без этого страница перегружается после возврата data
-                var messagetext = document.getElementById("messagetext").value;
-                //console.log("==="+messagetext);
-                $.ajax({
-                    url: "{% url 'my_chat:message_create' %}",
+            var getMembersOnLine = function() {
+                $.ajax( {
+                    url: "{% url 'my_chat:messages' %}",
                     type: "GET",
-                    data : {
+                    data: {
                         chatid: {{ currentchatid }},
-                        text: messagetext,
+                        interval: 1,
                     },
-                     success: function(data)
-                            {
-                             //console.log(data)
-                             $('#ajax_messagelistresult').html(data);
-                            },
-                     error: function(xhr, errmsg, err)
-                            {
-                             console.log("error")
-                             console.log(error_data)
-                             $('#ajax_messagelisterror').html('Нет данных!');
-                            }
+                    success: function(data) {
+                            //console.log(data)
+                            $('#ajax_messagelistresult').html(data);
+                           },
+                    //complete: function() {
+                    //        setInterval(getMembersOnLine, 1000000);
+                    //       },
+                    error: function(xhr, errmsg, err) {
+                            console.log("error")
+                            //console.log(error_data);
+                            $('#ajax_messagelisterorr').html('Нет данных!');
+                           }
                 });
-            });
+            };
+
+            if (typeof interval !== 'undefined') {
+                clearInterval(interval);    // иначе множатся вызовы!!!
+            }
+            interval = setInterval(getMembersOnLine, 10000);
 
         </script>
 

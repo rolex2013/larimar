@@ -1,3 +1,8 @@
+
+#import datetime
+from datetime import datetime, timedelta
+from django.utils import timezone
+
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
@@ -8,6 +13,8 @@ from django.views.generic import CreateView
 
 from companies.models import Company #, UserCompanyComponentGroup
 from .models import Dict_ChatType, Chat, Message, ChatMember
+from companies.models import UserCompanyComponentGroup
+from django.contrib.auth.models import User
 
 #from .forms import ChatForm, MessageForm
 
@@ -42,6 +49,8 @@ def chats_messages_members_lists(request, companyid=0, chatid=0):
 
     chat_type_list = Dict_ChatType.objects.filter(is_active=True)
 
+    button_company_select = "Сменить организацию"
+
     return {
             'nodes_chats': chats_list.distinct(),
             #'nodes_messages': messages_list,
@@ -53,6 +62,7 @@ def chats_messages_members_lists(request, companyid=0, chatid=0):
             'currentchatid': 0,
             'user_companies': comps,
             'chat_type_list': chat_type_list,
+            'button_company_select': button_company_select,
            }
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
@@ -87,7 +97,7 @@ def chatcreate(request):
     #chats_list = Chat.objects.filter(Q(author=currentuserid) | Q(members__in=[currentuserid,]) | Q(type=3), company_id=companyid, is_active=True).select_related("company", "author", "type")
     #chat_type_list = Dict_ChatType.objects.filter(is_active=True)
 
-    return render(request, 'chats.html', render_list, {'object_message': 'Ok!'})
+    return render(request, 'chats_list.html', render_list, {'object_message': 'Ok!'})
     #return render(request, 'chats_list.html', {'nodes_chats': chats_list.distinct(),
     #                                           'companyid': companyid,
     #                                           'chat_type_list': chat_type_list,
@@ -97,14 +107,27 @@ def chatcreate(request):
 def messages(request):
 
     chatid = request.GET['chatid']
-    #print(chatid)
-    #print(Chat.objects.filter(id=chatid).first())
-    #print(ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author"))
-    return render(request, 'chat_messages_members.html', {
+    interval = request.GET['interval']
+
+    if interval == 1:
+        template_name = 'chat_messages_list.html'
+        #first = False
+    else:
+        template_name = 'chat_messages_members.html'
+        #first = True
+
+    ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).update(dateonline=datetime.now())
+    print(datetime.now(), 'chat_id=', chatid, 'member_id=', request.user.id)
+    #cm = ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).first()
+    #if timezone.now()-cm.dateonline < timedelta(milliseconds=10000):
+    #    print(timezone.now()-cm.dateonline)
+
+    return render(request, template_name, {
                                             'nodes_messages': Message.objects.filter(chat_id=chatid, is_active=True).distinct(),
                                             'nodes_members': ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author"),
                                             'currentchat': Chat.objects.filter(id=chatid).first(),
                                             'currentchatid': chatid,
+                                            #'first': first,
                                           }
                   )
 
@@ -121,7 +144,7 @@ def messagecreate(request):
 
     messages_list = Message.objects.filter(chat_id=chatid, is_active=True,
                                            chat__members__in=[currentuserid, ]).select_related("chat",
-                                                                                             "author")  # .prefetch_related("chat__members")
+                                                                                               "author")  # .prefetch_related("chat__members")
     #messages_list = Message.objects.filter(chat_id=chatid, is_active=True).distinct()
 
     currentchat = Chat.objects.filter(id=chatid).first()
@@ -139,3 +162,45 @@ def messagecreate(request):
                                                          },
 
                   )
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def messageform(request):
+
+    chatid = request.GET['chatid']
+
+    currentchat = Chat.objects.filter(id=chatid).first()
+
+    return render(request, 'chat_message_form.html', {'currentchat': currentchat, 'currentchatid': chatid,})
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def membercreate(request):
+
+    chatid = request.GET['chatid']
+    memberid = request.GET['memberid']
+
+    currentchat = Chat.objects.filter(id=chatid).first()
+    currentuserid = request.user.id
+
+    member_new = ChatMember.objects.create(chat_id=chatid, member_id=memberid, author_id=currentuserid)
+
+    return render(request, 'chat_messages_members.html', {'nodes_members': ChatMember.objects.filter(chat=chatid,
+                                                                                                     is_active=True,
+                                                                                                     dateclose__isnull=True).select_related("member", "author"),
+                                                          'currentchat': currentchat,
+                                                          'currentchatid': chatid,
+                                                          },
+                  )
+
+@login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
+def memberform(request):
+
+    chatid = request.GET['chatid']
+
+    currentchat = Chat.objects.filter(id=chatid).first()
+
+    # Список пользователей для выбора
+    uc = UserCompanyComponentGroup.objects.filter(company_id=currentchat.company_id).values_list('user_id', flat=True)
+    member_list = User.objects.filter(id__in=uc, is_active=True)
+
+    return render(request, 'chat_member_form.html', {'currentchat': currentchat, 'currentchatid': chatid, 'member_list': member_list,})
+

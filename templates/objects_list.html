@@ -14,6 +14,8 @@
                     <span class="hint hint--bottom hint--info" data-hint="Файлы"><b><a href="{% url 'my_file:folders' node.pk 0 %}">{{ node.name }}</b></span><br />
                  {% elif component_name == 'feedback' %}
                     <span class="hint hint--bottom hint--info" data-hint="Техподдержка"><b><a href="{% url 'my_feedback:tickets' 0 1 node.pk %}">{{ node.name }}</b></span><br />
+                 {% elif component_name == 'chats' %}
+                    <span class="hint hint--bottom hint--info" data-hint="Чаты"><b><a href="{% url 'my_chat:chats' node.pk 0 %}">{{ node.name }}</b></span><br />
                  {% elif component_name == 'companies' %}
                     <span class="hint hint--bottom hint--info" data-hint="Настройка"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{{ node.parent.name }}--></b></span><br />
                  {% endif %}                    

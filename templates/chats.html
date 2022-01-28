@@ -1,8 +1,8 @@
 
 
-        <div id="ajax_chatlistresult" class="object-list-wrapper">
+        <div id="ajax_chatlistresult__" class="object-chats-wrapper">
 
-            <div class="object-chats-chats">
+            <div id="ajax_chatlistresult" class="object-chats-chats">
                 {% include 'chats_list.html' %}
             </div>
 
@@ -14,25 +14,34 @@
         </div>
         <div id="ajax_chatlisterrors"></div>
 
+        <div class="object-list-wrapper">
+            <div class="object-chats-chats">
+                <form method="GET" id="ajax_chat_form" action="">
+                    {% csrf_token %}
+                    <select name="select-chattype" id="chattypeselectid" class="select-chat-type">
+                         {% for chattype in chat_type_list %}
+                            <option value="{{chattype.id}}">
+                               {{chattype.name}}
+                            </option>
+                         {% endfor %}
+                    </select>
+                    <input type="text" id="chatname" placeholder="Название чата" /><br />
+                    <input type="text" id="chatdescription" placeholder="Описание" />
+                    <input type="button" id="addchatbutton" value="Создать" />
+                </form>
+            </div>
+            <div id="ajax_chat_message_form" class="object-chats-messages">
+                {% include 'chat_message_form.html' %}
+            </div>
+
+            <div id="ajax_chat_member_form" class="object-chats-members">
+                {% include 'chat_member_form.html' %}
+            </div>
+        </div>
+
 
 <script>
-    /*
-    $( document ).ready(function() {
-        $("#addchatbutton").click(
-            function() {
-                sendChatAjaxForm('chat_result_form', 'ajax_chat_form');
-                return false;
-            }
-        );
-        $("#addmessagebutton").click(
-            function() {
-                sendMessageAjaxForm('message_result_form', 'ajax_message_form');
-                return false;
-            }
-        );
-    });
-    */
-    //function sendChatAjaxForm(result_form, ajax_form) {
+
     $('#addchatbutton').click(function() {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
         var chattypeSelected = $('#chattypeselectid').find(":selected").val();
@@ -44,29 +53,18 @@
         $.ajax({
             url: "{% url 'my_chat:chat_create' %}",
             type: "GET",
-            //dataType: "html",
-            //data: $("#" + ajax_form).serialize(),
             data : {
                 companyid: {{ current_company.id }},
                 typeid: chattypeSelected,
                 name: chatname,
                 description: chatdescription
             },
-            /*
-            success: function(response) {
-                result = $.parseJSON(response);
-                $('#result_form').html('Название: ' + result.name + '<br />Описание: ' + result.description);
-            },
-            error: function(response) {
-                $('#result_form').html('Ошибка. Данные не отправлены!');
-            }
-            */
-             success: function(data)
+            success: function(data)
                     {
                      //console.log(data)
                      $('#ajax_chatlistresult').html(data);
                     },
-             error: function(xhr, errmsg, err)
+            error: function(xhr, errmsg, err)
                     {
                      console.log("error")
                      console.log(error_data)
@@ -75,8 +73,6 @@
         });
     });
 
-
-
     function MessagesList(chatid) {
 
         $.ajax({
@@ -84,11 +80,52 @@
             type: "GET",
             data : {
                 chatid: chatid,
+                interval: 0,
             },
              success: function(data)
                     {
-                     //console.log(data)
-                     $('#ajax_messagelistresult').html(data);
+                        //console.log(data)
+                        $('#ajax_messagelistresult').html(data);
+                        // *** Выводим форму добавления сообщения в чат
+                        $.ajax({
+                            url: "{% url 'my_chat:messageform' %}",
+                            type: "GET",
+                            data : {
+                                chatid: chatid,
+                            },
+                            success: function(data)
+                                    {
+                                    //console.log(data)
+                                    $('#ajax_chat_message_form').html(data);
+                                    // *** Выводим форму добавления участника в чат
+                                    $.ajax({
+                                        url: "{% url 'my_chat:memberform' %}",
+                                        type: "GET",
+                                        data : {
+                                            chatid: chatid,
+                                        },
+                                        success: function(data)
+                                                {
+                                                 //console.log(data)
+                                                 $('#ajax_chat_member_form').html(data);
+                                                },
+                                        error: function(xhr, errmsg, err)
+                                                {
+                                                 console.log("error")
+                                                 console.log(error_data)
+                                                 $('#ajax_memberlisterrors').html('Нет данных!');
+                                                }
+                                    });
+                                    // *******
+                                    },
+                            error: function(xhr, errmsg, err)
+                                    {
+                                     console.log("error")
+                                     console.log(error_data)
+                                     $('#ajax_messagelisterrors').html('Нет данных!');
+                                    }
+                        });
+                        // *******
                     },
              error: function(xhr, errmsg, err)
                     {
@@ -99,6 +136,5 @@
         });
 
     };
-
 
 </script>

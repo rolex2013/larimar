@@ -1,0 +1,45 @@
+
+        {% if currentchat %}
+
+            <form method="GET" id="ajax_member_form" action="">
+                {% csrf_token %}
+                <select name="select-member" id="memberselectid" class="select-member">
+                     {% for member in member_list %}
+                        <option value="{{member.id}}">
+                           {{member.username}}
+                        </option>
+                     {% endfor %}
+                    </select>
+                <input type="button" id="addmemberbutton" value="Добавить" />
+            </form>
+
+        {% endif %}
+
+<script>
+
+        $('#addmemberbutton').click(function() {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        var memberSelected = $('#memberselectid').find(":selected").val();
+        console.log("==="+memberSelected);
+        $.ajax({
+            url: "{% url 'my_chat:member_create' %}",
+            type: "GET",
+            data : {
+                chatid: {{ currentchatid }},
+                memberid: memberSelected,
+            },
+             success: function(data)
+                    {
+                     //console.log(data)
+                     $('#ajax_messagelistresult').html(data);
+                    },
+             error: function(xhr, errmsg, err)
+                    {
+                     console.log("error")
+                     console.log(error_data)
+                     $('#ajax_messagelisterror').html('Нет данных!');
+                    }
+        });
+    });
+
+</script>

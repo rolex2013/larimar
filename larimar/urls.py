@@ -21,6 +21,8 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
 
+from main.views import pageNotFound
+
 urlpatterns = [
     path('favicon.ico/', RedirectView.as_view(url='/static/image/favicon.ico')),
     path('admin/', admin.site.urls),
@@ -48,3 +50,10 @@ if settings.DEBUG:
 
 # без этого ckeditor не видит загруженные на сервер файлы/картинки (https://qarchive.ru/37247_django_media_url_i_media_root)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+#handler500 = serverError
+handler400 = pageNotFound
+#handler403 = accessDenided
+#handler404 = badRequest
+
+#TODO не забыть про возможность перенаправления на другие страницы (redirect)
