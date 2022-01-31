@@ -18,6 +18,8 @@ from django.contrib.auth.models import User
 
 #from .forms import ChatForm, MessageForm
 
+from django.db.models import Q
+
 """
 path('chats_list/<int:companyid>/', views.chats, name='chats'),
 path('chats_page/chat_create/<int:companyid>/', views.ChatCreate.as_view(), name='chat_create'),
@@ -92,7 +94,7 @@ def chatcreate(request):
     #print(companyid)
     chat_new = Chat.objects.create(company_id=companyid, name=name, description=description, type_id=type, author_id=currentuserid)
     if chat_new:
-        member_new = ChatMember.objects.create(chat_id=chat_new.id, author_id=currentuserid, member_id=currentuserid)
+        member_new = ChatMember.objects.create(chat_id=chat_new.id, is_admin=True, author_id=currentuserid, member_id=currentuserid)
     render_list = chats_messages_members_lists(request, companyid=0, chatid=0)
     #chats_list = Chat.objects.filter(Q(author=currentuserid) | Q(members__in=[currentuserid,]) | Q(type=3), company_id=companyid, is_active=True).select_related("company", "author", "type")
     #chat_type_list = Dict_ChatType.objects.filter(is_active=True)
@@ -111,23 +113,16 @@ def messages(request):
 
     if interval == 1:
         template_name = 'chat_messages_list.html'
-        #first = False
     else:
         template_name = 'chat_messages_members.html'
-        #first = True
 
     ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).update(dateonline=datetime.now())
-    print(datetime.now(), 'chat_id=', chatid, 'member_id=', request.user.id)
-    #cm = ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).first()
-    #if timezone.now()-cm.dateonline < timedelta(milliseconds=10000):
-    #    print(timezone.now()-cm.dateonline)
 
     return render(request, template_name, {
                                             'nodes_messages': Message.objects.filter(chat_id=chatid, is_active=True).distinct(),
-                                            'nodes_members': ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author"),
+                                            'nodes_members': ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),
                                             'currentchat': Chat.objects.filter(id=chatid).first(),
                                             'currentchatid': chatid,
-                                            #'first': first,
                                           }
                   )
 
@@ -154,7 +149,7 @@ def messagecreate(request):
     return render(request, 'chat_messages_members.html', {'nodes_messages': messages_list.distinct(),
                                                           'nodes_members': ChatMember.objects.filter(chat=chatid,
                                                                                                      is_active=True,
-                                                                                                     dateclose__isnull=True).select_related("member", "author"),
+                                                                                                     dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),
                                                           'currentchat': currentchat,
                                                           'currentchatid': chatid,
                                                           'object_message': 'Ok!'
@@ -177,15 +172,22 @@ def membercreate(request):
 
     chatid = request.GET['chatid']
     memberid = request.GET['memberid']
+    memberisadmin = request.GET['memberisadmin']
+
+    isadmin = False
+    if memberisadmin == "1":
+        isadmin = True
 
     currentchat = Chat.objects.filter(id=chatid).first()
     currentuserid = request.user.id
 
-    member_new = ChatMember.objects.create(chat_id=chatid, member_id=memberid, author_id=currentuserid)
+    member_new = ChatMember.objects.create(chat_id=chatid, member_id=memberid, is_admin=isadmin, author_id=currentuserid)
 
-    return render(request, 'chat_messages_members.html', {'nodes_members': ChatMember.objects.filter(chat=chatid,
+
+    return render(request, 'chat_messages_members.html', {'nodes_messages': Message.objects.filter(chat_id=chatid, is_active=True).distinct(),
+                                                          'nodes_members': ChatMember.objects.filter(chat=chatid,
                                                                                                      is_active=True,
-                                                                                                     dateclose__isnull=True).select_related("member", "author"),
+                                                                                                     dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),
                                                           'currentchat': currentchat,
                                                           'currentchatid': chatid,
                                                           },
@@ -199,8 +201,14 @@ def memberform(request):
     currentchat = Chat.objects.filter(id=chatid).first()
 
     # Список пользователей для выбора
-    uc = UserCompanyComponentGroup.objects.filter(company_id=currentchat.company_id).values_list('user_id', flat=True)
-    member_list = User.objects.filter(id__in=uc, is_active=True)
+    uc = UserCompanyComponentGroup.objects.filter(company_id=currentchat.company_id).distinct().values_list('user_id', flat=True)
+    current_members_list = ChatMember.objects.filter(chat_id=chatid, is_active=True).values_list('member_id', flat=True)
+    #member_list = User.objects.filter(~Q(id__in=current_members_list), id__in=uc, is_active=True) #.exclude(id__in=current_members_list)
+    member_list = User.objects.filter(id__in=uc, is_active=True).exclude(id__in=current_members_list)
+    print(uc)
+    print(current_members_list)
+    print(member_list)
 
     return render(request, 'chat_member_form.html', {'currentchat': currentchat, 'currentchatid': chatid, 'member_list': member_list,})
+
 

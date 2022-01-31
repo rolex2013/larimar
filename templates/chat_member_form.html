@@ -10,6 +10,7 @@
                         </option>
                      {% endfor %}
                     </select>
+                <label><input type="checkbox" id="memberisadmin" name="admin" />Админ</label>
                 <input type="button" id="addmemberbutton" value="Добавить" />
             </form>
 
@@ -20,13 +21,21 @@
         $('#addmemberbutton').click(function() {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
         var memberSelected = $('#memberselectid').find(":selected").val();
-        console.log("==="+memberSelected);
+        //var memberIsAdmin = $('#memberadmin').find(":checked").val();
+        var memberIsAdmin = document.getElementById('memberisadmin');
+        if (memberIsAdmin.checked) {
+           memberIsAdmin = 1;
+        } else {
+           memberIsAdmin = 0;
+        }
+        //console.log("==="+memberSelected);
         $.ajax({
             url: "{% url 'my_chat:member_create' %}",
             type: "GET",
             data : {
                 chatid: {{ currentchatid }},
                 memberid: memberSelected,
+                memberisadmin: memberIsAdmin,
             },
              success: function(data)
                     {

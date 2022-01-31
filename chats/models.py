@@ -49,6 +49,7 @@ class ChatMember(models.Model):
     datecreate = models.DateTimeField("Создан", auto_now_add=True)                                                                                         # Момент вступления в чат
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)                                                           # Момент выхода из члентства
     dateonline = models.DateTimeField("Момент последней активности", auto_now_add=False, blank=True, null=True)
+    is_admin = models.BooleanField("Администратор", default=False)
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, related_name='chats_chatmember_author', verbose_name="Автор") # Пригласивший в чат
     is_active = models.BooleanField("Активность", default=True)
 
