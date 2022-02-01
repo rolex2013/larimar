@@ -121,7 +121,7 @@ def messages(request):
     return render(request, template_name, {
                                             'nodes_messages': Message.objects.filter(chat_id=chatid, is_active=True).distinct(),
                                             'nodes_members': ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),
-                                            'currentchat': Chat.objects.filter(id=chatid).first(),
+                                            'currentchat': Chat.objects.filter(id=chatid).select_related("company").first(),
                                             'currentchatid': chatid,
                                           }
                   )
@@ -178,11 +178,12 @@ def membercreate(request):
     if memberisadmin == "1":
         isadmin = True
 
-    currentchat = Chat.objects.filter(id=chatid).first()
+    #currentchat = Chat.objects.filter(id=chatid).first()
     currentuserid = request.user.id
 
     member_new = ChatMember.objects.create(chat_id=chatid, member_id=memberid, is_admin=isadmin, author_id=currentuserid)
 
+    (member_list, currentchat) = memberlist(request, chatid)
 
     return render(request, 'chat_messages_members.html', {'nodes_messages': Message.objects.filter(chat_id=chatid, is_active=True).distinct(),
                                                           'nodes_members': ChatMember.objects.filter(chat=chatid,
@@ -198,17 +199,31 @@ def memberform(request):
 
     chatid = request.GET['chatid']
 
-    currentchat = Chat.objects.filter(id=chatid).first()
-
-    # Список пользователей для выбора
-    uc = UserCompanyComponentGroup.objects.filter(company_id=currentchat.company_id).distinct().values_list('user_id', flat=True)
-    current_members_list = ChatMember.objects.filter(chat_id=chatid, is_active=True).values_list('member_id', flat=True)
-    #member_list = User.objects.filter(~Q(id__in=current_members_list), id__in=uc, is_active=True) #.exclude(id__in=current_members_list)
-    member_list = User.objects.filter(id__in=uc, is_active=True).exclude(id__in=current_members_list)
-    print(uc)
-    print(current_members_list)
-    print(member_list)
+    (member_list, currentchat) = memberlist(request, chatid)
 
     return render(request, 'chat_member_form.html', {'currentchat': currentchat, 'currentchatid': chatid, 'member_list': member_list,})
 
+def memberlist(request, chatid):
 
+    currentchat = Chat.objects.filter(id=chatid).first()
+
+    member_list = []
+    is_admin = ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).first()
+    if is_admin:
+        # Список пользователей для выбора
+        uc = UserCompanyComponentGroup.objects.filter(company_id=currentchat.company_id, component__name="Чаты", is_active=True).select_related("user", "component").distinct() #.values_list('user_id', flat=True)
+        current_members_list = ChatMember.objects.filter(chat_id=chatid, is_active=True).values_list('member_id', flat=True)
+        #member_list = User.objects.filter(~Q(id__in=current_members_list), id__in=uc, is_active=True) #.exclude(id__in=current_members_list)
+        #member_list = User.objects.filter(id__in=uc, is_active=True).exclude(id__in=current_members_list)
+        #mem_list = uc.exclude(user_id__in=current_members_list)
+        for mem in uc:
+            if mem.user_id in current_members_list:
+                pass
+            else:
+                member_list.append(mem)
+                #print(mem)
+        #print('===', uc)
+        #print(current_members_list)
+        print(member_list)
+
+    return (member_list, currentchat)

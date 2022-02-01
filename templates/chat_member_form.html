@@ -1,12 +1,12 @@
 
-        {% if currentchat %}
+        {% if currentchat and member_list %}
 
             <form method="GET" id="ajax_member_form" action="">
                 {% csrf_token %}
                 <select name="select-member" id="memberselectid" class="select-member">
                      {% for member in member_list %}
-                        <option value="{{member.id}}">
-                           {{member.username}}
+                        <option value="{{member.user.id}}">
+                           {{member.user.username}}
                         </option>
                      {% endfor %}
                     </select>
@@ -41,6 +41,27 @@
                     {
                      //console.log(data)
                      $('#ajax_messagelistresult').html(data);
+                     //$('#ajax_chat_member_form').html(data);
+                     // *** Перезаполняем список доступных пользователей ***
+                     $.ajax({
+                        url: "{% url 'my_chat:memberform' %}",
+                        type: "GET",
+                        data : {
+                            chatid: {{ currentchatid }},
+                        },
+                         success: function(data)
+                                {
+                                 //console.log(data)
+                                 $('#ajax_member_form').html(data);
+                                },
+                         error: function(xhr, errmsg, err)
+                                {
+                                 console.log("error")
+                                 //console.log(error_data)
+                                 $('#ajax_memberlisterror_').html('Нет данных!');
+                                }
+                    });
+                    // ***
                     },
              error: function(xhr, errmsg, err)
                     {

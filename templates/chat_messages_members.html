@@ -11,36 +11,36 @@
 
     {% if currentchat %}
 
-        <script>
+    <script>
 
-            var getMembersOnLine = function() {
-                $.ajax( {
-                    url: "{% url 'my_chat:messages' %}",
-                    type: "GET",
-                    data: {
-                        chatid: {{ currentchatid }},
-                        interval: 1,
-                    },
-                    success: function(data) {
-                            //console.log(data)
-                            $('#ajax_messagelistresult').html(data);
-                           },
-                    //complete: function() {
-                    //        setInterval(getMembersOnLine, 1000000);
-                    //       },
-                    error: function(xhr, errmsg, err) {
-                            console.log("error")
-                            //console.log(error_data);
-                            $('#ajax_messagelisterorr').html('Нет данных!');
-                           }
-                });
-            };
+        var getMembersOnLine = function() {
+            $.ajax( {
+                url: "{% url 'my_chat:messages' %}",
+                type: "GET",
+                data: {
+                    chatid: {{ currentchatid }},
+                    interval: 1,
+                },
+                success: function(data) {
+                        //console.log(data)
+                        $('#ajax_messagelistresult').html(data);
+                       },
+                //complete: function() {
+                //        setInterval(getMembersOnLine, 1000000);
+                //       },
+                error: function(xhr, errmsg, err) {
+                        console.log("error")
+                        //console.log(error_data);
+                        $('#ajax_messagelisterorr').html('Нет данных!');
+                       }
+            });
+        };
 
-            if (typeof interval !== 'undefined') {
-                clearInterval(interval);    // иначе множатся вызовы!!!
-            }
-            interval = setInterval(getMembersOnLine, 10000);
+        if (typeof interval !== 'undefined') {
+            clearInterval(interval);    // иначе множатся вызовы!!!
+        }
+        interval = setInterval(getMembersOnLine, 10000);
 
-        </script>
+    </script>
 
     {% endif %}

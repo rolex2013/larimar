@@ -3,7 +3,8 @@
 
             <form method="GET" id="ajax_message_form" action="">
                 {% csrf_token %}
-                <input type="text" id="messagetext" placeholder="Текст сообщения" />
+                <!--<input style="width: 98%; padding: 1%;" type="text" id="messagetext" placeholder="Текст сообщения" />-->
+                <textarea style="width: 98%; padding: 1%;" type="textarea" id="messagetext" placeholder="Текст сообщения"></textarea>
                 <input type="button" id="addmessagebutton" value="Отправить" />
             </form>
 

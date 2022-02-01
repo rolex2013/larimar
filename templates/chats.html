@@ -26,7 +26,7 @@
                          {% endfor %}
                     </select>
                     <input type="text" id="chatname" placeholder="Название чата" /><br />
-                    <input type="text" id="chatdescription" placeholder="Описание" />
+                    <textarea style="width: 98%; padding: 1%;" type="textarea" id="chatdescription" placeholder="Описание"></textarea>
                     <input type="button" id="addchatbutton" value="Создать" />
                 </form>
             </div>
@@ -63,6 +63,8 @@
                     {
                      //console.log(data)
                      $('#ajax_chatlistresult').html(data);
+                     document.getElementById("chatname").value = "";
+                     document.getElementById("chatdescription").value = "";
                     },
             error: function(xhr, errmsg, err)
                     {
