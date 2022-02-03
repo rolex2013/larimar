@@ -70,11 +70,13 @@ class ChatMember(models.Model):
         verbose_name_plural = 'Участники чатов'
 
 class Message(models.Model):
-    text = models.TextField("Наименование", max_length=2048)
+    #text = models.TextField("Наименование", max_length=2048)
+    text = RichTextUploadingField("Текст")
     chat = models.ForeignKey('Chat', limit_choices_to={'is_active': True},
                              on_delete=models.CASCADE, related_name='chats_chat', verbose_name="Чат")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
     #dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
+    onlyfor = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, related_name='chats_message_onlyfor', verbose_name="Только для")
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, related_name='chats_message_autor', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
 

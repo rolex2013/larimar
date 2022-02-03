@@ -12,7 +12,7 @@
                         <!--<p style="padding: 0px 0px 0px 10px;">-->
                         <div class="chat_message">
                     {% endif %}
-                    <b>{{ node.author }}</b> <i>{{ node.datecreate }}</i><br />{{ node.text }}
+                    <b>{{ node.author }}</b> <i>{{ node.datecreate }}</i><br />{% autoescape off %}{{ node.text }}{% endautoescape %}
                     </div>
                     <br />
                 {% endfor %}
