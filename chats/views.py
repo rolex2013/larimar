@@ -13,6 +13,7 @@ from django.views.generic import CreateView
 
 from companies.models import Company #, UserCompanyComponentGroup
 from .models import Dict_ChatType, Chat, Message, ChatMember
+from main.models import Component
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
 
@@ -70,6 +71,9 @@ def chats_messages_members_lists(request, companyid=0, chatid=0):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def chats(request, companyid=0, chatid=0):
 
+    request.session['_auth_user_currentcomponent'] = 'chats'
+    request.session['_auth_user_currentcomponentid'] = Component.objects.filter(code='chats', is_active=True).first().id
+
     render_list = chats_messages_members_lists(request, companyid, chatid)
 
     #template_name = 'chats_list.html'
@@ -109,7 +113,7 @@ def chatcreate(request, **kwargs):
     #chats_list = Chat.objects.filter(Q(author=currentuserid) | Q(members__in=[currentuserid,]) | Q(type=3), company_id=companyid, is_active=True).select_related("company", "author", "type")
     #chat_type_list = Dict_ChatType.objects.filter(is_active=True)
 
-    return render(request, 'chats_list.html', render_list, {'object_message': 'Ok!'})
+    return render(request, 'chats_list.html', render_list, {'currentchatid': chat_new.id})
     #return render(request, 'chats_list.html', {'nodes_chats': chats_list.distinct(),
     #                                           'companyid': companyid,
     #                                           'chat_type_list': chat_type_list,
@@ -144,6 +148,10 @@ def messagecreate(request):
     chatid = request.GET['chatid']
     text = request.GET['text']
     currentuserid = request.user.id
+    # для команды добавления участников чата
+    currentcompanyid = request.session['_auth_user_currentcompany_id']
+    currentcomponentid = request.session['_auth_user_currentcomponentid']
+    #print(currentcompanyid, currentcomponentid)
 
     message_new = Message.objects.create(chat_id=chatid, text=text, author_id=currentuserid)
     if message_new:
@@ -159,7 +167,7 @@ def messagecreate(request):
             #print(text, text.find('/help'))
             if text.find('/help') >= 0:
                 text_new = '/chat-create [-t 1|2|3] -n[ame] "название чата" [-d[escription] "описание чата"]<br />' \
-                           '/chat-update [-n[ame] "название чата"] [-d[escription] "описание чата"]<br />' \
+                           '/chat-update [-t 1|2|3] [-n[ame] "название чата"] [-d[escription] "описание чата"]<br />' \
                            '<span style="padding:0px 0px 0px 16px;">/name "название чата"</span><br />' \
                            '<span style="padding:0px 0px 0px 16px;">/description "описание чата"</span><br />' \
                            '/user-invite [-u[ser]] username [-a[dmin]]<br />' \
@@ -174,14 +182,16 @@ def messagecreate(request):
                 #op_t_1 = text.find('-t')
                 #op_t_2 = text.find('-topic')
                 chat_new = Chat()
-                if text.find('-name') >= 0 or text.find('-t') >= 0:
+                if text.find('-name') >= 0 or text.find('-n') >= 0:
                     #txt = text.split('"')[1].split('"')[0]
                     #print(txt)
                     chat_new.name = text.split('"')[1]
                 if text.find('-description') >= 0 or text.find('-d') >= 0:
-                    #txt = text.split('"')[1].split('"')[1]
-                    #print(text.split('"')[0], text.split('"')[1], text.split('"')[2], text.split('"')[3])
-                    chat_new.description = text.split('"')[3]
+                    com_cnt = text.count('"')
+                    if com_cnt == 2:
+                        chat_new.description = text.split('"')[1]
+                    elif com_cnt == 4:
+                        chat_new.description = text.split('"')[3]
                 #print(text.split(' ')[0], text.split(' ')[1], text.split(' ')[2], text.split(' ')[3])
                 if text.find('-type') >= 0 or text.find('-t') >= 0:
                     chat_new.type_id = text.split(' ')[2]
@@ -190,14 +200,35 @@ def messagecreate(request):
                 if chat_new.name or chat_new.description:
                     chat_new.company_id = message_new.chat.company_id
                     chat_new.author_id = currentuserid
-                    #chat_new.save()
-                    new_chat = chatcreate(request, get={'companyid': chat_new.company_id, 'name': chat_new.name, 'description': chat_new.description,
-                                                        'typeid': chat_new.type_id})
-                    #member_new = ChatMember.objects.create(chat_id=chatid, member_id=currentuserid, is_admin=True, author_id=currentuserid)
+                    chat_new.save()
+                    #new_chat = chatcreate(request, get={'companyid': chat_new.company_id, 'name': chat_new.name, 'description': chat_new.description,
+                    #                                    'typeid': chat_new.type_id})
+                    #print(new_chat)
+                    #memb = UserCompanyComponentGroup.objects.filter(user_id=currentuserid, company_id=currentcompanyid,
+                    #                                                component_id=currentcomponentid, is_active=True).first()
+                    member_new = ChatMember.objects.create(chat_id=chatid, member_id=currentuserid, is_admin=True, author_id=currentuserid)
+                    chatid = chat_new.id
                     text_new = 'Создан новый чат "' + chat_new.name + '"'
 
             elif text[0:12] == '/chat-update':
-                text_new = "Вы ввели команду: /chat-update"
+                #text_new = "Вы ввели команду: /chat-update"
+                chat_curr = Chat.objects.filter(id=chatid).first()
+                #print(com_count, chat_curr)
+                if text.find('-name') >= 0 or text.find('-n') >= 0:
+                    chat_curr.name = text.split('"')[1]
+                if text.find('-description') >= 0 or text.find('-d') >= 0:
+                    com_cnt = text.count('"')
+                    if com_cnt == 2:
+                        chat_curr.description = text.split('"')[1]
+                    elif com_cnt == 4:
+                        chat_curr.description = text.split('"')[3]
+                if text.find('-type') >= 0 or text.find('-t') >= 0:
+                    chat_curr.type_id = text.split(' ')[2]
+                chat_curr.save()
+                print(chat_curr)
+                text_new = 'Текущий чат изменён!'
+                #template = 'company_detail.html'
+                #template = 'chats.html'
             #elif:
             else:
                 text_new = "Такой команды не существует!"
@@ -230,6 +261,7 @@ def messagecreate(request):
                                       'currentchat': currentchat,
                                       'currentchatid': chatid,
                                       'object_message': 'Ok!',
+                                      #'nodes_chats': Chat.objects.filter(is_active=True).distinct(),
                                       #'nodes_chats': chats_list,
                                       #'chat_type_list': chat_type_list,
                                      },

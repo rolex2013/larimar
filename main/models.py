@@ -43,7 +43,8 @@ class Dict_ProtocolType(models.Model):
 
 class Component(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='component_children', verbose_name="Головной компонент")
-    name = models.CharField("Наименование", max_length=64)
+    name = models.CharField("Наименование", max_length=64, blank=True, null=True)
+    code = models.CharField("Код", max_length=64)
     #description = RichTextUploadingField("Описание")
     description = models.CharField("Описание", max_length=256, blank=True, null=True)
     menu = models.CharField("Пункт меню", max_length=256, blank=True, null=True)
