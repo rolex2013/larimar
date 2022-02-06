@@ -24,10 +24,32 @@
             },
              success: function(data)
                     {
-                     //console.log(data)
+                     console.log(data)
                      $('#ajax_messagelistresult').html(data);
                      //$('#ajax_chatlistresult__').html(data);
                      document.getElementById("messagetext").value = "";
+                     //{ if chats_list_reload == 1 %}
+                         $.ajax({
+                            url: "{% url 'my_chat:chats_list' %}",
+                            type: "GET",
+                            data : {
+                                //companyid: {{ current_company.id }},
+                                companyid: {{ currentchat.company_id }},
+                            },
+                            success: function(data)
+                                    {
+                                     console.log(data)
+                                     $('#ajax_chatlistresult').html(data);
+                                    },
+                            error: function(xhr, errmsg, err)
+                                    {
+                                     console.log("error")
+                                     console.log(error_data)
+                                     $('#ajax_chatlisterrors').html('Нет данных!');
+                                    }
+                         });
+                     //{ endif %}
+
                     },
              error: function(xhr, errmsg, err)
                     {

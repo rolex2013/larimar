@@ -63,6 +63,7 @@ def chats_messages_members_lists(request, companyid=0, chatid=0):
             'companyid': current_company.id,
             'currentchat': currentchat,
             'currentchatid': 0,
+            #'chats_list_reload': 0,
             'user_companies': comps,
             'chat_type_list': chat_type_list,
             'button_company_select': button_company_select,
@@ -139,6 +140,7 @@ def messages(request):
                                             'nodes_members': ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),
                                             'currentchat': Chat.objects.filter(id=chatid).select_related("company").first(),
                                             'currentchatid': chatid,
+                                            #'chats_list_reload': 0,
                                           }
                   )
 
@@ -160,6 +162,7 @@ def messagecreate(request):
     template = 'chat_messages_members.html'
     text = text.strip()
     # *** Обрабатываем команды ***
+    chats_list_reload = 0
     if text[0] == '/':
 
         member = ChatMember.objects.filter(chat_id=chatid, member_id=currentuserid, is_active=True).first()
@@ -209,6 +212,7 @@ def messagecreate(request):
                     member_new = ChatMember.objects.create(chat_id=chatid, member_id=currentuserid, is_admin=True, author_id=currentuserid)
                     chatid = chat_new.id
                     text_new = 'Создан новый чат "' + chat_new.name + '"'
+                    chats_list_reload = 1
 
             elif text[0:12] == '/chat-update':
                 #text_new = "Вы ввели команду: /chat-update"
@@ -225,8 +229,9 @@ def messagecreate(request):
                 if text.find('-type') >= 0 or text.find('-t') >= 0:
                     chat_curr.type_id = text.split(' ')[2]
                 chat_curr.save()
-                print(chat_curr)
+                #print(chat_curr)
                 text_new = 'Текущий чат изменён!'
+                chats_list_reload = 1
                 #template = 'company_detail.html'
                 #template = 'chats.html'
             #elif:
@@ -260,6 +265,7 @@ def messagecreate(request):
                                                                                  dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),
                                       'currentchat': currentchat,
                                       'currentchatid': chatid,
+                                      'chats_list_reload': chats_list_reload,
                                       'object_message': 'Ok!',
                                       #'nodes_chats': Chat.objects.filter(is_active=True).distinct(),
                                       #'nodes_chats': chats_list,
@@ -275,7 +281,7 @@ def messageform(request):
 
     currentchat = Chat.objects.filter(id=chatid).first()
 
-    return render(request, 'chat_message_form.html', {'currentchat': currentchat, 'currentchatid': chatid,})
+    return render(request, 'chat_message_form.html', {'currentchat': currentchat, 'currentchatid': chatid, 'chats_list_reload': 0,})
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def membercreate(request):
@@ -334,6 +340,21 @@ def memberlist(request, chatid):
                 #print(mem)
         #print('===', uc)
         #print(current_members_list)
-        print(member_list)
+        #print(member_list)
 
     return (member_list, currentchat)
+
+def chatslist(request):
+
+    companyid = request.GET['companyid']
+    currentuser = request.user.id
+
+    chats_list = Chat.objects.filter(Q(author=currentuser) | Q(members__in=[currentuser, ]) | Q(type=3), company_id=companyid,
+                                     is_active=True) #.select_related("company", "author", "type")
+
+    #print('===', chats_list.distinct())
+
+    return render(request, 'chats_list.html', {'nodes_chats': chats_list.distinct(),
+                                               #'chats_list_reload': 0,
+                                              },
+                  )

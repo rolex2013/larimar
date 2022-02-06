@@ -9,6 +9,7 @@ urlpatterns = [
 
     path('chats_list/<int:companyid>/<int:chatid>/', views.chats, name='chats'),
     #path('chats_page/chat_create/<int:companyid>/', views.ChatCreate.as_view(), name='chat_create'),
+    path('chats_page/chat_list/', views.chatslist, name='chats_list'),
     path('chats_page/chat_create/', views.chatcreate, name='chat_create'),
     #path('chats_page/message_list/<int:chatid>', views.messages, name='messages'),
     path('chats_page/message_list/', views.messages, name='messages'),
