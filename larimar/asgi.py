@@ -7,10 +7,23 @@ For more information on this file, see
 https://docs.djangoproject.com/en/3.0/howto/deployment/asgi/
 """
 
-import os
+from channels.auth import AuthMiddlewareStack
+from channels.http import AsgiHandler
+from channels.routing import ProtocolTypeRouter, URLRouter
+from channels.security.websocket import AllowedHostsOriginValidator
 
+import chats.routing
+
+#import os
+#os.environ.setdefault("DJANGO_SETTINGS_MODULE", "larimar.settings")
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'larimar.settings')
-
-application = get_asgi_application()
+application = ProtocolTypeRouter({
+    'http': AsgiHandler(),
+    #"http": get_asgi_application(),
+    'websocket': AllowedHostsOriginValidator(AuthMiddlewareStack(
+        URLRouter(
+            chats.routing.websocket_urlpatterns
+        )
+    )),
+})

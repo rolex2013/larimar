@@ -14,7 +14,7 @@
         $('#addmessagebutton').click(function() {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
         var messagetext = document.getElementById("messagetext").value;
-        console.log("==="+messagetext);
+        //console.log("==="+messagetext);
         $.ajax({
             url: "{% url 'my_chat:message_create' %}",
             type: "GET",
@@ -24,21 +24,24 @@
             },
              success: function(data)
                     {
-                     console.log(data)
+                     //console.log(data)
                      $('#ajax_messagelistresult').html(data);
-                     //$('#ajax_chatlistresult__').html(data);
                      document.getElementById("messagetext").value = "";
                      //{ if chats_list_reload == 1 %}
                          $.ajax({
                             url: "{% url 'my_chat:chats_list' %}",
                             type: "GET",
                             data : {
-                                //companyid: {{ current_company.id }},
-                                companyid: {{ currentchat.company_id }},
+                                //companyid: { current_company.id }},
+                                {% if currentchat.company_id %}
+                                    companyid: {{ currentchat.company_id }},
+                                {% else %}
+                                    companyid: {{ companyid }},
+                                {% endif %}
                             },
                             success: function(data)
                                     {
-                                     console.log(data)
+                                     //console.log(data)
                                      $('#ajax_chatlistresult').html(data);
                                     },
                             error: function(xhr, errmsg, err)

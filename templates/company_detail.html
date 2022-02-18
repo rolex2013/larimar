@@ -433,6 +433,7 @@
          });         
          // ***
 
+         {% if component_name == 'projects' %}
          $('#selection-button-project').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             var statusSelected = $("#selectid option:selected").val()
@@ -454,7 +455,9 @@
                }               
             });
          });
+         {% endif %}
 
+         {% if component_name == 'crm' %}
          $('#selection-button-client').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             var statusSelected = $("#statusselectid option:selected").val()
@@ -478,7 +481,9 @@
                }               
             });
          });
+         {% endif %}
 
+         {% if component_name == 'docs' %}
          $('#selection-button-doc').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             var statusSelected = $("#statusselectid option:selected").val()
@@ -502,7 +507,9 @@
                }
             });
          });
+        {% endif %}
 
+        {% if component_name == 'files' %}
         $('#selection-button-folder').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             var themeSelected = $("#folderthemeselectid option:selected").val()
@@ -526,7 +533,9 @@
                }
             });
          });
+        {% endif %}
 
+        {% if component_name == 'feedback' %}
         $('#selection-button-feedbackticket').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             var statusSelected = $("#feedbackticketstatusselectid option:selected").val()
@@ -552,6 +561,7 @@
                }
             });
          });
+        {% endif %}
 
       </script>
 

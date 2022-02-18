@@ -79,6 +79,7 @@ def chats(request, companyid=0, chatid=0):
 
     #template_name = 'chats_list.html'
     template_name = "company_detail.html"
+    #template_name = "chats.html"
     #print(render_list)
 
     return render(request, template_name, render_list)
@@ -127,6 +128,8 @@ def messages(request):
     interval = request.GET['interval']
     currentuserid = request.user.id
 
+    currentchat = Chat.objects.filter(id=chatid).select_related("company").first()
+
     if interval == 1:
         template_name = 'chat_messages_list.html'
     else:
@@ -138,8 +141,9 @@ def messages(request):
                                             'nodes_messages': Message.objects.filter(Q(onlyfor__isnull=True) | Q(onlyfor=currentuserid) | Q(
                                                 chat__author_id=currentuserid), chat_id=chatid, is_active=True).distinct(),
                                             'nodes_members': ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),
-                                            'currentchat': Chat.objects.filter(id=chatid).select_related("company").first(),
+                                            'currentchat': currentchat,
                                             'currentchatid': chatid,
+                                            'companyid': currentchat.company_id,
                                             #'chats_list_reload': 0,
                                           }
                   )
@@ -267,9 +271,6 @@ def messagecreate(request):
                                       'currentchatid': chatid,
                                       'chats_list_reload': chats_list_reload,
                                       'object_message': 'Ok!',
-                                      #'nodes_chats': Chat.objects.filter(is_active=True).distinct(),
-                                      #'nodes_chats': chats_list,
-                                      #'chat_type_list': chat_type_list,
                                      },
 
                   )
@@ -281,7 +282,7 @@ def messageform(request):
 
     currentchat = Chat.objects.filter(id=chatid).first()
 
-    return render(request, 'chat_message_form.html', {'currentchat': currentchat, 'currentchatid': chatid, 'chats_list_reload': 0,})
+    return render(request, 'chat_message_form.html', {'currentchat': currentchat, 'currentchatid': chatid, 'chats_list_reload': 0, })
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def membercreate(request):
@@ -357,4 +358,21 @@ def chatslist(request):
     return render(request, 'chats_list.html', {'nodes_chats': chats_list.distinct(),
                                                #'chats_list_reload': 0,
                                               },
+                  )
+
+def get_current_company_id(request):
+    print(request)
+
+    return request.session['_auth_user_currentcompany_id']
+
+# ***
+def notifications(request):
+
+    user_list = User.objects.filter(is_active=True)
+    #return render(request, 'notifications.html', {'recipientusernameid': '10',
+    #                                              }
+    #              )
+
+    return render(request, 'notifications.html', {'user_list': user_list,
+                                                  }
                   )

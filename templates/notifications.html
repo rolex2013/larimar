@@ -1,0 +1,99 @@
+
+    <h6 style="color: #fff000;">Уведомления</h6>
+
+    <div style="font-size: small; color: #fff000;">
+        <!--<label for="username" class="form-label">{ request.user.username }}</label>-->
+        <select name="select-user" id="userselectid" class="select-user">
+             {% for u in user_list %}
+                <option value="{{u.id}}">
+                   {{u.username}}
+                </option>
+             {% endfor %}
+        </select><br />
+        <input id="message" class="form-control" type="text" style="font-size: small;"><br />
+    </div>
+    <button id="button" style="font-size: small;">Нажимай!</button>
+
+    <div style="font-size: small; color: #80bdff;">
+        <p id="log"></p>
+    </div>
+
+<script>
+
+    //const usernameid = JSON.parse(document.getElementById('user').textContent)
+    //var userSelected = $('#userselectid').find(":selected").val();
+    //var userSelected = document.getElementById('userselectid').find(":selected").val()
+    //const userid = document.querySelector('#userselectid').value
+    //const userid = 5
+    //console.log('userid=' + userid)
+
+   // этот сокет должен создаваться динамически, если пришло сообщение от какого-то юзера
+
+    /*    const notificationSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/notification/' + userid + '/'
+        );*/
+
+    /*notificationSocket.addEventListener('error', function (event) { console.log('WebSocket error: ', event); });*/
+
+    const MyNotificationSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/notification/{{ request.user.id }}/'
+    );
+
+    MyNotificationSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        //console.log(data.message)
+        document.querySelector('#log').innerHTML += (data.userid + ' ' + data.message + ' ' + data.date + '<br />');
+        const notificationSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/notification/' + data.userid + '/'
+        );
+    };
+
+    MyNotificationSocket.onclose = function (e) {
+        console.error('My socket closed unexpectedly!')
+    };
+
+    document.querySelector('#button').onclick = function (e) {
+        /*const username = document.querySelector('#username');*/
+        /*const userid = '{ request.user.id }}'*/
+        //const userid = '2'
+        const userid = document.querySelector('#userselectid').value
+        /*const message = document.querySelector('#message');
+        const message = username.value + ' отправил сообщение!';*/
+        const message = '{{ request.user.username }}' + ' for ' + userid + ': ' + document.querySelector('#message').value
+        // **************************************
+        //notificationSocket.close()
+        // *** надо бы как-то попробовать закрывать сокет перед его открытием! ***
+        const notificationSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/notification/' + userid + '/'
+        );
+        try {
+            notificationSocket.onopen = function(m) {
+              console.log("Соединение открыто...");
+            }
+        } catch(exception) {
+            console.log(exception);
+        }
+        notificationSocket.onclose = function (e) {
+            console.error('Message socket closed unexpectedly!')
+        };
+        // ***************************************
+        console.log('Отправлено сообщение для userid=' + userid)
+        setTimeout(function (){
+            notificationSocket.send(JSON.stringify({
+                'userid': userid,
+                'message': message
+            }));
+        },100);
+
+    };
+
+
+</script>

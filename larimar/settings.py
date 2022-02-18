@@ -40,6 +40,7 @@ ADMINS = (('Harry', 'larimaritgroup.ru@gmail.com'),)
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,7 +59,6 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'django_tables2',
     'rest_framework',
-    'channels',
     #'menu',
     'accounts',
     'main', 
@@ -152,8 +152,22 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'larimar.wsgi.application'
-ASGI_APPLICATION = 'larimar.routing.application'
+#ASGI_APPLICATION = 'larimar.routing.application'
+ASGI_APPLICATION = 'larimar.asgi.application'
 
+CHANNEL_LAYERS = {
+   'default': {
+       #'BACKEND': 'asgiref.inmemory.ChannelLayer',
+       #'BACKEND': 'channels.layers.InMemoryChannelLayer',
+       #'ROUTING': 'larimar.routing.channel_routing',
+       'BACKEND': 'channels_redis.core.RedisChannelLayer',
+       'CONFIG': {
+            #"hosts": [('redis', 6379)],
+            #"hosts": [('redisdata', 6379)],
+            "hosts": [('127.0.0.1', 6379)],
+       },
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -246,7 +260,7 @@ if sys.platform == "win32":
    STATIC_URL = '/static/'
    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  
 
-   ALLOWED_HOSTS = ['localhost','192.168.88.153']
+   ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.88.153']
 
    # Database
    # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
