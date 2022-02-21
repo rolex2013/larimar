@@ -4,7 +4,8 @@ from companies.models import UserCompanyComponentGroup
 from django.db.models import Q #, Count, Min, Max, Sum, Avg 
 from django.contrib import auth
 #import requests
-  
+from django.contrib.auth.models import User
+from main.models import Notification
   
 register = template.Library() 
 
@@ -44,4 +45,28 @@ def left__menu(context):
         'link': 'kjkjkjkjkj============',
         'title': ';lkl;klklkl kljkjkjk===',
         'cnt': 5
-    }         
+    }
+
+# *** для вывода Уведомлений в SideBar'е ***
+
+@register.simple_tag(takes_context=True)
+def notifications(context, is_auth=False):
+
+    nodes = []
+
+    if is_auth == True:
+
+        nodes = Notification.objects.filter(Q(author_id=context.request.user) | Q(recipient_id=context.request.user), is_active=True)
+
+    return (nodes.order_by('datecreate'))
+
+@register.simple_tag(takes_context=True)
+def users_list(context, is_auth=False):
+
+    users_list = []
+
+    if is_auth == True:
+
+        nodes = User.objects.filter(is_active=True)
+
+    return (nodes.order_by('username'))
