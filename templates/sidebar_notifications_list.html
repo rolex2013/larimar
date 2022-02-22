@@ -1,0 +1,22 @@
+
+    <div style="font-size: x-small; color: #ffffff;">
+
+        {% for node in nodes %}
+
+            {% if node.author_id == request.user.id %}
+                <p style="margin: 10px 0px 10px 20px;">
+                  <i>{{ node.datecreate|date:"d.m.y H:i" }}</i><br />
+                  {{ node.recipient.username }}<br />
+                  {{ node.text }}
+            {% else %}
+                <p style="margin: 10px 0px 10px 0px;">
+                  <i>{{ node.datecreate|date:"d.m.y H:i" }}</i><br />
+                  {{ node.author.username }}<br />
+                  {{ node.text }}
+            {% endif %}
+            </p>
+
+        {% endfor %}
+
+    </div>
+

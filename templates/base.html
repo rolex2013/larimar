@@ -64,7 +64,9 @@
          <div class='sidebar'>
       
             {% block sidebar %}
-                {% include 'notifications.html' %}
+                {% if user.is_authenticated == True %}
+                    {% include 'sidebar.html' %}
+                {% endif %}
             {% endblock %}     
                
          </div>

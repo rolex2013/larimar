@@ -17,7 +17,6 @@ urlpatterns = [
     path('chats_page/message_form/', views.messageform, name='messageform'),
     path('chats_page/member_create/', views.membercreate, name='member_create'),
     path('chats_page/member_form/', views.memberform, name='memberform'),
-    path('chats_page/notifications/', views.notifications, name='notifications'),
     #path('', views.notifications, name='notifications'),
 
 ]

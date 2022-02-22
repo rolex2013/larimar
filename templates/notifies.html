@@ -40,6 +40,29 @@
    {% include 'notify_list.html' %}
 
 <script>
+
+   $('#selection-button').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            var statusSelected = $("#statusselectid option:selected").val()
+            var metaobjecttypeSelected = $("#metaobjecttypeselectid option:selected").val()
+
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_main:notification_filter' %}",
+               data: {
+                  notificationstatus: statusSelected,
+                  notificationobjecttype: metaobjecttypeSelected
+               },
+               success: function(data){
+                  $('#ajax_listresult').html(data);
+               },
+               error: function(xhr, errmsg, err){
+                  console.log("error")
+                  $('#ajax_listerrors').html('Нет данных!');
+               }
+            });
+   });
+
 /*
    $('input[type="checkbox"]').change(function(){
    
@@ -52,7 +75,7 @@
 
          // Ваш запрос
          $.ajax({
-            url: "{% url 'my_main:notification_read' %}",
+            url: "{ url 'my_main:notification_read' %}",
             type: 'GET',
             //data: { name: chk, val: chkVal },
             data: { val: chkVal },
@@ -75,7 +98,7 @@
 
          // Ваш запрос
          $.ajax({
-            url: "{% url 'my_main:notification_read' %}",
+            url: "{ url 'my_main:notification_read' %}",
             type: 'GET',
             //data: { name: chk, val: chkVal },
             data: { val: chkVal },
@@ -86,27 +109,7 @@
             }
          });
    });   
-
-   $('#selection-button').click(function(){
-            event.preventDefault(); // *** без этого страница перегружается после возврата data
-            var statusSelected = $("#statusselectid option:selected").val()
-            var metaobjecttypeSelected = $("#metaobjecttypeselectid option:selected").val()
-            $.ajax({
-               type: 'GET',
-               url: "{% url 'my_main:notification_filter' %}",
-               data: {
-                  //companyid: {{ current_company.id }},
-                  notificationstatus: statusSelected,
-                  notificationobjecttype: metaobjecttypeSelected
-               },
-               success: function(data){           
-                  $('#ajax_listresult').html(data);                  
-               },
-               error: function(xhr, errmsg, err){               
-                  console.log("error")                                  
-                  $('#ajax_listerrors').html('Нет данных!');
-               }               
-            });
-   });
 */
+
+
 </script>

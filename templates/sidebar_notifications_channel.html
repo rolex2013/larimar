@@ -1,34 +1,21 @@
 
-{% load main_tags %}
-
-<!--{ left_menu menuid=0 is_auth=user.is_authenticated as nodes %}-->
-{% users_list is_auth=user.is_authenticated as user_list %}
-{% notifications is_auth=user.is_authenticated as nodes %}
-
-    <h6 style="color: #fff000;">Уведомления</h6>
-
-    <div style="font-size: small; color: #80bdff;">
-        {% for node in nodes %}
-            <p>=={{ node.text }}</p>
-        {% endfor %}
-    </div>
-
-    <div style="font-size: small; color: #80bdff;">
+    <div style="font-size: small; color: #ffffff;">
         <p id="log"></p>
     </div>
 
-    <div style="font-size: small; color: #fff000;">
+    <div style="font-size: small; color: #ffffff;">
         <!--<label for="username" class="form-label">{ request.user.username }}</label>-->
         <select name="select-user" id="userselectid" class="select-user">
              {% for u in user_list %}
-                <option value="{{u.id}}">
-                   {{u.username}}
+                <option value="{{ u.id }}">
+                   {{ u.username }}
                 </option>
              {% endfor %}
         </select><br />
         <input id="message" class="form-control" type="text" style="font-size: small;"><br />
     </div>
     <button id="button" style="font-size: small;">Отправить</button>
+
 
 <script>
 
@@ -44,7 +31,7 @@
     /*    const notificationSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/notification/' + userid + '/'
+            + '/ws/main/notification/' + userid + '/'
         );*/
 
     /*notificationSocket.addEventListener('error', function (event) { console.log('WebSocket error: ', event); });*/
@@ -52,7 +39,7 @@
     const MyNotificationSocket = new WebSocket(
         'ws://'
         + window.location.host
-        + '/ws/notification/{{ request.user.id }}/'
+        + '/ws/main/notification/{{ request.user.id }}/'
     );
 
     MyNotificationSocket.onmessage = function (e) {
@@ -62,7 +49,7 @@
         const notificationSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/notification/' + data.userid + '/'
+            + '/ws/main/notification/' + data.userid + '/'
         );
     };
 
@@ -77,7 +64,8 @@
         const userid = document.querySelector('#userselectid').value
         /*const message = document.querySelector('#message');
         const message = username.value + ' отправил сообщение!';*/
-        const message = '{{ request.user.username }}' + ' for ' + userid + ': ' + document.querySelector('#message').value
+        //const message = '{{ request.user.username }}' + ' for ' + userid + ': ' + document.querySelector('#message').value
+        const message = document.querySelector('#message').value
         // **************************************
         //setTimeout(function (){
         //   notificationSocket.close()
@@ -95,7 +83,7 @@
         const notificationSocket = new WebSocket(
             'ws://'
             + window.location.host
-            + '/ws/notification/' + userid + '/'
+            + '/ws/main/notification/' + userid + '/'
         );
         try {
             notificationSocket.onopen = function(m) {

@@ -1,0 +1,44 @@
+
+    <h6 style="color: #fff000;">Уведомления</h6>
+
+    {% load main_tags %}
+
+    {% users_list is_auth=user.is_authenticated as user_list %}
+    {% notifications user.is_authenticated %}
+
+    <!--{ include 'sidebar_notifications_form.html' %}-->
+
+    <div id="ajax__listresult">
+        <!--{ include 'sidebar_notifications_list.html' %}-->
+    </div>
+
+    {% include 'sidebar_notifications_channel.html' %}
+
+
+<script>
+
+   $('#notify-selection-button').click(function(){
+            event.preventDefault(); // *** без этого страница перегружается после возврата data
+            //const userSelected = document.querySelector('#notifyuserselectid').value
+            var statusSelected = $("#notifystatusselectid option:selected").val()
+            var metaobjecttypeSelected = $("#notifymetaobjecttypeselectid option:selected").val()
+
+            $.ajax({
+               type: 'GET',
+               url: "{% url 'my_main:sidebar_notification_filter' %}",
+               data: {
+                  //notificationuser: userSelected,
+                  notificationstatus: statusSelected,
+                  notificationobjecttype: metaobjecttypeSelected
+               },
+               success: function(data){
+                  $('#ajax_listresult').html(data);
+               },
+               error: function(xhr, errmsg, err){
+                  console.log("error")
+                  $('#ajax_listerrors').html('Нет данных!');
+               }
+            });
+   });
+
+</script>

@@ -1,5 +1,5 @@
 from django import template  
-from main.models import Menu, MenuItem
+from main.models import Menu, MenuItem, Meta_ObjectType
 from companies.models import UserCompanyComponentGroup
 from django.db.models import Q #, Count, Min, Max, Sum, Avg 
 from django.contrib import auth
@@ -49,24 +49,33 @@ def left__menu(context):
 
 # *** для вывода Уведомлений в SideBar'е ***
 
-@register.simple_tag(takes_context=True)
+@register.inclusion_tag('sidebar_notifications_form.html', takes_context=True)
 def notifications(context, is_auth=False):
 
     nodes = []
 
     if is_auth == True:
+        nodes = Notification.objects.filter(Q(author_id=context.request.user) | Q(recipient_id=context.request.user), type_id=3, is_read=False,
+                                            is_active=True).select_related("author", "recipient", "objecttype").order_by('datecreate').distinct()
+        metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True).order_by("sort").distinct()
 
-        nodes = Notification.objects.filter(Q(author_id=context.request.user) | Q(recipient_id=context.request.user), is_active=True)
-
-    return (nodes.order_by('datecreate'))
+    return {'nodes': nodes, 'status_selectid': "2", 'metaobjecttype_list': metaobjecttype_list}
 
 @register.simple_tag(takes_context=True)
 def users_list(context, is_auth=False):
 
-    users_list = []
+    nodes = []
 
     if is_auth == True:
 
-        nodes = User.objects.filter(is_active=True)
+        members = list(set(list(UserCompanyComponentGroup.objects.filter(is_active=True, user__is_active=True, company__in=context.request.session[
+            "_auth_user_companies_id"]).values_list('user_id', flat=True))))
+        nodes = User.objects.filter(is_active=True, id__in=members).order_by('username').distinct()
+        #nodes = list(set(list(UserCompanyComponentGroup.objects.filter(is_active=True, user__is_active=True, company__in=context.request.session[
+        #    "_auth_user_companies_id"]).select_related("user"))))
 
-    return (nodes.order_by('username'))
+        #print(context.request.session["_auth_user_companies_id"])
+        #print(members)
+        #print(nodes)
+
+    return (nodes)

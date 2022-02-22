@@ -15,7 +15,6 @@ from companies.models import Company #, UserCompanyComponentGroup
 from .models import Dict_ChatType, Chat, Message, ChatMember
 from main.models import Component
 from companies.models import UserCompanyComponentGroup
-from django.contrib.auth.models import User
 
 #from .forms import ChatForm, MessageForm
 
@@ -365,14 +364,3 @@ def get_current_company_id(request):
 
     return request.session['_auth_user_currentcompany_id']
 
-# ***
-def notifications(request):
-
-    user_list = User.objects.filter(is_active=True)
-    #return render(request, 'notifications.html', {'recipientusernameid': '10',
-    #                                              }
-    #              )
-
-    return render(request, 'notifications.html', {'user_list': user_list,
-                                                  }
-                  )

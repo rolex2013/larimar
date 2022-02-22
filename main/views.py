@@ -11,6 +11,9 @@ from projects.models import Project, Task, ProjectFile #, TaskFile
 from crm.models import Client, ClientTask, ClientEvent, ClientFile
 from docs.models import Doc, DocTask, DocVerFile
 from files.models import Folder, FolderFile
+from django.contrib.auth.models import User
+
+from django.db.models import Q #, Count, Min, Max, Sum, Avg
 
 from django.contrib.auth.decorators import login_required
 
@@ -52,6 +55,7 @@ def notificationfilter(request):
     notificationobjecttype = request.GET['notificationobjecttype']
 
     notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True, type_id=3)
+    #print('===', notificationobjecttype, notification_list)
     if notificationstatus == "2":
        notification_list = notification_list.filter(is_read=False)       
     elif notificationstatus == "3":
@@ -60,6 +64,7 @@ def notificationfilter(request):
     
     if notificationobjecttype != "0":
        notification_list = notification_list.filter(objecttype_id=notificationobjecttype)
+       #print(notificationobjecttype, notification_list)
 
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
   
@@ -69,7 +74,35 @@ def notificationfilter(request):
                                                 'status_selectid': notificationstatus,
                                                 'metaobjecttype_selectid': notificationobjecttype,
                                                }
-                 )    
+                 )
+
+
+def sidebarnotificationfilter(request):
+
+    notificationuser = request.user.id
+    #notificationuser = request.GET['notificationuser']
+    notificationstatus = request.GET['notificationstatus']
+    notificationobjecttype = request.GET['notificationobjecttype']
+
+    notification_list = Notification.objects.filter(Q(recipient_id=notificationuser) | Q(author_id=notificationuser), is_active=True, type_id=3)
+    #print('===', notificationuser, notificationobjecttype, notification_list)
+    if notificationstatus == "2":
+        notification_list = notification_list.filter(is_read=False)
+    elif notificationstatus == "3":
+        notification_list = notification_list.filter(is_read=True)
+
+    if notificationobjecttype != "0":
+        notification_list = notification_list.filter(objecttype_id=notificationobjecttype)
+
+    #metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
+
+    return render(request, "sidebar_notifications_list.html", {
+            'nodes': notification_list.distinct().order_by("-datecreate"),
+            #'metaobjecttype_list': metaobjecttype_list.distinct().order_by(),
+            #'notify_status_selectid': notificationstatus,
+            #'notify_metaobjecttype_selectid': notificationobjecttype,
+            }
+        )
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def objecthistory(request, objtype='prj', pk=0):
@@ -196,3 +229,15 @@ def objectfiledelete(request, objtype='prj'):
                                                    'object_message': object_message,
                                                    'media_path': settings.MEDIA_URL,
                                                   })
+
+# ***
+def notifications(request):
+
+    user_list = User.objects.filter(is_active=True)
+    #return render(request, 'sidebar_notifications.html', {'recipientusernameid': '10',
+    #                                              }
+    #              )
+
+    return render(request, 'sidebar.html', {'user_list': user_list,
+                                                  }
+                  )

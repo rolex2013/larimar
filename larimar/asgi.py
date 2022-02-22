@@ -12,7 +12,7 @@ from channels.http import AsgiHandler
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.security.websocket import AllowedHostsOriginValidator
 
-import chats.routing
+import main.routing, chats.routing
 
 #import os
 #os.environ.setdefault("DJANGO_SETTINGS_MODULE", "larimar.settings")
@@ -23,7 +23,8 @@ application = ProtocolTypeRouter({
     #"http": get_asgi_application(),
     'websocket': AllowedHostsOriginValidator(AuthMiddlewareStack(
         URLRouter(
-            chats.routing.websocket_urlpatterns
+            main.routing.websocket_urlpatterns #,
+            #chats.routing.websocket_urlpatterns
         )
     )),
 })
