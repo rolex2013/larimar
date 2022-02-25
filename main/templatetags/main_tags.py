@@ -48,7 +48,6 @@ def left__menu(context):
     }
 
 # *** для вывода Уведомлений в SideBar'е ***
-
 @register.inclusion_tag('sidebar_notifications_form.html', takes_context=True)
 def notifications(context, is_auth=False):
 
@@ -57,9 +56,11 @@ def notifications(context, is_auth=False):
     if is_auth == True:
         nodes = Notification.objects.filter(Q(author_id=context.request.user) | Q(recipient_id=context.request.user), type_id=3, is_read=False,
                                             is_active=True).select_related("author", "recipient", "objecttype").order_by('datecreate').distinct()
+        count = nodes.exclude(author_id=context.request.user.id).count()
         metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True).order_by("sort").distinct()
 
-    return {'nodes': nodes, 'status_selectid': "2", 'metaobjecttype_list': metaobjecttype_list}
+    return {'nodes': nodes, 'status_selectid': "2", 'metaobjecttype_list': metaobjecttype_list, 'currentuserid': context.request.user.id,
+            'count': count}
 
 @register.simple_tag(takes_context=True)
 def users_list(context, is_auth=False):
@@ -70,12 +71,6 @@ def users_list(context, is_auth=False):
 
         members = list(set(list(UserCompanyComponentGroup.objects.filter(is_active=True, user__is_active=True, company__in=context.request.session[
             "_auth_user_companies_id"]).values_list('user_id', flat=True))))
-        nodes = User.objects.filter(is_active=True, id__in=members).order_by('username').distinct()
-        #nodes = list(set(list(UserCompanyComponentGroup.objects.filter(is_active=True, user__is_active=True, company__in=context.request.session[
-        #    "_auth_user_companies_id"]).select_related("user"))))
-
-        #print(context.request.session["_auth_user_companies_id"])
-        #print(members)
-        #print(nodes)
+        nodes = User.objects.filter(is_active=True, id__in=members).exclude(id=context.request.user.id).order_by('username').distinct()
 
     return (nodes)

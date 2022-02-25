@@ -3,7 +3,7 @@ from django.urls import path
 #from .models import MainManu
 #from .views import ProjectsHome
 #from accounts.views import ELogoutView
-from .views import notificationread, notificationfilter, objecthistory, sidebarnotificationfilter
+from .views import notificationread, notificationfilter, objecthistory, sidebarnotificationfilter, sidebarnotificationisread
 from companies.views import contents, publiccontents, vacancies, vacancy_detail, SummaryCreate #, summaries, summary_detail #, ContentList
 from . import views
 
@@ -24,6 +24,7 @@ urlpatterns = [
    path('main/objectfile_delete/<objtype>', views.objectfiledelete, name='objectfile_delete'),
    path('main/notifications/', views.notifications, name='notifications'),
    path('main/sidebar_notify_filter/', sidebarnotificationfilter, name='sidebar_notification_filter'),
+   path('main/sidebar_notify_isread/', sidebarnotificationisread, name='sidebar_notification_isread'),
    #path('', contents, name = 'main'),
    #path('', contents, name = 'index'),
    #path('', ELogoutView.as_view(), name='logout')

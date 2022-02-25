@@ -85,19 +85,24 @@ def sidebarnotificationfilter(request):
     notificationobjecttype = request.GET['notificationobjecttype']
 
     notification_list = Notification.objects.filter(Q(recipient_id=notificationuser) | Q(author_id=notificationuser), is_active=True, type_id=3)
-    #print('===', notificationuser, notificationobjecttype, notification_list)
+    #print('===', notificationuser, notificationobjecttype)
     if notificationstatus == "2":
         notification_list = notification_list.filter(is_read=False)
     elif notificationstatus == "3":
         notification_list = notification_list.filter(is_read=True)
+        #print(str(notification_list))
 
     if notificationobjecttype != "0":
         notification_list = notification_list.filter(objecttype_id=notificationobjecttype)
 
     #metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
+    count = notification_list.exclude(author_id=request.user.id).count()
+    notification_list = notification_list.select_related("author", "recipient", "objecttype").order_by('datecreate').distinct()
 
     return render(request, "sidebar_notifications_list.html", {
-            'nodes': notification_list.distinct().order_by("-datecreate"),
+            'nodes': notification_list,
+            'currentuserid': request.user.id,
+            'count': count,
             #'metaobjecttype_list': metaobjecttype_list.distinct().order_by(),
             #'notify_status_selectid': notificationstatus,
             #'notify_metaobjecttype_selectid': notificationobjecttype,
@@ -234,10 +239,28 @@ def objectfiledelete(request, objtype='prj'):
 def notifications(request):
 
     user_list = User.objects.filter(is_active=True)
-    #return render(request, 'sidebar_notifications.html', {'recipientusernameid': '10',
+    #return render(request, 'sidebar_notifications~.html', {'recipientusernameid': '10',
     #                                              }
     #              )
 
     return render(request, 'sidebar.html', {'user_list': user_list,
                                                   }
+                  )
+
+def sidebarnotificationisread(request):
+
+    userid = request.GET['userid']
+
+    Notification.objects.filter(recipient_id=userid, type_id=3, objecttype_id=9, is_read=False).update(is_read=True)
+    notification_list = Notification.objects.filter(Q(recipient_id=userid) | Q(author_id=userid), is_active=True, type_id=3, objecttype_id=9)
+    count = notification_list.exclude(author_id=request.user.id).count()
+    #metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True).order_by("sort").distinct()
+    notification_list = notification_list.select_related("author", "recipient", "objecttype").order_by('datecreate').distinct()
+
+    return render(request, 'sidebar_notifications_list.html', {'nodes': notification_list,
+                                                               'status_selectid': "2",
+                                                               #'metaobjecttype_list': metaobjecttype_list,
+                                                               'currentuserid': request.user.id,
+                                                               'count': count,
+                                                              }
                   )

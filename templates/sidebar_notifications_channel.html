@@ -1,6 +1,6 @@
 
     <div style="font-size: small; color: #ffffff;">
-        <p id="log"></p>
+        <p id="log" style="margin: 10px 0px 10px 0px;"></p> <br /><!--<p id="log_my" style="margin: 10px 0px 10px 20px;"></p>-->
     </div>
 
     <div style="font-size: small; color: #ffffff;">
@@ -44,8 +44,9 @@
 
     MyNotificationSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
+        //console.log(data.date)
         //console.log(data.message)
-        document.querySelector('#log').innerHTML += (data.userid + ' ' + data.message + ' ' + data.date + '<br />');
+        document.querySelector('#log').innerHTML += ( '<i>' + data.date + '</i><br />' + 'From: ' + data.userfromname + '<br />' + data.message + '<br />');
         const notificationSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -58,28 +59,14 @@
     };
 
     document.querySelector('#button').onclick = function (e) {
-        /*const username = document.querySelector('#username');*/
-        /*const userid = '{ request.user.id }}'*/
-        //const userid = '2'
-        const userid = document.querySelector('#userselectid').value
-        /*const message = document.querySelector('#message');
-        const message = username.value + ' отправил сообщение!';*/
-        //const message = '{{ request.user.username }}' + ' for ' + userid + ': ' + document.querySelector('#message').value
-        const message = document.querySelector('#message').value
-        // **************************************
-        //setTimeout(function (){
-        //   notificationSocket.close()
-        //},100);
-        /*try {
-            const ws_opened = notificationSocket.readyState
-            if (ws_opened === WebSocket.OPEN) {
-                setTimeout(notificationSocket.close(), 0)
-            }
-        } catch(exception) {
-            console.log(exception);
-        }*/
 
-        // *** надо бы как-то попробовать закрывать сокет перед его открытием! ***
+        const userid = document.querySelector('#userselectid').value
+        //const username = document.querySelector('#userselectid').text
+        var sel = document.getElementById("userselectid");
+        var username= sel.options[sel.selectedIndex].text; /* выцепляем username получателя */
+        const message = document.querySelector('#message').value
+        let today = new Date();
+        now = today.toLocaleString()
         const notificationSocket = new WebSocket(
             'ws://'
             + window.location.host
@@ -97,15 +84,18 @@
             //console.error('webSocket userid=' + userid + ' closed!');
             console.log('webSocket userid=' + userid + ' closed!');
         };
-        // ***************************************
         console.log('Отправлено сообщение для userid=' + userid)
-        setTimeout(function (){
+        setTimeout(function ()  {
             notificationSocket.send(JSON.stringify({
                 'userid': userid,
-                'message': message
+                'userfromid': '{{ request.user.id }}',
+                'userfromname': '{{ request.user.username }}',
+                'message': message,
+                'date': now
             }));
-            //document.querySelector('#log').innerHTML += ({{ request.user.id }} + ' --> ' + {{ recipient_user.username }} + ': ' + message + '<br />');
-            document.querySelector('#log').innerHTML += (message + '<br />');
+            //document.querySelector('#log').innerHTML += ({ request.user.id }} + ' --> ' + { recipient_user.username }} + ': ' + message + '<br />');
+            //document.querySelector('#log').innerHTML += (message + '<br />');
+            document.querySelector('#log').innerHTML += ( '<i>' + now + '</i><br />' + 'To: ' + username + '<br />' + message + '<br />' );
             setTimeout(notificationSocket.close(), 0)
         },100);
 
