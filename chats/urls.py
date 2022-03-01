@@ -18,5 +18,6 @@ urlpatterns = [
     path('chats_page/member_create/', views.membercreate, name='member_create'),
     path('chats_page/member_form/', views.memberform, name='memberform'),
     #path('', views.notifications, name='notifications'),
+    path('chats_page/wschat/', views.wschat, name='wschat'),
 
 ]

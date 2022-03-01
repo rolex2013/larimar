@@ -6,7 +6,7 @@ from asgiref.sync import async_to_sync
 from django.contrib.auth.models import User
 
 
-class NotificationConsumer(WebsocketConsumer):
+class ChatConsumer(WebsocketConsumer):
     #chat_name = self.scope['url_route']['kwargs']['chat_name']
 
     def connect(self):

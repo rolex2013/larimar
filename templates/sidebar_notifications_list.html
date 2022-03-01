@@ -32,17 +32,19 @@
             event.preventDefault(); // *** без этого страница перегружается после возврата data
             //var statusSelected = $("#notifystatusselectid option:selected").val()
             //var metaobjecttypeSelected = $("#notifymetaobjecttypeselectid option:selected").val()
+            //console.log("===================")
 
             $.ajax({
                type: 'GET',
                url: "{% url 'my_main:sidebar_notification_isread' %}",
                data: {
-                  userid: {{ request.user.id }}
+                  userid: {{ currentuserid }}
                   //notificationstatus: statusSelected,
                   //notificationobjecttype: metaobjecttypeSelected
                },
                success: function(data){
                   $('#ajax_listresult').html(data);
+                  document.querySelector('#log').innerHTML = ""
                },
                error: function(xhr, errmsg, err){
                   console.log("error")

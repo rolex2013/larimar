@@ -96,13 +96,15 @@ def sidebarnotificationfilter(request):
         notification_list = notification_list.filter(objecttype_id=notificationobjecttype)
 
     #metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
-    count = notification_list.exclude(author_id=request.user.id).count()
+    #cnt = notification_list.exclude(author_id=request.user.id, objecttype_id=9).count()
+    cnt = notification_list.filter(recipient_id=request.user.id, is_read=False, objecttype_id=9).count()
+    #print(cnt)
     notification_list = notification_list.select_related("author", "recipient", "objecttype").order_by('datecreate').distinct()
 
     return render(request, "sidebar_notifications_list.html", {
             'nodes': notification_list,
             'currentuserid': request.user.id,
-            'count': count,
+            'count': cnt,
             #'metaobjecttype_list': metaobjecttype_list.distinct().order_by(),
             #'notify_status_selectid': notificationstatus,
             #'notify_metaobjecttype_selectid': notificationobjecttype,
@@ -252,8 +254,11 @@ def sidebarnotificationisread(request):
     userid = request.GET['userid']
 
     Notification.objects.filter(recipient_id=userid, type_id=3, objecttype_id=9, is_read=False).update(is_read=True)
-    notification_list = Notification.objects.filter(Q(recipient_id=userid) | Q(author_id=userid), is_active=True, type_id=3, objecttype_id=9)
-    count = notification_list.exclude(author_id=request.user.id).count()
+    #print('recipient_id=',userid, 'type_id=',3, 'objecttype_id=',9, 'is_read=',False)
+    notification_list = Notification.objects.filter(Q(recipient_id=userid) | Q(author_id=userid), is_active=True, is_read=False, type_id=3) #, objecttype_id=9)
+    #cnt = notification_list.exclude(author_id=request.user.id, objecttype_id=9).count()
+    cnt = notification_list.filter(recipient_id=userid, is_read=False, objecttype_id=9).count()
+    #print(cnt)
     #metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True).order_by("sort").distinct()
     notification_list = notification_list.select_related("author", "recipient", "objecttype").order_by('datecreate').distinct()
 
@@ -261,6 +266,6 @@ def sidebarnotificationisread(request):
                                                                'status_selectid': "2",
                                                                #'metaobjecttype_list': metaobjecttype_list,
                                                                'currentuserid': request.user.id,
-                                                               'count': count,
+                                                               'count': cnt,
                                                               }
                   )

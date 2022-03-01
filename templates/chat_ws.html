@@ -1,0 +1,107 @@
+
+    <div style="font-size: small; color: #ffffff;">
+        <p id="log" style="margin: 10px 0px 10px 0px;"></p> <br /><!--<p id="log_my" style="margin: 10px 0px 10px 20px;"></p>-->
+    </div>
+
+    <div style="font-size: small; color: #ffffff;">
+        <!--<label for="username" class="form-label">{ request.user.username }}</label>-->
+        <select name="select-user" id="userselectid" class="select-user">
+             {% for u in user_list %}
+                <option value="{{ u.id }}">
+                   {{ u.username }}
+                </option>
+             {% endfor %}
+        </select><br />
+        <input id="message" class="form-control" type="text" style="font-size: small;"><br />
+    </div>
+    <button id="button" style="font-size: small;">Отправить</button>
+
+
+<script>
+
+    //const usernameid = JSON.parse(document.getElementById('user').textContent)
+    //var userSelected = $('#userselectid').find(":selected").val();
+    //var userSelected = document.getElementById('userselectid').find(":selected").val()
+    //const userid = document.querySelector('#userselectid').value
+    //const userid = 5
+    //console.log('userid=' + userid)
+
+   // этот сокет должен создаваться динамически, если пришло сообщение от какого-то юзера
+
+    /*    const notificationSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/main/notification/' + userid + '/'
+        );*/
+
+    /*notificationSocket.addEventListener('error', function (event) { console.log('WebSocket error: ', event); });*/
+
+    const MyChatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chats/chat/{{ request.user.id }}/'
+    );
+
+    MyChatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        //console.log(data.date)
+        //console.log(data.message)
+        document.querySelector('#log').innerHTML += ( '<i>' + data.date + '</i><br />' + 'From: ' + data.userfromname + '<br />' + data.message + '<br />');
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chats/chat/' + data.userid + '/'
+        );
+    };
+
+    MyChatSocket.onclose = function (e) {
+        console.error('My socket closed unexpectedly!')
+    };
+
+    document.querySelector('#button').onclick = function (e) {
+
+        const userid = document.querySelector('#userselectid').value
+        //const username = document.querySelector('#userselectid').text
+        var sel = document.getElementById("userselectid");
+        var username= sel.options[sel.selectedIndex].text; /* выцепляем username получателя */
+        const message = document.querySelector('#message').value
+        let today = new Date();
+        now = today.toLocaleString()
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chats/chat/' + userid + '/'
+        );
+        try {
+            chatSocket.onopen = function(m) {
+              console.log("Соединение с userid=" + userid + " открыто!");
+            }
+        } catch(exception) {
+            console.log(exception);
+        }
+        chatSocket.onclose = function (e) {
+            //console.error('Message socket closed unexpectedly!')
+            //console.error('webSocket userid=' + userid + ' closed!');
+            console.log('webSocket userid=' + userid + ' closed!');
+        };
+        console.log('Отправлено сообщение для userid=' + userid)
+        setTimeout(function ()  {
+            chatSocket.send(JSON.stringify({
+                'userid': userid,
+                'userfromid': '{{ request.user.id }}',
+                'userfromname': '{{ request.user.username }}',
+                'message': message,
+                'date': now
+            }));
+            //document.querySelector('#log').innerHTML += ({ request.user.id }} + ' --> ' + { recipient_user.username }} + ': ' + message + '<br />');
+            //document.querySelector('#log').innerHTML += (message + '<br />');
+            document.querySelector('#log').innerHTML += ( '<i>' + now + '</i><br />' + 'To: ' + username + '<br />' + message + '<br />' );
+            setTimeout(chatSocket.close(), 0)
+        },100);
+
+        document.getElementById("message").value = "";
+
+    };
+
+
+</script>

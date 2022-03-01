@@ -12,7 +12,6 @@
              {% endfor %}
          </select><br />
          {% endcomment %}
-      {{ statusselected }}
          <label>По статусам: </label>
          <select name="notify-select-status" id="notifystatusselectid" class="select-status">
             <option value="1" {% ifequal "1" status_selectid %} selected="selected" {% endifequal %}>- Все</option>

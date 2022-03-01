@@ -30,12 +30,15 @@ class NotificationConsumer(WebsocketConsumer):
         message = text_data_json['message']
         user = User.objects.filter(id=userid).first()
         username = user.username
+        userfrom = User.objects.filter(id=userfromid).first()
+        userfromname = userfrom.username
         #userto = User.objects.filter(id=usertoid).first()
         #usertorname = userto.username
         #recipient_user = User.objects.filter(id=userid).first()
         print(text_data, self.group_name, self.channel_name, 'userid=', userid, 'from=', userfromname, 'to=', username, message)
         print('******************** author_id=', userfromid, 'recipient_id=', userid, 'text=', message)
-        Notification.objects.create(type_id=3, author_id=userfromid, recipient_id=userid, objecttype_id=9, text=message)
+        Notification.objects.create(type_id=3, author_id=userfromid, recipient_id=userid, objecttype_id=9, theme='Сообщение от ' + userfromname,
+                                    text=message)
         #print("//////////////////", t_rounded)
         dt = datetime.strftime(datetime.now(), '%d-%m-%y %H:%M')
         async_to_sync(self.channel_layer.group_send)(
