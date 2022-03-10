@@ -43,12 +43,12 @@
                   //notificationobjecttype: metaobjecttypeSelected
                },
                success: function(data){
-                  $('#ajax_listresult').html(data);
+                  $('#ajax_nlist_listresult').html(data);
                   document.querySelector('#log').innerHTML = ""
                },
                error: function(xhr, errmsg, err){
                   console.log("error")
-                  $('#ajax_listerrors').html('Нет данных!');
+                  $('#ajax_nlist_listerrors').html('Нет данных!');
                }
             });
    });

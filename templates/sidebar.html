@@ -32,11 +32,11 @@
                   notificationobjecttype: metaobjecttypeSelected
                },
                success: function(data){
-                  $('#ajax_listresult').html(data);
+                  $('#ajax_sidebar_listresult').html(data);
                },
                error: function(xhr, errmsg, err){
                   console.log("error")
-                  $('#ajax_listerrors').html('Нет данных!');
+                  $('#ajax_sidebar_listerrors').html('Нет данных!');
                }
             });
    });

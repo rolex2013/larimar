@@ -36,11 +36,11 @@ class ProjectsHome(TemplateView):
 def notificationread(request):
     # помечаем уведомление прочитанным
     notify_id = request.GET['val']
-    curr_notify = Notification.objects.get(id=notify_id)
+    curr_notify = Notification.objects.filter(id=notify_id).select_related("author", "recipient", "objecttype", "type").first()
     if curr_notify:
        curr_notify.is_read = True
        curr_notify.save(update_fields=["is_read"])
-    notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True, is_read=False, type_id=3)
+    notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True, is_read=False, type_id=3).select_related("author", "recipient", "objecttype", "type")
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
     return render(request,  "notify_list.html", {
                                                  'notification_list': notification_list.distinct().order_by("-datecreate"),
@@ -60,6 +60,7 @@ def notificationfilter(request):
        notification_list = notification_list.filter(is_read=False)       
     elif notificationstatus == "3":
        notification_list = notification_list.filter(is_read=True)
+    notification_list = notification_list.select_related("author", "recipient", "objecttype", "type")
     #print(notification_list)
     
     if notificationobjecttype != "0":
@@ -95,19 +96,15 @@ def sidebarnotificationfilter(request):
     if notificationobjecttype != "0":
         notification_list = notification_list.filter(objecttype_id=notificationobjecttype)
 
-    #metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
-    #cnt = notification_list.exclude(author_id=request.user.id, objecttype_id=9).count()
     cnt = notification_list.filter(recipient_id=request.user.id, is_read=False, objecttype_id=9).count()
-    #print(cnt)
-    notification_list = notification_list.select_related("author", "recipient", "objecttype").order_by('datecreate').distinct()
+    print(cnt)
+    notification_list = notification_list.select_related("author", "recipient", "objecttype", "type").order_by('datecreate').distinct()
+    print(notification_list)
 
     return render(request, "sidebar_notifications_list.html", {
             'nodes': notification_list,
             'currentuserid': request.user.id,
-            'count': cnt,
-            #'metaobjecttype_list': metaobjecttype_list.distinct().order_by(),
-            #'notify_status_selectid': notificationstatus,
-            #'notify_metaobjecttype_selectid': notificationobjecttype,
+            'count': 10,
             }
         )
 
@@ -118,43 +115,46 @@ def objecthistory(request, objtype='prj', pk=0):
        if pk == 0:
           current_object = 0
        else:
-          current_object = Project.objects.filter(id=pk).first() #Project.objects.get(id=pk)
+          current_object = Project.objects.filter(id=pk).select_related("company", "author", "assigner", "status", "type", "structure_type",
+                "currency").first()
        templatename = 'project_history.html'
     elif objtype == 'tsk':
        if pk == 0:
           current_object = 0
        else:
-          current_object = Task.objects.filter(id=pk).first()
+          current_object = Task.objects.filter(id=pk).select_related("project", "author", "assigner", "status", "type", "structure_type").first()
        templatename = 'task_history.html'             
     elif objtype == 'clnt':
        if pk == 0:
           current_object = 0
        else:
-          current_object = Client.objects.filter(id=pk).first()
+          current_object = Client.objects.filter(id=pk).select_related("company", "author", "user", "initiator", "manager", "status", "type", "protocol_type", "currency").first()
        templatename = 'client_history.html'            
     elif objtype == 'cltsk':
        if pk == 0:
           current_object = 0
        else:
-          current_object = ClientTask.objects.filter(id=pk).first()
+          current_object = ClientTask.objects.filter(id=pk).select_related("assigner", "author", "client", "status", "structure_type", "type",
+                                                                           "initiator").first()
        templatename = 'clienttask_history.html'              
     elif objtype == 'clevnt':
        if pk == 0:
           current_object = 0
        else:
-          current_object = ClientEvent.objects.filter(id=pk).first()
+          current_object = ClientEvent.objects.filter(id=pk).select_related("assigner", "author", "client", "status", "task", "type",
+                                                                           "initiator").first()
        templatename = 'clientevent_history.html'
     elif objtype == 'doc':
        if pk == 0:
           current_object = 0
        else:
-          current_object = Doc.objects.filter(id=pk).first()
+          current_object = Doc.objects.filter(id=pk).select_related("company", "author", "status", "type", "manager").first()
        templatename = 'doc_history.html'
     elif objtype == 'dctsk':
        if pk == 0:
           current_object = 0
        else:
-          current_object = DocTask.objects.filter(id=pk).first()
+          current_object = DocTask.objects.filter(id=pk).select_related("assigner", "author", "doc", "docver", "status", "type").first()
        templatename = 'doctask_history.html'
 
     comps = request.session['_auth_user_companies_id']
@@ -164,7 +164,7 @@ def objecthistory(request, objtype='prj', pk=0):
     #row = ModelLog.objects.get(modelobjectid=pk, is_active=True)
     #titles = json.loads(row.log).items()
     #print(objtype)
-    nodes = ModelLog.objects.filter(componentname=objtype, modelobjectid=pk, is_active=True) #.order_by()
+    nodes = ModelLog.objects.filter(componentname=objtype, modelobjectid=pk, is_active=True).select_related("author", "modelobject") #.order_by()
     #print(nodes)
     i = -1
     mas = []

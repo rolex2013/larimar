@@ -58,7 +58,8 @@ def projects(request, companyid=0, pk=0):
     try:
        prjstatus = request.POST['select_projectstatus']
     except:
-       project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True)
+       project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True,
+                                             company=companyid, dateclose__isnull=True)
     else:
        if prjstatus == "0":
           # если в выпадающем списке выбрано "Все активные"
@@ -99,7 +100,8 @@ def projects(request, companyid=0, pk=0):
        root_project_id = 0
        #tree_project_id = 0
     else:
-       current_project = Project.objects.get(id=pk)
+       current_project = Project.objects.filter(id=pk).first().select_related("company", "author", "assigner", "status", "type", "structure_type",
+                                                                   "currency") #.prefetch_related("members")
        #idpk = 'id=pk'
        #current_project = Project.objects.get({idpk})
        tree_project_id = current_project.tree_id  
@@ -130,6 +132,10 @@ def projects(request, companyid=0, pk=0):
        button_project_create = 'Добавить'        
     if current_company.id in comps:
        button_project_create = 'Добавить'
+
+    project_list = project_list.select_related("company", "author", "assigner", "status", "type", "structure_type", "currency") #.prefetch_related(
+        #"members")
+
     return render(request, "company_detail.html", {
                               'nodes': project_list.distinct(), #.order_by(), # для удаления задвоений и восстановления иерархии
                               'current_project': current_project,
@@ -309,7 +315,9 @@ def tasks(request, projectid=0, pk=0):
     len_list = len(task_list)
     #print(len_list)    
 
-    currentproject = Project.objects.filter(id=projectid).first()
+    currentproject = Project.objects.filter(id=projectid).select_related("company", "author", "assigner", "status", "type", "structure_type",
+                                                                         "currency").first()
+    #currentproject = Project.objects.filter(id=projectid).first()
 
     #taskcomment_costsum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('cost'))
     #taskcomment_timesum = TaskComment.objects.filter(task__project_id=currentproject.id).aggregate(Sum('time'))
@@ -332,7 +340,8 @@ def tasks(request, projectid=0, pk=0):
        if currentuser == currentproject.author_id or currentuser == currentproject.assigner_id:
            obj_files_rights = 1
     else:
-       current_task = Task.objects.filter(id=pk).first()
+       current_task = Task.objects.filter(id=pk).select_related("project", "author", "assigner", "status", "type", "structure_type").first()
+       #current_task = Task.objects.filter(id=pk).first()
        root_task_id = current_task.get_root().id
        tree_task_id = current_task.tree_id
        if currentuser == current_task.author_id or currentuser == current_task.assigner_id:
@@ -349,7 +358,9 @@ def tasks(request, projectid=0, pk=0):
        button_project_history = 'История' 
        button_task_create = 'Добавить'             
        if currentuser == currentproject.author_id or currentuser == currentproject.assigner_id:
-          button_project_update = 'Изменить'    
+          button_project_update = 'Изменить'
+
+    task_list = task_list.select_related("project", "author", "assigner", "status", "type", "structure_type")
      
     return render(request, "project_detail.html", {
                               'nodes': task_list.distinct(), #.order_by(), #.order_by('tree_id', 'level', '-dateend'),
@@ -377,7 +388,7 @@ def tasks(request, projectid=0, pk=0):
                               'hours': hours, 'minutes': minutes, 'seconds': seconds,
                               'len_list': len_list,
                                                 })       
-
+"""
 class TaskDetail___(DetailView):
    model = Task
    template_name = 'task_detail.html'  
@@ -402,7 +413,7 @@ class TaskDetail___(DetailView):
        context['button_task_history'] = button_task_history
        context['button_taskcomment_create'] = button_taskcomment_create      
        return context
-
+"""
 class TaskCreate(AddFilesMixin, CreateView):    
     model = Task
     form_class = TaskForm
@@ -495,7 +506,7 @@ class TaskUpdate(AddFilesMixin, UpdateView):
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def taskcomments(request, taskid):
 
-    currenttask = Task.objects.get(id=taskid)
+    currenttask = Task.objects.filter(id=taskid).select_related("project", "author", "assigner", "status", "type", "structure_type").first()
     currentuser = request.user.id
     
     #taskcomment_costsum = TaskComment.objects.filter(task=taskid).aggregate(Sum('cost'))
@@ -509,7 +520,7 @@ def taskcomments(request, taskid):
     hours, sec = divmod(sec, 3600)
     minutes, sec = divmod(sec, 60)
     seconds = sec
-    taskcomment_list = TaskComment.objects.filter(Q(author=request.user.id) | Q(task__project__members__in=[currentuser,]), is_active=True, task=taskid)
+    taskcomment_list = TaskComment.objects.filter(Q(author=request.user.id) | Q(task__project__members__in=[currentuser,]), is_active=True, task=taskid).select_related("task", "author")
 
     button_taskcomment_create = ''
     #button_taskcomment_update = ''
@@ -526,7 +537,7 @@ def taskcomments(request, taskid):
         button_taskcomment_create = 'Добавить'
         if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
             button_task_update = 'Изменить'
-     
+
     return render(request, "task_detail.html", {
                               'nodes': taskcomment_list.distinct().order_by(),
                               #'node_files': n_files,
@@ -584,6 +595,7 @@ class TaskCommentUpdate(UpdateView):
 #    #template_name = 'taskcomment_delete.html'
 #    success_url = '/success/' 
 
+"""
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def projecthistory_(request, pk=0):
 
@@ -612,7 +624,8 @@ def projecthistory_(request, pk=0):
                               #'companyid':companyid,
                               'user_companies': comps,
                               'table': table,                                                           
-                                                })     
+                                                })
+
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def projecthistory__(request, pk=0):
 
@@ -667,6 +680,7 @@ def taskhistory(request, pk=0):
                               'user_companies': comps,  
                               'table': table,                                                               
                                                 })  
+"""
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def projectfilter(request):
@@ -701,7 +715,7 @@ def projectfilter(request):
             elif myprjuser == "2":
                project_list = project_list.filter(Q(assigner=request.user.id)) 
             #nodes = project_list.order_by().distinct()
-            nodes = project_list.distinct() #.order_by()
+            nodes = project_list.select_related("company", "author", "assigner", "status", "type", "structure_type", "currency").distinct()
             object_message = ''
             if len(nodes) == 0:
                object_message = 'Проекты не найдены!'
@@ -743,7 +757,7 @@ def taskfilter(request):
     elif mytskuser == "2":
        task_list = task_list.filter(Q(assigner=request.user.id)) 
     # *******************************           
-    nodes = task_list.distinct() #.order_by()
+    nodes = task_list.select_related("project", "author", "assigner", "status", "type", "structure_type").distinct() #.order_by()
     object_message = ''
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'                  
