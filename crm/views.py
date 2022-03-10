@@ -907,8 +907,7 @@ def clientfilter(request):
                else:   
                   client_list = Client.objects.filter(Q(author=request.user.id) | Q(manager=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=clntstatus)
             # *******************************
-            #client_list = Client.objects.filter(is_active=True, company=companyid, status=clntstatus, dateclose__isnull=True) 
-            #client_list = Client.objects.filter(id__in=[client.id for client in Client.objects.all() if client.is_leaf_node()])   
+
             # **** фильтр по типу ***
             if clnttype != "-1":
                client_list = client_list.filter(Q(type=clnttype))
