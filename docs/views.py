@@ -57,7 +57,7 @@ def docs(request, companyid=0, pk=0):
     #print(doc_list)
     len_list = len(doc_list)
 
-    current_company = Company.objects.filter(id=companyid).first()
+    current_company = Company.objects.filter(id=companyid).select_related("author", "structure_type", "type", "currency").first()
 
     obj_files_rights = 0
 
@@ -65,7 +65,7 @@ def docs(request, companyid=0, pk=0):
        current_doc = 0
     else:
        #current_doc = Doc.objects.get(id=pk)
-       current_doc = Doc.objects.filter(id=pk).first()
+       current_doc = Doc.objects.filter(id=pk).select_related("author", "company", "status", "type", "manager").first()
        if currentuser == current_doc.author_id or currentuser == current_doc.manager_id:
            obj_files_rights = 1
 
@@ -91,7 +91,7 @@ def docs(request, companyid=0, pk=0):
        button_doc_create = 'Добавить'
     if current_company in comps:
        button_doc_create = 'Добавить'
-    nodes = doc_list.distinct().order_by()
+    nodes = doc_list.select_related("author", "company", "status", "type", "manager").distinct().order_by()
     return render(request, "company_detail.html", {
                               'nodes': nodes,
                               'current_doc': current_doc,
@@ -245,18 +245,12 @@ def doctasks(request, pk=0):
     currentuser = request.user.id
     # *** фильтруем по статусу ***
     tskstatus_selectid = 0
-    doc = Doc.objects.filter(id=pk).first()
+    doc = Doc.objects.filter(id=pk).select_related("author", "company", "status", "type", "manager").first()
     docverid = doc.docver
-
-    #if currentuser != doc.author and currentuser not in doc.members:
-    #    print("не член!")
 
     try:
         tskstatus = request.POST['select_taskstatus']
     except:
-        #task_list = DocTask.objects.filter(
-        #    Q(author=request.user.id) | Q(assigner=request.user.id) | Q(doc__members__in=[currentuser, ]),
-        #    is_active=True, docver=docverid, dateclose__isnull=True)
         task_list = DocTask.objects.filter(
             Q(author=request.user.id) | Q(assigner=request.user.id), is_active=True, docver=docverid, dateclose__isnull=True)
     else:
@@ -282,21 +276,11 @@ def doctasks(request, pk=0):
                     is_active=True, docver=docverid, status=tskstatus)  # , dateclose__isnull=True)
         tskstatus_selectid = tskstatus
     # *******************************
-
-    #event_list = ClientEvent.objects.filter(client=clientid, is_active=True)
-    ## len_elist = len(event_list)
-
-    currentdoc = Doc.objects.filter(id=pk).first()
+    currentdoc = doc #Doc.objects.filter(id=pk).first()
     #currentdocver = DocVer.objects.filter(id=docverid).first()
-    currentdocver = DocVer.objects.filter(doc_id=pk, is_actual=True).first()
-    #print(pk)
+    currentdocver = DocVer.objects.filter(doc_id=pk, is_actual=True).select_related("author", "doc", "status", "type", "manager").first()
 
-    #try:
-    #    current_task = DocTask.objects.get(doc_id=pk, docver_id=docverid)
-    #except DocTask.DoesNotExist:
-    #    current_task = None
-    # вместо этой конструкции можно писать короче:
-    current_task = DocTask.objects.filter(doc_id=pk, docver_id=docverid).first()
+    current_task = DocTask.objects.filter(doc_id=pk, docver_id=docverid).select_related("author", "doc", "docver", "assigner", "status", "type").first()
 
     button_doc_update = ''
     button_doc_history = ''
@@ -317,6 +301,8 @@ def doctasks(request, pk=0):
             if (currentuser == currentdoc.author_id or currentuser == currentdocver.author_id or currentuser == currentdocver.manager_id) and currentdocver.is_public == False and currentdoc.doctask == 0:
                 button_doc_update = 'Изменить'
 
+    task_list = task_list.select_related("author", "doc", "docver", "assigner", "status", "type")
+
     return render(request, "doc_detail.html", {
         'nodes': task_list.distinct().order_by(),  # .order_by('tree_id', 'level', '-dateend'),
         'current_task': current_task,
@@ -326,7 +312,9 @@ def doctasks(request, pk=0):
         'docverid': docverid,
         'user_companies': request.session['_auth_user_companies_id'],
         'obj_files_rights': obj_files_rights,
-        'files': DocVerFile.objects.filter(docver=currentdocver, is_active=True).order_by('uname'),
+        'files': DocVerFile.objects.filter(docver=currentdocver, is_active=True).select_related("author", "doc", "docver", "task",
+                                                                                                "taskcomment").order_by(
+            'uname'),
         'objtype': 'doc',
         'is_member': is_member,
         'media_path': settings.MEDIA_URL,
@@ -430,6 +418,7 @@ class DocTaskUpdate(AddFilesMixin, UpdateView):
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def doctaskcomments(request, taskid):
+
     currenttask = DocTask.objects.filter(id=taskid).first()
     currentuser = request.user.id
 
@@ -452,13 +441,16 @@ def doctaskcomments(request, taskid):
         if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
             button_task_update = 'Изменить'
 
+    taskcomment_list = taskcomment_list.select_related("author", "task")
+
     return render(request, "doctask_detail.html", {
         'nodes': taskcomment_list.distinct().order_by(),
         # 'node_files': n_files,
         # 'current_taskcomment': currenttaskcomment,
         'task': currenttask,
         'obj_files_rights': obj_files_rights,
-        'files': DocVerFile.objects.filter(task=currenttask, is_active=True).order_by('uname'),
+        'files': DocVerFile.objects.filter(task=currenttask, is_active=True).select_related("author", "doc", "docver", "task",
+                                                                                                "taskcomment").order_by('uname'),
         'objtype': 'doctsk',
         'media_path': settings.MEDIA_URL,
         #'button_task_create': button_task_create,
@@ -527,7 +519,7 @@ def docfilter(request):
     elif mydocuser == "2":
        doc_list = doc_list.filter(Q(author=request.user.id))
     # *******************************
-    nodes = doc_list.distinct().order_by()
+    nodes = doc_list.select_related("author", "company", "status", "type", "manager").distinct().order_by()
     object_message = ''
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'
@@ -539,7 +531,7 @@ def doctaskfilter(request):
     docid = request.GET['docid']
     taskstatus = request.GET['taskstatus']
     tasktype = request.GET['tasktype']
-    currentdoc = Doc.objects.filter(id=docid).first()
+    currentdoc = Doc.objects.filter(id=docid).select_related("author", "company", "status", "type", "manager").first()
     # *** фильтруем по статусу ***
     currentuser = request.user.id
     #tskstatus_selectid = 0
@@ -571,7 +563,7 @@ def doctaskfilter(request):
     #elif mytskuser == "2":
     #   task_list = task_list.filter(Q(assigner=request.user.id))
     # *******************************
-    nodes = task_list.distinct().order_by()
+    nodes = task_list.select_related("author", "doc", "docver", "assigner", "status", "type").distinct().order_by()
     object_message = ''
     if len(nodes) == 0:
        object_message = 'Задачи не найдены!'
