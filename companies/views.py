@@ -59,7 +59,7 @@ def companies(request, pk=0, razdel='projects'):
        #template_name = "menu_companies.html"
        #print(comps)
     else:
-       current_company = Company.objects.filter(id=pk).first()
+       current_company = Company.objects.filter(id=pk).select_related("author", "currency", "structure_type", "type").first()
        tree_company_id = current_company.tree_id  
        root_company_id = current_company.get_root().id
        tree_company_id = current_company.tree_id
@@ -96,7 +96,7 @@ def companies(request, pk=0, razdel='projects'):
         nodes = Company.objects.filter(is_active=True, id__in=comps)
 
     return render(request, template_name, {
-                              'nodes': nodes,
+                              'nodes': nodes.select_related("author", "currency", "structure_type", "type"),
                               'len_list': len(nodes),
                               'current_company': current_company,
                               'root_company_id': root_company_id,
@@ -167,7 +167,7 @@ def stafflist(request, companyid=0, pk=0):
        companyid = request.session['_auth_user_currentcompany_id']
 
     comps = request.session['_auth_user_companies_id']
-    current_company = Company.objects.get(id=companyid)
+    current_company = Company.objects.filter(id=companyid).select_related("author", "currency", "structure_type", "type").first()
 
     if pk == 0:
        current_stafflist = 0
@@ -177,7 +177,7 @@ def stafflist(request, companyid=0, pk=0):
        stafflist_id = 0
        #template_name = "stafflist.html"
     else:
-       current_stafflist = StaffList.objects.get(id=pk)
+       current_stafflist = StaffList.objects.filter(id=pk).select_related("author", "company", "currency", "type").first()
        tree_stafflist_id = current_stafflist.tree_id  
        root_stafflist_id = current_stafflist.get_root().id
        tree_stafflist_id = current_stafflist.tree_id
@@ -196,9 +196,20 @@ def stafflist(request, companyid=0, pk=0):
     component_name = 'companies'    
     #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).exclude(user_id=currentuser).distinct().order_by('user_id')
     #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).distinct().order_by('user_id')
-    unodes = UserCompanyComponentGroup.objects.raw('SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id WHERE company_id='+str(companyid)+' AND uc.is_active=1 AND u.is_active=1 GROUP BY uc.user_id')
-    #print(unodes)
-    nodes = StaffList.objects.filter(is_active=True, company_id=companyid).order_by()  
+    #unodes = UserCompanyComponentGroup.objects.raw('SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id
+    # WHERE company_id='+str(companyid)+' AND uc.is_active=1 AND u.is_active=1 GROUP BY uc.user_id')
+    unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid, user__is_active=True).select_related("company",
+                                                                                                                                      "group",
+                                                                                                                                 "user",
+                                                                                                                                 "component").values("user").annotate(usr=Count(
+        "user_id")).distinct()
+    #.values_list('user',
+    # flat=True).distinct()
+    #unodes = User.objects.filter(is_active=True).exclude(id__in=uc)
+    #unodes = User.objects.filter(is_active=True, company__result_company=companyid)
+
+    print(companyid, unodes)
+    nodes = StaffList.objects.filter(is_active=True, company_id=companyid).select_related("author", "company", "currency", "type").order_by()
 
     button_company_create = ''
     button_company_update = ''
@@ -276,8 +287,8 @@ def staffs(request, stafflistid=0, pk=0):
     #   companyid = request.session['_auth_user_currentcompany_id']
 
     comps = request.session['_auth_user_companies_id']
-    current_stafflist = StaffList.objects.get(id=stafflistid)
-    current_company = Company.objects.get(id=current_stafflist.company_id)
+    current_stafflist = StaffList.objects.filter(id=stafflistid).select_related("author", "company", "currency", "type").first()
+    current_company = Company.objects.filter(id=current_stafflist.company_id).select_related("author", "currency", "structure_type", "type").first()
 
     if pk == 0:
        current_staff = 0
@@ -300,7 +311,8 @@ def staffs(request, stafflistid=0, pk=0):
     component_name = 'companies' 
 
     #number_employees = Staff.objects.filter(Q(dateend__gte=datetime.now()) | Q(dateend=None), datebegin__lte=datetime.now(), is_active=True, stafflist_id=stafflistid).annotate(cnt=Count('id'))   
-    nodes = Staff.objects.filter(Q(dateend__gte=datetime.now()) | Q(dateend=None), datebegin__lte=datetime.now(), is_active=True, stafflist_id=stafflistid).order_by()   
+    nodes = Staff.objects.filter(Q(dateend__gte=datetime.now()) | Q(dateend=None), datebegin__lte=datetime.now(), is_active=True,
+                                 stafflist_id=stafflistid).select_related("author", "stafflist", "user").order_by()
 
     button_stafflist_create = ''
     button_stafflist_update = ''     
@@ -424,12 +436,13 @@ class SummaryCreate(CreateView):
 def summaries(request, pk=0):
     template_name = 'stafflist_detail.html'
     if pk == 0:
-       summaries_list = Summary.objects.filter(is_active=True, stafflist__is_active=True, stafflist__is_vacancy=True).order_by('-datecreate')
+       summaries_list = Summary.objects.filter(is_active=True, stafflist__is_active=True, stafflist__is_vacancy=True)
     else:
-       summaries_list = Summary.objects.filter(stafflist_id=pk, is_active=True, stafflist__is_active=True, stafflist__is_vacancy=True).order_by('-datecreate')      
+       summaries_list = Summary.objects.filter(stafflist_id=pk, is_active=True, stafflist__is_active=True, stafflist__is_vacancy=True)
+    summaries_list = summaries_list.select_related("stafflist").order_by('-datecreate')
     param = 'summaries'
     comps = request.session['_auth_user_companies_id']
-    current_stafflist = StaffList.objects.get(id=pk)
+    current_stafflist = StaffList.objects.filter(id=pk).select_related("author", "company", "currency", "type").first()
     button_stafflist_create = 'Добавить'
     button_stafflist_update = 'Изменить'       
     return render(request, template_name, {
@@ -443,7 +456,7 @@ def summaries(request, pk=0):
 
 def summary_detail(request, pk):
     template_name = 'summary_detail.html'
-    current_summary = Summary.objects.get(id=pk)
+    current_summary = Summary.objects.filter(id=pk).select_related("stafflist").first()
     if not current_summary.candidatemiddlename:
        current_summary.candidatemiddlename = ''
     button_delete_resume = 'Удалить резюме'
@@ -454,7 +467,7 @@ def summary_detail(request, pk):
 
 def summary_delete(request, pk):
     template_name = 'summary_detail.html'
-    current_summary = Summary.objects.get(id=pk)
+    current_summary = Summary.objects.filter(id=pk).select_related("stafflist").first()
     if current_summary.is_active == True:
        current_summary.is_active = False   
        button_delete_resume = 'Восстановить резюме'           
@@ -485,6 +498,7 @@ def contents(request, place=0):
        else:
           content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company__in=companies_id, place_id=3).annotate(cnt=Count('id'))          
                       # это надо как-то исправить, чтоб записи не дублировались, когда контент для нескольких компаний, и они же есть в списке у пользователя!
+    content_list = content_list.select_related("author", "type", "place")
      # здесь нужно условие для button_company_create
      # юзер имеет право на добавление контента
      # это реализовано в шаблоне через штатный perms.companies.add_content
@@ -509,7 +523,7 @@ def contents(request, place=0):
 def publiccontents(request):
     template_name = 'index.html'
     #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, is_public=True, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
-    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, place__is_active=True, place_id=1).annotate(cnt=Count('id')) 
+    content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, place__is_active=True, place_id=1).select_related("author", "type", "place").annotate(cnt=Count('id'))
     param = 'publiccontent'
     return render(request, template_name, {
                               'content_list': content_list,
@@ -602,7 +616,8 @@ class ContentUpdate(UpdateView):
 def userroles(request, companyid=1, pk=1):
     companyuser = User.objects.filter(id=pk).first()
     companyname = Company.objects.filter(id=companyid).first()
-    roles = UserCompanyComponentGroup.objects.filter(user_id=pk, company_id=companyid, is_active=True).order_by('component_id', 'group_id')
+    roles = UserCompanyComponentGroup.objects.filter(user_id=pk, company_id=companyid, is_active=True).select_related("company", "component",
+                                                                                                                      "group", "user").order_by('component_id', 'group_id')
     componentlist = Component.objects.filter(is_active=True)
     grouplist = Group.objects.filter().exclude(name='Суперадминистраторы')
     button_companyuser_update = 'Изменить'
@@ -622,10 +637,10 @@ def userroles(request, companyid=1, pk=1):
 def userrole_delete(request):
     roleid = request.GET['roleid']
     if roleid:
-       role = UserCompanyComponentGroup.objects.get(id=roleid)
+       role = UserCompanyComponentGroup.objects.filter(id=roleid).first()
        role.is_active = 0
        role.save(update_fields=["is_active"])
-    roles = UserCompanyComponentGroup.objects.filter(user_id=role.user_id, company_id=role.company_id, is_active=True).order_by('component_id', 'group_id')
+    roles = UserCompanyComponentGroup.objects.filter(user_id=role.user_id, company_id=role.company_id, is_active=True).select_related("company", "component", "group", "user").order_by('component_id', 'group_id')
     componentlist = Component.objects.filter(is_active=True)
     grouplist = Group.objects.all()    
     button_companyuserrole_create = 'Добавить'
@@ -649,7 +664,7 @@ def userrole_create(request):
        role.save()
     except:
        message = 'Такая роль уже назначена!'
-    roles = UserCompanyComponentGroup.objects.filter(user_id=userid, company_id=companyid, is_active=True).order_by('component_id', 'group_id')
+    roles = UserCompanyComponentGroup.objects.filter(user_id=userid, company_id=companyid, is_active=True).select_related("company", "component", "group", "user").order_by('component_id', 'group_id')
     componentlist = Component.objects.filter(is_active=True)
     grouplist = Group.objects.all()
     button_companyuserrole_create = 'Добавить роль'

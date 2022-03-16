@@ -318,8 +318,10 @@ def UserProfileDetail(request, userid=0, param=''):
        content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(OurTZ), dateend__gte=datetime.now(OurTZ), place_id=3).annotate(cnt=Count('id'))
 
     #user_profile = UserProfile.objects.get(user=userid, is_active=True) #.company_id
-    user_profile = UserProfile.objects.filter(user=userid, is_active=True).first()
-    notification_list = Notification.objects.filter(recipient_id=userid, is_active=True, is_read=False, type_id=3)
+    user_profile = UserProfile.objects.filter(user=userid, is_active=True).select_related("company", "user", "protocoltype").first()
+    notification_list = Notification.objects.filter(recipient_id=userid, is_active=True, is_read=False, type_id=3).select_related("author", "type",
+                                                                                                                                  "recipient",
+                                                                                                                                  "objecttype")
     #print(notification_list)
     #table = NotificationTable(notification_list)
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)

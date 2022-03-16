@@ -574,7 +574,7 @@ def docver_change(request):
     if docverid == 0:
         return False
     # позиционируемся на нужной версии
-    docver = DocVer.objects.filter(id=docverid).first()
+    docver = DocVer.objects.filter(id=docverid).select_related("author", "doc", "status", "type", "manager").first()
     # делаем все версии Документа неактуальными
     DocVer.objects.filter(doc_id=docver.doc_id).update(is_actual=False)
     # делаем текущую версию Документа актуальной
@@ -586,7 +586,7 @@ def docver_change(request):
     for node in nodes:
        i += 1
        mas.append(json.loads(node.log).items())
-    current_object = Doc.objects.filter(id=docver.doc_id).first()
+    current_object = Doc.objects.filter(id=docver.doc_id).select_related("author", "company", "status", "type", "manager").first()
     comps = request.session['_auth_user_companies_id']
     return render(request, 'object_history.html', {'nodes': nodes,
                                                    'mas': mas,

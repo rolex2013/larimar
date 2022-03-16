@@ -60,8 +60,9 @@ def folders(request, companyid=0, pk=0):
        fldrtype_selectid = type
     # *******************************
     #project_list = project_list.order_by('dateclose')
+    folder_list = folder_list.select_related("author", "company", "theme", "type")
 
-    current_company = Company.objects.filter(id=companyid).first()
+    current_company = Company.objects.filter(id=companyid).select_related("author", "structure_type", "type", "currency").first()
 
     obj_files_rights = 0
 
@@ -72,7 +73,7 @@ def folders(request, companyid=0, pk=0):
        #tree_project_id = 0
        template = "company_detail.html"
     else:
-       current_folder = Folder.objects.filter(id=pk).first()
+       current_folder = Folder.objects.filter(id=pk).select_related("author", "company", "theme", "type").first()
        #idpk = 'id=pk'
        #current_folder = Folder.objects.get({idpk})
        tree_folder_id = current_folder.tree_id
@@ -136,7 +137,7 @@ def folders(request, companyid=0, pk=0):
                               'companyid': companyid,
                               'user_companies': comps,
                               'component_name': 'files',
-                              'files': FolderFile.objects.filter(folder=current_folder, is_active=True),
+                              'files': FolderFile.objects.filter(folder=current_folder, is_active=True).select_related("author", "folder"),
                               'objtype': 'fldr',
                               'obj_files_rights': obj_files_rights,
                               'media_path': settings.MEDIA_URL,
@@ -259,7 +260,7 @@ def folderfilter(request):
         currentuser = request.user.id
         #folder = Folder.objects.filter(id=folderid).first()
         #companyid = folder.company_id
-        current_company = Company.objects.filter(id=companyid).first()
+        current_company = Company.objects.filter(id=companyid).select_related("author", "structure_type", "type", "currency").first()
         if companyid == 0:
            companyid = request.session['_auth_user_currentcompany_id']
         #parent_folder = Folder.objects.filter(id=folderid).first()
@@ -276,7 +277,7 @@ def folderfilter(request):
            folder_list = folder_list.filter(author_id=currentuser)
         # **********
         #print(currentuser, my)
-        nodes = folder_list.distinct() #.order_by()
+        nodes = folder_list.select_related("author", "company", "theme", "type").distinct() #.order_by()
 
         themes_list = folder_list.values('theme_id')
         foldertheme = Dict_Theme.objects.filter(id__in=themes_list)
@@ -310,6 +311,7 @@ def filefilter(request):
         file_list = FolderFile.objects.filter(folder_id=folderid, is_active=True, author_id=currentuser)
     elif my == "2":
         file_list = FolderFile.objects.filter(folder_id=folderid, is_active=False, author_id=currentuser)
+    file_list = file_list.select_related("author", "folder")
     #print(file_list)
     if sort == "1":
         if sortdir == "-1":
@@ -337,7 +339,7 @@ def filefilter(request):
     nodes = file_list.distinct()  # .order_by()
 
     obj_files_rights = 0
-    current_folder = Folder.objects.filter(id=folderid).first()
+    current_folder = Folder.objects.filter(id=folderid).select_related("author", "company", "theme", "type").first()
     if currentuser == current_folder.author_id:
         obj_files_rights = 1
 
