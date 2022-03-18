@@ -196,17 +196,12 @@ def stafflist(request, companyid=0, pk=0):
     component_name = 'companies'    
     #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).exclude(user_id=currentuser).distinct().order_by('user_id')
     #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).distinct().order_by('user_id')
-    #unodes = UserCompanyComponentGroup.objects.raw('SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id
-    # WHERE company_id='+str(companyid)+' AND uc.is_active=1 AND u.is_active=1 GROUP BY uc.user_id')
-    unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid, user__is_active=True).select_related("company",
-                                                                                                                                      "group",
-                                                                                                                                 "user",
-                                                                                                                                 "component").values("user").annotate(usr=Count(
-        "user_id")).distinct()
-    #.values_list('user',
-    # flat=True).distinct()
-    #unodes = User.objects.filter(is_active=True).exclude(id__in=uc)
-    #unodes = User.objects.filter(is_active=True, company__result_company=companyid)
+    #raw_query = 'SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id LEFT JOIN companies_company c ON
+    # c.id=uc.company_id LEFT JOIN main_component cmp ON cmp.id=uc.component_id LEFT JOIN auth_group g ON g.id=uc.group_id WHERE company_id='+str(companyid)+' AND uc.is_active=1 AND u.is_active=1 GROUP BY  uc.user_id'
+    raw_query = 'SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id LEFT JOIN main_component c ON ' \
+                'c.id=uc.component_id WHERE uc.company_id='+str(companyid)+\
+                ' AND uc.is_active=1 AND u.is_active=1 AND c.code="'+component_name+'" GROUP BY uc.user_id'
+    unodes = UserCompanyComponentGroup.objects.raw(raw_query)
 
     print(companyid, unodes)
     nodes = StaffList.objects.filter(is_active=True, company_id=companyid).select_related("author", "company", "currency", "type").order_by()
