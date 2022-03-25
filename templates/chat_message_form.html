@@ -11,7 +11,59 @@
         {% endif %}
 
 <script>
-        $('#addmessagebutton').click(function() {
+
+    document.querySelector('#addmessagebutton').onclick = function (e) {
+
+        /*const userid = document.querySelector('#userselectid').value
+        //const username = document.querySelector('#userselectid').text
+        var sel = document.getElementById("userselectid");
+        var username= sel.options[sel.selectedIndex].text;*/ /* выцепляем username получателя */
+        var chatname = document.getElementById("chatname").value;
+        const message = document.querySelector('#messagetext').value;
+        console.log(chatname + "***" + message);
+        let today = new Date();
+        now = today.toLocaleString()
+        /*const ChatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chats/chat/' + {currentchatid}} + '/'
+        );*/
+        try {
+            ChatSocket.onopen = function(m) {
+              console.log("Соединение с chatid=" + {{currentchatid}} + " открыто!");
+            }
+        } catch(exception) {
+            console.log('***** ' + exception);
+        }
+        ChatSocket.onclose = function (e) {
+            //console.error('Message socket closed unexpectedly!')
+            //console.error('webSocket userid=' + userid + ' closed!');
+            console.log('webSocket chatid=' + {{currentchatid}} + ' closed!');
+        };
+        console.log('Отправлено сообщение для chatid=' + {{currentchatid}})
+
+        setTimeout(function ()  {
+            ChatSocket.send(JSON.stringify({
+                'chatid': {{currentchatid}},
+                'userfromid': '{{ request.user.id }}',
+                'userfromname': '{{ request.user.username }}',
+                'message': message,
+                'date': now
+            }));
+            //document.querySelector('#log').innerHTML += ({ request.user.id }} + ' --> ' + { recipient_user.username }} + ': ' + message + '<br />');
+            //document.querySelector('#log').innerHTML += (message + '<br />');
+            //document.querySelector('#logchat').innerHTML += ( '<i>' + now + '</i><br />' + 'To: ' + {currentchatid}} + '<br />' + message + '<br/>' );
+            //document.querySelector('#logchat').innerHTML += ( '<b>' + '{ request.user.username }}' + '</b> <i>' + now + '</i><br />' + message + ' +
+            //''<br ' +
+            //    '/>');
+            //setTimeout(ChatSocket.close(), 0)
+        },100);
+
+        document.getElementById("messagetext").value = "";
+
+    };
+
+        $('#add_message_button').click(function() {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
         var messagetext = document.getElementById("messagetext").value;
         //console.log("==="+messagetext);

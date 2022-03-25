@@ -367,8 +367,8 @@ def get_current_company_id(request):
 
 
 # ***
-def wschat(request):
-
-    user_list = User.objects.filter(is_active=True)
-
-    return render(request, 'chat_ws.html', {'user_list': user_list,})
+#def wschat(request):
+#
+#    user_list = User.objects.filter(is_active=True)
+#
+#    return render(request, 'chat_ws.html', {'user_list': user_list,})

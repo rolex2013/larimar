@@ -17,4 +17,69 @@
                     <br />
                 {% endfor %}
 
+                <p style="font-size: small;">
+                    <!--<p id="logchat" style="margin: 10px 0px 10px 0px;"></p> <br />--><!--<p id="log_my" style="margin: 10px 0px 10px 20px;"></p>-->
+                    <p id="logchat"
+                       {% if data.userfromname == request.user.username %}
+                            class="chat_message_my"
+                       {% else %}
+                            class="chat_message"
+                       {% endif %}
+                    ></p>
+                </div>
+
+<script>
+
+    try {
+        setTimeout(ChatSocket.close(), 1)
+        //ChatSocket_{{currentchatid}} = null;
+    } catch(exception) {
+        console.log('=== ' + exception);
+    }
+    //setTimeout(ChatSocket.close(), 1)
+    ChatSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chats/chat/' + {{ currentchatid }} + '/'
+    );
+
+    ChatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        //console.log(data.date)
+        //console.log(data.message)
+        document.querySelector('#logchat').innerHTML += ( '<b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '<br />');
+        /*const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chats/chat/' + data.userid + '/'
+        );*/
+    };
+
+    ChatSocket.onclose = function (e) {
+        console.error('Chat socket closed unexpectedly!')
+    };
+
+    {% comment %}
+        let today = new Date();
+        now = today.toLocaleString()
+
+        setTimeout(function ()  {
+            ChatSocket.send(JSON.stringify({
+                'chatid': {{ currentchatid }},
+                'userfromid': '{{ request.user.id }}',
+                'userfromname': '{{ request.user.username }}',
+                'message': message,
+                'date': now
+            }));
+            //document.querySelector('#log').innerHTML += ({ request.user.id }} + ' --> ' + { recipient_user.username }} + ': ' + message + '<br />');
+            //document.querySelector('#log').innerHTML += (message + '<br />');
+            document.querySelector('#logchat').innerHTML += ( '<i>' + now + '</i><br />' + 'To chat: #' + {{ currentchatid }} + '<br />' + message +
+                '<br />' );
+            setTimeout(ChatSocket.close(), 0)
+        },100);
+    {% endcomment %}
+
+
+</script>
+
             {% endif %}

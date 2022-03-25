@@ -89,6 +89,7 @@
                     {
                         //console.log(data)
                         $('#ajax_messagelistresult').html(data);
+
                         // *** Выводим форму добавления сообщения в чат
                         $.ajax({
                             url: "{% url 'my_chat:messageform' %}",
