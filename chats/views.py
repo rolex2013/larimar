@@ -135,7 +135,7 @@ def messages(request):
     else:
         template_name = 'chat_messages_members.html'
 
-    ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).update(dateonline=datetime.now())
+    #ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).update(dateonline=datetime.now())
 
     return render(request, template_name, {
                                             'nodes_messages': Message.objects.filter(Q(onlyfor__isnull=True) | Q(onlyfor=currentuserid) | Q(
@@ -344,6 +344,17 @@ def memberlist(request, chatid):
         #print(member_list)
 
     return (member_list, currentchat)
+
+def ajax_memberlist(request):
+
+    chatid = request.GET['chatid']
+    currentchat = Chat.objects.filter(id=chatid).first()
+
+    return render(request, 'chat_members_list.html', {'currentchat': currentchat,
+                                                      'currentchatid': chatid,
+                                                      'nodes_members': ChatMember.objects.filter(chat=chatid,
+                                                                                        is_active=True,
+                                                                                        dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),})
 
 def chatslist(request):
 

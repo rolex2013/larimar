@@ -6,33 +6,22 @@
 
                 {% for node in nodes_messages %}
                     {% if node.author_id == request.user.id %}
-                        <!--<p style="padding: 0px 0px 0px 100px;">-->
                         <div class="chat_message_my">
                     {% else %}
-                        <!--<p style="padding: 0px 0px 0px 10px;">-->
                         <div class="chat_message">
                     {% endif %}
-                    <b>{{ node.author }}</b> <i>{{ node.datecreate }}</i><br />{% autoescape off %}{{ node.text }}{% endautoescape %}
+                    <b>{{ node.author }}</b> <i>{{ node.datecreate | date:"d.m.Y H:i:s" }}</i><br />{% autoescape off %}{{ node.text }}{% endautoescape %}
                     </div>
                     <br />
                 {% endfor %}
 
-                <p style="font-size: small;">
-                    <!--<p id="logchat" style="margin: 10px 0px 10px 0px;"></p> <br />--><!--<p id="log_my" style="margin: 10px 0px 10px 20px;"></p>-->
-                    <p id="logchat"
-                       {% if data.userfromname == request.user.username %}
-                            class="chat_message_my"
-                       {% else %}
-                            class="chat_message"
-                       {% endif %}
-                    ></p>
-                </div>
+                <p id="logchat" style="font-size: small;"></p>
 
 <script>
 
     try {
         setTimeout(ChatSocket.close(), 1)
-        //ChatSocket_{{currentchatid}} = null;
+        //ChatSocket_{currentchatid}} = null;
     } catch(exception) {
         console.log('=== ' + exception);
     }
@@ -40,14 +29,26 @@
     ChatSocket = new WebSocket(
         'ws://'
         + window.location.host
-        + '/ws/chats/chat/' + {{ currentchatid }} + '/'
+        + '/ws/chats/chat/' + {{ currentchatid }} + '/' + {{ request.user.id }} + '/'
     );
 
     ChatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);
-        //console.log(data.date)
-        //console.log(data.message)
-        document.querySelector('#logchat').innerHTML += ( '<b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '<br />');
+        //console.log('///'+data.date)
+        //console.log('&&&'+data.message)
+        if (data.userfromname === '{{request.user.username}}') {
+            document.querySelector('#logchat').innerHTML += ('<div class="chat_message_my"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
+        } else {
+            document.querySelector('#logchat').innerHTML += ('<div class="chat_message"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
+        }
+        var block = document.getElementById("ajax_messagelistresult_");
+        block.scrollTop = block.scrollHeight;
+        //if (data.member_isonline) {
+        //    document.querySelector('#member_{{request.user.id}}').innerHTML = ('===<b>data.userfromname</b>');
+        //} else {
+        //    document.querySelector('#member_{{request.user.id}}').innerHTML = ('data.userfromname');
+        //}
+        //document.querySelector('#logchat').innerHTML += ('=============================')
         /*const chatSocket = new WebSocket(
             'ws://'
             + window.location.host

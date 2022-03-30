@@ -43,12 +43,12 @@ class Chat(models.Model):
         verbose_name_plural = 'Чаты компаний'
 
 class ChatMember(models.Model):
-    chat = models.ForeignKey('Chat', limit_choices_to={'is_active': True},
-                             on_delete=models.CASCADE, related_name='chats_chatmember_chat', verbose_name="Чат")
+    chat = models.ForeignKey('Chat', limit_choices_to={'is_active': True}, on_delete=models.CASCADE, related_name='chats_chatmember_chat', verbose_name="Чат")
     member = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='chats_chatmember_member', verbose_name="Участник")
     datecreate = models.DateTimeField("Создан", auto_now_add=True)                                                                                         # Момент вступления в чат
     dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)                                                           # Момент выхода из члентства
     dateonline = models.DateTimeField("Момент последней активности", auto_now_add=False, blank=True, null=True)
+    dateoffline = models.DateTimeField("Момент выхода из чата", auto_now_add=False, blank=True, null=True)
     is_admin = models.BooleanField("Администратор", default=False)
     author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, related_name='chats_chatmember_author', verbose_name="Автор") # Пригласивший в чат
     is_active = models.BooleanField("Активность", default=True)
@@ -57,8 +57,10 @@ class ChatMember(models.Model):
     def is_online(self):
         online = False
         if not self.dateonline is None:
-            if (timezone.now()-self.dateonline <= timedelta(milliseconds=10000)):
-                online = True
+            #if (timezone.now()-self.dateonline <= timedelta(milliseconds=10000)):
+            if not self.dateoffline is None:
+                if (self.dateonline > self.dateoffline):
+                    online = True
         return online
 
     def __str__(self):

@@ -6,12 +6,13 @@
             {% for node in nodes_members %}
 
                 {% if node.chat.author_id == node.member_id or node.is_admin %}
-                    <span style="font-weight:bold; color:blue;">   <!-- Админ чата -->
+                    <span id="member_{{node.member_id}}" style="font-weight:bold; color:blue;">   <!-- Админ чата -->
                 {% elif node.member_id == request.user.id %}
-                    <span style="font-weight:bold; color:green;">  <!-- Текущий пользователь -->
+                    <span id="member_{{node.member_id}}" style="font-weight:bold; color:green;">  <!-- Текущий пользователь -->
                 {% else %}
                     <span>
                 {% endif %}
+
                 {% if node.is_online %}
                     <b>                                         <!-- Если OnLine -->
                 {% endif %}
@@ -19,8 +20,15 @@
                 {% if node.is_online %}
                     </b>
                 {% endif %}
+
+                <!--<span id="member_{node.member_id}}">{ node.member.username }}</span>-->
                 </span>
-                <i>({{ node.dateonline|date:"d.m.y H:i" }})</i>
+
+                {% if node.is_online %}
+                    <i>({{ node.dateonline|date:"d.m.y H:i:s" }})</i>
+                {% else %}
+                    <i>({{ node.dateoffline|date:"d.m.y H:i:s" }})</i>
+                {% endif %}
                 <br />
 
             {% endfor %}

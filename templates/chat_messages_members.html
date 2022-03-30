@@ -1,30 +1,41 @@
 
-    <div id="ajax_messagelistresult_" class="object-chats-messages">
+    <div id="ajax_messagelistresult_" class="object-chats-messages" style="height:200px; overflow-y: scroll;">
         {% include 'chat_messages_list.html' %}
     </div>
     <div id="ajax_messagelisterorr_"></div>
 
-    <div id="ajax_memberlistresult_" class="object-chats-members">
+    <div id="ajax_memberlistresult" class="object-chats-members">
         {% include 'chat_members_list.html' %}
     </div>
-    <div id="ajax_memberlisterror_"></div>
+    <div id="ajax_memberlisterror"></div>
 
     {% if currentchat %}
 
     <script>
 
+        // Восстанавливаем стиль шрифта списка чатов
+        document.getElementById("chatlist").style.fontWeight = "normal";
+        // Подсвечиваем выбранный чат
+        //document.querySelector('#chat_{currentchatid}}').innerHTML = ('<b>{ currentchat.name }}</b>');
+        document.getElementById("chat_{{currentchatid}}").style.fontWeight = "bolder";
+        // Прокручиваем сообщения в чате вниз
+        block = document.getElementById("ajax_messagelistresult_");
+        block.scrollTop = block.scrollHeight;
+
         var getMembersOnLine = function() {
             $.ajax( {
-                url: "{% url 'my_chat:messages' %}",
+                //url: "{ url 'my_chat:messages' %}",
+                url: "{% url 'my_chat:ajax_memberlist' %}",
                 type: "GET",
                 data: {
                     chatid: {{ currentchatid }},
-                    interval: 1,
+                    //interval: 1,
                 },
                 success: function(data) {
                         //console.log(data)
                         //$('#ajax_chatlistresult').html(data);
-                        $('#ajax_messagelistresult').html(data);
+                        //$('#ajax_messagelistresult').html(data);
+                        $('#ajax_memberlistresult').html(data);
                        },
                 //complete: function() {
                 //        setInterval(getMembersOnLine, 1000000);
@@ -32,17 +43,16 @@
                 error: function(xhr, errmsg, err) {
                         console.log("error")
                         //console.log(error_data);
-                        $('#ajax_messagelisterorr').html('Нет данных!');
+                        //$('#ajax_messagelisterorr').html('Нет данных!');
+                        $('#ajax_memberlisterorr').html('Нет данных!');
                        }
             });
         };
-/*
+
         if (typeof interval !== 'undefined') {
             clearInterval(interval);    // иначе множатся вызовы!!!
         }
         interval = setInterval(getMembersOnLine, 10000);
-*/
-
 
 
     </script>
