@@ -12,13 +12,13 @@ class NotificationConsumer(WebsocketConsumer):
 
     def connect(self):
         self.group_name = self.scope['url_route']['kwargs']['userid']
-        print('+++', self.channel_name, self.group_name)
+        print('Открыт сокет уведомлений для userid=', self.group_name, '(', self.channel_name, ')')
         async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
         self.accept()
 
     def disconnect(self, close_code):
         #self.chat_name = self.scope['url_route']['kwargs']['chat_name']
-        print('---', self.channel_name, 'userid=', self.group_name, 'webSocket закрыт!')
+        print('Закрыт сокет уведомлений для userid=', self.group_name, '(', self.channel_name, ')')
         async_to_sync(self.channel_layer.group_discard)(self.group_name, self.channel_name)
 
     def receive(self, text_data):
@@ -32,15 +32,13 @@ class NotificationConsumer(WebsocketConsumer):
         username = user.username
         userfrom = User.objects.filter(id=userfromid).first()
         userfromname = userfrom.username
-        #userto = User.objects.filter(id=usertoid).first()
-        #usertorname = userto.username
-        #recipient_user = User.objects.filter(id=userid).first()
         print(text_data, self.group_name, self.channel_name, 'userid=', userid, 'from=', userfromname, 'to=', username, message)
-        print('******************** author_id=', userfromid, 'recipient_id=', userid, 'text=', message)
+        print('Получено уведомление от author_id=', userfromid, 'recipient_id=', userid, 'text=', message)
         Notification.objects.create(type_id=3, author_id=userfromid, recipient_id=userid, objecttype_id=9, theme='Сообщение от ' + userfromname,
                                     text=message)
         #print("//////////////////", t_rounded)
-        dt = datetime.strftime(datetime.now(), '%d-%m-%y %H:%i:%s')
+        #dt = datetime.strftime(datetime.now(), '%d-%m-%y %H:%i:%s')
+        formatDate = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
         async_to_sync(self.channel_layer.group_send)(
             self.group_name,
             {
@@ -50,29 +48,23 @@ class NotificationConsumer(WebsocketConsumer):
                 "username": username,
                 "userfromid": userfromid,
                 "userfromname": userfromname,
-                #'recipient_user': recipient_user,
-                #'date': str(datetime.now().date()) + ' ' + str(datetime.now().time())
-                'date': dt
+                'date': formatDate
             },
         )
-        #print('author_id=', userfromid, 'recipient_id=', userid)
-        #Notification.create(type_id=3, author_id=userfromid, recipient_id=userid, objecttype_id=9)
-        #print(str(date.today()))
-        #print("///////////////", str(datetime.now().date()) + ' ' + str(datetime.now().time()))
-
 
     # Receive message from room group
     def notification_message(self, event):
-
+        #print('*-*-*-*-************ author_id=', event['userfromid'], 'recipient_id=', event['userid'], 'text=', event['message'])
         message = event['message']
         userid = event['userid']
         username = event['username']
         userfromid = event['userfromid']
         userfromname = event['userfromname']
         #usertoname = event['usertoname']
-        dt = datetime.strftime(datetime.now(), '%d-%m-%y %H:%i:%s')
+        #dt = datetime.strftime(datetime.now(), '%d-%m-%y %H:%i:%s')
+        formatDate = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
         #print("===================", t_rounded)
-        #print('*-*-*-*-************ author_id=', userfromid, 'recipient_id=', userid, 'text=', message)
+
         #Notification.create(type_id=3, author_id=userfromid, recipient_id=userid, objecttype_id=9, text=message)
 
         # Send message to WebSocket
@@ -80,16 +72,8 @@ class NotificationConsumer(WebsocketConsumer):
             'message': message,
             'userid': userid,
             'username': username,
+            "userfromid": userfromid,
             "userfromname": userfromname,
-            #'usertoname': usertoname,
-            'date': dt
-            #'date': str(date.today())
+            'date': formatDate
         }))
-
-        #user = User.objects.filter(id=userid).first()
-        #print('******************** author_id=',userfromid, 'recipient_id=',userid, 'text=',message)
-        #try:
-        #Notification.create(type_id=3, author_id=userfromid, recipient_id=userid, objecttype_id=9, text=message)
-        #except:
-        #    print('ошибка!')
 

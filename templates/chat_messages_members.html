@@ -1,5 +1,5 @@
 
-    <div id="ajax_messagelistresult_" class="object-chats-messages" style="height:200px; overflow-y: scroll;">
+    <div id="ajax_messagelistresult_" class="object-chats-messages">
         {% include 'chat_messages_list.html' %}
     </div>
     <div id="ajax_messagelisterorr_"></div>
@@ -48,12 +48,12 @@
                        }
             });
         };
-
+/*
         if (typeof interval !== 'undefined') {
             clearInterval(interval);    // иначе множатся вызовы!!!
         }
         interval = setInterval(getMembersOnLine, 10000);
-
+*/
 
     </script>
 

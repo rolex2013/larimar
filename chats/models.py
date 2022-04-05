@@ -9,6 +9,9 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 from companies.models import Company
 
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
+
 class Dict_ChatType(models.Model):
     name = models.CharField("Наименование", max_length=64)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
@@ -70,6 +73,14 @@ class ChatMember(models.Model):
     class Meta:
         verbose_name = 'Участник Чата'
         verbose_name_plural = 'Участники чатов'
+
+#@receiver(post_save, sender=ChatMember)
+#def post_save_member(sender, instance, **kwargs):
+#    if kwargs['created']:
+#        print(f'В чат "{instance.chat}" добавлен пользователь {instance}!')
+#    else:
+#        print(f'В чате "{instance.chat}" изменены данные пользователя {instance}!')
+
 
 class Message(models.Model):
     #text = models.TextField("Наименование", max_length=2048)

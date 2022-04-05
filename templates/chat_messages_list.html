@@ -44,9 +44,9 @@
         var block = document.getElementById("ajax_messagelistresult_");
         block.scrollTop = block.scrollHeight;
         //if (data.member_isonline) {
-        //    document.querySelector('#member_{{request.user.id}}').innerHTML = ('===<b>data.userfromname</b>');
+        //    document.querySelector('#member_{request.user.id}}').innerHTML = ('===<b>data.userfromname</b>');
         //} else {
-        //    document.querySelector('#member_{{request.user.id}}').innerHTML = ('data.userfromname');
+        //    document.querySelector('#member_{request.user.id}}').innerHTML = ('data.userfromname');
         //}
         //document.querySelector('#logchat').innerHTML += ('=============================')
         /*const chatSocket = new WebSocket(
@@ -57,6 +57,7 @@
     };
 
     ChatSocket.onclose = function (e) {
+        //const data = JSON.parse(e.data);
         console.error('Chat socket closed unexpectedly!')
     };
 
@@ -79,6 +80,10 @@
             setTimeout(ChatSocket.close(), 0)
         },100);
     {% endcomment %}
+
+    setInterval(function() {
+        ChatSocket.send(JSON.stringify("heartbeat"));
+    }, 30000);
 
 
 </script>

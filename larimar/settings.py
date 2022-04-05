@@ -16,6 +16,7 @@ import sys
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 import logging
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,6 +42,7 @@ ADMINS = (('Harry', 'larimaritgroup.ru@gmail.com'),)
 
 INSTALLED_APPS = [
     'channels',
+    "channels_presence",
     'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -167,6 +169,17 @@ CHANNEL_LAYERS = {
             "hosts": [('127.0.0.1', 6379)],
        },
     },
+}
+
+CELERYBEAT_SCHEDULE = {
+    'prune-presence': {
+        'task': 'channels_presence.tasks.prune_presences',
+        'schedule': datetime.timedelta(seconds=60)
+    },
+    'prune-rooms': {
+        'task': 'channels_presence.tasks.prune_rooms',
+        'schedule': datetime.timedelta(seconds=600)
+    }
 }
 
 # Password validation

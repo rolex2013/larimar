@@ -1,5 +1,5 @@
 
-    <div style="font-size: x-small; color: #ffffff;">
+    <div id="notificationslist" class="sidebar-notifications-list">
 
         {% for node in nodes %}
 
@@ -22,11 +22,17 @@
             <p><button id="isread-button" type="submit" method="GET" class="object-filter-button" style="font-size: x-small;">Пометить прочитанными</button></p>
         {% endif %}
 
+        <div style="font-size: small; color: #ffffff;">
+            <p id="log"></p> <br /><!--<p id="log_my" style="margin: 10px 0px 10px 20px;"></p>-->
+        </div>
+
     </div>
 
 
 <script>
 
+   var block = document.getElementById("notificationslist");
+   block.scrollTop = block.scrollHeight;
 
    $('#isread-button').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data

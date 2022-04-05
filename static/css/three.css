@@ -75,6 +75,8 @@ body {
     border: 1px solid;
     border-radius: 10px;
     box-shadow: 0 0 4px 2px rgb(78, 78, 78);
+    height: 200px;
+    overflow-y: scroll;
 }
 .sidebar a {
     /*color: #000;*/
@@ -88,6 +90,13 @@ body {
     border: 1px solid;
     border-radius: 10px;
     box-shadow: 0 0 4px 2px rgb(78, 78, 78);*/
+}
+
+.sidebar-notifications-list {
+    font-size: x-small;
+    color: #ffffff;
+    height: 590px;
+    overflow-y: scroll;
 }
 
 .content {
@@ -386,19 +395,28 @@ body {
     /*background: red;*/
 }
 .object-chats-messages {
-    /*float: right;*/
     padding: 0px 0px 0px 0px;
     margin: 0px 1px 0px 0px;
     text-decoration: none;
-    /*width: max-content;*/
     min-height: 100%;
-    height: 100%;
     float: left;
-    /*background: green;*/
     width: 75%;
     border: 1px solid;
     border-radius: 10px;
-    /*min-width: 500px;*/
+    height: 200px;
+    overflow-y: scroll;
+}
+
+.object-chats-messages-form {
+    padding: 0px 0px 0px 0px;
+    margin: 0px 1px 0px 0px;
+    text-decoration: none;
+    min-height: 100%;
+    height: 100%;
+    float: left;
+    width: 75%;
+    border: 1px solid;
+    border-radius: 10px;
 }
 
 .chat_message {
