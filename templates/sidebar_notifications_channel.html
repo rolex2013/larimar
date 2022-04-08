@@ -63,27 +63,41 @@
         const message = document.querySelector('#message').value
         let today = new Date();
         now = today.toLocaleString()
+
         const notificationSocket = new WebSocket(
             'ws://'
             + window.location.host
             + '/ws/main/notification/' + userid + '/'
         );
+
         try {
             notificationSocket.onopen = function(m) {
               console.log("Соединение с userid=" + userid + " открыто!");
-            }
-        } catch(exception) {
-            console.log(exception);
-        }
-        notificationSocket.onclose = function (e) {
-            console.log("Соединение с userid=" + userid + " закрыто!");
-        };
-        setTimeout(function ()  {
-            notificationSocket.send(JSON.stringify({
+              notificationSocket.send(JSON.stringify({
                 'userid': userid,
                 'username': '{{ request.user.username }}',
                 'userfromid': '{{ request.user.id }}',
                 'userfromname': '{{ request.user.username }}',
+                'message': message,
+                'date': now
+              }));
+              console.log('Отправлено сообщение для userid=' + userid)
+              document.querySelector('#log').innerHTML += ('<div style="margin: 10px 0px 10px 20px;"><i>' + now + '</i><br />' + 'To: ' + username +
+                                                              '<br />' + message + '<br /></div>');
+                var block = document.getElementById("notificationslist");
+                block.scrollTop = block.scrollHeight;
+              setTimeout(notificationSocket.close(), 0)
+            }
+        } catch(exception) {
+            console.log(exception);
+        }
+        /*
+        setTimeout(function ()  {
+            notificationSocket.send(JSON.stringify({
+                'userid': userid,
+                'username': '{ request.user.username }}',
+                'userfromid': '{ request.user.id }}',
+                'userfromname': '{ request.user.username }}',
                 'message': message,
                 'date': now
             }));
@@ -94,6 +108,11 @@
                 block.scrollTop = block.scrollHeight;
             setTimeout(notificationSocket.close(), 0)
         },100);
+        */
+
+        notificationSocket.onclose = function (e) {
+            console.log("Соединение с userid=" + userid + " закрыто!");
+        };
 
         document.getElementById("message").value = "";
 

@@ -25,7 +25,7 @@
     } catch(exception) {
         console.log('=== ' + exception);
     }
-    //setTimeout(ChatSocket.close(), 1)
+
     ChatSocket = new WebSocket(
         'ws://'
         + window.location.host
@@ -43,17 +43,6 @@
         }
         var block = document.getElementById("ajax_messagelistresult_");
         block.scrollTop = block.scrollHeight;
-        //if (data.member_isonline) {
-        //    document.querySelector('#member_{request.user.id}}').innerHTML = ('===<b>data.userfromname</b>');
-        //} else {
-        //    document.querySelector('#member_{request.user.id}}').innerHTML = ('data.userfromname');
-        //}
-        //document.querySelector('#logchat').innerHTML += ('=============================')
-        /*const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chats/chat/' + data.userid + '/'
-        );*/
     };
 
     ChatSocket.onclose = function (e) {
@@ -61,28 +50,49 @@
         console.error('Chat socket closed unexpectedly!')
     };
 
-    {% comment %}
-        let today = new Date();
-        now = today.toLocaleString()
+    /* Работаем с участниками чата через websocket */
 
-        setTimeout(function ()  {
-            ChatSocket.send(JSON.stringify({
-                'chatid': {{ currentchatid }},
-                'userfromid': '{{ request.user.id }}',
-                'userfromname': '{{ request.user.username }}',
-                'message': message,
-                'date': now
-            }));
-            //document.querySelector('#log').innerHTML += ({ request.user.id }} + ' --> ' + { recipient_user.username }} + ': ' + message + '<br />');
-            //document.querySelector('#log').innerHTML += (message + '<br />');
-            document.querySelector('#logchat').innerHTML += ( '<i>' + now + '</i><br />' + 'To chat: #' + {{ currentchatid }} + '<br />' + message +
-                '<br />' );
-            setTimeout(ChatSocket.close(), 0)
-        },100);
-    {% endcomment %}
+    try {
+        setTimeout(ChatMemberSocket.close(), 1)
+    } catch(exception) {
+        console.log('ChatMemberSocket: ' + exception);
+    }
+    //setTimeout(ChatMemberSocket.close(), 1)
+    ChatMemberSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/chats/chat/member/' + {{ currentchatid }} + '/' + {{ request.user.id }} + '/'
+    );
+
+    ChatMemberSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        //console.log('///'+data.date)
+        //console.log('&&&'+data.message)
+        document.querySelector('#logchat').innerHTML += ('<div class="chat_message_my">Пользователь <b>' + data.username + '</b> вошёл в чат! <i>' +
+            data.date + '</i><br ' + '/>' + data.message + '</div><br />');
+        //if (data.userfromname === '{request.user.username}}') {
+        //    document.querySelector('#logchat').innerHTML += ('<div class="chat_message_my"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
+        //} else {
+        //    document.querySelector('#logchat').innerHTML += ('<div class="chat_message"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
+        //}
+        //var block = document.getElementById("ajax_messagelistresult_");
+        //block.scrollTop = block.scrollHeight;
+
+        //if (data.member_isonline) {
+        //    document.querySelector('#member_{request.user.id}}').innerHTML = ('===<b>data.userfromname</b>');
+        //} else {
+        //    document.querySelector('#member_{request.user.id}}').innerHTML = ('data.userfromname');
+        //}
+        //document.querySelector('#logchat').innerHTML += ('=============================')
+    };
+
+    ChatMemberSocket.onclose = function (e) {
+        //const data = JSON.parse(e.data);
+        console.error('ChatMember socket closed unexpectedly!' + e.code)
+    };
 
     setInterval(function() {
-        ChatSocket.send(JSON.stringify("heartbeat"));
+        ChatMemberSocket.send(JSON.stringify("heartbeat"));
     }, 30000);
 
 

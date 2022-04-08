@@ -17,15 +17,16 @@ from django.db.models.signals import post_save
 #    else:
 #        print(f'В чате "{instance.chat}" изменены данные пользователя {instance}!')#
 
-
+"""
 channel_layer = get_channel_layer()
+print('channel_layer=', channel_layer)
 
 @receiver(presence_changed)
 def broadcast_presence(sender, room, **kwargs):
-    """
-    Broadcast the new list of present users to the room.
-    """
-
+    
+    # Broadcast the new list of present users to the room.
+    
+    print('****************************************************')
     message = {
       "type": "presence",
       "payload": {
@@ -42,6 +43,6 @@ def broadcast_presence(sender, room, **kwargs):
         "type": "forward.message",
         "message": json.dumps(message)
     }
-    print('****************************************************')
-    async_to_sync(channel_layer.group_send)(room.channel_name, channel_layer_message)
 
+    async_to_sync(channel_layer.group_send)(room.channel_name, channel_layer_message)
+"""

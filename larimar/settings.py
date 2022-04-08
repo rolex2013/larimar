@@ -167,6 +167,7 @@ CHANNEL_LAYERS = {
             #"hosts": [('redis', 6379)],
             #"hosts": [('redisdata', 6379)],
             "hosts": [('127.0.0.1', 6379)],
+            #"hosts": [('localhost', 6379)],
        },
     },
 }
@@ -266,14 +267,15 @@ if sys.platform == "win32":
    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
    INTERNAL_IPS = [
+       'localhost',
        '127.0.0.1',
-       '192.168.88.153',
+       '192.168.88.55',
    ]
 
    STATIC_URL = '/static/'
    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  
 
-   ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.88.153']
+   ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.88.55']
 
    # Database
    # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
