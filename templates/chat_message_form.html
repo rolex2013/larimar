@@ -35,11 +35,11 @@
         } catch(exception) {
             console.log('***** ' + exception);
         }
-        ChatSocket.onclose = function (e) {
-            //console.error('Message socket closed unexpectedly!')
-            //console.error('webSocket userid=' + userid + ' closed!');
-            console.log('webSocket chatid=' + {{currentchatid}} + ' closed!');
-        };
+        //ChatSocket.onclose = function (e) {
+        //    //console.error('Message socket closed unexpectedly!')
+        //    //console.error('webSocket userid=' + userid + ' closed!');
+        //    console.log('webSocket chatid=' + {currentchatid}} + ' closed!');
+        //};
         console.log('Отправлено сообщение для chatid=' + {{currentchatid}})
 
         setTimeout(function ()  {
@@ -48,7 +48,8 @@
                 'userfromid': '{{ request.user.id }}',
                 'userfromname': '{{ request.user.username }}',
                 'message': message,
-                'date': now
+                'date': now,
+                'memberslist': false
             }));
         },100);
 
