@@ -60,9 +60,9 @@ class ChatMember(models.Model):
     def is_online(self):
         online = False
         if not self.dateonline is None:
-            #if (timezone.now()-self.dateonline <= timedelta(milliseconds=10000)):
-            if not self.dateoffline is None:
-                if (self.dateonline > self.dateoffline):
+            if (timezone.now()-self.dateonline <= timedelta(milliseconds=30000)):
+            #if not self.dateoffline is None:
+            #    if (self.dateonline > self.dateoffline):
                     online = True
         return online
 

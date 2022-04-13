@@ -70,11 +70,37 @@
 
         ChatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
+            const mess = data.message;
             //console.log('///'+data.date)
             //console.log('&&&'+data.message)
-            if (data.memberslist) {     // отображаем список участников чата
-                document.querySelector('#logmembers').innerHTML += ('<div class="chat_message_my"><b>' + data.userfromname + '</b> <i>' + data.date +
-                    '</i><br />' + data.message + '</div><br />');
+            if (data.ismemberslist) {     // отображаем список участников чата
+                //document.querySelector('#logmembers').innerHTML += ('<div class="chat_message_my"><b>' + data.userfromname + '</b> <i>' + data.date +
+                //    '</i><br />' + data.message + '</div><br />');
+                const members = mess.split(';');
+                //console.log('-members:'+members)
+                for (member of members) {
+                    const memb = member.split('/');
+                    var i = 0;
+                    //console.log('--memb:'+memb)
+                    for (m of memb) {
+                        i ++;
+                        if (i == 1) {
+                            mb = m;
+                        } else if (i == 2) {
+                                //document.querySelector('#logmembers').innerHTML += ('<div class="chat_message_my">' + member + "|" + i + "|" + mb +
+                                //'</div><br ' + '/>');
+                            if (m == 'True') {
+                                document.getElementById("member_" + mb).style.fontWeight = "bolder";
+                            } else {
+                                document.getElementById("member_" + mb).style.fontWeight = "normal";
+                            }
+                        } else {
+                            //document.getElementById("member_" + mb+ "_date").value = '<i>(=' + m + '=)</i>';
+                            //console.log(m)
+                        }
+                        //console.log('---mb:'+i+'.'+mb)
+                    }
+                }
             } else {    // отображаем сообщения в чате
                 if (data.userfromname === '{{request.user.username}}') {
                     document.querySelector('#logchat').innerHTML += ('<div class="chat_message_my"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
@@ -160,7 +186,7 @@
                     'userfromname': '{{ request.user.username }}',
                     'message': '2. проверка пользователей',
                     'date': now,
-                    'memberslist': true
+                    'ismemberslist': true
              }));
         }, 30000);
 

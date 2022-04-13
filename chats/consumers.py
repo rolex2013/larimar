@@ -49,22 +49,34 @@ class ChatConsumer(WebsocketConsumer):
         chatid = text_data_json['chatid']
         userfromid = text_data_json['userfromid']
         userfromname = text_data_json['userfromname']
-        memberslist = text_data_json['memberslist']
+        ismemberslist = text_data_json['ismemberslist']
         formatDate = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
 
-        if memberslist:
+        if ismemberslist:
             # помещаем список участников чата в message
-            mess = []
-            ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).update(dateonline=datetime.now())
+            #mess = []
+            message = ''
+            #ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).update(dateonline=datetime.now())
+            memb = ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).first()
+            memb.dateonline = datetime.now()
+            memb.save()
             chatmembers = ChatMember.objects.filter(chat_id=self.group_name)
             for mmb in chatmembers:
                 #message += mmb.member_id
-                mess.append({'id': mmb.member_id, 'isonline': mmb.is_online})
+                #elem_mmb = {'id': mmb.member_id, 'isonline': mmb.is_online}
+                dt = mmb.dateoffline
+                if mmb.is_online:
+                    dt = mmb.dateonline
+                elem_mmb = str(mmb.member_id) + '/' + str(mmb.is_online) + '/' + str(dt.strftime("%d.%m.%Y %H:%M:%S"))
+                #print(str(dt.strftime("%d.%m.%Y %H:%M:%S")))
+                #mess.append(elem_mmb)
                 #mess.append([mmb.member_id, mmb.is_online])
+                message += str(elem_mmb) + ';'
             #message = ';'.join(mess)
-            message = mess
+            #message = mess
             #message = '*************'
-            print('receive:', mess, message)
+            #print('receive:', mess, message)
+            print('receive:', message)
             #Presence.objects.touch(self.channel_name)
             #print('"heartbeat"', text_data)
             #message = 'список пользователей онлайн'
@@ -77,7 +89,7 @@ class ChatConsumer(WebsocketConsumer):
                     "chatid": chatid,
                     'userfromname': userfromname,
                     'date': formatDate,
-                    'memberslist': memberslist
+                    'ismemberslist': ismemberslist
                 },
             )
         else:
@@ -92,7 +104,7 @@ class ChatConsumer(WebsocketConsumer):
                     "chatid": chatid,
                     'userfromname': userfromname,
                     'date': formatDate,
-                    'memberslist': memberslist
+                    'ismemberslist': ismemberslist
                 },
             )
 
@@ -101,7 +113,7 @@ class ChatConsumer(WebsocketConsumer):
         message = event['message']
         chatid = event['chatid']
         userfromname = event['userfromname']
-        memberslist = event['memberslist']
+        ismemberslist = event['ismemberslist']
         #formatDate = date.today().strftime("%d.%m.%Y")
         formatDate = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
         print('В чат chatid=',chatid, 'отправлено сообщение "'+message+'" (',formatDate,')')
@@ -112,7 +124,7 @@ class ChatConsumer(WebsocketConsumer):
             'userfromname': userfromname,
             #'date': str(date.today())
             'date': formatDate,
-            'memberslist': memberslist
+            'ismemberslist': ismemberslist
         }))
 
 

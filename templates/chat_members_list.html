@@ -10,25 +10,30 @@
                 {% elif node.member_id == request.user.id %}
                     <span id="member_{{node.member_id}}" style="font-weight:bold; color:green;">  <!-- Текущий пользователь -->
                 {% else %}
-                    <span>
+                    <span id="member_{{node.member_id}}">
                 {% endif %}
 
-                {% if node.is_online %}
-                    <b>                                         <!-- Если OnLine -->
-                {% endif %}
-                {{ node.member.username }}
-                {% if node.is_online %}
-                    </b>
-                {% endif %}
+                        {% if node.is_online %}
+                            <b>                                         <!-- Если OnLine -->
+                        {% endif %}
+                        {{ node.member.username }}
+                        {% if node.is_online %}
+                            </b>
+                        {% endif %}
 
-                <!--<span id="member_{node.member_id}}">{ node.member.username }}</span>-->
                 </span>
+                        <!--<span id="member_{node.member_id}}">{ node.member.username }}</span>-->
 
-                {% if node.is_online %}
-                    <i>({{ node.dateonline|date:"d.m.y H:i:s" }})</i>
-                {% else %}
-                    <i>({{ node.dateoffline|date:"d.m.y H:i:s" }})</i>
-                {% endif %}
+                        <span id="member_{{node.member_id}}_date"><i>
+                        {% if node.is_online %}
+                            ({{ node.dateonline|date:"d.m.y H:i:s" }})
+                        {% else %}
+                            ({{ node.dateoffline|date:"d.m.y H:i:s" }})
+                        {% endif %}
+                        </i></span>
+
+
+
                 <br />
 
                 <p id="logmembers" style="font-size: small;"></p>
