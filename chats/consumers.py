@@ -56,30 +56,22 @@ class ChatConsumer(WebsocketConsumer):
             # помещаем список участников чата в message
             #mess = []
             message = ''
-            #ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).update(dateonline=datetime.now())
+            #ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).update(datecurrent=datetime.now())
             memb = ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).first()
-            memb.dateonline = datetime.now()
+            memb.datecurrent = datetime.now()
             memb.save()
-            chatmembers = ChatMember.objects.filter(chat_id=self.group_name)
+            chatmembers = ChatMember.objects.filter(chat_id=self.group_name, is_active=True)
+            #print(chatmembers)
             for mmb in chatmembers:
-                #message += mmb.member_id
-                #elem_mmb = {'id': mmb.member_id, 'isonline': mmb.is_online}
                 dt = mmb.dateoffline
+                #dt = mmb.datecurrent
                 if mmb.is_online:
                     dt = mmb.dateonline
                 elem_mmb = str(mmb.member_id) + '/' + str(mmb.is_online) + '/' + str(dt.strftime("%d.%m.%Y %H:%M:%S"))
-                #print(str(dt.strftime("%d.%m.%Y %H:%M:%S")))
-                #mess.append(elem_mmb)
-                #mess.append([mmb.member_id, mmb.is_online])
                 message += str(elem_mmb) + ';'
-            #message = ';'.join(mess)
-            #message = mess
-            #message = '*************'
-            #print('receive:', mess, message)
-            print('receive:', message)
-            #Presence.objects.touch(self.channel_name)
-            #print('"heartbeat"', text_data)
-            #message = 'список пользователей онлайн'
+                #print('===:',mmb.dateonline,mmb.datecurrent,mmb.dateoffline,datetime.now(),mmb.is_online)
+                #print(mmb.chat_id, mmb.member.username)
+
             async_to_sync(self.channel_layer.group_send)(
                 self.group_name,
                 {

@@ -128,6 +128,7 @@ def messages(request):
     interval = request.GET['interval']
     currentuserid = request.user.id
 
+    ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).update(dateonline=datetime.now(), datecurrent=datetime.now())
     currentchat = Chat.objects.filter(id=chatid).select_related("company").first()
 
     if interval == 1:
@@ -325,6 +326,7 @@ def memberlist(request, chatid):
     currentchat = Chat.objects.filter(id=chatid).first()
 
     member_list = []
+
     is_admin = ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).first()
     if is_admin:
         # Список пользователей для выбора
