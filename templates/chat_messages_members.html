@@ -77,17 +77,36 @@
             //console.log('&&&'+data.message)
             if (data.ismemberslist) {     // отображаем список участников чата
                 const members = mess.split(';');
+                /*
                 //console.log('-members:'+members)
+                members.sort(function(a,b) {
+                    //var c = b.split('/')[2] - a.split('/')[2]
+                    var dateA = new Date(a.split('/')[2]), dateB = new Date(b.split('/')[2])
+                    return dateB - dateA
+                    //return c
+                    //console.log('+' + a.members[0].split('/')[2] + '-' + b.split('/')[2] + '=' + c)
+                })
+                console.log('===')
+                console.log('-members:'+members)
+                console.log('----------------')
+                */
                 for (member of members) {
                     const memb = member.split('/');
                     if (memb[0] !== '') {
                         if (memb[1] === 'True') {
-                            document.getElementById("member_" + memb[0]).style.fontWeight = "bolder";
+                            //document.getElementById("member_" + memb[0]).style.fontWeight = "bolder";
+                            document.querySelector("#member_" + memb[0]).innerHTML = '<strong>' + memb[3] + '</starong>';
+                            //document.querySelector("#logmembers").innerHTML += '<strong>' + memb[3] + '</starong><br />';
                         } else {
-                            console.log('members='+members+'/memb='+memb+'/memb[0]='+memb[0])
-                            document.getElementById("member_" + memb[0]).style.fontWeight = "normal";
+                            //console.log('members='+members+'/memb='+memb+'/memb[0]='+memb[0])
+                            //document.getElementById("member_" + memb[0]).style.fontWeight = "normal";
+                            document.querySelector("#member_" + memb[0]).innerHTML = '' + memb[3] + '';
+                            //document.querySelector("#logmembers").innerHTML += '' + memb[3] + '<br />';
                         }
-                        document.getElementById("member_" + memb[0] + "_date").value = '<i>(=' + memb[2] + '=)</i>';
+                        //document.getElementById("member_" + memb[0] + "_date").value = '<i>(=' + memb[2] + '=)</i>';
+                        if (memb[2] !== 'None') {
+                            document.querySelector("#member_" + memb[0] + "_date").innerHTML = '<i> (' + memb[2] + ')</i>';
+                        }
                     }
                 }
             } else {    // отображаем сообщения в чате

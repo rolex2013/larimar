@@ -25,14 +25,19 @@
                         <!--<span id="member_{node.member_id}}">{ node.member.username }}</span>-->
 
                         <span id="member_{{node.member_id}}_date"><i>
+                        {% comment %}
                         {% if node.is_online %}
-                            ({{ node.dateonline|date:"d.m.y H:i:s" }})
+                            {% if node.dateonline %}
+                               ({{ node.dateonline|date:"d.m.y H:i:s" }})
+                            {% endif %}
                         {% else %}
-                            ({{ node.dateoffline|date:"d.m.y H:i:s" }})
+                            {% if node.dateoffline %}
+                                ({{ node.dateoffline|date:"d.m.y H:i:s" }})
+                            {% endif %}
                         {% endif %}
+                        {% endcomment %}
+                        ({{ node.datecurrent|date:"d.m.y H:i:s" }})
                         </i></span>
-
-
 
                 <br />
 

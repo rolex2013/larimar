@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, date, time
+from django.utils import timezone
 from channels.generic.websocket import WebsocketConsumer, JsonWebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 
@@ -25,13 +26,20 @@ class ChatConsumer(WebsocketConsumer):
         #print('Открыт сокет chatid=', self.group_name, 'для userid=', self.chat_member, self.channel_name, self.scope)
         #print('Пользователь userid=', self.chat_member, 'вошёл в чат chatid=', self.group_name)
         async_to_sync(self.channel_layer.group_add)(self.group_name, self.channel_name)
-        ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).update(dateonline=datetime.now())
-        #memb = ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).first()
-        #memb.dateonline = datetime.now()
-        #memb.save()
-        #logging.info('Adding WebSocket with username %s in room %s', self.group_name)
+        chat = Chat.objects.filter(id=self.group_name).first()
+        # если тип чата - "Общий"
+        if chat.type_id == 3:
+            chatmember = ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).first()
+            if chatmember == None:
+                #print(chatmember)
+                ChatMember.objects.create(chat_id=self.group_name, member_id=self.chat_member, author_id=self.chat_member, dateonline=datetime.now(),
+                                          datecurrent=datetime.now(), dateoffline=datetime.now())
+            else:
+                ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).update(dateonline=datetime.now())
+        else:
+            ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).update(dateonline=datetime.now())
+
         self.accept()
-        #Room.objects.add(self.group_name, self.channel_name, self.scope["user"])
 
     def disconnect(self, close_code):
         #self.chat_name = self.scope['url_route']['kwargs']['chat_name']
@@ -50,7 +58,7 @@ class ChatConsumer(WebsocketConsumer):
         userfromid = text_data_json['userfromid']
         userfromname = text_data_json['userfromname']
         ismemberslist = text_data_json['ismemberslist']
-        formatDate = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+        formatDate = datetime.now().strftime("%d.%m.%y %H:%M:%S")
 
         if ismemberslist:
             # помещаем список участников чата в message
@@ -60,15 +68,30 @@ class ChatConsumer(WebsocketConsumer):
             memb = ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).first()
             memb.datecurrent = datetime.now()
             memb.save()
-            chatmembers = ChatMember.objects.filter(chat_id=self.group_name, is_active=True)
+            chatmembers = ChatMember.objects.filter(chat_id=self.group_name, is_active=True).order_by('-datecurrent')
             #print(chatmembers)
             for mmb in chatmembers:
-                dt = mmb.dateoffline
-                #dt = mmb.datecurrent
-                if mmb.is_online:
+                #dt = mmb.dateoffline
+                dt = mmb.datecurrent
+                if dt is None:
                     dt = mmb.dateonline
-                elem_mmb = str(mmb.member_id) + '/' + str(mmb.is_online) + '/' + str(dt.strftime("%d.%m.%Y %H:%M:%S"))
+                    if dt is None:
+                        dt = mmb.dateoffline
+                ddt = ' '
+                if not dt is None:
+                    dt = dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+                    #dt = dt.split('+',1)[0]
+                    ddt = str(dt.strftime("%d.%m.%y %H:%M:%S"))
+                    #print(self.chat_member, dt)
+                #if not dt is None:
+                #    ddt = str(dt.strftime("%d.%m.%y %H:%M:%S"))
+                #if mmb.is_online:
+                #    dt = mmb.dateonline
+                #    ddt = str(dt.strftime("%d.%m.%y %H:%M:%S"))
+                elem_mmb = str(mmb.member_id) + '/' + str(mmb.is_online) + '/' + str(ddt) + '/' + str(mmb.member.username)
                 message += str(elem_mmb) + ';'
+
+                #print(dt, '/', str(dt.date())+' '+str(dt.time()), '/', dt.replace(tzinfo=timezone.utc).astimezone(tz=None), '/', ddt)
                 #print('===:',mmb.dateonline,mmb.datecurrent,mmb.dateoffline,datetime.now(),mmb.is_online)
                 #print(mmb.chat_id, mmb.member.username)
 
@@ -107,7 +130,7 @@ class ChatConsumer(WebsocketConsumer):
         userfromname = event['userfromname']
         ismemberslist = event['ismemberslist']
         #formatDate = date.today().strftime("%d.%m.%Y")
-        formatDate = datetime.now().strftime("%d.%m.%Y %H:%M:%S")
+        formatDate = datetime.now().strftime("%d.%m.%y %H:%M:%S")
         print('В чат chatid=',chatid, 'отправлено сообщение "'+message+'" (',formatDate,')')
         # Send message to WebSocket
         self.send(text_data=json.dumps({
