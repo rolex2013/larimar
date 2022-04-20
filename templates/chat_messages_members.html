@@ -14,9 +14,12 @@
     <script>
 
         // Восстанавливаем стиль шрифта списка чатов
-        document.getElementById("chatlist").style.fontWeight = "normal";
+        document.getElementById("chatlist").style.fontWeight = "normal";    // не работает!
+        var chat_list = document.querySelector('#chatlist').querySelectorAll('a');
+        for (item of chat_list) {
+            item.style.fontWeight = "normal";
+        }
         // Подсвечиваем выбранный чат
-        //document.querySelector('#chat_{currentchatid}}').innerHTML = ('<b>{ currentchat.name }}</b>');
         document.getElementById("chat_{{currentchatid}}").style.fontWeight = "bolder";
         // Прокручиваем сообщения в чате вниз
         block = document.getElementById("ajax_messagelistresult_");
@@ -90,23 +93,36 @@
                 console.log('-members:'+members)
                 console.log('----------------')
                 */
+                document.querySelector("#logmembers").innerHTML = "";
                 for (member of members) {
                     const memb = member.split('/');
                     if (memb[0] !== '') {
+                        document.querySelector("#logmembers").innerHTML += "<p id='member_" + memb[0] + "'>";
+                        /*
+                        element = document.getElementById("member_" + memb[0]);
+                        style_font_weight = element.style.font;
+                        style_font_color = element.style.color;
+                        console.log(element)
+                        console.log(style_font_weight)
+                        console.log(style_font_color)
+                        */
                         if (memb[1] === 'True') {
                             //document.getElementById("member_" + memb[0]).style.fontWeight = "bolder";
-                            document.querySelector("#member_" + memb[0]).innerHTML = '<strong>' + memb[3] + '</starong>';
-                            //document.querySelector("#logmembers").innerHTML += '<strong>' + memb[3] + '</starong><br />';
+                            //document.querySelector("#member_" + memb[0]).innerHTML = '<strong>' + memb[3] + '</starong>';
+                            document.querySelector("#logmembers").innerHTML += "<strong>" + memb[3] + "</strong>";
+                            //document.querySelector("#logmembers").innerHTML += style + memb[3];
                         } else {
                             //console.log('members='+members+'/memb='+memb+'/memb[0]='+memb[0])
                             //document.getElementById("member_" + memb[0]).style.fontWeight = "normal";
-                            document.querySelector("#member_" + memb[0]).innerHTML = '' + memb[3] + '';
-                            //document.querySelector("#logmembers").innerHTML += '' + memb[3] + '<br />';
+                            //document.querySelector("#member_" + memb[0]).innerHTML = '' + memb[3] + '';
+                            document.querySelector("#logmembers").innerHTML += memb[3];
                         }
                         //document.getElementById("member_" + memb[0] + "_date").value = '<i>(=' + memb[2] + '=)</i>';
-                        if (memb[2] !== 'None') {
-                            document.querySelector("#member_" + memb[0] + "_date").innerHTML = '<i> (' + memb[2] + ')</i>';
+                        if (memb[2] !== ' ') {
+                            //document.querySelector("#member_" + memb[0] + "_date").innerHTML = '<i> (' + memb[2] + ')</i>';
+                            document.querySelector("#logmembers").innerHTML += "<i> (" + memb[2] + ")</i>";
                         }
+                        document.querySelector("#logmembers").innerHTML += "</p>";
                     }
                 }
             } else {    // отображаем сообщения в чате

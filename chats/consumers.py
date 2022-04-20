@@ -68,12 +68,14 @@ class ChatConsumer(WebsocketConsumer):
             memb = ChatMember.objects.filter(chat_id=self.group_name, member_id=self.chat_member).first()
             memb.datecurrent = datetime.now()
             memb.save()
-            chatmembers = ChatMember.objects.filter(chat_id=self.group_name, is_active=True).order_by('-datecurrent')
+            chatmembers = ChatMember.objects.filter(chat_id=self.group_name, is_active=True).order_by('-dateonline')
             #print(chatmembers)
             for mmb in chatmembers:
+                dt = mmb.dateonline
                 #dt = mmb.dateoffline
-                dt = mmb.datecurrent
+                #dt = mmb.datecurrent
                 if dt is None:
+                    #dt = mmb.dateonline
                     dt = mmb.dateonline
                     if dt is None:
                         dt = mmb.dateoffline

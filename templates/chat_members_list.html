@@ -3,6 +3,8 @@
 
             <h4>Участники</h4>
 
+            <div id="logmembers">
+
             {% for node in nodes_members %}
 
                 {% if node.chat.author_id == node.member_id or node.is_admin %}
@@ -41,9 +43,11 @@
 
                 <br />
 
-                <p id="logmembers" style="font-size: small;"></p>
+                <p id="log_members" style="font-size: small;"></p>
 
             {% endfor %}
+
+            </div>
 
         {% endif %}
 

@@ -4,8 +4,10 @@
     <div id="chatlist">
 
         {% for node in nodes_chats %}
-           <p><a href="" id="chat_{{ node.id }}" onclick="MessagesList({{ node.id }}); return false;">{{ node.name }}</a> <i>({{ node.type }} -
+           <p><a href="" id="chat_{{ node.id }}" onclick="MessagesList({{ node.id }}); return false;">{{ node.name }}</a> <i>
+               ({{ node.type }} -
                {{ node.author }} {{ node.datecreate|date:"d.m.Y" }})</i></p>
         {% endfor %}
+
 
     </div>
