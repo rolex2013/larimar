@@ -1,20 +1,20 @@
 
-            {% if currentchat %}
+    {% if currentchat %}
 
-                <h4>#{{ currentchat.company_id }}.{{ currentchatid }}. {{ currentchat.name }}</h4>
-                <h5>{{ currentchat.description }}</h5>
+        <h4>#{{ currentchat.company_id }}.{{ currentchatid }}. {{ currentchat.name }}</h4>
+        <h5>{{ currentchat.description }}</h5>
 
-                {% for node in nodes_messages %}
-                    {% if node.author_id == request.user.id %}
-                        <div class="chat_message_my">
-                    {% else %}
-                        <div class="chat_message">
-                    {% endif %}
-                    <b>{{ node.author }}</b> <i>{{ node.datecreate | date:"d.m.Y H:i:s" }}</i><br />{% autoescape off %}{{ node.text }}{% endautoescape %}
-                    </div>
-                    <br />
-                {% endfor %}
-
-                <p id="logchat" style="font-size: small;"></p>
-
+        {% for node in nodes_messages %}
+            {% if node.author_id == request.user.id %}
+                <div class="chat_message_my">
+            {% else %}
+                <div class="chat_message">
             {% endif %}
+            <b>{{ node.author }}</b> <i>{{ node.datecreate | date:"d.m.Y H:i:s" }}</i><br />{% autoescape off %}{{ node.text }}{% endautoescape %}
+            </div>
+            <br />
+        {% endfor %}
+
+        <p id="logchat" style="font-size: small;"></p>
+
+    {% endif %}

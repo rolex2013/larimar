@@ -439,7 +439,7 @@ body {
 
 .object-chats-members {
     float: left;
-    padding: 0px 0px 0px 35px;
+    padding: 0px 0px 0px 10px;
     text-decoration: none;
     width: 25%;
     min-height: 100%;

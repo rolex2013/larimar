@@ -42,7 +42,7 @@ ADMINS = (('Harry', 'larimaritgroup.ru@gmail.com'),)
 
 INSTALLED_APPS = [
     'channels',
-    "channels_presence",
+    #"channels_presence", - удалено, справились своей таблицей и своим websocket'ом
     'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',

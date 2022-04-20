@@ -1,7 +1,7 @@
 
     <h4>Чаты</h4>
 
-    <div id="chatlist">
+    <div id="chatlist" style="padding:0px 0px 0px 10px;">
 
         {% for node in nodes_chats %}
            <p><a href="" id="chat_{{ node.id }}" onclick="MessagesList({{ node.id }}); return false;">{{ node.name }}</a> <i>
