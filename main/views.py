@@ -20,6 +20,12 @@ from django.contrib.auth.decorators import login_required
 import json
 
 
+def websocket_test(request):
+    ok = request.GET['ok']
+    request.session['websocket_test'] = ok
+    print('********************:', ok)
+    return render(request, "sidebar.html", {'wstest': ok,})
+
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена!</h1>')
 

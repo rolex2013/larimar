@@ -81,6 +81,7 @@ def chats(request, companyid=0, chatid=0):
     template_name = "company_detail.html"
     #template_name = "chats.html"
     #print(render_list)
+    #print("websocket_test:", request.session['websocket_test'])
 
     return render(request, template_name, render_list)
 
