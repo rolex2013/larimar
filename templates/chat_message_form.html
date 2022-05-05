@@ -12,52 +12,46 @@
 
 <script>
 
-    document.querySelector('#addmessagebutton').onclick = function (e) {
+    {% if request.session.websocket_test == 'true' %}
 
-        /*const userid = document.querySelector('#userselectid').value
-        //const username = document.querySelector('#userselectid').text
-        var sel = document.getElementById("userselectid");
-        var username= sel.options[sel.selectedIndex].text;*/ /* выцепляем username получателя */
-        var chatname = document.getElementById("chatname").value;
-        const message = document.querySelector('#messagetext').value;
-        console.log(chatname + "***" + message);
-        let today = new Date();
-        now = today.toLocaleString()
-        /*const ChatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chats/chat/' + {currentchatid}} + '/'
-        );*/
-        try {
-            ChatSocket.onopen = function(m) {
-              console.log("Соединение с chatid=" + {{currentchatid}} + " открыто!");
+        document.querySelector('#addmessagebutton').onclick = function (e) {
+
+            /*const userid = document.querySelector('#userselectid').value
+            //const username = document.querySelector('#userselectid').text
+            var sel = document.getElementById("userselectid");
+            var username= sel.options[sel.selectedIndex].text;*/ /* выцепляем username получателя */
+            var chatname = document.getElementById("chatname").value;
+            const message = document.querySelector('#messagetext').value;
+            console.log(chatname + "***" + message);
+            let today = new Date();
+            now = today.toLocaleString()
+            try {
+                ChatSocket.onopen = function(m) {
+                  console.log("Соединение с chatid=" + {{currentchatid}} + " открыто!");
+                }
+            } catch(exception) {
+                console.log('***** ' + exception);
             }
-        } catch(exception) {
-            console.log('***** ' + exception);
-        }
-        //ChatSocket.onclose = function (e) {
-        //    //console.error('Message socket closed unexpectedly!')
-        //    //console.error('webSocket userid=' + userid + ' closed!');
-        //    console.log('webSocket chatid=' + {currentchatid}} + ' closed!');
-        //};
-        console.log('Отправлено сообщение для chatid=' + {{currentchatid}})
+            console.log('Отправлено сообщение для chatid=' + {{currentchatid}})
 
-        setTimeout(function ()  {
-            ChatSocket.send(JSON.stringify({
-                'chatid': {{currentchatid}},
-                'userfromid': '{{ request.user.id }}',
-                'userfromname': '{{ request.user.username }}',
-                'message': message,
-                'date': now,
-                'ismemberslist': false
-            }));
-        },100);
+            setTimeout(function ()  {
+                ChatSocket.send(JSON.stringify({
+                    'chatid': {{currentchatid}},
+                    'userfromid': '{{ request.user.id }}',
+                    'userfromname': '{{ request.user.username }}',
+                    'message': message,
+                    'date': now,
+                    'ismemberslist': false
+                }));
+            },100);
 
-        document.getElementById("messagetext").value = "";
+            document.getElementById("messagetext").value = "";
 
-    };
+        };
 
-        $('#add_message_button').click(function() {
+    {% else %}
+
+        $('#addmessagebutton').click(function() {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
         var messagetext = document.getElementById("messagetext").value;
         //console.log("==="+messagetext);
@@ -106,7 +100,9 @@
                      console.log(error_data)
                      $('#ajax_messagelisterror').html('Нет данных!');
                     }
+            });
         });
-    });
+
+    {% endif %}
 
 </script>

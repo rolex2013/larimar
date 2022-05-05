@@ -1,4 +1,4 @@
-*** {{ request.session.websocket_test }} ***
+<!--*** { request.session.websocket_test }} ***-->
     <div id="ajax_messagelistresult_" class="object-chats-messages">
         {% include 'chat_messages_list.html' %}
     </div>
@@ -25,119 +25,124 @@
         block = document.getElementById("ajax_messagelistresult_");
         block.scrollTop = block.scrollHeight;
 
-        var getMembersOnLine = function() {
-            $.ajax( {
-                //url: "{ url 'my_chat:messages' %}",
-                url: "{% url 'my_chat:ajax_memberlist' %}",
-                type: "GET",
-                data: {
-                    chatid: {{ currentchatid }},
-                    //interval: 1,
-                },
-                success: function(data) {
-                        //console.log(data)
-                        //$('#ajax_chatlistresult').html(data);
-                        //$('#ajax_messagelistresult').html(data);
-                        $('#ajax_memberlistresult').html(data);
-                       },
-                //complete: function() {
-                //        setInterval(getMembersOnLine, 1000000);
-                //       },
-                error: function(xhr, errmsg, err) {
-                        console.log("error")
-                        //console.log(error_data);
-                        //$('#ajax_messagelisterorr').html('Нет данных!');
-                        $('#ajax_memberlisterorr').html('Нет данных!');
-                       }
-            });
-        };
-/*
-        // Вместо этого ajax применяем webSocket'ы
-        if (typeof interval !== 'undefined') {
-            clearInterval(interval);    // иначе множатся вызовы!!!
-        }
-        interval = setInterval(getMembersOnLine, 10000);
-*/
+        {% if request.session.websocket_test == 'false' %}
+            // Если webSocket'ы не работают
 
-        try {
-            setTimeout(ChatSocket.close(), 10)
-            //ChatSocket_{currentchatid}} = null;
-            //console.log('Чат ' + {{ currentchatid }} + 'закрыт!');
-        } catch(exception) {
-            console.log('=== ' + exception);
-        }
+            var getMembersOnLine = function() {
+                $.ajax( {
+                    //url: "{ url 'my_chat:messages' %}",
+                    url: "{% url 'my_chat:ajax_memberlist' %}",
+                    type: "GET",
+                    data: {
+                        chatid: {{ currentchatid }},
+                        //interval: 1,
+                    },
+                    success: function(data) {
+                            //console.log(data)
+                            //$('#ajax_chatlistresult').html(data);
+                            //$('#ajax_messagelistresult').html(data);
+                            $('#ajax_memberlistresult').html(data);
+                           },
+                    //complete: function() {
+                    //        setInterval(getMembersOnLine, 1000000);
+                    //       },
+                    error: function(xhr, errmsg, err) {
+                            console.log("error")
+                            //console.log(error_data);
+                            //$('#ajax_messagelisterorr').html('Нет данных!');
+                            $('#ajax_memberlisterorr').html('Нет данных!');
+                           }
+                });
+            };
 
-        ChatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
-            + '/ws/chats/chat/' + {{ currentchatid }} + '/' + {{ request.user.id }} + '/'
-        );
-
-        ChatSocket.onmessage = function (e) {
-            const data = JSON.parse(e.data);
-            const mess = data.message;
-            //console.log('///'+data.date)
-            //console.log('&&&'+data.message)
-            if (data.ismemberslist) {     // отображаем список участников чата
-                const members = mess.split(';');
-                document.querySelector("#logmembers").innerHTML = "";
-                for (member of members) {
-                    const memb = member.split('/');
-                    if (memb[0] !== '') {
-                        document.querySelector("#logmembers").innerHTML += "<p id='member_" + memb[0] + "'>";
-                        if (memb[1] === 'True') {
-                            document.querySelector("#logmembers").innerHTML += "<strong>" + memb[3] + "</strong>";
-                        } else {
-                            document.querySelector("#logmembers").innerHTML += memb[3];
-                        }
-                        if (memb[2] !== ' ') {
-                            document.querySelector("#logmembers").innerHTML += "<i> (" + memb[2] + ")</i>";
-                        }
-                        document.querySelector("#logmembers").innerHTML += "</p>";
-                    }
-                }
-            } else {    // отображаем сообщения в чате
-                if (data.userfromname === '{{request.user.username}}') {
-                    document.querySelector('#logchat').innerHTML += ('<div class="chat_message_my"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
-                } else {
-                    document.querySelector('#logchat').innerHTML += ('<div class="chat_message"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
-                }
-                var block = document.getElementById("ajax_messagelistresult_");
-                block.scrollTop = block.scrollHeight;
+            if (typeof interval !== 'undefined') {
+                clearInterval(interval);    // иначе множатся вызовы!!!
             }
-        };
+            interval = setInterval(getMembersOnLine, 10000);
 
-        ChatSocket.onclose = function (e) {
-            //const data = JSON.parse(e.data);
-            console.error('Chat socket closed unexpectedly!')
-        };
+        {% else %}
 
-        /* Работаем с участниками чата через тот же websocket */
+            try {
+                setTimeout(ChatSocket.close(), 10)
+                //ChatSocket_{currentchatid}} = null;
+                //console.log('Чат ' + {{ currentchatid }} + 'закрыт!');
+            } catch(exception) {
+                console.log('=== ' + exception);
+            }
 
-        var chat_send = function() {
-        //    ChatSocket.send(JSON.stringify("heartbeat"));
-             let today = new Date();
-             now = today.toLocaleString()
-             ChatSocket.send(JSON.stringify({
-                    'chatid': {{ currentchatid }},
-                    'userfromid': '{{ request.user.id }}',
-                    'userfromname': '{{ request.user.username }}',
-                    'message': '2. проверка пользователей',
-                    'date': now,
-                    'ismemberslist': true
-             }));
-        }
+            ChatSocket = new WebSocket(
+                'ws://'
+                + window.location.host
+                + '/ws/chats/chat/' + {{ currentchatid }} + '/' + {{ request.user.id }} + '/'
+            );
 
-        if (ChatSocket.readyState === WebSocket.OPEN) {
-            window.chat_send();
-        } else {
-            setTimeout(chat_send, 1000);
-        }
+            ChatSocket.onmessage = function (e) {
+                const data = JSON.parse(e.data);
+                const mess = data.message;
+                //console.log('///'+data.date)
+                //console.log('&&&'+data.message)
+                if (data.ismemberslist) {     // отображаем список участников чата
+                    const members = mess.split(';');
+                    document.querySelector("#logmembers").innerHTML = "";
+                    for (member of members) {
+                        const memb = member.split('/');
+                        if (memb[0] !== '') {
+                            document.querySelector("#logmembers").innerHTML += "<p id='member_" + memb[0] + "'>";
+                            if (memb[1] === 'True') {
+                                document.querySelector("#logmembers").innerHTML += "<strong>" + memb[3] + "</strong>";
+                            } else {
+                                document.querySelector("#logmembers").innerHTML += memb[3];
+                            }
+                            if (memb[2] !== ' ') {
+                                document.querySelector("#logmembers").innerHTML += "<i> (" + memb[2] + ")</i>";
+                            }
+                            document.querySelector("#logmembers").innerHTML += "</p>";
+                        }
+                    }
+                } else {    // отображаем сообщения в чате
+                    if (data.userfromname === '{{request.user.username}}') {
+                        document.querySelector('#logchat').innerHTML += ('<div class="chat_message_my"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
+                    } else {
+                        document.querySelector('#logchat').innerHTML += ('<div class="chat_message"><b>' + data.userfromname + '</b> <i>' + data.date + '</i><br />' + data.message + '</div><br />');
+                    }
+                    var block = document.getElementById("ajax_messagelistresult_");
+                    block.scrollTop = block.scrollHeight;
+                }
+            };
 
-        if (typeof interval2 !== 'undefined') {
-            clearInterval(interval2);    // иначе множатся вызовы!!!
-        }
-        interval2 = setInterval(chat_send, 30000);
+            ChatSocket.onclose = function (e) {
+                //const data = JSON.parse(e.data);
+                console.error('Chat socket closed unexpectedly!')
+            };
+
+            /* Работаем с участниками чата через тот же websocket */
+
+            var chat_send = function() {
+            //    ChatSocket.send(JSON.stringify("heartbeat"));
+                 let today = new Date();
+                 now = today.toLocaleString()
+                 ChatSocket.send(JSON.stringify({
+                        'chatid': {{ currentchatid }},
+                        'userfromid': '{{ request.user.id }}',
+                        'userfromname': '{{ request.user.username }}',
+                        'message': '2. проверка пользователей',
+                        'date': now,
+                        'ismemberslist': true
+                 }));
+            }
+
+            if (ChatSocket.readyState === WebSocket.OPEN) {
+                window.chat_send();
+            } else {
+                setTimeout(chat_send, 1000);
+            }
+
+            if (typeof interval2 !== 'undefined') {
+                clearInterval(interval2);    // иначе множатся вызовы!!!
+            }
+            interval2 = setInterval(chat_send, 30000);
+
+        {% endif %}
 
     </script>
 
