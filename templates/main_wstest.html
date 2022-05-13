@@ -5,7 +5,11 @@
 
 <script>
 console.log('request.session.websocket_test: {{ request.session.websocket_test }}')
-    wSocket = new WebSocket('ws://' + window.location.host + '/ws/main/notification/{{ request.user.id }}/');
+    if (window.location.protocol == 'https:') {
+        wSocket = new WebSocket('wss://' + window.location.host + '/ws/main/notification/{{ request.user.id }}/');
+    } else {
+        wSocket = new WebSocket('ws://' + window.location.host + '/ws/main/notification/{{ request.user.id }}/');
+    }
     wSocket.onopen = function(e) {
         //console.log("webSockets present!")
         $.ajax({
