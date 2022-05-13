@@ -1,0 +1,46 @@
+<!-- Проверку на работоспособность сокетов надо перенести куда-то выше, напр., в авторизацию (?) -->
+
+{% if not request.session.websocket_test %}
+<!-- Проверяем только один раз при входе -->
+
+<script>
+console.log('request.session.websocket_test: {{ request.session.websocket_test }}')
+    wSocket = new WebSocket('ws://' + window.location.host + '/ws/main/notification/{{ request.user.id }}/');
+    wSocket.onopen = function(e) {
+        //console.log("webSockets present!")
+        $.ajax({
+           type: 'GET',
+           url: "{% url 'my_main:websocket_test' %}",
+           data: {
+                ok: true
+           },
+           success: function(data)  {
+               console.log("webSockets present!")
+           },
+        });
+    };
+    wSocket.onerror = function(error) {
+        //console.log("webSockets not present!")
+        $.ajax({
+           type: 'GET',
+           url: "{% url 'my_main:websocket_test' %}",
+           data: {
+                ok: false
+           },
+           success: function(data)  {
+               console.log("webSockets not present!")
+           },
+        });
+    };
+/*
+    try {
+        setTimeout(wSocket.close(), 10)
+    } catch(exception) {
+        console.log('wSocket ' + exception);
+    }
+*/
+</script>
+
+{% endif %}
+
+<!-- Окончание проверки работоспособности сокетов -->
