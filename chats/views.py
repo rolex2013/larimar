@@ -132,16 +132,19 @@ def messages(request):
     ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).update(dateonline=datetime.now(), datecurrent=datetime.now())
     currentchat = Chat.objects.filter(id=chatid).select_related("company").first()
 
-    if interval == 1:
+    mess_list = Message.objects.filter(Q(onlyfor__isnull=True) | Q(onlyfor=currentuserid) | Q(chat__author_id=currentuserid), chat_id=chatid, is_active=True).distinct()
+
+    if interval == '1':
         template_name = 'chat_messages_list.html'
     else:
         template_name = 'chat_messages_members.html'
 
     #ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).update(dateonline=datetime.now())
 
+    #print(chatid, interval, currentuserid, template_name)
+
     return render(request, template_name, {
-                                            'nodes_messages': Message.objects.filter(Q(onlyfor__isnull=True) | Q(onlyfor=currentuserid) | Q(
-                                                chat__author_id=currentuserid), chat_id=chatid, is_active=True).distinct(),
+                                            'nodes_messages': mess_list,
                                             'nodes_members': ChatMember.objects.filter(chat=chatid, is_active=True, dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),
                                             'currentchat': currentchat,
                                             'currentchatid': chatid,

@@ -30,6 +30,22 @@
 
             var getMembersOnLine = function() {
                 $.ajax( {
+                    url: "{% url 'my_chat:messages' %}",
+                    type: "GET",
+                    data: {
+                        chatid: {{ currentchatid }},
+                        interval: 1,
+                    },
+                    success: function(data) {
+                            $('#ajax_messagelistresult_').html(data);
+                            block.scrollTop = block.scrollHeight;
+                           },
+                    error: function(xhr, errmsg, err) {
+                            console.log("error")
+                            $('#ajax_messagelisterorr_').html('Нет данных!');
+                           }
+                });
+                $.ajax( {
                     //url: "{ url 'my_chat:messages' %}",
                     url: "{% url 'my_chat:ajax_memberlist' %}",
                     type: "GET",
