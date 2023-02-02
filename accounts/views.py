@@ -33,6 +33,10 @@ from django.db.models import Count
 import sys
 import pytz
 
+import requests
+from bs4 import BeautifulSoup as BS
+from time import sleep
+
 #from companies.views import publiccontents
 
  
@@ -311,7 +315,11 @@ def UserProfileDetail(request, userid=0, param=''):
        if param == 'all':
           #content_list = Content.objects.filter(author_id=userid, is_forprofile=True).annotate(cnt=Count('id'))          
           #content_list = Content.objects.filter(author_id=userid, place_id=3).annotate(cnt=Count('id'))  
-          content_list = Content.objects.filter(author_id=userid).annotate(cnt=Count('id'))        
+          content_list = Content.objects.filter(author_id=userid).annotate(cnt=Count('id'))
+
+          # *** потестируем забор контента с произвольного сайта ***
+          #parsing_test()
+          # ***
        else:
           content_list = Content.objects.filter(author_id=userid, is_active=True, datebegin__lte=datetime.now(OurTZ), dateend__gte=datetime.now(OurTZ), place_id=3).annotate(cnt=Count('id'))
     else:
@@ -371,4 +379,36 @@ class UserProfileUpdate(UpdateView):
         current_company = UserProfile.objects.get(user=self.request.user.id, is_active=True).company_id
         self.request.session['_auth_user_currentcompany_id'] = current_company
         return super(UserProfileUpdate, self).form_valid(form)
-                 
+
+
+def parsing_test():
+
+    url0 = "https://bobsoccer.ru"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)"}
+
+    for count in range(1, 3):
+        sleep(3)
+        url = url0 + f"/tags/?tag=%D0%A6%D0%A1%D0%9A%D0%90&part={count}"
+        r = requests.get(url, headers=headers)
+        soup = BS(r.text, 'lxml')
+        data = soup.find_all("div", class_="blog-list")
+        for el in data:
+            datetime = el.find("time").get("datetime")
+            title = el.find("h2").text.replace("\n", "")
+            summary = el.find("p").text.replace("\n", "")
+            link = url0 + el.find("a").get("href")
+            print("Страница ", count)
+            print(datetime)
+            print(title)
+            print(summary)
+            print(link)
+            # вытаскиваем текст поста
+            r1 = requests.get(link, headers=headers)
+            soup1 = BS(r1.text, 'lxml')
+            data1 = soup1.find_all("div", class_="blog-element")
+            for el1 in data1:
+                description = el1.find_all("p")[1].text
+                print(description.encode("utf-8", errors="ignore").decode("utf-8", errors="ignore"))
+            print("\n")
+
+    return
