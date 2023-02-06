@@ -45,7 +45,6 @@ Markdown==3.3.4
 mccabe==0.6.1
 msgpack==1.0.3
 msgpack-python==0.5.6
-mysqlclient @ file:///E:/larimar-rolex/download/mysqlclient-1.4.6-cp38-cp38-win_amd64.whl
 pipenv==2022.12.19
 pipreqs==0.4.10
 platformdirs==2.6.2
