@@ -18,25 +18,28 @@ from sentry_sdk.integrations.django import DjangoIntegration
 import logging
 import datetime
 
+from dotenv import load_dotenv, find_dotenv
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+print(BASE_DIR)
+
+load_dotenv(BASE_DIR+'/larimar/config/.env')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@2%zg8-cp_cqq!=4g-1o0ok6#q3t##0a3@hrat-=i8(=!7(xr!'
+#SECRET_KEY = '@2%zg8-cp_cqq!=4g-1o0ok6#q3t##0a3@hrat-=i8(=!7(xr!'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 #DEBUG = False
 
-#INTERNAL_IPS = [
-#    '127.0.0.1',
-#    '192.168.88.153',
-#]
-
-ADMINS = (('Harry', 'larimaritgroup.ru@gmail.com'),)
+#ADMINS = (('Harry', 'larimaritgroup.ru@gmail.com'),)
+ADMINS = ((os.getenv('ADMIN_NAME'), os.getenv('ADMIN_EMAIL')),)
 
 # Application definition
 
@@ -164,10 +167,7 @@ CHANNEL_LAYERS = {
        #'ROUTING': 'larimar.routing.channel_routing',
        'BACKEND': 'channels_redis.core.RedisChannelLayer',
        'CONFIG': {
-            #"hosts": [('redis', 6379)],
-            #"hosts": [('redisdata', 6379)],
             "hosts": [('127.0.0.1', 6379)],
-            #"hosts": [('localhost', 6379)],
        },
     },
 }
@@ -210,27 +210,24 @@ LANGUAGES = (
     ('ru', 'Russian'),
     ('en', 'English'),
 )
+LANGUAGE_CODE = os.getenv('LANGUAGE_CODE')
 
-LANGUAGE_CODE = 'ru'
-
-TIME_ZONE = 'Europe/Moscow'
-USE_TZ = True
-
-USE_I18N = True  # активация системы перевода django
+TIME_ZONE = os.getenv('TIME_ZONE')
+USE_TZ = bool(os.getenv('USE_TZ', default=True))
+USE_I18N = bool(os.getenv('USE_I18N', default=True))   # активация системы перевода django
 
 # месторасположение файлов перевода
 LOCALE_PATHS = (
-    #'locale',
     os.path.join(BASE_DIR, 'locale'),
 )
 
 USE_L10N = True
 
-EMAIL_HOST = 'smtp.beget.com'
-EMAIL_PORT = 2525
-EMAIL_HOST_USER = "1yes@larimaritgroup.ru"
-EMAIL_HOST_PASSWORD = "CucumbeR---000"
-EMAIL_USE_TLS = False
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT'))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = bool(os.getenv('EMAIL_USE_TLS', default='False'))
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -239,29 +236,11 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-GOOGLE_RECAPTCHA_SECRET_KEY = '6LesNnsaAAAAAOVy87nqWSHTsN2XQ_lgbPpKO5_T'   
+GOOGLE_RECAPTCHA_SECRET_KEY = os.getenv('GOOGLE_RECAPTCHA_SECRET_KEY')
 
 if sys.platform == "win32":
-#if_os = 1
-#if if_os == 0:
+
    # для разработки
-   """ 
-   LOGGING = {
-       'version': 1,
-       'disable_existing_loggers': False,
-       'handlers': {
-           'console': {
-               'class': 'logging.StreamHandler',
-           },
-       },
-       'loggers': {
-           'django': {
-               'handlers': ['console'],
-               'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
-           },
-       },
-   }
-   """
 
    DEBUG = True
    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
@@ -291,14 +270,9 @@ if sys.platform == "win32":
       return True
 
    DEBUG_TOOLBAR_CONFIG = {
-     "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
+     "SHOW_TOOLBAR_CALLBACK": show_toolbar,
    }
-   """
-   sentry_sdk.init(
-      dsn="https://add7d976d667443da9a89bf0064d887e@localhost/5729108",
-      integrations=[DjangoIntegration()]
-   )
-   """
+
 else:
 
    ALLOWED_HOSTS = ['larimaritgroup.ru', '1yes.larimaritgroup.ru']
@@ -315,18 +289,16 @@ else:
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
             'charset': 'utf8mb4',
          },
-         'NAME': 'larimagu_1yes',
-         'USER': 'larimagu_1yes',
-         'PASSWORD': 'CucumbeR@000',
-         #'PASSWORD': 'NikolaevnA@@@1959',
-         'HOST': '127.0.0.1',
-         #'PORT': '5432'
-         'PORT': '3306'
+         'NAME': os.getenv('DB_NAME'),
+         'USER': os.getenv('DB_USER'),
+         'PASSWORD': os.getenv('DB_PASSWORD'),
+         'HOST': os.getenv('DB_HOST'),
+         'PORT': int(os.getenv('DB_PORT'))
       }
    }
 
 sentry_sdk.init(
-    dsn="https://add7d976d667443da9a89bf0064d887e@o576033.ingest.sentry.io/5729108",
+    dsn=os.getenv('SENTRY_DSN'),
     integrations=[DjangoIntegration()],
 
     # Set traces_sample_rate to 1.0 to capture 100%
