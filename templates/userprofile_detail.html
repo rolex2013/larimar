@@ -14,7 +14,7 @@
          {% endif %}
 
          {% if user_profile.user.id == user.id %}
-            <h5>Настройки</h5>
+            <h5>Настройки:</h5>
             <p>Компания: {{ user_profile.company.name }}</p>
             <p>Оповещения: {{ prompt_is_notify }} </p>
             <p>Протокол: {{ user_profile.protocoltype.name }}</p>
