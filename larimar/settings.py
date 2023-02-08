@@ -24,7 +24,7 @@ from dotenv import load_dotenv, find_dotenv
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-print(BASE_DIR)
+#print(BASE_DIR)
 
 load_dotenv(BASE_DIR+'/larimar/config/.env')
 
@@ -32,13 +32,8 @@ load_dotenv(BASE_DIR+'/larimar/config/.env')
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = '@2%zg8-cp_cqq!=4g-1o0ok6#q3t##0a3@hrat-=i8(=!7(xr!'
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
-
-#ADMINS = (('Harry', 'larimaritgroup.ru@gmail.com'),)
 ADMINS = ((os.getenv('ADMIN_NAME'), os.getenv('ADMIN_EMAIL')),)
 
 # Application definition
@@ -277,9 +272,9 @@ else:
 
    ALLOWED_HOSTS = ['larimaritgroup.ru', '1yes.larimaritgroup.ru']
 
-   STATIC_URL = '/larimar/static/'
-   STATICFILES_DIRS = ('/home/l/larimagu/larimaritgroup.ru/public_html/larimar/static',)
-   STATIC_ROOT = '/home/l/larimagu/larimaritgroup.ru/public_html/larimar/static/static_collected'
+   STATIC_URL = os.getenv('STATIC_URL')
+   STATICFILES_DIRS = (os.getenv('STATICFILES_DIRS'),)
+   STATIC_ROOT = os.getenv('STATIC_ROOT')
 
    DATABASES = {
       'default': {
