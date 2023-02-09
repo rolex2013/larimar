@@ -9,8 +9,8 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 from companies.models import Company
 
-from django.db.models.signals import post_save, pre_save
-from django.dispatch import receiver
+#from django.db.models.signals import post_save, pre_save
+#from django.dispatch import receiver
 
 class Dict_ChatType(models.Model):
     name = models.CharField("Наименование", max_length=64)
