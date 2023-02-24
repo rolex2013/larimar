@@ -19,7 +19,7 @@
              <select name="select-component" id="componentselectid" class="select-component">
 
                 {% for component in componentlist %}
-                   <option value="{{component.id}}" {% ifequal component.id component_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                   <option value="{{component.id}}" {% if component.id == component_selectid|add:"0" %} selected="selected" {% endif %}>
                      {{component.name}}
                    </option>   
                 {% endfor %}
@@ -27,7 +27,7 @@
              <label>Группа: </label>
              <select name="select-group" id="groupselectid" class="select-group">
                 {% for group in grouplist %}
-                   <option value="{{group.id}}" {% ifequal group.id group_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                   <option value="{{group.id}}" {% if group.id == group_selectid|add:"0" %} selected="selected" {% endif %}>
                       {{group.name}}
                    </option>   
                 {% endfor %}

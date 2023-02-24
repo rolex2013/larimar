@@ -4,7 +4,7 @@ from .models import UserProfile
 from companies.models import Company, UserCompanyComponentGroup
 from mptt.forms import MoveNodeForm, TreeNodeChoiceField
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(label=_('Пароль'), widget=forms.PasswordInput)

@@ -71,27 +71,27 @@
                        <div class="object-list-filters">
                            <label>По тематике: </label>
                            <select name="select-folder-theme" id="themeselectid" class="select-folder-theme">
-                              <option value="-1" {% ifequal "-1" theme_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                              <option value="-1" {% if "-1" == theme_selectid %} selected="selected" {% endif %}>- Все</option>
                               {% for fldrtheme in foldertheme %}
-                                 <option value="{{fldrtheme.id}}" {% ifequal fldrtheme.id fldrtheme_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                 <option value="{{fldrtheme.id}}" {% if fldrtheme.id == fldrtheme_selectid|add:"0" %} selected="selected" {% endif %}>
                                     {{fldrtheme.name}}
                                  </option>
                               {% endfor %}
                            </select>
                            <label>По типу: </label>
                            <select name="select-folder-type" id="typeselectid" class="select-folder-type">
-                              <option value="-1" {% ifequal "-1" type_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                              <option value="-1" {% if "-1" == type_selectid %} selected="selected" {% endif %}>- Все</option>
                               {% for fldrtype in foldertype %}
-                                 <option value="{{fldrtype.id}}" {% ifequal fldrtype.id fldrtype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                 <option value="{{fldrtype.id}}" {% if fldrtype.id == fldrtype_selectid|add:"0" %} selected="selected" {% endif %}>
                                     {{fldrtype.name}}
                                  </option>
                               {% endfor %}
                            </select>
                            <label>Автор: </label>
                            <select name="select-myfolder" id="myselectid" class="select-my-doc">
-                              <option value="-1" {% ifequal "-1" my_selectid %} selected="selected" {% endifequal %}>Все активные</option>
-                              <option value="1" {% ifequal "1" my_selectid %} selected="selected" {% endifequal %}>Мои активные</option>
-                              <option value="2" {% ifequal "2" my_selectid %} selected="selected" {% endifequal %}>Мои неактивные</option>
+                              <option value="-1" {% if "-1" == my_selectid %} selected="selected" {% endif %}>Все активные</option>
+                              <option value="1" {% if "1" == my_selectid %} selected="selected" {% endif %}>Мои активные</option>
+                              <option value="2" {% if "2" == my_selectid %} selected="selected" {% endif %}>Мои неактивные</option>
                            </select>
                            <button id="selection-button-folder" type="submit" method="GET" class="object-filter-button">Применить</button>
                        </div>
@@ -118,23 +118,23 @@
                        <div class="object-list-filters">
                            <label>Упорядочить: </label>
                            <select name="select-sort" id="sortselectid" class="select-sort">
-                                <option value="1" {% ifequal "1" sort_selectid %} selected="selected" {% endifequal %}>По имени</option>
-                                <option value="2" {% ifequal "3" sort_selectid %} selected="selected" {% endifequal %}>По размеру</option>
-                                <option value="3" {% ifequal "4" sort_selectid %} selected="selected" {% endifequal %}>По дате</option>
-                                {% comment %}<option value="4" {% ifequal "2" fl_sort_selectid %} selected="selected" {% endifequal %}>По расширению</option>{% endcomment %}
+                                <option value="1" {% if "1" == sort_selectid %} selected="selected" {% endif %}>По имени</option>
+                                <option value="2" {% if "3" == sort_selectid %} selected="selected" {% endif %}>По размеру</option>
+                                <option value="3" {% if "4" == sort_selectid %} selected="selected" {% endif %}>По дате</option>
+                                {% comment %}<option value="4" {% if "2" fl_sort_selectid %} selected="selected" {% endif %}>По расширению</option>{% endcomment %}
                            </select>
                            <!--<label>Порядок: </label>-->
                            <select name="select-sort" id="sortdirselectid" class="select-sortdir">
-                                <option value="1" {% ifequal "1" sortdir_selectid %} selected="selected" {% endifequal %}>По возрастанию</option>
-                                <option value="2" {% ifequal "2" sortdir_selectid %} selected="selected" {% endifequal %}>По убыванию</option>
-                                <option value="-1" {% ifequal "-1" sortdir_selectid %} selected="selected" {% endifequal %}>Без сортировки</option>
+                                <option value="1" {% if "1" == sortdir_selectid %} selected="selected" {% endif %}>По возрастанию</option>
+                                <option value="2" {% if "2" == sortdir_selectid %} selected="selected" {% endif %}>По убыванию</option>
+                                <option value="-1" {% if "-1" == sortdir_selectid %} selected="selected" {% endif %}>Без сортировки</option>
                            </select>
                            <!--<button id="selection-button-filesort" type="submit" method="GET" class="object-filter-button">Сортировать</button>-->
                            <label>Автор: </label>
                            <select name="select-myfile" id="myfileselectid" class="select-my-file">
-                                <option value="-1" {% ifequal "-1" myfileselectid %} selected="selected" {% endifequal %}>Все активные</option>
-                                <option value="1" {% ifequal "1" myfileselectid %} selected="selected" {% endifequal %}>Мои активные</option>
-                                <option value="2" {% ifequal "2" myfileselectid %} selected="selected" {% endifequal %}>Мои неактивные</option>
+                                <option value="-1" {% if "-1" == myfileselectid %} selected="selected" {% endif %}>Все активные</option>
+                                <option value="1" {% if "1" == myfileselectid %} selected="selected" {% endif %}>Мои активные</option>
+                                <option value="2" {% if "2" == myfileselectid %} selected="selected" {% endif %}>Мои неактивные</option>
                            </select>
                            <button id="selection-button-file" type="submit" method="GET" class="object-filter-button">Выбрать</button>
                        </div>

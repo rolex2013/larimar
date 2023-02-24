@@ -1,6 +1,7 @@
 from django.contrib.auth import views
 from django.urls import path
-from django.conf.urls import url
+#from django.conf.urls import url
+from django.urls import re_path as url
  
 from . import views
 from companies.views import publiccontents

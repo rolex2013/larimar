@@ -5,30 +5,30 @@
             <div class="object-list-filters">            
                <label>По статусу: </label>
                <select name="select_eventstatus" id="eventstatusselectid" class="select-event-status">
-                  <option value="-1" {% ifequal "-1" evntstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                  <option value="0" {% ifequal 0 evntstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option> 
-                  <option value="-2" {% ifequal "-2" evntstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>                    
+                  <option value="-1" {% if "-1" == evntstatus_selectid %} selected="selected" {% endif %}>- Все</option>
+                  <option value="0" {% if 0 == evntstatus_selectid|add:"0" %} selected="selected" {% endif %}>- Все активные</option>
+                  <option value="-2" {% if "-2" == evntstatus_selectid %} selected="selected" {% endif %}>- Просроченные</option>
                   {% for evntstatus in eventstatus %}
-                     <option value="{{evntstatus.id}}" {% ifequal evntstatus.id evntstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                     <option value="{{evntstatus.id}}" {% if evntstatus.id == evntstatus_selectid|add:"0" %} selected="selected" {% endif %}>
                         {{evntstatus.name}}
                      </option>   
                   {% endfor %}
                </select>
                <label>По типу: </label>
                <select name="select-eventtype" id="eventtypeselectid" class="select-event-type">
-                  <option value="-1" {% ifequal "-1" evnttype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                  <option value="-1" {% if "-1" == evnttype_selectid %} selected="selected" {% endif %}>- Все</option>
                   {% for evnttype in eventtype %}
-                     <option value="{{evnttype.id}}" {% ifequal evnttype.id evnttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                     <option value="{{evnttype.id}}" {% if evnttype.id == evnttype_selectid|add:"0" %} selected="selected" {% endif %}>
                         {{evnttype.name}}
                      </option>   
                   {% endfor %}
                </select>                              
                <label>Мои: </label>
                <select name="select-myevent" id="myeventselectid" class="select-my-event">
-                  <option value="-1" {% ifequal "-1" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                  <option value="0" {% ifequal "0" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
-                  <option value="1" {% ifequal "1" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                  <option value="2" {% ifequal "2" evntstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
+                  <option value="-1" {% if "-1" == evntstatus_myselectid %} selected="selected" {% endif %}>- Все</option>
+                  <option value="0" {% if "0" == evntstatus_myselectid %} selected="selected" {% endif %}>- Я участник</option>
+                  <option value="1" {% if "1" == evntstatus_myselectid %} selected="selected" {% endif %}>- Я автор</option>
+                  <option value="2" {% if "2" == evntstatus_myselectid %} selected="selected" {% endif %}>- Я исполнитель</option>
                </select>            
                <button id="selection-event-button" type="submit" method="GET" class="object-filter-button">Применить</button>                
                <!--<button type="submit">Применить</button>-->

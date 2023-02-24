@@ -126,32 +126,32 @@
                <div class="object-list-filters">
                    <label>По статусу: </label>
                    <select name="select-clientstatus" id="statusselectid" class="select-client-status">
-                      <option value="-1" {% ifequal "-1" clntstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                      <!--<option value="0" { ifequal 0 clntstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                      <option value="-2" { ifequal "-2" clntstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                      <option value="-1" {% if "-1" == clntstatus_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <!--<option value="0" { if 0 == clntstatus_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
+                      <option value="-2" { if "-2" == clntstatus_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                       {% for clntstatus in clientstatus %}
-                         <option value="{{clntstatus.id}}" {% ifequal clntstatus.id clntstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                         <option value="{{clntstatus.id}}" {% if clntstatus.id == clntstatus_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{clntstatus.name}}
                          </option>   
                       {% endfor %}
                    </select>
                    <label>По типу: </label>
                    <select name="select-clienttype" id="typeselectid" class="select-client-type">
-                      <option value="-1" {% ifequal "-1" clnttype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                      <!--<option value="0" { ifequal 0 clnttype_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                      <option value="-2" { ifequal "-2" clnttype_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->   
+                      <option value="-1" {% if "-1" == clnttype_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <!--<option value="0" { if 0 clnttype_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
+                      <option value="-2" { if "-2" clnttype_selectid %} selected="selected" { endif %}>- Просроченные</option>-->   
                       {% for clnttype in clienttype %}
-                         <option value="{{clnttype.id}}" {% ifequal clnttype.id clnttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                         <option value="{{clnttype.id}}" {% if clnttype.id == clnttype_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{clnttype.name}}
                          </option>   
                       {% endfor %}
                    </select>               
                    <label>Мои клиенты: </label>
                    <select name="select-myclient" id="myselectid" class="select-my-client">
-                      <option value="-1" {% ifequal "-1" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                      <option value="0" {% ifequal "0" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
-                      <option value="1" {% ifequal "1" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                      <option value="2" {% ifequal "2" clntstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>
+                      <option value="-1" {% if "-1" == clntstatus_myselectid %} selected="selected" {% endif %}>- Все</option>
+                      <option value="0" {% if "0" == clntstatus_myselectid %} selected="selected" {% endif %}>- Я участник</option>
+                      <option value="1" {% if "1" == clntstatus_myselectid %} selected="selected" {% endif %}>- Я автор</option>
+                      <option value="2" {% if "2" == clntstatus_myselectid %} selected="selected" {% endif %}>- Я менеджер</option>
                    </select>            
                    <button id="selection-button-client" type="submit" method="GET" class="object-filter-button">Применить</button>
                </div>
@@ -177,31 +177,31 @@
                <div class="object-list-filters">
                    <label>По статусу: </label>
                    <select name="select-docstatus" id="statusselectid" class="select-doc-status">
-                      <option value="-1" {% ifequal "-1" dcstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                      <!--<option value="0" { ifequal 0 dcstatus_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                      <option value="-2" { ifequal "-2" dctstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                      <option value="-1" {% if "-1" == dcstatus_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <!--<option value="0" { if 0 == dcstatus_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
+                      <option value="-2" { if "-2" == dctstatus_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                       {% for dcstatus in docstatus %}
-                         <option value="{{dcstatus.id}}" {% ifequal dcstatus.id dcstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                         <option value="{{dcstatus.id}}" {% if dcstatus.id == dcstatus_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{dcstatus.name}}
                          </option>
                       {% endfor %}
                    </select>
                    <label>По типу: </label>
                    <select name="select-doctype" id="typeselectid" class="select-doc-type">
-                      <option value="-1" {% ifequal "-1" dctype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                      <option value="-1" {% if "-1" == dctype_selectid %} selected="selected" {% endif %}>- Все</option>
                       {% for dctype in doctype %}
-                         <option value="{{dctype.id}}" {% ifequal dctype.id dcttype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                         <option value="{{dctype.id}}" {% if dctype.id == dcttype_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{dctype.name}}
                          </option>
                       {% endfor %}
                    </select>
                    <label>Мои документы: </label>
                    <select name="select-mydoc" id="myselectid" class="select-my-doc">
-                      <option value="-1" {% ifequal "-1" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                      <option value="0" {% ifequal "0" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>
-                      <option value="1" {% ifequal "1" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>
-                      <option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                      {% comment %}<option value="2" {% ifequal "2" dcstatus_myselectid %} selected="selected" {% endifequal %}>- Я менеджер</option>{% endcomment %}
+                      <option value="-1" {% if "-1" == dcstatus_myselectid %} selected="selected" {% endif %}>- Все</option>
+                      <option value="0" {% if "0" == dcstatus_myselectid %} selected="selected" {% endif %}>- Я участник</option>
+                      <option value="1" {% if "1" == dcstatus_myselectid %} selected="selected" {% endif %}>- Я менеджер</option>
+                      <option value="2" {% if "2" == dcstatus_myselectid %} selected="selected" {% endif %}>- Я автор</option>
+                      {% comment %}<option value="2" {% if "2" dcstatus_myselectid %} selected="selected" {% endif %}>- Я менеджер</option>{% endcomment %}
                    </select>
                    <button id="selection-button-doc" type="submit" method="GET" class="object-filter-button">Применить</button>
                </div>
@@ -227,26 +227,26 @@
                <div class="object-list-filters">
                    <label>По тематике: </label>
                    <select name="select-foldertheme" id="folderthemeselectid" class="select-folder-theme">
-                      <option value="-1" {% ifequal "-1" foldertheme_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                      <option value="-1" {% if "-1" == foldertheme_selectid %} selected="selected" {% endif %}>- Все</option>
                       {% for fldtheme in foldertheme %}
-                         <option value="{{fldtheme.id}}" {% ifequal fldtheme.id foldertheme_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                         <option value="{{fldtheme.id}}" {% if fldtheme.id == foldertheme_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{fldtheme.name}}
                          </option>
                       {% endfor %}
                    </select>
                    <label>По типу: </label>
                    <select name="select-foldertype" id="foldertypeselectid" class="select-folder-type">
-                      <option value="-1" {% ifequal "-1" fldtype_selectid %} selected="selected" {% endifequal %}>- Все</option>
+                      <option value="-1" {% if "-1" == fldtype_selectid %} selected="selected" {% endif %}>- Все</option>
                       {% for fldtype in foldertype %}
-                         <option value="{{fldtype.id}}" {% ifequal fldtype.id foldertype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                         <option value="{{fldtype.id}}" {% if fldtype.id == foldertype_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{fldtype.name}}
                          </option>
                       {% endfor %}
                    </select>
                    <label>Мои папки: </label>
                    <select name="select-myfolder" id="myfolderselectid" class="select-my-folder">
-                      <option value="-1" {% ifequal "-1" folder_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                       <option value="1" {% ifequal "1" folder_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                      <option value="-1" {% if "-1" == folder_myselectid %} selected="selected" {% endif %}>- Все</option>
+                       <option value="1" {% if "1" == folder_myselectid %} selected="selected" {% endif %}>- Я автор</option>
                    </select>
                    <button id="selection-button-folder" type="submit" method="GET" class="object-filter-button">Применить</button>
                </div>
@@ -276,23 +276,23 @@
                            <div class="object-list-filters">
                               <label>По статусу: </label>
                               <select name="select-feedbackticketstatus" id="feedbackticketstatusselectid" class="select-feedbackticket-status">
-                                 <option value="-1" {% ifequal "-1" feedbackticketstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                                 <option value="0" {% ifequal 0 feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
-                                 <option value="-2" {% ifequal 1 feedbackticketstatus_selectid %} selected="selected" {% endifequal %}>- Все закрытые</option>
-                                 <!--<option value="-2" { ifequal "-2" tktstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                                 <option value="-1" {% if "-1" == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- Все</option>
+                                 <option value="0" {% if 0 == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>- Все активные</option>
+                                 <option value="-2" {% if 1 == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- Все закрытые</option>
+                                 <!--<option value="-2" { if "-2" == tktstatus_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                                  {% for tktstatus in feedbackticketstatus %}
-                                    <option value="{{tktstatus.id}}" {% ifequal tktstatus.id feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                    <option value="{{tktstatus.id}}" {% if tktstatus.id == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>
                                        {{tktstatus.name}}
                                     </option>
                                  {% endfor %}
                               </select>
                               <label>По типу: </label>
                               <select name="select-feedbacktickettype" id="feedbacktickettypeselectid" class="select-feedbackticket-type">
-                                 <option value="-1" {% ifequal "-1" feedbacktickettype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                                 <!--<option value="0" { ifequal 0 feedbacktickettype_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                                 <option value="-2" { ifequal "-2" feedbacktickettype_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                                 <option value="-1" {% if "-1" == feedbacktickettype_selectid %} selected="selected" {% endif %}>- Все</option>
+                                 <!--<option value="0" { if 0 == feedbacktickettype_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
+                                 <option value="-2" { if "-2" == feedbacktickettype_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                                  {% for tkttype in feedbacktickettype %}
-                                    <option value="{{tkttype.id}}" {% ifequal tkttype.id feedbacktickettype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                    <option value="{{tkttype.id}}" {% if tkttype.id == feedbacktickettype_selectid|add:"0" %} selected="selected" {% endif %}>
                                        {{tkttype.name}}
                                     </option>
                                  {% endfor %}
@@ -300,8 +300,8 @@
                               {% if is_admin_org %}
                                   <label>Мои: </label>
                                    <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
-                                       <option value="-1" {% ifequal "-1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                                       <option value="1" {% ifequal "1" feedbackticket_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
+                                       <option value="-1" {% if "-1" == feedbackticket_myselectid %} selected="selected" {% endif %}>- Все</option>
+                                       <option value="1" {% if "1" == feedbackticket_myselectid %} selected="selected" {% endif %}>- Я автор</option>
                                    </select>
                                {% endif %}
                               <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">Применить</button>
@@ -345,21 +345,21 @@
                <div class="object-list-filters">
                   <label>По статусу: </label>
                   <select name="select-projectstatus" id="selectid" class="select-project-status">
-                     <option value="-1" {% ifequal "-1" prjstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                     <option value="0" {% ifequal 0 prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
-                     <option value="-2" {% ifequal "-2" prjstatus_selectid %} selected="selected" {% endifequal %}>- Просроченные</option>   
+                     <option value="-1" {% if "-1" == prjstatus_selectid %} selected="selected" {% endif %}>- Все</option>
+                     <option value="0" {% if 0 == prjstatus_selectid|add:"0" %} selected="selected" {% endif %}>- Все активные</option>
+                     <option value="-2" {% if "-2" == prjstatus_selectid %} selected="selected" {% endif %}>- Просроченные</option>
                      {% for prjstatus in projectstatus %}
-                        <option value="{{prjstatus.id}}" {% ifequal prjstatus.id prjstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                        <option value="{{prjstatus.id}}" {% if prjstatus.id == prjstatus_selectid|add:"0" %} selected="selected" {% endif %}>
                            {{prjstatus.name}}
                         </option>   
                      {% endfor %}
                   </select>
                   <label>Мои проекты: </label>
                   <select name="select-myproject" id="myselectid" class="select-my-project">
-                     <option value="-1" {% ifequal "-1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Все</option>
-                     <option value="0" {% ifequal "0" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я участник</option>               
-                     <option value="1" {% ifequal "1" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я автор</option>
-                     <option value="2" {% ifequal "2" prjstatus_myselectid %} selected="selected" {% endifequal %}>- Я исполнитель</option>
+                     <option value="-1" {% if "-1" == prjstatus_myselectid %} selected="selected" {% endif %}>- Все</option>
+                     <option value="0" {% if "0" == prjstatus_myselectid %} selected="selected" {% endif %}>- Я участник</option>
+                     <option value="1" {% if "1" == prjstatus_myselectid %} selected="selected" {% endif %}>- Я автор</option>
+                     <option value="2" {% if "2" == prjstatus_myselectid %} selected="selected" {% endif %}>- Я исполнитель</option>
                   </select>            
                   <button id="selection-button-project" type="submit" method="GET" class="object-filter-button">Применить</button>
                </div>

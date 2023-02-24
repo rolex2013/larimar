@@ -52,23 +52,23 @@
                            <div class="object-list-filters">
                               <label>По статусу: </label>
                               <select name="select-feedbackticketstatus" id="feedbackticketstatusselectid" class="select-feedbackticket-status">
-                                 <option value="-1" {% ifequal "-1" feedbackticketstatus_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                                 <option value="0" {% ifequal 0 feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>- Все активные</option>
-                                 <option value="-2" {% ifequal 1 feedbackticketstatus_selectid %} selected="selected" {% endifequal %}>- Все закрытые</option>
-                                 <!--<option value="-2" { ifequal "-2" tktstatus_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                                 <option value="-1" {% if "-1" == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- Все</option>
+                                 <option value="0" {% if 0 == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>- Все активные</option>
+                                 <option value="-2" {% if 1 == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- Все закрытые</option>
+                                 <!--<option value="-2" { if "-2" tktstatus_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                                  {% for tktstatus in feedbackticketstatus %}
-                                    <option value="{{tktstatus.id}}" {% ifequal tktstatus.id feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                    <option value="{{tktstatus.id}}" {% if tktstatus.id == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>
                                        {{tktstatus.name}}
                                     </option>
                                  {% endfor %}
                               </select>
                               <label>По типу: </label>
                               <select name="select-feedbacktickettype" id="feedbacktickettypeselectid" class="select-feedbackticket-type">
-                                 <option value="-1" {% ifequal "-1" feedbacktickettype_selectid %} selected="selected" {% endifequal %}>- Все</option>
-                                 <!--<option value="0" { ifequal 0 feedbacktickettype_selectid|add:"0" %} selected="selected" { endifequal %}>- Все активные</option>
-                                 <option value="-2" { ifequal "-2" feedbacktickettype_selectid %} selected="selected" { endifequal %}>- Просроченные</option>-->
+                                 <option value="-1" {% if "-1" == feedbacktickettype_selectid %} selected="selected" {% endif %}>- Все</option>
+                                 <!--<option value="0" { if 0 feedbacktickettype_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
+                                 <option value="-2" { if "-2" feedbacktickettype_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                                  {% for tkttype in feedbacktickettype %}
-                                    <option value="{{tkttype.id}}" {% ifequal tkttype.id feedbacktickettype_selectid|add:"0" %} selected="selected" {% endifequal %}>
+                                    <option value="{{tkttype.id}}" {% if tkttype.id == feedbacktickettype_selectid|add:"0" %} selected="selected" {% endif %}>
                                        {{tkttype.name}}
                                     </option>
                                  {% endfor %}

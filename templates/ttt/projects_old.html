@@ -12,7 +12,7 @@
     
       <ul>
         {% recursetree nodes %}
-           {% ifequal node.tree_id tree_company_id %}
+           {% if node.tree_id == tree_company_id %}
               {% if user.is_authenticated and node.is_active %}
                  <li>
                    <a href="{% url 'my_company:company_detail' node.pk %}">
@@ -27,7 +27,7 @@
                    {% endif %}
                  </li>
               {% endif %}
-           {% endifequal %}
+           {% endif %}
         {% endrecursetree %}
       </ul>
 

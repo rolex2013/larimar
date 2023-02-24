@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'files',
     'feedback',
     'chats',
+    'trade',
 ]
 
 REST_FRAMEWORK = {
@@ -232,6 +233,8 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = None
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 GOOGLE_RECAPTCHA_SECRET_KEY = os.getenv('GOOGLE_RECAPTCHA_SECRET_KEY')
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 if sys.platform == "win32":
 

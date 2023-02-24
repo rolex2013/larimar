@@ -39,13 +39,13 @@
                 </a>
                 &nbsp;&nbsp;&nbsp;===><a href="{% url 'my_project:projects' node.pk %}"> Проекты</a>
                 {% if node.is_root_node %}
-                    {% ifequal node.id root_company_id %}
+                    {% if node.id == root_company_id %}
                         {% if not node.is_leaf_node %}
                             <ul class="children">
                                 {{ children }}
                             </ul>
                         {% endif %}
-                    {% endifequal %}
+                    {% endif %}
                 {% else %}
                     {% if not node.is_leaf_node %}
                         {% if current_company.id == node.id %}
