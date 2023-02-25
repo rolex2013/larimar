@@ -41,7 +41,6 @@ ADMINS = ((os.getenv('ADMIN_NAME'), os.getenv('ADMIN_EMAIL')),)
 INSTALLED_APPS = [
     'channels',
     #"channels_presence", - удалено, справились своей таблицей и своим websocket'ом
-    'debug_toolbar',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -241,6 +240,7 @@ if sys.platform == "win32":
    # для разработки
 
    DEBUG = True
+   INSTALLED_APPS.append('debug_toolbar')
    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
    INTERNAL_IPS = [
