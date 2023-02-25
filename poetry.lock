@@ -4,7 +4,7 @@
 name = "aioredis"
 version = "1.3.1"
 description = "asyncio (PEP 3156) Redis support"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -271,7 +271,7 @@ pycparser = "*"
 name = "channels"
 version = "4.0.0"
 description = "Brings async, event-driven capabilities to Django 3.2 and up."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -291,7 +291,7 @@ tests = ["async-timeout", "coverage (>=4.5,<5.0)", "pytest", "pytest-asyncio", "
 name = "channels-redis"
 version = "4.0.0"
 description = "Redis-backed ASGI channel layer implementation"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -674,7 +674,7 @@ testing = ["covdefaults (>=2.2.2)", "coverage (>=7.0.1)", "pytest (>=7.2)", "pyt
 name = "hiredis"
 version = "2.0.0"
 description = "Python wrapper for hiredis"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -1193,7 +1193,7 @@ files = [
 name = "redis"
 version = "4.5.1"
 description = "Python client for Redis database and key-value store"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1691,4 +1691,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "13fc34ed3ea3ad4c2445475877372daee2e8d208e2099cf2b179aefa35478c64"
+content-hash = "520f2499b3f1cfb66deee988cb98239095c2016f41f3844e5fae39e6367cd6ff"
