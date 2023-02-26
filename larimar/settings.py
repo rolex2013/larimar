@@ -235,7 +235,10 @@ GOOGLE_RECAPTCHA_SECRET_KEY = os.getenv('GOOGLE_RECAPTCHA_SECRET_KEY')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-if sys.platform == "win32":
+IS_DEV = bool(os.getenv('IS_DEV', default='False'))
+
+#if sys.platform == "win32":
+if IS_DEV:
 
    # для разработки
 
