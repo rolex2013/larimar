@@ -155,6 +155,7 @@ class ELogoutView(LogoutView):
 
 # эта ф-ция после логаута переадресовывает на начальную страницу с публичным контентом (внешний сайт)
 def logout_view(request):
+    del request.session['websocket_test']
     logout(request)
     return HttpResponseRedirect('/')
 

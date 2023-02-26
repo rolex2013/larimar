@@ -6,10 +6,26 @@ from asgiref.sync import async_to_sync
 from django.contrib.auth.models import User
 from main.models import Notification
 
+from channels.consumer import AsyncConsumer
 
-class NotificationConsumer(WebsocketConsumer):
+
+class NotificationConsumer(AsyncConsumer):
+
+    async def websocket_connect(self, event):
+        await self.send({"type": "websocket.accept"})
+
+    async def websocket_receive(self, text_data):
+        await self.send({
+            "type": "websocket.send",
+            "text": "Hello from Django socket"
+        })
+
+    async def websocket_disconnect(self, event):
+        pass
+
+class Notification_Consumer(WebsocketConsumer):
     #chat_name = self.scope['url_route']['kwargs']['chat_name']
-
+    #print('===========================')
     def connect(self):
         self.group_name = self.scope['url_route']['kwargs']['userid']
         print('Открыт сокет уведомлений для userid=', self.group_name, '(', self.channel_name, ')')

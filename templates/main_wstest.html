@@ -1,6 +1,6 @@
 <!-- Проверку на работоспособность сокетов надо перенести куда-то выше, напр., в авторизацию (?) -->
 
-{% if not request.session.websocket_test %}
+{% if not request.session.websocket_test and user.id %}
 <!-- Проверяем только один раз при входе -->
 
 <script>
@@ -32,7 +32,7 @@ console.log('request.session.websocket_test: {{ request.session.websocket_test }
                 ok: false
            },
            success: function(data)  {
-               console.log("webSockets not present!")
+               console.log("webSockets not present!", error)
            },
         });
     };
