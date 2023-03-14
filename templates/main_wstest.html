@@ -11,7 +11,7 @@ console.log('request.session.websocket_test: {{ request.session.websocket_test }
         wSocket = new WebSocket('ws://' + window.location.host + '/ws/main/notification/{{ request.user.id }}/');
     }
     wSocket.onopen = function(e) {
-        //console.log("webSockets present!")
+        console.log("webSockets present!")
         $.ajax({
            type: 'GET',
            url: "{% url 'my_main:websocket_test' %}",
@@ -24,7 +24,7 @@ console.log('request.session.websocket_test: {{ request.session.websocket_test }
         });
     };
     wSocket.onerror = function(error) {
-        //console.log("webSockets not present!")
+        console.log("webSockets not present!")
         $.ajax({
            type: 'GET',
            url: "{% url 'my_main:websocket_test' %}",

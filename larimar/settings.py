@@ -39,7 +39,6 @@ ADMINS = ((os.getenv('ADMIN_NAME'), os.getenv('ADMIN_EMAIL')),)
 # Application definition
 
 INSTALLED_APPS = [
-    #'daphne',
     'channels',
     #"channels_presence", - удалено, справились своей таблицей и своим websocket'ом
     'django.contrib.admin',

@@ -9,7 +9,7 @@ from main.models import Notification
 from channels.consumer import AsyncConsumer
 
 
-class NotificationConsumer(AsyncConsumer):
+class Notification_Consumer(AsyncConsumer):
 
     async def websocket_connect(self, event):
         await self.send({"type": "websocket.accept"})
@@ -23,7 +23,7 @@ class NotificationConsumer(AsyncConsumer):
     async def websocket_disconnect(self, event):
         pass
 
-class Notification_Consumer(WebsocketConsumer):
+class NotificationConsumer(WebsocketConsumer):
     #chat_name = self.scope['url_route']['kwargs']['chat_name']
     #print('===========================')
     def connect(self):
