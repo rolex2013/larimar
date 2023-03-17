@@ -279,9 +279,9 @@ else:
 
    ALLOWED_HOSTS = ['larimaritgroup.ru', 'www.larimaritgroup.ru', '1yes.larimaritgroup.ru']
 
-   #STATIC_URL = os.getenv('STATIC_URL')
-   #STATICFILES_DIRS = (os.getenv('STATICFILES_DIRS'),)
-   #STATIC_ROOT = os.getenv('STATIC_ROOT')
+   STATIC_URL = os.getenv('STATIC_URL')
+   STATICFILES_DIRS = (os.getenv('STATICFILES_DIRS'),)
+   STATIC_ROOT = os.getenv('STATIC_ROOT')
 
    DATABASES = {
       'default': {
