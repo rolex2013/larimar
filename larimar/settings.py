@@ -235,10 +235,6 @@ GOOGLE_RECAPTCHA_SECRET_KEY = os.getenv('GOOGLE_RECAPTCHA_SECRET_KEY')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.getenv('STATIC_ROOT')
-
 IS_DEV = bool(os.getenv('IS_DEV', default='False'))
 
 #if sys.platform == "win32":
@@ -249,6 +245,10 @@ if IS_DEV:
     DEBUG = True
     INSTALLED_APPS.append('debug_toolbar')
     MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
+
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    STATIC_ROOT = os.getenv('STATIC_ROOT')
 
     INTERNAL_IPS = [
         'localhost',
