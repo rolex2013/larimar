@@ -1,5 +1,7 @@
-import os
+#import os
 #import socket
+#import redis
+
 from django.conf import settings
 from django.http import HttpResponseNotFound
 
@@ -22,8 +24,13 @@ import json
 
 def websocket_test(request):
     ok = request.GET['ok']
+    #r = redis.Redis(host="127.0.0.1", port="6379")
+    #try:
+    #    is_connected = r.ping()
+    #except redis.ConnectionError:
+    #    print('Redis connect error!')
     request.session['websocket_test'] = ok
-    print('********************:', ok)
+    print('WebSocket:', ok)
     #return render(request, "sidebar.html", {'wstest': ok,})
     return render(request, "main_wstest.html", {'wstest': ok,})
 

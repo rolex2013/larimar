@@ -158,12 +158,12 @@ ASGI_APPLICATION = 'larimar.asgi.application'
 CHANNEL_LAYERS = {
    'default': {
        #'BACKEND': 'asgiref.inmemory.ChannelLayer',
-       #'BACKEND': 'channels.layers.InMemoryChannelLayer',
+       'BACKEND': 'channels.layers.InMemoryChannelLayer',
        #'ROUTING': 'larimar.routing.channel_routing',
-       'BACKEND': 'channels_redis.core.RedisChannelLayer',
-       'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-       },
+       #'BACKEND': 'channels_redis.core.RedisChannelLayer',
+       #'CONFIG': {
+       #     "hosts": [('127.0.0.1', 6379)],
+       #},
     },
 }
 
@@ -235,52 +235,52 @@ GOOGLE_RECAPTCHA_SECRET_KEY = os.getenv('GOOGLE_RECAPTCHA_SECRET_KEY')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 IS_DEV = bool(os.getenv('IS_DEV', default='False'))
 
 #if sys.platform == "win32":
 if IS_DEV:
 
-   # для разработки
+    # для разработки
 
-   DEBUG = True
-   INSTALLED_APPS.append('debug_toolbar')
-   MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
+    DEBUG = True
+    INSTALLED_APPS.append('debug_toolbar')
+    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware'] + MIDDLEWARE
 
-   INTERNAL_IPS = [
-       'localhost',
-       '127.0.0.1',
-       '192.168.88.55',
-   ]
+    INTERNAL_IPS = [
+        'localhost',
+        '127.0.0.1',
+        '192.168.88.55',
+    ]
 
-   STATIC_URL = '/static/'
-   STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.88.55']
 
-   ALLOWED_HOSTS = ['localhost', '127.0.0.1', '192.168.88.55']
+    #Database
+    #https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-   # Database
-   # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+    DATABASES = {
+            'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            }
+    }
 
-   DATABASES = {
-       'default': {
-           'ENGINE': 'django.db.backends.sqlite3',
-           'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-       }
-   }
+    def show_toolbar(request):
+        return True
 
-   def show_toolbar(request):
-      return True
-
-   DEBUG_TOOLBAR_CONFIG = {
-     "SHOW_TOOLBAR_CALLBACK": show_toolbar,
-   }
+    DEBUG_TOOLBAR_CONFIG = {
+        "SHOW_TOOLBAR_CALLBACK": show_toolbar,
+    }
 
 else:
 
    ALLOWED_HOSTS = ['larimaritgroup.ru', 'www.larimaritgroup.ru', '1yes.larimaritgroup.ru']
 
-   STATIC_URL = os.getenv('STATIC_URL')
-   STATICFILES_DIRS = (os.getenv('STATICFILES_DIRS'),)
-   STATIC_ROOT = os.getenv('STATIC_ROOT')
+   #STATIC_URL = os.getenv('STATIC_URL')
+   #STATICFILES_DIRS = (os.getenv('STATICFILES_DIRS'),)
+   #STATIC_ROOT = os.getenv('STATIC_ROOT')
 
    DATABASES = {
       'default': {

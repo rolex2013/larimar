@@ -60,8 +60,8 @@ class MenuItemAdmin(DjangoMpttAdmin):
 class Dict_ThemeAdmin(DjangoMpttAdmin):
     pass
 
-#class StaffListAdmin(DjangoMpttAdmin):
-#    pass
+class StaffListAdmin(DjangoMpttAdmin):
+    pass
 
 #class ClientTaskAdmin(DjangoMpttAdmin):
 #    pass

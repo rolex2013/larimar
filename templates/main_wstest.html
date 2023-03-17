@@ -4,6 +4,7 @@
 <!-- Проверяем только один раз при входе -->
 
 <script>
+console.log('request.session.websocket_test: ===================')
 console.log('request.session.websocket_test: {{ request.session.websocket_test }}')
     if (window.location.protocol == 'https:') {
         wSocket = new WebSocket('wss://' + window.location.host + '/ws/main/notification/{{ request.user.id }}/');
