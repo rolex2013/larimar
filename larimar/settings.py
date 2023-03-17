@@ -237,8 +237,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 IS_DEV = bool(os.getenv('IS_DEV', default='False'))
 
-#if sys.platform == "win32":
-if IS_DEV:
+if sys.platform == "win32":
+#if IS_DEV:
 
     # для разработки
 
