@@ -75,6 +75,7 @@ virtualenv-clone = "0.5.7"
 wrapt = "^1.14.1"
 yarg = "0.1.9"
 zipp = "3.8.0"
+psycopg2 = { version = "^3.1.8", optional = true }
 
 [tool.poetry.dev-dependencies]
 channels-redis = "^4.0.0"
@@ -84,9 +85,6 @@ redis = "^4.5.1"
 autobahn = "^23.1.2"
 Twisted = "^22.10.0"
 channels = "3.0.4"
-
-[tool.poetry.dependencies]
-psycopg2 = { version = "^3.1.8", optional = true }
 
 [build-system]
 requires = ["poetry-core"]
