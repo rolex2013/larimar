@@ -114,7 +114,7 @@ admin.site.register(Dict_CompanyType)
 
 admin.site.register(Dict_PositionType)
 
-admin.site.register(StaffList, StaffListAdmin)
+admin.site.register(StaffList, StaffListAdmin) #
 
 admin.site.register(Staff)
 
