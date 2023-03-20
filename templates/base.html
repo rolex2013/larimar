@@ -165,7 +165,9 @@
 
        <div class='footer'>
 
-            © 2017-2021 Designed by <b>Larimar IT Group</b>. Лучший хостинг <a href="https://beget.com/p1595998" target="_blank">здесь</a>.
+            {% load main_tags %}
+            {% copyright_show as copyright %} {{ copyright.0 }} {{ copyright.1 }}
+                <a href="{{ copyright.2 }}" target="_blank">{{ copyright.3 }}</a>. {{ copyright.4 }} <a href="{{ copyright.5 }}">{{ copyright.6 }}</a>.
             <!-- Yandex.Metrika informer -->
             <a href="https://metrika.yandex.ru/stat/?id=38865620&amp;from=informer"
             target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/38865620/3_0_B9B9B9FF_999999FF_0_pageviews"

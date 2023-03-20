@@ -1,4 +1,5 @@
-from django import template  
+from django import template
+import datetime
 from main.models import Menu, MenuItem, Meta_ObjectType
 from companies.models import UserCompanyComponentGroup
 from django.db.models import Q #, Count, Min, Max, Sum, Avg 
@@ -74,3 +75,20 @@ def users_list(context, is_auth=False):
         nodes = User.objects.filter(is_active=True, id__in=members).exclude(id=context.request.user.id).order_by('username').distinct()
 
     return (nodes)
+
+@register.simple_tag(takes_context=False)
+def copyright_show():
+
+    copyright_text = '© 2017-' + str(datetime.datetime.now().year)
+    designby_text = 'Designed by'
+    designby_company = 'Larimar IT Group'
+    designby_link = 'https://larimaritgroup.ru'
+    hosting_company = 'Beget.com'
+    hosting_text = 'The best hosting is'
+    hosting_link = 'https://beget.com/p1595998'
+
+    #return {'copyright_text': copyright_text,
+    #        'designby_text': designby_text, 'designby_company': designby_company, 'designby_link': designby_link,
+    #        'hosting_text': hosting_text, 'hosting_company': hosting_company, 'hosting_link': hosting_link}
+
+    return copyright_text, designby_text, designby_link, designby_company, hosting_text, hosting_link, hosting_company
