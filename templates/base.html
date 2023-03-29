@@ -1,5 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+
+<!--{ if request.session.django_language %}
+    <html lang="{ request.session.django_language }}">-->
+<!--{ else %}-->
+    <html lang="en">
+<!--{ endif %}-->
 
     <head>
 
@@ -7,6 +12,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         {% load static %}
+        {% load i18n %}
 
         <!--<link rel="shortcut icon" type="image/png" href="{ static 'images/favicon.ico' %}"/>-->
         <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}"/>
@@ -18,8 +24,31 @@
 
         <title>{% block title %}1⅄ES! Корпоративная система управления{% endblock %}</title>
 
-        <div class="header">    
-           <strong>&nbsp;1⅄ES! Корпоративная система управления</strong>
+        <div class="header">
+            <!--<div style="width: 100%;">-->
+            <div style="float: left;"><strong>&nbsp;1⅄ES! Корпоративная система управления</strong></div>
+            <div style="float: right;">
+
+                <!-- Выбор языка -->
+                    <!--<div class="container">-->
+                      {% get_current_language as CURRENT_LANGUAGE %}
+                      {% get_available_languages as AVAILABLE_LANGUAGES %}
+                      {% get_language_info_list for AVAILABLE_LANGUAGES as languages %}
+                      <!--<div class="select-lang" style="width: 100%;">-->
+                          <!--{ trans "Выберите язык" %}:-->
+                          {% for language in languages %}
+                                {% if language.code != CURRENT_LANGUAGE %}
+                                    <div style="float: right;"><a href="{% url 'my_main:select_lang' %}?lang_code={{language.code}}"
+                                    ><img src="{% static 'images/'|add:language.code|add:'_32'|add:'.png' %}" alt="{{ language.name_local }}"
+                                    /></a></div>
+                                {% endif %}
+                          {% endfor %}
+                      <!--</div>-->
+                    <!--</div>-->
+                <!-- Конец выбора языка -->
+                </div>
+            <!--</div>-->
+
         </div>
 
         {% block head %}
@@ -157,9 +186,7 @@
                {% endblock %}
             {% endif %}            
             
-          </div>             
-
-      
+          </div>
 
        </div>
 
@@ -201,7 +228,38 @@
             "border='0' width='88' height='31'><\/a>")
             </script><!--/LiveInternet-->
 
-       </div>
+        </div>
+
+        <!--<div id="ajax_lng_listerrors"></div>-->
+
+        <script>
+
+            var select = document.getElementById("langselect_id");
+            select.addEventListener("change", function(){
+                event.preventDefault();
+                var code = this.options[this.selectedIndex].value
+                console.log(code)
+                $.ajax({
+                    type: 'GET',
+                    url: "{% url 'my_main:select_lang' %}",
+                    data: {
+                        lang_code: code
+                    },
+                    success: function(data){
+                        //console.log('===============')
+                        //console.log(data)
+                        $('#ajax_lng_listresult').html(data);
+                        //alert(data);
+                    },
+                    error: function(xhr, errmsg, err){
+                        console.log("error")
+                        console.log(error_data)
+                        $('#ajax_lng_listerrors').html('Нет данных!');
+                    }
+                });
+            });
+
+        </script>
 
     </body>
 

@@ -338,6 +338,17 @@ body {
     border-radius: 10px;
     /*float: left;*/
 }
+
+.select-lang {
+    /*height: 300px; /* высота контента */
+    background: #eee; /* фон */
+    background: linear-gradient(to top, #eee, #8e968e);
+    /*margin: 2% 1% 2% 1%; /* боковые поля */
+    padding: 10px 15px 10px 15px;
+    border: 0px solid;
+    border-radius: 10px;
+    float: right;
+}
 .object-list-wrapper {
     display: flex;
     width: 100%;

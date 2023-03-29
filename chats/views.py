@@ -324,7 +324,7 @@ def memberform(request):
 
     (member_list, currentchat) = memberlist(request, chatid)
 
-    return render(request, 'chat_member_form.html', {'currentchat': currentchat, 'currentchatid': chatid, 'member_list': member_list,})
+    return render(request, 'chat_member_form.html', {'currentchat': currentchat, 'currentchatid': chatid, 'member_list': member_list, })
 
 def memberlist(request, chatid):
 
@@ -361,7 +361,7 @@ def ajax_memberlist(request):
                                                       'currentchatid': chatid,
                                                       'nodes_members': ChatMember.objects.filter(chat=chatid,
                                                                                         is_active=True,
-                                                                                        dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'),})
+                                                                                        dateclose__isnull=True).select_related("member", "author").order_by('-is_admin', '-dateonline'), })
 
 def chatslist(request):
 
@@ -375,7 +375,7 @@ def chatslist(request):
 
     return render(request, 'chats_list.html', {'nodes_chats': chats_list.distinct(),
                                                #'chats_list_reload': 0,
-                                              },
+                                               },
                   )
 
 def get_current_company_id(request):

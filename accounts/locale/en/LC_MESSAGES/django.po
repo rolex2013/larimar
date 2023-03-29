@@ -1,0 +1,20 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+
+
+#: .\accounts\forms.py:10
+msgid "Пароль"
+msgstr "Password"
+
+#: .\accounts\forms.py:11
+msgid "Повторно"
+msgstr "Repeatedly"
+
+#: .\accounts\forms.py:12
+msgid "Зарегистрировать свою Компанию?"
+msgstr "Register your Company?"

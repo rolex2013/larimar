@@ -7,12 +7,19 @@ from django.contrib import auth
 #import requests
 from django.contrib.auth.models import User
 from main.models import Notification
-  
-register = template.Library() 
+from main.views import select_lang
+from django.conf import settings
+
+register = template.Library()
+
 
 @register.simple_tag(takes_context=True)
 def left_menu(context, menuid=0, is_auth=False):
-    #group_name = ''
+    #print(RequestContext)
+    #print(request)
+    #print('LANGUAGE_CODE:', settings.LANGUAGE_CODE, 'settings.LANGUAGE_SESSION_KEY:',
+    #      settings.LANGUAGE_SESSION_KEY, 'settings.LANGUAGE_COOKIE_NAME:', settings.LANGUAGE_COOKIE_NAME)
+    #select_lang(RequestContext)
     try:
         compid = context.request.session['_auth_user_component_id']
         if is_auth == True:
@@ -25,7 +32,7 @@ def left_menu(context, menuid=0, is_auth=False):
            nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
     except:
         nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
-        #print(nodes)
+        #print(nodes, context.request.session['_auth_user_component_id'])
     return (nodes.order_by('sort'))
     #return (nodes)
 

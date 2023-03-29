@@ -1171,7 +1171,7 @@ def ticketfilter(request):
                                                              'myticketselectid': myticketuser,
                                                              'is_ticketslist_dev': is_ticketslist_dev,
                                                              'button_feedbackticket_create': button_feedbackticket_create,
-                                                            }
+                                                             }
                       )
 
 
@@ -1214,7 +1214,7 @@ def tickettaskfilter(request):
                                                            'tskstatus_selectid': taskstatus,
                                                            'tskstatus_myselectid': mytskuser,
                                                            'is_ticketslist_dev': is_ticketslist_dev,
-                                                          }
+                                                     }
                       )
 
 def tickettasklist(request, companyid, ticketid="0", statusid="0", mytskuser="0", is_ticketslist_dev=0):

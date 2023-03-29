@@ -593,4 +593,4 @@ def docver_change(request):
                                                    'current_object': current_object,
                                                    'user_companies': comps,
                                                    'objtype': 'doc',
-                                                  })
+                                                   })

@@ -3,10 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-
+#, fuzzy
+msgid ""
+msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-23 15:20+0300\n"
+"POT-Creation-Date: 2023-03-23 11:31+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,16 +16,11 @@
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+#: .\templates\finance_detail.html:9
+msgid "Курсы валют"
+msgstr "Exchange rates"
 
-#: .\accounts\forms.py:10
-msgid "Пароль"
-msgstr "Password"
-
-#: .\accounts\forms.py:11
-msgid "Повторно"
-msgstr "Repeatedly"
-
-#: .\accounts\forms.py:12
-msgid "Зарегистрировать свою Компанию?"
-msgstr "Register your Company?"
+#: .\templates\finance_detail.html:9
+msgid "за 1 ед."
+msgstr "for 1 unit"

@@ -4,12 +4,12 @@ from .models import UserProfile
 from companies.models import Company, UserCompanyComponentGroup
 from mptt.forms import MoveNodeForm, TreeNodeChoiceField
 
-from django.utils.translation import gettext_lazy as _
+#from django.utils.translation import gettext_lazy as _
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label=_('Пароль'), widget=forms.PasswordInput)
-    password2 = forms.CharField(label=_('Повторно'), widget=forms.PasswordInput)
-    is_org_register = forms.BooleanField(label=_('Зарегистрировать свою Компанию?'), required=False)
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Повторно', widget=forms.PasswordInput)
+    is_org_register = forms.BooleanField(label='Зарегистрировать свою Компанию?', required=False)
 
     class Meta:
         model = User

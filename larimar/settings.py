@@ -20,6 +20,9 @@ import datetime
 
 from dotenv import load_dotenv, find_dotenv
 
+from django.utils.translation import gettext_lazy as _
+from django.utils.translation import get_language_info
+#from django.utils.translation import gettext as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -58,6 +61,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'django_tables2',
     'rest_framework',
+    'rosetta',
     #'menu',
     'accounts',
     'main', 
@@ -87,11 +91,14 @@ MIDDLEWARE = [
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # add our middleware for redirect user
+    'accounts.middleware.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'larimar.urls'
@@ -200,23 +207,27 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 # https://vivazzi.pro/it/translate-django/
-
-LANGUAGES = (
-    ('ru', 'Russian'),
-    ('en', 'English'),
-)
 LANGUAGE_CODE = os.getenv('LANGUAGE_CODE')
+LANGUAGES = [
+    ('ru', _('Russian')),
+    ('en', _('English')),
+    #('es', _('Spain')),
+]
 
-TIME_ZONE = os.getenv('TIME_ZONE')
-USE_TZ = bool(os.getenv('USE_TZ', default=True))
-USE_I18N = bool(os.getenv('USE_I18N', default=True))   # активация системы перевода django
-
+USE_I18N = True #bool(os.getenv('USE_I18N', default=True))   # активация системы перевода django
+USE_L10N = True #форматирование дат и чисел в зависимости от локализации
+LANGUAGE_SESSION_KEY = 'session_language_appname'
+LANGUAGE_COOKIE_NAME = 'cookie_language_appname'
 # месторасположение файлов перевода
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
+    os.path.join(BASE_DIR, 'accounts/locale'),
+    os.path.join(BASE_DIR, 'finance/locale'),
 )
+#print('==================>', get_language_info('ru'))
+TIME_ZONE = os.getenv('TIME_ZONE')
+USE_TZ = bool(os.getenv('USE_TZ', default=True))
 
-USE_L10N = True
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = int(os.getenv('EMAIL_PORT'))

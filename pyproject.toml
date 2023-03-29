@@ -75,6 +75,7 @@ virtualenv-clone = "0.5.7"
 wrapt = "^1.14.1"
 yarg = "0.1.9"
 zipp = "3.8.0"
+django-rosetta = "^0.9.8"
 
 [tool.poetry.group.dev.dependencies]
 channels-redis = "^4.0.0"

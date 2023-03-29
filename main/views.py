@@ -3,11 +3,12 @@
 #import redis
 
 from django.conf import settings
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound, HttpResponseRedirect
 
 from django.shortcuts import render
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 
+from accounts.models import UserProfile
 from main.models import Notification, Meta_ObjectType, ModelLog
 from projects.models import Project, Task, ProjectFile #, TaskFile
 from crm.models import Client, ClientTask, ClientEvent, ClientFile
@@ -21,6 +22,8 @@ from django.contrib.auth.decorators import login_required
 
 import json
 
+#from django.utils import translation
+
 
 def websocket_test(request):
     ok = request.GET['ok']
@@ -32,7 +35,7 @@ def websocket_test(request):
     request.session['websocket_test'] = ok
     print('WebSocket:', ok)
     #return render(request, "sidebar.html", {'wstest': ok,})
-    return render(request, "main_wstest.html", {'wstest': ok,})
+    return render(request, "main_wstest.html", {'wstest': ok, })
 
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена!</h1>')
@@ -56,11 +59,11 @@ def notificationread(request):
        curr_notify.save(update_fields=["is_read"])
     notification_list = Notification.objects.filter(recipient_id=request.user.id, is_active=True, is_read=False, type_id=3).select_related("author", "recipient", "objecttype", "type")
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
-    return render(request,  "notify_list.html", {
+    return render(request, "notify_list.html", {
                                                  'notification_list': notification_list.distinct().order_by("-datecreate"),
                                                  'metaobjecttype_list': metaobjecttype_list.distinct().order_by(),
                                                 }
-                 )
+                  )
 
 def notificationfilter(request):
 
@@ -89,7 +92,7 @@ def notificationfilter(request):
                                                 'status_selectid': notificationstatus,
                                                 'metaobjecttype_selectid': notificationobjecttype,
                                                }
-                 )
+                  )
 
 
 def sidebarnotificationfilter(request):
@@ -120,7 +123,7 @@ def sidebarnotificationfilter(request):
             'currentuserid': request.user.id,
             'count': 10,
             }
-        )
+                  )
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def objecthistory(request, objtype='prj', pk=0):
@@ -260,7 +263,7 @@ def notifications(request):
     #              )
 
     return render(request, 'sidebar.html', {'user_list': user_list,
-                                                  }
+                                            }
                   )
 
 def sidebarnotificationisread(request):
@@ -281,5 +284,44 @@ def sidebarnotificationisread(request):
                                                                #'metaobjecttype_list': metaobjecttype_list,
                                                                'currentuserid': request.user.id,
                                                                'count': cnt,
-                                                              }
+                                                               }
                   )
+'''
+def select_lang(request):
+    lang_code = request.GET['lang_code']
+    go_next = request.META.get('HTTP_REFERER', '/')
+    response = HttpResponseRedirect(go_next)
+    #print('code=', lang_code, 'go_next=', go_next)
+    if lang_code and translation.check_for_language(lang_code):
+        if hasattr(request, 'session'):
+            request.session['django_language'] = lang_code
+            request.session['_language'] = lang_code
+        else:
+            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang_code)
+        translation.activate(lang_code)
+    return response
+    #return render(request, 'base.html') #response
+'''
+def select_lang(request):
+    lang_code = request.GET['lang_code']
+    #print('=== select_lang ===')
+    response = HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    if lang_code:
+        request.session[settings.LANGUAGE_SESSION_KEY] = lang_code
+        response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang_code)
+        if request.user.is_authenticated:
+            UserProfile.objects.filter(user_id=request.user.id).update(lang=lang_code)
+    else:
+        if request.user.is_authenticated:
+            user_lang = UserProfile.objects.filter(user_id=request.user.id).first().lang.strip()
+            if user_lang != None and user_lang != '':
+                request.session[settings.LANGUAGE_SESSION_KEY] = user_lang
+                response.set_cookie(settings.LANGUAGE_COOKIE_NAME, user_lang)
+            #else:
+            #    request.session[settings.LANGUAGE_SESSION_KEY] = user_lang
+            #    request.session['_auth_user_currentlang_id'] = settings.LANGUAGE_COOKIE_NAME
+        else:
+            request.session[settings.LANGUAGE_SESSION_KEY] = settings.LANGUAGE_COOKIE_NAME
+    #print('code=', lang_code, 'response=', request.META.get('HTTP_REFERER', '/'))
+
+    return response

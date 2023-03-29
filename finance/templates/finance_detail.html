@@ -2,9 +2,11 @@
 
 {% block finance %}
 
+{% load i18n %}
+
 <div class="object-list">   
 
-   <h3>Курсы валют, {{ r_base }} за 1 ед.</h3>
+   <h3>{% trans 'Курсы валют' %}, {{ r_base }} {% trans 'за 1 ед.' %}</h3>
    <br />
 
 <!--{ button_currencyrate_update }}<br /><br />-->
@@ -15,7 +17,7 @@
       {% csrf_token %}
 
       <div class="object-list-filters">      
-         <label>Фильтр по дате: </label>
+         <label>{% trans 'Фильтр по дате' %}: </label>
    
          <!--<div class="input-group date" id="datetimepicker1" data-target-input="nearest">-->
             <!--{{ form.date }}-->
@@ -25,8 +27,8 @@
                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
             </div>
          </div>-->
-         c <input type="date" id="datebegin"> по <input type="date" id="dateend">
-         <label>Фильтр по валюте: </label>
+         {% trans 'c' %} <input type="date" id="datebegin"> {% trans 'по' %} <input type="date" id="dateend">
+         <label>{% trans 'Фильтр по валюте' %}: </label>
          <select name="select-curr" id="currselectid" class="select-curr">
             <option value="0" {% if "0" == currselectid %} selected="selected" {% endif %}>- Все</option>
             {% for currency in currency_list %}
@@ -35,7 +37,7 @@
                </option>        
             {% endfor %}                 
          </select>&nbsp;            
-         <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>               
+         <button id="selection-button" type="submit" method="GET" class="object-filter-button">{% trans 'Применить' %}</button>
    
          <!--<button type="submit">Применить</button>-->
       </div>

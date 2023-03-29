@@ -23,9 +23,13 @@ from django.views.generic import RedirectView
 
 from main.views import pageNotFound
 
+from django.conf.urls.i18n import i18n_patterns #добавляем в адреса языковый префикс
+
+#urlpatterns = i18n_patterns()
 urlpatterns = [
     path('favicon.ico/', RedirectView.as_view(url='/static/image/favicon.ico')),
     path('admin/', admin.site.urls),
+    path('rosetta/', include('rosetta.urls')),
     #path('', include('accounts.urls')),
     #path('main/', include('main.urls')),
     path('', include('main.urls')),

@@ -26,6 +26,7 @@ urlpatterns = [
    path('main/sidebar_notify_filter/', sidebarnotificationfilter, name='sidebar_notification_filter'),
    path('main/sidebar_notify_isread/', sidebarnotificationisread, name='sidebar_notification_isread'),
    path('main/ws/test/', websocket_test, name='websocket_test'),
+   path('main/lang/', views.select_lang, name='select_lang'),
    #path('', contents, name = 'main'),
    #path('', contents, name = 'index'),
    #path('', ELogoutView.as_view(), name='logout')
