@@ -43,7 +43,7 @@ ADMINS = ((os.getenv('ADMIN_NAME'), os.getenv('ADMIN_EMAIL')),)
 
 INSTALLED_APPS = [
     'channels',
-    #"channels_presence", - удалено, справились своей таблицей и своим websocket'ом
+    'modeltranslation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

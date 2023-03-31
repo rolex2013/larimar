@@ -38,6 +38,8 @@ from chats.models import Dict_ChatType, Chat, ChatMember
 
 from django_mptt_admin.admin import DjangoMpttAdmin
 
+from modeltranslation.admin import TranslationAdmin, TabbedTranslationAdmin
+
 
 class CompanyAdmin(DjangoMpttAdmin):
     pass
@@ -87,8 +89,10 @@ admin.site.register(Menu)
 
 admin.site.register(MenuItem, MenuItemAdmin)
 
+class Dict_CurrencyAdmin(TabbedTranslationAdmin):
+    pass
 
-admin.site.register(Dict_Currency)
+admin.site.register(Dict_Currency, Dict_CurrencyAdmin)
 
 admin.site.register(CurrencyRate)
 

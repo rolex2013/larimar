@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from django.conf import settings
-#from django.http import HttpResponseRedirect
-#from django.urls import translate_url
-#from django.utils import translation
 from django.utils.deprecation import MiddlewareMixin
 from .models import UserProfile
 
@@ -18,7 +15,7 @@ class LocaleMiddleware(MiddlewareMixin):
         if not user.is_authenticated:
             return response
 
-        user_lang = UserProfile.objects.filter(user=user).first().lang #getattr(UserProfile, 'lang', None)
+        user_lang = UserProfile.objects.filter(user=user).first().lang
         print('middleware:', user_lang)
         if not user_lang:
             return response
