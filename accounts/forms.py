@@ -4,12 +4,12 @@ from .models import UserProfile
 from companies.models import Company, UserCompanyComponentGroup
 from mptt.forms import MoveNodeForm, TreeNodeChoiceField
 
-#from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 class UserRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Повторно', widget=forms.PasswordInput)
-    is_org_register = forms.BooleanField(label='Зарегистрировать свою Компанию?', required=False)
+    password = forms.CharField(label=_('Пароль'), widget=forms.PasswordInput)
+    password2 = forms.CharField(label=_('Повторно'), widget=forms.PasswordInput)
+    is_org_register = forms.BooleanField(label=_('Зарегистрировать свою Компанию?'), required=False)
 
     class Meta:
         model = User
@@ -18,7 +18,7 @@ class UserRegistrationForm(forms.ModelForm):
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Пароли не совпадают!')
+            raise forms.ValidationError(_('Пароли не совпадают!'))
         return cd['password2']
 
     #def clean(self):
@@ -44,7 +44,7 @@ class UserSelect(forms.Select):
 
 class UserAddForm(forms.ModelForm):
 
-    is_staff = forms.BooleanField(label='Отметьте, если это сотрудник, а не клиент', required=False)
+    is_staff = forms.BooleanField(label=_('Отметьте, если это сотрудник, а не клиент'), required=False)
 
     # Надо из выпадающего списка юзеров исключить уже привязанных к этой организации
     def __init__(self, *args, **kwargs):
@@ -55,19 +55,18 @@ class UserAddForm(forms.ModelForm):
         uc = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid, user__is_active=True).values_list('user', flat=True).distinct()
         usr = User.objects.filter(is_active=True).exclude(id__in=uc)
         self.fields['user'].queryset = usr
-        #print(uc)
     class Meta:
         model = UserCompanyComponentGroup
         fields = ['user']
         widgets = {'user': UserSelect}
 
 class UserEnviteForm(forms.ModelForm):
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Повторно', widget=forms.PasswordInput) 
+    password = forms.CharField(label=_('Пароль'), widget=forms.PasswordInput)
+    password2 = forms.CharField(label=_('Повторно'), widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
         super(UserEnviteForm, self).__init__(*args, **kwargs)
-        self.fields['is_staff'].help_text = '<br />(отметьте, если это сотрудник вашей Организации)'  
+        self.fields['is_staff'].help_text = '<br />('+_('отметьте, если это сотрудник вашей Организации')+')'
 
     class Meta:
         model = User
@@ -76,7 +75,7 @@ class UserEnviteForm(forms.ModelForm):
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Пароли не совпадают!')
+            raise forms.ValidationError(_('Пароли не совпадают!'))
         return cd['password2']
 
 class UserProfileForm(forms.ModelForm):
@@ -87,7 +86,7 @@ class UserProfileForm(forms.ModelForm):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         #self.fields['company'].queryset = Company.objects.filter(id__in=self.companies) # это без иерархии
         #self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.all(), level_indicator = u'---') # из документации
-        self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.filter(id__in=self.companies), level_indicator = u'---') # с иерархией
+        self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.filter(id__in=self.companies), level_indicator=u'---')   # с иерархией
     class Meta:
         model = UserProfile
         fields = ['company', 'description', 'is_notify', 'protocoltype', 'email', 'phone']     

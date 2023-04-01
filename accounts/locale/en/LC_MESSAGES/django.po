@@ -3,18 +3,73 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-01 20:39+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-
-#: .\accounts\forms.py:10
+#: .\forms.py:10 .\forms.py:64
 msgid "Пароль"
 msgstr "Password"
 
-#: .\accounts\forms.py:11
+#: .\forms.py:11 .\forms.py:65
 msgid "Повторно"
-msgstr "Repeatedly"
+msgstr "Again"
 
-#: .\accounts\forms.py:12
+#: .\forms.py:12
 msgid "Зарегистрировать свою Компанию?"
 msgstr "Register your Company?"
+
+#: .\forms.py:21 .\forms.py:78
+msgid "Пароли не совпадают!"
+msgstr "Passwords don't match!"
+
+#: .\forms.py:47
+msgid "Отметьте, если это сотрудник, а не клиент"
+msgstr "Check if this is an employee, not a client"
+
+#: .\forms.py:69
+msgid "отметьте, если это сотрудник вашей Организации"
+msgstr "check if this is an employee of your Organization"
+
+#: .\templates\registration\register.html:8
+#: .\templates\registration\register.html:20
+msgid "Регистрация пользователя"
+msgstr "User Registration"
+
+#: .\templates\registration\register.html:10
+#: .\templates\registration\register.html:64
+msgid "Приглашение нового пользователя"
+msgstr "Inviting a new user"
+
+#: .\templates\registration\register.html:21
+#: .\templates\registration\register.html:65
+msgid "Пожалуйста, заполните все поля формы"
+msgstr "Please fill in all fields of the form"
+
+#: .\templates\registration\register.html:37
+#: .\templates\registration\register.html:74
+msgid "Создать"
+msgstr "Create"
+
+#: .\templates\registration\register.html:46
+msgid "Добавить пользователя в организацию"
+msgstr "Add a user to an organization"
+
+#: .\templates\registration\register.html:47
+msgid "Пожалуйста, выберите пользователя"
+msgstr "Please select a user"
+
+#: .\templates\registration\register.html:56
+msgid "Добавить"
+msgstr "Add"

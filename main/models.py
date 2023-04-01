@@ -1,6 +1,12 @@
+import requests
+from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 from ckeditor_uploader.fields import RichTextUploadingField
+
+# request, пробрасываемый сюда из main\request_exposer.py
+exposed_request = ''
 
 
 class Meta_Param(models.Model):
@@ -109,13 +115,39 @@ class ModelLog(models.Model):
         verbose_name_plural = 'Истории Объектов'
 
 class Menu(models.Model):
-    name = models.CharField("Наименование", max_length=128)
+    name_ru = models.CharField(_("Наименование_ru"), max_length=128)
+    name_en = models.CharField(_("Наименование_en"), max_length=128)
     slug = models.CharField("slug", max_length=64)
-    base_url = models.CharField("Основной URL", max_length=128)
-    description = models.TextField("Описание", blank=True, null=True)
+    base_url = models.CharField(_("Основной URL"), max_length=128)
+    description_ru = models.TextField(_("Описание_ru"), blank=True, null=True)
+    description_en = models.TextField(_("Описание_en"), blank=True, null=True)
     #sort = models.PositiveSmallIntegerField(default=5, blank=True, null=True)
-    is_active = models.BooleanField("Активность", default=True)            
-    
+    is_active = models.BooleanField(_("Активность"), default=True)
+
+    @property
+    def name(self):
+        try:
+            lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
+        except KeyError:
+            try:
+                lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
+            except KeyError:
+                lang = 'ru' #exposed_request.session[settings.LANGUAGE_CODE]
+        #print('exposed_request:', exposed_request, lang, 'name_'+lang)
+        return getattr(self, 'name_'+lang, None)
+
+    @property
+    def description(self):
+        try:
+            lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
+        except KeyError:
+            try:
+                lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
+            except KeyError:
+                lang = 'ru'
+        print('exposed_request:', exposed_request, lang, 'title_'+lang)
+        return getattr(self, 'description_'+lang, None)
+
     def __str__(self):
         return (self.name)
     
@@ -124,16 +156,46 @@ class Menu(models.Model):
         verbose_name = 'Список меню'
         verbose_name_plural = 'Списки меню'
 
-class MenuItem(MPTTModel):    
-    title = models.CharField("Наименование", max_length=128)
-    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='menuitem_menu', verbose_name="Меню")
-    component = models.ForeignKey('Component', null=True, blank=True, on_delete=models.CASCADE, related_name='menuitem_component', verbose_name="Компонент")
-    description = models.TextField("Описание", null=True, blank=True)
+class MenuItem(MPTTModel):
+    #title = models.CharField(_("Наименование"), max_length=128)
+    title_ru = models.CharField(_("Наименование_ru"), default='title', max_length=128)
+    title_en = models.CharField(_("Наименование_en"), default='title', max_length=128)
+    menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='menuitem_menu', verbose_name=_("Меню"))
+    component = models.ForeignKey('Component', null=True, blank=True, on_delete=models.CASCADE, related_name='menuitem_component',
+                                  verbose_name=_("Компонент"))
+    #description = models.TextField("Описание", null=True, blank=True)
+    description_ru = models.TextField(_("Описание_ru"), null=True, blank=True)
+    description_en = models.TextField(_("Описание_en"), null=True, blank=True)
     link_url = models.CharField("URL", max_length=128)
-    parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='menuitem_children', verbose_name="Головной пункт меню")
-    sort = models.PositiveSmallIntegerField(default=5, blank=True, null=True)
-    is_active = models.BooleanField("Активность", default=True)    
-                      
+    parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE,
+                            related_name='menuitem_children', verbose_name=_("Головной пункт меню"))
+    sort = models.PositiveSmallIntegerField(default=15, blank=True, null=True)
+    is_active = models.BooleanField(_("Активность"), default=True)
+
+    @property
+    def title(self):
+        try:
+            lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
+        except KeyError:
+            try:
+                lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
+            except KeyError:
+                lang = 'ru' #exposed_request.session[settings.LANGUAGE_CODE]
+        #print('exposed_request:', exposed_request, lang, 'title_'+lang)
+        return getattr(self, 'title_'+lang, None)
+
+    @property
+    def description(self):
+        try:
+            lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
+        except KeyError:
+            try:
+                lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
+            except KeyError:
+                lang = 'ru'
+        print('exposed_request:', exposed_request, lang, 'title_'+lang)
+        return getattr(self, 'description_'+lang, None)
+
     def __str__(self):
         return (self.menu.name + ' ' + self.title)
     class MPTTMeta:
@@ -141,8 +203,8 @@ class MenuItem(MPTTModel):
         order_insertion_by = ['sort']
     class Meta:
         #ordering = ('menu', 'sort')
-        verbose_name = 'Пункты меню'
-        verbose_name_plural = 'Пункты меню'
+        verbose_name = _('Пункты меню')
+        verbose_name_plural = _('Пункты меню')
 
 
 class Dict_Theme(MPTTModel):

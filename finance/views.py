@@ -68,10 +68,7 @@ def finance(request):
            r_data = r_curr[curr.code_char]
            r_value = r_data['Previous']            
         cr = CurrencyRate(currency_id=curr.id, date=r_date, rate=r_value)
-        if curr.code_char == 'GBP':
-            print(r_data)
-            print(r_value)
-        try: 
+        try:
            cr.save()
         except IntegrityError:
            print('Курс на предыдущую дату уже загружен в БД!') 

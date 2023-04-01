@@ -43,7 +43,7 @@ ADMINS = ((os.getenv('ADMIN_NAME'), os.getenv('ADMIN_EMAIL')),)
 
 INSTALLED_APPS = [
     'channels',
-    'modeltranslation',
+    #'modeltranslation', #обошлись собственным middleware для проброса request'а в модели и полями @property
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -99,6 +99,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # add our middleware for redirect user
     'accounts.middleware.LocaleMiddleware',
+    'main.request_exposer.RequestExposerMiddleware',
+    'finance.request_exposer.RequestExposerMiddleware',
 ]
 
 ROOT_URLCONF = 'larimar.urls'
@@ -216,8 +218,8 @@ LANGUAGES = [
 
 USE_I18N = True #bool(os.getenv('USE_I18N', default=True))   # активация системы перевода django
 USE_L10N = True #форматирование дат и чисел в зависимости от локализации
-LANGUAGE_SESSION_KEY = 'session_language_appname'
-LANGUAGE_COOKIE_NAME = 'cookie_language_appname'
+LANGUAGE_SESSION_KEY = 'session_language'
+LANGUAGE_COOKIE_NAME = 'cookie_language'
 # месторасположение файлов перевода
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'locale'),
