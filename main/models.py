@@ -193,7 +193,7 @@ class MenuItem(MPTTModel):
                 lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
             except KeyError:
                 lang = 'ru'
-        print('exposed_request:', exposed_request, lang, 'title_'+lang)
+        #print('exposed_request:', exposed_request, lang, 'title_'+lang)
         return getattr(self, 'description_'+lang, None)
 
     def __str__(self):

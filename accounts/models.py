@@ -13,8 +13,9 @@ class UserProfile(models.Model):
     lang = models.CharField("Язык", max_length=5, blank=True, null=True)
     email = models.CharField("E-mail", max_length=64, blank=True, null=True)
     phone = models.CharField("Телефон", max_length=16, blank=True, null=True)
-    description = RichTextUploadingField("Описание", blank=True, null=True)    
+    description = RichTextUploadingField("Описание", blank=True, null=True)
     is_active = models.BooleanField("Активность", default=True)
+    #is_del = models.BooleanField("Метка удаления", default=False)
 
     def get_absolute_url(self):
         return reverse('my_account:userprofile_detail', kwargs={'userid': self.user.pk, 'param': ' '})  
