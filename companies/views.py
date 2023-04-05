@@ -198,12 +198,13 @@ def stafflist(request, companyid=0, pk=0):
     #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).distinct().order_by('user_id')
     #raw_query = 'SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id LEFT JOIN companies_company c ON
     # c.id=uc.company_id LEFT JOIN main_component cmp ON cmp.id=uc.component_id LEFT JOIN auth_group g ON g.id=uc.group_id WHERE company_id='+str(companyid)+' AND uc.is_active=1 AND u.is_active=1 GROUP BY  uc.user_id'
-    raw_query = 'SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id LEFT JOIN main_component c ON ' \
-                'c.id=uc.component_id WHERE uc.company_id='+str(companyid)+\
-                ' AND uc.is_active=1 AND u.is_active=1 AND c.code="'+component_name+'" GROUP BY uc.user_id'
+    raw_query_1 = 'SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id LEFT JOIN main_component c ON c.id=uc.component_id '
+    raw_query_2 = "WHERE uc.company_id="+str(companyid)+" AND uc.is_active=1 AND u.is_active=1 AND c.code='"+component_name+"' GROUP BY uc.user_id"
+    raw_query = raw_query_1 + raw_query_2
+    #print(raw_query)
     unodes = UserCompanyComponentGroup.objects.raw(raw_query)
 
-    print(companyid, unodes)
+    #print(companyid, unodes)
     nodes = StaffList.objects.filter(is_active=True, company_id=companyid).select_related("author", "company", "currency", "type").order_by()
 
     button_company_create = ''
@@ -211,7 +212,7 @@ def stafflist(request, companyid=0, pk=0):
     button_user_envite = ''
     button_user_create = ''
     button_stafflist_create = ''  
-    #print(currentuser)  
+    #print(unodes)
     #print(current_company.author_id)
     if currentuser == current_company.author_id:
        button_company_create = 'Добавить'
@@ -411,7 +412,6 @@ class SummaryCreate(CreateView):
     model = Summary
     form_class = SummaryForm
     template_name = 'object_form.html'
-    #print('===================')
 
     def form_valid(self, form):
        form.instance.stafflist_id = self.kwargs['stafflistid']    
@@ -564,7 +564,7 @@ class ContentDetail(DetailView):
              context['extdescription'] = ' (Контент перемещен в архив)'
           return context              
        elif self.object.place_id == 1:
-          print(context)
+          #print(context)
           return context  
        #context['extdescription'] = ' Контент недоступен!'
        

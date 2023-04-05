@@ -1,4 +1,6 @@
 
+    {% load i18n %}
+
     <div style="font-size: small; color: #ffffff;">
         <!--<label for="username" class="form-label">{ request.user.username }}</label>-->
         <select name="select-user" id="userselectid" class="select-user">
@@ -10,7 +12,7 @@
         </select><br />
         <input id="message" class="form-control" type="text" style="font-size: small;"><br />
     </div>
-    <button id="button" style="font-size: small;">Отправить</button>
+    <button id="button" style="font-size: small;">{% trans "Отправить" %}</button>
 
 
 <script>

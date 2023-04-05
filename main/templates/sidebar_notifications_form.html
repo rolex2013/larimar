@@ -1,4 +1,6 @@
 
+   {% load i18n %}
+
    <form method="GET" style="font-size: x-small;">
       {% csrf_token %}
       <div class="object-list-filters">
@@ -12,15 +14,15 @@
              {% endfor %}
          </select><br />
          {% endcomment %}
-         <label>По статусам: </label>
+         <label>{% trans "По статусам" %}: </label>
          <select name="notify-select-status" id="notifystatusselectid" class="select-status">
-            <option value="1" {% if "1" == status_selectid %} selected="selected" {% endif %}>- Все</option>
-            <option value="2" {% if "2" == status_selectid %} selected="selected" {% endif %}>- Непрочитанные</option>
-            <option value="3" {% if "3" == status_selectid %} selected="selected" {% endif %}>- Прочитанные</option>
+            <option value="1" {% if "1" == status_selectid %} selected="selected" {% endif %}>- {% trans "Все" %}</option>
+            <option value="2" {% if "2" == status_selectid %} selected="selected" {% endif %}>- {% trans "Непрочитанные" %}</option>
+            <option value="3" {% if "3" == status_selectid %} selected="selected" {% endif %}>- {% trans "Прочитанные" %}</option>
          </select><br />
-         <label>По типам: </label>
+         <label>{% trans "По типам" %}: </label>
          <select name="notify-select-metaobjecttype" id="notifymetaobjecttypeselectid"  class="select-metaobjecttype">
-            <option value="0" {% if 0 == metaobjecttype_selectid|add:"0" %} selected="selected" {% endif %}>- Все</option>
+            <option value="0" {% if 0 == metaobjecttype_selectid|add:"0" %} selected="selected" {% endif %}>- {% trans "Все" %}</option>
             {% for metaobjecttype in metaobjecttype_list %}
                <option value="{{metaobjecttype.id}}" {% if metaobjecttype.id == metaobjecttype_selectid|add:"0" %} selected="selected" {% endif %}>
                   {{metaobjecttype.name}}
@@ -28,7 +30,7 @@
             {% endfor %}
          </select><br />
          <button id="notify-selection-button" type="submit" method="GET" class="object-filter-button" style="font-size: x-small; text-align: right;
-">Применить</button>
+">{% trans "Применить" %}</button>
       </div>
    </form>
     <br />

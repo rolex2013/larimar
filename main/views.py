@@ -114,9 +114,9 @@ def sidebarnotificationfilter(request):
         notification_list = notification_list.filter(objecttype_id=notificationobjecttype)
 
     cnt = notification_list.filter(recipient_id=request.user.id, is_read=False, objecttype_id=9).count()
-    print(cnt)
+    #print(cnt)
     notification_list = notification_list.select_related("author", "recipient", "objecttype", "type").order_by('datecreate').distinct()
-    print(notification_list)
+    #print(notification_list)
 
     return render(request, "sidebar_notifications_list.html", {
             'nodes': notification_list,

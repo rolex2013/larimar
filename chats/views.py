@@ -74,6 +74,7 @@ def chats(request, companyid=0, chatid=0):
 
     request.session['_auth_user_currentcomponent'] = 'chats'
     request.session['_auth_user_currentcomponentid'] = Component.objects.filter(code='chats', is_active=True).first().id
+    #print('=====================', Component.objects.filter(Q(code='chats') & Q(is_active=True)))
 
     render_list = chats_messages_members_lists(request, companyid, chatid)
 
@@ -335,7 +336,11 @@ def memberlist(request, chatid):
     is_admin = ChatMember.objects.filter(chat_id=chatid, member_id=request.user.id).first()
     if is_admin:
         # Список пользователей для выбора
-        uc = UserCompanyComponentGroup.objects.filter(company_id=currentchat.company_id, component__name="Чаты", is_active=True).select_related("user", "component").distinct() #.values_list('user_id', flat=True)
+        #uc = UserCompanyComponentGroup.objects.filter(company_id=currentchat.company_id, component__name="Чаты", is_active=True).select_related(
+        # "user", "component").distinct() #.values_list('user_id', flat=True)
+        #print(Component.objects)
+        uc = UserCompanyComponentGroup.objects.filter(company_id=currentchat.company_id, component__code="chats", is_active=True).select_related(
+            "user", "component").distinct()
         current_members_list = ChatMember.objects.filter(chat_id=chatid, is_active=True).values_list('member_id', flat=True)
         #member_list = User.objects.filter(~Q(id__in=current_members_list), id__in=uc, is_active=True) #.exclude(id__in=current_members_list)
         #member_list = User.objects.filter(id__in=uc, is_active=True).exclude(id__in=current_members_list)

@@ -1,6 +1,13 @@
-<!--{ load render_table from django_tables2 %}-->
+<!-- Load translations into Javascript -->
+<script src="{% url 'js-catalog' %}"></script>
 
-<h4>Мои уведомления</h4>
+<!-- Load our JS script that uses translations
+{ load static %}
+<script src="{ static 'js/i18n.js' %}"></script>-->
+
+{% load i18n %}
+
+<h4>{% trans 'Мои уведомления' %}</h4>
 <!--
 <br />
 <div style="float: left;" class="notification-entry"><a href="{ url 'my_company:notification_create' %}"
@@ -19,22 +26,22 @@
    <form method="GET">
       {% csrf_token %}
       <div class="object-list-filters">
-         <label>По статусам: </label>
+         <label>{% trans 'По статусам' %}: </label>
          <select name="select-status" id="statusselectid" class="select-status">
-            <option value="1" {% if "1" == status_selectid %} selected="selected" {% endif %}>- Все</option>
-            <option value="2" {% if "2" == status_selectid %} selected="selected" {% endif %}>- Непрочитанные</option>
-            <option value="3" {% if "3" == status_selectid %} selected="selected" {% endif %}>- Прочитанные</option>
+            <option value="1" {% if "1" == status_selectid %} selected="selected" {% endif %}>- {% trans 'Все' %}</option>
+            <option value="2" {% if "2" == status_selectid %} selected="selected" {% endif %}>- {% trans 'Непрочитанные' %}</option>
+            <option value="3" {% if "3" == status_selectid %} selected="selected" {% endif %}>- {% trans 'Прочитанные' %}</option>
          </select> 
-         <label>По типам: </label>
+         <label>{% trans 'По типам' %}: </label>
          <select name="select-metaobjecttype" id="metaobjecttypeselectid"  class="select-metaobjecttype">
-            <option value="0" {% if 0 == metaobjecttype_selectid|add:"0" %} selected="selected" {% endif %}>- Все</option>
+            <option value="0" {% if 0 == metaobjecttype_selectid|add:"0" %} selected="selected" {% endif %}>- {% trans 'Все' %}</option>
             {% for metaobjecttype in metaobjecttype_list %}
                <option value="{{metaobjecttype.id}}" {% if metaobjecttype.id == metaobjecttype_selectid|add:"0" %} selected="selected" {% endif %}>
                   {{metaobjecttype.name}}
                </option>   
             {% endfor %}
          </select>                
-         <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>
+         <button id="selection-button" type="submit" method="GET" class="object-filter-button">{% trans 'Применить' %}</button>
       </div>
    </form>    
    {% include 'notify_list.html' %}
@@ -58,58 +65,10 @@
                },
                error: function(xhr, errmsg, err){
                   console.log("error")
-                  $('#ajax_listerrors').html('Нет данных!');
+                  $('#ajax_listerrors').html(gettext('Нет данных!'));
                }
             });
    });
-
-/*
-   $('input[type="checkbox"]').change(function(){
-   
-      console.log("*** === ***")
-      // Проверка стоит галочка или нет
-      if ($(this).is(':checked')) {
-
-         var chk = $(this).attr("name");
-         var chkVal = $(this).attr("value");
-
-         // Ваш запрос
-         $.ajax({
-            url: "{ url 'my_main:notification_read' %}",
-            type: 'GET',
-            //data: { name: chk, val: chkVal },
-            data: { val: chkVal },
-            //beforeSend: function() { alert(chk+ ' '+chkVal); },
-            //success: function(data) { alert(data); }
-            success: function(data) {
-               $('#ajax_listresult').html(data);
-            }
-         });
-
-      }
-   
-   });
-
-   $document.querySelector('button').onclick(function() {
-      console.log("*** =///= ***")
-         event.preventDefault(); // *** без этого страница перегружается после возврата data
-         var chk = $(this).attr("name");
-         var chkVal = $(this).attr("value");
-
-         // Ваш запрос
-         $.ajax({
-            url: "{ url 'my_main:notification_read' %}",
-            type: 'GET',
-            //data: { name: chk, val: chkVal },
-            data: { val: chkVal },
-            //beforeSend: function() { alert(chk+ ' '+chkVal); },
-            //success: function(data) { alert(data); }
-            success: function(data) {
-               $('#ajax_listresult').html(data);
-            }
-         });
-   });   
-*/
 
 
 </script>

@@ -1,5 +1,6 @@
-from django.http import HttpResponse
-from ckeditor.widgets import CKEditorWidget
+#from django.http import HttpResponse
+#from ckeditor.widgets import CKEditorWidget
+import requests
 from django import forms
 from .models import Company, Project, Task, TaskComment, ProjectFile
 #from .models import ProjectStatusLog, TaskStatusLog
@@ -10,67 +11,63 @@ from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
 #from django.contrib.admin.widgets import AdminDateWidget
 #from django.contrib.admin.widgets import AdminSplitDateTime
-from bootstrap_datepicker_plus import DatePickerInput
-from django.contrib.auth.context_processors import auth
+from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
+#from django.contrib.auth.context_processors import auth
 import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 
 
+# Create custom widget in your forms.py file.
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class ProjectForm(forms.ModelForm):
-    #datebegin = forms.DateField(widget=AdminDateWidget())
-    #datebegin = forms.DateField(widget=AdminSplitDateTime())
 
     files = forms.FileField(label='Файлы проекта', widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
-
     disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
         if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
            self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
-        if self.action == 'update': 
-           if self.cleaned_data['status'].id != self.initial['status']:
-              # если вызов пришёл из ProjectUpdate и статус проекта был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели)
-              #dict_status = Dict_ProjectStatus.objects.get(pk=self.cleaned_data['status'].id)
-              #ProjectStatusLog.objects.create(project_id=self.initial['id'], 
-              #                                status_id=dict_status.id, 
-              #                                author_id=self.user.id)
-              if self.cleaned_data['status'].is_close: # == "Выполнен":
-                  self.cleaned_data['dateclose'] = datetime.datetime.today()
-                  self.cleaned_data['percentage'] = 100
-                  if self.user.id != self.initial['author']:
-                    # если проект закрывается Исполнителем, то уведомление отсылается Автору
-                    #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)    
-                    user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
-                    objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id                                       
-                    send_mail('1YES. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
-                    #print('==================')
-                    Notification.objects.create(type=user_profile.protocoltype,
-                                                objecttype_id=objecttypeid,
-                                                objectid=self.initial['id'],
-                                                sendfrom=settings.EMAIL_HOST_USER,
-                                                theme='Ваш Проект закрыт!',
-                                                text='Уведомляем о закрытии Вашего Проекта.',
-                                                recipient_id=self.initial['author'],                                             
-                                                sendto=user_profile.email,
-                                                author_id=self.user.id)
-              else:
-                 self.cleaned_data['dateclose'] = None
-           elif self.cleaned_data['assigner'].id != self.initial['assigner']:
-              user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
-              objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id
-              #send_mail('LarimarITGroup. Вы назначены исполнителем Проекта.', 'Уведомляем о назначении Вам Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
-              #print(user_profile.protocoltype)
-              #print(self.cleaned_data['assigner'].id)
-              Notification.objects.create(type=user_profile.protocoltype,
-                                          objecttype_id=objecttypeid,  
-                                          objectid=self.initial['id'],            
-                                          sendfrom=settings.EMAIL_HOST_USER,
-                                          theme='Вы назначены исполнителем Проекта.',
-                                          text='Уведомляем о назначении Вам Проекта "'+self.cleaned_data['name']+'".',
-                                          recipient_id=self.cleaned_data['assigner'].id,                                          
-                                          sendto=user_profile.email,
-                                          author_id=self.user.id)
+        if self.action == 'update':
+            if self.cleaned_data['status'].id != self.initial['status']:
+                if self.cleaned_data['status'].is_close:  # == "Выполнен":
+                    self.cleaned_data['dateclose'] = datetime.datetime.today()
+                    self.cleaned_data['percentage'] = 100
+                    if self.user.id != self.initial['author']:
+                        # если проект закрывается Исполнителем, то уведомление отсылается Автору
+                        # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
+                        user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
+                        objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id
+                        send_mail('1YES. Ваш Проект закрыт.', 'Уведомляем о закрытии Вашего Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+                        # print('==================')
+                        Notification.objects.create(type=user_profile.protocoltype,
+                                                    objecttype_id=objecttypeid,
+                                                    objectid=self.initial['id'],
+                                                    sendfrom=settings.EMAIL_HOST_USER,
+                                                    theme='Ваш Проект закрыт!',
+                                                    text='Уведомляем о закрытии Вашего Проекта.',
+                                                    recipient_id=self.initial['author'],
+                                                    sendto=user_profile.email,
+                                                    author_id=self.user.id)
+                else:
+                    self.cleaned_data['dateclose'] = None
+            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
+                user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
+                objecttypeid = Meta_ObjectType.objects.get(shortname='prj').id
+                # send_mail('LarimarITGroup. Вы назначены исполнителем Проекта.', 'Уведомляем о назначении Вам Проекта!', settings.EMAIL_HOST_USER, [user_profile.email])
+                # print(user_profile.protocoltype)
+                # print(self.cleaned_data['assigner'].id)
+                Notification.objects.create(type=user_profile.protocoltype,
+                                            objecttype_id=objecttypeid,
+                                            objectid=self.initial['id'],
+                                            sendfrom=settings.EMAIL_HOST_USER,
+                                            theme='Вы назначены исполнителем Проекта.',
+                                            text='Уведомляем о назначении Вам Проекта "' + self.cleaned_data['name'] + '".',
+                                            recipient_id=self.cleaned_data['assigner'].id,
+                                            sendto=user_profile.email,
+                                            author_id=self.user.id)
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user')      # Выцепляем текущего юзера (To get request.user. Do not use kwargs.pop('user', None) due to potential security hole)
@@ -102,10 +99,8 @@ class ProjectForm(forms.ModelForm):
         fields = ['name', 'description', 'members', 'assigner', 'currency', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'is_active', 'dateclose', 'id', 'author']
         #labels = {'Files':'Выберите файлы'}
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y') # specify date-frmat,
-            #'docfile': forms.ClearableFileInput(attrs={'multiple': True}),
-            #'files': forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), required=False)
+            'datebegin': DatePickerInput(options={'format': 'DD.MM.YY'}),
+            'dateend': DatePickerInput(options={'format': 'DD.MM.YY'})
         }
 
 class TaskForm(forms.ModelForm):
@@ -120,11 +115,6 @@ class TaskForm(forms.ModelForm):
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == 'update':
            if self.cleaned_data['status'].id != self.initial['status']:
-              # если вызов пришёл из TaskUpdate и статус задачи был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели) 
-              #dict_status = Dict_TaskStatus.objects.get(pk=self.cleaned_data['status'].id)
-              #TaskStatusLog.objects.create(task_id=self.initial['id'], 
-              #                             status_id=dict_status.id, 
-              #                             author_id=self.user.id)
               if self.cleaned_data['status'].is_close:
                  if self.user.id != self.initial['author']: 
                     self.cleaned_data['dateclose'] = datetime.datetime.today()
@@ -191,8 +181,8 @@ class TaskForm(forms.ModelForm):
         model = Task
         fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'percentage', 'is_active', 'dateclose', 'id', 'author']
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y %H:%M'), # specify date-frmat
+            'datebegin': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}), # default date-format %m/%d/%Y will be used
+            'dateend': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}), # specify date-frmat
         }        
 
 class TaskCommentForm(forms.ModelForm):
@@ -209,12 +199,3 @@ class FilterStatusForm(forms.ModelForm):
         model = Dict_ProjectStatus
         fields = ['name']
 
-#
-#class DateForm(forms.Form):
-#    date = forms.DateTimeField(
-#        input_formats=['%d/%m/%Y %H:%M'],
-#        widget=forms.DateTimeInput(attrs={
-#            'class': 'form-control datetimepicker-input',
-#            'data-target': '#datetimepicker1'
-#        })
-#    )

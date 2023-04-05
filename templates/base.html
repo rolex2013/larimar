@@ -12,7 +12,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         {% load static %}
-        {% load i18n %}
 
         <!--<link rel="shortcut icon" type="image/png" href="{ static 'images/favicon.ico' %}"/>-->
         <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}"/>
@@ -28,9 +27,9 @@
             <!--<div style="width: 100%;">-->
             <div style="float: left;"><strong>&nbsp;1⅄ES! Корпоративная система управления</strong></div>
             <div style="float: right;">
-
                 <!-- Выбор языка -->
-                    <!--<div class="container">-->
+                {% load i18n %}
+                <!--<div class="container">-->
                       {% get_current_language as CURRENT_LANGUAGE %}
                       {% get_available_languages as AVAILABLE_LANGUAGES %}
                       {% get_language_info_list for AVAILABLE_LANGUAGES as languages %}
@@ -178,13 +177,16 @@
 
             <!-- Уникальные блоки -->
 
-            {% if user.is_authenticated %}
-               {% block content %}
-               {% endblock %}
-            {% else %}
-               {% block public_content %}
-               {% endblock %}
-            {% endif %}            
+{#            {% if user.is_authenticated %}#}
+{#               {% block content %}#}
+{#               {% endblock %}#}
+{#            {% else %}#}
+{#               {% block public_content %}#}
+{#               {% endblock %}#}
+{#            {% endif %}      #}
+
+              {% block content %}
+              {% endblock %}
             
           </div>
 

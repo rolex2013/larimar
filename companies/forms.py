@@ -1,11 +1,9 @@
-from django.http import HttpResponse
-from ckeditor.widgets import CKEditorWidget
+
 from django import forms
-import datetime
 from .models import Company, StaffList, Staff, Summary, Content
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
-from bootstrap_datepicker_plus import DatePickerInput
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 
 from mptt.forms import MoveNodeForm, TreeNodeChoiceField, TreeNodeMultipleChoiceField
 
@@ -109,6 +107,6 @@ class ContentForm(forms.ModelForm):
         model = Content
         fields = ['name', 'announcement', 'description', 'is_ontop', 'company', 'type', 'datebegin', 'dateend', 'place']  
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y HH:mm'),
-            'dateend': DatePickerInput(format='%d.%m.%Y HH:mm'),
+            'datebegin': DatePickerInput(options={'format': 'DD.MM.YY HH:MM'}),
+            'dateend': DatePickerInput(options={'format': 'DD.MM.YY HH:MM'}),
         }

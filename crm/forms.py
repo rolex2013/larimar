@@ -10,7 +10,7 @@ from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
 #from django.contrib.admin.widgets import AdminDateWidget
 #from django.contrib.admin.widgets import AdminSplitDateTime
-from bootstrap_datepicker_plus import DatePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django.contrib.auth.context_processors import auth
 import datetime
 from django.conf import settings
@@ -189,8 +189,8 @@ class ClientTaskForm(forms.ModelForm):
         model = ClientTask
         fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'structure_type', 'type', 'status', 'cost', 'percentage', 'initiator', 'dateclose', 'is_active', 'id', 'author']
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y %H:%M'), # specify date-frmat
+            'datebegin': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}), # default date-format %m/%d/%Y will be used
+            'dateend': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}), # specify date-frmat
         }        
 
 class ClientTaskCommentForm(forms.ModelForm):
@@ -254,17 +254,7 @@ class ClientEventForm(forms.ModelForm):
                                           text='Уведомляем о назначении Вам События "'+self.cleaned_data['name']+'".',
                                           recipient_id=self.cleaned_data['assigner'],                                                
                                           sendto=user_profile.email,
-                                          author_id=self.user.id)                                                     
-        #else:
-            #dict_status = Dict_ClientEventStatus.objects.get(pk=self.cleaned_data['status'].id) 
-            #print(self.cleaned_data['id'])
-            #print(self.initial['id']) 
-            #print(self.initial['event_id'])         
-            #print(self.cleaned_data['status_id'])
-            #print(self.cleaned_data['author_id'])                            
-            #ClientEventStatusLog.objects.create(event_id=self.cleaned_data['event_id'], 
-            #                                     status_id=self.cleaned_data['status_id'], 
-            #                                    author_id=self.cleaned_data['author_id'])              
+                                          author_id=self.user.id)
 
     def __init__(self, *args, **kwargs):
 
@@ -302,8 +292,8 @@ class ClientEventForm(forms.ModelForm):
         model = ClientEvent
         fields = ['name', 'description', 'assigner', 'datebegin', 'dateend', 'type', 'status', 'initiator', 'dateclose', 'task', 'is_active', 'id', 'author']
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'), # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y %H:%M'), # specify date-frmat
+            'datebegin': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}), # default date-format %m/%d/%Y will be used
+            'dateend': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}), # specify date-frmat
         }        
 
 class ClientEventCommentForm(forms.ModelForm):

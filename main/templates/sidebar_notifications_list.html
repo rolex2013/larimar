@@ -1,6 +1,9 @@
 
     <div id="notificationslist" class="sidebar-notifications-list">
 
+       <script src="{% url 'js-catalog' %}"></script>
+       {% load i18n %}
+
         {% for node in nodes %}
 
             {% if node.author_id == currentuserid %}
@@ -19,7 +22,8 @@
         {% endfor %}
 
         {% if count %}
-            <p><button id="isread-button" type="submit" method="GET" class="object-filter-button" style="font-size: x-small;">Пометить прочитанными</button></p>
+            <p><button id="isread-button" type="submit" method="GET" class="object-filter-button" style="font-size: x-small;">
+            {% trans "Пометить прочитанными" %}</button></p>
         {% endif %}
 
         <div style="font-size: small; color: #ffffff;">
@@ -36,10 +40,6 @@
 
    $('#isread-button').click(function(){
             event.preventDefault(); // *** без этого страница перегружается после возврата data
-            //var statusSelected = $("#notifystatusselectid option:selected").val()
-            //var metaobjecttypeSelected = $("#notifymetaobjecttypeselectid option:selected").val()
-            //console.log("===================")
-
             $.ajax({
                type: 'GET',
                url: "{% url 'my_main:sidebar_notification_isread' %}",
@@ -54,7 +54,7 @@
                },
                error: function(xhr, errmsg, err){
                   console.log("error")
-                  $('#ajax_nlist_listerrors').html('Нет данных!');
+                  $('#ajax_nlist_listerrors').html(gettext('Нет данных!'));
                }
             });
    });

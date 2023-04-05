@@ -1,13 +1,14 @@
 import os
 from django.conf import settings
 
-from projects.models import Project, Task, TaskComment, ProjectFile
-from crm.models import Client, ClientTask, ClientTaskComment, ClientFile
-from docs.models import DocVerFile #, Doc, DocFile
+from projects.models import ProjectFile
+from crm.models import ClientFile
+from docs.models import DocVerFile
 from files.models import FolderFile
 from feedback.models import FeedbackFile
 
 from django.shortcuts import render, redirect, get_object_or_404
+
 
 class AddFilesMixin(object):
     model = None
@@ -119,3 +120,6 @@ class AddFilesMixin(object):
            return True
 
         return False
+
+
+

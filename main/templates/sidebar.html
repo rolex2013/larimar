@@ -1,7 +1,9 @@
 
 {% if request.session.websocket_test == 'true' %}
 
-    <h6 style="color: #fff000;">Уведомления</h6>
+    {% load i18n %}
+
+    <h6 style="color: #fff000;">{% trans "Уведомления" %}</h6>
 
     {% load main_tags %}
 

@@ -10,7 +10,7 @@ from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
 # from django.contrib.admin.widgets import AdminDateWidget
 # from django.contrib.admin.widgets import AdminSplitDateTime
-from bootstrap_datepicker_plus import DatePickerInput
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django.contrib.auth.context_processors import auth
 import datetime
 from django.conf import settings
@@ -222,8 +222,8 @@ class FeedbackTaskForm(forms.ModelForm):
         fields = ['name', 'description', 'assigner', 'cost', 'datebegin', 'dateend', 'status',
                   'percentage', 'is_active', 'dateclose', 'id', 'author']
         widgets = {
-            'datebegin': DatePickerInput(format='%d.%m.%Y %H:%M'),  # default date-format %m/%d/%Y will be used
-            'dateend': DatePickerInput(format='%d.%m.%Y %H:%M'),  # specify date-frmat
+            'datebegin': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}),
+            'dateend': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}),
         }
 
 

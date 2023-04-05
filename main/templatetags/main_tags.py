@@ -72,7 +72,7 @@ def notifications(context, is_auth=False):
 
 @register.simple_tag(takes_context=True)
 def users_list(context, is_auth=False):
-
+    #print('context = ', context)
     nodes = []
 
     if is_auth == True:

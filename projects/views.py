@@ -170,11 +170,6 @@ class ProjectCreate(AddFilesMixin, CreateView):
     #template_name = 'project_create.html'
     template_name = 'object_form.html'
 
-    #def get_success_url(self):
-    #    print(self.object) # Prints the name of the submitted user
-    #    print(self.object.id) # Prints None
-    #    return reverse("webApp:project:stepTwo", args=(self.object.id,))    
-
     def form_valid(self, form):
         form.instance.company_id = self.kwargs['companyid']
         if self.kwargs['parentid'] != 0:
@@ -201,7 +196,7 @@ class ProjectCreate(AddFilesMixin, CreateView):
                        "Участники": membersstr,
                        "Активность": '✓' if self.object.is_active else '-'
                       }
-        ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))       
+        ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):

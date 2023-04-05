@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-<!--{% load bootstrap4 %}-->
+<!--{ load bootstrap4 %}-->
 
-{% block public_content %}
-   
+{% block content %}
+
    <!-- Защита от прямого доступа к контенту -->
    <!--{ object.company_id }} / { user_companies }}-->
    <!--{ if object.company_id in user_companies %}-->
@@ -41,7 +41,7 @@
 
    { endif %} -->
 
-{% endblock public_content %}
+{% endblock %}
 
 {% block list %}
 
