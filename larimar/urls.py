@@ -31,6 +31,7 @@ urlpatterns = [
     path('feedback/', include('feedback.urls')),
     path('chats/', include('chats.urls')),
     path('lists/', include('lists.urls')),
+    path('dashboard/', include('dashboard.urls')),
     path('jscat/', JavaScriptCatalog.as_view(), name='js-catalog'),
     #path('media/', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),    
 ]

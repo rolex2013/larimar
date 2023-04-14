@@ -35,4 +35,5 @@ urlpatterns=[
     path('taskcomments_list/taskcomment_update/<int:pk>', views.TaskCommentUpdate.as_view(), name='taskcomment_update'),
     #path('projects_list/tasks_list/taskcomments_list/taskcomment_delete/<int:pk>', views.TaskCommentDelete.as_view(), name='taskcomment_delete'),    
     #path('contact_form/', views.Contacts, name='contacts'),
+    path('projects_tasks/', views.projects_tasks, name='projects_tasks'),
 ]

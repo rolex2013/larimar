@@ -1006,3 +1006,8 @@ def clienteventfilter(request):
     if len_elist == 0:
        event_message = 'События не найдены!'
     return render(request, 'clientevents_objects_list.html', {'enodes': enodes, 'event_list': 'clientevent_list', 'event_message': event_message, 'clientid': clientid})
+
+# for Dashboard
+def clients_tasks_events(request):
+
+    pass

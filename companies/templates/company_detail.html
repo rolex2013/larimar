@@ -3,7 +3,7 @@
 <!--{ load bootstrap4 %}-->
 
 {% block company %}
-   
+
    <!-- Защита от прямого доступа к компании, если это не Служба техподдержки -->
    {% if current_company.id in user_companies or current_company.is_support %}
 
@@ -39,6 +39,8 @@
                <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
            {% elif component_name == 'chats' %}
                <a href="{% url 'my_chat:chats' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+           {% elif component_name == 'dashboard' %}
+               <a href="{% url 'my_dashboard:dashboard' current_company.parent.pk %}">{{ current_company.parent.name }}</a>
            {% endif %}
            </p></i>
         <!--{ else %}
@@ -71,6 +73,8 @@
                  {% endif %}
               {% elif component_name == 'chats' %}
                  <a href="{% url 'my_company:companies' 0 'chats' %}">{{ button_company_select }}</a>
+              {% elif component_name == 'dashboard' %}
+                 <a href="{% url 'my_company:companies' 0 component_name %}">{{ button_company_select }}</a>
               {% else %}
                  <a href="{% url 'my_company:companies' 0 'projects' %}">{{ button_company_select }}</a>
               {% endif %}              
@@ -95,7 +99,7 @@
 
 {% block list %}
 
-   <!-- Защита от прямого доступа к сотрудникам компании, если это не Служба техподдержки -->
+{#   Защита от прямого доступа к сотрудникам компании, если это не Служба техподдержки#}
    {% if current_company.id in user_companies or current_company.is_support %}
 
       <div class="object-list">
@@ -120,7 +124,7 @@
 
             {% if len_list %}
 
-            <!--<form action="{ url 'my_crm:clients' current_company.pk 0 %}" method="post">-->
+{#            <form action="{% url 'my_crm:clients' current_company.pk 0 %}" method="post">#}
             <form method="GET">
                {% csrf_token %}
                <div class="object-list-filters">
@@ -333,7 +337,7 @@
                 {% include 'chats.html' %}
             <!--</div>-->
 
-         {% else %}
+         {% elif component_name == 'projects' %}
 
             <h4>Проекты</h4>  
             

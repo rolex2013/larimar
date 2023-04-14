@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     'chats',
     'lists',
     'trade',
+    'dashboard',
 ]
 
 REST_FRAMEWORK = {

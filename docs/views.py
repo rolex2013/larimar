@@ -594,3 +594,8 @@ def docver_change(request):
                                                    'user_companies': comps,
                                                    'objtype': 'doc',
                                                    })
+
+# for Dashboard
+def docs_tasks(request):
+
+    pass

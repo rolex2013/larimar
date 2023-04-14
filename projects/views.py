@@ -758,11 +758,17 @@ def taskfilter(request):
        object_message = 'Задачи не найдены!'                  
     return render(request, 'objects_list.html', {'nodes': nodes, 'object_list': 'task_list', 'object_message': object_message})           
 
-#def project__filter(request, companyid=0):
-#   response = render(
-#         request,
-#         'projects_list.html',
-#         {'nodes': Project.objects.filter(is_active=True, company=companyid).order_by()}
-#         )
-#  return response
+# for Dashboard
+def projects_tasks(request):
+    companyid = request.session['_auth_user_currentcompany_id']
+    currentuser = request.user.id
+    # print(request, companyid)
 
+    projects_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser, ]), is_active=True,
+                                           company=companyid, dateclose__isnull=True)
+    projects_tasks_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser, ]),
+                                              is_active=True, dateclose__isnull=True)
+
+    #print(projects_list, projects_tasks_list)
+
+    return (projects_list, projects_tasks_list)

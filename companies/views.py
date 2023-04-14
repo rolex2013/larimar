@@ -673,4 +673,9 @@ def userrole_create(request):
                                                             'group_selectid': groupid,
                                                             'message': message,
                                                             'button_companyuserrole_create': button_companyuserrole_create,                                                                                     
-                                                           })                                                             
+                                                           })
+
+
+def get_current_company(companyid):
+
+    return Company.objects.filter(id=companyid).first()

@@ -65,7 +65,7 @@
 {% endblock client %}
 
 {% block list %}
-    <!-- Защита от прямого доступа к задачам проекта -->
+    <!-- Защита от прямого доступа к задачам и событиям Клиента -->
     {% if current_client.company.id in user_companies %}
 
         <div class="object-list">
