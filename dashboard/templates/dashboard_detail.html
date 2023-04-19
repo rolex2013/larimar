@@ -1,30 +1,5 @@
 {% extends 'base.html' %}
 
-{% block client %}
-    <!-- Защита от прямого доступа к Компании -->
-    {% if current_company.id in user_companies %}
-
-        <div class="object-detail">
-            <h2>{{ current_company.name }}
-                {% if not current_company.is_active %}({{ company_in_archive }}){% endif %}
-            </h2>
-            <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
-            <!--{ if user.is_authenticated and user.id == current_client.author_id  %}-->
-            <div class="object-detail-buttons">
-                <a href="{% url 'my_company:companies' 0 'companies' %}">{{ button_company_select }}</a>
-            </div>
-            <!--{ endif %}-->
-
-        </div>
-
-    {% else %}
-
-        <h4>Информация о Компании недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
-
-    {% endif %}
-
-{% endblock client %}
-
 {% block list %}
     <!-- Защита от прямого доступа к Dashboard -->
     {% if current_company.id in user_companies %}
@@ -34,10 +9,34 @@
             <div class="object-list-wrapper">
 
                 <div class="object-list-left">
-                    { include 'clienttasks_list.html' %}
+                    {#                    {% include 'clienttasks_list.html' %}#}
+                    <div class="grid">
+                        {% for node in project_nodes %}
+                            <div class="grid-tr">
+                                <div class="grid-td">
+                                    <div class="item"><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}</a></div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item">{{ node.dateend }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
                 <div class="object-list-right">
-                    { include 'clientevents_list.html' %}
+                    {#                    {% include 'clientevents_list.html' %}#}
+                    <div class="grid">
+                        {% for node in project_task_nodes %}
+                            <div class="grid-tr">
+                                <div class="grid-td">
+                                    <div class="item"><a href="{% url 'my_project:taskcomments' node.pk %}">{{ node.name }}</a></div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item">{{ node.dateend }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
 
             </div>

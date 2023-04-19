@@ -181,7 +181,7 @@ def objecthistory(request, objtype='prj', pk=0):
     #row = ModelLog.objects.get(modelobjectid=pk, is_active=True)
     #titles = json.loads(row.log).items()
     #print(objtype)
-    nodes = ModelLog.objects.filter(componentname=objtype, modelobjectid=pk, is_active=True).select_related("author", "modelobject") #.order_by()
+    nodes = ModelLog.objects.filter(componentname=objtype, modelobjectid=pk, is_active=True).select_related("author") #, "modelobject") #.order_by()
     #print(nodes)
     i = -1
     mas = []

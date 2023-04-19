@@ -694,3 +694,25 @@ body {
     cursor: pointer;
 }
 
+.grid {
+	display: table;
+	width: 100%;
+	border: none;
+	border-collapse: separate;
+	border-spacing: 5px;
+}
+.grid-tr {
+	display: table-row;
+    /*display: flex;*/
+    /*flex-direction: row;*/
+    /*justify-content: flex-start;*/
+}
+.grid-td {
+	display: table-cell;
+	width: 33.3%;
+	vertical-align: top;
+	padding: 0;
+}
+/*.item {*/
+/*    display: inline-block;*/
+/*}*/

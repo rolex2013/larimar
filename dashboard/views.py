@@ -24,7 +24,7 @@ def dashboard_lists(request, companyid=0):
     # (clients_tasks_list, clients_events_list) = clients_tasks_events(request)
     # (feedback_tickets_list, feedback_tasks_list) = feedback_tickets_tasks(request)
 
-    return render(request, "company_detail.html", {
+    return render(request, "dashboard_detail.html", {
         'component_name': 'dashboard',
         'companyid': companyid,
         'current_company': current_company,

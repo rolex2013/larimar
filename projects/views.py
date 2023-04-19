@@ -5,7 +5,8 @@ from django.conf import settings
 from django.urls import reverse_lazy
 #from django.core.urlresolvers import reverse
 from django.utils import timezone
-from datetime import datetime, date, time
+from datetime import datetime, timedelta #, date, time
+
 import json
 import requests
 from django.db import connection
@@ -760,14 +761,19 @@ def taskfilter(request):
 
 # for Dashboard
 def projects_tasks(request):
-    companyid = request.session['_auth_user_currentcompany_id']
+    #companyid = request.session['_auth_user_currentcompany_id']
     currentuser = request.user.id
-    # print(request, companyid)
+    date_end = datetime.now() + timedelta(days=10)
+    print(request, date_end)
 
+    # projects_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser, ]), is_active=True,
+    #                                        company=companyid, dateclose__isnull=True)
+    # projects_tasks_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser, ]),
+    #                                           is_active=True, dateclose__isnull=True)
     projects_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser, ]), is_active=True,
-                                           company=companyid, dateclose__isnull=True)
+                                           dateclose__isnull=True, dateend__lte=date_end).order_by('dateend')
     projects_tasks_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser, ]),
-                                              is_active=True, dateclose__isnull=True)
+                                              is_active=True, dateclose__isnull=True, dateend__lte=date_end).order_by('dateend')
 
     #print(projects_list, projects_tasks_list)
 
