@@ -701,18 +701,22 @@ body {
 	border-collapse: separate;
 	border-spacing: 5px;
 }
-.grid-tr {
+.grid-tr1 {
 	display: table-row;
-    /*display: flex;*/
-    /*flex-direction: row;*/
-    /*justify-content: flex-start;*/
+    background: #E8E8E8;
+}
+.grid-tr2 {
+	display: table-row;
+}
+.grid-th {
+	display: table-row;
+    font-weight: bold;
+    background: #E0E0E0;
+    text-align: center;
 }
 .grid-td {
 	display: table-cell;
-	width: 33.3%;
+	/*width: 33.3%;*/
 	vertical-align: top;
 	padding: 0;
 }
-/*.item {*/
-/*    display: inline-block;*/
-/*}*/

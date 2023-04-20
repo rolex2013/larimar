@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block list %}
     <!-- Защита от прямого доступа к Dashboard -->
     {% if current_company.id in user_companies %}
@@ -11,13 +13,32 @@
                 <div class="object-list-left">
                     {#                    {% include 'clienttasks_list.html' %}#}
                     <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Проект' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Тип' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
                         {% for node in project_nodes %}
-                            <div class="grid-tr">
-                                <div class="grid-td">
-                                    <div class="item"><a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}</a></div>
-                                </div>
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
                                 <div class="grid-td">
                                     <div class="item">{{ node.dateend }}</div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint="#{{ node.id }} {% trans 'Проект от' %}
+                                                                {{ node.datebegin }};
+                                                                {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}: {{ node.author }}">
+                                        <a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}</a></span></div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item">{{ node.type }}</div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item">{{ node.status }}</div>
                                 </div>
                             </div>
                         {% endfor %}
@@ -26,13 +47,35 @@
                 <div class="object-list-right">
                     {#                    {% include 'clientevents_list.html' %}#}
                     <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Задача' %}</div></div>
+{#                            <div class="grid-td"><div class="item">{% trans 'Проект' %}</div></div>#}
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
                         {% for node in project_task_nodes %}
-                            <div class="grid-tr">
-                                <div class="grid-td">
-                                    <div class="item"><a href="{% url 'my_project:taskcomments' node.pk %}">{{ node.name }}</a></div>
-                                </div>
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
                                 <div class="grid-td">
                                     <div class="item">{{ node.dateend }}</div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача проекта' %}"
+{{ node.project.name }}" {% trans 'создана' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a href="{% url 'my_project:taskcomments' node.pk %}">{{ node.name }}</a></span></div>
+                                </div>
+                                {#                                <div class="grid-td">#}
+                                {#                                    <div class="item">{{ node.project.name }}</div>#}
+                                {#                                </div>#}
+                                {#                                <div class="grid-td">#}
+                                {#                                    <div class="item">{{ node.type }}</div>#}
+                                {#                                </div>#}
+                                <div class="grid-td">
+                                    <div class="item">{{ node.status }}</div>
                                 </div>
                             </div>
                         {% endfor %}

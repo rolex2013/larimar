@@ -761,8 +761,9 @@ def taskfilter(request):
 
 # for Dashboard
 def projects_tasks(request):
-    #companyid = request.session['_auth_user_currentcompany_id']
+    # companyid = request.session['_auth_user_currentcompany_id']
     currentuser = request.user.id
+    companies_id = request.session["_auth_user_companies_id"]
     date_end = datetime.now() + timedelta(days=10)
     print(request, date_end)
 
@@ -770,10 +771,17 @@ def projects_tasks(request):
     #                                        company=companyid, dateclose__isnull=True)
     # projects_tasks_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser, ]),
     #                                           is_active=True, dateclose__isnull=True)
-    projects_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser, ]), is_active=True,
-                                           dateclose__isnull=True, dateend__lte=date_end).order_by('dateend')
+    projects_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser, ]),
+                                           company__in=companies_id, is_active=True,
+                                           dateclose__isnull=True, dateend__lte=date_end).select_related('type', 'status', 'assigner',
+                                                                                                         'author').order_by(
+        'dateend', 'type').distinct()
     projects_tasks_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser, ]),
-                                              is_active=True, dateclose__isnull=True, dateend__lte=date_end).order_by('dateend')
+                                              project__company__in=companies_id,
+                                              is_active=True, dateclose__isnull=True, dateend__lte=date_end).select_related('project', 'status',
+                                                                                                                            'assigner',
+                                                                                                                            'author').order_by(
+        'dateend').distinct()
 
     #print(projects_list, projects_tasks_list)
 
