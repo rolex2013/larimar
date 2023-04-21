@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta, date, time
 from django.db.models import Q, Count, Min, Max, Sum, Avg
 
-from datetime import datetime, date, time
+from datetime import datetime, timedelta
 
 
 from .serializers import Dict_SystemSerializer, CompanySerializer #, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
@@ -1252,6 +1252,23 @@ def tickettasklist(request, companyid, ticketid="0", statusid="0", mytskuser="0"
     return (tickettask_list)
 
 # for Dashboard
-def feedback_tickets_tasks():
+def feedback_tickets_tasks(request):
 
-    pass
+    currentuser = request.user.id
+    companies_id = request.session["_auth_user_companies_id"]
+    date_end = datetime.now() + timedelta(days=10)
+    #print(request, date_end)
+
+    feedback_tickets_list = FeedbackTicket.objects.filter(Q(company__in=companies_id) | Q(companyfrom__in=companies_id) | Q(author=request.user.id),
+                                            is_active=True, status__is_close=False, dateclose__isnull=True).select_related(
+                                            'company', 'companyfrom', 'type', 'type', 'status', 'author').order_by('datecreate', 'type').distinct()
+
+    feedback_tasks_list = FeedbackTask.objects.filter(Q(ticket__author=request.user.id) | Q(assigner=request.user.id) | Q(author=request.user.id),
+                                              is_active=True, status__is_close=False, dateclose__isnull=True,
+                                              dateend__lte=date_end).select_related('ticket', 'ticket__company__currency', 'status', 'assigner',
+                                                                                    'author').order_by(
+                                              'dateend', 'status').distinct()
+
+    #print(projects_list, projects_tasks_list)
+
+    return (feedback_tickets_list, feedback_tasks_list)

@@ -4,7 +4,7 @@ from django.conf import settings
 
 from django.urls import reverse_lazy
 from django.utils import timezone
-from datetime import datetime, date, time
+from datetime import datetime, timedelta #, timezone #date, time
 import json
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -1010,4 +1010,24 @@ def clienteventfilter(request):
 # for Dashboard
 def clients_tasks_events(request):
 
-    pass
+    currentuser = request.user.id
+    companies_id = request.session["_auth_user_companies_id"]
+    date_end = datetime.now() + timedelta(days=10)
+    #print(request, date_end)
+
+    clients_tasks_list = ClientTask.objects.filter(Q(client__author=request.user.id) | Q(client__initiator=request.user.id) | Q(
+        client__manager=request.user.id) | Q(author=request.user.id) | Q(initiator=request.user.id) | Q(assigner=request.user.id),
+                                           is_active=True, status__is_close=False, client__company__in=companies_id, dateclose__isnull=True,
+                                           dateend__lte=date_end).select_related('client', 'type', 'type', 'status', 'initiator', 'assigner',
+                                                                                                         'author').order_by(
+        'dateend', 'type').distinct()
+    clients_events_list = ClientEvent.objects.filter(Q(client__author=request.user.id) | Q(client__initiator=request.user.id) | Q(
+        client__manager=request.user.id) | Q(task__author=request.user.id) | Q(task__initiator=request.user.id) | Q(task__assigner=request.user.id) | Q(author=request.user.id) | Q(initiator=request.user.id) | Q(assigner=request.user.id),
+                                              is_active=True, status__is_close=False, dateclose__isnull=True, client__company__in=companies_id,
+                                              dateend__lte=date_end).select_related('client', 'task', 'type', 'status', 'initiator', 'assigner',
+                                                                                                                            'author').order_by(
+        'dateend', 'status').distinct()
+
+    #print(projects_list, projects_tasks_list)
+
+    return (clients_tasks_list, clients_events_list)

@@ -8,6 +8,7 @@
 
         <div class="object-list">
 
+            <h3>{% trans 'Проекты и Задачи' %}</h3>
             <div class="object-list-wrapper">
 
                 <div class="object-list-left">
@@ -32,20 +33,16 @@
                                     <div class="item"><span class="hint hint--bottom hint--info" data-hint="#{{ node.id }} {% trans 'Проект от' %}
                                                                 {{ node.datebegin }};
                                                                 {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}: {{ node.author }}">
-                                        <a href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}</a></span></div>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_project:tasks' node.pk 0 %}">{{ node.name }}</a></span></div>
                                 </div>
-                                <div class="grid-td">
-                                    <div class="item">{{ node.type }}</div>
-                                </div>
-                                <div class="grid-td">
-                                    <div class="item">{{ node.status }}</div>
-                                </div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.type }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.status }}</div></div>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="object-list-right">
-                    {#                    {% include 'clientevents_list.html' %}#}
+
                     <div class="grid">
                         <div class="grid-th">
                             <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
@@ -64,9 +61,95 @@
                                 </div>
                                 <div class="grid-td">
                                     <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача проекта' %}"
-{{ node.project.name }}" {% trans 'создана' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.project.name }}" {% trans 'начата' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
 {{ node.author }}'>
-                                        <a href="{% url 'my_project:taskcomments' node.pk %}">{{ node.name }}</a></span></div>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_project:taskcomments' node.pk %}">{{ node.name }}</a></span></div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item" style="text-align:center;">{{ node.status }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div> <!-- wrapper -->
+
+            <h3>{% trans 'Задачи Документооборота' %}</h3>
+            <div class="object-list-wrapper">
+
+                <div class="object-list-left">
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Задача' %}</div></div>
+                            {#                            <div class="grid-td"><div class="item">{% trans 'Проект' %}</div></div>#}
+                            <div class="grid-td"><div class="item">{% trans 'Документ' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Версия' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Тип' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
+                        {% for node in doc_task_nodes %}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                                <div class="grid-td"><div class="item">{{ node.dateend }}</div></div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }}
+{% trans 'Задача документа' %} "
+        {{ node.docver.name }}" {% trans 'создана' %} {{ node.datecreate }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+        {{ node.author }}'>
+                                        <a style="color: {{ node.color }};"
+                                           href="{% url 'my_doc:doctaskcomments' node.pk %}">{{ node.name }}</a></span></div>
+                                </div> <!-- td -->
+                                {#                                <div class="grid-td">#}
+                                {#                                    <div class="item">{{ node.project.name }}</div>#}
+                                {#                                </div>#}
+                                {#                                <div class="grid-td">#}
+                                {#                                    <div class="item">{{ node.type }}</div>#}
+                                {#                                </div>#}
+                                <div class="grid-td"><div class="item">{{ node.docver.name }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:right;">{{ node.docver.vernumber }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.type }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.status }}</div></div>
+                            </div> <!-- tr1/tr2 -->
+                        {% endfor %}
+
+                    </div> <!-- grid -->
+
+                </div> <!-- left -->
+
+            </div> <!-- wrapper -->
+
+            <h3>{% trans 'Клиентские Задачи и События' %}</h3>
+            <div class="object-list-wrapper">
+
+                 <div class="object-list-left">
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Задача' %}</div></div>
+{#                            <div class="grid-td"><div class="item">{% trans 'Проект' %}</div></div>#}
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
+                        {% for node in client_task_nodes %}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                                <div class="grid-td">
+                                    <div class="item">{{ node.dateend }}</div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача клиента' %}"
+{{ node.client.name }}" {% trans 'начата' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_crm:clienttaskcomments' node.pk %}">{{ node.name }}</a></span></div>
                                 </div>
                                 {#                                <div class="grid-td">#}
                                 {#                                    <div class="item">{{ node.project.name }}</div>#}
@@ -75,14 +158,123 @@
                                 {#                                    <div class="item">{{ node.type }}</div>#}
                                 {#                                </div>#}
                                 <div class="grid-td">
-                                    <div class="item">{{ node.status }}</div>
+                                    <div class="item" style="text-align:center;">{{ node.status }}</div>
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
                 </div>
 
-            </div>
+                 <div class="object-list-right">
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Событие' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Задача' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Тип' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
+                        {% for node in client_event_nodes %}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                                <div class="grid-td">
+                                    <div class="item">{{ node.dateend }}</div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }}
+{% trans 'Событие клиента' %} "{{ node.client }}" {% trans 'по задаче' %} "{{ node.task.name }}" {% trans 'начата' %} {{ node.datebegin }};
+{% trans 'ответственный' %}:
+{{ node.assigner }};
+{% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_crm:clienteventcomments' node.pk %}">{{ node.name }}</a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="grid-td"><div class="item">{{ node.task.name }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.type }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.status }}</div></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div> <!-- wrapper -->
+
+            <h3>{% trans 'Тикеты и Задачи Техподдержки' %}</h3>
+            <div class="object-list-wrapper">
+
+                <div class="object-list-left">
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Тикет' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Тип' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Система' %}</div></div>
+                        </div>
+                        {% for node in feedback_ticket_nodes %}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                                <div class="grid-td"><div class="item">{{ node.datecreate }}</div></div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Тикет от' %}
+                                                            {{ node.datecreate }}
+                                                            {% trans 'из компании' %}: "{{ node.companyfrom.name }}"; {% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_feedback:feedbacktasks' 0 node.pk 0 %}"
+                                        >{{ node.name }}</a></span></div>
+                                </div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.type }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.status }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.system.name }}</div></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="object-list-right">
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Задача' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans '%' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Стоимость' %}</div></div>
+                        </div>
+                        {% for node in feedback_task_nodes %}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                                <div class="grid-td">
+                                    <div class="item">{{ node.dateend }}</div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача тикета' %}"
+{{ node.ticket.name }} "{% trans 'начата' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_feedback:feedbacktaskcomments' node.pk %}">{{ node.name }}</a></span></div>
+                                </div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.status }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:right;">{{ node.percentage|floatformat }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:right;">{{ node.cost }}
+                                    {{ node.ticket.company.currency.symbol }}</div></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div> <!-- wrapper -->
 
         </div>
 

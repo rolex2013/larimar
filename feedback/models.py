@@ -13,6 +13,8 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 from companies.models import Company
 
+from main.utils_color import SetColorMixin
+
 class Dict_System(models.Model):
     code = models.CharField("Код системы", editable=False, max_length=128)
     name = models.CharField("Наименование системы", max_length=128)
@@ -121,7 +123,7 @@ class FeedbackTicket(models.Model):
         verbose_name = 'Тикет'
         verbose_name_plural = 'Тикеты'
 
-class FeedbackTask(MPTTModel):
+class FeedbackTask(SetColorMixin, MPTTModel):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")
     datebegin = models.DateTimeField("Начало")

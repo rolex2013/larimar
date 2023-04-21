@@ -121,5 +121,3 @@ class AddFilesMixin(object):
 
         return False
 
-
-

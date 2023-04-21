@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from datetime import datetime, timedelta, date, time
+from datetime import datetime, timedelta #, date, time
 import json
 import requests
 from django.db import connection
@@ -598,4 +598,16 @@ def docver_change(request):
 # for Dashboard
 def docs_tasks(request):
 
-    pass
+    currentuser = request.user.id
+    companies_id = request.session["_auth_user_companies_id"]
+    date_end = datetime.datetime.now() + timedelta(days=10)
+    print(request, date_end)
+
+    docs_tasks_list = DocTask.objects.filter(
+        Q(author=request.user.id) | Q(assigner=request.user.id) | Q(doc__members__in=[currentuser, ]), docver__doc__company__in=companies_id,
+        is_active=True, dateclose__isnull=True, dateend__lte=date_end).select_related('doc', 'docver', 'type', 'status', 'assigner',
+                                                                                      'author').order_by('dateend', 'type').distinct()
+
+    #print(projects_list, projects_tasks_list)
+
+    return docs_tasks_list

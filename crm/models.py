@@ -10,8 +10,11 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from main.models import ModelLog
 from companies.models import Company
 
-import json
-from datetime import datetime, timedelta
+from main.utils_color import SetColorMixin
+
+#import json
+from django.utils import timezone
+from datetime import date, datetime, timedelta
 
 
 class Dict_ClientType(models.Model):
@@ -143,6 +146,10 @@ class Client(models.Model):
     members = models.ManyToManyField('auth.User', related_name='client_members', verbose_name="Участники")        
     is_active = models.BooleanField("Активность", default=True)
 
+    # @property
+    # def name(self):
+    #     return (self.firstname + self.middlename + self.lastname)
+
     def get_absolute_url(self):
         #return reverse('my_crm:client_detail', kwargs={'userid': self.user.pk, 'param': ' '}) 
         return reverse('my_crm:clienttasks', kwargs={'clientid': self.pk, 'pk': '0'}) 
@@ -157,7 +164,7 @@ class Client(models.Model):
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
 
-class ClientTask(MPTTModel):
+class ClientTask(SetColorMixin, MPTTModel):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание", null=True, blank=True)
     datebegin = models.DateTimeField("Начало")
@@ -176,6 +183,7 @@ class ClientTask(MPTTModel):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultclienttaskuser', verbose_name="Автор")
     initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_initiator', verbose_name="Инициатор")        
     is_active = models.BooleanField("Активность", default=True)
+
     def get_absolute_url(self):
         return reverse('my_crm:clienttaskcomments', kwargs={'taskid': self.pk})
         #return reverse('my_crm:clienttaskcomments, kwargs={'taskid': self.pk})
@@ -212,7 +220,7 @@ class ClientTaskComment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
-class ClientEvent(models.Model):
+class ClientEvent(SetColorMixin, models.Model):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание", null=True, blank=True)
     datebegin = models.DateTimeField("Начало")
@@ -228,6 +236,7 @@ class ClientEvent(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='event_user', verbose_name="Автор")
     initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='event_initiator', verbose_name="Инициатор")        
     is_active = models.BooleanField("Активность", default=True)
+
     def get_absolute_url(self):
         return reverse('my_crm:clienteventcomments', kwargs={'eventid': self.pk})
     def __str__(self):
