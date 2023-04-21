@@ -6,10 +6,12 @@
     <!-- Защита от прямого доступа к Dashboard -->
     {% if current_company.id in user_companies %}
 
+        <h3>{% trans 'Панель управления' %}</h3>
+
         <div class="object-list">
 
 {% if project_nodes or project_task_nodes %}
-            <h3>{% trans 'Проекты и Задачи' %}</h3>
+            <h4>{% trans 'Проекты и Задачи' %}</h4>
             <div class="object-list-wrapper">
 
                 <div class="object-list-left">
@@ -77,7 +79,7 @@
             </div> <!-- wrapper -->
 {% endif %}
 {% if doc_task_nodes %}
-            <h3>{% trans 'Задачи Документооборота' %}</h3>
+            <h4>{% trans 'Задачи Документооборота' %}</h4>
             <div class="object-list-wrapper">
 
                 <div class="object-list-left">
@@ -127,7 +129,7 @@
             </div> <!-- wrapper -->
 {% endif %}
 {% if client_task_nodes or client_event_nodes %}
-            <h3>{% trans 'Клиентские Задачи и События' %}</h3>
+            <h4>{% trans 'Клиентские Задачи и События' %}</h4>
             <div class="object-list-wrapper">
 
                  <div class="object-list-left">
@@ -209,7 +211,7 @@
             </div> <!-- wrapper -->
 {% endif %}
 {% if feedback_ticket_nodes or feedback_task_nodes %}
-            <h3>{% trans 'Тикеты и Задачи Техподдержки' %}</h3>
+            <h4>{% trans 'Тикеты и Задачи Техподдержки' %}</h4>
             <div class="object-list-wrapper">
 
                 <div class="object-list-left">
