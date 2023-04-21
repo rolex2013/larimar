@@ -8,11 +8,12 @@
 
         <div class="object-list">
 
+{% if project_nodes or project_task_nodes %}
             <h3>{% trans 'Проекты и Задачи' %}</h3>
             <div class="object-list-wrapper">
 
                 <div class="object-list-left">
-                    {#                    {% include 'clienttasks_list.html' %}#}
+
                     <div class="grid">
                         <div class="grid-th">
                             <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
@@ -74,7 +75,8 @@
                 </div>
 
             </div> <!-- wrapper -->
-
+{% endif %}
+{% if doc_task_nodes %}
             <h3>{% trans 'Задачи Документооборота' %}</h3>
             <div class="object-list-wrapper">
 
@@ -123,7 +125,8 @@
                 </div> <!-- left -->
 
             </div> <!-- wrapper -->
-
+{% endif %}
+{% if client_task_nodes or client_event_nodes %}
             <h3>{% trans 'Клиентские Задачи и События' %}</h3>
             <div class="object-list-wrapper">
 
@@ -204,7 +207,8 @@
                 </div>
 
             </div> <!-- wrapper -->
-
+{% endif %}
+{% if feedback_ticket_nodes or feedback_task_nodes %}
             <h3>{% trans 'Тикеты и Задачи Техподдержки' %}</h3>
             <div class="object-list-wrapper">
 
@@ -275,7 +279,7 @@
                 </div>
 
             </div> <!-- wrapper -->
-
+{% endif %}
         </div>
 
     {% else %}
