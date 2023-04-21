@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-04-21 18:26+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\templates\dashboard_detail.html:9
+msgid "Панель управления"
+msgstr "Dashboard"
+
+#: .\templates\dashboard_detail.html:14
+msgid "Проекты и Задачи"
+msgstr "Projects and Tasks"
+
+#: .\templates\dashboard_detail.html:21 .\templates\dashboard_detail.html:51
+#: .\templates\dashboard_detail.html:89 .\templates\dashboard_detail.html:139
+#: .\templates\dashboard_detail.html:177 .\templates\dashboard_detail.html:221
+#: .\templates\dashboard_detail.html:253
+msgid "Срок"
+msgstr "Deadline"
+
+#: .\templates\dashboard_detail.html:22
+msgid "Проект"
+msgstr "Project"
+
+#: .\templates\dashboard_detail.html:23 .\templates\dashboard_detail.html:94
+#: .\templates\dashboard_detail.html:180 .\templates\dashboard_detail.html:223
+msgid "Тип"
+msgstr "Type"
+
+#: .\templates\dashboard_detail.html:24 .\templates\dashboard_detail.html:54
+#: .\templates\dashboard_detail.html:95 .\templates\dashboard_detail.html:142
+#: .\templates\dashboard_detail.html:181 .\templates\dashboard_detail.html:224
+#: .\templates\dashboard_detail.html:255
+msgid "Статус"
+msgstr "Status"
+
+#: .\templates\dashboard_detail.html:36
+msgid "Проект от"
+msgstr "Project from"
+
+#: .\templates\dashboard_detail.html:38 .\templates\dashboard_detail.html:67
+#: .\templates\dashboard_detail.html:107 .\templates\dashboard_detail.html:155
+#: .\templates\dashboard_detail.html:270
+msgid "исполнитель"
+msgstr "implementer"
+
+#: .\templates\dashboard_detail.html:38 .\templates\dashboard_detail.html:67
+#: .\templates\dashboard_detail.html:107 .\templates\dashboard_detail.html:155
+#: .\templates\dashboard_detail.html:197 .\templates\dashboard_detail.html:237
+#: .\templates\dashboard_detail.html:270
+msgid "автор"
+msgstr "author"
+
+#: .\templates\dashboard_detail.html:52 .\templates\dashboard_detail.html:90
+#: .\templates\dashboard_detail.html:140 .\templates\dashboard_detail.html:179
+#: .\templates\dashboard_detail.html:254
+msgid "Задача"
+msgstr "Task"
+
+#: .\templates\dashboard_detail.html:66
+msgid "Задача проекта"
+msgstr "Project task"
+
+#: .\templates\dashboard_detail.html:67 .\templates\dashboard_detail.html:155
+#: .\templates\dashboard_detail.html:194 .\templates\dashboard_detail.html:270
+msgid "начата"
+msgstr "started"
+
+#: .\templates\dashboard_detail.html:82
+msgid "Задачи Документооборота"
+msgstr "Docflow Tasks"
+
+#: .\templates\dashboard_detail.html:92
+msgid "Документ"
+msgstr "Document"
+
+#: .\templates\dashboard_detail.html:93
+msgid "Версия"
+msgstr "Version"
+
+#: .\templates\dashboard_detail.html:106
+msgid "Задача документа"
+msgstr "Document task"
+
+#: .\templates\dashboard_detail.html:107
+msgid "создана"
+msgstr "created"
+
+#: .\templates\dashboard_detail.html:132
+msgid "Клиентские Задачи и События"
+msgstr "Client Tasks and Events"
+
+#: .\templates\dashboard_detail.html:154
+msgid "Задача клиента"
+msgstr "Client task"
+
+#: .\templates\dashboard_detail.html:178
+msgid "Событие"
+msgstr "Event"
+
+#: .\templates\dashboard_detail.html:194
+msgid "Событие клиента"
+msgstr "Client event"
+
+#: .\templates\dashboard_detail.html:194
+msgid "по задаче"
+msgstr "by task"
+
+#: .\templates\dashboard_detail.html:195
+msgid "ответственный"
+msgstr "responsible"
+
+#: .\templates\dashboard_detail.html:214
+msgid "Тикеты и Задачи Техподдержки"
+msgstr "Technical Support Tickets and Tasks"
+
+#: .\templates\dashboard_detail.html:222
+msgid "Тикет"
+msgstr "Ticket"
+
+#: .\templates\dashboard_detail.html:225
+msgid "Система"
+msgstr "System"
+
+#: .\templates\dashboard_detail.html:235
+msgid "Тикет от"
+msgstr "Ticket from"
+
+#: .\templates\dashboard_detail.html:237
+msgid "из компании"
+msgstr "from Organization"
+
+#: .\templates\dashboard_detail.html:256
+#, python-format
+msgid "%%"
+msgstr "%%"
+
+#: .\templates\dashboard_detail.html:257
+msgid "Стоимость"
+msgstr "Cost"
+
+#: .\templates\dashboard_detail.html:269
+msgid "Задача тикета"
+msgstr "Ticket task"
+
+#: .\views.py:41
+msgid "Сменить организацию"
+msgstr "Change organization"
+
+#: .\views.py:42
+msgid "Организация перемещена в архив"
+msgstr "The organization has been moved to the archive"

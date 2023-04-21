@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
-{% load i18n %}
-
 {% block list %}
+
+    {% load i18n %}
+
     <!-- Защита от прямого доступа к Dashboard -->
     {% if current_company.id in user_companies %}
 
