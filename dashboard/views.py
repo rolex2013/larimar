@@ -51,7 +51,7 @@ def dashboard_lists(request, companyid=0):
              }
     #print(links.get('docs_tsk'))
 
-    return render(request, "dashboard_detail_new.html", {
+    return render(request, "dashboard_detail.html", {
         'component_name': 'dashboard',
         'companyid': companyid,
         'current_company': current_company,
