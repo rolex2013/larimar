@@ -1,7 +1,9 @@
 from django.db import models
 
-from django.urls import reverse, reverse_lazy
-from django.utils import timezone
+from django.urls import reverse
+#from django.utils import timezone
+
+from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -10,11 +12,10 @@ from ckeditor_uploader.fields import RichTextUploadingField
 from main.models import ModelLog
 from companies.models import Company
 
-from main.utils_color import SetColorMixin
+from dashboard.utils import SetPropertiesDashboardMixin
 
 #import json
-from django.utils import timezone
-from datetime import date, datetime, timedelta
+from datetime import datetime
 
 
 class Dict_ClientType(models.Model):
@@ -164,7 +165,7 @@ class Client(models.Model):
         verbose_name = 'Клиент'
         verbose_name_plural = 'Клиенты'
 
-class ClientTask(SetColorMixin, MPTTModel):
+class ClientTask(SetPropertiesDashboardMixin, MPTTModel):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание", null=True, blank=True)
     datebegin = models.DateTimeField("Начало")
@@ -183,6 +184,10 @@ class ClientTask(SetColorMixin, MPTTModel):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultclienttaskuser', verbose_name="Автор")
     initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='clienttask_initiator', verbose_name="Инициатор")        
     is_active = models.BooleanField("Активность", default=True)
+
+    @property
+    def object_name(self):
+        return ('crm_tsk', _("Задача клиента"))
 
     def get_absolute_url(self):
         return reverse('my_crm:clienttaskcomments', kwargs={'taskid': self.pk})
@@ -220,7 +225,7 @@ class ClientTaskComment(models.Model):
         verbose_name = 'Комментарий'
         verbose_name_plural = 'Комментарии'
 
-class ClientEvent(SetColorMixin, models.Model):
+class ClientEvent(SetPropertiesDashboardMixin, models.Model):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание", null=True, blank=True)
     datebegin = models.DateTimeField("Начало")
@@ -236,6 +241,10 @@ class ClientEvent(SetColorMixin, models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='event_user', verbose_name="Автор")
     initiator = models.ForeignKey('Dict_ClientInitiator', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='event_initiator', verbose_name="Инициатор")        
     is_active = models.BooleanField("Активность", default=True)
+
+    @property
+    def object_name(self):
+        return ('crm_evnt', _("Событие клиента"))
 
     def get_absolute_url(self):
         return reverse('my_crm:clienteventcomments', kwargs={'eventid': self.pk})

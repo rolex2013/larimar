@@ -1,0 +1,85 @@
+{% if client_task_nodes or client_event_nodes %}
+
+    {% load i18n %}
+
+            <h4>{% trans 'Клиентские Задачи и События' %}</h4>
+            <div class="object-list-wrapper">
+
+                 <div class="object-list-left">
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Задача' %}</div></div>
+{#                            <div class="grid-td"><div class="item">{% trans 'Проект' %}</div></div>#}
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
+                        {% for node in client_task_nodes %}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                                <div class="grid-td">
+                                    <div class="item">{{ node.dateend }}</div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача клиента' %}"
+{{ node.client.name }}" {% trans 'начата' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_crm:clienttaskcomments' node.pk %}">{{ node.name }}</a></span></div>
+                                </div>
+                                {#                                <div class="grid-td">#}
+                                {#                                    <div class="item">{{ node.project.name }}</div>#}
+                                {#                                </div>#}
+                                {#                                <div class="grid-td">#}
+                                {#                                    <div class="item">{{ node.type }}</div>#}
+                                {#                                </div>#}
+                                <div class="grid-td">
+                                    <div class="item" style="text-align:center;">{{ node.status }}</div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                 <div class="object-list-right">
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Событие' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Задача' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Тип' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
+                        {% for node in client_event_nodes %}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                                <div class="grid-td">
+                                    <div class="item">{{ node.dateend }}</div>
+                                </div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }}
+{% trans 'Событие клиента' %} "{{ node.client }}" {% trans 'по задаче' %} "{{ node.task.name }}" {% trans 'начата' %} {{ node.datebegin }};
+{% trans 'ответственный' %}:
+{{ node.assigner }};
+{% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_crm:clienteventcomments' node.pk %}">{{ node.name }}</a>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="grid-td"><div class="item">{{ node.task.name }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.type }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.status }}</div></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div> <!-- wrapper -->
+{% endif %}

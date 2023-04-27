@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext_lazy as _
+import itertools, operator, functools
+from operator import attrgetter, or_
 
 from companies.views import get_current_company
 from projects.views import projects_tasks
@@ -24,7 +26,32 @@ def dashboard_lists(request, companyid=0):
     (clients_tasks_list, clients_events_list) = clients_tasks_events(request)
     (feedback_tickets_list, feedback_tasks_list) = feedback_tickets_tasks(request)
 
-    return render(request, "dashboard_detail.html", {
+    full_list = itertools.chain(projects_list, projects_tasks_list, docs_tasks_list, clients_tasks_list, clients_events_list, feedback_tickets_list, feedback_tasks_list)
+    #full_list = functools.reduce(operator.or_, [projects_list, projects_tasks_list]) # это только для одной модели
+    #full_list = projects_list.union(projects_tasks_list)
+    #full_list = (projects_list | projects_tasks_list) # это только для одной модели
+
+    full_list = sorted(full_list, key=attrgetter('date_for_sort'))
+
+    # links = [{'object': 'prj_prj', 'url_name': 'my_project:tasks'},
+    #          {'object': 'prj_tsk', 'url_name': 'my_project:taskcomments'},
+    #          {'object': 'docs_tsk', 'url_name': 'my_doc:doctaskcomments'},
+    #          {'object': 'crm_tsk', 'url_name': 'my_crm:clienttaskcomments'},
+    #          {'object': 'crm_evnt', 'url_name': 'my_crm:clienteventcomments'},
+    #          {'object': 'fdb_tckt', 'url_name': 'my_feedback:feedbacktasks'},
+    #          {'object': 'fdb_tsk', 'url_name': 'my_feedback:feedbacktaskcomments'},
+    #         ]
+    links = {'prj_prj': 'my_project:tasks',
+             'prj_tsk': 'my_project:taskcomments',
+             'docs_tsk': 'my_doc:doctaskcomments',
+             'crm_tsk': 'my_crm:clienttaskcomments',
+             'crm_evnt': 'my_crm:clienteventcomments',
+             'fdb_tckt': 'my_feedback:feedbacktasks',
+             'fdb_tsk': 'my_feedback:feedbacktaskcomments',
+             }
+    #print(links.get('docs_tsk'))
+
+    return render(request, "dashboard_detail_new.html", {
         'component_name': 'dashboard',
         'companyid': companyid,
         'current_company': current_company,
@@ -40,4 +67,7 @@ def dashboard_lists(request, companyid=0):
         'feedback_task_nodes': feedback_tasks_list,
         'button_company_select': _("Сменить организацию"),
         'company_in_archive': _("Организация перемещена в архив"),
+        'full_list': full_list,
+        # 'links': {'object': 'prj_prj', 'url_name': 'my_project:tasks'},
+        'links': links,
     })

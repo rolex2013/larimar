@@ -1,0 +1,72 @@
+    {% load i18n %}
+    {% load array_tags %}
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Объект' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Наименование' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Тип' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
+
+                        {% for node in full_list %}
+
+{#                            <p>{{ node.date_for_sort }} {{ node.object_name.1 }} {{ node.name }}</p>#}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                            <div class="grid-td"><div class="item">{{ node.date_for_sort }}</div></div>
+                            <div class="grid-td"><div class="item" style="text-align:center;">{{ node.object_name.1 }}</div></div>
+                            <div class="grid-td">
+                                <div class="item">
+
+                                    {% if node.object_name.0 == 'prj_prj' %}
+                                        <span class="hint hint--bottom hint--info" data-hint="#{{ node.id }} {% trans 'Проект от' %}
+{{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}: {{ node.author }}"><a href="
+{#                                            {% url 'my_project:tasks' node.pk 0 %}#}
+                                         {% url links|link:node.object_name.0 node.pk 0 %}" style="color:{{ node.color }};">{{ node.name }}</a></span>
+                                        {#                                             использование этого пользовательского фильтра никакого выигрыша не даёт! :(#}
+                                    {% elif node.object_name.0 == 'prj_tsk' %}
+                                        <span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача проекта' %}"
+{{ node.project.name }}" {% trans 'начата' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'><a href="{% url 'my_project:taskcomments' node.pk %}" style="color:{{ node.color }};">{{ node.name }}</a></span>
+                                    {% elif node.object_name.0 == 'doc_tsk' %}
+                                        <span class="hint hint--bottom hint--info" data-hint='#{{ node.id }}
+{% trans 'Задача документа' %} "
+    {{ node.docver.name }}" {% trans 'создана' %} {{ node.datecreate }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+    {{ node.author }}'><a href="{% url 'my_doc:doctaskcomments' node.pk %}" style="color:{{ node.color }};">{{ node.name }}</a></span>
+                                    {% elif node.object_name.0 == 'crm_tsk' %}
+                                        <span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача клиента' %}"
+{{ node.client.name }}" {% trans 'начата' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'><a href="{% url 'my_crm:clienttaskcomments' node.pk %}" style="color:{{ node.color }};">{{ node.name }}</a></span>
+                                    {% elif node.object_name.0 == 'crm_evnt' %}
+                                        <span class="hint hint--bottom hint--info" data-hint='#{{ node.id }}
+{% trans 'Событие клиента' %} "{{ node.client }}" {% trans 'по задаче' %} "{{ node.task.name }}" {% trans 'начата' %} {{ node.datebegin }};
+{% trans 'ответственный' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'><a href="{% url 'my_crm:clienteventcomments' node.pk %}" style="color:{{ node.color }};">{{ node.name }}</a></span>
+                                    {% elif node.object_name.0 == 'fdb_tckt' %}
+                                        <span class="hint hint--bottom hint--info"
+                                              data-hint='#{{ node.id }} {% trans 'Тикет от' %} {{ node.datecreate }}
+                                                        {% trans 'из компании' %}: "{{ node.companyfrom.name }}"; {% trans 'автор' %}:
+{{ node.author }}'><a href="{% url 'my_feedback:feedbacktasks' 0 node.pk 0 %}" style="color:{{ node.color }};">{{ node.name }}</a></span>
+                                    {% elif node.object_name.0 == 'fdb_tsk' %}
+                                        <span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача тикета' %}"
+{{ node.ticket.name }} "{% trans 'начата' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'><a href="{% url 'my_feedback:feedbacktaskcomments' node.pk %}" style="color:{{ node.color }};">{{ node.name }}</a></span>
+                                    {% endif %}
+
+                                </div> <!-- item -->
+                            </div> <!-- td -->
+                            <div class="grid-td"><div class="item" style="text-align:center;">{{ node.type }}</div></div>
+                            <div class="grid-td"><div class="item" style="text-align:center;">{{ node.status }}</div></div>
+{#                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.link }}</div></div>#}
+{#                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.object_name }}</div></div>#}
+{#                            <div class="grid-td"><div class="item" style="text-align:center;">{{ node.link }}</div></div>#}
+                            </div> <!-- tr1/tr2 -->
+
+                        {% endfor %}
+
+                    </div> <!-- grid -->

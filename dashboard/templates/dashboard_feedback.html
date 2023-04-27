@@ -1,0 +1,110 @@
+{% if feedback_ticket_nodes or feedback_task_nodes %}
+
+    {% load i18n %}
+
+    <h4>{% trans 'Тикеты и Задачи Техподдержки' %}</h4>
+    <div class="object-list-wrapper">
+
+        <div class="object-list-left">
+
+            <div class="grid">
+                <div class="grid-th">
+                    <div class="grid-td">
+                        <div class="item">{% trans 'Срок' %}</div>
+                    </div>
+                    <div class="grid-td">
+                        <div class="item">{% trans 'Тикет' %}</div>
+                    </div>
+                    <div class="grid-td">
+                        <div class="item">{% trans 'Тип' %}</div>
+                    </div>
+                    <div class="grid-td">
+                        <div class="item">{% trans 'Статус' %}</div>
+                    </div>
+                    <div class="grid-td">
+                        <div class="item">{% trans 'Система' %}</div>
+                    </div>
+                </div>
+                {% for node in feedback_ticket_nodes %}
+                    {% if forloop.counter0|divisibleby:"2" %}
+                        <div class="grid-tr2">
+                    {% else %}
+                        <div class="grid-tr1">
+                    {% endif %}
+                <div class="grid-td">
+                    <div class="item">{{ node.datecreate }}</div>
+                </div>
+                <div class="grid-td">
+                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Тикет от' %}
+                                                            {{ node.datecreate }}
+                                                            {% trans 'из компании' %}: "{{ node.companyfrom.name }}"; {% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a style="color: {{ node.color }};" href="{% url 'my_feedback:feedbacktasks' 0 node.pk 0 %}"
+                                        >{{ node.name }}</a></span></div>
+                </div>
+                <div class="grid-td">
+                    <div class="item" style="text-align:center;">{{ node.type }}</div>
+                </div>
+                <div class="grid-td">
+                    <div class="item" style="text-align:center;">{{ node.status }}</div>
+                </div>
+                <div class="grid-td">
+                    <div class="item" style="text-align:center;">{{ node.system.name }}</div>
+                </div>
+                </div>
+                {% endfor %}
+                </div>
+            </div>
+            <div class="object-list-right">
+
+                <div class="grid">
+                    <div class="grid-th">
+                        <div class="grid-td">
+                            <div class="item">{% trans 'Срок' %}</div>
+                        </div>
+                        <div class="grid-td">
+                            <div class="item">{% trans 'Задача' %}</div>
+                        </div>
+                        <div class="grid-td">
+                            <div class="item">{% trans 'Статус' %}</div>
+                        </div>
+                        <div class="grid-td">
+                            <div class="item">{% trans '%' %}</div>
+                        </div>
+                        <div class="grid-td">
+                            <div class="item">{% trans 'Стоимость' %}</div>
+                        </div>
+                    </div>
+                    {% for node in feedback_task_nodes %}
+                        {% if forloop.counter0|divisibleby:"2" %}
+                            <div class="grid-tr2">
+                        {% else %}
+                            <div class="grid-tr1">
+                        {% endif %}
+                    <div class="grid-td">
+                        <div class="item">{{ node.dateend }}</div>
+                    </div>
+                    <div class="grid-td">
+                        <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }} {% trans 'Задача тикета' %}"
+{{ node.ticket.name }} "{% trans 'начата' %} {{ node.datebegin }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+{{ node.author }}'>
+                                        <a style="color: {{ node.color }};"
+                                           href="{% url 'my_feedback:feedbacktaskcomments' node.pk %}">{{ node.name }}</a></span></div>
+                    </div>
+                    <div class="grid-td">
+                        <div class="item" style="text-align:center;">{{ node.status }}</div>
+                    </div>
+                    <div class="grid-td">
+                        <div class="item" style="text-align:right;">{{ node.percentage|floatformat }}</div>
+                    </div>
+                    <div class="grid-td">
+                        <div class="item" style="text-align:right;">{{ node.cost }}
+                            {{ node.ticket.company.currency.symbol }}</div>
+                    </div>
+                    </div>
+                    {% endfor %}
+                    </div>
+                </div>
+
+            </div> <!-- wrapper -->
+{% endif %}

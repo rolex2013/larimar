@@ -1,0 +1,53 @@
+{% if doc_task_nodes %}
+
+    {% load i18n %}
+
+            <h4>{% trans 'Задачи Документооборота' %}</h4>
+            <div class="object-list-wrapper">
+
+                <div class="object-list-left">
+
+                    <div class="grid">
+                        <div class="grid-th">
+                            <div class="grid-td"><div class="item">{% trans 'Срок' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Задача' %}</div></div>
+                            {#                            <div class="grid-td"><div class="item">{% trans 'Проект' %}</div></div>#}
+                            <div class="grid-td"><div class="item">{% trans 'Документ' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Версия' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Тип' %}</div></div>
+                            <div class="grid-td"><div class="item">{% trans 'Статус' %}</div></div>
+                        </div>
+                        {% for node in doc_task_nodes %}
+                            {% if forloop.counter0|divisibleby:"2" %}
+                                <div class="grid-tr2">
+                            {% else %}
+                                <div class="grid-tr1">
+                            {% endif %}
+                                <div class="grid-td"><div class="item">{{ node.dateend }}</div></div>
+                                <div class="grid-td">
+                                    <div class="item"><span class="hint hint--bottom hint--info" data-hint='#{{ node.id }}
+{% trans 'Задача документа' %} "
+        {{ node.docver.name }}" {% trans 'создана' %} {{ node.datecreate }}; {% trans 'исполнитель' %}: {{ node.assigner }}; {% trans 'автор' %}:
+        {{ node.author }}'>
+                                        <a style="color: {{ node.color }};"
+                                           href="{% url 'my_doc:doctaskcomments' node.pk %}">{{ node.name }}</a></span></div>
+                                </div> <!-- td -->
+                                {#                                <div class="grid-td">#}
+                                {#                                    <div class="item">{{ node.project.name }}</div>#}
+                                {#                                </div>#}
+                                {#                                <div class="grid-td">#}
+                                {#                                    <div class="item">{{ node.type }}</div>#}
+                                {#                                </div>#}
+                                <div class="grid-td"><div class="item">{{ node.docver.name }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:right;">{{ node.docver.vernumber }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.type }}</div></div>
+                                <div class="grid-td"><div class="item" style="text-align:center;">{{ node.status }}</div></div>
+                            </div> <!-- tr1/tr2 -->
+                        {% endfor %}
+
+                    </div> <!-- grid -->
+
+                </div> <!-- left -->
+
+            </div> <!-- wrapper -->
+{% endif %}

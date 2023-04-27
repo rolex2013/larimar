@@ -804,7 +804,10 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
         button_feedbacktask_create = 'Создать'
 
     is_system_dev = request.session['system_dev'][1]
-    current_companyid = request.session["_auth_user_supportcompany_id"]
+    try:
+        current_companyid = request.session["_auth_user_supportcompany_id"]
+    except:
+        current_companyid = 0
 
     #task_list.refresh_from_db()
     #print(is_ticketslist_dev)
@@ -996,7 +999,10 @@ def feedbacktaskcomments(request, taskid):
         if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
             button_task_update = 'Изменить'
 
-    current_companyid = request.session["_auth_user_supportcompany_id"]
+    try:
+        current_companyid = request.session["_auth_user_supportcompany_id"]
+    except:
+        current_companyid = 0
 
     return render(request, "feedbacktask_detail.html", {
         'nodes': taskcomment_list.distinct().order_by(),
@@ -1261,7 +1267,8 @@ def feedback_tickets_tasks(request):
 
     feedback_tickets_list = FeedbackTicket.objects.filter(Q(company__in=companies_id) | Q(companyfrom__in=companies_id) | Q(author=request.user.id),
                                             is_active=True, status__is_close=False, dateclose__isnull=True).select_related(
-                                            'company', 'companyfrom', 'type', 'type', 'status', 'author').order_by('datecreate', 'type').distinct()
+                                            'company', 'companyfrom', 'system', 'type', 'status', 'author').order_by('datecreate',
+                                                                                                                         'type').distinct()
 
     feedback_tasks_list = FeedbackTask.objects.filter(Q(ticket__author=request.user.id) | Q(assigner=request.user.id) | Q(author=request.user.id),
                                               is_active=True, status__is_close=False, dateclose__isnull=True,

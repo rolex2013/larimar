@@ -778,7 +778,7 @@ def projects_tasks(request):
         'dateend', 'type').distinct()
     projects_tasks_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser, ]),
                                               project__company__in=companies_id,
-                                              is_active=True, dateclose__isnull=True, dateend__lte=date_end).select_related('project', 'status',
+                                              is_active=True, dateclose__isnull=True, dateend__lte=date_end).select_related('project', 'type', 'status',
                                                                                                                             'assigner',
                                                                                                                             'author').order_by(
         'dateend').distinct()

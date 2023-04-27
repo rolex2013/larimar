@@ -1,9 +1,10 @@
 from django.db import models
-from django.db.models import Q, Sum
+from django.db.models import Sum
 
 from django.urls import reverse #, reverse_lazy
-from django.utils import timezone
-from datetime import date, timedelta
+from datetime import datetime
+
+from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
 from main.models import ModelLog
@@ -12,7 +13,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 from companies.models import Company
 
-from main.utils_color import SetColorMixin
+from dashboard.utils import SetPropertiesDashboardMixin
 
 #import json
 #from datetime import datetime, timedelta
@@ -93,7 +94,7 @@ class Dict_TaskType(models.Model):
     def __str__(self):
         return (self.name)
 
-class Project(SetColorMixin, MPTTModel):
+class Project(SetPropertiesDashboardMixin, MPTTModel):
     name = models.CharField("Наименование", max_length=64)
     description = RichTextUploadingField("Описание")
     datebegin = models.DateField("Начало")
@@ -114,6 +115,15 @@ class Project(SetColorMixin, MPTTModel):
     is_active = models.BooleanField("Активность", default=True)
 
     @property
+    def object_name(self):
+        return ('prj_prj', _("Проект"))
+    @property
+    def link(self):
+        index = str(self.pk)
+        #print(index[-1].__class__.__name__)
+        return f'my_project:tasks {index} 0' # + str(self.pk)
+        #return mark_safe(f"{ my_project:tasks {index} 0 %}")
+    @property
     # суммарная стоимость по Комментам (сколько освоено средств)
     def costsum(self):
         return TaskComment.objects.filter(task__project_id=self.id).aggregate(Sum('cost'))
@@ -121,22 +131,7 @@ class Project(SetColorMixin, MPTTModel):
     # суммарная затраченное время по Комментам
     def timesum(self):
         return TaskComment.objects.filter(task__project_id=self.id).aggregate(Sum('time'))
-    # @property
-    # # цвет отображения, в зависимости от просроченности
-    # def color(self):
-    #     colour = ''
-    #     date_end1 = date.today() + timedelta(days=3)
-    #     date_end2 = date.today() + timedelta(days=10)
-    #     if self.dateend < date.today():
-    #         colour = 'red'
-    #     elif self.dateend == date.today():
-    #         colour = 'magenta'
-    #     elif self.dateend < date_end1:
-    #         colour = 'blue'
-    #     elif self.dateend < date_end2:
-    #         colour = 'green'
-    #     return colour
-         
+
     def get_absolute_url(self):
         return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '0'})  
     def __str__(self):
@@ -182,7 +177,7 @@ class Project(SetColorMixin, MPTTModel):
         verbose_name = 'Проект'
         verbose_name_plural = 'Проекты'
 
-class Task(SetColorMixin, MPTTModel):
+class Task(SetPropertiesDashboardMixin, MPTTModel):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")
     datebegin = models.DateTimeField("Начало")
@@ -208,26 +203,13 @@ class Task(SetColorMixin, MPTTModel):
     # суммарная затраченное время по Комментариям
     def timesum(self):
         return TaskComment.objects.filter(task_id=self.id).aggregate(Sum('time'))
-    # @property
-    # # цвет отображения, в зависимости от просроченности
-    # def color(self):
-    #     colour = ''
-    #     date_end1 = timezone.now() + timedelta(days=3)
-    #     date_end2 = timezone.now() + timedelta(days=10)
-    #     #print(self.name, self.dateend, self.dateend.day, timezone.now().day)
-    #     if self.dateend < timezone.now():
-    #         # все просроченные
-    #         colour = 'red'
-    #     elif self.dateend.day == timezone.now().day:
-    #         # если срок исполнения истекает сегодня
-    #         colour = 'magenta'
-    #     elif self.dateend < date_end1:
-    #         # если срок исполнения - ближайшие 3 дня
-    #         colour = 'blue'
-    #     elif self.dateend < date_end2:
-    #         # если срок исполнения - ближайшие 10 дней
-    #         colour = 'green'
-    #     return colour
+    @property
+    def object_name(self):
+        return ('prj_tsk', _("Задача проекта"))
+    @property
+    def link(self):
+        index = str(self.pk)
+        return f'my_project:taskcomments {index}' # + str(self.pk)
 
     def get_absolute_url(self):
         return reverse('my_project:taskcomments', kwargs={'taskid': self.pk})

@@ -3,8 +3,11 @@ from django.db import models
 #from django.db.models import Q, Sum
 from django.db.models import Sum
 
-from django.urls import reverse, reverse_lazy
-from django.utils import timezone
+from django.urls import reverse
+#from django.utils import timezone
+from datetime import datetime
+
+from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
 from main.models import ModelLog
@@ -13,7 +16,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 from companies.models import Company
 
-from main.utils_color import SetColorMixin
+from dashboard.utils import SetPropertiesDashboardMixin
 
 class Dict_System(models.Model):
     code = models.CharField("Код системы", editable=False, max_length=128)
@@ -75,7 +78,7 @@ class Dict_FeedbackTaskStatus(models.Model):
     def __str__(self):
         return (self.name)
 
-class FeedbackTicket(models.Model):
+class FeedbackTicket(SetPropertiesDashboardMixin, models.Model):
     system = models.ForeignKey('Dict_System', on_delete=models.CASCADE, related_name='feedback_system',
                                 verbose_name="Система")
     company = models.ForeignKey('companies.Company', null=True, blank=True, on_delete=models.CASCADE, related_name='feedback_company',
@@ -95,6 +98,9 @@ class FeedbackTicket(models.Model):
     id_remote = models.IntegerField("ID тикета в удалённой системе", null=True, blank=True)
     is_active = models.BooleanField("Активность", default=True)
 
+    @property
+    def object_name(self):
+        return ('fdb_tckt', _("Тикет"))
     @property
     # суммарная стоимость по Комментам к Тикету
     def costcommentsum(self):
@@ -123,7 +129,7 @@ class FeedbackTicket(models.Model):
         verbose_name = 'Тикет'
         verbose_name_plural = 'Тикеты'
 
-class FeedbackTask(SetColorMixin, MPTTModel):
+class FeedbackTask(SetPropertiesDashboardMixin, MPTTModel):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")
     datebegin = models.DateTimeField("Начало")
@@ -141,6 +147,9 @@ class FeedbackTask(SetColorMixin, MPTTModel):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='feedback_task_user', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
 
+    @property
+    def object_name(self):
+        return ('fdb_tsk', _("Задача тикета"))
     @property
     # суммарная стоимость по Комментариям (сколько освоено средств)
     def costsum(self):

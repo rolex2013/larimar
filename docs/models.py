@@ -1,8 +1,9 @@
 from django.db import models
 
 from django.urls import reverse #, reverse_lazy
-from django.utils import timezone
-from datetime import date, timedelta
+from datetime import datetime #, date, timedelta
+
+from django.utils.translation import gettext_lazy as _
 
 #from mptt.models import MPTTModel, TreeForeignKey
 
@@ -11,7 +12,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 #from main.models import ModelLog
 from companies.models import Company
 
-from main.utils_color import SetColorMixin
+from dashboard.utils import SetPropertiesDashboardMixin
 
 
 class Dict_DocType(models.Model):
@@ -134,7 +135,7 @@ class DocVer(models.Model):
         verbose_name = 'Версия Документа'
         verbose_name_plural = 'Версии Документов'
 
-class DocTask(SetColorMixin, models.Model):
+class DocTask(SetPropertiesDashboardMixin, models.Model):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание", null=True, blank=True)
     #datebegin = models.DateTimeField("Начало")
@@ -149,21 +150,10 @@ class DocTask(SetColorMixin, models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultdoctaskuser', verbose_name="Автор")
     is_active = models.BooleanField("Активность", default=True)
 
-    # @property
-    # # цвет отображения, в зависимости от просроченности
-    # def color(self):
-    #     colour = ''
-    #     date_end1 = date.today() + timedelta(days=3)
-    #     date_end2 = date.today() + timedelta(days=10)
-    #     if self.dateend < date.today():
-    #         colour = 'red'
-    #     elif self.dateend == date.today():
-    #         colour = 'magenta'
-    #     elif self.dateend < date_end1:
-    #         colour = 'blue'
-    #     elif self.dateend < date_end2:
-    #         colour = 'green'
-    #     return colour
+    @property
+    def object_name(self):
+        return ('doc_tsk', _("Задача документа"))
+    @property
 
     def get_absolute_url(self):
         return reverse('my_doc:doctaskcomments', kwargs={'taskid': self.pk})
