@@ -20,11 +20,11 @@
                 <input class="radio" id="five" name="group" type="radio">
 
                 <div class="tabs">
-                    <label class="tab" id="one-tab" for="one">Все</label>
-                    <label class="tab" id="two-tab" for="two">Проекты и Задачи</label>
-                    <label class="tab" id="three-tab" for="three">Задачи Документооборота</label>
-                    <label class="tab" id="four-tab" for="four">Клиентские Задачи и События</label>
-                    <label class="tab" id="five-tab" for="five">Тикеты и Задачи Техподдержки</label>
+                    <label class="tab" id="one-tab" for="one">{% trans 'Все' %}</label>
+                    <label class="tab" id="two-tab" for="two">{% trans 'Проекты и Задачи' %}</label>
+                    <label class="tab" id="three-tab" for="three">{% trans 'Задачи Документооборота' %}</label>
+                    <label class="tab" id="four-tab" for="four">{% trans 'Клиентские Задачи и События' %}</label>
+                    <label class="tab" id="five-tab" for="five">{% trans 'Тикеты и Задачи Техподдержки' %}</label>
                 </div>
 
                 <div class="panels">
@@ -60,15 +60,6 @@
     {% endif %}
 
 {% endblock list %}
-
-
-            <div class="object-list-wrapper">
-
-                <div class="object-list-left">
-
-{#                    {% include 'dashboard_all.html' %}#}
-
-                </div>
 
             </div>
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-21 18:22+0300\n"
+"POT-Creation-Date: 2023-04-27 13:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,26 +17,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\crm\models.py:190
+msgid "Задача клиента"
+msgstr "Client task"
+
+#: .\crm\models.py:247
+msgid "Событие клиента"
+msgstr "Client event"
+
+#: .\docs\models.py:155
+msgid "Задача документа"
+msgstr "Document task"
+
+#: .\feedback\models.py:103
+msgid "Тикет"
+msgstr "Ticket"
+
+#: .\feedback\models.py:152
+msgid "Задача тикета"
+msgstr "Ticket task"
+
 #: .\larimar\settings.py:217
 msgid "Russian"
-msgstr ""
+msgstr "Russian"
 
 #: .\larimar\settings.py:218
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: .\lists\models.py:8 .\lists\models.py:9
 msgid "Наименование"
-msgstr ""
+msgstr "Name"
 
 #: .\lists\models.py:10
 msgid "Описание_ru"
-msgstr ""
+msgstr "Description_ru"
 
 #: .\lists\models.py:11
 msgid "Описание_en"
-msgstr ""
+msgstr "Description_en"
 
 #: .\lists\models.py:12
 msgid "Активность Системы"
-msgstr ""
+msgstr "System is active"
+
+#: .\projects\models.py:119
+msgid "Проект"
+msgstr "Project"
+
+#: .\projects\models.py:208
+msgid "Задача проекта"
+msgstr "Project task"
