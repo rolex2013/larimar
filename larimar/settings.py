@@ -104,6 +104,7 @@ MIDDLEWARE = [
     'accounts.middleware.LocaleMiddleware',
     'main.request_exposer.RequestExposerMiddleware',
     'finance.request_exposer.RequestExposerMiddleware',
+    'lists.request_exposer.RequestExposerMiddleware',
 ]
 
 ROOT_URLCONF = 'larimar.urls'

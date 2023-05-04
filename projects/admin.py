@@ -36,6 +36,8 @@ from feedback.models import Dict_System, Dict_FeedbackTicketStatus, Dict_Feedbac
 
 from chats.models import Dict_ChatType, Chat, ChatMember
 
+from lists.models import Dict_YListFieldType
+
 from django_mptt_admin.admin import DjangoMpttAdmin
 
 #from modeltranslation.admin import TranslationAdmin, TabbedTranslationAdmin
@@ -226,4 +228,7 @@ admin.site.register(Chat)
 
 admin.site.register(ChatMember)
 
+# lists
+
+admin.site.register(Dict_YListFieldType)
 

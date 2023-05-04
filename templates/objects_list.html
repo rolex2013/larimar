@@ -1,3 +1,5 @@
+{% load i18n %}
+
          {% load mptt_tags %}
  
          <ul>
@@ -5,21 +7,26 @@
            <li>
               {% if object_list == 'company_list' %}
                  {% if component_name == 'projects' %}
-                    <span class="hint hint--bottom hint--info" data-hint="Проекты, Задачи"><b><a href="{% url 'my_project:projects' node.pk 0 %}">{{ node.name }}</a></b></span><br />
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Проекты и Задачи" %}'><b><a href=
+                                                                                                                 "{% url 'my_project:projects' node.pk 0 %}"
+                 >{{ node.name }}</a></b></span><br />
                  {% elif component_name == 'crm' %}                    
-                     <span class="hint hint--bottom hint--info" data-hint="CRM"><b><a href="{% url 'my_crm:clients' node.pk 0 %}">{{ node.name }}</a></b></span><br />
+                     <span class="hint hint--bottom hint--info" data-hint='{% trans "CRM" %}'><b><a href="{% url 'my_crm:clients' node.pk 0 %}">{{ node.name }}</a></b></span><br />
                  {% elif component_name == 'docs' %}
-                     <span class="hint hint--bottom hint--info" data-hint="Документы"><b><a href="{% url 'my_doc:docs' node.pk 0 %}">{{ node.name }}</a></b></span><br />
+                     <span class="hint hint--bottom hint--info" data-hint='{% trans "Документы" %}'><b><a href="{% url 'my_doc:docs' node.pk 0 %}"
+                     >{{ node.name }}</a></b></span><br />
                  {% elif component_name == 'files' %}
-                    <span class="hint hint--bottom hint--info" data-hint="Файлы"><b><a href="{% url 'my_file:folders' node.pk 0 %}">{{ node.name }}</a></b></span><br />
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Файлы" %}'><b><a href="{% url 'my_file:folders' node.pk 0 %}">{{ node.name }}</a></b></span><br />
                  {% elif component_name == 'feedback' %}
-                    <span class="hint hint--bottom hint--info" data-hint="Техподдержка"><b><a href="{% url 'my_feedback:tickets' 0 1 node.pk %}">{{ node.name }}</a></b></span><br />
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Техподдержка" %}'><b><a href="{% url 'my_feedback:tickets' 0 1 node.pk %}">{{ node.name }}</a></b></span><br />
                  {% elif component_name == 'chats' %}
-                    <span class="hint hint--bottom hint--info" data-hint="Чаты"><b><a href="{% url 'my_chat:chats' node.pk 0 %}">{{ node.name }}</a></b></span><br />
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Чаты" %}'><b><a href="{% url 'my_chat:chats' node.pk 0 %}">{{ node.name }}</a></b></span><br />
                  {% elif component_name == 'companies' %}
-                    <span class="hint hint--bottom hint--info" data-hint="Настройка"><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{ node.parent.name }}--></a></b></span><br />
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Настройка" %}'><b><a href="{% url 'my_company:stafflist' node.pk 0 %}">{{ node.name }}<!-------------{ node.parent.name }}--></a></b></span><br />
                  {% elif component_name == 'dashboard' %}
-                    <span class="hint hint--bottom hint--info" data-hint="Панель управления"><b><a href="{% url 'my_dashboard:dashboard' node.pk %}"
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Панель управления" %}'><b><a href="{% url 'my_dashboard:dashboard' node.pk %}"
+                 {% elif component_name == 'lists' %}
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Списки" %}'><b><a href="{% url 'my_list:ylists' node.pk 0 %}"
                     >{{ node.name }}</a></b></span><br />
                  {% endif %}
               {% elif object_list == 'project_list' %}         
@@ -27,9 +34,11 @@
                     <b><a href="{% url 'my_project:tasks' node.pk 0 %}">#{{ node.id }}. {{ node.name }} </a><span style="font-size: 70%; color: green;"> {{ node.datebegin|date:"d.m.Y" }} - {{ node.dateend|date:"d.m.Y" }} | 
                     {{ node.status.name }} | 
                     {{ node.type }} | 
-                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}">{{ node.assigner.username }}</a></span> | 
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Профиль" %}'><a style="color: green" href=
+                            "{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}">{{ node.assigner.username }}</a></span> |
                     <i>{{ node.datecreate|date:"d.m.Y" }}</i> |
-                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span>
+                    <span class="hint hint--bottom hint--info" data-hint='{% trans "Профиль" %}'><a style="color: green" href=
+                            "{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span>
                     </span></b>
                  <!--</div>--><br />
               {% comment %}          
@@ -57,8 +66,9 @@
                  {% endif %}                                          
                  <!-- <a href="{ url 'my_project:tasks' current_project.id node.pk %}">-->
                  #{% if object_list == 'feedbacktask_list' %}{{ node.ticket.id}}.{% endif %}{{ node.id }}. {{ node.name }}</a> <span style="font-size: 70%; color: brown;">{{ node.datebegin }} - {{ node.dateend }} |
-                 {{ node.status.name }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}">{{ node.assigner.username }}</a></span> |
-                 <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | 
+                 {{ node.status.name }} | <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a style="color: brown;" href=
+                          "{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}">{{ node.assigner.username }}</a></span> |
+                 <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> |
                     {{ node.project.currency.symbol }}{{ node.ticket.company.currency.symbol }}{{ node.cost }}
                  </span></b>   
         

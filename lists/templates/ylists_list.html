@@ -1,0 +1,14 @@
+
+   {% load i18n %}
+
+    <h4>{% trans 'Списки' %}</h4>
+
+    <div id="listslist" style="padding:0px 0px 0px 10px;">
+
+        {% for node in nodes %}
+           <p><a href="" id="list_{{ node.id }}" onclick="MessagesList({{ node.id }}); return false;">{{ node.name }}</a> <i>
+               ({{ node.type }} -
+               {{ node.author }} {{ node.datecreate|date:"d.m.y" }})</i></p>
+        {% endfor %}
+
+    </div>

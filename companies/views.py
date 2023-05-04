@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import View, TemplateView, ListView, DetailView, CreateView
 from django.views.generic.edit import UpdateView, DeleteView
+from django.utils.translation import gettext_lazy as _
 from django.template import loader, Context, RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
@@ -72,8 +73,8 @@ def companies(request, pk=0, razdel='projects'):
 
     # здесь нужно условие для button_company_create
     button_company_create = ''
-    button_company_create = 'Добавить'
-    button_StaffList = "Штатное расписание"
+    button_company_create = _('Добавить')
+    button_StaffList = _("Штатное расписание")
 
     component_name = razdel       
     request.session['_auth_user_currentcomponent'] = component_name
@@ -151,7 +152,7 @@ class CompanyUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
        context = super(CompanyUpdate, self).get_context_data(**kwargs)
-       context['header'] = 'Изменить Организацию'
+       context['header'] = _('Изменить Организацию')
        return context
 
 #def getCompanies(request, user):
@@ -215,10 +216,10 @@ def stafflist(request, companyid=0, pk=0):
     #print(unodes)
     #print(current_company.author_id)
     if currentuser == current_company.author_id:
-       button_company_create = 'Добавить'
-       button_company_update = 'Изменить'
-       button_user_envite = 'Пригласить'
-       button_user_create = 'Добавить'
+       button_company_create = _('Добавить')
+       button_company_update = _('Изменить')
+       button_user_envite = _('Пригласить')
+       button_user_create = _('Добавить')
        if len(nodes) == 0:
           # в Компании может быть только один руководитель!
           button_stafflist_create = 'Добавить'
@@ -271,7 +272,7 @@ class StaffListUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
        context = super(StaffListUpdate, self).get_context_data(**kwargs)
-       context['header'] = 'Изменить Должность'
+       context['header'] = _('Изменить Должность')
        return context
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
@@ -296,13 +297,13 @@ def staffs(request, stafflistid=0, pk=0):
 
     # здесь нужно условие для button_stafflist_create
     button_stafflist_create = ''
-    button_stafflist_create = 'Добавить'
-    #button_stafflist = "Штатное расписание"
+    button_stafflist_create = _('Добавить')
+    #button_stafflist = _("Штатное расписание")
 
-    #button_company_select = 'Сменить организацию'  
+    #button_company_select = _('Сменить организацию')
     comps = request.session['_auth_user_companies_id']
     #if len(comps) > 1:
-    #   button_company_select = 'Сменить организацию'  
+    #   button_company_select = _('Сменить организацию')
 
     component_name = 'companies' 
 
@@ -318,10 +319,10 @@ def staffs(request, stafflistid=0, pk=0):
        #print(number_employees.cnt)
        #if number_employees[0].cnt < current_stafflist.numberemployees:
        if len(nodes) < current_stafflist.numberemployees:
-          button_staff_create = 'Добавить'
-       button_stafflist_create = 'Добавить'
-       button_stafflist_update = 'Изменить'              
-       #button_staff_update = 'Изменить'
+          button_staff_create = _('Добавить')
+       button_stafflist_create = _('Добавить')
+       button_stafflist_update = _('Изменить')
+       #button_staff_update = _('Изменить')
     
     return render(request, template_name, {
                               #'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid).order_by(),
@@ -364,7 +365,7 @@ class StaffCreate(CreateView):
 
     def get_context_data(self, **kwargs):
        context = super(StaffCreate, self).get_context_data(**kwargs)
-       context['header'] = 'Новый Сотрудник' # + stafflistid
+       context['header'] = _('Новый Сотрудник') # + stafflistid
        return context
 
     def get_form_kwargs(self):
@@ -379,7 +380,7 @@ class StaffUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
        context = super(StaffUpdate, self).get_context_data(**kwargs)
-       context['header'] = 'Изменить Должность'
+       context['header'] = _('Изменить Должность')
        return context
 
     def get_form_kwargs(self):
@@ -401,7 +402,7 @@ def vacancies(request):
 def vacancy_detail(request, pk):
     template_name = 'vacancy_detail.html'
     current_stafflist = StaffList.objects.get(id=pk)
-    button_send_resume = 'Откликнуться на вакансию'
+    button_send_resume = _('Откликнуться на вакансию')
     return render(request, template_name, {
                                            'current_stafflist': current_stafflist,
                                            'button_send_resume': button_send_resume,
@@ -419,7 +420,7 @@ class SummaryCreate(CreateView):
 
     def get_context_data(self, **kwargs):
        context = super(SummaryCreate, self).get_context_data(**kwargs)
-       context['header'] = 'Новое резюме'
+       context['header'] = _('Новое резюме')
        return context
 
     #def get_form_kwargs(self):
@@ -438,8 +439,8 @@ def summaries(request, pk=0):
     param = 'summaries'
     comps = request.session['_auth_user_companies_id']
     current_stafflist = StaffList.objects.filter(id=pk).select_related("author", "company", "currency", "type").first()
-    button_stafflist_create = 'Добавить'
-    button_stafflist_update = 'Изменить'       
+    button_stafflist_create = _('Добавить')
+    button_stafflist_update = _('Изменить')
     return render(request, template_name, {
                                            'summaries_list': summaries_list,
                                            'param': param,
@@ -454,7 +455,7 @@ def summary_detail(request, pk):
     current_summary = Summary.objects.filter(id=pk).select_related("stafflist").first()
     if not current_summary.candidatemiddlename:
        current_summary.candidatemiddlename = ''
-    button_delete_resume = 'Удалить резюме'
+    button_delete_resume = _('Удалить резюме')
     return render(request, template_name, {
                                            'current_summary': current_summary,
                                            'button_delete_resume': button_delete_resume,
@@ -465,10 +466,10 @@ def summary_delete(request, pk):
     current_summary = Summary.objects.filter(id=pk).select_related("stafflist").first()
     if current_summary.is_active == True:
        current_summary.is_active = False   
-       button_delete_resume = 'Восстановить резюме'           
+       button_delete_resume = _('Восстановить резюме')
     else:
        current_summary.is_active = True
-       button_delete_resume = 'Удалить резюме'
+       button_delete_resume = _('Удалить резюме')
     current_summary.save()
 
     return render(request, template_name, {
@@ -556,12 +557,12 @@ class ContentDetail(DetailView):
        context = super(ContentDetail, self).get_context_data(**kwargs)
        #print(self.object.name)       
        if self.request.user.is_authenticated:
-          context['button_content_create'] = 'Добавить' #button_company_create
-          context['button_content_update'] = 'Изменить'
+          context['button_content_create'] = _('Добавить') #button_company_create
+          context['button_content_update'] = _('Изменить')
           context['user_companies'] = self.request.session['_auth_user_companies_id']
-          context['whoisauthor'] = 'Автор: ' + self.object.author.username
+          context['whoisauthor'] = _('Автор: ') + self.object.author.username
           if not self.object.is_active:
-             context['extdescription'] = ' (Контент перемещен в архив)'
+             context['extdescription'] = _(' (Контент перемещен в архив)')
           return context              
        elif self.object.place_id == 1:
           #print(context)
@@ -577,7 +578,7 @@ class ContentCreate(CreateView):
 
     def get_context_data(self, **kwargs):
        context = super(ContentCreate, self).get_context_data(**kwargs)
-       context['header'] = 'Новый Контент'
+       context['header'] = _('Новый Контент')
        return context
 
     def get_form_kwargs(self):
@@ -598,7 +599,7 @@ class ContentUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
        context = super(ContentUpdate, self).get_context_data(**kwargs)
-       context['header'] = 'Изменить Контент'
+       context['header'] = _('Изменить Контент')
        return context
 
     def get_form_kwargs(self):
@@ -615,8 +616,8 @@ def userroles(request, companyid=1, pk=1):
                                                                                                                       "group", "user").order_by('component_id', 'group_id')
     componentlist = Component.objects.filter(is_active=True)
     grouplist = Group.objects.filter().exclude(name='Суперадминистраторы')
-    button_companyuser_update = 'Изменить'
-    button_companyuserrole_create = 'Добавить'
+    button_companyuser_update = _('Изменить')
+    button_companyuserrole_create = _('Добавить')
     return render(request, 'company_user_detail.html', {
                                                         'nodes': roles,
                                                         'companyuser': companyuser,
@@ -638,7 +639,7 @@ def userrole_delete(request):
     roles = UserCompanyComponentGroup.objects.filter(user_id=role.user_id, company_id=role.company_id, is_active=True).select_related("company", "component", "group", "user").order_by('component_id', 'group_id')
     componentlist = Component.objects.filter(is_active=True)
     grouplist = Group.objects.all()    
-    button_companyuserrole_create = 'Добавить'
+    button_companyuserrole_create = _('Добавить')
     return render(request, 'company_user_roles_list.html', {
                                                             'nodes': roles,
                                                             'componentlist': componentlist,
@@ -658,11 +659,11 @@ def userrole_create(request):
        role = UserCompanyComponentGroup.objects.create(user_id=userid, company_id=companyid, component_id=componentid, group_id=groupid)
        role.save()
     except:
-       message = 'Такая роль уже назначена!'
+       message = _('"Эта" роль уже назначена!')
     roles = UserCompanyComponentGroup.objects.filter(user_id=userid, company_id=companyid, is_active=True).select_related("company", "component", "group", "user").order_by('component_id', 'group_id')
     componentlist = Component.objects.filter(is_active=True)
     grouplist = Group.objects.all()
-    button_companyuserrole_create = 'Добавить роль'
+    button_companyuserrole_create = _('Добавить роль')
     return render(request, 'company_user_roles_list.html', {
                                                             'nodes': roles,
                                                             'componentlist': componentlist,

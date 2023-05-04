@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block list %}
+
+    {% load i18n %}
+
+    <!-- Защита от прямого доступа к Dashboard -->
+    {% if current_company.id in user_companies %}
+
+        <h3>{% trans 'Панель управления' %}</h3>
+
+        <div class="object-list">
+
+<ul id="tabs">
+    <li><a href="#" id="tab1">One</a></li>
+    <li><a href="#" id="tab2">Two</a></li>
+    <li><a href="#" id="tab3">Three</a></li>
+    <li><a href="#" id="tab4">Four</a></li>
+</ul>
+
+<div id="content">
+    <div id="ctab1">..1.</div>
+    <div id="ctab2">...2</div>
+    <div id="ctab3">...3</div>
+    <div id="ctab4">...4</div>
+</div>
+
+        </div>
+
+    {% else %}
+        <h5>Информация для Dashboard недоступна!</h5>
+    {% endif %}
+
+{% endblock list %}
+
+
+            <div class="object-list-wrapper">
+
+                <div class="object-list-left">
+
+{#                    {% include 'dashboard_all.html' %}#}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="object-list">
+
+        </div>
+
+
+{#<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>#}
+<script>
+$(document).ready(function() {
+    $("#content").find("[id^='ctab']").hide(); // Hide all content
+    $("#tabs li:first").attr("id","current"); // Activate the first tab
+    $("#content #ctab1").fadeIn(); // Show first tab's content
+
+    $('#tabs a').click(function(e) {
+        e.preventDefault();
+        if ($(this).closest("li").attr("id") == "current"){ //detection for current tab
+         return;
+        }
+        else{
+          $("#content").find("[id^='ctab']").hide(); // Hide all content
+          $("#tabs li").attr("id",""); //Reset id's
+          $(this).parent().attr("id","current"); // Activate this
+          $('#' + $(this).attr('id')).fadeIn(); // Show content for the current tab
+        }
+    });
+});
+</script>
+
+   

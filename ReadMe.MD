@@ -6,5 +6,8 @@
 
 Для тестирования доступен функционирующий прототип по адресу: http://1yes.larimaritgroup.ru
 
-v.2.1.0 - 27.04.2023
-(+) Dashboard application
+# v.2.1.1 - 04.05.2023
+## (+) List application
+
+# v.2.1.0 - 27.04.2023
+## (+) Dashboard application
