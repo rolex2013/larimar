@@ -5,6 +5,7 @@
    {% load i18n %}
 
     <!-- Защита от прямого доступа к элементам Списка -->
+
     {% if current_ylist.company.id in user_companies %}
 
         <div class="object-detail">
@@ -20,18 +21,21 @@
 
                 <div class="object-detail-left">
                     <p>{% autoescape off %}{{ current_ylist.description }}{% endautoescape %}</p>
-                    <i><p>{%  trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Списки организации' %}"><a href=
+                    <i><p>{% trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Списки организации' %}"><a href=
                                                                                                                               "
 {% url 'my_list:ylists' current_ylist.company.pk 0 %}">{{ current_ylist.company }}</a></span></p></i>
-                    <p>Создан: {{ current_ylist.datecreate }}</p>
-                    <p>Закрыт: {{ current_ylist.dateclose }}</p>
-                    <p><i>Участники:
+                    <p><em>{% trans "Создан" %}: {{ current_ylist.datecreate }} <a href="{% url 'my_account:userprofile_detail' current_ylist.author.pk ' ' %}">{{ current_ylist.author }}</a></em></p>
+                    <p><em>{% trans "Изменён" %}: {{ current_ylist.dateupdate }} <a href="
+{% url 'my_account:userprofile_detail' current_ylist.authorupdate.pk ' ' %}">{{ current_ylist.authorupdate }}</a></em></p>
+                    {% if current_ylist.dateclose is not NULL %}
+                        <p><em>{% trans "Закрыт" %}: {{ current_ylist.dateclose }}</em></p>
+                    {% endif %}
+                    <p><em>{% trans "Участники" %}:
                         {% for u in current_ylist.members.all %}
-                            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
+                            <span class="hint hint--bottom hint--info" data-hint="{% trans "Профиль" %}"><a href=
+"{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
                         {% endfor %}
-                    </i></p>
-                    <p><em>Автор: {{ current_ylist.author }}</em></p>
-                    <p><em>Изменил: {{ current_ylist.authorupdate }} {{ current_ylist.dateupdate }}</em></p>
+                    </em></p>
                     <br />
                 </div>
 
@@ -39,7 +43,7 @@
 
             <!--{ if user.is_authenticated and user.id == current_ylist.author_id  %}-->
             <div class="object-detail-buttons">
-                <a href="{% url 'my_list:ylist_create' current_ylist.company.id %}">{{ button_list_create }}</a>
+{#                <a href="{% url 'my_list:ylist_create' current_ylist.company.id %}">{{ button_list_create }}</a>#}
                 <a href="{% url 'my_list:ylist_update' current_ylist.pk %}">{{ button_list_update }}</a>
             </div>
             <!--{ endif %}-->
@@ -87,7 +91,7 @@
                 <!--<button type="submit">Применить</button>-->
             </form>
 
-            <div id="ajax_item_listresult">{% include 'objects_list.html' %}</div>
+            <div id="ajax_item_listresult">{% include 'ylist_items_list.html' %}</div>
             <div id="ajax_item_listerrors"></div>
 
             <div class="object-list-buttons">

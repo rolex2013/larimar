@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+import json
 
 from main.utils_lang import TranslateFieldMixin
 
@@ -41,6 +42,12 @@ class YList(models.Model):
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='ylist_author', verbose_name=_("Автор"))
     members = models.ManyToManyField('auth.User', related_name='ylist_members', verbose_name=_("Участники"))
     is_active = models.BooleanField(_("Активность Списка"), default=True)
+    @property
+    def json_fieldslist(self):
+        return [*json.loads(self.fieldslist)]
+    @property
+    def json_fieldsvalue(self):
+        return json.loads(self.fieldslist).items()
 
     def get_absolute_url(self):
         return reverse('my_list:ylist_items', kwargs={'pk': self.pk})
@@ -53,11 +60,18 @@ class YListItem(models.Model):
     ylist = models.ForeignKey('YList', on_delete=models.CASCADE, related_name='ylistresult', verbose_name=_("Список"))
     datecreate = models.DateTimeField(_("Дата создания"), auto_now_add=True)
     dateupdate = models.DateTimeField(_("Дата изменения"), auto_now_add=True)
-    dateclose = models.DateTimeField(_("Дата закрытия"), auto_now_add=True)
+    dateclose = models.DateTimeField(_("Дата закрытия"), blank=True, null=True)
     authorupdate = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='ylistitem_author_update', verbose_name=_("Автор последних "
                                                                                                                             "изменений"))
     author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='ylistitem_author', verbose_name=_("Автор"))
     is_active = models.BooleanField(_("Активность элемента Списка"), default=True)
+    @property
+    def json_fieldsname(self):
+        return [*json.loads(self.fieldslist)]
+    @property
+    def json_fieldsvalue(self):
+        return json.loads(self.fieldslist).items()
 
     def __str__(self):
-        return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + '|' + self.name)
+        # return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + '|' + self.name)
+        return (self.fieldslist)

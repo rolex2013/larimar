@@ -1,0 +1,24 @@
+{% block ylistitems %}
+
+    {% load i18n %}
+
+    <div id="listslist" style="padding:0px 0px 0px 10px;">
+
+        {% for node in nodes %}
+            <p>
+                {% if forloop.first %}
+                    {% for title in titles %}
+                        {{ title }}
+                    {% endfor %}
+                {% endif %}
+            </p>
+            <p>
+                {% for value in node.json_fieldsvalue %}
+                    {{ value.1 }}
+                {% endfor %}
+            </p>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

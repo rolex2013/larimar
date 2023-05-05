@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.views.generic import CreateView, UpdateView
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
+from datetime import datetime #, timedelta
+import json
 
 from companies.models import Company
 from .models import YList, YListItem
@@ -31,7 +33,7 @@ def ylists(request, companyid=0, pk=0):
        button_list_create = _('Добавить')
 
     return render(request, "company_detail.html", {
-        'nodes': list_list.order_by('-dateupdate'),
+        'nodes': list_list.order_by('-dateupdate').distinct(),
         'current_company': current_company,
         'companyid': companyid,
         'user_companies': comps,
@@ -67,10 +69,9 @@ class YListUpdate(UpdateView):
     template_name = 'object_form.html'
 
     def form_valid(self, form):
-        form.instance.company_id = self.kwargs['companyid']
-        form.instance.author_id = self.request.user.id
         form.instance.authorupdate_id = self.request.user.id
-        self.object = form.update() # Записываем изменения в список
+        form.instance.dateupdate = datetime.now()
+        self.object = form.save() # Записываем изменения в список
         # формируем строку из Участников
         memb = self.object.members.values_list('id', 'username').all()
         membersstr = ''
@@ -82,21 +83,25 @@ class YListUpdate(UpdateView):
 def ylist_items(request, pk=0):
 
     comps = request.session['_auth_user_companies_id']
-
     current_ylist = YList.objects.filter(id=pk).first()
+    k = current_ylist.fieldslist.split(',')
+    # titles = dict(current_ylist.fieldslist)
+    titles = [*json.loads(current_ylist.fieldslist)] # преобразовываем в словарь и распаковываем ключи
+    #print([*titles], titles, json.dumps(titles))
 
-    ylistitem = YListItem.objects.filter(id=pk)
+    ylistitem = YListItem.objects.filter(ylist=pk, is_active=True) #.values('fieldslist')
 
     return render(request, "ylist_detail.html", {
         'nodes': ylistitem,
         'current_ylist': current_ylist,
+        'titles': titles,
         # 'companyid': companyid,
         'user_companies': comps,
         # 'component_name': 'lists',
         # 'button_company_select': button_company_select,
-        'button_list_create': _("Создать"),
+        # 'button_list_create': _("Создать"),
         'button_list_update': _("Изменить"),
-        # 'button_list_create': button_list_create,
+        'button_item_create': _("Добавить"),
     })
 
 class YItemCreate(CreateView):

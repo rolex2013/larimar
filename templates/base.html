@@ -3,269 +3,285 @@
 <!--{ if request.session.django_language %}
     <html lang="{ request.session.django_language }}">-->
 <!--{ else %}-->
-    <html lang="en">
+<html lang="en">
 <!--{ endif %}-->
 
-    <head>
+<head>
 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        {% load static %}
+    {% load static %}
 
-        <!--<link rel="shortcut icon" type="image/png" href="{ static 'images/favicon.ico' %}"/>-->
-        <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}"/>
-        <link rel="stylesheet" href="{% static 'css/three.css' %}">
-        <!--<link rel="stylesheet" href="{ static 'css/bootstrap.min.css' %}">-->
-        <link rel="stylesheet" href="{% static 'css/hint.css' %}">
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!--<link rel="shortcut icon" type="image/png" href="{ static 'images/favicon.ico' %}"/>-->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}"/>
+    <link rel="stylesheet" href="{% static 'css/three.css' %}">
+    <!--<link rel="stylesheet" href="{ static 'css/bootstrap.min.css' %}">-->
+    <link rel="stylesheet" href="{% static 'css/hint.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-        <title>{% block title %}1⅄ES! Корпоративная система управления{% endblock %}</title>
+    <title>{% block title %}1⅄ES! Корпоративная система управления{% endblock %}</title>
 
-        <div class="header">
-            <!--<div style="width: 100%;">-->
-            <div style="float: left;"><strong>&nbsp;1⅄ES! Корпоративная система управления</strong></div>
-            <div style="float: right;">
-                <!-- Выбор языка -->
-                {% load i18n %}
-                <!--<div class="container">-->
-                      {% get_current_language as CURRENT_LANGUAGE %}
-                      {% get_available_languages as AVAILABLE_LANGUAGES %}
-                      {% get_language_info_list for AVAILABLE_LANGUAGES as languages %}
-                      <!--<div class="select-lang" style="width: 100%;">-->
-                          <!--{ trans "Выберите язык" %}:-->
-                          {% for language in languages %}
-                                {% if language.code != CURRENT_LANGUAGE %}
-                                    <div style="float: right;"><a href="{% url 'my_main:select_lang' %}?lang_code={{language.code}}"
-                                    ><img src="{% static 'images/'|add:language.code|add:'_32'|add:'.png' %}" alt="{{ language.name_local }}"
-                                    /></a></div>
-                                {% endif %}
-                          {% endfor %}
-                      <!--</div>-->
-                    <!--</div>-->
-                <!-- Конец выбора языка -->
-                </div>
-            <!--</div>-->
-
-        </div>
-
-        {% block head %}
-           <!--<script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>-->
-           <!-----------<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-------->
-           <!--<script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>-->
-        {% endblock %}
-
-        {% block css %}
-            <!-- blueimp Gallery styles --
-            <link rel=stylesheet href=/static/css/blueimp-gallery.min.css>
-            !-- CSS to style the file input field as button and adjust the Bootstrap progress bars --
-            <link rel=stylesheet href=/static/css/jquery.fileupload-ui.css>
-            !-- CSS adjustments for browsers with JavaScript disabled --
-            <noscript><link rel=stylesheet href=/static/css/jquery.fileupload-ui-noscript.css></noscript>-->
-        {% endblock %}
-
-        {% block bootstrap_css %}
-            <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
-        {% endblock %}
-
-        {% block bootstrap_js %}
-            <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-            <script src="//cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/js/bootstrap-datetimepicker.min.js"></script>-->
-        {% endblock %}
-
-        {% block extrahead %}
-  
-        {% endblock %}
-
-    </head>
-
-    <body>
-
-       <!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
-       <script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>
-       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-       {% include 'main_wstest.html' %}
-
-       <div class="layout">
-
-         <div class='sidebar'>
-      
-            {% block sidebar %}
-                {% if user.is_authenticated == True %}
-                    {% include 'sidebar.html' %}
+    <div class="header">
+        <!--<div style="width: 100%;">-->
+        <div style="float: left;"><strong>&nbsp;1⅄ES! Корпоративная система управления</strong></div>
+        <div style="float: right;">
+            <!-- Выбор языка -->
+            {% load i18n %}
+            <!--<div class="container">-->
+            {% get_current_language as CURRENT_LANGUAGE %}
+            {% get_available_languages as AVAILABLE_LANGUAGES %}
+            {% get_language_info_list for AVAILABLE_LANGUAGES as languages %}
+            <!--<div class="select-lang" style="width: 100%;">-->
+            <!--{ trans "Выберите язык" %}:-->
+            {% for language in languages %}
+                {% if language.code != CURRENT_LANGUAGE %}
+                    <div style="float: right;"><a href="{% url 'my_main:select_lang' %}?lang_code={{ language.code }}"
+                    ><img src="{% static 'images/'|add:language.code|add:'_32'|add:'.png' %}" alt="{{ language.name_local }}"
+                    /></a></div>
                 {% endif %}
-            {% endblock %}     
-               
-         </div>
-
-         {% include 'menu.html' %}         
-
-          <div class="content">
-
-            <!-- Для неавторизованных пользователей -->
-
-            {% block registration %}
-            {% endblock %} 
-
-            {% block registration_done %}
-            {% endblock %}               
-
-            {% block login %}
-            {% endblock %} 
-            
-            {% block vacancies_list %}
-            {% endblock %}  
-
-            {% block vacancy %}
-            {% endblock %} 
-
-            <!-- Для авторизованных пользователей -->
-
-            <!-- Попробовать все блоки заменить на detail -->
-            {% block detail %}
-            {% endblock %}   
-
-            {% block summary %}
-            {% endblock %}                
-
-            {% block profile %}
-            {% endblock %}
-
-            {% block company %}
-            {% endblock %}
-
-            {% block staff %}
-            {% endblock %}            
-
-            {% block finance %}
-            {% endblock %}            
-
-            {% block project %}
-            {% endblock %}
-        
-            {% block task %}
-            {% endblock %}     
-        
-            {% block comment %}
-            {% endblock %}
-
-            {% block event %}
-            {% endblock %}  
-
-            {% block client %}
-            {% endblock %}
-
-            {% block doc %}
-            {% endblock %}
-
-            {% block folder %}
-            {% endblock %}
-
-            {% block ticket %}
-            {% endblock %}
-
-            {% block ylist %}
-            {% endblock %}
-
-            {% block list %}
-            {% endblock %}
-
-            <!-- Общие блоки -->
-            
-            {% block forms %}
-            {% endblock %} 
-
-            <!-- Уникальные блоки -->
-
-{#            {% if user.is_authenticated %}#}
-{#               {% block content %}#}
-{#               {% endblock %}#}
-{#            {% else %}#}
-{#               {% block public_content %}#}
-{#               {% endblock %}#}
-{#            {% endif %}      #}
-
-              {% block content %}
-              {% endblock %}
-            
-          </div>
-
-       </div>
-
-       <div class='footer'>
-
-            {% load main_tags %}
-            {% copyright_show as copyright %} {{ copyright.0 }} {{ copyright.1 }}
-                <a href="{{ copyright.2 }}" target="_blank">{{ copyright.3 }}</a>. {{ copyright.4 }} <a href="{{ copyright.5 }}">{{ copyright.6 }}</a>.
-            <!-- Yandex.Metrika informer -->
-            <a href="https://metrika.yandex.ru/stat/?id=38865620&amp;from=informer"
-            target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/38865620/3_0_B9B9B9FF_999999FF_0_pageviews"
-            style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="38865620" data-lang="ru" /></a>
-            <!-- /Yandex.Metrika informer -->
-            
-            <!-- Yandex.Metrika counter -->
-            <script type="text/javascript" >
-               (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
-               m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
-               (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-            
-               ym(38865620, "init", {
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true
-               });
-            </script>
-            <noscript><div><img src="https://mc.yandex.ru/watch/38865620" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-            <!-- /Yandex.Metrika counter -->
-            
-            <!--LiveInternet counter--><script type="text/javascript">
-            document.write("<a href='//www.liveinternet.ru/click' "+
-            "target=_blank><img src='//counter.yadro.ru/hit?t22.4;r"+
-            escape(document.referrer)+((typeof(screen)=="undefined")?"":
-            ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
-            screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
-            ";h"+escape(document.title.substring(0,150))+";"+Math.random()+
-            "' alt='' title='LiveInternet: показано число просмотров за 24"+
-            " часа, посетителей за 24 часа и за сегодня' "+
-            "border='0' width='88' height='31'><\/a>")
-            </script><!--/LiveInternet-->
-
+            {% endfor %}
+            <!--</div>-->
+            <!--</div>-->
+            <!-- Конец выбора языка -->
         </div>
+        <!--</div>-->
 
-        <!--<div id="ajax_lng_listerrors"></div>-->
+    </div>
 
-        <script>
+    {% block head %}
+        <!--<script src="//cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>-->
+        <!-----------<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-------->
+        <!--<script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>-->
+    {% endblock %}
 
-            var select = document.getElementById("langselect_id");
-            select.addEventListener("change", function(){
-                event.preventDefault();
-                var code = this.options[this.selectedIndex].value
-                console.log(code)
-                $.ajax({
-                    type: 'GET',
-                    url: "{% url 'my_main:select_lang' %}",
-                    data: {
-                        lang_code: code
-                    },
-                    success: function(data){
-                        //console.log('===============')
-                        //console.log(data)
-                        $('#ajax_lng_listresult').html(data);
-                        //alert(data);
-                    },
-                    error: function(xhr, errmsg, err){
-                        console.log("error")
-                        console.log(error_data)
-                        $('#ajax_lng_listerrors').html('Нет данных!');
-                    }
-                });
-            });
+    {% block css %}
+        <!-- blueimp Gallery styles --
+        <link rel=stylesheet href=/static/css/blueimp-gallery.min.css>
+        !-- CSS to style the file input field as button and adjust the Bootstrap progress bars --
+        <link rel=stylesheet href=/static/css/jquery.fileupload-ui.css>
+        !-- CSS adjustments for browsers with JavaScript disabled --
+        <noscript><link rel=stylesheet href=/static/css/jquery.fileupload-ui-noscript.css></noscript>-->
+    {% endblock %}
 
-        </script>
+    {% block bootstrap_css %}
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+    {% endblock %}
 
-    </body>
+    {% block bootstrap_js %}
+        <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <script src="//cdn.bootcss.com/bootstrap-datetimepicker/4.17.44/js/bootstrap-datetimepicker.min.js"></script>-->
+    {% endblock %}
+
+    {% block extrahead %}
+
+    {% endblock %}
+
+</head>
+
+<body>
+
+<!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+<script src="{% static 'js/jquery-3.5.0.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+{% include 'main_wstest.html' %}
+
+<div class="layout">
+
+    <div class='sidebar'>
+
+        {% block sidebar %}
+            {% if user.is_authenticated == True %}
+                {% include 'sidebar.html' %}
+            {% endif %}
+        {% endblock %}
+
+    </div>
+
+    {% include 'menu.html' %}
+
+    <div class="content">
+
+        <!-- Для неавторизованных пользователей -->
+
+        {% block registration %}
+        {% endblock %}
+
+        {% block registration_done %}
+        {% endblock %}
+
+        {% block login %}
+        {% endblock %}
+
+        {% block vacancies_list %}
+        {% endblock %}
+
+        {% block vacancy %}
+        {% endblock %}
+
+        <!-- Для авторизованных пользователей -->
+
+        <!-- Попробовать все блоки заменить на detail -->
+        {% block detail %}
+        {% endblock %}
+
+        {% block summary %}
+        {% endblock %}
+
+        {% block profile %}
+        {% endblock %}
+
+        {% block company %}
+        {% endblock %}
+
+        {% block staff %}
+        {% endblock %}
+
+        {% block finance %}
+        {% endblock %}
+
+        {% block project %}
+        {% endblock %}
+
+        {% block task %}
+        {% endblock %}
+
+        {% block comment %}
+        {% endblock %}
+
+        {% block event %}
+        {% endblock %}
+
+        {% block client %}
+        {% endblock %}
+
+        {% block doc %}
+        {% endblock %}
+
+        {% block folder %}
+        {% endblock %}
+
+        {% block ticket %}
+        {% endblock %}
+
+        {% block ylist %}
+        {% endblock %}
+
+        {% block ylistitems %}
+        {% endblock %}
+
+        {% block list %}
+        {% endblock %}
+
+        <!-- Общие блоки -->
+
+        {% block forms %}
+        {% endblock %}
+
+        <!-- Уникальные блоки -->
+
+        {#            {% if user.is_authenticated %}#}
+        {#               {% block content %}#}
+        {#               {% endblock %}#}
+        {#            {% else %}#}
+        {#               {% block public_content %}#}
+        {#               {% endblock %}#}
+        {#            {% endif %}      #}
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+</div>
+
+<div class='footer'>
+
+    {% load main_tags %}
+    {% copyright_show as copyright %} {{ copyright.0 }} {{ copyright.1 }}
+    <a href="{{ copyright.2 }}" target="_blank">{{ copyright.3 }}</a>. {{ copyright.4 }} <a href="{{ copyright.5 }}">{{ copyright.6 }}</a>.
+    <!-- Yandex.Metrika informer -->
+    <a href="https://metrika.yandex.ru/stat/?id=38865620&amp;from=informer"
+       target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/38865620/3_0_B9B9B9FF_999999FF_0_pageviews"
+                                           style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика"
+                                           title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)"
+                                           class="ym-advanced-informer" data-cid="38865620" data-lang="ru"/></a>
+    <!-- /Yandex.Metrika informer -->
+
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(38865620, "init", {
+            clickmap: true,
+            trackLinks: true,
+            accurateTrackBounce: true
+        });
+    </script>
+    <noscript>
+        <div><img src="https://mc.yandex.ru/watch/38865620" style="position:absolute; left:-9999px;" alt=""/></div>
+    </noscript>
+    <!-- /Yandex.Metrika counter -->
+
+    <!--LiveInternet counter-->
+    <script type="text/javascript">
+        document.write("<a href='//www.liveinternet.ru/click' " +
+            "target=_blank><img src='//counter.yadro.ru/hit?t22.4;r" +
+            escape(document.referrer) + ((typeof (screen) == "undefined") ? "" :
+                ";s" + screen.width + "*" + screen.height + "*" + (screen.colorDepth ?
+                    screen.colorDepth : screen.pixelDepth)) + ";u" + escape(document.URL) +
+            ";h" + escape(document.title.substring(0, 150)) + ";" + Math.random() +
+            "' alt='' title='LiveInternet: показано число просмотров за 24" +
+            " часа, посетителей за 24 часа и за сегодня' " +
+            "border='0' width='88' height='31'><\/a>")
+    </script><!--/LiveInternet-->
+
+</div>
+
+<!--<div id="ajax_lng_listerrors"></div>-->
+
+<script>
+
+    var select = document.getElementById("langselect_id");
+    select.addEventListener("change", function () {
+        event.preventDefault();
+        var code = this.options[this.selectedIndex].value
+        console.log(code)
+        $.ajax({
+            type: 'GET',
+            url: "{% url 'my_main:select_lang' %}",
+            data: {
+                lang_code: code
+            },
+            success: function (data) {
+                //console.log('===============')
+                //console.log(data)
+                $('#ajax_lng_listresult').html(data);
+                //alert(data);
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+                console.log(error_data)
+                $('#ajax_lng_listerrors').html('Нет данных!');
+            }
+        });
+    });
+
+</script>
+
+</body>
 
 </html>
