@@ -253,34 +253,34 @@
 
 <!--<div id="ajax_lng_listerrors"></div>-->
 
-<script>
-
-    var select = document.getElementById("langselect_id");
-    select.addEventListener("change", function () {
-        event.preventDefault();
-        var code = this.options[this.selectedIndex].value
-        console.log(code)
-        $.ajax({
-            type: 'GET',
-            url: "{% url 'my_main:select_lang' %}",
-            data: {
-                lang_code: code
-            },
-            success: function (data) {
-                //console.log('===============')
-                //console.log(data)
-                $('#ajax_lng_listresult').html(data);
-                //alert(data);
-            },
-            error: function (xhr, errmsg, err) {
-                console.log("error")
-                console.log(error_data)
-                $('#ajax_lng_listerrors').html('Нет данных!');
-            }
-        });
-    });
-
-</script>
+{#<script>#}
+{##}
+{#    var select = document.getElementById("langselect_id");#}
+{#    select.addEventListener("change", function () {#}
+{#        event.preventDefault();#}
+{#        var code = this.options[this.selectedIndex].value#}
+{#        console.log(code)#}
+{#        $.ajax({#}
+{#            type: 'GET',#}
+{#            url: "{% url 'my_main:select_lang' %}",#}
+{#            data: {#}
+{#                lang_code: code#}
+{#            },#}
+{#            success: function (data) {#}
+{#                //console.log('===============')#}
+{#                //console.log(data)#}
+{#                $('#ajax_lng_listresult').html(data);#}
+{#                //alert(data);#}
+{#            },#}
+{#            error: function (xhr, errmsg, err) {#}
+{#                console.log("error")#}
+{#                console.log(error_data)#}
+{#                $('#ajax_lng_listerrors').html('Нет данных!');#}
+{#            }#}
+{#        });#}
+{#    });#}
+{##}
+{#</script>#}
 
 </body>
 

@@ -40,8 +40,8 @@ def chats_messages_members_lists(request, companyid=0, chatid=0):
     chats_list = Chat.objects.filter(Q(author=currentuser) | Q(members__in=[currentuser,]) | Q(type=3), company_id=companyid, is_active=True).select_related("company", "author", "type")
 
     if chatid == 0:
-        messages_list = []
-        members_list = []
+        #messages_list = []
+        #members_list = []
         currentchat = None
         template_name = "company_detail.html"
     else:

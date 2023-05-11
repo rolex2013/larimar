@@ -286,22 +286,22 @@ def sidebarnotificationisread(request):
                                                                'count': cnt,
                                                                }
                   )
-'''
-def select_lang(request):
-    lang_code = request.GET['lang_code']
-    go_next = request.META.get('HTTP_REFERER', '/')
-    response = HttpResponseRedirect(go_next)
-    #print('code=', lang_code, 'go_next=', go_next)
-    if lang_code and translation.check_for_language(lang_code):
-        if hasattr(request, 'session'):
-            request.session['django_language'] = lang_code
-            request.session['_language'] = lang_code
-        else:
-            response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang_code)
-        translation.activate(lang_code)
-    return response
-    #return render(request, 'base.html') #response
-'''
+
+# def select_lang(request):
+#     lang_code = request.GET['lang_code']
+#     go_next = request.META.get('HTTP_REFERER', '/')
+#     response = HttpResponseRedirect(go_next)
+#     #print('code=', lang_code, 'go_next=', go_next)
+#     if lang_code and translation.check_for_language(lang_code):
+#         if hasattr(request, 'session'):
+#             request.session['django_language'] = lang_code
+#             request.session['_language'] = lang_code
+#         else:
+#             response.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang_code)
+#         translation.activate(lang_code)
+#     return response
+#     #return render(request, 'base.html') #response
+
 def select_lang(request):
     lang_code = request.GET['lang_code']
     #print('=== select_lang ===')

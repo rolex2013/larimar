@@ -4,21 +4,114 @@
 
     <div id="listslist" style="padding:0px 0px 0px 10px;">
 
-        {% for node in nodes %}
-            <p>
+        <div class="table" id="myTable">
+
+{#            {% for node in nodes %}#}
+{##}
+{#                {% if forloop.first %}#}
+{##}
+{#                    <div class="th-row">#}
+{#                        {% for title in titles %}#}
+{#                            <div class="th-cell" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">{{ title }}</div>#}
+{#                        {% endfor %}#}
+{#                    </div>#}
+{##}
+{#                {% endif %}#}
+{##}
+{#                <div class="{% cycle 'row1' 'row2' %}">#}
+{#                {{ node.json_fieldsname.2 }}#}
+{#                    {% for value in node.json_fieldsvalue %}#}
+{#                        <div class="cell" id="td-{{ node.id }}-{{ forloop.counter }}" name="td-{{ node.id }}-{{ forloop.counter0 }}" row="{{ node.id }}"#}
+{#                        column="{{ forloop.counter0 }}">{{ value.1 }}</div>#}
+{#                    {% endfor %}#}
+{#                </div>#}
+{##}
+{#            {% endfor %}#}
+
+
+            {% for node in ylisttable %}
+
                 {% if forloop.first %}
-                    {% for title in titles %}
-                        {{ title }}
-                    {% endfor %}
+                    <div class="th-row">
+                        {% for title in titles %}
+                            <div class="th-cell" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">{{ title }}</div>
+                        {% endfor %}
+                    </div>
                 {% endif %}
-            </p>
-            <p>
-                {% for value in node.json_fieldsvalue %}
-                    {{ value.1 }}
-                {% endfor %}
-            </p>
-        {% endfor %}
+
+                <div class="{% cycle 'row1' 'row2' %}">
+                    {% for key, value in node.items %}
+                        {% if not forloop.first %}
+                            <div class="cell" id="td-{{ node.yl.id }}-{{ forloop.counter }}" name="td-{{ node.yl.id }}-{{ forloop.counter0 }}" row="
+{{ node.yl.id }}"
+                            column="{{ forloop.counter0 }}" val="{{ value }}">{{ value }}</div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div style="display: none; position: absolute; top: 22px; left: 26px; width: 290px;" id="myCell">
+
+            <form action="" method="POST">
+
+                {% csrf_token %}
+
+                <input type="text" name="name" id="inputCell" placeholder="Введите значение" autofocus>
+{##}
+{#                <label>#}
+{#                    Профессия:#}
+{#                    <select name="specialization" required>#}
+{#                        <option value="engineer" selected>Инженер</option>#}
+{#                        <option value="scientist">Учёный</option>#}
+{#                        <option value="psychologist">Психолог</option>#}
+{#                        <option value="other">Другая</option>#}
+{#                    </select>#}
+{#                </label>#}
+
+                <button type="submit" id="myCellButton">{% trans 'Ok' %}</button>
+
+            </form>
+
+        </div>
 
     </div>
 
 {% endblock %}
+
+
+<script>
+
+    {#name = document.getElementById('th-1').value;#}
+{#    document.getElementById(*'th-').addEventListener('click', cl_Div);#}
+{##}
+{#    function cl_Div() {#}
+{#        document.getElementById(*'th-').innerHTML = "Welcome to JavaScript";#}
+{#    }#}
+
+    {#document.getElementById('myTable').onmouseover = function (event) {#}
+    document.getElementById('myTable').onclick = function (e) {
+        var name = e.target.getAttribute('name');
+        var row = e.target.getAttribute('row');
+        var column = e.target.getAttribute('column');
+        var val = e.target.getAttribute('val');
+        //alert(e.type + ' ' + e.clientX + ' ' + e.clientY + ' ' + e.which + ' ' + val);
+        //console.log('==========' + e.target.id + '/' + e.target.tagName.toUpperCase());
+        console.log('==========' + row + '/' + column);
+        if (e.target.tagName.toUpperCase() == "DIV") {
+            //document.getElementById(e.target.id).innerHTML = "Welcome to JavaScript";
+            document.getElementById("myCell").style.display = "block";
+            document.getElementById("inputCell").placeholder = val;
+            document.getElementById("myCell").style.top = (e.clientY-12)+'px';
+            document.getElementById("myCell").style.left = (e.clientX-50)+'px';
+            console.log(name + '/' + document.getElementById("myCell").style.top + '/' + document.getElementById("myCell").style.left);
+        }
+    }
+
+    document.getElementById('myCellButton').onclick = function (e) {
+        document.getElementById("myCell").style.display = "none";
+    }
+
+</script>
