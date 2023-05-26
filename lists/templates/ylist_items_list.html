@@ -2,6 +2,8 @@
 
     {% load i18n %}
 
+    <div id="ajax_itemsresult">
+
     <div id="listslist" style="padding:0px 0px 0px 10px;">
 
         <div class="table" id="myTable">
@@ -33,6 +35,9 @@
 
                 {% if forloop.first %}
                     <div class="th-row">
+                        <div class="th-cell">
+
+                        </div>
                         {% for title in titles %}
                             <div class="th-cell" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">{{ title }}</div>
                         {% endfor %}
@@ -45,6 +50,15 @@
                             <div class="cell" id="td-{{ node.yl.id }}-{{ forloop.counter }}" name="td-{{ node.yl.id }}-{{ forloop.counter0 }}" row="
 {{ node.yl.id }}"
                             column="{{ forloop.counter0 }}" val="{{ value }}">{{ value }}</div>
+                        {% else %}
+                            <div class="cell">
+{#                                <button type="submit" id="addrowpre_{{ node.yl.sort }}">{% trans 'Добавить перед' %}</button>#}
+                                <div class="object-list-buttons">
+{#                                   <a href="{% url 'my_list:yitem_edit' 1 node.yl.id node.yl.sort %}">{% trans 'Добавить перед' %}</a>#}
+                                   <button id="insert_row_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort }}"
+                                   onClick="myClick(this);">{% trans 'Добавить перед' %}</button>
+                                </div>
+                            </div>
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -52,6 +66,8 @@
             {% endfor %}
 
         </div>
+        </div>
+        <div id="ajax_itemerror"></div>
 
         <div style="display: none; position: absolute; top: 22px; left: 26px; width: 290px;" id="myCell">
 
@@ -76,6 +92,8 @@
             </form>
 
         </div>
+
+    </div>
 
     </div>
 
@@ -112,6 +130,32 @@
 
     document.getElementById('myCellButton').onclick = function (e) {
         document.getElementById("myCell").style.display = "none";
+    }
+
+    function myClick(e) {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        {#console.log("==================="+e.getAttribute("node_id"))#}
+        {#console.log('==============='+chatdescription);#}
+        $.ajax({
+            url: "{% url 'my_list:yitem_edit' %}",
+            type: "GET",
+            data: {
+                prz: e.getAttribute("node_prz"),
+                pk: e.getAttribute("node_id"),
+                sort: e.getAttribute("node_sort")
+            },
+            success: function (data) {
+                //console.log(data)
+                $('#ajax_itemsresult').html(data);
+                {#document.getElementById("chatname").value = "";#}
+                {#document.getElementById("chatdescription").value = "";#}
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+                console.log(error_data)
+                $('#ajax_itemserror').html('Нет данных!');
+            }
+        });
     }
 
 </script>

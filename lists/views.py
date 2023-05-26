@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime  # , timedelta
 import json
+from django.db.models import F
 
 from companies.models import Company
 from .models import YList, YListItem
@@ -82,6 +83,36 @@ class YListUpdate(UpdateView):
         return super().form_valid(form)
 
 
+def ylist_items0(request, pk=0):
+    comps = request.session['_auth_user_companies_id']
+    current_ylist = YList.objects.filter(id=pk).first()
+    #k = current_ylist.fieldslist.split(',')
+    # titles = dict(current_ylist.fieldslist)
+    titles = [*json.loads(current_ylist.fieldslist)]  # преобразовываем в словарь и распаковываем ключи
+    # print([*titles], titles, json.dumps(titles))
+
+    ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related('ylist', 'author', 'authorupdate')
+    ylisttable = []
+    #cnt = 0
+    for yl in ylistitem:
+        name = json.loads(yl.fieldslist)
+        yfield = {}
+        #yfield['id'] = str(yl.id)
+        yfield['yl'] = yl
+        for title in titles:    # пробегаем по всем ключам заголовков Списка
+            try:
+                yfield[title] = name[title]     # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
+            except:
+                yfield[title] = ''
+
+            #print('=========', yl.fieldslist)
+            #print(title, name, yfield)
+        ylisttable.append(yfield)
+    #print(ylisttable)
+
+    return request, ylisttable, ylistitem, current_ylist, titles, comps, _("Изменить"), _("Добавить")
+
+
 def ylist_items(request, pk=0):
     comps = request.session['_auth_user_companies_id']
     current_ylist = YList.objects.filter(id=pk).first()
@@ -90,7 +121,7 @@ def ylist_items(request, pk=0):
     titles = [*json.loads(current_ylist.fieldslist)]  # преобразовываем в словарь и распаковываем ключи
     # print([*titles], titles, json.dumps(titles))
 
-    ylistitem = YListItem.objects.filter(ylist=pk, is_active=True)  # .values('fieldslist')
+    ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related('ylist', 'author', 'authorupdate')
     ylisttable = []
     #cnt = 0
     for yl in ylistitem:
@@ -124,11 +155,38 @@ def ylist_items(request, pk=0):
     })
 
 
-class YItemCreate(CreateView):
-    # model = YItem
-    # form_class = YItemForm
-    # template_name = 'object_form.html'
-    pass
+# def yitemedit(request, prz=1, pk=1, sort=1):
+def yitemedit(request):
+
+    prz = int(request.GET['prz'])
+    pk = int(request.GET['pk'])
+    sort = int(request.GET['sort'])
+
+    yli = YListItem.objects.filter(id=pk).first()
+    print('======================', prz, pk, sort, yli.ylist.id)
+
+    if prz == 1:
+        # для всех записей с yli.sort>=sort увеличиваем sort на единичку
+        YListItem.objects.filter(ylist=yli.ylist, sort__gte=sort).update(sort=F('sort') + 1)
+        # и вставляем новую запись
+        new_item = YListItem(ylist=yli.ylist, fieldslist=yli.fieldslist, sort=sort, author=request.user, authorupdate=request.user)
+        new_item.save()
+    else:
+        yli.update(is_active=False)
+
+    (request, ylisttable, ylistitem, current_ylist, titles, comps, button_list_update, button_item_create) = ylist_items0(
+        request, yli.ylist.id)
+
+    #return render(request, 'ylist_items_list.html', {'nodes': nodes, 'object_list': 'task_list', 'object_message': object_message})
+    return render(request, 'ylist_items_list.html', {
+        'ylisttable': ylisttable,
+        'nodes': ylistitem,
+        'current_ylist': current_ylist,
+        'titles': titles,
+        'user_companies': comps,
+        'button_list_update': _("Изменить"),
+        'button_item_create': _("Добавить"),
+    })
 
 
 def ylistfilter(request):
