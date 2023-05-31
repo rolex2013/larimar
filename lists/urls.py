@@ -13,6 +13,8 @@ urlpatterns = [
     path('lists_list/list_update/<int:pk>', views.YListUpdate.as_view(), name='ylist_update'),
     path('list_list/list_filter/', views.ylistfilter, name='ylist_filter'),
     # path('list_page/item_edit/<int:prz>/<int:pk>/<int:sort>', views.yitemedit, name='yitem_edit'),
-    path('list_page/item_edit/', views.yitemedit, name='yitem_edit'),
+    path('list_page/item_insert/', views.yiteminsert, name='yitem_insert'),
+    path('list_page/item_delete/', views.yitemdelete, name='yitem_delete'),
+    path('list_page/item_celledit/', views.yitemcelledit, name='yitem_celledit'),
 
 ]

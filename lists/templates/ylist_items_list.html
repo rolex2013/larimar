@@ -44,7 +44,7 @@
                     </div>
                 {% endif %}
 
-                <div class="{% cycle 'row1' 'row2' %}">
+                <div class="{% cycle 'row1' 'row2' %}" id="row_{{ node.yl.id }}">
                     {% for key, value in node.items %}
                         {% if not forloop.first %}
                             <div class="cell" id="td-{{ node.yl.id }}-{{ forloop.counter }}" name="td-{{ node.yl.id }}-{{ forloop.counter0 }}" row="
@@ -57,6 +57,7 @@
 {#                                   <a href="{% url 'my_list:yitem_edit' 1 node.yl.id node.yl.sort %}">{% trans 'Добавить перед' %}</a>#}
                                    <button id="insert_row_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort }}"
                                    onClick="myClick(this);">{% trans 'Добавить перед' %}</button>
+                                   <button id="delete_row_{{ node.yl.id }}" node_id="{{ node.yl.id }}" onClick="myClick_del(this);">{% trans 'Удалить' %}</button>
                                 </div>
                             </div>
                         {% endif %}
@@ -71,11 +72,11 @@
 
         <div style="display: none; position: absolute; top: 22px; left: 26px; width: 290px;" id="myCell">
 
-            <form action="" method="POST">
+            <form action="" method="POST" id="form_cell">
 
                 {% csrf_token %}
 
-                <input type="text" name="name" id="inputCell" placeholder="Введите значение" autofocus>
+                <input type="text" name="inputCellName" id="inputCell" placeholder="Введите значение" autofocus>
 {##}
 {#                <label>#}
 {#                    Профессия:#}
@@ -102,21 +103,15 @@
 
 <script>
 
-    {#name = document.getElementById('th-1').value;#}
-{#    document.getElementById(*'th-').addEventListener('click', cl_Div);#}
-{##}
-{#    function cl_Div() {#}
-{#        document.getElementById(*'th-').innerHTML = "Welcome to JavaScript";#}
-{#    }#}
-
-    {#document.getElementById('myTable').onmouseover = function (event) {#}
     document.getElementById('myTable').onclick = function (e) {
         var name = e.target.getAttribute('name');
         var row = e.target.getAttribute('row');
         var column = e.target.getAttribute('column');
-        var val = e.target.getAttribute('val');
-        //alert(e.type + ' ' + e.clientX + ' ' + e.clientY + ' ' + e.which + ' ' + val);
-        //console.log('==========' + e.target.id + '/' + e.target.tagName.toUpperCase());
+        var val = e.target.getAttribute('value');
+        var inp = document.getElementById("inputCell");
+        console.log(inp)
+        inp.setAttribute('row', row);
+        inp.setAttribute('column', column);
         console.log('==========' + row + '/' + column);
         if (e.target.tagName.toUpperCase() == "DIV") {
             //document.getElementById(e.target.id).innerHTML = "Welcome to JavaScript";
@@ -129,6 +124,34 @@
     }
 
     document.getElementById('myCellButton').onclick = function (e) {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        {#console.log("==================="+e.getAttribute("node_id"))#}
+        {#console.log('==============='+chatdescription);#}
+        var row = e.getAttribute("row");
+        var column = e.getAttribute("column");
+        var val = e.getAttribute("val");
+        $.ajax({
+            url: "{% url 'my_list:yitem_celledit' %}",
+            type: "GET",
+            data: {
+                {#prz: e.getAttribute("node_prz"),#}
+                col: column,
+                pk: row, //e.getAttribute("node_id"),
+                val: val
+                {#sort: e.getAttribute("node_sort")#}
+            },
+            success: function (data) {
+                //console.log(data)
+                $('#ajax_itemsresult').html(data);
+                {#document.getElementById("chatname").value = "";#}
+                {#document.getElementById("chatdescription").value = "";#}
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+                console.log(error_data)
+                $('#ajax_itemserror').html('Нет данных!');
+            }
+        });
         document.getElementById("myCell").style.display = "none";
     }
 
@@ -137,7 +160,7 @@
         {#console.log("==================="+e.getAttribute("node_id"))#}
         {#console.log('==============='+chatdescription);#}
         $.ajax({
-            url: "{% url 'my_list:yitem_edit' %}",
+            url: "{% url 'my_list:yitem_insert' %}",
             type: "GET",
             data: {
                 prz: e.getAttribute("node_prz"),
@@ -149,6 +172,50 @@
                 $('#ajax_itemsresult').html(data);
                 {#document.getElementById("chatname").value = "";#}
                 {#document.getElementById("chatdescription").value = "";#}
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+                console.log(error_data)
+                $('#ajax_itemserror').html('Нет данных!');
+            }
+        });
+    }
+
+    function myClick_del(e) {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        var node_id = e.getAttribute("node_id")
+        $.ajax({
+            url: "{% url 'my_list:yitem_delete' %}",
+            type: "GET",
+            data: {
+                pk: node_id,
+            },
+            success: function (data) {
+                {#console.log(data)#}
+                console.log("delete_row_"+node_id)
+                document.getElementById("row_"+node_id).style.display = "none";
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+                console.log(error_data)
+                $('#ajax_itemserror').html('Нет данных!');
+            }
+        });
+    }
+
+    function myClick_cell(e) {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        var node_id = e.getAttribute("node_id")
+        $.ajax({
+            url: "{% url 'my_list:yitem_delete' %}",
+            type: "GET",
+            data: {
+                pk: node_id,
+            },
+            success: function (data) {
+                {#console.log(data)#}
+                console.log("delete_row_"+node_id)
+                document.getElementById("row_"+node_id).style.display = "none";
             },
             error: function (xhr, errmsg, err) {
                 console.log("error")

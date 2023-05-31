@@ -156,23 +156,20 @@ def ylist_items(request, pk=0):
 
 
 # def yitemedit(request, prz=1, pk=1, sort=1):
-def yitemedit(request):
+def yiteminsert(request):
 
-    prz = int(request.GET['prz'])
+    # prz = int(request.GET['prz'])
     pk = int(request.GET['pk'])
     sort = int(request.GET['sort'])
 
     yli = YListItem.objects.filter(id=pk).first()
-    print('======================', prz, pk, sort, yli.ylist.id)
+    print('====================== insert', pk, sort, yli.ylist.id)
 
-    if prz == 1:
-        # для всех записей с yli.sort>=sort увеличиваем sort на единичку
-        YListItem.objects.filter(ylist=yli.ylist, sort__gte=sort).update(sort=F('sort') + 1)
-        # и вставляем новую запись
-        new_item = YListItem(ylist=yli.ylist, fieldslist=yli.fieldslist, sort=sort, author=request.user, authorupdate=request.user)
-        new_item.save()
-    else:
-        yli.update(is_active=False)
+    # для всех записей с yli.sort>=sort увеличиваем sort на единичку
+    YListItem.objects.filter(ylist=yli.ylist, sort__gte=sort).update(sort=F('sort') + 1)
+    # и вставляем новую запись
+    new_item = YListItem(ylist=yli.ylist, fieldslist=yli.fieldslist, sort=sort, author=request.user, authorupdate=request.user)
+    new_item.save()
 
     (request, ylisttable, ylistitem, current_ylist, titles, comps, button_list_update, button_item_create) = ylist_items0(
         request, yli.ylist.id)
@@ -188,6 +185,24 @@ def yitemedit(request):
         'button_item_create': _("Добавить"),
     })
 
+def yitemdelete(request):
+
+    pk = int(request.GET['pk'])
+    yli = YListItem.objects.filter(id=pk) #.first()
+    print('====================== delete', pk)
+    yli.update(is_active=False)
+
+    return render(request, 'ylist_items_list.html')
+
+def yitemcelledit(request):
+
+    pk = int(request.GET['pk'])
+    col = int(request.GET['col'])
+    # yli = YListItem.objects.filter(id=pk) #.first()
+    print('====================== celledit', pk, col)
+    # yli.update(is_active=False)
+
+    return render(request, 'ylist_items_list.html')
 
 def ylistfilter(request):
     pass
