@@ -1,5 +1,6 @@
 {% block ylistitems %}
 
+    {% load static %}
     {% load i18n %}
 
     <div id="ajax_itemsresult">
@@ -47,16 +48,18 @@
                 <div class="{% cycle 'row1' 'row2' %}" id="row_{{ node.yl.id }}">
                     {% for key, value in node.items %}
                         {% if not forloop.first %}
-                            <div class="cell" id="td-{{ node.yl.id }}-{{ forloop.counter }}" name="td-{{ node.yl.id }}-{{ forloop.counter0 }}" row="
+                            <div class="cell" id="td-{{ node.yl.id }}-{{ forloop.counter }}" name="td-{{ node.yl.id }}-{{ forloop.counter0 }}"
+                                 row="
 {{ node.yl.id }}"
-                            column="{{ forloop.counter0 }}" val="{{ value }}">{{ value }}</div>
+                            column="{{ key }}{#{{ forloop.counter0 }}#}" val="{{ value }}">{{ value }}</div>
                         {% else %}
                             <div class="cell">
 {#                                <button type="submit" id="addrowpre_{{ node.yl.sort }}">{% trans 'Добавить перед' %}</button>#}
                                 <div class="object-list-buttons">
 {#                                   <a href="{% url 'my_list:yitem_edit' 1 node.yl.id node.yl.sort %}">{% trans 'Добавить перед' %}</a>#}
+                                    <img src="{% static 'images/ins_row_above_30.png' %}" /> <img src="{% static 'images/ins_row_after_30.png' %}" />
                                    <button id="insert_row_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort }}"
-                                   onClick="myClick(this);">{% trans 'Добавить перед' %}</button>
+                                   onClick="myClick_ins(this);">{% trans 'Добавить перед' %}</button>
                                    <button id="delete_row_{{ node.yl.id }}" node_id="{{ node.yl.id }}" onClick="myClick_del(this);">{% trans 'Удалить' %}</button>
                                 </div>
                             </div>
@@ -76,7 +79,7 @@
 
                 {% csrf_token %}
 
-                <input type="text" name="inputCellName" id="inputCell" placeholder="Введите значение" autofocus>
+                <input type="text" name="inputCellName" id="inputCell" placeholder="{% trans 'Введите значение' %}" autofocus>
 {##}
 {#                <label>#}
 {#                    Профессия:#}
@@ -88,7 +91,7 @@
 {#                    </select>#}
 {#                </label>#}
 
-                <button type="submit" id="myCellButton">{% trans 'Ok' %}</button>
+                <input type="submit" id="myCellButton" onclick="cell_edit(this)" value="{% trans 'Ok' %}">
 
             </form>
 
@@ -108,43 +111,40 @@
         var row = e.target.getAttribute('row');
         var column = e.target.getAttribute('column');
         var val = e.target.getAttribute('value');
+        var cell_id = e.target.getAttribute('id');
         var inp = document.getElementById("inputCell");
-        console.log(inp)
         inp.setAttribute('row', row);
         inp.setAttribute('column', column);
-        console.log('==========' + row + '/' + column);
+        inp.setAttribute('cell_id', cell_id);
+        {#console.log('!==========!' + row + '/' + column + '/' + cell_id);#}
         if (e.target.tagName.toUpperCase() == "DIV") {
             //document.getElementById(e.target.id).innerHTML = "Welcome to JavaScript";
             document.getElementById("myCell").style.display = "block";
             document.getElementById("inputCell").placeholder = val;
             document.getElementById("myCell").style.top = (e.clientY-12)+'px';
             document.getElementById("myCell").style.left = (e.clientX-50)+'px';
-            console.log(name + '/' + document.getElementById("myCell").style.top + '/' + document.getElementById("myCell").style.left);
+            {#console.log(name + '/' + document.getElementById("myCell").style.top + '/' + document.getElementById("myCell").style.left);#}
         }
     }
 
-    document.getElementById('myCellButton').onclick = function (e) {
+    function cell_edit(e) {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
-        {#console.log("==================="+e.getAttribute("node_id"))#}
-        {#console.log('==============='+chatdescription);#}
-        var row = e.getAttribute("row");
-        var column = e.getAttribute("column");
-        var val = e.getAttribute("val");
+        var elem = document.getElementById("inputCell");
+        var row = elem.getAttribute("row");
+        var column = elem.getAttribute("column");
+        var val = elem.value;
+        var cell_id = elem.getAttribute("cell_id");
+        console.log(row + '/' + column + '/' + val + '/' + 'cell_id');
         $.ajax({
             url: "{% url 'my_list:yitem_celledit' %}",
             type: "GET",
             data: {
-                {#prz: e.getAttribute("node_prz"),#}
                 col: column,
-                pk: row, //e.getAttribute("node_id"),
+                pk: row,
                 val: val
-                {#sort: e.getAttribute("node_sort")#}
             },
             success: function (data) {
-                //console.log(data)
-                $('#ajax_itemsresult').html(data);
-                {#document.getElementById("chatname").value = "";#}
-                {#document.getElementById("chatdescription").value = "";#}
+                document.getElementById(cell_id).innerHTML = val;   // выводим значение ячейки без перезагрузки списка
             },
             error: function (xhr, errmsg, err) {
                 console.log("error")
@@ -155,10 +155,8 @@
         document.getElementById("myCell").style.display = "none";
     }
 
-    function myClick(e) {
+    function myClick_ins(e) {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
-        {#console.log("==================="+e.getAttribute("node_id"))#}
-        {#console.log('==============='+chatdescription);#}
         $.ajax({
             url: "{% url 'my_list:yitem_insert' %}",
             type: "GET",
@@ -168,10 +166,7 @@
                 sort: e.getAttribute("node_sort")
             },
             success: function (data) {
-                //console.log(data)
                 $('#ajax_itemsresult').html(data);
-                {#document.getElementById("chatname").value = "";#}
-                {#document.getElementById("chatdescription").value = "";#}
             },
             error: function (xhr, errmsg, err) {
                 console.log("error")
@@ -203,26 +198,26 @@
         });
     }
 
-    function myClick_cell(e) {
-        event.preventDefault(); // *** без этого страница перегружается после возврата data
-        var node_id = e.getAttribute("node_id")
-        $.ajax({
-            url: "{% url 'my_list:yitem_delete' %}",
-            type: "GET",
-            data: {
-                pk: node_id,
-            },
-            success: function (data) {
+    {#function myClick_cell(e) {#}
+    {#    event.preventDefault(); // *** без этого страница перегружается после возврата data#}
+    {#    var node_id = e.getAttribute("node_id")#}
+    {#    $.ajax({#}
+    {#        url: "{% url 'my_list:yitem_delete' %}",#}
+    {#        type: "GET",#}
+    {#        data: {#}
+    {#            pk: node_id,#}
+    {#        },#}
+    {#        success: function (data) {#}
                 {#console.log(data)#}
-                console.log("delete_row_"+node_id)
-                document.getElementById("row_"+node_id).style.display = "none";
-            },
-            error: function (xhr, errmsg, err) {
-                console.log("error")
-                console.log(error_data)
-                $('#ajax_itemserror').html('Нет данных!');
-            }
-        });
-    }
+    {#            console.log("delete_row_"+node_id)#}
+    {#            document.getElementById("row_"+node_id).style.display = "none";#}
+    {#        },#}
+    {#        error: function (xhr, errmsg, err) {#}
+    {#            console.log("error")#}
+    {#            console.log(error_data)#}
+    {#            $('#ajax_itemserror').html('Нет данных!');#}
+    {#        }#}
+    {#    });#}
+    {#}#}
 
 </script>

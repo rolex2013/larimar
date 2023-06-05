@@ -197,9 +197,10 @@ def yitemdelete(request):
 def yitemcelledit(request):
 
     pk = int(request.GET['pk'])
-    col = int(request.GET['col'])
+    col = request.GET['col']
+    val = request.GET['val']
     # yli = YListItem.objects.filter(id=pk) #.first()
-    print('====================== celledit', pk, col)
+    print('====================== celledit', pk, col, val)
     # yli.update(is_active=False)
 
     return render(request, 'ylist_items_list.html')
