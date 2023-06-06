@@ -190,7 +190,7 @@ def yitemdelete(request):
     pk = int(request.GET['pk'])
     yli = YListItem.objects.filter(id=pk) #.first()
     print('====================== delete', pk)
-    yli.update(is_active=False)
+    yli.update(is_active=False, authorupdate=request.user, dateupdate=datetime.now(), dateclose=datetime.now())
 
     return render(request, 'ylist_items_list.html')
 
@@ -199,9 +199,14 @@ def yitemcelledit(request):
     pk = int(request.GET['pk'])
     col = request.GET['col']
     val = request.GET['val']
-    # yli = YListItem.objects.filter(id=pk) #.first()
-    print('====================== celledit', pk, col, val)
-    # yli.update(is_active=False)
+    yli = YListItem.objects.filter(id=pk).first()
+    name = json.loads(yli.fieldslist)
+    name[col] = val
+    # print('====================== celledit', pk, col, val, ' yli ', name[col], name)
+    yli.fieldslist = json.dumps(name)
+    yli.dateupdate = datetime.now()
+    yli.authorupdate = request.user
+    yli.save()
 
     return render(request, 'ylist_items_list.html')
 

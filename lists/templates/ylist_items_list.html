@@ -57,9 +57,12 @@
 {#                                <button type="submit" id="addrowpre_{{ node.yl.sort }}">{% trans 'Добавить перед' %}</button>#}
                                 <div class="object-list-buttons">
 {#                                   <a href="{% url 'my_list:yitem_edit' 1 node.yl.id node.yl.sort %}">{% trans 'Добавить перед' %}</a>#}
-                                    <img src="{% static 'images/ins_row_above_30.png' %}" /> <img src="{% static 'images/ins_row_after_30.png' %}" />
-                                   <button id="insert_row_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort }}"
-                                   onClick="myClick_ins(this);">{% trans 'Добавить перед' %}</button>
+                                    <img src="{% static 'images/ins_row_above_24.png' %}" id="insert_row_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort }}"
+                                   onClick="myClick_ins(this);" /> <img src="{% static 'images/ins_row_after_24.png' %}" id="insert_row_after_
+{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort|add:1 }}"
+                                   onClick="myClick_ins(this);" />
+{#                                   <button id="insert_row_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort }}"#}
+{#                                   onClick="myClick_ins(this);">{% trans 'Добавить перед' %}</button>#}
                                    <button id="delete_row_{{ node.yl.id }}" node_id="{{ node.yl.id }}" onClick="myClick_del(this);">{% trans 'Удалить' %}</button>
                                 </div>
                             </div>
@@ -158,12 +161,13 @@
     function myClick_ins(e) {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
         $.ajax({
+            headers: { "X-CSRFToken": '{{csrf_token}}' },
             url: "{% url 'my_list:yitem_insert' %}",
             type: "GET",
             data: {
                 prz: e.getAttribute("node_prz"),
                 pk: e.getAttribute("node_id"),
-                sort: e.getAttribute("node_sort")
+                sort: e.getAttribute("node_sort"),
             },
             success: function (data) {
                 $('#ajax_itemsresult').html(data);
