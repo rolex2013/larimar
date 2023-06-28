@@ -163,7 +163,7 @@ def yiteminsert(request):
     sort = int(request.GET['sort'])
 
     yli = YListItem.objects.filter(id=pk).first()
-    print('====================== insert', pk, sort, yli.ylist.id)
+    print('====================== item insert', pk, sort, yli.ylist.id)
 
     # для всех записей с yli.sort>=sort увеличиваем sort на единичку
     YListItem.objects.filter(ylist=yli.ylist, sort__gte=sort).update(sort=F('sort') + 1)
@@ -189,7 +189,7 @@ def yitemdelete(request):
 
     pk = int(request.GET['pk'])
     yli = YListItem.objects.filter(id=pk) #.first()
-    print('====================== delete', pk)
+    #print('====================== delete', pk)
     yli.update(is_active=False, authorupdate=request.user, dateupdate=datetime.now(), dateclose=datetime.now())
 
     return render(request, 'ylist_items_list.html')
@@ -209,6 +209,53 @@ def yitemcelledit(request):
     yli.save()
 
     return render(request, 'ylist_items_list.html')
+
+def ylistcolumninsert(request):
+
+    # prz = int(request.GET['prz'])
+    pk = int(request.GET['pk'])
+    #col = int(request.GET['val'])
+    sort = int(request.GET['sort'])
+
+    yl = YList.objects.filter(id=pk).first()
+    print('====================== column insert', pk, sort, yl)
+    yl.add_column('Новый столбец', 'string', sort)
+
+    (request, ylisttable, ylistitem, current_ylist, titles, comps, button_list_update, button_item_create) = ylist_items0(
+        request, yl.id)
+
+    #return render(request, 'ylist_items_list.html', {'nodes': nodes, 'object_list': 'task_list', 'object_message': object_message})
+    return render(request, 'ylist_items_list.html', {
+        'ylisttable': ylisttable,
+        'nodes': ylistitem,
+        'current_ylist': current_ylist,
+        'titles': titles,
+        'user_companies': comps,
+        'button_list_update': _("Изменить"),
+        'button_item_create': _("Добавить"),
+    })
+
+def ylistcolumndelete(request):
+    pass
+
+def ylistcolumnedit(request):
+
+    ylistid = int(request.GET['ylistid'])
+    col = request.GET['col']
+    val = request.GET['val']
+    yl = YList.objects.filter(id=ylistid).first()
+    print(yl)
+    # yli = YListItem.objects.filter(ylist=yl.id).first()
+    # name = json.loads(yli.fieldslist)
+    # name[col] = val
+    # # print('====================== celledit', pk, col, val, ' yli ', name[col], name)
+    # yli.fieldslist = json.dumps(name)
+    # yli.dateupdate = datetime.now()
+    # yli.authorupdate = request.user
+    # yli.save()
+
+    return render(request, 'ylist_items_list.html')
+
 
 def ylistfilter(request):
     pass

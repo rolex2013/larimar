@@ -40,7 +40,13 @@
 
                         </div>
                         {% for title in titles %}
-                            <div class="th-cell" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">{{ title }}</div>
+                            <div class="th-cell" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">
+                                <button id="insert_col_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ current_ylist.id }}" node_sort=
+                                        "{{ forloop.counter0 }}"
+                                        onClick="myClick_column_ins(this);">{% trans 'Добавить перед' %}
+                                </button>
+                                {{ title }}
+                            </div>
                         {% endfor %}
                     </div>
                 {% endif %}
@@ -202,26 +208,54 @@
         });
     }
 
-    {#function myClick_cell(e) {#}
-    {#    event.preventDefault(); // *** без этого страница перегружается после возврата data#}
-    {#    var node_id = e.getAttribute("node_id")#}
-    {#    $.ajax({#}
-    {#        url: "{% url 'my_list:yitem_delete' %}",#}
-    {#        type: "GET",#}
-    {#        data: {#}
-    {#            pk: node_id,#}
-    {#        },#}
-    {#        success: function (data) {#}
-                {#console.log(data)#}
-    {#            console.log("delete_row_"+node_id)#}
-    {#            document.getElementById("row_"+node_id).style.display = "none";#}
-    {#        },#}
-    {#        error: function (xhr, errmsg, err) {#}
-    {#            console.log("error")#}
-    {#            console.log(error_data)#}
-    {#            $('#ajax_itemserror').html('Нет данных!');#}
-    {#        }#}
-    {#    });#}
-    {#}#}
+    function myClick_column_ins(e) {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        $.ajax({
+            headers: { "X-CSRFToken": '{{csrf_token}}' },
+            url: "{% url 'my_list:ylist_columninsert' %}",
+            type: "GET",
+            data: {
+                prz: e.getAttribute("node_prz"),
+                pk: e.getAttribute("node_id"),
+                sort: e.getAttribute("node_sort"),
+            },
+            success: function (data) {
+                $('#ajax_itemsresult').html(data);
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+                console.log(error_data)
+                $('#ajax_itemserror').html('Нет данных!');
+            }
+        });
+    }
+
+    function myClick_column_edit(e) {
+        event.preventDefault(); // *** без этого страница перегружается после возврата data
+        var elem = document.getElementById("inputCell");
+        var row = elem.getAttribute("row");
+        var column = elem.getAttribute("column");
+        var val = elem.value;
+        var cell_id = elem.getAttribute("cell_id");
+        console.log(row + '/' + column + '/' + val + '/' + 'cell_id');
+        $.ajax({
+            url: "{% url 'my_list:ylist_columnedit' %}",
+            type: "GET",
+            data: {
+                col: column,
+                pk: row,
+                val: val
+            },
+            success: function (data) {
+                document.getElementById(column_id).innerHTML = val;   // выводим значение ячейки без перезагрузки списка
+            },
+            error: function (xhr, errmsg, err) {
+                console.log("error")
+                console.log(error_data)
+                $('#ajax_itemserror').html('Нет данных!');
+            }
+        });
+        document.getElementById("myColumn").style.display = "none";
+    }
 
 </script>

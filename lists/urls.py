@@ -16,5 +16,8 @@ urlpatterns = [
     path('list_page/item_insert/', views.yiteminsert, name='yitem_insert'),
     path('list_page/item_delete/', views.yitemdelete, name='yitem_delete'),
     path('list_page/item_celledit/', views.yitemcelledit, name='yitem_celledit'),
+    path('list_page/list_columninsert/', views.ylistcolumninsert, name='ylist_columninsert'),
+    path('list_page/list_columndelete/', views.ylistcolumndelete, name='ylist_columndelete'),
+    path('list_page/list_columnedit/', views.ylistcolumnedit, name='ylist_columnedit'),
 
 ]

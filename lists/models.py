@@ -49,6 +49,16 @@ class YList(models.Model):
     def json_fieldsvalue(self):
         return json.loads(self.fieldslist).items()
 
+    def add_column(self, key_name, key_value, position):
+        d = json.loads(self.fieldslist)
+        lst = list(d.items())
+        lst.insert(position, (key_name, key_value))
+        d = dict(lst)
+        self.fieldslist = json.dumps(d)
+        print(type(d), d, type(lst), lst, self.fieldslist)
+        self.save()
+        return self.fieldslist
+
     def get_absolute_url(self):
         return reverse('my_list:ylist_items', kwargs={'pk': self.pk})
 
