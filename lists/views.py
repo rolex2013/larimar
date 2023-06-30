@@ -240,11 +240,11 @@ def ylistcolumndelete(request):
 
 def ylistcolumnedit(request):
 
-    ylistid = int(request.GET['ylistid'])
+    pk = int(request.GET['pk'])
     col = request.GET['col']
     val = request.GET['val']
-    yl = YList.objects.filter(id=ylistid).first()
-    print(yl)
+    yl = YList.objects.filter(id=pk).first()
+    print(pk, col, val, ': ', yl)
     # yli = YListItem.objects.filter(ylist=yl.id).first()
     # name = json.loads(yli.fieldslist)
     # name[col] = val

@@ -63,6 +63,8 @@
 
         <div class="object-list">
 
+            {%  comment %}
+
             <h4>{% trans "Записи" %}</h4>
 
             <form method="GET">
@@ -90,6 +92,8 @@
                 </div>
                 <!--<button type="submit">Применить</button>-->
             </form>
+
+            {% endcomment %}
 
             <div id="ajax_item_listresult">{% include 'ylist_items_list.html' %}</div>
             <div id="ajax_item_listerrors"></div>
