@@ -51,8 +51,24 @@ class YList(models.Model):
 
     def add_column(self, key_name, key_value, position):
         d = json.loads(self.fieldslist)
+        if not d[key_name]:
+            lst = list(d.items())
+            # lst.insert(position, (key_name, key_value))
+            lst.insert(position, (key_name, {"type": key_value, "is_active": "True"}))
+            d = dict(lst)
+            self.fieldslist = json.dumps(d)
+            #print(type(d), d, type(lst), lst, self.fieldslist)
+            #print(json.loads(self.fieldslist))
+            self.save()
+            return self.fieldslist
+        else:
+            print('Столбец "Новый столбец" уже есть!')
+            return ''
+
+    def del_column(self, key_name):
+        d = json.loads(self.fieldslist)
         lst = list(d.items())
-        lst.insert(position, (key_name, key_value))
+        #lst.insert(position, (key_name, key_value))
         d = dict(lst)
         self.fieldslist = json.dumps(d)
         print(type(d), d, type(lst), lst, self.fieldslist)

@@ -5,89 +5,85 @@
 
     <div id="ajax_itemsresult">
 
-    <div id="listslist" style="padding:0px 0px 0px 10px;">
+        <div id="listslist" style="padding:0px 0px 0px 10px;">
 
-        <div class="object-list-filters">
-            <div id="myCell" style="display: none">
-                <form action="" method="POST" id="form_cell">
-                    {% csrf_token %}
-{#                    <input type="text" name="inputCellName" id="inputCell" placeholder="{% trans 'Введите значение' %}" autofocus>#}
-                    <textarea class="form-control" name="inputCellName" id="inputCell" placeholder="{% trans 'Введите значение' %}" autofocus ></textarea>
-                    <input type="submit" id="myCellButton" onclick="cell_edit(this)" value="{% trans 'Ok' %}">
-                    <input type="button" id="myCellCancelButton" onclick="edit_cancel(this)" value="{% trans 'Отменить' %}">
-                </form>
+            <div class="object-list-filters">
+                <div id="myCell" style="display: none">
+                    <form action="" method="POST" id="form_cell">
+                        {% csrf_token %}
+                        {#                    <input type="text" name="inputCellName" id="inputCell" placeholder="{% trans 'Введите значение' %}" autofocus>#}
+                        <textarea class="form-control" name="inputCellName" id="inputCell" placeholder="{% trans 'Введите значение' %}"
+                                  autofocus></textarea>
+                        <input type="submit" id="myCellButton" onclick="cell_edit(this)" value="{% trans 'Ok' %}">
+                        <input type="button" id="myCellCancelButton" onclick="edit_cancel(this)" value="{% trans 'Отменить' %}">
+                    </form>
+                </div>
+                <div id="myColumn" style="display: none">
+                    <form action="" method="POST" id="form_column">
+                        {% csrf_token %}
+                        <input type="text" name="inputColumnName" id="inputColumn" placeholder="{% trans 'Введите значение' %}" autofocus>
+                        <input type="submit" id="myColumnButton" onclick="column_edit(this)" value="{% trans 'Ok' %}">
+                        <input type="button" id="myColumnCancelButton" onclick="edit_cancel(this)" value="{% trans 'Отменить' %}">
+                    </form>
+                </div>
             </div>
-            <div id="myColumn" style="display: none">
-                <form action="" method="POST" id="form_column">
-                    {% csrf_token %}
-                    <input type="text" name="inputColumnName" id="inputColumn" placeholder="{% trans 'Введите значение' %}" autofocus>
-                    <input type="submit" id="myColumnButton" onclick="column_edit(this)" value="{% trans 'Ok' %}">
-                    <input type="button" id="myColumnCancelButton" onclick="edit_cancel(this)" value="{% trans 'Отменить' %}">
-                </form>
-            </div>
-        </div>
 
-        <div class="table" id="myTable">
+            <div class="table" id="myTable">
 
-            {% for node in ylisttable %}
+                {% for node in ylisttable %}
 
-                {% if forloop.first %}
-                    <div class="th-row">
-                        <div class="th-cell">
-
+                    {% if forloop.first %}
+                        <div class="th-row">
+                            <div class="th-cell"></div>
+                            {#                        {% for title in titles %}#}
+                            {% for title in columns %}
+                                <div class="th-cell" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">
+                                    <img src="{% static 'images/ins_column_above_24.png' %}" id="insert_col_pre_{{ current_ylist.id }}_{{ forloop.counter0 }}" node_prz="1" node_id=
+                                            "{{ current_ylist.id }}" node_sort="{{ forloop.counter0 }}" onClick="myClick_column_ins(this);"/>
+                                    <span onClick="myClick_column_edit(this);" column_id="column-{{ forloop.counter0 }}" pk="{{ current_ylist.id }}"
+                                          col="{{ title }}">{{ title }}</span>
+                                </div>
+                            {% endfor %}
                         </div>
-                        {% for title in titles %}
-                            <div class="th-cell" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">
-                                <button id="insert_col_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ current_ylist.id }}" node_sort=
-                                        "{{ forloop.counter0 }}"
-                                        onClick="myClick_column_ins(this);">{% trans 'Добавить перед' %}
-                                </button>
-                                <span onClick="myClick_column_edit(this);" column_id="column-{{ forloop.counter0 }}" pk="{{ current_ylist.id }}" col=
-                                        "{{ title }}">{{ title }}</span>
+                    {% endif %}
+
+                    <div class="{% cycle 'row1' 'row2' %}" id="row_{{ forloop.counter }}">
+                        <div class="cell">
+                            <div class="object-list-buttons">
+                                <img src="{% static 'images/ins_row_above_24.png' %}" id="insert_row_pre_{{ forloop.counter }}" node_prz="1"
+                                     node_id="{{ forloop.counter }}" node_sort="{{ forloop.counter }}"
+                                     onClick="myClick_ins(this);"/> <img src="{% static 'images/ins_row_after_24.png' %}" id="insert_row_after_
+{{ forloop.counter }}" node_prz="1" node_id="{{ forloop.counter }}" node_sort="{{ forloop.counter|add:1 }}"
+                                                                         onClick="myClick_ins(this);"/>
+                                {#                                   <button id="insert_row_pre_{{ forloop.counter }}" node_prz="1" node_id="{{ forloop.counter }}" node_sort="{{ forloop.counter }}"#}
+                                {#                                   onClick="myClick_ins(this);">{% trans 'Добавить перед' %}</button>#}
+                                <button id="delete_row_{{ forloop.counter }}" node_id="{{ forloop.counter }}"
+                                        onClick="myClick_del(this);">{% trans 'Удалить' %}</button>
                             </div>
+                        </div>
+                        {% for key, value in node.items %}
+                            <div class="cell" id="td-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" name="td-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                                 row="{{ forloop.parentloop.counter }}"
+                                 column="{{ key }}" val="{{ value }}">{{ value }}</div>
                         {% endfor %}
                     </div>
-                {% endif %}
 
-                <div class="{% cycle 'row1' 'row2' %}" id="row_{{ node.yl.id }}">
-                    {% for key, value in node.items %}
-                        {% if not forloop.first %}
-                            <div class="cell" id="td-{{ node.yl.id }}-{{ forloop.counter }}" name="td-{{ node.yl.id }}-{{ forloop.counter0 }}"
-                                 row="{{ node.yl.id }}"
-                                 column="{{ key }}{#{{ forloop.counter0 }}#}" val="{{ value }}">{{ value }}</div>
-                        {% else %}
-                            <div class="cell">
-{#                                <button type="submit" id="addrowpre_{{ node.yl.sort }}">{% trans 'Добавить перед' %}</button>#}
-                                <div class="object-list-buttons">
-{#                                   <a href="{% url 'my_list:yitem_edit' 1 node.yl.id node.yl.sort %}">{% trans 'Добавить перед' %}</a>#}
-                                    <img src="{% static 'images/ins_row_above_24.png' %}" id="insert_row_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort }}"
-                                   onClick="myClick_ins(this);" /> <img src="{% static 'images/ins_row_after_24.png' %}" id="insert_row_after_
-{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort|add:1 }}"
-                                   onClick="myClick_ins(this);" />
-{#                                   <button id="insert_row_pre_{{ node.yl.id }}" node_prz="1" node_id="{{ node.yl.id }}" node_sort="{{ node.yl.sort }}"#}
-{#                                   onClick="myClick_ins(this);">{% trans 'Добавить перед' %}</button>#}
-                                   <button id="delete_row_{{ node.yl.id }}" node_id="{{ node.yl.id }}" onClick="myClick_del(this);">{% trans 'Удалить' %}</button>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+                {% endfor %}
 
-            {% endfor %}
-
+            </div>
         </div>
-        </div>
-        <div id="ajax_itemerror"></div>
 
-{#        <div style="display: none; position: absolute; top: 22px; left: 26px; width: 290px;" id="myCell_">#}
-{##}
-{#            <form action="" method="POST" id="form_cell">#}
-{#                {% csrf_token %}#}
-{#                <input type="text" name="inputCellName" id="inputCell" placeholder="{% trans 'Введите значение' %}" autofocus>#}
-{#                <input type="submit" id="myCellButton" onclick="cell_edit(this)" value="{% trans 'Ok' %}">#}
-{#            </form>#}
-{##}
-{#        </div>#}
+        <div id="ajax_itemserror"></div>
+
+        {#        <div style="display: none; position: absolute; top: 22px; left: 26px; width: 290px;" id="myCell_">#}
+        {##}
+        {#            <form action="" method="POST" id="form_cell">#}
+        {#                {% csrf_token %}#}
+        {#                <input type="text" name="inputCellName" id="inputCell" placeholder="{% trans 'Введите значение' %}" autofocus>#}
+        {#                <input type="submit" id="myCellButton" onclick="cell_edit(this)" value="{% trans 'Ok' %}">#}
+        {#            </form>#}
+        {##}
+        {#        </div>#}
 
     </div>
 
@@ -212,12 +208,19 @@
                 sort: e.getAttribute("node_sort"),
             },
             success: function (data) {
-                $('#ajax_itemsresult').html(data);
+                var result = data['success']
+                console.log(data['success'])
+                if (result) {
+                    $('#ajax_itemsresult').html(data);
+                } else {
+                    {#$('#ajax_itemserror').html('Такой столбец уже есть!');#}
+                    alert(data['errmsg'])
+                }
             },
             error: function (xhr, errmsg, err) {
                 console.log("error")
                 console.log(error_data)
-                $('#ajax_itemserror').html('Нет данных!');
+                $('#ajax_itemserror').html('Такой столбец уже есть!');
             }
         });
     }

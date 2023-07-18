@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from datetime import datetime  # , timedelta
 import json
+from django.http.response import JsonResponse
 from django.db.models import F
 
 from companies.models import Company
@@ -55,7 +56,11 @@ class YListCreate(CreateView):
         form.instance.company_id = self.kwargs['companyid']
         form.instance.author_id = self.request.user.id
         form.instance.authorupdate_id = self.request.user.id
-        self.object = form.save()  # Созадём новый список
+        form.instance.fieldslist = json.dumps({"Дата": {"type": "date", "is_active": "True"}})
+        self.object = form.save()  # созадём новый список
+        new_item = YListItem(ylist_id=self.object.id, fieldslist=json.dumps({"Дата": ""}), sort=1, author_id=self.request.user.id,
+                             authorupdate_id=self.request.user.id)
+        new_item.save() # создаём одну пустую запись
         # формируем строку из Участников
         memb = self.object.members.values_list('id', 'username').all()
         membersstr = ''
@@ -88,8 +93,10 @@ def ylist_items0(request, pk=0):
     current_ylist = YList.objects.filter(id=pk).first()
     #k = current_ylist.fieldslist.split(',')
     # titles = dict(current_ylist.fieldslist)
-    titles = [*json.loads(current_ylist.fieldslist)]  # преобразовываем в словарь и распаковываем ключи
+    #titles = [*json.loads(current_ylist.fieldslist)]  # преобразовываем в словарь и распаковываем ключи
     # print([*titles], titles, json.dumps(titles))
+    fields = json.loads(current_ylist.fieldslist)
+    titles = [*fields]  # преобразовываем в словарь и распаковываем ключи
 
     ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related('ylist', 'author', 'authorupdate')
     ylisttable = []
@@ -97,20 +104,21 @@ def ylist_items0(request, pk=0):
     for yl in ylistitem:
         name = json.loads(yl.fieldslist)
         yfield = {}
+        columns = []
         #yfield['id'] = str(yl.id)
-        yfield['yl'] = yl
+        #yfield['yl'] = yl
         for title in titles:    # пробегаем по всем ключам заголовков Списка
-            try:
-                yfield[title] = name[title]     # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
-            except:
-                yfield[title] = ''
+            if dict(fields[title])['is_active'] == 'True':
+                try:
+                    yfield[title] = name[title]     # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
+                except:
+                    yfield[title] = ''
+                columns.append(title)
 
-            #print('=========', yl.fieldslist)
-            #print(title, name, yfield)
         ylisttable.append(yfield)
     #print(ylisttable)
 
-    return request, ylisttable, ylistitem, current_ylist, titles, comps, _("Изменить"), _("Добавить")
+    return request, ylisttable, yfield, current_ylist, columns, comps, _("Изменить"), _("Добавить")
 
 
 def ylist_items(request, pk=0):
@@ -118,33 +126,36 @@ def ylist_items(request, pk=0):
     current_ylist = YList.objects.filter(id=pk).first()
     #k = current_ylist.fieldslist.split(',')
     # titles = dict(current_ylist.fieldslist)
-    titles = [*json.loads(current_ylist.fieldslist)]  # преобразовываем в словарь и распаковываем ключи
-    # print([*titles], titles, json.dumps(titles))
+    fields = json.loads(current_ylist.fieldslist)
+    titles = [*fields]  # преобразовываем в словарь и распаковываем ключи
 
     ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related('ylist', 'author', 'authorupdate')
     ylisttable = []
     #cnt = 0
     for yl in ylistitem:
         name = json.loads(yl.fieldslist)
+        #print('********', name)
         yfield = {}
-        #yfield['id'] = str(yl.id)
-        yfield['yl'] = yl
+        columns = []
+        #print(yfield)
         for title in titles:    # пробегаем по всем ключам заголовков Списка
-            try:
-                yfield[title] = name[title]     # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
-            except:
-                yfield[title] = ''
-
-            #print('=========', yl.fieldslist)
-            #print(title, name, yfield)
+            if dict(fields[title])['is_active'] == 'True':
+                try:
+                    yfield[title] = name[title]     # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
+                except:
+                    yfield[title] = ''
+                columns.append(title)
+                #print('+++', yfield)
         ylisttable.append(yfield)
-    #print(ylisttable)
+        print(ylisttable)
 
     return render(request, "ylist_detail.html", {
         'ylisttable': ylisttable,
-        'nodes': ylistitem,
+        #'nodes': ylistitem,
+        #'nodes': yfield,
         'current_ylist': current_ylist,
-        'titles': titles,
+        # 'titles': titles,
+        'columns': columns,
         # 'companyid': companyid,
         'user_companies': comps,
         # 'component_name': 'lists',
@@ -218,8 +229,34 @@ def ylistcolumninsert(request):
     sort = int(request.GET['sort'])
 
     yl = YList.objects.filter(id=pk).first()
-    print('====================== column insert', pk, sort, yl)
-    yl.add_column('Новый столбец', 'string', sort)
+    fldlst = yl.add_column('Новый столбец', 'string', sort)
+    print('====================== column insert', pk, sort, yl, fldlst)
+    if fldlst == '':
+        return JsonResponse({'success': False, 'errmsg': 'Столбец "Новый столбец" уже существует! Переименуйте его!'})
+
+    (request, ylisttable, yfield, current_ylist, columns, comps, button_list_update, button_item_create) = ylist_items0(
+        request, yl.id)
+
+    #return render(request, 'ylist_items_list.html', {'nodes': nodes, 'object_list': 'task_list', 'object_message': object_message})
+    return render(request, 'ylist_items_list.html', {
+        'ylisttable': ylisttable,
+        'nodes': yfield,
+        'current_ylist': current_ylist,
+        #'titles': titles,
+        'columns': columns,
+        'user_companies': comps,
+        'button_list_update': _("Изменить"),
+        'button_item_create': _("Добавить"),
+    })
+
+def ylistcolumndelete(request):
+
+    pk = int(request.GET['pk'])
+    #col = int(request.GET['val'])
+
+    yl = YList.objects.filter(id=pk).first()
+    print('====================== column insert', pk, yl)
+    #yl.add_column('Новый столбец', 'string', sort)
 
     (request, ylisttable, ylistitem, current_ylist, titles, comps, button_list_update, button_item_create) = ylist_items0(
         request, yl.id)
@@ -234,9 +271,6 @@ def ylistcolumninsert(request):
         'button_list_update': _("Изменить"),
         'button_item_create': _("Добавить"),
     })
-
-def ylistcolumndelete(request):
-    pass
 
 def ylistcolumnedit(request):
 
