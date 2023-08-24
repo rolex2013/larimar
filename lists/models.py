@@ -67,11 +67,14 @@ class YList(models.Model):
 
     def del_column(self, key_name):
         d = json.loads(self.fieldslist)
-        lst = list(d.items())
-        #lst.insert(position, (key_name, key_value))
-        d = dict(lst)
+        d[key_name]['is_active'] = 'False'    # вместо удаления меняем значение 'is_active'
+        #lst = list(d.items())
+        #lst.remove(key_name)   # вместо удаления меняем значение 'is_active'
+        #print('dct: ', d[key_name]['is_active'])
+        #print('lst: ', lst)
+        #d = dict(lst)
         self.fieldslist = json.dumps(d)
-        print(type(d), d, type(lst), lst, self.fieldslist)
+        #print(type(d), d, type(lst), lst, self.fieldslist)
         self.save()
         return self.fieldslist
 

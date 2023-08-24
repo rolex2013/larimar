@@ -104,6 +104,7 @@ def ylist_items0(request, pk=0):
     for yl in ylistitem:
         name = json.loads(yl.fieldslist)
         yfield = {}
+        yfield['itemid'] = yl.id
         columns = []
         #yfield['id'] = str(yl.id)
         #yfield['yl'] = yl
@@ -137,6 +138,7 @@ def ylist_items(request, pk=0):
         #print('********', name)
         yfield = {}
         columns = []
+        yfield['itemid'] = yl.id
         #print(yfield)
         for title in titles:    # пробегаем по всем ключам заголовков Списка
             if dict(fields[title])['is_active'] == 'True':
@@ -156,6 +158,7 @@ def ylist_items(request, pk=0):
         'current_ylist': current_ylist,
         # 'titles': titles,
         'columns': columns,
+        'len_columns': len(columns),
         # 'companyid': companyid,
         'user_companies': comps,
         # 'component_name': 'lists',
@@ -213,7 +216,7 @@ def yitemcelledit(request):
     yli = YListItem.objects.filter(id=pk).first()
     name = json.loads(yli.fieldslist)
     name[col] = val
-    # print('====================== celledit', pk, col, val, ' yli ', name[col], name)
+    print('===+++================ celledit', yli.id, pk, col, val, ' yli ', name[col], name)
     yli.fieldslist = json.dumps(name)
     yli.dateupdate = datetime.now()
     yli.authorupdate = request.user
@@ -225,11 +228,12 @@ def ylistcolumninsert(request):
 
     # prz = int(request.GET['prz'])
     pk = int(request.GET['pk'])
-    #col = int(request.GET['val'])
+    col_name = int(request.GET['val'])
+    col_type = int(request.GET['type'])
     sort = int(request.GET['sort'])
 
     yl = YList.objects.filter(id=pk).first()
-    fldlst = yl.add_column('Новый столбец', 'string', sort)
+    fldlst = yl.add_column(col_name, col_type, sort)
     print('====================== column insert', pk, sort, yl, fldlst)
     if fldlst == '':
         return JsonResponse({'success': False, 'errmsg': 'Столбец "Новый столбец" уже существует! Переименуйте его!'})
@@ -289,6 +293,54 @@ def ylistcolumnedit(request):
     # yli.save()
 
     return render(request, 'ylist_items_list.html')
+
+def ylistcolumnactions(request):
+
+    reread = 1
+
+    prz = int(request.GET['prz'])
+    pk = int(request.GET['pk'])
+    col = int(request.GET['col'])
+    col_name = request.GET['col_name']
+
+    print('******* ylistcolumnactions *********** ', prz, pk, col)
+
+    yl = YList.objects.filter(id=pk).first()
+
+    if prz == 1 or prz == 2:
+        # добавляем столбец слева или справа
+        col_type = request.GET['col_type']
+        sort = int(request.GET['sort'])
+        fldlst = yl.add_column(col_name, col_type, sort)
+        print('====================== column insert', pk, sort, yl, fldlst)
+        if fldlst == '':
+            return JsonResponse({'success': False, 'errmsg': 'Столбец "Новый столбец" уже существует! Переименуйте его!'})
+    elif prz == 3:
+        # изменяем наименование или тип столбца
+        reread = 0
+    elif prz == 4:
+        # удаляем столбец
+        #print(col_name)
+        fldlst = yl.del_column(col_name)
+    elif prz == 5 or prz == 6:
+        # переносим столбец влево или вправо
+        pass
+
+    if reread == 1:
+        (request, ylisttable, ylistitem, current_ylist, columns, comps, button_list_update, button_item_create) = ylist_items0(
+            request, yl.id)
+        return render(request, 'ylist_items_list.html', {
+            'ylisttable': ylisttable,
+            'nodes': ylistitem,
+            'current_ylist': current_ylist,
+            'columns': columns,
+            'len_columns': len(columns),
+            'user_companies': comps,
+            'button_list_update': _("Изменить"),
+            'button_item_create': _("Добавить"),
+        })
+    else:
+        return render(request, 'ylist_items_list.html')
 
 
 def ylistfilter(request):
