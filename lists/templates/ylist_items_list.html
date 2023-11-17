@@ -24,13 +24,16 @@
                     <form action="" method="POST" id="form_column">
                         {% csrf_token %}
                         <label id="FormLabel"></label>
-                        <input type="text" name="inputColumnName" id="inputColumnName" placeholder="{% trans 'Введите наименование' %}" autofocus>
+                        <input type="text" name="input_ColumnName" id="inputColumnName" placeholder="{% trans 'Введите наименование' %}" autofocus>
                         <select id="inputColumnType" class="hint hint--bottom hint--info" data-hint="{% trans 'Выберите тип данных в столбце' %}">
-                            <option value="1">{% trans 'строка' %}</option>
+                            <!-- <option value="1">{% trans 'строка' %}</option>
                             <option value="2">{% trans 'текст' %}</option>
                             <option value="3">{% trans 'дата' %}</option>
                             <option value="4">{% trans 'число' %}</option>
-                            <option value="5">{% trans 'да/нет' %}</option>
+                            <option value="5">{% trans 'да/нет' %}</option> -->
+                            {% for ft in fieldtype %}
+                                <option value="{{ ft.id }}">{{ ft.name }}</option>
+                            {% endfor %}
                         </select>
 {#                        <input type="submit" id="myColumnButton" onclick="column_edit(this)" value="{% trans 'Ok' %}">#}
                         <input type="submit" id="myColumnButton" onclick="myColumnActions(this)" value="{% trans 'Ok' %}">
@@ -187,7 +190,7 @@
         event.preventDefault(); // *** без этого страница перегружается после возврата data
         var elem = document.getElementById("inputCell");
         var pk = elem.getAttribute("pk");
-        {#var row = elem.getAttribute("row");#}
+        //var row = elem.getAttribute("row");
         var column = elem.getAttribute("column");
         var val = elem.value;
         var cell_id = elem.getAttribute("cell_id");
@@ -293,10 +296,11 @@
         };
         var id = menu.getAttribute('node_id');
         var col = menu.getAttribute('col');
+        var name = menu.getAttribute('col_name');
         var prz = menu.getAttribute('node_prz');
         var pk = menu.getAttribute('node_id');
         var sort = menu.getAttribute('node_sort');
-        console.log('myColumnEdit: prz=' + prz + '/id=' + id + '/sort=' + sort);
+        console.log('myColumnEdit: prz=' + prz + '/id=' + id + '/sort=' + sort + '/name=' + name);
         var doc = document.getElementById("myColumn");
         var button = document.getElementById("myColumnButton");
         doc.style.display = "block";
@@ -314,6 +318,8 @@
         button.setAttribute("col", col);
         button.setAttribute("node_prz", prz);
         button.setAttribute("node_id", pk);
+        button.setAttribute("node_sort", sort);
+        //button.setAttribute("col_name", name);
     }
 
     function myClick_column_ins(e) {
@@ -375,21 +381,20 @@
 */
     function myColumnActions(e) {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
-        {#var elem = document.getElementById("inputCell");#}
-        try {
+
+        var col_name = document.getElementById("inputColumnName").value;
+        if (col_name == "") {
             var col_name = e.getAttribute("col_name");
-            console.log(col_name);
-        } catch (err) {
-            console.log('error: '+err);
-            var col_name = document.getElementById("inputColumnName");
         }
-        const col_type = document.getElementById("inputColumnType");
+        var col_type = document.getElementById("inputColumnType").value;
+        if (col_type == "") {
+            var col_type = e.getAttribute("col_type");
+        }
         var col = e.getAttribute("col");
-        {#var val = elem.value;#}
         var prz = e.getAttribute("node_prz");
-        {#var name = e.getAttribute("col_name");#}
         var type = e.getAttribute("col_type");
-        console.log(col, prz, col_name, col_type.value)
+        var sort = e.getAttribute("node_sort");
+        console.log(col, prz, col_name, col_type, sort)
 
         if (prz == 4) {
             if (confirm("{% trans 'Вы действительно хотите удалить столбец?' %}")) {
@@ -406,8 +411,9 @@
                 type: "GET",
                 data: {
                     pk: e.getAttribute("node_id"),
-                    col: e.getAttribute("col"),
+                    col: sort, //parseInt(e.getAttribute("col")) + shift,
                     col_name: col_name,
+                    col_type: col_type,
                     prz: prz,
                     val: e.value,
                 },
