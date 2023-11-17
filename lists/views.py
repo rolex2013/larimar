@@ -229,7 +229,7 @@ def yiteminsert(request):
     sort = int(request.GET["sort"])
 
     yli = YListItem.objects.filter(id=pk).first()
-    print("====================== item insert", pk, sort, yli, yli.ylist.id)
+    # print("====================== item insert", pk, sort, yli, yli.ylist.id)
 
     # для всех записей с yli.sort>=sort увеличиваем sort на единичку
     YListItem.objects.filter(ylist=yli.ylist, sort__gte=sort).update(sort=F("sort") + 1)
