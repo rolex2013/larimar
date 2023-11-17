@@ -15,6 +15,6 @@ media/
 /tmp
 requirements.~xt
 requirements.txt
-larimar/__pycache__/__init__.cpython-38.pyc
-larimar/__pycache__/settings.cpython-38.pyc
-larimar/__pycache__/urls.cpython-38.pyc
+/larimar/__pycache__/__init__.cpython-38.pyc
+/larimar/__pycache__/settings.cpython-38.pyc
+/larimar/__pycache__/urls.cpython-38.pyc

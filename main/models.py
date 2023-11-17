@@ -173,7 +173,7 @@ class MenuItem(TranslateFieldMixin, MPTTModel):
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='menuitem_menu', verbose_name=_("Меню"))
     component = models.ForeignKey('Component', null=True, blank=True, on_delete=models.CASCADE, related_name='menuitem_component',
                                   verbose_name=_("Компонент"))
-    #description = models.TextField("Описание", null=True, blank=True)
+    #description = models.TextField("Описание", null=True, blank=True) 
     description_ru = models.TextField(_("Описание_ru"), null=True, blank=True)
     description_en = models.TextField(_("Описание_en"), null=True, blank=True)
     link_url = models.CharField("URL", max_length=128)

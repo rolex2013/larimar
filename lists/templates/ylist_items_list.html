@@ -49,7 +49,7 @@
                     {% if forloop.first %}
                         <div class="th-row">
                             <div class="th-cell"></div>
-                            {#                        {% for title in titles %}#}
+
                             {% for title in columns %}
                                 <div class="dropdown" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">
                                     {#                                    <img src="{% static 'images/ins_column_above_24.png' %}" id="insert_col_pre_{{ current_ylist.id }}_{{ forloop.counter0 }}" node_prz="1" node_id=#}
@@ -77,16 +77,14 @@
                                            node_id="{{ current_ylist.id }}"
                                            node_sort="{{ forloop.counter0 }}" href="#" onclick="myColumnActions(this)">{% trans "Удалить" %}</a>
                                         {% if forloop.counter != 1 %}
-                                            <a id="remove_col_left_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name=
-                                                "{{ title}}"
+                                            <a id="remove_col_left_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name="{{ title }}"
                                                node_prz="5"
                                                node_id="{{ current_ylist.id }}"
                                                node_sort="{{ forloop.counter0 }}" href="#" onclick="myColumnActions(this)">
                                                 {% trans "Переместить влево" %}</a>
                                         {% endif %}
                                         {% if forloop.counter != len_columns %}
-                                            <a id="remove_col_right_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name=
-                                                "{{ title}}"
+                                            <a id="remove_col_right_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name="{{ title }}"
                                                node_prz="6"
                                                node_id="{{ current_ylist.id }}"
                                                node_sort="{{ forloop.counter0 }}" href="#" onclick="myColumnActions(this)">
@@ -102,12 +100,12 @@
                         <div class="cell">
                             <div class="object-list-buttons">
                                 <img src="{% static 'images/ins_row_above_24.png' %}" id="insert_row_pre_{{ forloop.counter }}" node_prz="1"
-                                     node_id="{{ forloop.counter }}" node_sort="{{ forloop.counter }}"
-                                     onClick="myClick_ins(this);"/> <img src="{% static 'images/ins_row_after_24.png' %}" id="insert_row_after_
-{{ forloop.counter }}" node_prz="1" node_id="{{ forloop.counter }}" node_sort="{{ forloop.counter|add:1 }}"
-                                                                         onClick="myClick_ins(this);"/>
-                                {#                                   <button id="insert_row_pre_{{ forloop.counter }}" node_prz="1" node_id="{{ forloop.counter }}" node_sort="{{ forloop.counter }}"#}
-                                {#                                   onClick="myClick_ins(this);">{% trans 'Добавить перед' %}</button>#}
+                                    node_id="{{ node.itemid }}" node_sort="{{ forloop.counter }}"
+                                    onClick="myClick_ins(this);"/> 
+                                <img src="{% static 'images/ins_row_after_24.png' %}" id="insert_row_after_{{ forloop.counter }}" node_prz="1" 
+                                    node_id="{{ node.itemid }}" node_sort="{{ forloop.counter|add:1 }}"
+                                    onClick="myClick_ins(this);"/>
+                                
                                 <button id="delete_row_{{ forloop.counter }}" node_id="{{ forloop.counter }}"
                                         onClick="myClick_del(this);">{% trans 'Удалить' %}</button>
                             </div>

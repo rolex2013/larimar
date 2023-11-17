@@ -106,22 +106,6 @@ class YList(models.Model):
     def upd_column(self, key_name, key_value, position):
         d = json.loads(self.fieldslist)
         lst = list(d.items())
-        # i = j = -1
-        # for dd_key, dd_val in lst:
-        #     if dd_val["is_active"] == "True":
-        #         i += 1
-        #     if i > position:
-        #         break
-        #     j += 1
-        #     # print("-!!!-", dd_key, dd_val, i)
-        # key_name_old = lst[j][0]
-        # lst0 = list(lst[j])
-        # lst0[0] = key_name
-        # lst[j][0] = dict(lst0)
-        # print(lst, "$$$ ", key_name_old, lst[j][0], lst0)
-        # lst[position] = key_name
-        # lst0 = lst[position][1]
-        # lst0["type"] = key_value
         key_name_old = lst[position][0]
         lst[position] = (key_name, {"type": key_value})
         # print("*** ", lst, key_name_old)
@@ -154,11 +138,6 @@ class YList(models.Model):
         d.pop(key_name, None)
         # d[key_name]["is_active"] = "False"  # вместо удаления меняем значение 'is_active'
         # всё-таки надо удалять!
-        # lst = list(d.items())
-        # lst.remove(key_name)  # вместо удаления меняем значение 'is_active'
-        ## print('dct: ', d[key_name]['is_active'])
-        ## print("lst: ", lst)
-        # d = dict(lst)
         self.fieldslist = json.dumps(d)
         # print(type(d), d) #, type(lst), lst, self.fieldslist)
         self.save()

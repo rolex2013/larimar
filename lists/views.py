@@ -123,6 +123,8 @@ def ylist_items0(request, pk=0):
     fields = json.loads(current_ylist.fieldslist)
     titles = [*fields]  # преобразовываем в словарь и распаковываем ключи
 
+    fieldtype = Dict_YListFieldType.objects.filter(is_active=True)
+
     ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related(
         "ylist", "author", "authorupdate"
     )
@@ -155,6 +157,7 @@ def ylist_items0(request, pk=0):
         current_ylist,
         columns,
         comps,
+        fieldtype,
         _("Изменить"),
         _("Добавить"),
     )
@@ -225,17 +228,18 @@ def yiteminsert(request):
     pk = int(request.GET["pk"])
     sort = int(request.GET["sort"])
 
-    fieldtype = Dict_YListFieldType.objects.filter(is_active=True)
-
     yli = YListItem.objects.filter(id=pk).first()
-    print("====================== item insert", pk, sort, yli.ylist.id)
+    print("====================== item insert", pk, sort, yli, yli.ylist.id)
 
     # для всех записей с yli.sort>=sort увеличиваем sort на единичку
     YListItem.objects.filter(ylist=yli.ylist, sort__gte=sort).update(sort=F("sort") + 1)
     # и вставляем новую запись
+    d = json.loads(yli.ylist.fieldslist)
+    # print("-----------------------------------", d.fromkeys(d, ""))
     new_item = YListItem(
         ylist=yli.ylist,
-        fieldslist=yli.fieldslist,
+        # fieldslist=yli.fieldslist,
+        fieldslist=json.dumps(d.fromkeys(d, "")),
         sort=sort,
         author=request.user,
         authorupdate=request.user,
@@ -247,8 +251,9 @@ def yiteminsert(request):
         ylisttable,
         ylistitem,
         current_ylist,
-        titles,
+        columns,
         comps,
+        fieldtype,
         button_list_update,
         button_item_create,
     ) = ylist_items0(request, yli.ylist.id)
@@ -261,7 +266,7 @@ def yiteminsert(request):
             "ylisttable": ylisttable,
             "nodes": ylistitem,
             "current_ylist": current_ylist,
-            "titles": titles,
+            "columns": columns,
             "user_companies": comps,
             "fieldtype": fieldtype,
             "button_list_update": _("Изменить"),
@@ -316,8 +321,6 @@ def ylistcolumninsert(request):
     col_type = int(request.GET["type"])
     sort = int(request.GET["sort"])
 
-    fieldtype = Dict_YListFieldType.objects.filter(is_active=True)
-
     yl = YList.objects.filter(id=pk).first()
     fldlst = yl.add_column(col_name, col_type, sort)
     print("====================== column insert", pk, sort, yl, fldlst)
@@ -336,6 +339,7 @@ def ylistcolumninsert(request):
         current_ylist,
         columns,
         comps,
+        fieldtype,
         button_list_update,
         button_item_create,
     ) = ylist_items0(request, yl.id)
@@ -362,8 +366,6 @@ def ylistcolumndelete(request):
     pk = int(request.GET["pk"])
     # col = int(request.GET['val'])
 
-    fieldtype = Dict_YListFieldType.objects.filter(is_active=True)
-
     yl = YList.objects.filter(id=pk).first()
     print("====================== column insert", pk, yl)
     # yl.add_column('Новый столбец', 'string', sort)
@@ -375,6 +377,7 @@ def ylistcolumndelete(request):
         current_ylist,
         titles,
         comps,
+        fieldtype,
         button_list_update,
         button_item_create,
     ) = ylist_items0(request, yl.id)
@@ -424,8 +427,6 @@ def ylistcolumnactions(request):
 
     print("******* ylistcolumnactions *********** ", prz, pk, col)
 
-    fieldtype = Dict_YListFieldType.objects.filter(is_active=True)
-
     yl = YList.objects.filter(id=pk).first()
 
     if prz == 1 or prz == 2:
@@ -462,6 +463,7 @@ def ylistcolumnactions(request):
             current_ylist,
             columns,
             comps,
+            fieldtype,
             button_list_update,
             button_item_create,
         ) = ylist_items0(request, yl.id)
