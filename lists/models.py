@@ -148,9 +148,9 @@ class YList(models.Model):
         shift = -1 if prz == 5 else 1
         d = json.loads(self.fieldslist)
         lst = list(d.items())
-        #print("--- ", lst)
+        # print("--- ", lst)
         lst[col], lst[col + shift] = lst[col + shift], lst[col]
-        #print("+++ ", lst)
+        # print("+++ ", lst)
         d = dict(lst)
         self.fieldslist = json.dumps(d)
         self.save()
@@ -182,7 +182,7 @@ class YListItem(models.Model):
         related_name="ylistresult",
         verbose_name=_("Список"),
     )
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+    sort = models.PositiveSmallIntegerField(default=3, blank=True, null=True)
     datecreate = models.DateTimeField(_("Дата создания"), auto_now_add=True)
     dateupdate = models.DateTimeField(_("Дата изменения"), auto_now_add=True)
     dateclose = models.DateTimeField(_("Дата закрытия"), blank=True, null=True)
@@ -210,7 +210,7 @@ class YListItem(models.Model):
 
     def __str__(self):
         # return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + '|' + self.name)
-        return self.fieldslist
+        return self.fieldslist #+ "|" + str(self.ylist.id)
 
     def last_row(self):
         return (

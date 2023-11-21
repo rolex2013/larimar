@@ -13,12 +13,13 @@ urlpatterns = [
     path('lists_list/list_update/<int:pk>', views.YListUpdate.as_view(), name='ylist_update'),
     path('list_list/list_filter/', views.ylistfilter, name='ylist_filter'),
     # path('list_page/item_edit/<int:prz>/<int:pk>/<int:sort>', views.yitemedit, name='yitem_edit'),
-    path('list_page/item_insert/', views.yiteminsert, name='yitem_insert'),
-    path('list_page/item_delete/', views.yitemdelete, name='yitem_delete'),
+    # path('list_page/item_insert/', views.yiteminsert, name='yitem_insert'),
+    # path('list_page/item_delete/', views.yitemdelete, name='yitem_delete'),
+    path('list_page/item_actions/', views.ylistitemactions, name='ylist_itemactions'),
     path('list_page/item_celledit/', views.yitemcelledit, name='yitem_celledit'),
-    path('list_page/list_columninsert/', views.ylistcolumninsert, name='ylist_columninsert'),
-    path('list_page/list_columndelete/', views.ylistcolumndelete, name='ylist_columndelete'),
-    path('list_page/list_columnedit/', views.ylistcolumnedit, name='ylist_columnedit'),
+    # path('list_page/list_columninsert/', views.ylistcolumninsert, name='ylist_columninsert'),
+    # path('list_page/list_columndelete/', views.ylistcolumndelete, name='ylist_columndelete'),
+    # path('list_page/list_columnedit/', views.ylistcolumnedit, name='ylist_columnedit'),
     path('list_page/list_columnactions/', views.ylistcolumnactions, name='ylist_columnactions'),
 
 ]

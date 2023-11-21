@@ -1,0 +1,260 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-21 16:29+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: models.py:12
+msgid "Наименование_ru"
+msgstr "Name_ru"
+
+#: models.py:13
+msgid "Наименование_en"
+msgstr "Name_en"
+
+#: models.py:14
+msgid "Описание_ru"
+msgstr "Description_ru"
+
+#: models.py:15
+msgid "Описание_en"
+msgstr "Description_en"
+
+#: models.py:17
+msgid "Сортировка"
+msgstr "Sort"
+
+#: models.py:19
+msgid "Активность"
+msgstr "Is active"
+
+#: models.py:31
+msgid "Тип данных"
+msgstr "Type"
+
+#: models.py:32
+msgid "Типы данных"
+msgstr "Types"
+
+#: models.py:39
+msgid "Наименование"
+msgstr "Name"
+
+#: models.py:40
+msgid "Описание"
+msgstr "Description"
+
+#: models.py:41
+msgid "Список и тип полей"
+msgstr "List and fields type"
+
+#: models.py:46
+msgid "Компания"
+msgstr "Company"
+
+#: models.py:48 models.py:186
+msgid "Дата создания"
+msgstr "Date create"
+
+#: models.py:49 models.py:187
+msgid "Дата изменения"
+msgstr "Date update"
+
+#: models.py:50 models.py:188
+msgid "Дата закрытия"
+msgstr "Closing date"
+
+#: models.py:55 models.py:193
+msgid "Автор последних изменений"
+msgstr "Last Modified Author"
+
+#: models.py:61 models.py:199
+msgid "Автор"
+msgstr "Author"
+
+#: models.py:64 templates/ylist_detail.html:33
+msgid "Участники"
+msgstr "Participants"
+
+#: models.py:66
+msgid "Активность Списка"
+msgstr "List Activity"
+
+#: models.py:173 models.py:183
+msgid "Список"
+msgstr "List"
+
+#: models.py:174 templates/ylists_list.html:4
+msgid "Списки"
+msgstr "Lists"
+
+#: models.py:178
+msgid "Список и значения полей"
+msgstr "Field List and Values"
+
+#: models.py:201
+msgid "Активность элемента Списка"
+msgstr "List Item Activity"
+
+#: models.py:224
+msgid "Запись списка"
+msgstr "List Item"
+
+#: models.py:225
+msgid "Записи списков"
+msgstr "Lists Items"
+
+#: templates/ylist_detail.html:17
+msgid "(Список перемещён в архив)"
+msgstr "(List moved to archive)"
+
+#: templates/ylist_detail.html:24
+msgid "Организация"
+msgstr "Organization"
+
+#: templates/ylist_detail.html:24
+msgid "Списки организации"
+msgstr "Organization lists"
+
+#: templates/ylist_detail.html:27
+msgid "Создан"
+msgstr "Created"
+
+#: templates/ylist_detail.html:28
+msgid "Изменён"
+msgstr "Updated"
+
+#: templates/ylist_detail.html:31
+msgid "Закрыт"
+msgstr "Closed"
+
+#: templates/ylist_detail.html:35
+msgid "Профиль"
+msgstr "Profile"
+
+#: templates/ylist_detail.html:54
+msgid "Информация о Списке недоступна!"
+msgstr "List information is not available!"
+
+#: templates/ylist_detail.html:136
+msgid "Информация о записях Списка недоступна!"
+msgstr "List item information is not available!"
+
+#: templates/ylist_items_list.html:17
+msgid "Введите значение"
+msgstr "Enter a value"
+
+#: templates/ylist_items_list.html:19 templates/ylist_items_list.html:39
+msgid "Ok"
+msgstr "Ok"
+
+#: templates/ylist_items_list.html:20 templates/ylist_items_list.html:40
+msgid "Отменить"
+msgstr "Cancel"
+
+#: templates/ylist_items_list.html:27
+msgid "Введите наименование"
+msgstr "Enter a name"
+
+#: templates/ylist_items_list.html:28
+msgid "Выберите тип данных в столбце"
+msgstr "Select the data type in the column"
+
+#: templates/ylist_items_list.html:29
+msgid "строка"
+msgstr "string"
+
+#: templates/ylist_items_list.html:30
+msgid "текст"
+msgstr "text"
+
+#: templates/ylist_items_list.html:31
+msgid "дата"
+msgstr "date"
+
+#: templates/ylist_items_list.html:32
+msgid "число"
+msgstr "number"
+
+#: templates/ylist_items_list.html:33
+msgid "да/нет"
+msgstr "yes/no"
+
+#: templates/ylist_items_list.html:60
+msgid "Добавить столбец слева"
+msgstr "Add Column to Left"
+
+#: templates/ylist_items_list.html:64
+msgid "Добавить столбец справа"
+msgstr "Add Column to Right"
+
+#: templates/ylist_items_list.html:68 views.py:44 views.py:162 views.py:221
+#: views.py:309 views.py:409
+msgid "Изменить"
+msgstr "Edit"
+
+#: templates/ylist_items_list.html:72 templates/ylist_items_list.html:113
+msgid "Удалить"
+msgstr "Delete"
+
+#: templates/ylist_items_list.html:78
+msgid "Переместить влево"
+msgstr "Move Left"
+
+#: templates/ylist_items_list.html:85
+msgid "Переместить вправо"
+msgstr "Move Right"
+
+#: templates/ylist_items_list.html:111
+msgid "Дублировать строку"
+msgstr "Duplicate Row"
+
+#: templates/ylist_items_list.html:117
+msgid "Переместить выше"
+msgstr "Move Up"
+
+#: templates/ylist_items_list.html:122
+msgid "Переместить ниже"
+msgstr "Move Down"
+
+#: templates/ylist_items_list.html:221 templates/ylist_items_list.html:271
+msgid "Вы действительно хотите удалить столбец?"
+msgstr "Are you sure you want to delete the column?"
+
+#: templates/ylist_items_list.html:238
+msgid "Изменение столбца:"
+msgstr "Edit Column:"
+
+#: templates/ylist_items_list.html:241
+msgid "Добавление столбца слева:"
+msgstr "To add a column to the left:"
+
+#: templates/ylist_items_list.html:243
+msgid "Добавление столбца справа:"
+msgstr "To add a column to the right:"
+
+#: templates/ylist_items_list.html:313
+msgid "Вы действительно хотите удалить строку?"
+msgstr "Are you sure you want to delete the row?"
+
+#: views.py:41
+msgid "Сменить организацию"
+msgstr "Change organization"
+
+#: views.py:43 views.py:45 views.py:47 views.py:163 views.py:222 views.py:310
+#: views.py:410
+msgid "Добавить"
+msgstr "Add"
