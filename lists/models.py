@@ -182,7 +182,7 @@ class YListItem(models.Model):
         related_name="ylistresult",
         verbose_name=_("Список"),
     )
-    sort = models.PositiveSmallIntegerField(default=5, blank=True, null=True)
+    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     datecreate = models.DateTimeField(_("Дата создания"), auto_now_add=True)
     dateupdate = models.DateTimeField(_("Дата изменения"), auto_now_add=True)
     dateclose = models.DateTimeField(_("Дата закрытия"), blank=True, null=True)
