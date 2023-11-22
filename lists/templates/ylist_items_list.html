@@ -160,21 +160,21 @@
         var val = e.target.getAttribute('val');
         var cell_id = e.target.getAttribute('id');
         var inp = document.getElementById("inputCell");
-        {#inp.setAttribute('row', row);#}
+        // {#inp.setAttribute('row', row);#}
         inp.setAttribute('pk', pk);
         inp.setAttribute('column', column);
         inp.setAttribute('cell_id', cell_id);
-        {#inp.setAttribute('cell_id', cell_id);#}
-        {#console.log('!==========!' + row + '/' + column + '/' + cell_id + '/' + val);#}
+        // {#inp.setAttribute('cell_id', cell_id);#}
+        // {#console.log('!==========!' + row + '/' + column + '/' + cell_id + '/' + val);#}
         if (e.target.tagName.toUpperCase() == "DIV") {
             //document.getElementById(e.target.id).innerHTML = "Welcome to JavaScript";
             document.getElementById("myCell").style.display = "block";
             document.getElementById("inputCell").placeholder = val;
             document.getElementById("inputCell").value = val;
             document.getElementById("inputCell").focus();
-            {#document.getElementById("myCell").style.top = (e.clientY-12)+'px';#}
-            {#document.getElementById("myCell").style.left = (e.clientX-50)+'px';#}
-            {#console.log(name + '/' + document.getElementById("myCell").style.top + '/' + document.getElementById("myCell").style.left);#}
+            // {#document.getElementById("myCell").style.top = (e.clientY-12)+'px';#}
+            // {#document.getElementById("myCell").style.left = (e.clientX-50)+'px';#}
+            // {#console.log(name + '/' + document.getElementById("myCell").style.top + '/' + document.getElementById("myCell").style.left);#}
         }
     }
 
