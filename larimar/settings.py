@@ -23,6 +23,8 @@ from dotenv import load_dotenv, find_dotenv
 from django.utils.translation import gettext_lazy as _
 from django.utils.translation import get_language_info
 
+import pymysql
+
 # from django.utils.translation import gettext as _
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -256,10 +258,10 @@ GOOGLE_RECAPTCHA_SECRET_KEY = os.getenv("GOOGLE_RECAPTCHA_SECRET_KEY")
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 # IS_DEV = bool(os.getenv("IS_DEV", default="False"))
-IS_DEV = os.getenv("IS_DEV") 
+IS_DEV = os.getenv("IS_DEV")
 
 # if sys.platform == "win32":
-if IS_DEV == 'True':
+if IS_DEV == "True":
     # для разработки
 
     DEBUG = True
@@ -306,6 +308,8 @@ else:
     STATICFILES_DIRS = (os.getenv("STATICFILES_DIRS"),)
     STATIC_ROOT = os.getenv("STATIC_ROOT")
 
+    pymysql.install_as_MySQLdb()
+
     DATABASES = {
         "default": {
             #'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -313,6 +317,7 @@ else:
             "OPTIONS": {
                 "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
                 "charset": "utf8mb4",
+                "cursorclass": "pymysql.cursors.DictCursor",
             },
             "NAME": os.getenv("DB_NAME"),
             "USER": os.getenv("DB_USER"),
