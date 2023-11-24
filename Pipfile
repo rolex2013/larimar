@@ -48,6 +48,7 @@ yarg = "==0.1.9"
 Django = "==3.1.5"
 djangorestframework = "*"
 markdown = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.8"

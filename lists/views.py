@@ -37,6 +37,7 @@ def ylists(request, companyid=0, pk=0):
     )
 
     comps = request.session["_auth_user_companies_id"]
+    button_company_select = ""
     if len(comps) > 1:
         button_company_select = _("Сменить организацию")
     if currentuser == current_company.author_id:
@@ -281,7 +282,7 @@ def ylistitemactions(request):
         new_sort = target_item.sort
         yitem.sort = new_sort
         yitem.save()
-        target_item.sort=cur_sort
+        target_item.sort = cur_sort
         target_item.save()
     if reread == 1:
         (
@@ -344,6 +345,7 @@ def yitemcelledit(request):
     yli.save()
 
     return render(request, "ylist_items_list.html")
+
 
 def ylistcolumnactions(request):
     reread = 1
