@@ -308,7 +308,10 @@ else:
     STATICFILES_DIRS = (os.getenv("STATICFILES_DIRS"),)
     STATIC_ROOT = os.getenv("STATIC_ROOT")
 
+    # подменяем MySQLdb версией 1.4.2 модуля pymysql
+    pymysql.version_info = (1, 4, 2, "final", 0)
     pymysql.install_as_MySQLdb()
+    # ***
 
     DATABASES = {
         "default": {
@@ -317,7 +320,7 @@ else:
             "OPTIONS": {
                 "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
                 "charset": "utf8mb4",
-                "cursorclass": "pymysql.cursors.DictCursor",
+                #"cursorclass": "pymysql.cursors.DictCursor",
             },
             "NAME": os.getenv("DB_NAME"),
             "USER": os.getenv("DB_USER"),
