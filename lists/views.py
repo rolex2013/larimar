@@ -76,7 +76,7 @@ class YListCreate(CreateView):
         form.instance.authorupdate_id = self.request.user.id
         form.instance.fieldslist = json.dumps(
             # {"Дата": {"type": "date", "is_active": "True"}}
-            {"Дата": {"type": "1"}}
+            {"Дата": {"type": "3"}}
         )
         self.object = form.save()  # созадём новый список
         new_item = YListItem(
@@ -136,6 +136,7 @@ def ylist_items0(request, pk=0):
         yfield = {}
         yfield["itemid"] = yl.id
         yfield["sort"] = yl.sort
+        # yfield["type"] = yl.ylist.type.name
         columns = []
         # yfield['id'] = str(yl.id)
         # yfield['yl'] = yl
@@ -145,6 +146,11 @@ def ylist_items0(request, pk=0):
                 yfield[title] = name[
                     title
                 ]  # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
+                # ... и добавляем дип данных в этой колонке
+                val = fields[title]
+                yf = {}
+                yf["type"] = val["type"]
+                yfield[title] = (yfield[title], yf["type"])
             except:
                 yfield[title] = ""
             columns.append(title)
@@ -172,7 +178,7 @@ def ylist_items(request, pk=0):
     # titles = dict(current_ylist.fieldslist)
     fields = json.loads(current_ylist.fieldslist)
     titles = [*fields]  # преобразовываем в словарь и распаковываем ключи
-
+    # print(fields)
     fieldtype = Dict_YListFieldType.objects.filter(is_active=True)
 
     ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related(
@@ -195,10 +201,15 @@ def ylist_items(request, pk=0):
                 yfield[title] = name[
                     title
                 ]  # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
+                # ... и добавляем дип данных в этой колонке
+                val = fields[title]
+                yf = {}
+                yf["type"] = val["type"]
+                yfield[title] = (yfield[title], yf["type"])
+                # print(yf, yfield[title], type(yfield[title]))
             except:
                 yfield[title] = ""
             columns.append(title)
-            # print('+++', yfield)
         ylisttable.append(yfield)
         # print(ylisttable)
 
