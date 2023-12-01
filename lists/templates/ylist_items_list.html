@@ -50,7 +50,7 @@
 
                             {% for title in columns %}
                                 <div class="dropdown" id="th-{{ forloop.counter0 }}" name="th-{{ forloop.counter0 }}">
-                                    <button class="dropbtn" id="title_{{ forloop.counter0 }}">{{ title }}
+                                    <button class="dropbtn" id="title_{{ forloop.counter0 }}">{{ title.0 }}
                                         <i class="fa fa-caret-down"></i>
                                     </button>
                                     <div class="dropdown-content" id="myColumnMenu">
@@ -64,21 +64,21 @@
                                         >{% trans "Добавить столбец справа" %}</a>
                                         <a id="update_col_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" node_prz="3"
                                            node_id="{{ current_ylist.id }}"
-                                           node_sort="{{ forloop.counter0 }}" node_title="{{ title }}" href="#" onclick="myColumnEdit(this.id)"
+                                           node_sort="{{ forloop.counter0 }}" node_title="{{ title.0 }}" node_type="{{ title.1 }}" href="#" onclick="myColumnEdit(this.id)"
                                         >{% trans "Изменить" %}</a>
                                         <a id="delete_col_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name=
-                                                "{{ title}}" node_prz="4"
+                                                "{{ title.0 }}" node_prz="4"
                                            node_id="{{ current_ylist.id }}"
                                            node_sort="{{ forloop.counter0 }}" href="#" onclick="myColumnActions(this)">{% trans "Удалить" %}</a>
                                         {% if forloop.counter != 1 %}
-                                            <a id="remove_col_left_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name="{{ title }}"
+                                            <a id="remove_col_left_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name="{{ title.0 }}"
                                                node_prz="5"
                                                node_id="{{ current_ylist.id }}"
                                                node_sort="{{ forloop.counter0 }}" href="#" onclick="myColumnActions(this)">
                                                 {% trans "Переместить влево" %}</a>
                                         {% endif %}
                                         {% if forloop.counter != len_columns %}
-                                            <a id="remove_col_right_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name="{{ title }}"
+                                            <a id="remove_col_right_{{ current_ylist.id }}_{{ forloop.counter0 }}" col="{{ forloop.counter0 }}" col_name="{{ title.0 }}"
                                                node_prz="6"
                                                node_id="{{ current_ylist.id }}"
                                                node_sort="{{ forloop.counter0 }}" href="#" onclick="myColumnActions(this)">
@@ -132,7 +132,20 @@
                                             {% if value.1 == '4' %}
                                                 style="text-align: right; padding-right: 10px;"
                                             {% endif %}
-                                            >{{ value.0 }}</div>
+                                            >
+                                            {% if value.1 == '5' %}
+                                                <input id="td-{{ forloop.parentloop.counter }}-{{ forloop.counter }}" type="checkbox" onclick="cell_edit(this)" 
+                                                    name="td-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                                                    row="{{ forloop.parentloop.counter }}" pk="{{ node.itemid }}"
+                                                    column="{{ key }}" class="checkbox"  
+                                                {% if value.0 == '1' %}
+                                                    checked 
+                                                {% endif %}
+                                                />
+                                            {% else %}
+                                                {{ value.0 }}
+                                            {% endif %}
+                                            </div>
                                     {% endif %}
                                 {% endfor %}
 
@@ -184,13 +197,24 @@
 
     function cell_edit(e) {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
-        var elem = document.getElementById("inputCell");
+        var elem = e;
+        if (e.type == 'checkbox') {
+            var val = '0';
+            var e_val = false;
+            if (e.checked == true) {
+                val = '1';
+                e_val = true;
+            };
+        } else {
+            elem = document.getElementById("inputCell");
+            var val = elem.value;
+        };
         var pk = elem.getAttribute("pk");
         //var row = elem.getAttribute("row");
         var column = elem.getAttribute("column");
-        var val = elem.value;
+        
         var cell_id = elem.getAttribute("cell_id");
-        console.log(pk + '/' + column + '/' + val + '/' + 'cell_id');
+        console.log(pk + '/' + column + '/' + val + '/' + e_val + '/' + e.type + '/' + e.value + '/cell_id');
         $.ajax({
             url: "{% url 'my_list:yitem_celledit' %}",
             type: "GET",
@@ -200,7 +224,11 @@
                 val: val
             },
             success: function (data) {
-                document.getElementById(cell_id).innerHTML = val;   // выводим значение ячейки без перезагрузки списка
+                if (e.type == 'checkbox') {
+                    e.checked = e_val;   // выводим значение ячейки без перезагрузки списка
+                } else {
+                    document.getElementById(cell_id).innerHTML = val;   // выводим значение ячейки без перезагрузки списка
+                }
             },
             error: function (xhr, errmsg, err) {
                 console.log("error")
@@ -214,6 +242,7 @@
     function edit_cancel() {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
         document.getElementById("myCell").style.display = "none";
+        document.getElementById("myColumn").style.display = "none";
     }
 
     function myColumnEdit(click_id) {
@@ -231,7 +260,8 @@
         var prz = menu.getAttribute('node_prz');
         var pk = menu.getAttribute('node_id');
         var sort = menu.getAttribute('node_sort');
-        console.log('myColumnEdit: prz=' + prz + '/id=' + id + '/sort=' + sort + '/name=' + name);
+        var type = menu.getAttribute('node_type');
+        console.log('myColumnEdit: prz=' + prz + '/id=' + id + '/sort=' + sort + '/name=' + name + '/type=' + type);
         var doc = document.getElementById("myColumn");
         var button = document.getElementById("myColumnButton");
         doc.style.display = "block";
@@ -245,6 +275,7 @@
         } else if (prz == 2) {
             document.getElementById('FormLabel').innerHTML = "{% trans 'Добавление столбца справа:' %}";
         };
+        document.getElementById('inputColumnType').value = type;
         document.getElementById('inputColumnName').focus();
         button.setAttribute("col", col);
         button.setAttribute("node_prz", prz);

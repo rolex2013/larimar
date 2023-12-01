@@ -141,19 +141,21 @@ def ylist_items0(request, pk=0):
         # yfield['id'] = str(yl.id)
         # yfield['yl'] = yl
         for title in titles:  # пробегаем по всем ключам заголовков Списка
+            val = fields[title]
             # if dict(fields[title])["is_active"] == "True":
             try:
                 yfield[title] = name[
                     title
                 ]  # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
                 # ... и добавляем дип данных в этой колонке
-                val = fields[title]
                 yf = {}
                 yf["type"] = val["type"]
                 yfield[title] = (yfield[title], yf["type"])
             except:
-                yfield[title] = ""
-            columns.append(title)
+                yfield[title] = ("", val["type"])
+            # columns.append(title)
+            columns.append((title, val["type"]))
+            # print(columns)
 
         ylisttable.append(yfield)
     # print(ylisttable)
@@ -194,24 +196,27 @@ def ylist_items(request, pk=0):
         columns = []
         yfield["itemid"] = yl.id
         yfield["sort"] = yl.sort
+
         # print(yfield)
         for title in titles:  # пробегаем по всем ключам заголовков Списка
+            val = fields[title]
             # if dict(fields[title])["is_active"] == "True":
             try:
                 yfield[title] = name[
                     title
                 ]  # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
                 # ... и добавляем дип данных в этой колонке
-                val = fields[title]
+
                 yf = {}
                 yf["type"] = val["type"]
                 yfield[title] = (yfield[title], yf["type"])
                 # print(yf, yfield[title], type(yfield[title]))
             except:
-                yfield[title] = ""
-            columns.append(title)
+                yfield[title] = ("", val["type"])
+            columns.append((title, val["type"]))
+
         ylisttable.append(yfield)
-        # print(ylisttable)
+        # print(columns, "/", ylisttable)
 
     return render(
         request,
@@ -259,7 +264,7 @@ def ylistitemactions(request):
         )
         # и вставляем новую запись
         d = json.loads(yitem.ylist.fieldslist)
-        # print("-----------------------------------", d.fromkeys(d, ""))
+        # print("------------------------------------", d.fromkeys(d, ""))
         new_item = YListItem(
             ylist=yitem.ylist,
             fieldslist=yitem.fieldslist,
