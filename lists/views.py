@@ -143,15 +143,16 @@ def ylist_items0(request, pk=0):
         for title in titles:  # пробегаем по всем ключам заголовков Списка
             val = fields[title]
             # if dict(fields[title])["is_active"] == "True":
-            try:
-                yfield[title] = name[
-                    title
-                ]  # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
+            # try:
+            if title in list(name):
+                yfield[title] = name[title]
+                # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
                 # ... и добавляем дип данных в этой колонке
                 yf = {}
                 yf["type"] = val["type"]
                 yfield[title] = (yfield[title], yf["type"])
-            except:
+            # except:
+            else:
                 yfield[title] = ("", val["type"])
             # columns.append(title)
             columns.append((title, val["type"]))
@@ -183,9 +184,8 @@ def ylist_items(request, pk=0):
     # print(fields)
     fieldtype = Dict_YListFieldType.objects.filter(is_active=True)
 
-    ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related(
-        "ylist", "author", "authorupdate"
-    )
+    ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related("ylist", "author", "authorupdate")
+
     ylisttable = []
     columns = []
     # cnt = 0
@@ -201,17 +201,17 @@ def ylist_items(request, pk=0):
         for title in titles:  # пробегаем по всем ключам заголовков Списка
             val = fields[title]
             # if dict(fields[title])["is_active"] == "True":
-            try:
-                yfield[title] = name[
-                    title
-                ]  # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
+            # try:
+            if title in list(name):
+                yfield[title] = name[title]
+                # если этот ключ есть в заголовках записей Списка, то присваиваем ему его значение
                 # ... и добавляем дип данных в этой колонке
-
                 yf = {}
                 yf["type"] = val["type"]
                 yfield[title] = (yfield[title], yf["type"])
                 # print(yf, yfield[title], type(yfield[title]))
-            except:
+            # except:
+            else:
                 yfield[title] = ("", val["type"])
             columns.append((title, val["type"]))
 
@@ -223,8 +223,8 @@ def ylist_items(request, pk=0):
         "ylist_detail.html",
         {
             "ylisttable": ylisttable,
-            #'nodes': ylistitem,
-            #'nodes': yfield,
+            # 'nodes': ylistitem,
+            # 'nodes': yfield,
             "current_ylist": current_ylist,
             # 'titles': titles,
             "columns": columns,
@@ -263,7 +263,7 @@ def ylistitemactions(request):
             sort=F("sort") + 1
         )
         # и вставляем новую запись
-        d = json.loads(yitem.ylist.fieldslist)
+        # d = json.loads(yitem.ylist.fieldslist)
         # print("------------------------------------", d.fromkeys(d, ""))
         new_item = YListItem(
             ylist=yitem.ylist,

@@ -39,9 +39,12 @@
             <!--{ trans "Выберите язык" %}:-->
             {% for language in languages %}
                 {% if language.code != CURRENT_LANGUAGE %}
-                    <div style="float: right;"><a href="{% url 'my_main:select_lang' %}?lang_code={{ language.code }}"
-                    ><img src="{% static 'images/'|add:language.code|add:'_32'|add:'.png' %}" alt="{{ language.name_local }}"
-                    /></a></div>
+                    <div style="float: right;">
+                        <a href="{% url 'my_main:select_lang' %}?lang_code={{ language.code }}" style="text-decoration: none;">
+                            <!-- <img src="{ static 'images/'|add:language.code|add:'_32'|add:'.png' %}" alt="{ language.name_local }}"/> -->
+                            <strong>{{ language.code|upper }}</strong>
+                        </a>
+                    </div>
                 {% endif %}
             {% endfor %}
             <!--</div>-->
@@ -254,7 +257,7 @@
 
 <!--<div id="ajax_lng_listerrors"></div>-->
 
-{#<script>#}
+<!-- {#<script>#}
 {##}
 {#    var select = document.getElementById("langselect_id");#}
 {#    select.addEventListener("change", function () {#}
@@ -281,7 +284,7 @@
 {#        });#}
 {#    });#}
 {##}
-{#</script>#}
+{#</script>#} -->
 
 </body>
 
