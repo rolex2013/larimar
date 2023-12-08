@@ -1,318 +1,298 @@
-// *** перенесено в sql/db_sqlite3.sql ***
 [
+
     {
-      "model": "companies.Dict_CompanyStructureType",
+      "model": "companies.dict_companystructuretype",
       "pk": 1,
       "fields": {
-        "name": "Головная организация",
-        "sort": "5",
-        "name_lang": "Main company",
-        "is_active": "1"        
+        "name_en": "Parent Company",
+        "name_ru": "Головная организация",
+        "sort": 5,
+        "is_active": true
       }
     },
     {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 2,
-        "fields": {
-          "name": "Холдинг",
-          "sort": "10",
-          "name_lang": "Holding",
-          "is_active": "1"        
-        }
-    },    
-    {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 3,
-        "fields": {
-          "name": "Группа компаний",
-          "sort": "15",
-          "name_lang": "Group of companies",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 2,
+      "fields": {
+        "name_en": "Holding",
+        "name_ru": "Холдинг",
+        "sort": 10,
+        "is_active": true
+      }
     },
     {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 4,
-        "fields": {
-          "name": "Филиал",
-          "sort": "20",
-          "name_lang": "Branch",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 3,
+      "fields": {
+        "name_en": "Group of Companies",
+        "name_ru": "Группа компаний",
+        "sort": 15,
+        "is_active": true
+      }
     },
     {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 5,
-        "fields": {
-          "name": "Обособленное подразделение",
-          "sort": "25",
-          "name_lang": "Separate division",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 4,
+      "fields": {
+        "name_en": "Branch",
+        "name_ru": "Филиал",
+        "sort": 20,
+        "is_active": true
+      }
     },
     {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 6,
-        "fields": {
-          "name": "Представительство",
-          "sort": "30",
-          "name_lang": "Representation",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 5,
+      "fields": {
+        "name_en": "Separate department",
+        "name_ru": "Обособленное подразделение",
+        "sort": 25,
+        "is_active": true
+      }
     },
     {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 7,
-        "fields": {
-          "name": "Отделение",
-          "sort": "35",
-          "name_lang": "Office",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 6,
+      "fields": {
+        "name_en": "Representation",
+        "name_ru": "Представительство",
+        "sort": 30,
+        "is_active": true
+      }
     },
     {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 8,
-        "fields": {
-          "name": "Отдел",
-          "sort": "40",
-          "name_lang": "Department",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 7,
+      "fields": {
+        "name_en": "Office",
+        "name_ru": "Отделение",
+        "sort": 35,
+        "is_active": true
+      }
     },
     {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 9,
-        "fields": {
-          "name": "Сектор",
-          "sort": "45",
-          "name_lang": "Sector",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 8,
+      "fields": {
+        "name_en": "Division",
+        "name_ru": "Отдел",
+        "sort": 40,
+        "is_active": true
+      }
     },
     {
-        "model": "companies.Dict_CompanyStructureType",
-        "pk": 10,
-        "fields": {
-          "name": "Группа",
-          "sort": "50",
-          "name_lang": "Group",
-          "is_active": "1"        
-        }
-    },
-
-    {
-        "model": "companies.Dict_CompanyType",
-        "pk": 1,
-        "fields": {
-          "name": "Поставщик",
-          "sort": "5",
-          "name_lang": "Provider",
-          "is_active": "1"        
-        }
-    },          
-    {
-        "model": "companies.Dict_CompanyType",
-        "pk": 2,
-        "fields": {
-          "name": "Покупатель",
-          "sort": "10",
-          "name_lang": "Buyer",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 9,
+      "fields": {
+        "name_en": "Sector",
+        "name_ru": "Сектор",
+        "sort": 45,
+        "is_active": true
+      }
     },
     {
-        "model": "companies.Dict_CompanyType",
-        "pk": 3,
-        "fields": {
-          "name": "Партнёр",
-          "sort": "15",
-          "name_lang": "Partner",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_CompanyType",
-        "pk": 4,
-        "fields": {
-          "name": "Подрядчик",
-          "sort": "20",
-          "name_lang": "Contractor",
-          "is_active": "1"        
-        }
+      "model": "companies.dict_companystructuretype",
+      "pk": 10,
+      "fields": {
+        "name_en": "Group",
+        "name_ru": "Группа",
+        "sort": 50,
+        "is_active": true
+      }
     },
     
     {
-        "model": "companies.Dict_ContentPlace",
-        "pk": 1,
-        "fields": {
-          "name": "Внешний сайт",
-          "sort": "5",
-          "name_lang": "External Site",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_ContentPlace",
-        "pk": 2,
-        "fields": {
-          "name": "Контент организации",
-          "sort": "10",
-          "name_lang": "Organization Content",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_ContentPlace",
-        "pk": 3,
-        "fields": {
-          "name": "Для профиля",
-          "sort": "15",
-          "name_lang": "For Profile",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_ContentPlace",
-        "pk": 4,
-        "fields": {
-          "name": "Личный контент",
-          "sort": "20",
-          "name_lang": "Personal Content",
-          "is_active": "1"        
-        }
-    },
-    
-    {
-        "model": "companies.Dict_ContentType",
-        "pk": 1,
-        "fields": {
-          "name": "Новость",
-          "sort": "5",
-          "name_lang": "News",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_ContentType",
-        "pk": 2,
-        "fields": {
-          "name": "Объявление",
-          "sort": "10",
-          "name_lang": "Announcement",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_ContentType",
-        "pk": 3,
-        "fields": {
-          "name": "Блог",
-          "sort": "15",
-          "name_lang": "Blog",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_ContentType",
-        "pk": 4,
-        "fields": {
-          "name": "Заметка",
-          "sort": "20",
-          "name_lang": "Note",
-          "is_active": "1"        
-        }
-    },             
-
-    {
-        "model": "companies.Dict_PositionType",
-        "pk": 1,
-        "fields": {
-          "name": "Руководитель высшего звена",
-          "sort": "5",
-          "name_lang": "Top Manager",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_PositionType",
-        "pk": 2,
-        "fields": {
-          "name": "Руководитель среднего звена",
-          "sort": "10",
-          "name_lang": "Middle Manager",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_PositionType",
-        "pk": 3,
-        "fields": {
-          "name": "Руководитель низшего звена",
-          "sort": "15",
-          "name_lang": "Lower Level Manager",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_PositionType",
-        "pk": 4,
-        "fields": {
-          "name": "Специалист",
-          "sort": "20",
-          "name_lang": "Expert",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_PositionType",
-        "pk": 5,
-        "fields": {
-          "name": "Менеджер",
-          "sort": "25",
-          "name_lang": "Manager",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_PositionType",
-        "pk": 6,
-        "fields": {
-          "name": "Инженер",
-          "sort": "30",
-          "name_lang": "Engineer",
-          "is_active": "1"        
-        }
-    },
-    {
-        "model": "companies.Dict_PositionType",
-        "pk": 7,
-        "fields": {
-          "name": "Рабочий",
-          "sort": "35",
-          "name_lang": "Worker",
-          "is_active": "1"        
-        }
-    },
-    
-    {
-      "model": "companies.company",
+      "model": "companies.dict_companytype",
       "pk": 1,
-      "fields": {      
-        "author_id": 1,
-        "currency_id": 1,
-        "datecreate": "2021-03-04 13:00:00.0000000",
-        "description": "<p><em><strong><img alt=\"\" src=\"/media/uploads/2020/02/29/larimar_2.png\" />&nbsp;Компания Larimar IT Group</strong></em></p>",
-        "is_active": "1",
-        "level": "0",
-        "lft": "1",
-        "name": "Larimar IT Group",
-        "parent_id": null,
-        "rght": "1",
-        "structure_type_id": "1",
-        "tree_id": "1",
-        "type_id": "1"
-    }
-  }
+      "fields": {
+        "name_ru": "Поставщик",
+        "name_en": "Provider",
+        "sort": 5,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_companytype",
+      "pk": 2,
+      "fields": {
+        "name_ru": "Покупатель",
+        "name_en": "Buyer",
+        "sort": 10,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_companytype",
+      "pk": 3,
+      "fields": {
+        "name_ru": "Партнёр",
+        "name_en": "Partner",
+        "sort": 15,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_companytype",
+      "pk": 4,
+      "fields": {
+        "name_ru": "Подрядчик",
+        "name_en": "Contractor",
+        "sort": 20,
+        "is_active": true
+      }
+    },
+    
+    {
+      "model": "companies.dict_contentplace",
+      "pk": 1,
+      "fields": {
+        "name_ru": "Внешний сайт",
+        "name_en": "External Site",
+        "sort": 1,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_contentplace",
+      "pk": 2,
+      "fields": {
+        "name_ru": "Контент организации",
+        "name_en": "Organization Content\n",
+        "sort": 5,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_contentplace",
+      "pk": 3,
+      "fields": {
+        "name_ru": "Для профиля",
+        "name_en": "For Profile",
+        "sort": 10,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_contentplace",
+      "pk": 4,
+      "fields": {
+        "name_ru": "Личный контент",
+        "name_en": "Personal Content",
+        "sort": 15,
+        "is_active": true
+      }
+    },
+    
+    {
+      "model": "companies.dict_contenttype",
+      "pk": 1,
+      "fields": {
+        "name_ru": "Новость",
+        "name_en": "News",
+        "sort": 1,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_contenttype",
+      "pk": 2,
+      "fields": {
+        "name_ru": "Объявление",
+        "name_en": "Announcement",
+        "sort": 5,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_contenttype",
+      "pk": 3,
+      "fields": {
+        "name_ru": "Блог",
+        "name_en": "Blog",
+        "sort": 10,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_contenttype",
+      "pk": 4,
+      "fields": {
+        "name_ru": "Заметка",
+        "name_en": "Note",
+        "sort": 15,
+        "is_active": true
+      }
+    },
+    
+    {
+      "model": "companies.dict_positiontype",
+      "pk": 1,
+      "fields": {
+        "name_ru": "Руководитель высшего звена",
+        "name_en": "Top manager",
+        "sort": 1,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_positiontype",
+      "pk": 2,
+      "fields": {
+        "name_ru": "Руководитель среднего звена",
+        "name_en": "Middle manager",
+        "sort": 5,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_positiontype",
+      "pk": 3,
+      "fields": {
+        "name_ru": "Руководитель низшего звена",
+        "name_en": "Lower Level Manager",
+        "sort": 10,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_positiontype",
+      "pk": 4,
+      "fields": {
+        "name_ru": "Специалист",
+        "name_en": "Expert",
+        "sort": 15,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_positiontype",
+      "pk": 5,
+      "fields": {
+        "name_ru": "Менеджер",
+        "name_en": "Manager",
+        "sort": 20,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_positiontype",
+      "pk": 6,
+      "fields": {
+        "name_ru": "Инженер",
+        "name_en": "Engineer",
+        "sort": 12,
+        "is_active": true
+      }
+    },
+    {
+      "model": "companies.dict_positiontype",
+      "pk": 7,
+      "fields": {
+        "name_ru": "Рабочий",
+        "name_en": "Worker",
+        "sort": 30,
+        "is_active": true
+      }
+    }    
 
 ]
