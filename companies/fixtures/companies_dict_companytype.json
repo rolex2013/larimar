@@ -1,0 +1,42 @@
+[
+    {
+        "model": "companies.dict_companytype",
+        "pk": 1,
+        "fields": {
+            "name_ru": "Поставщик",
+            "name_en": "Provider",
+            "sort": 5,
+            "is_active": true
+        }
+    },
+    {
+        "model": "companies.dict_companytype",
+        "pk": 2,
+        "fields": {
+            "name_ru": "Покупатель",
+            "name_en": "Buyer",
+            "sort": 10,
+            "is_active": true
+        }
+    },
+    {
+        "model": "companies.dict_companytype",
+        "pk": 3,
+        "fields": {
+            "name_ru": "Партнёр",
+            "name_en": "Partner",
+            "sort": 15,
+            "is_active": true
+        }
+    },
+    {
+        "model": "companies.dict_companytype",
+        "pk": 4,
+        "fields": {
+            "name_ru": "Подрядчик",
+            "name_en": "Contractor",
+            "sort": 20,
+            "is_active": true
+        }
+    }
+]
