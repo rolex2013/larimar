@@ -60,12 +60,12 @@ class UserAddForm(forms.ModelForm):
         fields = ['user']
         widgets = {'user': UserSelect}
 
-class UserEnviteForm(forms.ModelForm):
+class UserInviteForm(forms.ModelForm):
     password = forms.CharField(label=_('Пароль'), widget=forms.PasswordInput)
     password2 = forms.CharField(label=_('Повторно'), widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
-        super(UserEnviteForm, self).__init__(*args, **kwargs)
+        super(UserInviteForm, self).__init__(*args, **kwargs)
         self.fields['is_staff'].help_text = '<br />('+_('отметьте, если это сотрудник вашей Организации')+')'
 
     class Meta:

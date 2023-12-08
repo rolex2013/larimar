@@ -27,7 +27,7 @@ from django.contrib.auth.views import LogoutView
 
 # from django.core import serializers
 
-from .forms import UserRegistrationForm, UserEnviteForm, UserAddForm, UserProfileForm
+from .forms import UserRegistrationForm, UserInviteForm, UserAddForm, UserProfileForm
 
 from main.models import Component, Notification, Meta_ObjectType
 
@@ -154,7 +154,9 @@ class ELoginView(View):
             request.session["_auth_user_group_id"] = list(set(usergroups_list))
             if 1 in request.session["_auth_user_group_id"]:
                 components_list = list(
-                    Component.objects.filter(is_active=True).values_list("id", flat=True)
+                    Component.objects.filter(is_active=True).values_list(
+                        "id", flat=True
+                    )
                 )
             else:
                 components_list = list(
@@ -164,6 +166,7 @@ class ELoginView(View):
                 )
                 # print(current_company)
             request.session["_auth_user_component_id"] = list(set(components_list))
+            request.session[settings.LANGUAGE_COOKIE_NAME] = current_profile.lang
             request.session.modified = True
             # ======================
             # получаем предыдущий url
@@ -471,9 +474,9 @@ def add(request, companyid=1):
     )
 
 
-def envite(request, companyid=1):
+def invite(request, companyid=1):
     if request.method == "POST":
-        user_form = UserEnviteForm(request.POST)
+        user_form = UserInviteForm(request.POST)
         if user_form.is_valid():
             # Create a new user object but avoid saving it yet
             new_user = user_form.save(commit=False)
@@ -577,16 +580,16 @@ def envite(request, companyid=1):
                 "registration/register_done.html",
                 {
                     "new_user": new_user,
-                    "param": "envite",
+                    "param": "invite",
                     "companyid": companyid,
                 },
             )
     else:
-        user_form = UserEnviteForm()
+        user_form = UserInviteForm()
     return render(
         request,
         "registration/register.html",
-        {"user_form": user_form, "param": "envite", "companyid": companyid},
+        {"user_form": user_form, "param": "invite", "companyid": companyid},
     )
 
 

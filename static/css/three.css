@@ -151,7 +151,6 @@ body {
 .object-detail a {
     color: rgb(180, 180, 180);
     text-shadow: 1px 1px #fff;
-
 }
 .object-detail a:hover{
     color: #000;
@@ -975,4 +974,13 @@ body {
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+.text-localization {
+    font-weight: bold;
+    text-shadow: 2px 8px 6px rgba(0, 0, 0, 0.2), 0px -5px 35px rgba(255, 255, 255, 0.3);
+}
+
+.text-localization a {
+    text-decoration: none;
 }

@@ -140,6 +140,7 @@ class ModelLog(TranslateFieldMixin, models.Model):
         verbose_name = _('История Объекта')
         verbose_name_plural = _('Истории Объектов')
 
+
 class Menu(TranslateFieldMixin, models.Model):
     name_ru = models.CharField(_("Наименование_ru"), max_length=128)
     name_en = models.CharField(_("Наименование_en"), max_length=128, blank=True, null=True)
@@ -147,7 +148,7 @@ class Menu(TranslateFieldMixin, models.Model):
     base_url = models.CharField(_("Основной URL"), max_length=128)
     description_ru = models.TextField(_("Описание_ru"), blank=True, null=True)
     description_en = models.TextField(_("Описание_en"), blank=True, null=True)
-    #sort = models.PositiveSmallIntegerField(default=5, blank=True, null=True)
+    # sort = models.PositiveSmallIntegerField(default=5, blank=True, null=True)
     is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
@@ -160,20 +161,21 @@ class Menu(TranslateFieldMixin, models.Model):
 
     def __str__(self):
         return (self.name)
-    
+
     class Meta:
         #ordering = 'sort'
         verbose_name = _('Список меню')
         verbose_name_plural = _('Списки меню')
 
+
 class MenuItem(TranslateFieldMixin, MPTTModel):
-    #title = models.CharField(_("Наименование"), max_length=128)
+    # title = models.CharField(_("Наименование"), max_length=128)
     title_ru = models.CharField(_("Наименование_ru"), default='title', max_length=128)
     title_en = models.CharField(_("Наименование_en"), default='title', max_length=128)
     menu = models.ForeignKey('Menu', on_delete=models.CASCADE, related_name='menuitem_menu', verbose_name=_("Меню"))
     component = models.ForeignKey('Component', null=True, blank=True, on_delete=models.CASCADE, related_name='menuitem_component',
                                   verbose_name=_("Компонент"))
-    #description = models.TextField("Описание", null=True, blank=True) 
+    # description = models.TextField("Описание", null=True, blank=True) 
     description_ru = models.TextField(_("Описание_ru"), null=True, blank=True)
     description_en = models.TextField(_("Описание_en"), null=True, blank=True)
     link_url = models.CharField("URL", max_length=128)

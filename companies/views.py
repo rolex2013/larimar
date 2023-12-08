@@ -186,13 +186,13 @@ def stafflist(request, companyid=0, pk=0):
 
     # здесь нужно условие для button_stafflist_create
     #button_stafflist_create = ''
-    button_stafflist_create = 'Добавить'
+    button_stafflist_create = _('Добавить')
     #button_stafflist = "Штатное расписание"
 
-    button_company_select = 'Сменить организацию'  
+    button_company_select = _('Сменить организацию')
     comps = request.session['_auth_user_companies_id']
     if len(comps) > 1:
-       button_company_select = 'Сменить организацию'  
+       button_company_select = _('Сменить организацию'  )
 
     component_name = 'companies'    
     #unodes = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid).exclude(user_id=currentuser).distinct().order_by('user_id')
@@ -210,7 +210,7 @@ def stafflist(request, companyid=0, pk=0):
 
     button_company_create = ''
     button_company_update = ''
-    button_user_envite = ''
+    button_user_invite = ''
     button_user_create = ''
     button_stafflist_create = ''  
     #print(unodes)
@@ -218,7 +218,7 @@ def stafflist(request, companyid=0, pk=0):
     if currentuser == current_company.author_id:
        button_company_create = _('Добавить')
        button_company_update = _('Изменить')
-       button_user_envite = _('Пригласить')
+       button_user_invite = _('Пригласить')
        button_user_create = _('Добавить')
        if len(nodes) == 0:
           # в Компании может быть только один руководитель!
@@ -232,14 +232,14 @@ def stafflist(request, companyid=0, pk=0):
                               'tree_stafflist_id': tree_stafflist_id,
                               'current_company': current_company,
                               'companyid': companyid,
-                              'user_companies': comps, 
-                              'button_company_select' : button_company_select,
+                              'user_companies': comps,
+                              'button_company_select': button_company_select,
                               'button_company_create': button_company_create,
-                              'button_company_update' : button_company_update,                                             
+                              'button_company_update': button_company_update,                                             
                               #'button_StaffList': button_stafflist,
-                              'button_user_envite': button_user_envite,
+                              'button_user_invite': button_user_invite,
                               'button_user_create': button_user_create,
-                              'button_stafflist_create' : button_stafflist_create,
+                              'button_stafflist_create': button_stafflist_create,
                               'object_list': 'stafflist_list',
                               'component_name': component_name, 
                                             })
@@ -290,7 +290,7 @@ def staffs(request, stafflistid=0, pk=0):
     if pk == 0:
        current_staff = 0
        staff_id = 0
-       #template_name = "stafflist.html"
+       # template_name = "stafflist.html"
     else:
        current_staff = Staff.objects.get(id=pk)
     template_name = "stafflist_detail.html"
@@ -298,11 +298,11 @@ def staffs(request, stafflistid=0, pk=0):
     # здесь нужно условие для button_stafflist_create
     button_stafflist_create = ''
     button_stafflist_create = _('Добавить')
-    #button_stafflist = _("Штатное расписание")
+    # button_stafflist = _("Штатное расписание")
 
-    #button_company_select = _('Сменить организацию')
+    # button_company_select = _('Сменить организацию')
     comps = request.session['_auth_user_companies_id']
-    #if len(comps) > 1:
+    # if len(comps) > 1:
     #   button_company_select = _('Сменить организацию')
 
     component_name = 'companies' 
@@ -499,24 +499,26 @@ def contents(request, place=0):
      # юзер имеет право на добавление контента
      # это реализовано в шаблоне через штатный perms.companies.add_content
     button_content_create = ''
-    #is_add2 = 'SELECT p.id FROM auth_user_groups ug INNER JOIN auth_user u ON u.id=ug.user_id INNER JOIN auth_group_permissions gp ON gp.group_id=ug.group_id INNER JOIN auth_permission p ON p.id=gp.permission_id WHERE u.is_superuser OR (ug.user_id=2 AND p.codename="add_content")'
-    #is_add1 = 'SELECT p.id FROM auth_user_user_permissions uup INNER JOIN auth_permission p ON p.id=uup.permission_id WHERE uup.user_id=3 AND p.codename="add_content"'
-    #is_add.query = auth_user_user_permissions.objects.filter(user_id=3, auth_permission__codename='add_content').values('auth_permission__id')
-    #u = User.objects.add_content(username='larimarit')
-    #is_add = u.has_perm('add_content')
-    #if is_add:
-    #   button_content_create = 'Добавить'
-    #else:
-    #   if is_add2:
-    #      button_content_create = 'Добавить'
-    #print(template_name)
+   #  is_add2 = 'SELECT p.id FROM auth_user_groups ug INNER JOIN auth_user u ON u.id=ug.user_id INNER JOIN auth_group_permissions gp ON gp.group_id=ug.group_id INNER JOIN auth_permission p ON p.id=gp.permission_id WHERE u.is_superuser OR (ug.user_id=2 AND p.codename="add_content")'
+   #  is_add1 = 'SELECT p.id FROM auth_user_user_permissions uup INNER JOIN auth_permission p ON p.id=uup.permission_id WHERE uup.user_id=3 AND p.codename="add_content"'
+   #  is_add.query = auth_user_user_permissions.objects.filter(user_id=3, auth_permission__codename='add_content').values('auth_permission__id')
+   #  u = User.objects.add_content(username='larimarit')
+   #  is_add = u.has_perm('add_content')
+   #  if is_add:
+   #    button_content_create = 'Добавить'
+   #  else:
+   #    if is_add2:
+   #       button_content_create = 'Добавить'
+   #  print(template_name)
     return render(request, template_name, {
                               'content_list': content_list,
                               'user_companies': companies_id, #request.session['_auth_user_companies_id'],
                               'button_content_create': button_content_create,                              
-                                            })  
+                                            })
+
 
 def publiccontents(request):
+
     template_name = 'index.html'
     #content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, is_public=True, is_forprofile=False, is_private=False).annotate(cnt=Count('id'))
     content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, place__is_active=True, place_id=1).select_related("author", "type", "place").annotate(cnt=Count('id'))
@@ -525,6 +527,7 @@ def publiccontents(request):
                               'content_list': content_list,
                               'param': param,                              
                                             })
+
 
 class ContentList(ListView):
     model = Content
@@ -535,12 +538,12 @@ class ContentList(ListView):
     def get_context_data(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             context = super().get_context_data(**kwargs)
-            #current_membership = get_user_membership(self.request)
-            #context['current_membership'] = str(current_membership.membership)
+            # current_membership = get_user_membership(self.request)
+            # context['current_membership'] = str(current_membership.membership)
             # добавляем к контексту сессионный массив с id компаний, доступными этому авторизованному юзеру
-            #button_company_select = 'Сменить организацию'
+            # button_company_select = 'Сменить организацию'
             context['user_companies'] = self.request.session['_auth_user_companies_id']
-            #context['button_company_select'] = button_company_select
+            # context['button_company_select'] = button_company_select
             return context
 
 class ContentDetail(DetailView):

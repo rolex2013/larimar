@@ -1,9 +1,11 @@
 
 <div id="ajax_listresult">
 
+   {% load i18n %}
+
    <div class="object-list">
         
-      <h5>Роли</h5>
+      <h5>{% trans 'Роли' %}</h5>
    
       {% comment %}
       <div class="object-list-buttons">        
@@ -15,7 +17,7 @@
       <form method="GET">
          {% csrf_token %}
          <div class="object-list-filters">
-             <label>Компонент: </label>
+             <label>{% trans 'Компонент' %}: </label>
              <select name="select-component" id="componentselectid" class="select-component">
 
                 {% for component in componentlist %}
@@ -24,7 +26,7 @@
                    </option>   
                 {% endfor %}
              </select>&nbsp;             
-             <label>Группа: </label>
+             <label>{% trans 'Группа' %}: </label>
              <select name="select-group" id="groupselectid" class="select-group">
                 {% for group in grouplist %}
                    <option value="{{group.id}}" {% if group.id == group_selectid|add:"0" %} selected="selected" {% endif %}>

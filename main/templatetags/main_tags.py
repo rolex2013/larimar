@@ -15,15 +15,15 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def left_menu(context, menuid=0, is_auth=False):
-    #print(RequestContext)
-    #print(request)
-    #print('LANGUAGE_CODE:', settings.LANGUAGE_CODE, 'settings.LANGUAGE_SESSION_KEY:',
+    # print(RequestContext)
+    # print(request)
+    # print('LANGUAGE_CODE:', settings.LANGUAGE_CODE, 'settings.LANGUAGE_SESSION_KEY:',
     #      settings.LANGUAGE_SESSION_KEY, 'settings.LANGUAGE_COOKIE_NAME:', settings.LANGUAGE_COOKIE_NAME)
-    #select_lang(RequestContext)
+    # select_lang(RequestContext)
     try:
         compid = context.request.session['_auth_user_component_id']
-        if is_auth == True:
-           #group = UserCompanyComponentGroup.objects.get(user_id=context.request.user, company_id=, component_id='1').order_by('-group_id')
+        if is_auth: # is True:
+           # group = UserCompanyComponentGroup.objects.get(user_id=context.request.user, company_id=, component_id='1').order_by('-group_id')
            if menuid == 0:
               nodes = MenuItem.objects.filter(Q(menu_id=2) & Q(is_active=True) & (Q(component_id__in=compid) | Q(component_id__in=[]) | Q(component_id=1)))   # Главное (левое) меню
            else:
@@ -32,9 +32,10 @@ def left_menu(context, menuid=0, is_auth=False):
            nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
     except:
         nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
-        #print(nodes, context.request.session['_auth_user_component_id'])
+        # print(nodes, context.request.session['_auth_user_component_id'])
     return (nodes.order_by('sort'))
-    #return (nodes)
+    # return (nodes)
+
 
 @register.simple_tag(takes_context=True)
 def group_name(context, is_auth=False):

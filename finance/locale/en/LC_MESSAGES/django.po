@@ -8,80 +8,79 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-21 18:22+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2023-12-07 14:10+0300\n"
+"PO-Revision-Date: 2023-12-08 15:58+0300\n"
+"Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: .\finance\models.py:14
+#: finance/models.py:14
 msgid "Наименование_ru"
 msgstr "Name_ru"
 
-#: .\finance\models.py:14 .\finance\models.py:15
+#: finance/models.py:14 finance/models.py:15
 msgid "Наименование валюты"
 msgstr "Name of the currency "
 
-#: .\finance\models.py:15
+#: finance/models.py:15
 msgid "Наименование_en"
 msgstr "Name_en"
 
-#: .\finance\models.py:16
+#: finance/models.py:16
 msgid "Краткое наименование_ru"
 msgstr "Short name_ru"
 
-#: .\finance\models.py:17
+#: finance/models.py:17
 msgid "Краткое наименование_en"
 msgstr "Short name _n"
 
-#: .\finance\models.py:18
+#: finance/models.py:18
 msgid "Символ"
 msgstr "Symbol"
 
-#: .\finance\models.py:21
+#: finance/models.py:21
 msgid "Активность"
 msgstr "Activity"
 
-#: .\finance\models.py:46
-#, fuzzy
+#: finance/models.py:46
 #| msgid "Курсы валют"
 msgid "Вид валюты"
-msgstr "Exchange rates"
+msgstr "Currency Type"
 
-#: .\finance\models.py:47
-#, fuzzy
+#: finance/models.py:47
 #| msgid "Курсы валют"
 msgid "Виды валют"
-msgstr "Exchange rates"
+msgstr "Currency Types"
 
-#: .\finance\templates\finance_detail.html:9
+#: finance/templates/finance_detail.html:9
 msgid "Курсы валют"
 msgstr "Exchange rates"
 
-#: .\finance\templates\finance_detail.html:9
+#: finance/templates/finance_detail.html:9
 msgid "за 1 ед."
 msgstr "for 1 unit"
 
-#: .\finance\templates\finance_detail.html:20
+#: finance/templates/finance_detail.html:20
 msgid "Фильтр по дате"
 msgstr "Date filter"
 
-#: .\finance\templates\finance_detail.html:30
+#: finance/templates/finance_detail.html:30
 msgid "c"
 msgstr "from"
 
-#: .\finance\templates\finance_detail.html:30
+#: finance/templates/finance_detail.html:30
 msgid "по"
 msgstr "to"
 
-#: .\finance\templates\finance_detail.html:31
+#: finance/templates/finance_detail.html:31
 msgid "Фильтр по валюте"
 msgstr "Currency filter"
 
-#: .\finance\templates\finance_detail.html:40
+#: finance/templates/finance_detail.html:40
 msgid "Применить"
 msgstr "Apply"

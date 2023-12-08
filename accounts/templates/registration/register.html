@@ -64,7 +64,7 @@
             <h3>{% trans 'Приглашение нового пользователя' %}</h3>
             <p>{% trans 'Пожалуйста, заполните все поля формы' %}:</p>
             <!--<div class="col-md-offset-3 col-md-6 voffset-60">-->
-            <form action="{% url 'my_account:envite' companyid %}" method="post">
+            <form action="{% url 'my_account:invite' companyid %}" method="post">
                 <!--{ load bootstrap4 %}-->
                 {% csrf_token %}
                 {{ user_form.as_p }}

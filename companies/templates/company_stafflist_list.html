@@ -2,6 +2,7 @@
    <div class="d-tr">
       <div class="d-td-text">
 {% endcomment %}         
+         {% load i18n %}
          {% load mptt_tags %}
          <ul>
            {% recursetree nodes %}
@@ -9,12 +10,12 @@
               {% if node.is_vacancy %}         
                  <b><a href="{% url 'my_company:summaries' node.pk %}">{{ node.name }}</a><span style="font-size: 70%; color: green;"> {{ node.datecreate|date:"d.m.Y" }} | 
                  <!--<span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | -->
-                 {{ node.currency.symbol }}{{ node.salary }} | Кол-во: {{ node.numberemployees }}
+                 {{ node.currency.symbol }}{{ node.salary }} | {% trans 'Кол-во' %}: {{ node.numberemployees }}
                  </span></b><br />
               {% else %}
                  <b><a href="{% url 'my_company:staffs' node.pk 0 %}">{{ node.name }}</a><span style="font-size: 70%; color: green;"> {{ node.datecreate|date:"d.m.Y" }} | 
                  <!--<span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a> | -->
-                 {{ node.currency.symbol }}{{ node.salary }} | Кол-во: {{ node.numberemployees }}
+                 {{ node.currency.symbol }}{{ node.salary }} | {% trans 'Кол-во' %}: {{ node.numberemployees }}
                  </span></b><br />
               {% endif %}     
               {% if not node.is_leaf_node %}

@@ -16,7 +16,7 @@ class LocaleMiddleware(MiddlewareMixin):
             return response
 
         user_lang = UserProfile.objects.filter(user=user).first().lang
-        #print('middleware:', user_lang)
+        # print('middleware:', user_lang)
         if not user_lang:
             return response
 

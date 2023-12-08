@@ -4,6 +4,8 @@
 
 {% block content %}
 
+   {% load i18n %}
+
    <!-- Защита от прямого доступа к контенту -->
    <!--{ object.company_id }} / { user_companies }}-->
    <!--{ if object.company_id in user_companies %}-->
@@ -16,11 +18,11 @@
         <p>{{ content.announcement }}</p>
         <p>{% autoescape off %} {{ object.description }}{% endautoescape %}</p>
 
-        Тип: {{ object.type }}<br />
+        {% trans 'Тип' %}: {{ object.type }}<br />
         <!--<em>Автор: {{ object.author }}</em><br /> -->
-        <em>{{ whoisauthor }}</em><br />
-        <em>Дата: {{ object.datecreate }}</em>
-        <br /><br />
+        <em>{{ whoisauthor }}</em>
+        <em>{% trans 'Дата' %}: {{ object.datecreate }}</em>
+        <br />
         <!--{user.is_authenticated}} and {user.id}} == {object.author_id}}-->
         {% if user.is_authenticated and user.id == object.author_id %}
            <!--{ button_content_create }}-->

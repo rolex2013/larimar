@@ -12,12 +12,12 @@
       <div class="object-detail">
 
         <h2>{{ current_company.name }}
-        {% if not current_company.is_active %}(Организация перемещена в архив){% endif %}
+        {% if not current_company.is_active %}{% trans '(Организация перемещена в архив)' %}{% endif %}
         </h2>
         <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
 
         {% if current_company.parent.pk %}
-           <i><p>Организация:
+           <i><p>{% trans 'Организация' %}:
            {% if component_name == 'companies' %}
                 <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
                 <a href="{% url 'my_company:stafflist' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
@@ -51,10 +51,10 @@
            Это головная организация-->
         {% endif %}
 
-        <p>Тип в оргструктуре: {{ current_company.structure_type }}</p>
-        <p>Тип: {{ current_company.type }}</p>
-        <em>Автор: {{ current_company.author }}</em>
-        <em>Дата: {{ current_company.datecreate }}</em>
+        <p>{% trans 'Тип в оргструктуре' %}: {{ current_company.structure_type }}</p>
+        <p>{% trans 'Тип' %}: {{ current_company.type }}</p>
+        <em>{% trans 'Автор' %}: {{ current_company.author }}</em>
+        <em>{% trans 'Дата' %}: {{ current_company.datecreate }}</em>
         <br />
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
           <div class="object-detail-buttons">
@@ -96,8 +96,8 @@
 
    {% else %}
 
-     <h4>Информация об организации недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
-     <em>Пожалуйста, обратитесь к администратору.</em>
+     <h4>{% trans 'Информация об организации недоступна!' %}</h4> <!--{ current_company.id }}/{ user_companies }}-->
+     <em>{% trans 'Пожалуйста, обратитесь к администратору.' %}</em>
 
    {% endif %}  
 
@@ -114,11 +114,11 @@
 
          <div class="object-list-wrapper">
             <div class="object-list-left">
-               <h4>Пользователи</h4>
+               <h4>{% trans 'Пользователи' %}</h4>
                <div id="ajax_userslistresult">{% include 'company_users_list.html' %}</div>          
             </div>
             <div class="object-list-right">
-               <h4>Штатное расписание</h4>                    
+               <h4>{% trans 'Штатное расписание' %}</h4>                    
                <!--<div id="ajax_listresult">{ include 'objects_list.html' %}</div>-->
                <div id="ajax_listresult">{% include 'company_stafflist_list.html' %}</div>              
             </div>
@@ -126,7 +126,7 @@
       
          {% elif component_name == 'crm' %}
 
-            <h4>Клиенты</h4> 
+            <h4>{% trans 'Клиенты' %}</h4> 
 
             {% if len_list %}
 
@@ -134,9 +134,9 @@
             <form method="GET">
                {% csrf_token %}
                <div class="object-list-filters">
-                   <label>По статусу: </label>
+                   <label>{% trans 'По статусу' %}: </label>
                    <select name="select-clientstatus" id="statusselectid" class="select-client-status">
-                      <option value="-1" {% if "-1" == clntstatus_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <option value="-1" {% if "-1" == clntstatus_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
                       <!--<option value="0" { if 0 == clntstatus_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
                       <option value="-2" { if "-2" == clntstatus_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                       {% for clntstatus in clientstatus %}
@@ -145,9 +145,9 @@
                          </option>   
                       {% endfor %}
                    </select>
-                   <label>По типу: </label>
+                   <label>{% trans 'По типу' %}: </label>
                    <select name="select-clienttype" id="typeselectid" class="select-client-type">
-                      <option value="-1" {% if "-1" == clnttype_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <option value="-1" {% if "-1" == clnttype_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
                       <!--<option value="0" { if 0 clnttype_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
                       <option value="-2" { if "-2" clnttype_selectid %} selected="selected" { endif %}>- Просроченные</option>-->   
                       {% for clnttype in clienttype %}
@@ -156,14 +156,14 @@
                          </option>   
                       {% endfor %}
                    </select>               
-                   <label>Мои клиенты: </label>
+                   <label>{% trans 'Мои клиенты' %}: </label>
                    <select name="select-myclient" id="myselectid" class="select-my-client">
-                      <option value="-1" {% if "-1" == clntstatus_myselectid %} selected="selected" {% endif %}>- Все</option>
-                      <option value="0" {% if "0" == clntstatus_myselectid %} selected="selected" {% endif %}>- Я участник</option>
-                      <option value="1" {% if "1" == clntstatus_myselectid %} selected="selected" {% endif %}>- Я автор</option>
-                      <option value="2" {% if "2" == clntstatus_myselectid %} selected="selected" {% endif %}>- Я менеджер</option>
+                      <option value="-1" {% if "-1" == clntstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
+                      <option value="0" {% if "0" == clntstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я участник' %}</option>
+                      <option value="1" {% if "1" == clntstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я автор' %}</option>
+                      <option value="2" {% if "2" == clntstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я менеджер' %}</option>
                    </select>            
-                   <button id="selection-button-client" type="submit" method="GET" class="object-filter-button">Применить</button>
+                   <button id="selection-button-client" type="submit" method="GET" class="object-filter-button">{% trans 'Применить' %}</button>
                </div>
             </form>
 
@@ -171,13 +171,13 @@
 
             {% else %}
 
-               <p>Клиентов пока нет...</p>
+               <p>{% trans 'Клиентов пока нет...' %}</p>
 
             {% endif %}
 
          {% elif component_name == 'docs' %}
 
-            <h4>Документы</h4>
+            <h4>{% trans 'Документы' %}</h4>
 
             {% if len_list %}
 
@@ -185,9 +185,9 @@
             <form method="GET">
                {% csrf_token %}
                <div class="object-list-filters">
-                   <label>По статусу: </label>
+                   <label>{% trans 'По статусу' %}: </label>
                    <select name="select-docstatus" id="statusselectid" class="select-doc-status">
-                      <option value="-1" {% if "-1" == dcstatus_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <option value="-1" {% if "-1" == dcstatus_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
                       <!--<option value="0" { if 0 == dcstatus_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
                       <option value="-2" { if "-2" == dctstatus_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                       {% for dcstatus in docstatus %}
@@ -196,24 +196,24 @@
                          </option>
                       {% endfor %}
                    </select>
-                   <label>По типу: </label>
+                   <label>{% trans 'По типу' %}: </label>
                    <select name="select-doctype" id="typeselectid" class="select-doc-type">
-                      <option value="-1" {% if "-1" == dctype_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <option value="-1" {% if "-1" == dctype_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
                       {% for dctype in doctype %}
                          <option value="{{dctype.id}}" {% if dctype.id == dcttype_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{dctype.name}}
                          </option>
                       {% endfor %}
                    </select>
-                   <label>Мои документы: </label>
+                   <label>{% trans 'Мои документы' %}: </label>
                    <select name="select-mydoc" id="myselectid" class="select-my-doc">
-                      <option value="-1" {% if "-1" == dcstatus_myselectid %} selected="selected" {% endif %}>- Все</option>
-                      <option value="0" {% if "0" == dcstatus_myselectid %} selected="selected" {% endif %}>- Я участник</option>
-                      <option value="1" {% if "1" == dcstatus_myselectid %} selected="selected" {% endif %}>- Я менеджер</option>
-                      <option value="2" {% if "2" == dcstatus_myselectid %} selected="selected" {% endif %}>- Я автор</option>
-                      {% comment %}<option value="2" {% if "2" dcstatus_myselectid %} selected="selected" {% endif %}>- Я менеджер</option>{% endcomment %}
+                      <option value="-1" {% if "-1" == dcstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
+                      <option value="0" {% if "0" == dcstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я участник' %}</option>
+                      <option value="1" {% if "1" == dcstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я менеджер' %}</option>
+                      <option value="2" {% if "2" == dcstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я автор' %}</option>
+                      {% comment %}<option value="2" {% if "2" dcstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я менеджер' %}</option>{% endcomment %}
                    </select>
-                   <button id="selection-button-doc" type="submit" method="GET" class="object-filter-button">Применить</button>
+                   <button id="selection-button-doc" type="submit" method="GET" class="object-filter-button">{% trans 'Применить' %}</button>
                </div>
             </form>
 
@@ -221,13 +221,13 @@
 
             {% else %}
 
-               <p>Документов пока нет...</p>
+               <p>{% trans 'Документов пока нет...' %}</p>
 
             {% endif %}
 
          {% elif component_name == 'files' %}
 
-            <h4>Папки</h4>
+            <h4>{% trans 'Папки' %}</h4>
 
             {% if len_list %}
 
@@ -235,30 +235,30 @@
             <form method="GET">
                {% csrf_token %}
                <div class="object-list-filters">
-                   <label>По тематике: </label>
+                   <label>{% trans 'По тематике' %}: </label>
                    <select name="select-foldertheme" id="folderthemeselectid" class="select-folder-theme">
-                      <option value="-1" {% if "-1" == foldertheme_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <option value="-1" {% if "-1" == foldertheme_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
                       {% for fldtheme in foldertheme %}
                          <option value="{{fldtheme.id}}" {% if fldtheme.id == foldertheme_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{fldtheme.name}}
                          </option>
                       {% endfor %}
                    </select>
-                   <label>По типу: </label>
+                   <label>{% trans 'По типу' %}: </label>
                    <select name="select-foldertype" id="foldertypeselectid" class="select-folder-type">
-                      <option value="-1" {% if "-1" == fldtype_selectid %} selected="selected" {% endif %}>- Все</option>
+                      <option value="-1" {% if "-1" == fldtype_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
                       {% for fldtype in foldertype %}
                          <option value="{{fldtype.id}}" {% if fldtype.id == foldertype_selectid|add:"0" %} selected="selected" {% endif %}>
                             {{fldtype.name}}
                          </option>
                       {% endfor %}
                    </select>
-                   <label>Мои папки: </label>
+                   <label>{% trans 'Мои папки' %}: </label>
                    <select name="select-myfolder" id="myfolderselectid" class="select-my-folder">
-                      <option value="-1" {% if "-1" == folder_myselectid %} selected="selected" {% endif %}>- Все</option>
-                       <option value="1" {% if "1" == folder_myselectid %} selected="selected" {% endif %}>- Я автор</option>
+                      <option value="-1" {% if "-1" == folder_myselectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
+                       <option value="1" {% if "1" == folder_myselectid %} selected="selected" {% endif %}>{% trans '- Я автор' %}</option>
                    </select>
-                   <button id="selection-button-folder" type="submit" method="GET" class="object-filter-button">Применить</button>
+                   <button id="selection-button-folder" type="submit" method="GET" class="object-filter-button">{% trans 'Применить' %}</button>
                </div>
             </form>
 
@@ -266,7 +266,7 @@
 
             {% else %}
 
-               <p>Папок пока нет...</p>
+               <p>{% trans 'Папок пока нет...' %}</p>
 
             {% endif %}
 
@@ -276,7 +276,7 @@
 
                 <div class="object-list-left">
 
-                    <h4>Тикеты</h4>
+                    <h4>{% trans 'Тикеты' %}</h4>
 
                     <!--{ if len_list %}-->
 
@@ -284,11 +284,11 @@
                         <form method="GET">
                            {% csrf_token %}
                            <div class="object-list-filters">
-                              <label>По статусу: </label>
+                              <label>{% trans 'По статусу' %}: </label>
                               <select name="select-feedbackticketstatus" id="feedbackticketstatusselectid" class="select-feedbackticket-status">
-                                 <option value="-1" {% if "-1" == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- Все</option>
-                                 <option value="0" {% if 0 == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>- Все активные</option>
-                                 <option value="-2" {% if 1 == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- Все закрытые</option>
+                                 <option value="-1" {% if "-1" == feedbackticketstatus_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
+                                 <option value="0" {% if 0 == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>{% trans '- Все активные' %}</option>
+                                 <option value="-2" {% if 1 == feedbackticketstatus_selectid %} selected="selected" {% endif %}>{% trans '- Все закрытые' %}</option>
                                  <!--<option value="-2" { if "-2" == tktstatus_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                                  {% for tktstatus in feedbackticketstatus %}
                                     <option value="{{tktstatus.id}}" {% if tktstatus.id == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>
@@ -296,9 +296,9 @@
                                     </option>
                                  {% endfor %}
                               </select>
-                              <label>По типу: </label>
+                              <label>{% trans 'По типу' %}: </label>
                               <select name="select-feedbacktickettype" id="feedbacktickettypeselectid" class="select-feedbackticket-type">
-                                 <option value="-1" {% if "-1" == feedbacktickettype_selectid %} selected="selected" {% endif %}>- Все</option>
+                                 <option value="-1" {% if "-1" == feedbacktickettype_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
                                  <!--<option value="0" { if 0 == feedbacktickettype_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
                                  <option value="-2" { if "-2" == feedbacktickettype_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                                  {% for tkttype in feedbacktickettype %}
@@ -308,13 +308,13 @@
                                  {% endfor %}
                               </select>
                               {% if is_admin_org %}
-                                  <label>Мои: </label>
+                                  <label>{% trans 'Мои' %}: </label>
                                    <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
-                                       <option value="-1" {% if "-1" == feedbackticket_myselectid %} selected="selected" {% endif %}>- Все</option>
-                                       <option value="1" {% if "1" == feedbackticket_myselectid %} selected="selected" {% endif %}>- Я автор</option>
+                                       <option value="-1" {% if "-1" == feedbackticket_myselectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
+                                       <option value="1" {% if "1" == feedbackticket_myselectid %} selected="selected" {% endif %}>{% trans '- Я автор' %}</option>
                                    </select>
                                {% endif %}
-                              <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">Применить</button>
+                              <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">{% trans 'Применить' %}</button>
                            </div>
                         </form>
 
@@ -346,7 +346,7 @@
 
          {% elif component_name == 'projects' %}
 
-            <h4>Проекты</h4>  
+            <h4>{% trans 'Проекты' %}</h4>  
             
             {% if len_list %}
 
@@ -354,25 +354,25 @@
             <form method="GET">
                {% csrf_token %}
                <div class="object-list-filters">
-                  <label>По статусу: </label>
+                  <label>{% trans 'По статусу' %}: </label>
                   <select name="select-projectstatus" id="selectid" class="select-project-status">
-                     <option value="-1" {% if "-1" == prjstatus_selectid %} selected="selected" {% endif %}>- Все</option>
-                     <option value="0" {% if 0 == prjstatus_selectid|add:"0" %} selected="selected" {% endif %}>- Все активные</option>
-                     <option value="-2" {% if "-2" == prjstatus_selectid %} selected="selected" {% endif %}>- Просроченные</option>
+                     <option value="-1" {% if "-1" == prjstatus_selectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
+                     <option value="0" {% if 0 == prjstatus_selectid|add:"0" %} selected="selected" {% endif %}>{% trans '- Все активные' %}</option>
+                     <option value="-2" {% if "-2" == prjstatus_selectid %} selected="selected" {% endif %}>{% trans '- Просроченные' %}</option>
                      {% for prjstatus in projectstatus %}
                         <option value="{{prjstatus.id}}" {% if prjstatus.id == prjstatus_selectid|add:"0" %} selected="selected" {% endif %}>
                            {{prjstatus.name}}
                         </option>   
                      {% endfor %}
                   </select>
-                  <label>Мои проекты: </label>
+                  <label>{% trans 'Мои проекты' %}: </label>
                   <select name="select-myproject" id="myselectid" class="select-my-project">
-                     <option value="-1" {% if "-1" == prjstatus_myselectid %} selected="selected" {% endif %}>- Все</option>
-                     <option value="0" {% if "0" == prjstatus_myselectid %} selected="selected" {% endif %}>- Я участник</option>
-                     <option value="1" {% if "1" == prjstatus_myselectid %} selected="selected" {% endif %}>- Я автор</option>
-                     <option value="2" {% if "2" == prjstatus_myselectid %} selected="selected" {% endif %}>- Я исполнитель</option>
+                     <option value="-1" {% if "-1" == prjstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
+                     <option value="0" {% if "0" == prjstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я участник' %}</option>
+                     <option value="1" {% if "1" == prjstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я автор' %}</option>
+                     <option value="2" {% if "2" == prjstatus_myselectid %} selected="selected" {% endif %}>{% trans '- Я исполнитель' %}</option>
                   </select>            
-                  <button id="selection-button-project" type="submit" method="GET" class="object-filter-button">Применить</button>
+                  <button id="selection-button-project" type="submit" method="GET" class="object-filter-button">{% trans 'Применить' %}</button>
                </div>
             </form>    
 
@@ -380,7 +380,7 @@
 
             {% else %}
 
-               <p>Проектов пока нет...</p>
+               <p>{% trans 'Проектов пока нет...' %}</p>
 
             {% endif %}
 

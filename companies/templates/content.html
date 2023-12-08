@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block list %}
-   <h1>Главная страница</h1>
+
+   {% load i18n %}
+
+   <h1>{% trans 'Главная страница' %}</h1>
    
 {% endblock list %}

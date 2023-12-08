@@ -5,23 +5,25 @@
 
 {% block detail %}
 
+{% load i18n %}
+
 <div class="object-detail">
 
-    <h4>Организация: {{ companyname }}</h4>
-      <h5>Пользователь: {{ companyuser.username }} <!--{ companyuser.username }}-->
+    <h4>{% trans 'Организация' %}: {{ companyname }}</h4>
+      <h5>{% trans 'Пользователь' %}: {{ companyuser.username }} <!--{ companyuser.username }}-->
         {% if not companyuser.is_active %}
-           (Пользователь перемещен в архив)
+         {% trans '(Пользователь перемещен в архив)' %}
         {% endif %}
       </h5>
-      <p><strong>ФИО:</strong> {{ companyuser.first_name }} {{ companyuser.last_name }}</p> <!--*** { request.user.first_name}}<br />-->
-      <p><strong>E-mail:</strong> {{ companyuser.email }}</p>
+      <p><strong>{% trans 'ФИО' %}:</strong> {{ companyuser.first_name }} {{ companyuser.last_name }}</p> <!--*** { request.user.first_name}}<br />-->
+      <p><strong>{% trans 'E-mail' %}:</strong> {{ companyuser.email }}</p>
       {% if not companyuser.is_staff %}
-         <p><strong>Статус:</strong> Сотрудник</p>
+         <p><strong>{% trans 'Статус' %}:</strong> Сотрудник</p>
       {% else %}
-         <p><strong>Статус:</strong> Клиент</p>
+         <p><strong>{% trans 'Статус' %}:</strong> Клиент</p>
       {% endif %}      
-      <em>Создан: {{ companyuser.date_joined }}</em><br />
-      <em>Последний вход: {{ companyuser.last_login }}</em> <br />            
+      <em>{% trans 'Создан' %}: {{ companyuser.date_joined }}</em>
+      <em>{% trans 'Последний вход' %}: {{ companyuser.last_login }}</em>          
       <p>&nbsp;</p>
       <div class="object-detail-buttons">
           <a href="{ url 'my_company:companyuser_update' companyuser.pk %}">{{ button_companyuser_update }}</a>

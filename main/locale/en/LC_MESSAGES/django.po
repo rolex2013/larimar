@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-21 18:22+0300\n"
+"POT-Creation-Date: 2023-12-07 14:10+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,243 +18,240 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\main\models.py:14 .\main\models.py:15 .\main\models.py:32
-#: .\main\models.py:33 .\main\models.py:50 .\main\models.py:51
-#: .\main\models.py:70 .\main\models.py:71 .\main\models.py:208
-#: .\main\models.py:209
+#: main/models.py:14 main/models.py:15 main/models.py:32 main/models.py:33
+#: main/models.py:50 main/models.py:51 main/models.py:70 main/models.py:71
+#: main/models.py:208 main/models.py:209
 msgid "Наименование"
 msgstr "Name"
 
-#: .\main\models.py:16 .\main\models.py:103 .\main\models.py:129
+#: main/models.py:16 main/models.py:103 main/models.py:129
 msgid "Дата"
 msgstr "Date"
 
-#: .\main\models.py:18
+#: main/models.py:18
 msgid "Система, как сервис"
 msgstr "System as a service"
 
-#: .\main\models.py:19
+#: main/models.py:19
 msgid "Активность Системы"
 msgstr "System Activity"
 
-#: .\main\models.py:31 .\main\models.py:72
+#: main/models.py:31 main/models.py:72
 msgid "Код"
 msgstr "Code"
 
-#: .\main\models.py:34
+#: main/models.py:34
 msgid "Таблица"
 msgstr "Table"
 
-#: .\main\models.py:35 .\main\models.py:52
+#: main/models.py:35 main/models.py:52
 msgid "Сортировка"
 msgstr "Sorting"
 
-#: .\main\models.py:36 .\main\models.py:53 .\main\models.py:77
-#: .\main\models.py:116 .\main\models.py:132 .\main\models.py:151
-#: .\main\models.py:183 .\main\models.py:213
+#: main/models.py:36 main/models.py:53 main/models.py:77 main/models.py:116
+#: main/models.py:132 main/models.py:151 main/models.py:183 main/models.py:213
 msgid "Активность"
 msgstr "Activity"
 
-#: .\main\models.py:44
+#: main/models.py:44
 msgid "Список типов объектов"
 msgstr "List of object types"
 
-#: .\main\models.py:45
+#: main/models.py:45
 msgid "Списки типов объектов"
 msgstr "Object types list"
 
-#: .\main\models.py:61
+#: main/models.py:61
 msgid "Протокол оповещения"
 msgstr "Notification Protocol"
 
-#: .\main\models.py:62
+#: main/models.py:62
 msgid "Протоколы оповещений"
 msgstr "Notification Protocolы"
 
-#: .\main\models.py:73 .\main\models.py:74 .\main\models.py:211
-#: .\main\models.py:212
+#: main/models.py:73 main/models.py:74 main/models.py:211 main/models.py:212
 msgid "Описание"
 msgstr "Description"
 
-#: .\main\models.py:75 .\main\models.py:76
+#: main/models.py:75 main/models.py:76
 msgid "Пункт меню"
 msgstr "Menu item"
 
-#: .\main\models.py:96 .\main\models.py:126 .\main\models.py:175
+#: main/models.py:96 main/models.py:126 main/models.py:175
 msgid "Компонент"
 msgstr "Component"
 
-#: .\main\models.py:97
+#: main/models.py:97
 msgid "Компоненты"
 msgstr "Components"
 
-#: .\main\models.py:102
+#: main/models.py:102
 msgid "ID объекта"
 msgstr "Object ID"
 
-#: .\main\models.py:106
+#: main/models.py:106
 msgid "От кого"
 msgstr "From whom"
 
-#: .\main\models.py:107
+#: main/models.py:107
 msgid "Тема"
 msgstr "Theme"
 
-#: .\main\models.py:108
+#: main/models.py:108
 msgid "Текст"
 msgstr "Text"
 
-#: .\main\models.py:110
+#: main/models.py:110
 msgid "Кому"
 msgstr "Whom"
 
-#: .\main\models.py:111
+#: main/models.py:111
 msgid "Момент отправки"
 msgstr "The moment of sending"
 
-#: .\main\models.py:112
+#: main/models.py:112
 msgid "Момент прочтения"
 msgstr "The moment of reading"
 
-#: .\main\models.py:113
+#: main/models.py:113
 msgid "Ответ"
 msgstr "Answer"
 
-#: .\main\models.py:114
+#: main/models.py:114
 msgid "Отправлено"
 msgstr "Sent"
 
-#: .\main\models.py:115
+#: main/models.py:115
 msgid "Прочитано"
 msgstr "Read"
 
-#: .\main\models.py:122
+#: main/models.py:122
 msgid "Оповещение"
 msgstr "Notification"
 
-#: .\main\models.py:123
+#: main/models.py:123
 msgid "Оповещения"
 msgstr "Notifications"
 
-#: .\main\models.py:127
+#: main/models.py:127
 msgid "Модель"
 msgstr "Model"
 
-#: .\main\models.py:128
+#: main/models.py:128
 msgid "Объект"
 msgstr "Object"
 
-#: .\main\models.py:130
+#: main/models.py:130
 msgid "Автор"
 msgstr "Author"
 
-#: .\main\models.py:140
+#: main/models.py:140
 msgid "История Объекта"
 msgstr "Object History"
 
-#: .\main\models.py:141
+#: main/models.py:141
 msgid "Истории Объектов"
 msgstr "Object Histories"
 
-#: .\main\models.py:144 .\main\models.py:171
+#: main/models.py:144 main/models.py:171
 msgid "Наименование_ru"
 msgstr "Name_ru"
 
-#: .\main\models.py:145 .\main\models.py:172
+#: main/models.py:145 main/models.py:172
 msgid "Наименование_en"
 msgstr "Name_en"
 
-#: .\main\models.py:147
+#: main/models.py:147
 msgid "Основной URL"
 msgstr "Main URL"
 
-#: .\main\models.py:148 .\main\models.py:177
+#: main/models.py:148 main/models.py:177
 msgid "Описание_ru"
 msgstr "Description_ru"
 
-#: .\main\models.py:149 .\main\models.py:178
+#: main/models.py:149 main/models.py:178
 msgid "Описание_en"
 msgstr "Description_en"
 
-#: .\main\models.py:166
+#: main/models.py:166
 msgid "Список меню"
 msgstr "Menu list"
 
-#: .\main\models.py:167
+#: main/models.py:167
 msgid "Списки меню"
 msgstr "Menu lists"
 
-#: .\main\models.py:173
+#: main/models.py:173
 msgid "Меню"
 msgstr "Menu"
 
-#: .\main\models.py:181
+#: main/models.py:181
 msgid "Головной пункт меню"
 msgstr "Main menu item"
 
-#: .\main\models.py:200 .\main\models.py:201
+#: main/models.py:200 main/models.py:201
 msgid "Пункты меню"
 msgstr "Menu items"
 
-#: .\main\models.py:230 .\main\models.py:231
+#: main/models.py:230 main/models.py:231
 msgid "Тематика"
 msgstr "Thematic"
 
-#: .\main\templates\main.html:12
+#: main/templates/main.html:12
 msgid "Главная страница"
 msgstr "Main page"
 
-#: .\main\templates\main.html:20
+#: main/templates/main.html:20
 msgid "Добавить"
 msgstr "Add"
 
-#: .\main\templates\notifies.html:10
+#: main/templates/notifies.html:10
 msgid "Мои уведомления"
 msgstr "My notifications"
 
-#: .\main\templates\notifies.html:29
-#: .\main\templates\sidebar_notifications_form.html:18
+#: main/templates/notifies.html:29
+#: main/templates/sidebar_notifications_form.html:18
 msgid "По статусам"
 msgstr "By status"
 
-#: .\main\templates\notifies.html:31 .\main\templates\notifies.html:37
-#: .\main\templates\sidebar_notifications_form.html:20
-#: .\main\templates\sidebar_notifications_form.html:26
+#: main/templates/notifies.html:31 main/templates/notifies.html:37
+#: main/templates/sidebar_notifications_form.html:20
+#: main/templates/sidebar_notifications_form.html:26
 msgid "Все"
 msgstr "All"
 
-#: .\main\templates\notifies.html:32
-#: .\main\templates\sidebar_notifications_form.html:21
+#: main/templates/notifies.html:32
+#: main/templates/sidebar_notifications_form.html:21
 msgid "Непрочитанные"
 msgstr "Unread"
 
-#: .\main\templates\notifies.html:33
-#: .\main\templates\sidebar_notifications_form.html:22
+#: main/templates/notifies.html:33
+#: main/templates/sidebar_notifications_form.html:22
 msgid "Прочитанные"
 msgstr "Read"
 
-#: .\main\templates\notifies.html:35
-#: .\main\templates\sidebar_notifications_form.html:24
+#: main/templates/notifies.html:35
+#: main/templates/sidebar_notifications_form.html:24
 msgid "По типам"
 msgstr "By type"
 
-#: .\main\templates\notifies.html:44
-#: .\main\templates\sidebar_notifications_form.html:34
+#: main/templates/notifies.html:44
+#: main/templates/sidebar_notifications_form.html:34
 msgid "Применить"
 msgstr "Apply"
 
-#: .\main\templates\notify_list.html:9
+#: main/templates/notify_list.html:9
 msgid "Отметить прочитанным"
 msgstr "Mark as read"
 
-#: .\main\templates\sidebar.html:6
+#: main/templates/sidebar.html:6
 msgid "Уведомления"
 msgstr "Notifications"
 
-#: .\main\templates\sidebar_notifications_channel.html:15
+#: main/templates/sidebar_notifications_channel.html:15
 msgid "Отправить"
 msgstr "Send"
 
-#: .\main\templates\sidebar_notifications_list.html:26
+#: main/templates/sidebar_notifications_list.html:26
 msgid "Пометить прочитанными"
 msgstr "Mark as read"

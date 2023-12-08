@@ -8,64 +8,178 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-27 13:58+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2023-12-07 14:10+0300\n"
+"PO-Revision-Date: 2023-12-07 14:15+0300\n"
+"Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: .\crm\models.py:190
+#: companies/views.py:76 companies/views.py:219 companies/views.py:222
+#: companies/views.py:300 companies/views.py:322 companies/views.py:323
+#: companies/views.py:442 companies/views.py:560 companies/views.py:620
+#: companies/views.py:642
+msgid "Добавить"
+msgstr "Add"
+
+#: companies/views.py:77
+#| msgid "Наименование"
+msgid "Штатное расписание"
+msgstr "Staff list"
+
+#: companies/views.py:155
+msgid "Изменить Организацию"
+msgstr "Edit Organization"
+
+#: companies/views.py:220 companies/views.py:324 companies/views.py:443
+#: companies/views.py:561 companies/views.py:619
+msgid "Изменить"
+msgstr "Edit"
+
+#: companies/views.py:221
+msgid "Пригласить"
+msgstr "Invite"
+
+#: companies/views.py:275 companies/views.py:383
+msgid "Изменить Должность"
+msgstr "Edit Position"
+
+#: companies/views.py:368
+msgid "Новый Сотрудник"
+msgstr "New Employee"
+
+#: companies/views.py:405
+msgid "Откликнуться на вакансию"
+msgstr "Respond to a vacancy"
+
+#: companies/views.py:423
+msgid "Новое резюме"
+msgstr "New CV"
+
+#: companies/views.py:458 companies/views.py:472
+msgid "Удалить резюме"
+msgstr "Remove CV"
+
+#: companies/views.py:469
+msgid "Восстановить резюме"
+msgstr ""
+
+#: companies/views.py:563
+msgid "Автор: "
+msgstr ""
+
+#: companies/views.py:565
+msgid " (Контент перемещен в архив)"
+msgstr ""
+
+#: companies/views.py:581
+msgid "Новый Контент"
+msgstr ""
+
+#: companies/views.py:602
+msgid "Изменить Контент"
+msgstr ""
+
+#: companies/views.py:662
+msgid "\"Эта\" роль уже назначена!"
+msgstr ""
+
+#: companies/views.py:666
+msgid "Добавить роль"
+msgstr ""
+
+#: crm/models.py:190
 msgid "Задача клиента"
 msgstr "Client task"
 
-#: .\crm\models.py:247
+#: crm/models.py:247
 msgid "Событие клиента"
 msgstr "Client event"
 
-#: .\docs\models.py:155
+#: docs/models.py:155
 msgid "Задача документа"
 msgstr "Document task"
 
-#: .\feedback\models.py:103
+#: feedback/models.py:103
 msgid "Тикет"
 msgstr "Ticket"
 
-#: .\feedback\models.py:152
+#: feedback/models.py:152
 msgid "Задача тикета"
 msgstr "Ticket task"
 
-#: .\larimar\settings.py:217
+#: larimar/settings.py:223
 msgid "Russian"
 msgstr "Russian"
 
-#: .\larimar\settings.py:218
+#: larimar/settings.py:224
 msgid "English"
 msgstr "English"
 
-#: .\lists\models.py:8 .\lists\models.py:9
-msgid "Наименование"
-msgstr "Name"
-
-#: .\lists\models.py:10
-msgid "Описание_ru"
-msgstr "Description_ru"
-
-#: .\lists\models.py:11
-msgid "Описание_en"
-msgstr "Description_en"
-
-#: .\lists\models.py:12
-msgid "Активность Системы"
-msgstr "System is active"
-
-#: .\projects\models.py:119
+#: projects/models.py:119
 msgid "Проект"
 msgstr "Project"
 
-#: .\projects\models.py:208
+#: projects/models.py:208
 msgid "Задача проекта"
 msgstr "Project task"
+
+#: templates/base.html:27 templates/base.html:31
+msgid "Ваша первая и единственная Корпоративная система управления"
+msgstr ""
+
+#: templates/objects_list.html:10
+msgid "Проекты и Задачи"
+msgstr ""
+
+#: templates/objects_list.html:14
+msgid "CRM"
+msgstr ""
+
+#: templates/objects_list.html:16
+#, fuzzy
+#| msgid "Задача документа"
+msgid "Документы"
+msgstr "Document task"
+
+#: templates/objects_list.html:19
+msgid "Файлы"
+msgstr ""
+
+#: templates/objects_list.html:21
+msgid "Техподдержка"
+msgstr ""
+
+#: templates/objects_list.html:23
+msgid "Чаты"
+msgstr ""
+
+#: templates/objects_list.html:25
+msgid "Настройка"
+msgstr ""
+
+#: templates/objects_list.html:27
+msgid "Панель управления"
+msgstr ""
+
+#: templates/objects_list.html:29
+msgid "Списки"
+msgstr ""
+
+#: templates/objects_list.html:37 templates/objects_list.html:40
+#: templates/objects_list.html:70 templates/objects_list.html:72
+msgid "Профиль"
+msgstr ""
+
+#~ msgid "Описание_ru"
+#~ msgstr "Description_ru"
+
+#~ msgid "Описание_en"
+#~ msgstr "Description_en"
+
+#~ msgid "Активность Системы"
+#~ msgstr "System is active"

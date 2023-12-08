@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     {% load static %}
+    {% load i18n %}
 
     <!--<link rel="shortcut icon" type="image/png" href="{ static 'images/favicon.ico' %}"/>-->
     <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}"/>
@@ -23,11 +24,11 @@
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <title>{% block title %}1⅄ES! Корпоративная система управления{% endblock %}</title>
+    <title>{% block title %}1⅄ES! {% trans 'Ваша первая и единственная Корпоративная система управления' %}{% endblock %}</title>
 
     <div class="header">
         <!--<div style="width: 100%;">-->
-        <div style="float: left;"><strong>&nbsp;1⅄ES! Корпоративная система управления</strong></div>
+        <div style="float: left;"><strong>&nbsp;1⅄ES! {% trans 'Ваша первая и единственная Корпоративная система управления' %}</strong></div>
         <div style="float: right;">
             <!-- Выбор языка -->
             {% load i18n %}
@@ -39,10 +40,10 @@
             <!--{ trans "Выберите язык" %}:-->
             {% for language in languages %}
                 {% if language.code != CURRENT_LANGUAGE %}
-                    <div style="float: right;">
+                    <div class="text-localization">
                         <a href="{% url 'my_main:select_lang' %}?lang_code={{ language.code }}" style="text-decoration: none;">
                             <!-- <img src="{ static 'images/'|add:language.code|add:'_32'|add:'.png' %}" alt="{ language.name_local }}"/> -->
-                            <strong>{{ language.code|upper }}</strong>
+                            {{ language.code|upper }}
                         </a>
                     </div>
                 {% endif %}

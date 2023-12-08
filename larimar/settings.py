@@ -46,7 +46,7 @@ ADMINS = ((os.getenv("ADMIN_NAME"), os.getenv("ADMIN_EMAIL")),)
 
 INSTALLED_APPS = [
     "channels",
-    #'modeltranslation', #обошлись собственным middleware для проброса request'а в модели и полями @property
+    # 'modeltranslation', #обошлись собственным middleware для проброса request'а в модели и полями @property
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     "bootstrap4",
     "crispy_forms",
     "bootstrap_datepicker_plus",
-    #'bootstrap4_datetime',
+    # 'bootstrap4_datetime',
     "django_mptt_admin",
     "mptt",
     "ckeditor",
@@ -65,7 +65,7 @@ INSTALLED_APPS = [
     "django_tables2",
     "rest_framework",
     "rosetta",
-    #'menu',
+    # 'menu',
     "accounts",
     "main",
     "companies",
@@ -96,7 +96,7 @@ BOOTSTRAP4 = {
 }
 
 MIDDLEWARE = [
-    #'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -108,8 +108,16 @@ MIDDLEWARE = [
     # add our middleware for redirect user
     "accounts.middleware.LocaleMiddleware",
     "main.request_exposer.RequestExposerMiddleware",
+    "companies.request_exposer.RequestExposerMiddleware",
     "finance.request_exposer.RequestExposerMiddleware",
     "lists.request_exposer.RequestExposerMiddleware",
+    "docs.request_exposer.RequestExposerMiddleware",
+    "files.request_exposer.RequestExposerMiddleware",
+    "crm.request_exposer.RequestExposerMiddleware",
+    "projects.request_exposer.RequestExposerMiddleware",
+    "feedback.request_exposer.RequestExposerMiddleware",
+    "chats.request_exposer.RequestExposerMiddleware",
+    "dashboard.request_exposer.RequestExposerMiddleware",
 ]
 
 ROOT_URLCONF = "larimar.urls"
@@ -320,7 +328,7 @@ else:
             "OPTIONS": {
                 "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
                 "charset": "utf8mb4",
-                #"cursorclass": "pymysql.cursors.DictCursor",
+                # "cursorclass": "pymysql.cursors.DictCursor",
             },
             "NAME": os.getenv("DB_NAME"),
             "USER": os.getenv("DB_USER"),
