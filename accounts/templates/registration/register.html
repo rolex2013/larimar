@@ -46,7 +46,7 @@
             <h3>{% trans 'Добавить пользователя в организацию' %}</h3>
             <p>{% trans 'Пожалуйста, выберите пользователя' %}:</p>
             <!--<div class="col-md-offset-3 col-md-6 voffset-60">-->
-            <form action="{% url 'my_account:add' companyid %}" method="post">
+            <form action="{% url 'my_account:add' companyid %}" method="POST">
                 <!--{ load bootstrap4 %}-->
                 {% csrf_token %}
                 {{ user_form.as_p }}

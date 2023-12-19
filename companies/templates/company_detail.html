@@ -5,15 +5,27 @@
 {% block company %}
 
    {% load i18n %}
+   {% load static %}
 
    <!-- Защита от прямого доступа к компании, если это не Служба техподдержки -->
    {% if current_company.id in user_companies or current_company.is_support %}
 
       <div class="object-detail">
-
-        <h2>{{ current_company.name }}
+   <!-- (A) TOGGLE BUTTON -->
+   <label for="check" class="togButton"><h2><img src="{% static 'images/expand-button_icon-icons.com_72763.png' %}" width="24" height="24">{{ current_company.name }}</h2></label>
+   
+   <!-- (B) CONTENT -->
+   <input type="checkbox" class="togCheck" id="check">
+   <!-- <div class="togContent">
+         <p>Just some random content here.</p>
+      </div> -->
+   
+   <!-- (C) REST OF PAGE -->
+   <!-- <p>Hello World!</p> -->
+   <!-- *************************** -->
+<div class="togContent">
+        <!-- <h2>{{ current_company.name }} -->
         {% if not current_company.is_active %}{% trans '(Организация перемещена в архив)' %}{% endif %}
-        </h2>
         <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
 
         {% if current_company.parent.pk %}
@@ -56,6 +68,7 @@
         <em>{% trans 'Автор' %}: {{ current_company.author }}</em>
         <em>{% trans 'Дата' %}: {{ current_company.datecreate }}</em>
         <br />
+</div>
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
           <div class="object-detail-buttons">
               {% if component_name == 'companies' %}

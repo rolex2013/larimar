@@ -229,13 +229,13 @@ def stafflist(request, companyid=0, pk=0):
     raw_query_1 = 'SELECT * FROM companies_usercompanycomponentgroup uc LEFT JOIN auth_user u ON u.id=uc.user_id LEFT JOIN main_component c ON c.id=uc.component_id '
     raw_query_2 = "WHERE uc.company_id=" + str(
         companyid
-    # ) + " AND uc.is_active=1 AND u.is_active=1 AND c.code='" + component_name + "' GROUP BY uc.user_id"
+     # ) + " AND uc.is_active=1 AND u.is_active=1 AND c.code='" + component_name + "' GROUP BY uc.user_id"
     ) + " AND uc.is_active=1 AND u.is_active=1 GROUP BY uc.user_id"
     raw_query = raw_query_1 + raw_query_2
    #  print(raw_query)
     unodes = UserCompanyComponentGroup.objects.raw(raw_query)
 
-   # print(companyid, unodes)
+    # print(companyid, unodes)
     nodes = StaffList.objects.filter(is_active=True,
                                      company_id=companyid).select_related(
                                          "author", "company", "currency",

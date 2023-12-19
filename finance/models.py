@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 # request, пробрасываемый сюда из main\request_exposer.py
 exposed_request = ''
 
+
 class Dict_Currency(models.Model):
     code_char = models.CharField("Символьный код", max_length=3)
     code_num = models.CharField("Цифровой код", max_length=3)

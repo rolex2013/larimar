@@ -6,6 +6,7 @@ from mptt.forms import MoveNodeForm, TreeNodeChoiceField
 
 from django.utils.translation import gettext_lazy as _
 
+
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(label=_('Пароль'), widget=forms.PasswordInput)
     password2 = forms.CharField(label=_('Повторно'), widget=forms.PasswordInput)
@@ -35,12 +36,15 @@ class UserAddForm(forms.Select):
         model = User
         fields = ('username', 'is_staff')
 """
+
+
 class UserSelect(forms.Select):
     def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
         option = super().create_option(name, value, label, selected, index, subindex, attrs)
         if value:
             option['attrs']['username'] = value.instance.username
         return option
+
 
 class UserAddForm(forms.ModelForm):
 
@@ -50,15 +54,17 @@ class UserAddForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         companyid = self.instance.id
-        #uc = UserCompanyComponentGroup.objects.filter(is_active=True).exclude(company_id=companyid, user__is_active=True).values_list('user_id', flat=True).distinct()
-        #usr = User.objects.filter(id__in=uc, is_active=True)
+        # uc = UserCompanyComponentGroup.objects.filter(is_active=True).exclude(company_id=companyid, user__is_active=True).values_list('user_id', flat=True).distinct()
+        # usr = User.objects.filter(id__in=uc, is_active=True)
         uc = UserCompanyComponentGroup.objects.filter(is_active=True, company_id=companyid, user__is_active=True).values_list('user', flat=True).distinct()
         usr = User.objects.filter(is_active=True).exclude(id__in=uc)
         self.fields['user'].queryset = usr
+
     class Meta:
         model = UserCompanyComponentGroup
         fields = ['user']
         widgets = {'user': UserSelect}
+
 
 class UserInviteForm(forms.ModelForm):
     password = forms.CharField(label=_('Пароль'), widget=forms.PasswordInput)
@@ -78,6 +84,7 @@ class UserInviteForm(forms.ModelForm):
             raise forms.ValidationError(_('Пароли не совпадают!'))
         return cd['password2']
 
+
 class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         #self.user = kwargs.pop('user')
@@ -87,6 +94,7 @@ class UserProfileForm(forms.ModelForm):
         #self.fields['company'].queryset = Company.objects.filter(id__in=self.companies) # это без иерархии
         #self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.all(), level_indicator = u'---') # из документации
         self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.filter(id__in=self.companies), level_indicator=u'---')   # с иерархией
+
     class Meta:
         model = UserProfile
         fields = ['company', 'description', 'is_notify', 'protocoltype', 'email', 'phone']     
