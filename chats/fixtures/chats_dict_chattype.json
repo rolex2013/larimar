@@ -1,0 +1,32 @@
+[
+    {
+        "model": "chats.dict_chattype",
+        "pk": 1,
+        "fields": {
+            "name_ru": "Приватный",
+            "name_en": "Private",
+            "sort": 5,
+            "is_active": true
+        }
+    },
+    {
+        "model": "chats.dict_chattype",
+        "pk": 2,
+        "fields": {
+            "name_ru": "Закрытый",
+            "name_en": "Hidden",
+            "sort": 10,
+            "is_active": true
+        }
+    },
+    {
+        "model": "chats.dict_chattype",
+        "pk": 3,
+        "fields": {
+            "name_ru": "Общий",
+            "name_en": "Shared",
+            "sort": 15,
+            "is_active": true
+        }
+    }
+]

@@ -1,17 +1,19 @@
 
-        {% if currentchat and member_list %}
+    {% if currentchat and member_list %}
+
+            {% load i18n %}
 
             <form method="GET" id="ajax_member_form" action="">
                 {% csrf_token %}
                 <select name="select-member" id="memberselectid" class="select-member">
                      {% for member in member_list %}
                         <option value="{{member.user.id}}">
-                           {{member.user.username}}
+                           {{ member.user.username }}
                         </option>
                      {% endfor %}
                 </select>
-                <label><input type="checkbox" id="memberisadmin" name="admin" />Админ</label>
-                <input type="button" id="addmemberbutton" value="Добавить" />
+                <label><input type="checkbox" id="memberisadmin" name="admin" />{% trans "Админ" %}</label>
+                <input type="button" id="addmemberbutton" value="{% trans 'Добавить' %}" />
             </form>
 
         {% endif %}

@@ -294,167 +294,242 @@ def add(request, companyid=1):
                     protocoltype_id=1,
                     description="Профиль создан Администратором Организации",
                 )
-            if user_form["is_staff"].value() == True:
-                # для Сотрудника
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=1,
-                        group_id=7,
-                    )
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=1,
-                        group_id=7,
-                        is_active=False,
-                    ).update(is_active=True)
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=5,
-                        group_id=7,
-                    )
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=5,
-                        group_id=7,
-                        is_active=False,
-                    ).update(is_active=True)
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=6,
-                        group_id=7,
-                    )
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=6,
-                        group_id=7,
-                        is_active=False,
-                    ).update(is_active=True)
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=7,
-                        group_id=7,
-                    )
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=7,
-                        group_id=7,
-                        is_active=False,
-                    ).update(is_active=True)
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=8,
-                        group_id=7,
-                    )
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=8,
-                        group_id=7,
-                        is_active=False,
-                    ).update(is_active=True)
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=9,
-                        group_id=7,
-                    )
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=9,
-                        group_id=10,
-                        is_active=False,
-                    ).update(is_active=True)
-                # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=5, group_id=7)
-                # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=6, group_id=7)
-                # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=7, group_id=7)
-                # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=8, group_id=7)
-            else:
-                # для Клиента
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=1,
-                        group_id=9,
-                    )  # для меню
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=1,
-                        group_id=9,
-                        is_active=False,
-                    ).update(is_active=True)
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=6,
-                        group_id=9,
-                    )  # для своих Задач в CRM
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=6,
-                        group_id=9,
-                        is_active=False,
-                    ).update(is_active=True)
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=8,
-                        group_id=9,
-                    )  # для заказов товара
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=8,
-                        group_id=9,
-                        is_active=False,
-                    ).update(is_active=True)
-                try:
-                    UserCompanyComponentGroup.objects.create(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=9,
-                        group_id=9,
-                    )  # для обращений в техподдержку
-                except:
-                    UserCompanyComponentGroup.objects.filter(
-                        user_id=new_user.user.id,
-                        company_id=companyid,
-                        component_id=9,
-                        group_id=9,
-                        is_active=False,
-                    ).update(is_active=True)
-                # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=1, group_id=9)   # для меню
-                # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=6, group_id=9)   # для своих Задач в CRM
-                # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=8, group_id=9)   # для заказов товара
+            # if user_form["is_staff"].value() == True:
+            #     # для Сотрудника
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=1,
+            #             group_id=7,
+            #         )
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=1,
+            #             group_id=7,
+            #             is_active=False,
+            #         ).update(is_active=True)
+
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=5,
+            #             group_id=7,
+            #         )
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=5,
+            #             group_id=7,
+            #             is_active=False,
+            #         ).update(is_active=True)
+
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=6,
+            #             group_id=7,
+            #         )
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=6,
+            #             group_id=7,
+            #             is_active=False,
+            #         ).update(is_active=True)
+
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=7,
+            #             group_id=7,
+            #         )
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=7,
+            #             group_id=7,
+            #             is_active=False,
+            #         ).update(is_active=True)
+
+            #     # try:
+            #     #     UserCompanyComponentGroup.objects.create(
+            #     #         user_id=new_user.user.id,
+            #     #         company_id=companyid,
+            #     #         component_id=8,
+            #     #         group_id=7,
+            #     #     )
+            #     # except:
+            #     #     UserCompanyComponentGroup.objects.filter(
+            #     #         user_id=new_user.user.id,
+            #     #         company_id=companyid,
+            #     #         component_id=8,
+            #     #         group_id=7,
+            #     #         is_active=False,
+            #     #     ).update(is_active=True)
+
+            #     # try:
+            #     #     UserCompanyComponentGroup.objects.create(
+            #     #         user_id=new_user.user.id,
+            #     #         company_id=companyid,
+            #     #         component_id=9,
+            #     #         group_id=7,
+            #     #     )
+            #     # except:
+            #     #     UserCompanyComponentGroup.objects.filter(
+            #     #         user_id=new_user.user.id,
+            #     #         company_id=companyid,
+            #     #         component_id=9,
+            #     #         group_id=7,
+            #     #         is_active=False,
+            #     #     ).update(is_active=True)
+
+            #     # Файлы
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=10,
+            #             group_id=7,
+            #         )
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=10,
+            #             group_id=7,
+            #             is_active=False,
+            #         ).update(is_active=True)
+
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=11,
+            #             group_id=7,
+            #         )
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=11,
+            #             group_id=7,
+            #             is_active=False,
+            #         ).update(is_active=True)
+
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=12,
+            #             group_id=7,
+            #         )
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=12,
+            #             group_id=7,
+            #             is_active=False,
+            #         ).update(is_active=True)
+
+            #     # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=5, group_id=7)
+            #     # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=6, group_id=7)
+            #     # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=7, group_id=7)
+            #     # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=8, group_id=7)
+            # else:
+            #     # для Клиента
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=1,
+            #             group_id=9,
+            #         )  # для меню
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=1,
+            #             group_id=9,
+            #             is_active=False,
+            #         ).update(is_active=True)
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=6,
+            #             group_id=9,
+            #         )  # для своих Задач в CRM
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=6,
+            #             group_id=9,
+            #             is_active=False,
+            #         ).update(is_active=True)
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=8,
+            #             group_id=9,
+            #         )  # для заказов товара
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=8,
+            #             group_id=9,
+            #             is_active=False,
+            #         ).update(is_active=True)
+            #     try:
+            #         UserCompanyComponentGroup.objects.create(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=9,
+            #             group_id=9,
+            #         )  # для обращений в техподдержку
+            #     except:
+            #         UserCompanyComponentGroup.objects.filter(
+            #             user_id=new_user.user.id,
+            #             company_id=companyid,
+            #             component_id=9,
+            #             group_id=9,
+            #             is_active=False,
+            #         ).update(is_active=True)
+            # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=1, group_id=9)   # для меню
+            # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=6, group_id=9)   # для своих Задач в CRM
+            # UserCompanyComponentGroup.objects.create(user_id=new_user.user.id, company_id=companyid, component_id=8, group_id=9)   # для заказов товара
+
+            components = Component.objects.filter(is_active=True)
+
+            grp = 9
+            if user_form["is_staff"].value() is True:
+                grp = 7
+                
+            for comp in components:
+
+                if comp.is_employee_default is True:
+
+                    uccg, created = UserCompanyComponentGroup.objects.update_or_create(
+                                        user_id=new_user.user.id,
+                                        company_id=companyid,
+                                        component_id=comp.id,
+                                        group_id=grp,
+                                        defaults={'is_active': True},
+                                        )
+                    # print(uccg, created)
+
             return render(
                 request,
                 "registration/register_done.html",

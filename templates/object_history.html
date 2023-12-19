@@ -13,7 +13,7 @@
             {% for rec in mas %}
                {% if forloop.first %}
                   <div class="th-row">                      
-                     <div class="th-cell">Дата</div> <div class="th-cell">Автор</div>
+                     <div class="th-cell">{% trans "Дата" %}</div> <div class="th-cell">{% trans "Автор" %}</div>
                      {% for key, value in rec %}          
                         <div class="th-cell">{{ key }}</div>
                      {% endfor %}    
@@ -28,12 +28,12 @@
                   {% for key, value in rec %}
                       <div class="cell">
                           {% if objtype == 'doc' %}
-                              {% if key == 'Актуальн.' %}
+                              {% if key == _('Актуальн.') %}
                                  {% if current_object.docver == value %}
                                      <span>✓</span>
                                  {% else %}
                                      {% if current_object.doctask == 0 %}
-                                        <span class="hint hint--bottom hint--info" data-hint="Сделать актуальной"><input type="checkbox" value="{{value}}" name="myCheck_{{value}}" /></span>
+                                        <span class="hint hint--bottom hint--info" data-hint="{% trans 'Сделать актуальной' %}"><input type="checkbox" value="{{value}}" name="myCheck_{{value}}" /></span>
                                      {% endif %}
                                  {% endif %}
                               {% else %}
@@ -55,6 +55,8 @@
 </div>
 
 <div id="ajax_listerrors"></div>
+
+{% trans "Версия не найдена!" as er_ror %}
 
 <script>
 
@@ -78,7 +80,7 @@
                 },
                 error: function(xhr, errmsg, err) {
                     console.log("error")
-                    $('#ajax_listerrors').html('Версия не найдена!');
+                    $('#ajax_listerrors').html('{{ er_ror }}');
                 }
 
             });

@@ -1,4 +1,6 @@
 
+    {% load i18n %}
+        
         <div id="ajax_chatlistresult__" class="object-chats-wrapper">
 
             <div id="ajax_chatlistresult" class="object-chats-chats">
@@ -24,9 +26,9 @@
                             </option>
                          {% endfor %}
                     </select>
-                    <input type="text" id="chatname" placeholder="Название чата" /><br />
-                    <textarea style="width: 98%; padding: 1%;" type="textarea" id="chatdescription" placeholder="Описание"></textarea>
-                    <input type="button" id="addchatbutton" value="Создать" />
+                    <input type="text" id="chatname" placeholder="{% trans 'Название чата' %}" /><br />
+                    <textarea style="width: 98%; padding: 1%;" type="textarea" id="chatdescription" placeholder="{% trans 'Описание' %}"></textarea>
+                    <input type="button" id="addchatbutton" value="{% trans 'Создать' %}" />
                 </form>
             </div>
 
@@ -44,35 +46,39 @@
 
     $('#addchatbutton').click(function() {
         event.preventDefault(); // *** без этого страница перегружается после возврата data
-        var chattypeSelected = $('#chattypeselectid').find(":selected").val();
-        //if (document.getElementById('chatname') != null) {
-            var chatname = document.getElementById("chatname").value;
-        //}
-        var chatdescription = document.getElementById("chatdescription").value;
-        //console.log('==============='+chatdescription);
-        $.ajax({
-            url: "{% url 'my_chat:chat_create' %}",
-            type: "GET",
-            data : {
-                companyid: {{ current_company.id }},
-                typeid: chattypeSelected,
-                name: chatname,
-                description: chatdescription
-            },
-            success: function(data)
-                    {
-                     //console.log(data)
-                     $('#ajax_chatlistresult').html(data);
-                     document.getElementById("chatname").value = "";
-                     document.getElementById("chatdescription").value = "";
-                    },
-            error: function(xhr, errmsg, err)
-                    {
-                     console.log("error")
-                     console.log(error_data)
-                     $('#ajax_chatlisterrors').html('Нет данных!');
-                    }
-        });
+        var chatname = document.getElementById("chatname").value;
+        // console.log('===============' + chatname);
+        if (chatname != '') {        
+            var chattypeSelected = $('#chattypeselectid').find(":selected").val();
+            var chatdescription = document.getElementById("chatdescription").value;
+
+            $.ajax({
+                url: "{% url 'my_chat:chat_create' %}",
+                type: "GET",
+                data : {
+                    companyid: {{ current_company.id }},
+                    typeid: chattypeSelected,
+                    name: chatname,
+                    description: chatdescription
+                },
+                success: function(data)
+                        {
+                        //console.log(data)
+                        $('#ajax_chatlistresult').html(data);
+                        document.getElementById("chatname").value = "";
+                        document.getElementById("chatdescription").value = "";
+                        },
+                error: function(xhr, errmsg, err)
+                        {
+                        console.log("error")
+                        console.log(error_data)
+                        $('#ajax_chatlisterrors').html('Нет данных!');
+                        }
+            });
+        } else {
+            // document.getElementById("chatname").placeholder = { trans "Введите название чата!" %}
+            document.getElementById("chatname").placeholder = "Введите название чата!"
+        }
     });
 
     function MessagesList(chatid) {

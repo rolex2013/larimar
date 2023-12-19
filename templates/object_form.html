@@ -8,6 +8,8 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 
+{% load i18n %}
+
 <div class="jumbotron">
 
    {% block forms %}
@@ -38,7 +40,7 @@
            <br />
         {% endif %}
         {% buttons %}
-           <button class="btn btn-success" name="submit">Сохранить</button>
+           <button class="btn btn-success" name="submit">{% trans "Сохранить" %}</button>
         {% endbuttons %}
     </form>
 

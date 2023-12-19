@@ -1,23 +1,25 @@
 {% extends 'base.html' %}
 <!--{ extends "../login_base.html" %}-->
 
-{% block title %}Добро пожаловать!{% endblock %}
+{% load i18n %}
+
+{% block title %}{% trans "Добро пожаловать!" %}{% endblock %}
 
 {% block registration_done %}
 
    <div class="object-detail">
 
       {% if companyid == '0' %}
-         <h3>Добро пожаловать, {{ new_user.first_name }}!</h3>
-         <p>Ваш аккаунт успешно создан. Теперь вы можете <a href="{% url 'my_account:login' %}">войти</a> в систему.</p>
+         <h3>{% trans "Добро пожаловать" %}, {{ new_user.first_name }}!</h3>
+         <p>{% trans "Ваш аккаунт успешно создан. Теперь вы можете" %} <a href="{% url 'my_account:login' %}">{% trans "войти" %}</a> {% trans "в систему" %}.</p>
       {% else %}
           {% if param == 'add' %}
-             <h3>Пользователь {{ new_user.username }} ({{ new_user.first_name }}) зарегистрирован в компании!</h3>
-             <p>Теперь вы можете <a href="{% url 'my_company:stafflist' companyid 0 %}">вернуться</a> в настройки Организации.</p>
+             <h3>{% trans "Пользователь" %} {{ new_user.username }} ({{ new_user.first_name }}) {% trans "зарегистрирован в компании" %}!</h3>
+             <p>{% trans "Теперь вы можете" %} <a href="{% url 'my_company:stafflist' companyid 0 %}">{% trans "вернуться" %}</a> {% trans "в настройки Организации" %}.</p>
           {% else  %}
-             <h3>Пользователь {{ new_user.username }} ({{ new_user.first_name }}) зарегистрирован!</h3>
-             <p>Его аккаунт успешно создан, и ему на {{ new_user.email }} отправлено приглашение.</p>
-             <p>Теперь вы можете <a href="{% url 'my_company:stafflist' companyid 0 %}">вернуться</a> в настройки Организации.</p>
+             <h3>{% trans "Пользователь" %} {{ new_user.username }} ({{ new_user.first_name }}) {% trans "зарегистрирован" %}!</h3>
+             <p>{% trans "Его аккаунт успешно создан, и ему на" %} {{ new_user.email }} {% trans "отправлено приглашение" %}.</p>
+             <p>{% trans "Теперь вы можете" %} <a href="{% url 'my_company:stafflist' companyid 0 %}">{% trans "вернуться" %}</a> {% trans "в настройки Организации" %}.</p>
           {% endif %}
       {% endif %}
 

@@ -66,7 +66,7 @@ class Dict_ProtocolType(TranslateFieldMixin, models.Model):
 
 class Component(TranslateFieldMixin, MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='component_children', verbose_name="Головной компонент")
-    #name = models.CharField(_("Наименование"), max_length=64, blank=True, null=True)
+    # name = models.CharField(_("Наименование"), max_length=64, blank=True, null=True)
     name_ru = models.CharField(_("Наименование"), max_length=64, blank=True, null=True)
     name_en = models.CharField(_("Наименование"), max_length=64, blank=True, null=True)
     code = models.CharField(_("Код"), max_length=64)
@@ -74,6 +74,8 @@ class Component(TranslateFieldMixin, MPTTModel):
     description_en = models.CharField(_("Описание"), max_length=256, blank=True, null=True)
     menu_ru = models.CharField(_("Пункт меню"), max_length=256, blank=True, null=True)
     menu_en = models.CharField(_("Пункт меню"), max_length=256, blank=True, null=True)
+    is_employee_default = models.BooleanField(_("Подключать сотруднику по-умолчанию"), default=False)
+    is_client_default = models.BooleanField(_("Подключать клиенту по-умолчанию"), default=False)
     is_active = models.BooleanField(_("Активность"), default=True)
 
     @property

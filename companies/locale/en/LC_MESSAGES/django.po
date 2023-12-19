@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-07 17:45+0300\n"
+"POT-Creation-Date: 2023-12-11 13:49+0300\n"
 "PO-Revision-Date: 2023-12-07 18:34+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,556 +19,558 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: models.py:24 models.py:44 models.py:64 models.py:412 models.py:432
-#| msgid "Штатное расписание"
+#: companies/models.py:24 companies/models.py:44 companies/models.py:64
+#: companies/models.py:412 companies/models.py:432
 msgid "Наименование_ru"
 msgstr "Company structure type"
 
-#: models.py:25 models.py:45 models.py:65 models.py:413 models.py:433
-#| msgid "Штатное расписание"
+#: companies/models.py:25 companies/models.py:45 companies/models.py:65
+#: companies/models.py:413 companies/models.py:433
 msgid "Наименование_en"
 msgstr "Company structure type"
 
-#: models.py:28 models.py:48 models.py:68 models.py:122 models.py:242
-#: models.py:281 models.py:323 models.py:386 models.py:416 models.py:436
+#: companies/models.py:28 companies/models.py:48 companies/models.py:68
+#: companies/models.py:122 companies/models.py:242 companies/models.py:281
+#: companies/models.py:323 companies/models.py:386 companies/models.py:416
+#: companies/models.py:436
 msgid "Активность"
 msgstr "Is active"
 
-#: models.py:36 models.py:107 templates/company_detail.html:54
+#: companies/models.py:36 companies/models.py:107
+#: companies/templates/company_detail.html:54
 msgid "Тип в оргструктуре"
 msgstr "Type in the organizational structure"
 
-#: models.py:37
-#| msgid "Тип в оргструктуре"
+#: companies/models.py:37
 msgid "Типы в оргструктуре"
 msgstr "Types in the organizational structure"
 
-#: models.py:56
-#| msgid "Организации"
+#: companies/models.py:56
 msgid "Тип организации"
 msgstr "Company type"
 
-#: models.py:57
-#| msgid "Организации"
+#: companies/models.py:57
 msgid "Типы организаций"
 msgstr "Company types"
 
-#: models.py:76 models.py:226
-#| msgid "Изменить Должность"
+#: companies/models.py:76 companies/models.py:226
 msgid "Тип должности"
 msgstr "Position type"
 
-#: models.py:77
-#| msgid "Изменить Должность"
+#: companies/models.py:77
 msgid "Типы должностей"
 msgstr "Position types"
 
-#: models.py:84 models.py:219
-#| msgid "Штатное расписание"
+#: companies/models.py:84 companies/models.py:219
 msgid "Наименование"
 msgstr "Name"
 
-#: models.py:86 models.py:220 models.py:320
-#| msgid "Описание вакансии"
+#: companies/models.py:86 companies/models.py:220 companies/models.py:320
 msgid "Описание"
 msgstr "Description"
 
-#: models.py:94
-#| msgid "Сменить организацию"
+#: companies/models.py:94
 msgid "Головная организация"
 msgstr "Main Organization"
 
-#: models.py:100 models.py:232
+#: companies/models.py:100 companies/models.py:232
 msgid "Валюта"
 msgstr "Currency"
 
-#: models.py:114 models.py:365 templates/company_detail.html:55
-#: templates/content_detail.html:21 templates/stafflist_detail.html:33
+#: companies/models.py:114 companies/models.py:365
+#: companies/templates/company_detail.html:55
+#: companies/templates/content_detail.html:21
+#: companies/templates/stafflist_detail.html:33
 msgid "Тип"
 msgstr "Type"
 
-#: models.py:116
-#| msgid "Организации техподдержки"
+#: companies/models.py:116
 msgid "Служба техподдержки"
 msgstr "Technical Support"
 
-#: models.py:118 models.py:237 models.py:277
-#| msgid "Создан"
+#: companies/models.py:118 companies/models.py:237 companies/models.py:277
 msgid "Создана"
 msgstr "Created"
 
-#: models.py:120 models.py:239 models.py:279 models.py:374
-#: templates/company_detail.html:56 templates/stafflist_detail.html:34
-#| msgid "Автор: "
+#: companies/models.py:120 companies/models.py:239 companies/models.py:279
+#: companies/models.py:374 companies/templates/company_detail.html:56
+#: companies/templates/stafflist_detail.html:34
 msgid "Автор"
 msgstr "Author"
 
-#: models.py:135 models.py:164 models.py:217 templates/company_detail.html:20
-#: templates/company_user_detail.html:12
-#| msgid "Организации"
+#: companies/models.py:135 companies/models.py:164 companies/models.py:217
+#: companies/templates/company_detail.html:20
+#: companies/templates/company_user_detail.html:12
 msgid "Организация"
 msgstr "Organization"
 
-#: models.py:136 models.py:369 templates/companies.html:29
+#: companies/models.py:136 companies/models.py:369
+#: companies/templates/companies.html:29
 msgid "Организации"
 msgstr "Organizations"
 
-#: models.py:158 models.py:270 templates/company_user_detail.html:13
+#: companies/models.py:158 companies/models.py:270
+#: companies/templates/company_user_detail.html:13
 msgid "Пользователь"
 msgstr "User"
 
-#: models.py:170 templates/company_user_roles_list.html:21
+#: companies/models.py:170 companies/templates/company_user_roles_list.html:21
 msgid "Компонент"
 msgstr "Component"
 
-#: models.py:176 templates/company_user_roles_list.html:30
+#: companies/models.py:176 companies/templates/company_user_roles_list.html:30
 msgid "Группа"
 msgstr "Group"
 
-#: models.py:194
+#: companies/models.py:194
 msgid "Пользователь и Группа Организации и Компонента"
 msgstr "User & Organization Group & Component"
 
-#: models.py:195
+#: companies/models.py:195
 msgid "Пользователи и Группы Организаций и Компонентов"
 msgstr "Users & Organization Groups & Components"
 
-#: models.py:210
-#| msgid "Изменить Должность"
+#: companies/models.py:210
 msgid "Головная должность"
 msgstr "Main Position"
 
-#: models.py:234 templates/stafflist_detail.html:27
+#: companies/models.py:234 companies/templates/stafflist_detail.html:27
 msgid "Оклад"
 msgstr "Salary"
 
-#: models.py:235 templates/stafflist_detail.html:28
+#: companies/models.py:235 companies/templates/stafflist_detail.html:28
 msgid "Кол-во сотрудников"
 msgstr "Number of employees"
 
-#: models.py:236 templates/stafflist_detail.html:31
+#: companies/models.py:236 companies/templates/stafflist_detail.html:31
 msgid "Описание вакансии"
 msgstr "Job description"
 
-#: models.py:241
-#| msgid "Вакансия: Да"
+#: companies/models.py:241
 msgid "Вакансия"
 msgstr "Vacancy"
 
-#: models.py:254 templates/company_detail.html:121 views.py:77
+#: companies/models.py:254 companies/templates/company_detail.html:121
+#: companies/views.py:77
 msgid "Штатное расписание"
 msgstr "Staff list"
 
-#: models.py:255
-#| msgid "Штатное расписание"
+#: companies/models.py:255
 msgid "Штатные расписания"
 msgstr "Staff list"
 
-#: models.py:264 models.py:310
-#| msgid "Изменить Должность"
+#: companies/models.py:264 companies/models.py:310
 msgid "Должность"
 msgstr "Position"
 
-#: models.py:273
+#: companies/models.py:273
 msgid "Ставка (0,1 - 1)"
 msgstr "Rate (0.1 - 1)"
 
-#: models.py:275
+#: companies/models.py:275
 msgid "Начало работы"
 msgstr "Start of work"
 
-#: models.py:276
+#: companies/models.py:276
 msgid "Окончание работы"
 msgstr "Completion of work"
 
-#: models.py:300
-#| msgid "Сотрудники"
+#: companies/models.py:300
 msgid "Сотрудник"
 msgstr "Employee"
 
-#: models.py:301 templates/stafflist_detail.html:80
+#: companies/models.py:301 companies/templates/stafflist_detail.html:80
 msgid "Сотрудники"
 msgstr "Employees"
 
-#: models.py:312
+#: companies/models.py:312
 msgid "Тема"
 msgstr "Theme"
 
-#: models.py:313
+#: companies/models.py:313
 msgid "Имя"
 msgstr "Name"
 
-#: models.py:315
+#: companies/models.py:315
 msgid "Отчество"
 msgstr "Second Name"
 
-#: models.py:317
+#: companies/models.py:317
 msgid "Фамилия"
 msgstr "Last Name"
 
-#: models.py:318 templates/company_user_detail.html:19
+#: companies/models.py:318 companies/templates/company_user_detail.html:19
 msgid "E-mail"
 msgstr "E-mail"
 
-#: models.py:319
+#: companies/models.py:319
 msgid "Телефон"
 msgstr "Phone"
 
-#: models.py:321
-#| msgid "Создан"
+#: companies/models.py:321
 msgid "Создано"
 msgstr "Created"
 
-#: models.py:348 models.py:349
-#| msgid "Новое резюме"
+#: companies/models.py:348 companies/models.py:349
 msgid "Резюме"
 msgstr "CV"
 
-#: models.py:354
+#: companies/models.py:354
 msgid "Заголовок"
 msgstr "Header"
 
-#: models.py:355
+#: companies/models.py:355
 msgid "Анонс"
 msgstr "Announcement"
 
-#: models.py:356
+#: companies/models.py:356
 msgid "Текст"
 msgstr "Text"
 
-#: models.py:357
+#: companies/models.py:357
 msgid "Начало"
 msgstr "Start"
 
-#: models.py:358
+#: companies/models.py:358
 msgid "Окончание"
 msgstr "End"
 
-#: models.py:359
+#: companies/models.py:359
 msgid "Всегда наверху"
 msgstr "Always at the top"
 
-#: models.py:371 templates/company_user_detail.html:25
+#: companies/models.py:371 companies/templates/company_user_detail.html:25
 msgid "Создан"
 msgstr "Created"
 
-#: models.py:384
+#: companies/models.py:384
 msgid "Место"
 msgstr "Place"
 
-#: models.py:407 models.py:408
-#| msgid "Новый Контент"
+#: companies/models.py:407 companies/models.py:408
 msgid "Контент"
 msgstr "Content"
 
-#: models.py:424
-#| msgid "Новый Контент"
+#: companies/models.py:424
 msgid "Тип контента"
 msgstr "Content Type"
 
-#: models.py:425
-#| msgid "Новый Контент"
+#: companies/models.py:425
 msgid "Типы контента"
 msgstr "Content Types"
 
-#: models.py:444
+#: companies/models.py:444
 msgid "Место отображения контента"
 msgstr "Content Display Location"
 
-#: models.py:445
+#: companies/models.py:445
 msgid "Места отображения контента"
 msgstr "Content Display Locations"
 
-#: templates/companies.html:27
+#: companies/templates/companies.html:27
 msgid "Организации техподдержки"
 msgstr "Technical Support Organizations"
 
-#: templates/companies.html:39
+#: companies/templates/companies.html:39
 msgid "В Системе нет ни одной"
 msgstr "There are none"
 
-#: templates/companies.html:41
-#| msgid "Организации техподдержки"
+#: companies/templates/companies.html:41
 msgid "Службы техподдержки!"
 msgstr "Technical Support Organization in the System!"
 
-#: templates/companies.html:43
-#| msgid "Организации"
+#: companies/templates/companies.html:43
 msgid "Организации!"
 msgstr "Organization in the System!"
 
-#: templates/companies.html:45
+#: companies/templates/companies.html:45
 msgid "Пожалуйста, обратитесь к Администратору Системы."
 msgstr "Please contact your System Administrator."
 
-#: templates/company_detail.html:15
-#| msgid " (Контент перемещен в архив)"
+#: companies/templates/company_detail.html:15
 msgid "(Организация перемещена в архив)"
 msgstr "(Organization moved to archive)"
 
-#: templates/company_detail.html:57 templates/content_detail.html:24
-#: templates/stafflist_detail.html:35
+#: companies/templates/company_detail.html:57
+#: companies/templates/content_detail.html:24
+#: companies/templates/stafflist_detail.html:35
 msgid "Дата"
 msgstr "Date"
 
-#: templates/company_detail.html:99
+#: companies/templates/company_detail.html:99
 msgid "Информация об организации недоступна!"
 msgstr "Organization information is not available!"
 
-#: templates/company_detail.html:100
-#| msgid "Пожалуйста, обратитесь к Администратору Системы."
+#: companies/templates/company_detail.html:100
 msgid "Пожалуйста, обратитесь к администратору."
 msgstr "Please contact your Administrator."
 
-#: templates/company_detail.html:117
+#: companies/templates/company_detail.html:117
 msgid "Пользователи"
 msgstr "Users"
 
-#: templates/company_detail.html:129
+#: companies/templates/company_detail.html:129
 msgid "Клиенты"
 msgstr "Clients"
 
-#: templates/company_detail.html:137 templates/company_detail.html:188
-#: templates/company_detail.html:288 templates/company_detail.html:358
+#: companies/templates/company_detail.html:137
+#: companies/templates/company_detail.html:188
+#: companies/templates/company_detail.html:288
+#: companies/templates/company_detail.html:358
 msgid "По статусу"
 msgstr "By status"
 
-#: templates/company_detail.html:139 templates/company_detail.html:150
-#: templates/company_detail.html:161 templates/company_detail.html:190
-#: templates/company_detail.html:201 templates/company_detail.html:210
-#: templates/company_detail.html:241 templates/company_detail.html:250
-#: templates/company_detail.html:259 templates/company_detail.html:290
-#: templates/company_detail.html:302 templates/company_detail.html:314
-#: templates/company_detail.html:360 templates/company_detail.html:371
+#: companies/templates/company_detail.html:139
+#: companies/templates/company_detail.html:150
+#: companies/templates/company_detail.html:161
+#: companies/templates/company_detail.html:190
+#: companies/templates/company_detail.html:201
+#: companies/templates/company_detail.html:210
+#: companies/templates/company_detail.html:241
+#: companies/templates/company_detail.html:250
+#: companies/templates/company_detail.html:259
+#: companies/templates/company_detail.html:290
+#: companies/templates/company_detail.html:302
+#: companies/templates/company_detail.html:314
+#: companies/templates/company_detail.html:360
+#: companies/templates/company_detail.html:371
 msgid "- Все"
 msgstr "- All"
 
-#: templates/company_detail.html:148 templates/company_detail.html:199
-#: templates/company_detail.html:248 templates/company_detail.html:300
+#: companies/templates/company_detail.html:148
+#: companies/templates/company_detail.html:199
+#: companies/templates/company_detail.html:248
+#: companies/templates/company_detail.html:300
 msgid "По типу"
 msgstr "By type"
 
-#: templates/company_detail.html:159
+#: companies/templates/company_detail.html:159
 msgid "Мои клиенты"
 msgstr "My Clients"
 
-#: templates/company_detail.html:162 templates/company_detail.html:211
-#: templates/company_detail.html:372
+#: companies/templates/company_detail.html:162
+#: companies/templates/company_detail.html:211
+#: companies/templates/company_detail.html:372
 msgid "- Я участник"
 msgstr "- I'm member"
 
-#: templates/company_detail.html:163 templates/company_detail.html:213
-#: templates/company_detail.html:260 templates/company_detail.html:315
-#: templates/company_detail.html:373
+#: companies/templates/company_detail.html:163
+#: companies/templates/company_detail.html:213
+#: companies/templates/company_detail.html:260
+#: companies/templates/company_detail.html:315
+#: companies/templates/company_detail.html:373
 msgid "- Я автор"
 msgstr "- I'm аuthor"
 
-#: templates/company_detail.html:164 templates/company_detail.html:212
+#: companies/templates/company_detail.html:164
+#: companies/templates/company_detail.html:212
 msgid "- Я менеджер"
 msgstr "- I'm manager"
 
-#: templates/company_detail.html:166 templates/company_detail.html:217
-#: templates/company_detail.html:262 templates/company_detail.html:318
-#: templates/company_detail.html:376
-#| msgid "Изменить"
+#: companies/templates/company_detail.html:166
+#: companies/templates/company_detail.html:217
+#: companies/templates/company_detail.html:262
+#: companies/templates/company_detail.html:318
+#: companies/templates/company_detail.html:376
 msgid "Применить"
 msgstr "Apply"
 
-#: templates/company_detail.html:174
+#: companies/templates/company_detail.html:174
 msgid "Клиентов пока нет..."
 msgstr "There are no clients yet..."
 
-#: templates/company_detail.html:180
+#: companies/templates/company_detail.html:180
 msgid "Документы"
 msgstr "Documents"
 
-#: templates/company_detail.html:208
+#: companies/templates/company_detail.html:208
 msgid "Мои документы"
 msgstr "My Documents"
 
-#: templates/company_detail.html:225
+#: companies/templates/company_detail.html:225
 msgid "Документов пока нет..."
 msgstr "There are no documents yet..."
 
-#: templates/company_detail.html:231
+#: companies/templates/company_detail.html:231
 msgid "Папки"
 msgstr "Folders"
 
-#: templates/company_detail.html:239
+#: companies/templates/company_detail.html:239
 msgid "По тематике"
 msgstr "By subject"
 
-#: templates/company_detail.html:257
+#: companies/templates/company_detail.html:257
 msgid "Мои папки"
 msgstr "My Folders"
 
-#: templates/company_detail.html:270
+#: companies/templates/company_detail.html:270
 msgid "Папок пока нет..."
 msgstr "There are no folders yet..."
 
-#: templates/company_detail.html:280
+#: companies/templates/company_detail.html:280
 msgid "Тикеты"
 msgstr "Tickets"
 
-#: templates/company_detail.html:291 templates/company_detail.html:361
+#: companies/templates/company_detail.html:291
+#: companies/templates/company_detail.html:361
 msgid "- Все активные"
 msgstr "- All active"
 
-#: templates/company_detail.html:292
+#: companies/templates/company_detail.html:292
 msgid "- Все закрытые"
 msgstr "- All closed"
 
-#: templates/company_detail.html:312
+#: companies/templates/company_detail.html:312
 msgid "Мои"
 msgstr "My"
 
-#: templates/company_detail.html:350
+#: companies/templates/company_detail.html:350
 msgid "Проекты"
 msgstr "Projects"
 
-#: templates/company_detail.html:362
+#: companies/templates/company_detail.html:362
 msgid "- Просроченные"
 msgstr "- Overdue"
 
-#: templates/company_detail.html:369
+#: companies/templates/company_detail.html:369
 msgid "Мои проекты"
 msgstr "My Projects"
 
-#: templates/company_detail.html:374
+#: companies/templates/company_detail.html:374
 msgid "- Я исполнитель"
 msgstr "- I'm performer"
 
-#: templates/company_detail.html:384
+#: companies/templates/company_detail.html:384
 msgid "Проектов пока нет..."
 msgstr "There are no projects yet..."
 
-#: templates/company_stafflist_list.html:13
-#: templates/company_stafflist_list.html:18
+#: companies/templates/company_stafflist_list.html:13
+#: companies/templates/company_stafflist_list.html:18
 msgid "Кол-во"
 msgstr "Quantity"
 
-#: templates/company_user_detail.html:15
-#| msgid " (Контент перемещен в архив)"
+#: companies/templates/company_user_detail.html:15
 msgid "(Пользователь перемещен в архив)"
 msgstr "(User moved to archive)"
 
-#: templates/company_user_detail.html:18
+#: companies/templates/company_user_detail.html:18
 msgid "ФИО"
 msgstr "Full name"
 
-#: templates/company_user_detail.html:21 templates/company_user_detail.html:23
+#: companies/templates/company_user_detail.html:21
+#: companies/templates/company_user_detail.html:23
 msgid "Статус"
 msgstr "Status"
 
-#: templates/company_user_detail.html:26
+#: companies/templates/company_user_detail.html:26
 msgid "Последний вход"
 msgstr "Last entry"
 
-#: templates/company_user_roles_list.html:8
+#: companies/templates/company_user_roles_list.html:8
 msgid "Роли"
 msgstr "Roles"
 
-#: templates/content.html:7
+#: companies/templates/content.html:7
 msgid "Главная страница"
 msgstr "Main page"
 
-#: templates/stafflist_detail.html:17
-#| msgid "- Я исполнитель"
+#: companies/templates/stafflist_detail.html:17
 msgid "Руководитель"
 msgstr "Head"
 
-#: templates/stafflist_detail.html:26
-#| msgid "Компонент"
+#: companies/templates/stafflist_detail.html:26
 msgid "Компания"
 msgstr "Company"
 
-#: templates/stafflist_detail.html:28
+#: companies/templates/stafflist_detail.html:28
 msgid "чел."
 msgstr "persons"
 
-#: templates/stafflist_detail.html:30
+#: companies/templates/stafflist_detail.html:30
 msgid "Вакансия: Да"
 msgstr "Vacancy: Yes"
 
-#: templates/stafflist_detail.html:46
+#: companies/templates/stafflist_detail.html:46
 msgid "Информация о должности недоступна!"
 msgstr "Positions information is not available!"
 
-#: templates/stafflist_detail.html:59
+#: companies/templates/stafflist_detail.html:59
 msgid "Список резюме"
 msgstr "CV list"
 
-#: templates/stafflist_detail.html:106
+#: companies/templates/stafflist_detail.html:106
 msgid "Информация о сотрудниках недоступна!"
 msgstr "Employees information is not available!"
 
-#: views.py:76 views.py:189 views.py:219 views.py:222 views.py:300
-#: views.py:322 views.py:323 views.py:442 views.py:563 views.py:623
-#: views.py:645
+#: companies/views.py:76 companies/views.py:189 companies/views.py:219
+#: companies/views.py:222 companies/views.py:300 companies/views.py:322
+#: companies/views.py:323 companies/views.py:442 companies/views.py:563
+#: companies/views.py:623 companies/views.py:645
 msgid "Добавить"
 msgstr "Add"
 
-#: views.py:155
+#: companies/views.py:155
 msgid "Изменить Организацию"
 msgstr "Edit Organization"
 
-#: views.py:192 views.py:195
+#: companies/views.py:192 companies/views.py:195
 msgid "Сменить организацию"
 msgstr "Cange Organization"
 
-#: views.py:220 views.py:324 views.py:443 views.py:564 views.py:622
+#: companies/views.py:220 companies/views.py:324 companies/views.py:443
+#: companies/views.py:564 companies/views.py:622
 msgid "Изменить"
 msgstr "Edit"
 
-#: views.py:221
+#: companies/views.py:221
 msgid "Пригласить"
 msgstr "Invite"
 
-#: views.py:275 views.py:383
+#: companies/views.py:275 companies/views.py:383
 msgid "Изменить Должность"
 msgstr "Edit Position"
 
-#: views.py:368
+#: companies/views.py:368
 msgid "Новый Сотрудник"
 msgstr "New Employee"
 
-#: views.py:405
+#: companies/views.py:405
 msgid "Откликнуться на вакансию"
 msgstr "Respond to a vacancy"
 
-#: views.py:423
+#: companies/views.py:423
 msgid "Новое резюме"
 msgstr "New CV"
 
-#: views.py:458 views.py:472
+#: companies/views.py:458 companies/views.py:472
 msgid "Удалить резюме"
 msgstr "Remove CV"
 
-#: views.py:469
+#: companies/views.py:469
 msgid "Восстановить резюме"
 msgstr "Restore CV"
 
-#: views.py:566
+#: companies/views.py:566
 msgid "Автор: "
 msgstr "Author"
 
-#: views.py:568
+#: companies/views.py:568
 msgid " (Контент перемещен в архив)"
 msgstr "(Content moved to archive)"
 
-#: views.py:584
+#: companies/views.py:584
 msgid "Новый Контент"
 msgstr "New Content"
 
-#: views.py:605
+#: companies/views.py:605
 msgid "Изменить Контент"
 msgstr "Edit Content"
 
-#: views.py:665
+#: companies/views.py:665
 msgid "\"Эта\" роль уже назначена!"
 msgstr "\"This\" role has already been assigned!"
 
-#: views.py:669
+#: companies/views.py:669
 msgid "Добавить роль"
 msgstr "Add role"
 

@@ -2,8 +2,10 @@
 
 {% block content %}
 
+   {% load i18n %}
+
    {% if param == 'publiccontent' %}
-      <h3>Главная страница</h3>
+      <h3>{% trans "Главная страница" %}</h3>
       <div class="object-list">
            {% for content in content_list %}
               <em>{{ content.datecreate }}</em>&nbsp;
@@ -25,7 +27,7 @@
 {% block vacancies_list %}
 
    {% if param == 'vacancies' %}
-      <h3>Наши вакансии</h3>
+      <h3>{% trans "Наши вакансии" %}</h3>
       <div class="object-list">
           {% for vacancy in vacancies_list %}
              <a href="{% url 'my_main:vacancy_detail' vacancy.pk %}">{{ vacancy.name }}</a>&nbsp;<i>{{ vacancy.datecreate }}</i>&nbsp;<br />

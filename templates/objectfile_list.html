@@ -1,14 +1,16 @@
 <div id="ajax_filelistresult">
 
+    {% load i18n %}
+
     <div class="object-detail--right">
 
         {% if files %}
-            Файлы:
+            {% trans "Файлы" %}:
         {% endif %}
 
         {% comment %}
         {% for file in files %}
-           <p style="margin: 0 0 10px 10px;"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл">
+           <p style="margin: 0 0 10px 10px;"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Удалить этот файл' %}">
             <input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span>&nbsp;&nbsp;&nbsp;
             <a href="{{ file.pfile }}">{{ file.uname }}</a>&nbsp;&nbsp;<em style="font-size:80%">{{ file.psize|filesizeformat }} {{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></p>
         {% endfor %}
@@ -19,18 +21,18 @@
                     {% comment %}
                     {% if objtype == 'fldr' %}
                         {% if user.id == file.author.id %}
-                            <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                            <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Удалить этот файл' %}"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                         {% endif %}
                     {% else %}
                         {{ current_doc.doctask }}/{{ task.name }}
                         {% if current_doc.doctask == 0 or task.name %}
-                            <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                            <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Удалить этот файл' %}"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                         {% endif %}
                     {% endif %}
                     {% endcomment %}
                     <!--+++/{ obj_files_rights }}/+++-->
                     {% if obj_files_rights and obj_files_rights != 0 %}
-                        <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                        <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Удалить этот файл' %}"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                     {% endif %}
 
                     <div class="cell-files-left"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>

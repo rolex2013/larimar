@@ -1,5 +1,7 @@
 
-    <h4>Чаты</h4>
+    {% load i18n %}
+    
+    <h4>{% trans "Чаты" %}</h4>
 
     <div id="chatlist" style="padding:0px 0px 0px 10px;">
 
@@ -8,6 +10,5 @@
                ({{ node.type }} -
                {{ node.author }} {{ node.datecreate|date:"d.m.y" }})</i></p>
         {% endfor %}
-
 
     </div>

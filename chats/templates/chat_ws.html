@@ -1,4 +1,6 @@
 
+    {% i18n %}
+    
     <div style="font-size: small; color: #ffffff;">
         <p id="log" style="margin: 10px 0px 10px 0px;"></p> <br /><!--<p id="log_my" style="margin: 10px 0px 10px 20px;"></p>-->
     </div>
@@ -14,7 +16,7 @@
         </select><br />
         <input id="message" class="form-control" type="text" style="font-size: small;"><br />
     </div>
-    <button id="button" style="font-size: small;">Отправить</button>
+    <button id="button" style="font-size: small;">{% trans "Отправить" %}</button>
 
 
 <script>
@@ -41,6 +43,7 @@
         + window.location.host
         + '/ws/chats/chat/{{ request.user.id }}/'
     );
+    // console.log('===>>>' + MyChatSocket)
 
     MyChatSocket.onmessage = function (e) {
         const data = JSON.parse(e.data);

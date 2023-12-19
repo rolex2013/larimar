@@ -1,4 +1,7 @@
 <!--*** { request.session.websocket_test }} ***-->
+    
+    {% load i18n %}
+
     <div id="ajax_messagelistresult_" class="object-chats-messages">
         {% include 'chat_messages_list.html' %}
     </div>
@@ -91,6 +94,9 @@
                 + window.location.host
                 + '/ws/chats/chat/' + {{ currentchatid }} + '/' + {{ request.user.id }} + '/'
             );
+            /* console.log('===>>>' + 'ws://'
+                    + window.location.host
+                    + '/ws/chats/chat/' + { currentchatid }} + '/' + { request.user.id }}) */
 
             ChatSocket.onmessage = function (e) {
                 const data = JSON.parse(e.data);

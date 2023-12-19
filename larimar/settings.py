@@ -310,6 +310,7 @@ else:
         "larimaritgroup.ru",
         "www.larimaritgroup.ru",
         "1yes.larimaritgroup.ru",
+        "www.1yes.larimaritgroup.ru",
     ]
 
     STATIC_URL = os.getenv("STATIC_URL")
