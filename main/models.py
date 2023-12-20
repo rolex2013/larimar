@@ -96,7 +96,7 @@ class Component(TranslateFieldMixin, MPTTModel):
         return self.trans_field(exposed_request, 'description')
                
     def __str__(self):
-        return self.name_ru
+        return self.name
 
     class MPTTMeta:
         order_insertion_by = ['code']
