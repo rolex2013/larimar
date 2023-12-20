@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-11 13:49+0300\n"
-"PO-Revision-Date: 2023-12-08 15:58+0300\n"
+"POT-Creation-Date: 2023-12-20 13:29+0300\n"
+"PO-Revision-Date: 2023-12-20 13:43+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,39 +19,39 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: finance/models.py:14
+#: finance/models.py:15
 msgid "Наименование_ru"
 msgstr "Name_ru"
 
-#: finance/models.py:14 finance/models.py:15
+#: finance/models.py:15 finance/models.py:16
 msgid "Наименование валюты"
 msgstr "Name of the currency "
 
-#: finance/models.py:15
+#: finance/models.py:16
 msgid "Наименование_en"
 msgstr "Name_en"
 
-#: finance/models.py:16
+#: finance/models.py:17
 msgid "Краткое наименование_ru"
 msgstr "Short name_ru"
 
-#: finance/models.py:17
+#: finance/models.py:18
 msgid "Краткое наименование_en"
 msgstr "Short name _n"
 
-#: finance/models.py:18
+#: finance/models.py:19
 msgid "Символ"
 msgstr "Symbol"
 
-#: finance/models.py:21
+#: finance/models.py:22
 msgid "Активность"
 msgstr "Activity"
 
-#: finance/models.py:46
+#: finance/models.py:47
 msgid "Вид валюты"
 msgstr "Currency Type"
 
-#: finance/models.py:47
+#: finance/models.py:48
 msgid "Виды валют"
 msgstr "Currency Types"
 

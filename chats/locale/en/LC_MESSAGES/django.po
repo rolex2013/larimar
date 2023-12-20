@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-12 13:38+0300\n"
-"PO-Revision-Date: 2023-12-12 14:00+0300\n"
+"POT-Creation-Date: 2023-12-20 13:29+0300\n"
+"PO-Revision-Date: 2023-12-20 13:46+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,175 +19,176 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: consumers.py:147
+#: chats/consumers.py:147
 msgid "Для чата chatid="
 msgstr "For chat chatid="
 
-#: consumers.py:149
+#: chats/consumers.py:149
 msgid "получено сообщение"
 msgstr "message received"
 
-#: consumers.py:175
+#: chats/consumers.py:175
 msgid "В чат chatid="
 msgstr "In chat chatid="
 
-#: consumers.py:177
+#: chats/consumers.py:177
 msgid "отправлено сообщение"
 msgstr "message sent"
 
-#: models.py:22
+#: chats/models.py:22
 msgid "Наименование_ru"
 msgstr "Name_ru"
 
-#: models.py:23
+#: chats/models.py:23
 msgid "Наименование_en"
 msgstr "Name_en"
 
-#: models.py:25 models.py:77 models.py:127 models.py:189
+#: chats/models.py:25 chats/models.py:77 chats/models.py:127
+#: chats/models.py:189
 msgid "Активность"
 msgstr "Activity"
 
-#: models.py:33
+#: chats/models.py:33
 msgid "Тип чата"
 msgstr "Type"
 
-#: models.py:34
+#: chats/models.py:34
 msgid "Типы чатов"
 msgstr "Types"
 
-#: models.py:41
+#: chats/models.py:41
 msgid "Наименование"
 msgstr "Name"
 
-#: models.py:42 templates/chats.html:30
+#: chats/models.py:42 chats/templates/chats.html:30
 msgid "Описание"
 msgstr "Description"
 
-#: models.py:49
+#: chats/models.py:49
 msgid "Компания"
 msgstr "Company"
 
-#: models.py:56
+#: chats/models.py:56
 msgid "Тип"
 msgstr "Type"
 
-#: models.py:58 models.py:104 models.py:171
+#: chats/models.py:58 chats/models.py:104 chats/models.py:171
 msgid "Создан"
 msgstr "Created"
 
-#: models.py:60 models.py:107
+#: chats/models.py:60 chats/models.py:107
 msgid "Дата закрытия"
 msgstr "Date close"
 
-#: models.py:67 templates/chat_members_list.html:6
+#: chats/models.py:67 chats/templates/chat_members_list.html:6
 msgid "Участники"
 msgstr "Participants"
 
-#: models.py:75 models.py:125 models.py:187
+#: chats/models.py:75 chats/models.py:125 chats/models.py:187
 msgid "Автор"
 msgstr "Author"
 
-#: models.py:85
+#: chats/models.py:85
 msgid "Чат Компании"
 msgstr "Company chat"
 
-#: models.py:86
+#: chats/models.py:86
 msgid "Чаты компаний"
 msgstr "Company chats"
 
-#: models.py:95 models.py:169
+#: chats/models.py:95 chats/models.py:169
 msgid "Чат"
 msgstr "Chat"
 
-#: models.py:101
+#: chats/models.py:101
 msgid "Участник"
 msgstr "Participant"
 
-#: models.py:110
+#: chats/models.py:110
 msgid "Момент входа в чат"
 msgstr "Entry moment"
 
-#: models.py:113
+#: chats/models.py:113
 msgid "Момент последней активности"
 msgstr "Last activity moment"
 
-#: models.py:116
+#: chats/models.py:116
 msgid "Момент выхода из чата"
 msgstr "Exit moment"
 
-#: models.py:118
+#: chats/models.py:118
 msgid "Администратор"
 msgstr "Administrator"
 
-#: models.py:149
+#: chats/models.py:149
 msgid "Участник Чата"
 msgstr "Chat Participant"
 
-#: models.py:150
+#: chats/models.py:150
 msgid "Участники чатов"
 msgstr "Chat Participants"
 
-#: models.py:163
+#: chats/models.py:163
 msgid "Текст"
 msgstr "Text"
 
-#: models.py:179
+#: chats/models.py:179
 msgid "Только для"
 msgstr "Only for"
 
-#: models.py:197
+#: chats/models.py:197
 msgid "Сообщение пользователя"
 msgstr "User message"
 
-#: models.py:198
+#: chats/models.py:198
 msgid "Сообщения пользователей"
 msgstr "Users messages"
 
-#: templates/chat_member_form.html:15
+#: chats/templates/chat_member_form.html:15
 msgid "Админ"
 msgstr "Admin"
 
-#: templates/chat_member_form.html:16
+#: chats/templates/chat_member_form.html:16
 msgid "Добавить"
 msgstr "Add"
 
-#: templates/chat_message_form.html:9
+#: chats/templates/chat_message_form.html:9
 msgid "Текст сообщения"
 msgstr "Text of message"
 
-#: templates/chat_message_form.html:10 templates/chat_ws.html:19
+#: chats/templates/chat_message_form.html:10 chats/templates/chat_ws.html:19
 msgid "Отправить"
 msgstr "Send"
 
-#: templates/chats.html:29
+#: chats/templates/chats.html:29
 msgid "Название чата"
 msgstr "Chat name"
 
-#: templates/chats.html:31
+#: chats/templates/chats.html:31
 msgid "Создать"
 msgstr "Create"
 
-#: templates/chats_list.html:4
+#: chats/templates/chats_list.html:4
 msgid "Чаты"
 msgstr "Chats"
 
-#: views.py:70
+#: chats/views.py:65
 msgid "Сменить организацию"
 msgstr "Change Organization"
 
-#: views.py:281
+#: chats/views.py:275
 msgid "Создан новый чат"
 msgstr "New chat was created"
 
-#: views.py:300
+#: chats/views.py:295
 msgid "Текущий чат изменён!"
 msgstr "Current chat was updated!"
 
-#: views.py:306
+#: chats/views.py:301
 msgid "Такой команды не существует!"
 msgstr "No such command exists!"
 
-#: views.py:309
+#: chats/views.py:305
 msgid ""
 "Сожалеем, но у Вас нет прав Администратора для выполнения команд в этом "
 "чате!"

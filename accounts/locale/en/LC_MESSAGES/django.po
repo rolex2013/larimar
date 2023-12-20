@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-19 14:09+0300\n"
-"PO-Revision-Date: 2023-12-19 14:10+0300\n"
+"POT-Creation-Date: 2023-12-20 13:29+0300\n"
+"PO-Revision-Date: 2023-12-20 13:46+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,153 +19,152 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: forms.py:10 forms.py:64
+#: accounts/forms.py:11 accounts/forms.py:70
 msgid "Пароль"
 msgstr "Password"
 
-#: forms.py:11 forms.py:65
+#: accounts/forms.py:12 accounts/forms.py:71
 msgid "Повторно"
 msgstr "Again"
 
-#: forms.py:12
+#: accounts/forms.py:13
 msgid "Зарегистрировать свою Компанию?"
 msgstr "Register your Company?"
 
-#: forms.py:21 forms.py:78
+#: accounts/forms.py:22 accounts/forms.py:84
 msgid "Пароли не совпадают!"
 msgstr "Passwords don't match!"
 
-#: forms.py:47
+#: accounts/forms.py:51
 msgid "Отметьте, если это сотрудник, а не клиент"
 msgstr "Check if this is an employee, not a client"
 
-#: forms.py:69
+#: accounts/forms.py:75
 msgid "отметьте, если это сотрудник вашей Организации"
 msgstr "check if this is an employee of your Organization"
 
-#: models.py:15 templates/registration/register_done.html:17
-#: templates/registration/register_done.html:20
+#: accounts/models.py:15 accounts/templates/registration/register_done.html:17
+#: accounts/templates/registration/register_done.html:20
 msgid "Пользователь"
 msgstr "User"
 
-#: models.py:16
-#| msgid "в настройки Организации"
+#: accounts/models.py:16
 msgid "Организация"
 msgstr "Organization"
 
-#: models.py:17
+#: accounts/models.py:17
 msgid "Оповещать"
 msgstr "To notify"
 
-#: models.py:18
+#: accounts/models.py:18
 msgid "Протокол оповещения"
 msgstr "Notification protocol"
 
-#: models.py:19
+#: accounts/models.py:19
 msgid "Язык"
 msgstr "Language"
 
-#: models.py:21
+#: accounts/models.py:21
 msgid "Телефон"
 msgstr "Phone"
 
-#: models.py:22
+#: accounts/models.py:22
 msgid "Описание"
 msgstr "Description"
 
-#: models.py:23
+#: accounts/models.py:23
 msgid "Активность"
 msgstr "Is activity"
 
-#: models.py:36
+#: accounts/models.py:36
 msgid "Профиль Пользователя"
 msgstr "User Profile"
 
-#: models.py:37
+#: accounts/models.py:37
 msgid "Профили Пользователей"
 msgstr "Users Profiles"
 
-#: templates/registration/register.html:8
-#: templates/registration/register.html:20
+#: accounts/templates/registration/register.html:8
+#: accounts/templates/registration/register.html:20
 msgid "Регистрация пользователя"
 msgstr "User Registration"
 
-#: templates/registration/register.html:10
-#: templates/registration/register.html:64
+#: accounts/templates/registration/register.html:10
+#: accounts/templates/registration/register.html:64
 msgid "Приглашение нового пользователя"
 msgstr "Inviting a new user"
 
-#: templates/registration/register.html:21
-#: templates/registration/register.html:65
+#: accounts/templates/registration/register.html:21
+#: accounts/templates/registration/register.html:65
 msgid "Пожалуйста, заполните все поля формы"
 msgstr "Please fill in all fields of the form"
 
-#: templates/registration/register.html:37
-#: templates/registration/register.html:74
+#: accounts/templates/registration/register.html:37
+#: accounts/templates/registration/register.html:74
 msgid "Создать"
 msgstr "Create"
 
-#: templates/registration/register.html:46
+#: accounts/templates/registration/register.html:46
 msgid "Добавить пользователя в организацию"
 msgstr "Add a user to an organization"
 
-#: templates/registration/register.html:47
+#: accounts/templates/registration/register.html:47
 msgid "Пожалуйста, выберите пользователя"
 msgstr "Please select a user"
 
-#: templates/registration/register.html:56
+#: accounts/templates/registration/register.html:56
 msgid "Добавить"
 msgstr "Add"
 
-#: templates/registration/register_done.html:6
+#: accounts/templates/registration/register_done.html:6
 msgid "Добро пожаловать!"
 msgstr "Welcome!"
 
-#: templates/registration/register_done.html:13
+#: accounts/templates/registration/register_done.html:13
 msgid "Добро пожаловать"
 msgstr "Welcome"
 
-#: templates/registration/register_done.html:14
+#: accounts/templates/registration/register_done.html:14
 msgid "Ваш аккаунт успешно создан. Теперь вы можете"
 msgstr "Your account has been successfully created. Now you can"
 
-#: templates/registration/register_done.html:14
+#: accounts/templates/registration/register_done.html:14
 msgid "войти"
 msgstr "log in"
 
-#: templates/registration/register_done.html:14
+#: accounts/templates/registration/register_done.html:14
 msgid "в систему"
 msgstr " "
 
-#: templates/registration/register_done.html:17
+#: accounts/templates/registration/register_done.html:17
 msgid "зарегистрирован в компании"
 msgstr "registered in Company"
 
-#: templates/registration/register_done.html:18
-#: templates/registration/register_done.html:22
+#: accounts/templates/registration/register_done.html:18
+#: accounts/templates/registration/register_done.html:22
 msgid "Теперь вы можете"
 msgstr "You can now"
 
-#: templates/registration/register_done.html:18
-#: templates/registration/register_done.html:22
+#: accounts/templates/registration/register_done.html:18
+#: accounts/templates/registration/register_done.html:22
 msgid "вернуться"
 msgstr "return"
 
-#: templates/registration/register_done.html:18
-#: templates/registration/register_done.html:22
+#: accounts/templates/registration/register_done.html:18
+#: accounts/templates/registration/register_done.html:22
 msgid "в настройки Организации"
 msgstr "Organization settings"
 
-#: templates/registration/register_done.html:20
+#: accounts/templates/registration/register_done.html:20
 msgid "зарегистрирован"
 msgstr "registered"
 
-#: templates/registration/register_done.html:21
+#: accounts/templates/registration/register_done.html:21
 msgid "Его аккаунт успешно создан, и ему на"
 msgstr ""
 "His account was successfully created, and an invitation was sent to him by "
 "email"
 
-#: templates/registration/register_done.html:21
+#: accounts/templates/registration/register_done.html:21
 msgid "отправлено приглашение"
 msgstr " "

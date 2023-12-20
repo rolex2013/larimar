@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-11 14:02+0300\n"
-"PO-Revision-Date: 2023-12-11 14:23+0300\n"
+"POT-Creation-Date: 2023-12-20 13:29+0300\n"
+"PO-Revision-Date: 2023-12-20 13:38+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,6 +19,27 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
+#: crm/models.py:190
+msgid "Задача клиента"
+msgstr "Client Task"
+
+#: crm/models.py:247
+msgid "Событие клиента"
+msgstr "Client Event"
+
+#: docs/models.py:155
+#| msgid "Документы"
+msgid "Задача документа"
+msgstr "Document Task"
+
+#: feedback/models.py:103
+msgid "Тикет"
+msgstr "Ticket"
+
+#: feedback/models.py:152
+msgid "Задача тикета"
+msgstr "Ticket Task"
+
 #: larimar/settings.py:231
 msgid "Russian"
 msgstr "Russian"
@@ -26,6 +47,14 @@ msgstr "Russian"
 #: larimar/settings.py:232
 msgid "English"
 msgstr "Enflish"
+
+#: projects/models.py:119
+msgid "Проект"
+msgstr "Project"
+
+#: projects/models.py:208
+msgid "Задача проекта"
+msgstr "Project Task"
 
 #: templates/base.html:27 templates/base.html:31
 msgid "Ваша первая и единственная Корпоративная система управления"

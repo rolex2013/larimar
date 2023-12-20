@@ -39,4 +39,14 @@
             "is_active": true
         }
     }
+    {
+        "model": "companies.dict_companytype",
+        "pk": 5,
+        "fields": {
+            "name_ru": "Тестовая Компания",
+            "name_en": "Testing Company",
+            "sort": 25,
+            "is_active": true
+        }
+    }    
 ]
