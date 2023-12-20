@@ -34,6 +34,7 @@ from main.models import Component, Notification, Meta_ObjectType
 # from .tables import NotificationTable
 from companies.models import Company, UserCompanyComponentGroup, Content
 from feedback.models import Dict_System
+from feedback.views import definerights
 from .models import UserProfile
 from django.db.models import Count
 
@@ -43,6 +44,7 @@ import pytz
 import requests
 from bs4 import BeautifulSoup as BS
 from time import sleep
+
 
 # from companies.views import publiccontents
 
@@ -168,6 +170,13 @@ class ELoginView(View):
             request.session["_auth_user_component_id"] = list(set(components_list))
             request.session[settings.LANGUAGE_COOKIE_NAME] = current_profile.lang
             request.session.modified = True
+            # получаем список Техподдержек
+            comp_support_list = UserCompanyComponentGroup.objects.filter(
+                                                    user=request.user.id,
+                                                    is_active=True,
+                                                    company__is_support=True,
+                                                    company__is_active=True).values_list("company_id", flat=True) # .select_related("company")
+            request.session["_auth_user_compsupportid"] = list(set(comp_support_list))
             # ======================
             # получаем предыдущий url
             # next = urlparse(get_next_url(request)).path
