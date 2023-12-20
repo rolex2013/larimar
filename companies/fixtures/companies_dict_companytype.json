@@ -38,7 +38,7 @@
             "sort": 20,
             "is_active": true
         }
-    }
+    },
     {
         "model": "companies.dict_companytype",
         "pk": 5,
@@ -48,5 +48,5 @@
             "sort": 25,
             "is_active": true
         }
-    }    
+    }
 ]

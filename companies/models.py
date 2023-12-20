@@ -175,7 +175,7 @@ class UserCompanyComponentGroup(models.Model):
         related_name="result_group",
         verbose_name=_("Группа"),
     )
-    is_active = models.BooleanField("Активность", default=True)
+    is_active = models.BooleanField(_("Активность"), default=True)
 
     def __str__(self):
         return (
