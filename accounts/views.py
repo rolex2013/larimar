@@ -168,7 +168,9 @@ class ELoginView(View):
                 )
                 # print(current_company)
             request.session["_auth_user_component_id"] = list(set(components_list))
-            request.session[settings.LANGUAGE_COOKIE_NAME] = current_profile.lang
+            request.session[settings.LANGUAGE_COOKIE_NAME] = 'ru'
+            if current_profile.lang:
+                request.session[settings.LANGUAGE_COOKIE_NAME] = current_profile.lang
             request.session.modified = True
             # получаем список Техподдержек
             comp_support_list = UserCompanyComponentGroup.objects.filter(

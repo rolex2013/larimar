@@ -9,14 +9,24 @@
          <span class="hint hint--bottom hint--info" data-hint={% trans "Отметить прочитанным" %}>
              <input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" />
              {% comment %}<button value="{{notification.id}}" name="myButton_{{notification.id}}"> X </button>{% endcomment %}
-         </span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate|date:"d.m.Y H:i:s" }}&nbsp;&nbsp;&nbsp;{{ notification.author.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info" data-hint="{{ notification.text }}">
+             {% comment %}</span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate|date:"d.m.Y H:i:s" }}//////////////
+               {{ notification.author.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info" data-hint="{{ notification.text }}">{% endcomment %}
+                  </span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate|date:"d.m.Y H:i:s" }}
+                     {% if notification.author.username == request.user.username %}
+                        &nbsp;
+                     {% else %}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                     {% endif %}
+                     {{ notification.author.username }} → {{ notification.recipient.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info"
+                     data-hint="{{ notification.theme }}">
              {% if notification.objecttype.shortname == 'prj' %}
-                <a href="{% url 'my_project:tasks' notification.objectid 0 %}">{{ notification.theme }}</a>
+                <a href="{% url 'my_project:tasks' notification.objectid 0 %}">{{ notification.text }}</a>
              {% elif notification.objecttype.shortname == 'tsk' %}
-                <a href="{% url 'my_project:taskcomments' notification.objectid %}">{{ notification.theme }}</a> 
+                <a href="{% url 'my_project:taskcomments' notification.objectid %}">{{ notification.text }}</a> 
              {% else %} 
-                {{ notification.theme }}          
+                {{ notification.text }}          
              {% endif %}
+
          </span>
          <br />
 

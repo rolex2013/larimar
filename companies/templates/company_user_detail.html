@@ -23,11 +23,15 @@
          <p><strong>{% trans 'Статус' %}:</strong> Клиент</p>
       {% endif %}      
       <em>{% trans 'Создан' %}: {{ companyuser.date_joined }}</em>
-      <em>{% trans 'Последний вход' %}: {{ companyuser.last_login }}</em>          
-      <p>&nbsp;</p>
-      <div class="object-detail-buttons">
-          <a href="{ url 'my_company:companyuser_update' companyuser.pk %}">{{ button_companyuser_update }}</a>
-      </div>
+      <em>{% trans 'Последний вход' %}: {{ companyuser.last_login }}</em>  
+
+      {% comment %}
+      <!-- Редактирование и Удаление пользователя производится только в админке -->        
+         <p>&nbsp;</p>
+         <div class="object-detail-buttons">
+            <a href="{% url 'my_company:companyuser_update' companyuser.pk %}">{{ button_companyuser_update }}</a>
+         </div>
+      {% endcomment %}
 
    </div>
 

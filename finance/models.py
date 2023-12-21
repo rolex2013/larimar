@@ -23,44 +23,67 @@ class Dict_Currency(models.Model):
 
     @property
     def name(self):
-        try:
-            lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
-        except KeyError:
-            try:
-                lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
-            except KeyError:
-                lang = 'ru'
-        return getattr(self, 'name_'+lang, None)
+        # # try:
+        # #     lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
+        # # except KeyError:
+        # #     try:
+        # #         lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
+        # #     except KeyError:
+        # #         lang = 'ru'
+        # try:
+        #     lang = exposed_request.COOKIES[settings.LANGUAGE_COOKIE_NAME]
+        # except KeyError:
+        #     try:
+        #         lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
+        #     except KeyError:
+        #         lang = "ru"
+        # if lang is None:
+        #     lang = "ru"
+        # return getattr(self, 'name_'+lang, None)
+        return self.trans_field(exposed_request, "name")
+
     @property
     def shortname(self):
-        try:
-            lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
-        except KeyError:
-            try:
-                lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
-            except KeyError:
-                lang = 'ru'
-        return getattr(self, 'shortname_'+lang, None)
+        # # try:
+        # #     lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
+        # # except KeyError:
+        # #     try:
+        # #         lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
+        # #     except KeyError:
+        # #         lang = 'ru'
+        # try:
+        #     lang = exposed_request.COOKIES[settings.LANGUAGE_COOKIE_NAME]
+        # except KeyError:
+        #     try:
+        #         lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
+        #     except KeyError:
+        #         lang = "ru"
+        # if lang is None:
+        #     lang = "ru"
+        # return getattr(self, 'shortname_'+lang, None)
+        return self.trans_field(exposed_request, "shortname")
 
     class Meta:
         ordering = ('sort',)
         verbose_name = _('Вид валюты')
         verbose_name_plural = _('Виды валют')
+
     def __str__(self):
         return (self.name)
+
 
 class CurrencyRate(models.Model):
     currency = models.ForeignKey('Dict_Currency', on_delete=models.CASCADE, related_name='currencyrate_currency', verbose_name="Валюта")
     date = models.DateTimeField("Дата")
     rate = models.DecimalField("Курс", max_digits=12, decimal_places=4)
-    datecreate = models.DateTimeField("Дата загрузки", auto_now_add=True)        
+    datecreate = models.DateTimeField("Дата загрузки", auto_now_add=True)
     is_active = models.BooleanField("Активность", default=True)
-    
+
     def __str__(self):
         return (self.currency.name + '. ' + self.date.strftime('%d.%m.%Y, %H:%M') + ' - ' + str(self.rate))
-    
+
     class Meta:
         unique_together = ('currency','date')
         ordering = ('-date', 'currency')
         verbose_name = 'История курса валют'
-        verbose_name_plural = 'Истории курсов валют'                    
+        verbose_name_plural = 'Истории курсов валют'

@@ -994,6 +994,7 @@ body {
   opacity: 0;
   transition: max-height 1s;
   visibility: hidden;
+  background-image: url("images/expand-button_icon-icons.com_72763.png");
 }
 
 /* (C) SHOW CONTENT WHEN CHECKED */
@@ -1001,6 +1002,7 @@ body {
   max-height: 100vh; /* any insanely large number if a lot of contents */
   opacity: 1;
   visibility: visible;
+  /* image: url("../images/expand-less_119177.png"); */
 }
 
 /* (X) COSMETICS - DOES NOT MATTER */
@@ -1018,6 +1020,7 @@ body {
   /* color: #fff;
   background: #00409f; */
   cursor: pointer;
+  /* image: url("../images/expand-less_119177.png"); */
 }
 
 /* (X3) CONTENT */
