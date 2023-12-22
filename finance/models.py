@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
+
 from django.utils.translation import gettext_lazy as _
+from main.utils_lang import TranslateFieldMixin
 
 #from django.urls import reverse, reverse_lazy
 #from django.utils import timezone
@@ -9,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 exposed_request = ''
 
 
-class Dict_Currency(models.Model):
+class Dict_Currency(TranslateFieldMixin, models.Model):
     code_char = models.CharField("Символьный код", max_length=3)
     code_num = models.CharField("Цифровой код", max_length=3)
     name_ru = models.CharField(_("Наименование_ru"), max_length=64, help_text=_("Наименование валюты"))
@@ -18,7 +20,7 @@ class Dict_Currency(models.Model):
     shortname_en = models.CharField(_("Краткое наименование_en"), blank=True, null=True, max_length=24)
     symbol = models.CharField(_("Символ"), blank=True, null=True, max_length=1)
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    #name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+    # name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
     is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
