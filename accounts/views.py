@@ -25,18 +25,16 @@ from django.views.generic.edit import UpdateView
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LogoutView
 
-# from django.core import serializers
-
-from .forms import UserRegistrationForm, UserInviteForm, UserAddForm, UserProfileForm
-
+from django.db.models import Count
+from .models import UserProfile
 from main.models import Component, Notification, Meta_ObjectType
-
-# from .tables import NotificationTable
 from companies.models import Company, UserCompanyComponentGroup, Content
 from feedback.models import Dict_System
+
 from feedback.views import definerights
-from .models import UserProfile
-from django.db.models import Count
+from main.views import notificationlist
+
+from .forms import UserRegistrationForm, UserInviteForm, UserAddForm, UserProfileForm
 
 import sys
 import pytz
@@ -521,11 +519,13 @@ def UserProfileDetail(request, userid=0, param=""):
         .select_related("company", "user", "protocoltype")
         .first()
     )
-    notification_list = Notification.objects.filter(
-        recipient_id=userid, is_active=True, is_read=False, type_id=3
-    ).select_related("author", "type", "recipient", "objecttype")
-    # print(notification_list)
-    # table = NotificationTable(notification_list)
+    # notification_list = Notification.objects.filter(
+    #     recipient_id=userid, is_active=True, is_read=False, type_id=3
+    # ).select_related("author", "type", "recipient", "objecttype")
+    # # print(notification_list)
+    # # table = NotificationTable(notification_list)
+    notification_list = notificationlist(request.user.id, '2', '0')
+    # print('++++++++++++++++++++++', notification_list)
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
 
     # button_project_create = ''

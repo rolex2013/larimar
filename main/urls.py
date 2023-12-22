@@ -10,11 +10,11 @@ from . import views
 app_name = 'my_main'
 
 urlpatterns = [
-   #path('home/', views.ProjectsHome, name = 'home'),
-   path('site/vacancies_page/', vacancies, name = 'vacancies'),
+   # path('home/', views.ProjectsHome, name = 'home'),
+   path('site/vacancies_page/', vacancies, name='vacancies'),
    path('site/vacancies_list/<int:pk>', vacancy_detail, name='vacancy_detail'),
-   #path('site/summary_page/<int:pk>/<int:site>', summaries, name = 'summaries_site'),
-   #path('site/summaries_list/<int:pk>', summary_detail, name = 'summary_detail'), 
+   # path('site/summary_page/<int:pk>/<int:site>', summaries, name = 'summaries_site'),
+   # path('site/summaries_list/<int:pk>', summary_detail, name = 'summary_detail'), 
    path('site/summaries_list/<int:stafflistid>', SummaryCreate.as_view(), name='summary_create'),
    path('', publiccontents, name='index'),
    path('main/', contents, name='main'),
@@ -27,7 +27,7 @@ urlpatterns = [
    path('main/sidebar_notify_isread/', sidebarnotificationisread, name='sidebar_notification_isread'),
    path('main/ws/test/', websocket_test, name='websocket_test'),
    path('main/lang/', views.select_lang, name='select_lang'),
-   #path('', contents, name = 'main'),
-   #path('', contents, name = 'index'),
-   #path('', ELogoutView.as_view(), name='logout')
+   # path('', contents, name = 'main'),
+   # path('', contents, name = 'index'),
+   # path('', ELogoutView.as_view(), name='logout')
 ]

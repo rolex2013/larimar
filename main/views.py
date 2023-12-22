@@ -61,37 +61,75 @@ class ProjectsHome(TemplateView):
 
 
 def notificationread(request):
-    # помечаем уведомление прочитанным
+    # меняем статус прочитанности уведомления
+
     notify_id = request.GET["val"]
-    curr_notify = (
-        Notification.objects.filter(id=notify_id)
-        .select_related("author", "recipient", "objecttype", "type")
-        .first()
-    )
+    status_selectid = int(request.GET["st"])
+    notificationobjecttype = request.GET["ot"]
+    notify = Notification.objects.get(id=notify_id)
+    # print(notify_id, status_selectid, notificationobjecttype)
+    # curr_notify = (
+    #     Notification.objects.filter(id=notify_id)
+    #     .select_related("author", "recipient", "objecttype", "type")
+    #     .first()
+    # )
+    curr_notify = Notification.objects.filter(id=notify_id).select_related(
+        "author", "recipient", "objecttype", "type").first()
+    # print('notify', notify.datecreate, notify.text)
+    # print('curr_notify', curr_notify.datecreate, curr_notify.text)
     if curr_notify:
-        curr_notify.is_read = True
-        curr_notify.save(update_fields=["is_read"])
-    notification_list = Notification.objects.filter(
-        recipient_id=request.user.id, is_active=True, is_read=False, type_id=3
-    ).select_related("author", "recipient", "objecttype", "type")
+        if curr_notify.is_read:
+            notify.is_read = False
+        else:
+            notify.is_read = True
+        notify.save(update_fields=["is_read"])
+
+    if status_selectid == 2:
+        notification_list = Notification.objects.filter(
+            Q(recipient_id=request.user.id) | Q(author_id=request.user.id),
+            is_active=True,
+            is_read=False,
+            type_id=3)
+    elif status_selectid == 3:
+        notification_list = Notification.objects.filter(
+            Q(recipient_id=request.user.id) | Q(author_id=request.user.id),
+            is_active=True,
+            is_read=True,
+            type_id=3)
+    else:
+        notification_list = Notification.objects.filter(
+            Q(recipient_id=request.user.id) | Q(author_id=request.user.id),
+            is_active=True,
+            type_id=3)
+    if notificationobjecttype != "0":
+        notification_list = notification_list.filter(
+            objecttype_id=notificationobjecttype)
+
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
+
     return render(
         request,
         "notify_list.html",
         {
-            "notification_list": notification_list.distinct().order_by("-datecreate"),
-            "metaobjecttype_list": metaobjecttype_list.distinct().order_by(),
+            "notification_list":
+            notification_list.select_related(
+                "author", "recipient", "objecttype",
+                "type").distinct().order_by("-datecreate"),
+            "metaobjecttype_list":
+            metaobjecttype_list.distinct().order_by(),
+            "status_selectid":
+            status_selectid,
+            "metaobjecttype_selectid":
+            notificationobjecttype,
+            # 'qq':
+            # (curr_notify.id, status_selectid),
         },
     )
 
 
-def notificationfilter(request):
-    # currentuser = request.user.id
-    notificationstatus = request.GET["notificationstatus"]
-    notificationobjecttype = request.GET["notificationobjecttype"]
-
+def notificationlist(userid, notificationstatus, notificationobjecttype):
     notification_list = Notification.objects.filter(
-        Q(recipient_id=request.user.id) | Q(author_id=request.user.id),
+        Q(recipient_id=userid) | Q(author_id=userid),
         is_active=True,
         type_id=3)
     # print('===', notificationobjecttype, notification_list)
@@ -100,15 +138,44 @@ def notificationfilter(request):
     elif notificationstatus == "3":
         notification_list = notification_list.filter(is_read=True)
     notification_list = notification_list.select_related(
-        "author", "recipient", "objecttype", "type"
-    )
-    # print(notification_list)
+        "author", "recipient", "objecttype", "type")
+    # print('==============', notification_list)
 
     if notificationobjecttype != "0":
         notification_list = notification_list.filter(
-            objecttype_id=notificationobjecttype
-        )
+            objecttype_id=notificationobjecttype)
         # print(notificationobjecttype, notification_list)
+
+    return notification_list
+
+
+def notificationfilter(request):
+    # currentuser = request.user.id
+    notificationstatus = request.GET["notificationstatus"]
+    notificationobjecttype = request.GET["notificationobjecttype"]
+
+    # notification_list = Notification.objects.filter(
+    #     Q(recipient_id=request.user.id) | Q(author_id=request.user.id),
+    #     is_active=True,
+    #     type_id=3)
+    # # print('===', notificationobjecttype, notification_list)
+    # if notificationstatus == "2":
+    #     notification_list = notification_list.filter(is_read=False)
+    # elif notificationstatus == "3":
+    #     notification_list = notification_list.filter(is_read=True)
+    # notification_list = notification_list.select_related(
+    #     "author", "recipient", "objecttype", "type"
+    # )
+    # # print(notification_list)
+
+    # if notificationobjecttype != "0":
+    #     notification_list = notification_list.filter(
+    #         objecttype_id=notificationobjecttype
+    #     )
+    #     # print(notificationobjecttype, notification_list)
+
+    notification_list = notificationlist(request.user.id, notificationstatus,
+                                         notificationobjecttype)
 
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
 
@@ -125,38 +192,41 @@ def notificationfilter(request):
 
 
 def sidebarnotificationfilter(request):
-    notificationuser = request.user.id
-    # notificationuser = request.GET['notificationuser']
+    # notificationuser = request.user.id
+    # # notificationuser = request.GET['notificationuser']
     notificationstatus = request.GET["notificationstatus"]
     notificationobjecttype = request.GET["notificationobjecttype"]
 
-    notification_list = Notification.objects.filter(
-        Q(recipient_id=notificationuser) | Q(author_id=notificationuser),
-        is_active=True,
-        type_id=3,
-    )
-    # print('===', notificationuser, notificationobjecttype)
-    if notificationstatus == "2":
-        notification_list = notification_list.filter(is_read=False)
-    elif notificationstatus == "3":
-        notification_list = notification_list.filter(is_read=True)
-        # print(str(notification_list))
+    # notification_list = Notification.objects.filter(
+    #     Q(recipient_id=notificationuser) | Q(author_id=notificationuser),
+    #     is_active=True,
+    #     type_id=3,
+    # )
+    # # print('===', notificationuser, notificationobjecttype)
+    # if notificationstatus == "2":
+    #     notification_list = notification_list.filter(is_read=False)
+    # elif notificationstatus == "3":
+    #     notification_list = notification_list.filter(is_read=True)
+    #     # print(str(notification_list))
 
-    if notificationobjecttype != "0":
-        notification_list = notification_list.filter(
-            objecttype_id=notificationobjecttype
-        )
+    # if notificationobjecttype != "0":
+    #     notification_list = notification_list.filter(
+    #         objecttype_id=notificationobjecttype
+    #     )
 
-    cnt = notification_list.filter(
-        recipient_id=request.user.id, is_read=False, objecttype_id=9
-    ).count()
-    # print(cnt)
-    notification_list = (
-        notification_list.select_related("author", "recipient", "objecttype", "type")
-        .order_by("datecreate")
-        .distinct()
-    )
-    # print(notification_list)
+    # cnt = notification_list.filter(
+    #     recipient_id=request.user.id, is_read=False, objecttype_id=9
+    # ).count()
+    # # print(cnt)
+    # notification_list = (
+    #     notification_list.select_related("author", "recipient", "objecttype", "type")
+    #     .order_by("datecreate")
+    #     .distinct()
+    # )
+    # # print(notification_list)
+    notification_list = notificationlist(request.user.id, notificationstatus,
+                                         notificationobjecttype)
+    count_unread = notification_list.filter(is_read=False).count()
 
     return render(
         request,
@@ -164,7 +234,7 @@ def sidebarnotificationfilter(request):
         {
             "nodes": notification_list,
             "currentuserid": request.user.id,
-            "count": 10,
+            "count_unread": count_unread,
         },
     )
 
@@ -302,13 +372,13 @@ def objecthistory(request, objtype="prj", pk=0):
         request,
         templatename,
         {
-            #'titles': titles,
+            # 'titles': titles,
             "nodes": nodes,
             "mas": mas,
             "current_object": current_object,
             "user_companies": comps,
             "objtype": objtype,
-            #'table': table,
+            # 'table': table,
         },
     )
 
@@ -419,7 +489,7 @@ def sidebarnotificationisread(request):
     # Notification.objects.filter(
     #     recipient_id=userid, type_id=3, objecttype_id=9, is_read=False
     # ).update(is_read=True)
-    Notification.objects.filter(recipient_id=userid,
+    Notification.objects.filter(Q(recipient_id=userid) | Q(author_id=userid),
                                 type_id=3,
                                 is_read=False).update(is_read=True)
     # print('recipient_id=',userid, 'type_id=',3, 'objecttype_id=',9, 'is_read=',False)
@@ -433,7 +503,7 @@ def sidebarnotificationisread(request):
     # cnt = notification_list.filter(
     #     recipient_id=userid, is_read=False, objecttype_id=9
     # ).count()
-    cnt = notification_list.filter(recipient_id=userid, is_read=False).count()
+    # cnt = notification_list.filter(recipient_id=userid, is_read=False).count()
     # print(cnt)
     # metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True).order_by("sort").distinct()
     notification_list = (
@@ -441,6 +511,7 @@ def sidebarnotificationisread(request):
         .order_by("datecreate")
         .distinct()
     )
+    count_unread = notification_list.filter(is_read=False).count()
 
     return render(
         request,
@@ -448,9 +519,9 @@ def sidebarnotificationisread(request):
         {
             "nodes": notification_list,
             "status_selectid": "2",
-            #'metaobjecttype_list': metaobjecttype_list,
+            # 'metaobjecttype_list': metaobjecttype_list,
             "currentuserid": request.user.id,
-            "count": cnt,
+            "count_unread": count_unread,
         },
     )
 

@@ -6,7 +6,7 @@
 
         {% for node in nodes %}
 
-            {% if node.author_id == currentuserid %}
+            {% if node.author_id == request.user.id %}
                 <p style="margin: 10px 0px 10px 20px;">
                   <i>{{ node.datecreate|date:"d.m.y H:i" }}</i><br />
                   {{ node.recipient.username }}<br />
@@ -21,9 +21,9 @@
 
         {% endfor %}
 
-        {% if count %}
+        {% if count_unread %}
             <p><button id="isread-button" type="submit" method="GET" class="object-filter-button" style="font-size: x-small;">
-            {% trans "Пометить прочитанными" %}{{ count }}</button></p>
+            {% trans "Пометить прочитанными" %}</button></p>
         {% endif %}
 
         <div style="font-size: small; color: #ffffff;">

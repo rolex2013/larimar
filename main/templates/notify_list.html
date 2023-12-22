@@ -3,11 +3,19 @@
     {% load i18n %}
 
    <div class="object-list">   
+      {{ qq }}
 
       {% for notification in notification_list %}
 
-         <span class="hint hint--bottom hint--info" data-hint={% trans "Отметить прочитанным" %}>
-             <input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" />
+         <span class="hint hint--bottom hint--info" data-hint=
+                                                               {% if notification.is_read %} 
+                                                                  "{% trans 'Отметить непрочитанным' %}" 
+                                                               {% else %} 
+                                                                  "{% trans 'Отметить прочитанным' %} 
+                                                               {% endif %}">
+             <input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" 
+             {% if notification.is_read %} checked {% endif %}
+             />
              {% comment %}<button value="{{notification.id}}" name="myButton_{{notification.id}}"> X </button>{% endcomment %}
              {% comment %}</span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate|date:"d.m.Y H:i:s" }}//////////////
                {{ notification.author.username }}</em>&nbsp;&nbsp;&nbsp;<span class="hint hint--bottom hint--info" data-hint="{{ notification.text }}">{% endcomment %}
@@ -43,7 +51,7 @@
       
          //console.log("*** === ***")
          // Проверка стоит галочка или нет
-         if ($(this).is(':checked')) {
+         //if ($(this).is(':checked')) {
    
             var chk = $(this).attr("name");
             var chkVal = $(this).attr("value");
@@ -52,7 +60,7 @@
             $.ajax({
                url: "{% url 'my_main:notification_read' %}",
                type: 'GET',
-               data: { val: chkVal },
+               data: { val: chkVal, st: {{ status_selectid }}, ot: {{ metaobjecttype_selectid }} },
                success: function(data) {
                    $('#ajax_listresult').html(data);
                },
@@ -63,7 +71,7 @@
 
             });
    
-         }
+         //}
       
       });
 

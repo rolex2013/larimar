@@ -5,7 +5,7 @@
       {% csrf_token %}
       <div class="object-list-filters">
          {% comment %}
-         <label>Пользователь: </label>
+         <label>{% trans "Пользователь" %}: </label>
          <select name="notify-select-user" id="notifyuserselectid" class="select-user">
              {% for u in user_list %}
                 <option value="{{u.id}}">
@@ -38,3 +38,31 @@
     <div id="ajax_nlist_listresult">
         {% include 'sidebar_notifications_list.html' %}
     </div>
+    <div id="ajax_nlist_listerror"></div>
+
+<script>
+
+   $('#notify-selection-button').click(function () {
+      event.preventDefault(); // *** без этого страница перегружается после возврата data
+      var statusSelected = $("#notifystatusselectid option:selected").val()
+      var metaobjecttypeSelected = $("#notifymetaobjecttypeselectid option:selected").val()
+      // console.log(statusSelected + '/' + metaobjecttypeSelected)
+
+      $.ajax({
+         type: 'GET',
+         url: "{% url 'my_main:sidebar_notification_filter' %}",
+         data: {
+            notificationstatus: statusSelected,
+            notificationobjecttype: metaobjecttypeSelected
+         },
+         success: function (data) {
+            $('#ajax_nlist_listresult').html(data);
+         },
+         error: function (xhr, errmsg, err) {
+            console.log("error")
+            $('#ajax_nlist_listerrors').html(gettext('Нет данных!'));
+         }
+      });
+   });
+
+</script>
