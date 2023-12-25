@@ -27,7 +27,7 @@ class Meta_Param(TranslateFieldMixin, models.Model):
         ordering = ('datecreate',)
 
     def __str__(self):
-        return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + '|' + self.name)      
+        return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + '|' + self.name)
 
 
 class Meta_ObjectType(TranslateFieldMixin, models.Model):
@@ -65,7 +65,7 @@ class Dict_ProtocolType(TranslateFieldMixin, models.Model):
         ordering = ('sort',)
         verbose_name = _('Протокол оповещения')
         verbose_name_plural = _('Протоколы оповещений')
-        
+
     def __str__(self):
         return (self.name)
 
@@ -94,7 +94,7 @@ class Component(TranslateFieldMixin, MPTTModel):
     @property
     def description(self):
         return self.trans_field(exposed_request, 'description')
-               
+
     def __str__(self):
         return self.name
 
@@ -115,15 +115,16 @@ class Notification(TranslateFieldMixin, models.Model):
     sendfrom = models.CharField(_("От кого"), max_length=64, blank=True, null=True)
     theme = models.CharField(_("Тема"), max_length=256, blank=True, null=True)
     text = RichTextUploadingField(_("Текст"), max_length=1024)
-    recipient = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True, null=True, related_name='notify_recipient', verbose_name=_("Получатель"))     
+    recipient = models.ForeignKey('auth.User', on_delete=models.CASCADE, blank=True, null=True, related_name='notify_recipient', verbose_name=_("Получатель"))
     sendto = models.CharField(_("Кому"), max_length=64, blank=True, null=True)
     datesent = models.DateTimeField(_("Момент отправки"), auto_now_add=False, blank=True, null=True)
     dateread = models.DateTimeField(_("Момент прочтения"), auto_now_add=False, blank=True, null=True)
     response = models.CharField(_("Ответ"), max_length=128, blank=True, null=True)
     is_sent = models.BooleanField(_("Отправлено"), default=False)
-    is_read = models.BooleanField(_("Прочитано"), default=False)
+    is_read_isauthor = models.BooleanField(_("Прочитано исходящее"), default=False)
+    is_read_isrecipient = models.BooleanField(_("Прочитано входящее"), default=False)
     is_active = models.BooleanField(_("Активность"), default=True)
-               
+
     def __str__(self):
         return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ' | ' + self.theme + ' | ' + self.author.username)
 

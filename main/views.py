@@ -78,23 +78,36 @@ def notificationread(request):
     # print('notify', notify.datecreate, notify.text)
     # print('curr_notify', curr_notify.datecreate, curr_notify.text)
     if curr_notify:
-        if curr_notify.is_read:
-            notify.is_read = False
+        # print('**************************',
+        #       curr_notify.author, curr_notify.is_read_isauthor)
+        if curr_notify.author.id == request.user.id:
+
+            if curr_notify.is_read_isauthor:
+                notify.is_read_isauthor = False
+            else:
+                notify.is_read_isauthor = True
+            notify.save(update_fields=["is_read_isauthor"])
         else:
-            notify.is_read = True
-        notify.save(update_fields=["is_read"])
+            if curr_notify.is_read_isrecipient:
+                notify.is_read_isrecipient = False
+            else:
+                notify.is_read_isrecipient = True
+            notify.save(update_fields=["is_read_isrecipient"])
 
     if status_selectid == 2:
         notification_list = Notification.objects.filter(
-            Q(recipient_id=request.user.id) | Q(author_id=request.user.id),
+            Q(author=request.user.id, is_read_isauthor=False)
+            | Q(recipient=request.user.id, is_read_isrecipient=False),
             is_active=True,
-            is_read=False,
+            # is_read=False,
             type_id=3)
     elif status_selectid == 3:
         notification_list = Notification.objects.filter(
-            Q(recipient_id=request.user.id) | Q(author_id=request.user.id),
+            # Q(recipient_id=request.user.id) | Q(author_id=request.user.id),
+            Q(author=request.user.id, is_read_isauthor=True)
+            | Q(recipient=request.user.id, is_read_isrecipient=True),
             is_active=True,
-            is_read=True,
+            # is_read=True,
             type_id=3)
     else:
         notification_list = Notification.objects.filter(
@@ -134,9 +147,12 @@ def notificationlist(userid, notificationstatus, notificationobjecttype):
         type_id=3)
     # print('===', notificationobjecttype, notification_list)
     if notificationstatus == "2":
-        notification_list = notification_list.filter(is_read=False)
+        notification_list = notification_list.filter(Q(author=userid, is_read_isauthor=False) |
+                                                     Q(recipient=userid, is_read_isrecipient=False))
     elif notificationstatus == "3":
-        notification_list = notification_list.filter(is_read=True)
+        # notification_list = notification_list.filter(is_read=True)
+        notification_list = notification_list.filter(Q(author=userid, is_read_isauthor=True) |
+                                                     Q(recipient=userid, is_read_isrecipient=True))
     notification_list = notification_list.select_related(
         "author", "recipient", "objecttype", "type")
     # print('==============', notification_list)
@@ -226,7 +242,9 @@ def sidebarnotificationfilter(request):
     # # print(notification_list)
     notification_list = notificationlist(request.user.id, notificationstatus,
                                          notificationobjecttype)
-    count_unread = notification_list.filter(is_read=False).count()
+    count_unread = notification_list.filter(
+        Q(author=request.user.id, is_read_isauthor=False) |
+        Q(recipient=request.user.id, is_read_isrecipient=False)).count()
 
     return render(
         request,
@@ -491,12 +509,14 @@ def sidebarnotificationisread(request):
     # ).update(is_read=True)
     Notification.objects.filter(Q(recipient_id=userid) | Q(author_id=userid),
                                 type_id=3,
-                                is_read=False).update(is_read=True)
+                                is_read_isrecipient=False).update(is_read_isrecipient=True)
     # print('recipient_id=',userid, 'type_id=',3, 'objecttype_id=',9, 'is_read=',False)
     notification_list = Notification.objects.filter(
-        Q(recipient_id=userid) | Q(author_id=userid),
+        # Q(recipient_id=userid) | Q(author_id=userid),
+        Q(author=userid, is_read_isauthor=False) |
+        Q(recipient=userid, is_read_isrecipient=False),
         is_active=True,
-        is_read=False,
+        # is_read=False,
         type_id=3,
     )
     # cnt = notification_list.exclude(author_id=request.user.id, objecttype_id=9).count()
@@ -511,7 +531,8 @@ def sidebarnotificationisread(request):
         .order_by("datecreate")
         .distinct()
     )
-    count_unread = notification_list.filter(is_read=False).count()
+    count_unread = notification_list.filter(Q(author=userid, is_read_isauthor=False) |
+                                            Q(recipient=userid, is_read_isrecipient=False)).count()
 
     return render(
         request,

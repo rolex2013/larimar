@@ -67,7 +67,11 @@ def notifications(context, is_auth=False):
         #                                     is_active=True).select_related("author", "recipient", "objecttype").order_by('datecreate').distinct()
         nodes = notificationlist(context.request.user, '2', '0')
         # count = nodes.exclude(author_id=context.request.user.id).count()
-        count_unread = nodes.filter(is_read=False).count()
+        # count_unread = nodes.filter(is_read=False).count()
+        count_unread = nodes.filter(
+            Q(author=context.request.user, is_read_isauthor=False) | 
+            Q(recipient=context.request.user, is_read_isrecipient=False)
+        ).count()
         metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True).order_by("sort").distinct()
 
     return {

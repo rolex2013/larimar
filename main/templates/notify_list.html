@@ -14,7 +14,9 @@
                                                                   "{% trans 'Отметить прочитанным' %} 
                                                                {% endif %}">
              <input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" 
-             {% if notification.is_read %} checked {% endif %}
+             {% if notification.author == request.user and notification.is_read_isauthor or notification.recipient == request.user and notification.is_read_isrecipient %} 
+                   checked 
+             {% endif %}
              />
              {% comment %}<button value="{{notification.id}}" name="myButton_{{notification.id}}"> X </button>{% endcomment %}
              {% comment %}</span>&nbsp;&nbsp;&nbsp;<em>{{ notification.datecreate|date:"d.m.Y H:i:s" }}//////////////
