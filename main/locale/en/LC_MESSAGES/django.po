@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-25 15:03+0300\n"
-"PO-Revision-Date: 2023-12-25 15:05+0300\n"
+"POT-Creation-Date: 2023-12-26 15:25+0300\n"
+"PO-Revision-Date: 2023-12-26 15:33+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,17 +19,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: models.py:15 models.py:35 models.py:55 models.py:75 models.py:163
-#: models.py:189 models.py:225
+#: models.py:15 models.py:35 models.py:55 models.py:75 models.py:155
+#: models.py:181 models.py:217
 msgid "Наименование_ru"
 msgstr "Name_ru"
 
-#: models.py:16 models.py:36 models.py:56 models.py:76 models.py:164
-#: models.py:190 models.py:226
+#: models.py:16 models.py:36 models.py:56 models.py:76 models.py:156
+#: models.py:182 models.py:218
 msgid "Наименование_en"
 msgstr "Name_en"
 
-#: models.py:17 models.py:112 models.py:148
+#: models.py:17 models.py:112 models.py:140
 msgid "Дата"
 msgstr "Date"
 
@@ -53,8 +53,8 @@ msgstr "Table"
 msgid "Сортировка"
 msgstr "Sorting"
 
-#: models.py:39 models.py:58 models.py:84 models.py:126 models.py:151
-#: models.py:170 models.py:200 models.py:230
+#: models.py:39 models.py:58 models.py:84 models.py:126 models.py:143
+#: models.py:162 models.py:192 models.py:222
 msgid "Активность"
 msgstr "Activity"
 
@@ -78,11 +78,11 @@ msgstr "Notification Protocols"
 msgid "Головной компонент"
 msgstr "Main Component"
 
-#: models.py:78 models.py:167 models.py:194 models.py:228
+#: models.py:78 models.py:159 models.py:186 models.py:220
 msgid "Описание_ru"
 msgstr "Description_ru"
 
-#: models.py:79 models.py:168 models.py:195 models.py:229
+#: models.py:79 models.py:160 models.py:187 models.py:221
 msgid "Описание_en"
 msgstr "Description_en"
 
@@ -102,7 +102,7 @@ msgstr "Connect to Employee by default"
 msgid "Подключать клиенту по-умолчанию"
 msgstr "Connect to Client by default"
 
-#: models.py:105 models.py:145 models.py:193
+#: models.py:105 models.py:137 models.py:185
 msgid "Компонент"
 msgstr "Component"
 
@@ -118,7 +118,7 @@ msgstr "Тип Объекта"
 msgid "ID объекта"
 msgstr "Object ID"
 
-#: models.py:113 models.py:149
+#: models.py:113 models.py:141
 msgid "Автор"
 msgstr "Author"
 
@@ -142,9 +142,9 @@ msgstr "Text"
 msgid "Получатель"
 msgstr "Recipient"
 
-#: models.py:119
+#: models.py:119 templates/sidebar_notifications_list.html:12
 msgid "Кому"
-msgstr "Whom"
+msgstr "To"
 
 #: models.py:120
 msgid "Момент отправки"
@@ -163,68 +163,66 @@ msgid "Отправлено"
 msgstr "Sent"
 
 #: models.py:124
-#| msgid "Прочитанные"
 msgid "Прочитано исходящее"
 msgstr "Read Outgoing"
 
 #: models.py:125
-#| msgid "Прочитанные"
 msgid "Прочитано входящее"
 msgstr "Read Inbound"
 
-#: models.py:140
+#: models.py:132
 msgid "Оповещение"
 msgstr "Notification"
 
-#: models.py:141
+#: models.py:133
 msgid "Оповещения"
 msgstr "Notifications"
 
-#: models.py:146
+#: models.py:138
 msgid "Модель"
 msgstr "Model"
 
-#: models.py:147
+#: models.py:139
 msgid "Объект"
 msgstr "Object"
 
-#: models.py:158
+#: models.py:150
 msgid "История Объекта"
 msgstr "Object History"
 
-#: models.py:159
+#: models.py:151
 msgid "Истории Объектов"
 msgstr "Object Histories"
 
-#: models.py:166
+#: models.py:158
 msgid "Основной URL"
 msgstr "Main URL"
 
-#: models.py:184
+#: models.py:176
 msgid "Список меню"
 msgstr "Menu list"
 
-#: models.py:185
+#: models.py:177
 msgid "Списки меню"
 msgstr "Menu lists"
 
-#: models.py:191
+#: models.py:183
 msgid "Меню"
 msgstr "Menu"
 
-#: models.py:198
+#: models.py:190
 msgid "Головной пункт меню"
 msgstr "Main menu item"
 
-#: models.py:217 models.py:218
+#: models.py:209 models.py:210
 msgid "Пункты меню"
 msgstr "Menu items"
 
-#: models.py:224
+#: models.py:216
 msgid "Головная тематика"
 msgstr "Main thematic"
 
-#: models.py:247 models.py:248
+#: models.py:239 models.py:240
 msgid "Тематика"
 msgstr "Thematic"
 
@@ -281,6 +279,10 @@ msgstr "Notifications"
 #: templates/sidebar_notifications_channel.html:15
 msgid "Отправить"
 msgstr "Send"
+
+#: templates/sidebar_notifications_list.html:17
+msgid "От"
+msgstr "From"
 
 #: templates/sidebar_notifications_list.html:26
 msgid "Пометить прочитанными"

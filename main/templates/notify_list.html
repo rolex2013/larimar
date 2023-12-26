@@ -8,11 +8,19 @@
       {% for notification in notification_list %}
 
          <span class="hint hint--bottom hint--info" data-hint=
-                                                               {% if notification.is_read %} 
-                                                                  "{% trans 'Отметить непрочитанным' %}" 
-                                                               {% else %} 
-                                                                  "{% trans 'Отметить прочитанным' %} 
-                                                               {% endif %}">
+                                                               {% if notification.author.username == request.user.username %}
+                                                                  {% if notification.is_read_isauthor %} 
+                                                                     "{% trans 'Отметить непрочитанным' %}" 
+                                                                  {% else %} 
+                                                                     "{% trans 'Отметить прочитанным' %} 
+                                                                  {% endif %}"
+                                                               {% else %}
+                                                                  {% if notification.is_read_isrecipient %}
+                                                                  "{% trans 'Отметить непрочитанным' %}"
+                                                                  {% else %}
+                                                                  "{% trans 'Отметить прочитанным' %}
+                                                                  {% endif %}"
+                                                               {% endif %}>
              <input type="checkbox" value="{{notification.id}}" name="myCheck_{{notification.id}}" 
              {% if notification.author == request.user and notification.is_read_isauthor or notification.recipient == request.user and notification.is_read_isrecipient %} 
                    checked 

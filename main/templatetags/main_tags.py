@@ -56,6 +56,7 @@ def left__menu(context):
         'cnt': 5
     }
 
+
 # *** для вывода Уведомлений в SideBar'е ***
 @register.inclusion_tag('sidebar_notifications_form.html', takes_context=True)
 def notifications(context, is_auth=False):

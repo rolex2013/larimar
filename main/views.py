@@ -507,7 +507,10 @@ def sidebarnotificationisread(request):
     # Notification.objects.filter(
     #     recipient_id=userid, type_id=3, objecttype_id=9, is_read=False
     # ).update(is_read=True)
-    Notification.objects.filter(Q(recipient_id=userid) | Q(author_id=userid),
+    Notification.objects.filter(author_id=userid,
+                                type_id=3,
+                                is_read_isauthor=False).update(is_read_isauthor=True)
+    Notification.objects.filter(recipient_id=userid,
                                 type_id=3,
                                 is_read_isrecipient=False).update(is_read_isrecipient=True)
     # print('recipient_id=',userid, 'type_id=',3, 'objecttype_id=',9, 'is_read=',False)
