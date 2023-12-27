@@ -19,7 +19,7 @@ from projects.models import Dict_ProjectType, Dict_ProjectStatus, Dict_TaskType,
 #from projects.models import ProjectStatusLog, TaskStatusLog
 
 from crm.models import Dict_ClientTaskStructureType
-from crm.models import Dict_ClientType, Dict_ClientStatus, Dict_ClientTaskType, Dict_ClientTaskStatus
+from crm.models import Dict_ClientType, Dict_ClientStatus, Dict_ClientTaskType, Dict_ClientTaskStatus, Dict_ClientInitiator
 from crm.models import Dict_ClientEventType, Dict_ClientEventStatus
 from crm.models import Client, ClientTask, ClientTaskComment
 #from crm.models import ClientStatusLog, ClientTaskStatusLog
@@ -170,6 +170,8 @@ admin.site.register(Dict_ClientEventType)
 
 admin.site.register(Dict_ClientEventStatus)
 
+admin.site.register(Dict_ClientInitiator)
+
 #admin.site.register(Client)
 
 #admin.site.register(ClientEvent)
@@ -231,4 +233,3 @@ admin.site.register(ChatMember)
 # lists
 
 admin.site.register(Dict_YListFieldType)
-

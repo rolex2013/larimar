@@ -1,0 +1,68 @@
+[
+    {
+        "model": "crm.dict_clienttaskstatus",
+        "pk": 1,
+        "fields": {
+            "name_ru": "В разработке",
+            "name_en": "Planning",
+            "sort": 5,
+            "is_close": false,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttaskstatus",
+        "pk": 2,
+        "fields": {
+            "name_ru": "В работе",
+            "name_en": "Working",
+            "sort": 10,
+            "is_close": false,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttaskstatus",
+        "pk": 3,
+        "fields": {
+            "name_ru": "Приостановлена",
+            "name_en": "In pause",
+            "sort": 15,
+            "is_close": false,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttaskstatus",
+        "pk": 4,
+        "fields": {
+            "name_ru": "Решена",
+            "name_en": "Completed",
+            "sort": 20,
+            "is_close": true,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttaskstatus",
+        "pk": 5,
+        "fields": {
+            "name_ru": "Снята",
+            "name_en": "Canceled",
+            "sort": 25,
+            "is_close": true,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttaskstatus",
+        "pk": 6,
+        "fields": {
+            "name_ru": "Отклонена",
+            "name_en": "Refused",
+            "sort": 30,
+            "is_close": true,
+            "is_active": true
+        }
+    }
+]

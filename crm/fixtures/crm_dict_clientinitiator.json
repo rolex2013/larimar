@@ -1,0 +1,32 @@
+[
+    {
+        "model": "crm.dict_clientinitiator",
+        "pk": 1,
+        "fields": {
+            "name_ru": "Клиент",
+            "name_en": "Client",
+            "sort": 5,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clientinitiator",
+        "pk": 2,
+        "fields": {
+            "name_ru": "Организация",
+            "name_en": "Organization",
+            "sort": 10,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clientinitiator",
+        "pk": 3,
+        "fields": {
+            "name_ru": "Другое",
+            "name_en": "Another",
+            "sort": 15,
+            "is_active": true
+        }
+    }
+]

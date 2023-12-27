@@ -1,0 +1,62 @@
+[
+    {
+        "model": "crm.dict_clienttasktype",
+        "pk": 1,
+        "fields": {
+            "name_ru": "Сложная",
+            "name_en": "Difficult",
+            "sort": 20,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttasktype",
+        "pk": 2,
+        "fields": {
+            "name_ru": "Простая",
+            "name_en": "Simple",
+            "sort": 25,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttasktype",
+        "pk": 3,
+        "fields": {
+            "name_ru": "Поручение",
+            "name_en": "Assignment",
+            "sort": 30,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttasktype",
+        "pk": 4,
+        "fields": {
+            "name_ru": "Приоритетная",
+            "name_en": "Priority",
+            "sort": 5,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttasktype",
+        "pk": 5,
+        "fields": {
+            "name_ru": "Срочная",
+            "name_en": "Urgent",
+            "sort": 10,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttasktype",
+        "pk": 6,
+        "fields": {
+            "name_ru": "Важная",
+            "name_en": "Important",
+            "sort": 15,
+            "is_active": true
+        }
+    }
+]

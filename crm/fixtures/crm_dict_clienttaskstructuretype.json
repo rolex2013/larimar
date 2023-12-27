@@ -1,0 +1,22 @@
+[
+    {
+        "model": "crm.dict_clienttaskstructuretype",
+        "pk": 1,
+        "fields": {
+            "name_ru": "Основная Задача",
+            "name_en": "Main Task",
+            "sort": 5,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienttaskstructuretype",
+        "pk": 2,
+        "fields": {
+            "name_ru": "Подзадача",
+            "name_en": "Subtask",
+            "sort": 10,
+            "is_active": true
+        }
+    }
+]

@@ -1,0 +1,42 @@
+[
+    {
+        "model": "crm.dict_clienteventtype",
+        "pk": 1,
+        "fields": {
+            "name_ru": "Звонок исходящий",
+            "name_en": "Outgoing call",
+            "sort": 5,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienteventtype",
+        "pk": 2,
+        "fields": {
+            "name_ru": "Звонок входящий",
+            "name_en": "Incoming call",
+            "sort": 10,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienteventtype",
+        "pk": 3,
+        "fields": {
+            "name_ru": "Встреча онлайн",
+            "name_en": "Meeting online",
+            "sort": 15,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienteventtype",
+        "pk": 4,
+        "fields": {
+            "name_ru": "Встреча офлайн",
+            "name_en": "Meeting offline",
+            "sort": 20,
+            "is_active": true
+        }
+    }
+]

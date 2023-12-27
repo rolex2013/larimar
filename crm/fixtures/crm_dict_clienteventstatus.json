@@ -1,0 +1,46 @@
+[
+    {
+        "model": "crm.dict_clienteventstatus",
+        "pk": 1,
+        "fields": {
+            "name_ru": "Ожидаемое",
+            "name_en": "Expected",
+            "sort": 5,
+            "is_close": false,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienteventstatus",
+        "pk": 2,
+        "fields": {
+            "name_ru": "Отложенное",
+            "name_en": "Postponed",
+            "sort": 10,
+            "is_close": false,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienteventstatus",
+        "pk": 3,
+        "fields": {
+            "name_ru": "Состоялось",
+            "name_en": "Completed",
+            "sort": 15,
+            "is_close": true,
+            "is_active": true
+        }
+    },
+    {
+        "model": "crm.dict_clienteventstatus",
+        "pk": 4,
+        "fields": {
+            "name_ru": "Отменено",
+            "name_en": "Canceled",
+            "sort": 20,
+            "is_close": true,
+            "is_active": true
+        }
+    }
+]
