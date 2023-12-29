@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% load render_table from django_tables2 %}
 
 {% block event %}
@@ -10,27 +12,27 @@
    
       <h4>{{ current_object.name }}
       {% if not current_object.is_active %}
-          (Событие перемещено в архив)
+          ({% trans "Событие перемещено в архив" %})
       {% endif %}
       </h4>
       <p>{% autoescape off %}{{ current_object.description }}{% endautoescape %}</p>
-      <i><p>Клиент: {{ current_object.client }}</p></i>
+      <i><p>{% trans "Клиент" %}: {{ current_object.client }}</p></i>
       {% if current_object.task %}
-         <p>Связанная задача: {{ current_object.task }}</p>
+         <p>{% trans "Связанная задача" %}: {{ current_object.task }}</p>
       {% endif %}
-      <p>Исполнитель: {{ current_object.assigner }}</p>       
-      <p>Начало: {{ current_object.datebegin }}</p>
-      <p>Окончание: {{ current_object.dateend }}</p>
-      <p>Тип: {{ current_object.type }}</p>
-      <p>Статус: {{ current_object.status }}</p>
-      <p>Инициатор: {{ current_object.initiator }}</p>        
-      <em>Автор: {{ current_object.author }}</em><br />
-      <em>Дата: {{ current_object.datecreate }}</em>              
+      <p>{% trans "Исполнитель" %}: {{ current_object.assigner }}</p>       
+      <p>{% trans "Начало" %}: {{ current_object.datebegin }}</p>
+      <p>{% trans "Окончание" %}: {{ current_object.dateend }}</p>
+      <p>{% trans "Тип" %}: {{ current_object.type }}</p>
+      <p>{% trans "Статус" %}: {{ current_object.status }}</p>
+      <p>{% trans "Инициатор" %}: {{ current_object.initiator }}</p>        
+      <em>{% trans "Автор" %}: {{ current_object.author }}</em><br />
+      <em>{% trans "Дата" %}: {{ current_object.datecreate }}</em>              
       <p>&nbsp;</p>   
    </div>
 
   {% else %}
-     <h4>Информация о Событии недоступна!</h4>
+     <h4>{% trans "Информация о Событии недоступна!" %}</h4>
   {% endif %}  
 
 {% endblock %}
@@ -41,7 +43,7 @@
 
       <div class="object-list">
 
-         <h5>История события</h5>
+         <h5>{% trans "История события" %}</h5>
        
          <!--{ render_table table %}   -->
 
@@ -51,7 +53,7 @@
       <p>&nbsp;</p>
 
    {% else %}
-      <h5>Информация об истории события недоступна!</h5>
+      <h5>{% trans "Информация об истории события недоступна!" %}</h5>
    {% endif %}  
 
 {% endblock %}

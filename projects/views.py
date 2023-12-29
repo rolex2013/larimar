@@ -271,6 +271,7 @@ class ProjectUpdate(AddFilesMixin, UpdateView):
                          "Участники": '' if is_members_changed == False else membersstr,
                          "Активность":'' if self.object.is_active == old.is_active else '✓' if self.object.is_active else '-'
                         }
+         #  print(historyjson)
           ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.object.id, author=self.object.author, log=json.dumps(historyjson))          
           return super().form_valid(form) #super(ProjectUpdate, self).form_valid(form)
 

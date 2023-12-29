@@ -1,36 +1,38 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block task %}
 
     <div class="object-detail">
         <div>
             <div class="object-detail-header">
-                <h4>Задача: {{ clienttask.name }}
+                <h4>{% trans "Задача" %}: {{ clienttask.name }}
                     {% if not clienttask.is_active %}
-                        (Задача перемещена в архив)
+                        ({% trans "Задача перемещена в архив" %})
                     {% endif %}
                 </h4>
             </div>
             <div class="object-detail-left">
                 <p>{% autoescape off %}{{ clienttask.description }}{% endautoescape %}</p>
-                <i><p>Клиент: <span class="hint hint--bottom hint--info" data-hint="Задачи и События клиента"><a href="{% url 'my_crm:clienttasks' clienttask.client.pk 0 %}">{{ clienttask.client }}</a></span></p></i>
+                <i><p>{% trans "Клиент" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Задачи и События клиента' %}"><a href="{% url 'my_crm:clienttasks' clienttask.client.pk 0 %}">{{ clienttask.client }}</a></span></p></i>
                 {% if clienttask.parent %}
-                    <p>Уровень выше: <a href="{% url 'my_crm:clienttaskcomments' clienttask.parent.pk %}">{{ clienttask.parent }}</a></p>
+                    <p>{% trans "Уровень выше" %}: <a href="{% url 'my_crm:clienttaskcomments' clienttask.parent.pk %}">{{ clienttask.parent }}</a></p>
                 {% else %}
 
                 {% endif %}
-                <p>Бюджет: {{ clienttask.cost }} {{ clienttask.client.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
-                <p>Исполнитель: <span class="hint hint--bottom hint--info" data-hint="Профиль исполнителя"><a href="{% url 'my_account:userprofile_detail' clienttask.assigner.pk ' ' %}">{{ clienttask.assigner }}</a></span></p>
-                <p>Начало: {{ clienttask.datebegin }}</p>
-                <p>Окончание: {{ clienttask.dateend }}</p>
-                <p>Тип в иерархии: {{ clienttask.structure_type }}</p>
-                <p>Тип: {{ clienttask.type }}</p>
-                <p>Статус: {{ clienttask.status }}</p>
-                <p>Инициатор: {{ clienttask.initiator }}</p>
-                <p>Затраченное время, час.: <!--{ taskcomment_timesum.time__sum|floatformat:2 }}-->{{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
-                <p>Выполнена на: {{ clienttask.percentage }} %</p>
-                <em>Автор: {{ clienttask.author }}</em><br />
-                <em>Дата: {{ clienttask.datecreate }}</em>
+                <p>{% trans "Бюджет" %}": {{ clienttask.cost }} {{ clienttask.client.currency.shortname }}<i> ({% trans "Освоено" %}: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
+                <p>{% trans "Исполнитель" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль исполнителя' %}"><a href="{% url 'my_account:userprofile_detail' clienttask.assigner.pk ' ' %}">{{ clienttask.assigner }}</a></span></p>
+                <p>{% trans "Начало" %}: {{ clienttask.datebegin }}</p>
+                <p>{% trans "Окончание" %}: {{ clienttask.dateend }}</p>
+                <p>{% trans "Тип в иерархии" %}: {{ clienttask.structure_type }}</p>
+                <p>{% trans "Тип" %}: {{ clienttask.type }}</p>
+                <p>{% trans "Статус" %}: {{ clienttask.status }}</p>
+                <p>{% trans "Инициатор" %}: {{ clienttask.initiator }}</p>
+                <p>{% trans "Затраченное время, час." %}: <!--{ taskcomment_timesum.time__sum|floatformat:2 }}-->{{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
+                <p>{% trans "Выполнена на" %}: {{ clienttask.percentage }} %</p>
+                <em>{% trans "Автор" %}: {{ clienttask.author }}</em><br />
+                <em>{% trans "Дата" %}: {{ clienttask.datecreate }}</em>
                 <p>&nbsp;</p>
             </div>
             <div class="object-detail-right">{% include 'objectfile_list.html' %}</div>
@@ -56,7 +58,7 @@
 
             <div class="object-list-left">
 
-                <h5>Комментарии</h5>
+                <h5>{% trans "Комментарии" %}</h5>
 
                 <div class="object-list-buttons">
                     <a href="{% url 'my_crm:clienttaskcomment_create' clienttask.pk %}">{{ button_clienttaskcomment_create }}</a>
@@ -65,7 +67,7 @@
 
                 {% for taskcomment in nodes %}
                     <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} |
-                 <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
+                 <span><span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i> | 
                     {{ taskcomment.time }} час. |
                      {{ clienttask.client.currency.symbol }}{{ taskcomment.cost }}</span></b>
                     <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
@@ -82,7 +84,7 @@
 
             <div class="object-list-right">
 
-                <h5>События</h5>
+                <h5>{% trans "События" %}</h5>
 
                 <div class="object-list-buttons">
                     <a href="{% url 'my_crm:clientevent_create' clienttask.client.pk clienttask.id %}">{{ button_event_create }}</a>
@@ -91,7 +93,7 @@
 
                 {% for event in enodes %}
                     <b><a href="{% url 'my_crm:clienteventcomments' event.pk %}">{{ event.name }}</a> : <span style="font-size: 70%; color: blue;">{{ event.datecreate }} |
-                  <span><span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' event.author.pk ' ' %}">{{ event.author.username }}</a></span></i></span></b>
+                  <span><span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' event.author.pk ' ' %}">{{ event.author.username }}</a></span></i></span></b>
                     <p>{% autoescape off %}{{ event.description }}{% endautoescape %}</p>
                 {% endfor %}
             </div>

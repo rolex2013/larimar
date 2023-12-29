@@ -303,7 +303,7 @@ def objecthistory(request, objtype="prj", pk=0):
                     "manager",
                     "status",
                     "type",
-                    "protocol_type",
+                    "protocoltype",
                     "currency",
                 )
                 .first()

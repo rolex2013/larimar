@@ -94,10 +94,10 @@ class ClientForm(forms.ModelForm):
     class Meta:
         model = Client
         fields = ['user', 'firstname', 'middlename', 'lastname', 'description', 'phone', 'email', 'members', 'manager', 'type', 'status', 'currency', 'cost', 'percentage', 'dateclose', 'is_notify', 'protocoltype', 'initiator', 'is_active', 'id', 'author']
-      #   widgets = {
-      #      'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
-      #      'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
-      #   }
+        # widgets = {
+        #    'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
+        #    'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
+        # }
 
 
 class ClientTaskForm(forms.ModelForm):

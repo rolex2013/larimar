@@ -1,9 +1,11 @@
+   {% load i18n %}
+   
    <!--{ if len_elist %}         -->
    <ul>
       {% for enode in enodes %}
          <div class="d-tr">
             <div class="d-td-text">
-               <li><span class="hint hint--bottom hint--info" data-hint="{{ enode.description }}"><b><a href="{% url 'my_crm:clienteventcomments' enode.pk %}">#{{ enode.id }}. {{ enode.name }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{{ enode.datecreate}} | {{ enode.type }} | {{ enode.status }} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' enode.assigner.pk ' ' %}">{{ enode.assigner }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' enode.author.pk ' ' %}"><i>{{ enode.author }}</i></a></span></span></b></li>
+               <li><span class="hint hint--bottom hint--info" data-hint="{{ enode.description }}"><b><a href="{% url 'my_crm:clienteventcomments' enode.pk %}">#{{ enode.id }}. {{ enode.name }}</a></span>&nbsp;<span style="font-size: 70%; color: green;">{{ enode.datecreate}} | {{ enode.type }} | {{ enode.status }} | <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a style="color: green" href="{% url 'my_account:userprofile_detail' enode.assigner.pk ' ' %}">{{ enode.assigner }}</a></span> | <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a style="color: green" href="{% url 'my_account:userprofile_detail' enode.author.pk ' ' %}"><i>{{ enode.author }}</i></a></span></span></b></li>
             </div>
          </div>
       {% endfor %}

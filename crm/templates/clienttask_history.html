@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load render_table from django_tables2 %}
+{% load i18n %}
 
 {% block task %}
    <!-- Защита от прямого доступа к задаче -->
@@ -10,19 +11,19 @@
 
        <h4>{{ current_object.name }}
        {% if not current_object.is_active %}
-          (Задача перемещена в архив)
+          ({% trans "Задача перемещена в архив" %})
        {% endif %}
        </h4>
        <p>{% autoescape off %}{{ current_object.description }}{% endautoescape %}</p>
-       <p>Исполнитель: {{ current_object.assigner }}</p>     
-       <p>Начало: {{ current_object.datebegin }}</p>
-       <p>Окончание: {{ current_object.dateend }}</p>
-       <p>Тип в иерархии: {{ current_object.structure_type }}</p>
-       <p>Тип: {{ current_object.type }}</p>       
-       <p>Статус: {{ current_object.status }}</p>
-       <em>Автор: {{ current_object.author }}</em><br /> 
+       <p>{% trans "Исполнитель" %}: {{ current_object.assigner }}</p>     
+       <p>{% trans "Начало" %}: {{ current_object.datebegin }}</p>
+       <p>{% trans "Окончание" %}: {{ current_object.dateend }}</p>
+       <p>{% trans "Тип в иерархии" %}: {{ current_object.structure_type }}</p>
+       <p>{% trans "Тип" %}: {{ current_object.type }}</p>       
+       <p>{% trans "Статус" %}: {{ current_object.status }}</p>
+       <em>{% trans "Автор" %}: {{ current_object.author }}</em><br /> 
        <!--<em>Участники: { current_object.members.name }}</em><br /> -->
-       <em>Дата: {{ current_object.datecreate }}</em>
+       <em>{% trans "Дата" %}: {{ current_object.datecreate }}</em>
        <p>&nbsp;</p>
        
        {% if user.is_authenticated and user.id == current_object.author_id  %}
@@ -32,7 +33,7 @@
       </div>
 
   {% else %}
-     <h4>Информация о Задаче недоступна!</h4>
+     <h4>{% trans "Информация о Задаче недоступна!" %}</h4>
   {% endif %}  
 
 {% endblock task %}
@@ -43,7 +44,7 @@
 
       <div class="object-list">
 
-       <h5>История задачи</h5>
+       <h5>{% trans "История задачи" %}</h5>
        
        <!--{ render_table table %}--> 
        
@@ -76,7 +77,7 @@
       <p>&nbsp;</p>
 
    {% else %}
-      <h5>Информация об истории задачи недоступна!</h5>
+      <h5>{% trans "Информация об истории задачи недоступна!" %}</h5>
    {% endif %}  
 
    {% endblock list %}
