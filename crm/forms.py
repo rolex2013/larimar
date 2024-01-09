@@ -96,7 +96,7 @@ class ClientForm(forms.ModelForm):
         fields = ['user', 'firstname', 'middlename', 'lastname', 'description', 'phone', 'email', 'members', 'manager', 'type', 'status', 'currency', 'cost', 'percentage', 'dateclose', 'is_notify', 'protocoltype', 'initiator', 'is_active', 'id', 'author']
         # widgets = {
         #    'datebegin': DatePickerInput(format='%d.%m.%Y'), # default date-format %m/%d/%Y will be used
-        #    'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-frmat
+        #    'dateend': DatePickerInput(format='%d.%m.%Y'), # specify date-format
         # }
 
 
@@ -208,16 +208,14 @@ class ClientEventForm(forms.ModelForm):
     disabled_fields = ('dateclose', 'author',)
 
     def clean(self):
+
         if self.cleaned_data['dateend'] < self.cleaned_data['datebegin']:
             self.cleaned_data['dateend'] = self.cleaned_data['datebegin']
         # здесь надо поставить проверку на view.EventUpdate
         if self.action == 'update':
+
             if self.cleaned_data['status'].id != self.initial['status']:
-               # если вызов пришёл из EventUpdate и статус События был изменён, то пишем лог изменения (это переехало в переопределение метода save в модели)
-               # dict_status = Dict_ClientEventStatus.objects.get(pk=self.cleaned_data['status'].id)
-               # ClientEventStatusLog.objects.create(event_id=self.initial['id'],
-               #                                    status_id=dict_status.id,
-               #                                    author_id=self.user.id)
+
                 if self.cleaned_data['status'].is_close:
                     if self.user.id != self.initial['author']:
                         self.cleaned_data['dateclose'] = datetime.datetime.today()
@@ -235,6 +233,7 @@ class ClientEventForm(forms.ModelForm):
                                                     author_id=self.user.id)
                 else:
                     self.cleaned_data['dateclose'] = None
+                    
             elif self.cleaned_data['assigner'].id != self.initial['assigner']:
                 user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
                 objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id

@@ -11,13 +11,15 @@
         {% comment %}
         {% for file in files %}
            <p style="margin: 0 0 10px 10px;"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Удалить этот файл' %}">
-            <input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span>&nbsp;&nbsp;&nbsp;
+            <input type="checkbox" value="{{file.id}}" id="myCheck_{{file.id}}" name="myCheck_{{file.id}}" checkboxtype="checkboxfile" onchange="file_delete()"/></span>&nbsp;&nbsp;&nbsp;
             <a href="{{ file.pfile }}">{{ file.uname }}</a>&nbsp;&nbsp;<em style="font-size:80%">{{ file.psize|filesizeformat }} {{ file.datecreate|date:'d.m.y' }} {{ file.datecreate|time:'H:i:s' }}</em></p>
         {% endfor %}
         {% endcomment %}
+        
         <div class="table-files">
             {% for file in files %}
                 <div class="row-files">
+                    
                     {% comment %}
                     {% if objtype == 'fldr' %}
                         {% if user.id == file.author.id %}
@@ -30,9 +32,9 @@
                         {% endif %}
                     {% endif %}
                     {% endcomment %}
-                    <!--+++/{ obj_files_rights }}/+++-->
+
                     {% if obj_files_rights and obj_files_rights != 0 %}
-                        <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Удалить этот файл' %}"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                        <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Удалить этот файл' %}"><input type="radio" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                     {% endif %}
 
                     <div class="cell-files-left"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
@@ -55,20 +57,21 @@
 
 <script>
 
-    //$(document).ready(function () {
+    // $(document).ready(function () {
     //    $("form").submit(function () {
-    $('input[type="checkbox"]').change(function() {
+    $('input[type="radio"]').change(function() {
+    // function filedelete() {        
     // $('input[class="sell-files"]').change(function () {
     // $(document).on('change', '.sell-files', function () {
-        //console.log({{ companyid }})
-        //console.log({{ companyuser.id }})
         // Проверка, стоит галочка или нет
         if ($(this).is(':checked')) {
-
+        // if ($("#myCheck_{{file.id}}").prop('checked')) {
+            // console.log('=========+++========' + $(this).prop("name"))
             if (confirm("Внимание! Этот файл будет удалён!")) {
-
-                var chk = $(this).attr("name");
-                var chkVal = $(this).attr("value");
+                // var chk = $(this).attr("name");
+                // var chkVal = $(this).attr("value");
+                var chk = $(this).prop("name");
+                var chkVal = $(this).prop("value");                
                 //console.log(chkVal)
                 $.ajax({
                     url: "{% url 'my_main:objectfile_delete' objtype %}",

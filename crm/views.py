@@ -226,9 +226,7 @@ class ClientCreate(AddFilesMixin, CreateView):
         #   form.instance.parent_id = self.kwargs['parentid']
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём нового клиента
-        af = self.add_files(
-            form, "crm",
-            "client")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, "crm", "client")  # добавляем файлы из формы (метод из AddFilesMixin)
         # Делаем первую запись в историю изменений проекта
         self_user_username = ""
         if self.object.user:
@@ -245,9 +243,7 @@ class ClientCreate(AddFilesMixin, CreateView):
             str(_("Имя")): self.object.firstname,
             str(_("Отчество")): self.object.middlename,
             str(_("Фамилия")): self.object.lastname,
-            str(_("Пользователь")):
-            "-" if self_user_username == "" else self_user_username,
-            "E-mail": self.object.email,
+            str(_("Пользователь")): "-" if self_user_username == "" else self_user_username, "E-mail": self.object.email,
             str(_("Телефон")): self.object.phone,
             str(_("Тип")): self.object.type.name,
             str(_("Статус")): self.object.status.name,
@@ -258,8 +254,7 @@ class ClientCreate(AddFilesMixin, CreateView):
             str(_("Менеджер")): self.object.manager.username,
             str(_("Участники")): membersstr,
             str(_("Оповещ.")): "✓" if self.object.is_notify else "-",
-            str(_("Протокол")): "-" if self_object_protocoltype_name == "" else
-            self_object_protocoltype_name,
+            str(_("Протокол")): "-" if self_object_protocoltype_name == "" else self_object_protocoltype_name,
             str(_("Активн.")): "✓" if self.object.is_active else "-",
         }
         ModelLog.objects.create(
@@ -307,13 +302,9 @@ class ClientUpdate(AddFilesMixin, UpdateView):
         return kwargs
 
     def form_valid(self, form):
-        self.object = form.save(
-            commit=False)  # без commit=False происходит вызов save() Модели
-        af = self.add_files(
-            form, "crm",
-            "client")  # добавляем файлы из формы (метод из AddFilesMixin)
-        old = Client.objects.filter(pk=self.object.pk).first(
-        )  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        self.object = form.save(commit=False)  # без commit=False происходит вызов save() Модели
+        af = self.add_files(form, "crm", "client")  # добавляем файлы из формы (метод из AddFilesMixin)
+        old = Client.objects.filter(pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
         old_user_username = ""
         self_user_username = ""
         if old.user:
@@ -337,58 +328,28 @@ class ClientUpdate(AddFilesMixin, UpdateView):
         membersstr = ""
         for mem in memb:
             membersstr = membersstr + mem[1] + ","
-            if is_members_changed == False:
+            if not is_members_changed:
                 if old_memb_list.count(mem) == 0:
                     is_members_changed = True
 
         historyjson = {
-            str(_("Имя")):
-            "" if self.object.firstname == old.firstname else
-            self.object.firstname,
-            str(_("Отчество")):
-            "" if self.object.middlename == old.middlename else
-            self.object.middlename,
-            str(_("Фамилия")):
-            ""
-            if self.object.lastname == old.lastname else self.object.lastname,
-            str(_("Пользователь")):
-            "" if self_user_username == old_user_username else
-            "-" if self_user_username == "" else self_user_username,
-            str(_("E-mail")):
-            "" if self.object.email == old.email else self.object.email,
-            str(_("Телефон")):
-            "" if self.object.phone == old.phone else self.object.phone,
-            str(_("Тип")):
-            "" if self.object.type.name == old.type.name else
-            self.object.type.name,
-            str(_("Статус")):
-            "" if self.object.status.name == old.status.name else
-            self.object.status.name,
-            str(_("Ст-ть")):
-            "" if self.object.cost == old.cost else str(self.object.cost),
-            str(_("Валюта")):
-            "" if self.object.currency.code_char == old.currency.code_char else
-            self.object.currency.code_char,
-            str(_("Выполнен на, %")):
-            "" if self.object.percentage == old.percentage else str(
-                self.object.percentage),
-            str(_("Инициатор")):
-            "" if self.object.initiator.name == old.initiator.name else
-            self.object.initiator.name,
-            str(_("Менеджер")):
-            "" if self.object.manager.username == old.manager.username else
-            self.object.manager.username,
-            str(_("Участники")):
-            "" if is_members_changed == False else membersstr,
-            str(_("Оповещ.")):
-            "" if self.object.is_notify == old.is_notify else
-            "✓" if self.object.is_notify else "-",
-            str(_("Протокол")):
-            "" if self.object.protocoltype.name == old.protocoltype.name else
-            self.object.protocoltype.name,
-            str(_("Активн.")):
-            "" if self.object.is_active == old.is_active else
-            "✓" if self.object.is_active else "-",
+            str(_("Имя")): "" if self.object.firstname == old.firstname else self.object.firstname,
+            str(_("Отчество")): "" if self.object.middlename == old.middlename else self.object.middlename,
+            str(_("Фамилия")): "" if self.object.lastname == old.lastname else self.object.lastname,
+            str(_("Пользователь")): "" if self_user_username == old_user_username else "-" if self_user_username == "" else self_user_username,
+            str(_("E-mail")): "" if self.object.email == old.email else self.object.email,
+            str(_("Телефон")): "" if self.object.phone == old.phone else self.object.phone,
+            str(_("Тип")): "" if self.object.type.name == old.type.name else self.object.type.name,
+            str(_("Статус")): "" if self.object.status.name == old.status.name else self.object.status.name,
+            str(_("Ст-ть")): "" if self.object.cost == old.cost else str(self.object.cost),
+            str(_("Валюта")): "" if self.object.currency.code_char == old.currency.code_char else self.object.currency.code_char,
+            str(_("Выполнен на, %")): "" if self.object.percentage == old.percentage else str(self.object.percentage),
+            str(_("Инициатор")): "" if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
+            str(_("Менеджер")): "" if self.object.manager.username == old.manager.username else self.object.manager.username,
+            str(_("Участники")): "" if is_members_changed == False else membersstr,
+            str(_("Оповещ.")): "" if self.object.is_notify == old.is_notify else "✓" if self.object.is_notify else "-",
+            str(_("Протокол")): "" if self.object.protocoltype.name == old.protocoltype.name else self.object.protocoltype.name,
+            str(_("Активн.")): "" if self.object.is_active == old.is_active else "✓" if self.object.is_active else "-",
         }
         ModelLog.objects.create(
             componentname="clnt",
@@ -507,8 +468,7 @@ def clienttasks(request, clientid=0, pk=0):
         tree_task_id = 0
         root_task_id = 0
         tree_task_id = 0
-        if (currentuser == currentclient.author_id
-                or currentuser == currentclient.manager_id):
+        if (currentuser == currentclient.author_id or currentuser == currentclient.manager_id):
             obj_files_rights = 1
     else:
         current_task = (ClientTask.objects.filter(id=pk).select_related(
@@ -523,8 +483,7 @@ def clienttasks(request, clientid=0, pk=0):
         tree_task_id = current_task.tree_id
         root_task_id = current_task.get_root().id
         tree_task_id = current_task.tree_id
-        if (currentuser == current_task.author_id
-                or currentuser == current_task.assigner_id):
+        if (currentuser == current_task.author_id or currentuser == current_task.assigner_id):
             obj_files_rights = 1
 
     button_client_create = ""
@@ -532,17 +491,13 @@ def clienttasks(request, clientid=0, pk=0):
     button_client_history = ""
     button_task_create = ""
 
-    is_member = Client.objects.filter(members__in=[
-        currentuser,
-    ]).exists()
-    if (currentuser == currentclient.author_id
-            or currentuser == currentclient.manager_id or is_member):
+    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
+    if (currentuser == currentclient.author_id or currentuser == currentclient.manager_id or is_member):
         # button_client_create = 'Добавить'
         button_client_history = _("История")
         button_task_create = button_event_create = _("Добавить")
         # button_event_create = _("Добавить")
-        if (currentuser == currentclient.author_id
-                or currentuser == currentclient.manager_id):
+        if (currentuser == currentclient.author_id or currentuser == currentclient.manager_id):
             button_client_update = _("Изменить")
 
     task_list = task_list.select_related("client", "assigner",
@@ -632,9 +587,7 @@ class ClientTaskCreate(AddFilesMixin, CreateView):
             form.instance.parent_id = self.kwargs["parentid"]
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новую задачу клиента
-        af = self.add_files(
-            form, "crm",
-            "task")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, "crm", "task")  # добавляем файлы из формы (метод из AddFilesMixin)
         historyjson = {
             str(_("Задача")): self.object.name,
             str(_("Статус")): self.object.status.name,
@@ -693,43 +646,20 @@ class ClientTaskUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        af = self.add_files(
-            form, "crm",
-            "task")  # добавляем файлы из формы (метод из AddFilesMixin)
-        old = ClientTask.objects.filter(pk=self.object.pk).first(
-        )  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        af = self.add_files(form, "crm", "task")  # добавляем файлы из формы (метод из AddFilesMixin)
+        old = ClientTask.objects.filter(pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
         historyjson = {
-            str(_("Задача")):
-            "" if self.object.name == old.name else self.object.name,
-            str(_("Статус")):
-            "" if self.object.status.name == old.status.name else
-            self.object.status.name,
-            str(_("Начало")):
-            "" if self.object.datebegin == old.datebegin else
-            self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
-            str(_("Окончание")):
-            "" if self.object.dateend == old.dateend else
-            self.object.dateend.strftime("%d.%m.%Y %H:%M"),
-            str(_("Тип в иерархии")):
-            "" if self.object.structure_type.name == old.structure_type.name
-            else self.object.structure_type.name,
-            str(_("Тип")):
-            "" if self.object.type.name == old.type.name else
-            self.object.type.name,
-            str(_("Стоимость")):
-            "" if self.object.cost == old.cost else str(self.object.cost),
-            str(_("Выполнен на, %")):
-            "" if self.object.percentage == old.percentage else str(
-                self.object.percentage),
-            str(_("Инициатор")):
-            "" if self.object.initiator.name == old.initiator.name else
-            self.object.initiator.name,
-            str(_("Исполнитель")):
-            "" if self.object.assigner.username == old.assigner.username else
-            self.object.assigner.username,
-            str(_("Активность")):
-            "" if self.object.is_active == old.is_active else
-            "✓" if self.object.is_active else "-"
+            str(_("Задача")): "" if self.object.name == old.name else self.object.name,
+            str(_("Статус")): "" if self.object.status.name == old.status.name else self.object.status.name,
+            str(_("Начало")): "" if self.object.datebegin == old.datebegin else self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
+            str(_("Окончание")): "" if self.object.dateend == old.dateend else self.object.dateend.strftime("%d.%m.%Y %H:%M"),
+            str(_("Тип в иерархии")): "" if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
+            str(_("Тип")): "" if self.object.type.name == old.type.name else self.object.type.name,
+            str(_("Стоимость")): "" if self.object.cost == old.cost else str(self.object.cost),
+            str(_("Выполнен на, %")): "" if self.object.percentage == old.percentage else str(self.object.percentage),
+            str(_("Инициатор")): "" if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
+            str(_("Исполнитель")): "" if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+            str(_("Активность")): "" if self.object.is_active == old.is_active else "✓" if self.object.is_active else "-"
             # , str(_("Участники")):self.members.username
         }
         ModelLog.objects.create(
@@ -787,17 +717,14 @@ def clienttaskcomments(request, taskid):
     button_task_create = ""
     button_task_update = ""
     button_task_history = ""
-    is_member = Client.objects.filter(members__in=[
-        currentuser,
-    ]).exists()
+    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
     if (currentuser == currenttask.author_id
             or currentuser == currenttask.assigner_id or is_member):
         button_task_create = button_taskcomment_create = button_event_create = _("Добавить")
         button_task_history = _("История")
         # button_taskcomment_create = "Добавить"
         # button_event_create = "Добавить"
-        if (currentuser == currenttask.author_id
-                or currentuser == currenttask.assigner_id):
+        if (currentuser == currenttask.author_id or currentuser == currenttask.assigner_id):
             button_task_update = _("Изменить")
 
     taskcomment_list = taskcomment_list.select_related("task", "author")
@@ -861,8 +788,7 @@ class ClientTaskCommentCreate(AddFilesMixin, CreateView):
     template_name = "object_form.html"
 
     def get_context_data(self, **kwargs):
-        context = super(ClientTaskCommentCreate,
-                        self).get_context_data(**kwargs)
+        context = super(ClientTaskCommentCreate, self).get_context_data(**kwargs)
         context["header"] = _("Новый Комментарий")
         return context
 
@@ -870,9 +796,7 @@ class ClientTaskCommentCreate(AddFilesMixin, CreateView):
         form.instance.task_id = self.kwargs["taskid"]
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новый коммент задачи клиента
-        af = self.add_files(
-            form, "crm",
-            "taskcomment")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, "crm", "taskcomment")  # добавляем файлы из формы (метод из AddFilesMixin)
         return super(ClientTaskCommentCreate, self).form_valid(form)
 
 
@@ -882,11 +806,9 @@ class ClientTaskCommentUpdate(UpdateView):
     template_name = "object_form.html"
 
     def get_context_data(self, **kwargs):
-        context = super(ClientTaskCommentUpdate,
-                        self).get_context_data(**kwargs)
+        context = super(ClientTaskCommentUpdate, self).get_context_data(**kwargs)
         context["header"] = _("Изменить Комментарий")
-        context["files"] = ClientFile.objects.filter(
-            taskcomment_id=self.kwargs["pk"], is_active=True).order_by("uname")
+        context["files"] = ClientFile.objects.filter(taskcomment_id=self.kwargs["pk"], is_active=True).order_by("uname")
         return context
 
 
@@ -1033,9 +955,7 @@ class ClientEventCreate(AddFilesMixin, CreateView):
             form.instance.task_id = self.kwargs["taskid"]
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новое событие клиента
-        af = self.add_files(
-            form, "crm",
-            "event")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, "crm", "event")  # добавляем файлы из формы (метод из AddFilesMixin)
         self_task = ""
         self_task_id = 0
         self_task_name = ""
@@ -1050,28 +970,17 @@ class ClientEventCreate(AddFilesMixin, CreateView):
         if self.object.type:
             self_type_name = self.object.type.name
         historyjson = {
-            str(_("Событие")):
-            self.object.name,
+            str(_("Событие")): self.object.name,
             # _("Задача"): '#'+str(self_task_id)+'. '+self_task_name,
-            str(_("Задача")):
-            "#" + str(self_task_id) + ". " +
-            self_task_name if self_task else "-",
-            str(_("Статус")):
-            self_status_name if self_status_name else "-",
-            str(_("Начало")):
-            self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
-            str(_("Окончание")):
-            self.object.dateend.strftime("%d.%m.%Y %H:%M"),
-            str(_("Тип")):
-            self_type_name if self_type_name else "-",
-            str(_("Место")):
-            self.object.place if self.object.place else "-",
-            str(_("Инициатор")):
-            self.object.initiator.name,
-            str(_("Исполнитель")):
-            self.object.assigner.username,
-            str(_("Активность")):
-            "✓" if self.object.is_active else "-"
+            str(_("Задача")): "#" + str(self_task_id) + ". " + self_task_name if self_task else "-",
+            str(_("Статус")): self_status_name if self_status_name else "-",
+            str(_("Начало")): self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
+            str(_("Окончание")): self.object.dateend.strftime("%d.%m.%Y %H:%M"),
+            str(_("Тип")): self_type_name if self_type_name else "-",
+            str(_("Место")): self.object.place if self.object.place else "-",
+            str(_("Инициатор")): self.object.initiator.name,
+            str(_("Исполнитель")): self.object.assigner.username,
+            str(_("Активность")): "✓" if self.object.is_active else "-"
             # , str(_("Участники")):self.object.members.username
         }
         ModelLog.objects.create(
@@ -1119,11 +1028,8 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        af = self.add_files(
-            form, "crm",
-            "event")  # добавляем файлы из формы (метод из AddFilesMixin)
-        old = ClientEvent.objects.filter(pk=self.object.pk).first(
-        )  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        af = self.add_files(form, "crm", "event")  # добавляем файлы из формы (метод из AddFilesMixin)
+        old = ClientEvent.objects.filter(pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
         # old_task_id = 0
         old_task = ""
         self_task = ""
@@ -1138,35 +1044,16 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
             self_task_id = self.object.task.id
             self_task_name = self.object.task.name
         historyjson = {
-            str(_("Событие")):
-            "" if self.object.name == old.name else self.name,
-            str(_("Задача")):
-            "" if self_task == old_task else
-            ("#" + str(self_task_id) + ". " +
-             self_task_name) if self_task else "-",
-            str(_("Статус")):
-            "" if self.object.status.name == old.status.name else
-            self.object.status.name,
-            str(_("Начало")):
-            "" if self.object.datebegin == old.datebegin else
-            self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
-            str(_("Окончание")):
-            "" if self.object.dateend == old.dateend else
-            self.object.dateend.strftime("%d.%m.%Y %H:%M"),
-            str(_("Тип")):
-            "" if self.object.type.name == old.type.name else
-            self.object.type.name,
-            str(_("Место")):
-            "" if self.object.place == old.place else self.object.place,
-            str(_("Инициатор")):
-            "" if self.object.initiator.name == old.initiator.name else
-            self.object.initiator.name,
-            str(_("Исполнитель")):
-            "" if self.object.assigner.username == old.assigner.username else
-            self.object.assigner.username,
-            str(_("Активность")):
-            "" if self.object.is_active == old.is_active else
-            "✓" if self.object.is_active else "-"
+            str(_("Событие")): "" if self.object.name == old.name else self.name,
+            str(_("Задача")): "" if self_task == old_task else ("#" + str(self_task_id) + ". " + self_task_name) if self_task else "-",
+            str(_("Статус")): "" if self.object.status.name == old.status.name else self.object.status.name,
+            str(_("Начало")): "" if self.object.datebegin == old.datebegin else self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
+            str(_("Окончание")): "" if self.object.dateend == old.dateend else self.object.dateend.strftime("%d.%m.%Y %H:%M"),
+            str(_("Тип")): "" if self.object.type.name == old.type.name else self.object.type.name,
+            str(_("Место")): "" if self.object.place == old.place else self.object.place,
+            str(_("Инициатор")): "" if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
+            str(_("Исполнитель")): "" if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
+            str(_("Активность")): "" if self.object.is_active == old.is_active else "✓" if self.object.is_active else "-"
             # , str(_("Участники")):self.members.username
         }
         ModelLog.objects.create(
@@ -1181,8 +1068,7 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienteventcomments(request, eventid):
-    currentevent = (ClientEvent.objects.filter(id=eventid).select_related(
-        "client", "task", "type", "status").first())
+    currentevent = (ClientEvent.objects.filter(id=eventid).select_related("client", "task", "type", "status").first())
     currentuser = request.user.id
     obj_files_rights = 0
     if currentuser == currentevent.author_id or currentuser == currentevent.assigner_id:
@@ -1202,9 +1088,7 @@ def clienteventcomments(request, eventid):
     button_event_create = ""
     button_event_update = ""
     button_event_history = ""
-    is_member = Client.objects.filter(members__in=[
-        currentuser,
-    ]).exists()
+    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
     if (currentuser == currentevent.author_id
             or currentuser == currentevent.assigner_id or is_member):
         button_event_create = button_eventcomment_create = _("Добавить")
@@ -1258,8 +1142,7 @@ class ClientEventCommentCreate(AddFilesMixin, CreateView):
     template_name = "object_form.html"
 
     def get_context_data(self, **kwargs):
-        context = super(ClientEventCommentCreate,
-                        self).get_context_data(**kwargs)
+        context = super(ClientEventCommentCreate, self).get_context_data(**kwargs)
         context["header"] = _("Новый Комментарий")
         return context
 
@@ -1267,9 +1150,7 @@ class ClientEventCommentCreate(AddFilesMixin, CreateView):
         form.instance.event_id = self.kwargs["eventid"]
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новый коммент события клиента
-        af = self.add_files(
-            form, "crm", "eventcomment"
-        )  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(form, "crm", "eventcomment")  # добавляем файлы из формы (метод из AddFilesMixin)
         return super(ClientEventCommentCreate, self).form_valid(form)
 
 
@@ -1436,9 +1317,7 @@ def clientfilter(request):
     # *** фильтр по принадлежности ***
     myclntuser = request.GET["myclientuser"]
     if myclntuser == "0":
-        client_list = client_list.filter(Q(members__in=[
-            currentuser,
-        ]))
+        client_list = client_list.filter(Q(members__in=[currentuser,]))
     elif myclntuser == "1":
         client_list = client_list.filter(Q(author=request.user.id))
     elif myclntuser == "2":
@@ -1638,8 +1517,7 @@ def clienteventfilter(request):
     elif myevntuser == "2":
         event_list = event_list.filter(Q(assigner=request.user.id))
     # *******************************
-    enodes = (event_list.select_related("client", "task", "type",
-                                        "status").distinct().order_by())
+    enodes = (event_list.select_related("client", "task", "type", "status").distinct().order_by())
     # print(enodes)
     event_message = ""
     len_elist = len(enodes)
@@ -1676,9 +1554,7 @@ def clients_tasks_events(request):
         client__company__in=companies_id,
         dateclose__isnull=True,
         dateend__lte=date_end,
-    ).select_related("client", "type", "type", "status", "initiator",
-                     "assigner", "author").order_by("dateend",
-                                                    "type").distinct())
+    ).select_related("client", "type", "type", "status", "initiator", "assigner", "author").order_by("dateend", "type").distinct())
     clients_events_list = (ClientEvent.objects.filter(
         Q(client__author=request.user.id)
         | Q(client__initiator=request.user.id)
@@ -1694,9 +1570,7 @@ def clients_tasks_events(request):
         dateclose__isnull=True,
         client__company__in=companies_id,
         dateend__lte=date_end,
-    ).select_related("client", "task", "type", "status", "initiator",
-                     "assigner", "author").order_by("dateend",
-                                                    "status").distinct())
+    ).select_related("client", "task", "type", "status", "initiator", "assigner", "author").order_by("dateend", "status").distinct())
 
     # print(projects_list, projects_tasks_list)
 
