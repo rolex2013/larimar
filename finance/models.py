@@ -4,8 +4,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from main.utils_lang import TranslateFieldMixin
 
-#from django.urls import reverse, reverse_lazy
-#from django.utils import timezone
+# from django.urls import reverse, reverse_lazy
+# from django.utils import timezone
 
 # request, пробрасываемый сюда из main\request_exposer.py
 exposed_request = ''
@@ -25,44 +25,10 @@ class Dict_Currency(TranslateFieldMixin, models.Model):
 
     @property
     def name(self):
-        # # try:
-        # #     lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
-        # # except KeyError:
-        # #     try:
-        # #         lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
-        # #     except KeyError:
-        # #         lang = 'ru'
-        # try:
-        #     lang = exposed_request.COOKIES[settings.LANGUAGE_COOKIE_NAME]
-        # except KeyError:
-        #     try:
-        #         lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
-        #     except KeyError:
-        #         lang = "ru"
-        # if lang is None:
-        #     lang = "ru"
-        # return getattr(self, 'name_'+lang, None)
         return self.trans_field(exposed_request, "name")
 
     @property
     def shortname(self):
-        # # try:
-        # #     lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
-        # # except KeyError:
-        # #     try:
-        # #         lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
-        # #     except KeyError:
-        # #         lang = 'ru'
-        # try:
-        #     lang = exposed_request.COOKIES[settings.LANGUAGE_COOKIE_NAME]
-        # except KeyError:
-        #     try:
-        #         lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
-        #     except KeyError:
-        #         lang = "ru"
-        # if lang is None:
-        #     lang = "ru"
-        # return getattr(self, 'shortname_'+lang, None)
         return self.trans_field(exposed_request, "shortname")
 
     class Meta:
