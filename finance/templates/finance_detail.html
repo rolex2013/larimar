@@ -30,7 +30,7 @@
          {% trans 'c' %} <input type="date" id="datebegin"> {% trans 'по' %} <input type="date" id="dateend">
          <label>{% trans 'Фильтр по валюте' %}: </label>
          <select name="select-curr" id="currselectid" class="select-curr">
-            <option value="0" {% if "0" == currselectid %} selected="selected" {% endif %}>- Все</option>
+            <option value="0" {% if "0" == currselectid %} selected="selected" {% endif %}>- {% trans 'Все' %}</option>
             {% for currency in currency_list %}
                <option value="{{currency.id}}" {% if currency.id == currselectid|add:"0" %} selected="selected" {% endif %}>
                   {{ currency.code_char }}
