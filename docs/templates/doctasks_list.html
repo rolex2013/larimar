@@ -1,11 +1,11 @@
-
+{% load i18n %}
 
  <!--<div id="ajax_doctasklistresult">-->
     <ul>
     {% for node in nodes %}
         <li><span class="hint hint--bottom hint--info" data-hint="{{ node.description }}"><b><a href="{% url 'my_doc:doctaskcomments' node.pk %}">#{{ node.id }}. {{ node.name }}</a></b></span>&nbsp;
-            <span style="font-size: 70%; color: green;">{{ node.datecreate}} - {{ node.dateend}} | <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}"><strong>{{ node.assigner }}</strong></a></span> | {{ node.type }} | {{ node.status }}  |
-            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span>
+            <span style="font-size: 70%; color: green;">{{ node.datecreate}} - {{ node.dateend}} | <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль Исполнителя' %}"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.assigner.pk ' ' %}"><strong>{{ node.assigner }}</strong></a></span> | {{ node.type }} | {{ node.status }}  |
+            <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль Автора' %}"><a style="color: green" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author }}</i></a></span></span>
         </li>
     {% endfor %}
     </ul>
