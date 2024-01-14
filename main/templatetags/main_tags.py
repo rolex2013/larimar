@@ -23,6 +23,7 @@ def left_menu(context, menuid=0, is_auth=False):
     # print('LANGUAGE_CODE:', settings.LANGUAGE_CODE, 'settings.LANGUAGE_SESSION_KEY:',
     #      settings.LANGUAGE_SESSION_KEY, 'settings.LANGUAGE_COOKIE_NAME:', settings.LANGUAGE_COOKIE_NAME)
     # select_lang(RequestContext)
+    # men = MenuItem._tree_manager.rebuild()
     try:
         compid = context.request.session["_auth_user_component_id"]
         if is_auth:  # is True:
@@ -48,7 +49,7 @@ def left_menu(context, menuid=0, is_auth=False):
     except:
         nodes = MenuItem.objects.filter(menu_id=1, is_active=True)
         # print(nodes, context.request.session['_auth_user_component_id'])
-    return nodes.order_by("sort")
+    return nodes.order_by("tree_id", "level", "sort")
     # return (nodes)
 
 
