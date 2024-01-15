@@ -231,12 +231,11 @@ class DocTaskForm(forms.ModelForm):
             self.doc = kwargs.pop("docid")
             self.docver = kwargs.pop("docverid")
             super().__init__(*args, **kwargs)
-            doc = Doc.objects.get(id=self.doc)
-            # companyid = doc.company_id
+            # doc = Doc.objects.get(id=self.doc)
+            # docid = doc.id
             # print(self.docver)
         else:
             super().__init__(*args, **kwargs)
-            # companyid = self.instance.doc.company_id
             self.doc = self.instance.doc_id
             self.docver = self.instance.docver_id
             # Исполнитель не может менять Исполнителя, если он не Автор

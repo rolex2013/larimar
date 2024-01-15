@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.urls import reverse
 from datetime import datetime, timedelta  # , date, time
 import json
 import requests
@@ -32,7 +33,7 @@ from .models import (
     Dict_DocTaskStatus,
     DocVerFile,
 )
-from .forms import *  # DocForm, DocTaskForm, DocTaskCommentForm #, DocTaskUpdateForm #,DocTaskCommentForm
+from .forms import DocForm, DocTaskForm, DocTaskFormUpdate, DocTaskCommentForm  # , DocTaskUpdateForm
 
 from main.models import ModelLog
 
@@ -374,7 +375,9 @@ class DocUpdate(AddFilesMixin, UpdateView):
         historyjson = {
             str(_("Номер")): newdocver.vernumber,
             str(_("Актуальн.")): newdocver.id,
-            str(_("Наименование")): "" if self.object.name == old.name else self.object.name,
+            str(_("Наименование")): ""
+            if self.object.name == old.name
+            else self.object.name,
             str(_("Тип")): ""
             if self.object.type.name == old.type.name
             else self.object.type.name,
@@ -621,7 +624,11 @@ class DocTaskCreate(AddFilesMixin, CreateView):
             author=self.object.author,
             log=json.dumps(historyjson),
         )
-        return super().form_valid(form)
+        # return super().form_valid(form)
+        self.object.save()
+        taskid = self.object.id
+        url = reverse("my_doc:doctaskcomments", kwargs={"taskid": taskid})
+        return HttpResponseRedirect(url)
 
     def get_context_data(self, **kwargs):
         context = super(DocTaskCreate, self).get_context_data(**kwargs)
@@ -702,7 +709,11 @@ class DocTaskUpdate(AddFilesMixin, UpdateView):
             author=self.object.author,
             log=json.dumps(historyjson),
         )
-        return super().form_valid(form)
+        # return super().form_valid(form)
+        self.object.save()
+        taskid = self.object.id
+        url = reverse("my_doc:doctaskcomments", kwargs={"taskid": taskid})
+        return HttpResponseRedirect(url)
 
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации

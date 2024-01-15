@@ -111,7 +111,6 @@ class ClientTaskForm(forms.ModelForm):
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == 'update':
             if self.cleaned_data['status'].id != self.initial['status']:
-
                 if self.cleaned_data['status'].is_close:
                     if self.user.id != self.initial['author']:
                         self.cleaned_data['dateclose'] = datetime.datetime.today()

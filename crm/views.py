@@ -346,7 +346,7 @@ class ClientUpdate(AddFilesMixin, UpdateView):
             str(_("Выполнен на, %")): "" if self.object.percentage == old.percentage else str(self.object.percentage),
             str(_("Инициатор")): "" if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
             str(_("Менеджер")): "" if self.object.manager.username == old.manager.username else self.object.manager.username,
-            str(_("Участники")): "" if is_members_changed == False else membersstr,
+            str(_("Участники")): "" if is_members_changed is False else membersstr,
             str(_("Оповещ.")): "" if self.object.is_notify == old.is_notify else "✓" if self.object.is_notify else "-",
             str(_("Протокол")): "" if self.object.protocoltype.name == old.protocoltype.name else self.object.protocoltype.name,
             str(_("Активн.")): "" if self.object.is_active == old.is_active else "✓" if self.object.is_active else "-",
