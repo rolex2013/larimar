@@ -249,7 +249,7 @@
 
       {% else %}
 
-      <p>{% trans 'Документов пока нет...' %}</p>
+         <p>{% trans 'Документов пока нет...' %}</p>
 
       {% endif %}
 
@@ -345,8 +345,7 @@
                   {% if is_admin_org %}
                   <label>{% trans 'Мои' %}: </label>
                   <select name="select-myfolder" id="myfeedbackticketselectid" class="select-my-ticket">
-                     <option value="-1" {% if "-1" == feedbackticket_myselectid %} selected="selected" {% endif %}>{%
-                        trans '- Все' %}</option>
+                     <option value="-1" {% if "-1" == feedbackticket_myselectid %} selected="selected" {% endif %}>{% trans '- Все' %}</option>
                      <option value="1" {% if "1" == feedbackticket_myselectid %} selected="selected" {% endif %}>{% trans '- Я автор' %}</option>
                   </select>
                   {% endif %}

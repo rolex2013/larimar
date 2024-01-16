@@ -15,13 +15,13 @@ from django.contrib.auth.context_processors import auth
 import datetime
 from django.conf import settings
 from django.core.mail import send_mail
-
+ 
 
 class Dict_SystemForm(forms.ModelForm):
-    #files = forms.FileField(label='Файлы комментария тикета', widget=forms.ClearableFileInput(attrs={'multiple': True}),
+    # files = forms.FileField(label='Файлы комментария тикета', widget=forms.ClearableFileInput(attrs={'multiple': True}),
     #                        required=False)
 
-    #def __init__(self, *args, **kwargs):
+    # def __init__(self, *args, **kwargs):
     #    self.is_support_member = kwargs.pop('is_support_member')
     #    super().__init__(*args, **kwargs)
     #    if not self.is_support_member:
@@ -30,9 +30,10 @@ class Dict_SystemForm(forms.ModelForm):
 
     class Meta:
         model = Dict_System
-        #fields = ['name', 'domain', 'url', 'ip', 'email', 'phone']
-        #fields = ['name', 'domain', 'url', 'email', 'phone']
+        # fields = ['name', 'domain', 'url', 'ip', 'email', 'phone']
+        # fields = ['name', 'domain', 'url', 'email', 'phone']
         fields = ['name', 'domain', 'email', 'phone']
+
 
 class FeedbackTicketForm(forms.ModelForm):
     # datebegin = forms.DateField(widget=AdminDateWidget())
@@ -40,11 +41,11 @@ class FeedbackTicketForm(forms.ModelForm):
 
     files = forms.FileField(label='Файлы тикета', widget=forms.ClearableFileInput(attrs={'multiple': True}),
                             required=False)
-    #comment = forms.CharField(label='Комментарий', widget=CKEditorWidget(), required=False)
+    # comment = forms.CharField(label='Комментарий', widget=CKEditorWidget(), required=False)
     comment = forms.CharField(label='Комментарий', widget=forms.Textarea, required=False)
 
-    #disabled_fields = ('name', 'description', 'type', 'files', 'status', 'is_active')
-    #disabled_fields = ('dateclose', 'author')
+    # disabled_fields = ('name', 'description', 'type', 'files', 'status', 'is_active')
+    # disabled_fields = ('dateclose', 'author')
 
     def clean(self):
         if self.action == 'update':
@@ -239,7 +240,7 @@ class FeedbackTaskCommentForm(forms.ModelForm):
 class FilterStatusForm(forms.ModelForm):
     class Meta:
         model = Dict_FeedbackTicketStatus
-        fields = ['name']
+        fields = ['name_ru', 'name_en']
 
 #
 # class DateForm(forms.Form):

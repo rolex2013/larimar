@@ -20,3 +20,4 @@ requirements.txt
 /larimar/__pycache__/urls.cpython-38.pyc
 out.sql
 out.sqlsource
+out.json
