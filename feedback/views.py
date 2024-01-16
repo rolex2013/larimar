@@ -11,8 +11,6 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta, date, time
 from django.db.models import Q, Count, Min, Max, Sum, Avg
 
-from datetime import datetime, timedelta
-
 
 from .serializers import Dict_SystemSerializer, CompanySerializer #, FeedbackTicketSerializer, FeedbackTicketCommentSerializer
 from companies.models import Company, UserCompanyComponentGroup
@@ -493,7 +491,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
                         feedbackticket_list = feedbackticket_list.filter(companyfrom=currentusercompanyid)
                 elif tktstatus == "-2":
                     # если в выпадающем списке выбрано "Просроченные"
-                    feedbackticket_list = feedbackticket_list.filter(dateclose__isnull=True, dateend__lt=datetime.datetime.now())
+                    feedbackticket_list = feedbackticket_list.filter(dateclose__isnull=True, dateend__lt=datetime.now())
                 else:
                     feedbackticket_list = feedbackticket_list.filter(status=tktstatus)
         # *******************************
@@ -1275,7 +1273,7 @@ def feedback_tickets_tasks(request):
     currentuser = request.user.id
     companies_id = request.session["_auth_user_companies_id"]
     date_end = datetime.now() + timedelta(days=10)
-    #print(request, date_end)
+    # print(request, date_end)
 
     feedback_tickets_list = FeedbackTicket.objects.filter(Q(company__in=companies_id) | Q(companyfrom__in=companies_id) | Q(author=request.user.id),
                                             is_active=True, status__is_close=False, dateclose__isnull=True).select_related(

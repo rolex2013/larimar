@@ -1,18 +1,18 @@
-#from django.http import HttpResponse
-#from ckeditor.widgets import CKEditorWidget
+# from django.http import HttpResponse
+# from ckeditor.widgets import CKEditorWidget
 import requests
 from django import forms
 from .models import Company, Project, Task, TaskComment, ProjectFile
-#from .models import ProjectStatusLog, TaskStatusLog
+# from .models import ProjectStatusLog, TaskStatusLog
 from .models import Dict_ProjectStatus, Dict_TaskStatus
 from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
-#from django.contrib.admin.widgets import AdminDateWidget
-#from django.contrib.admin.widgets import AdminSplitDateTime
+# from django.contrib.admin.widgets import AdminDateWidget
+# from django.contrib.admin.widgets import AdminSplitDateTime
 from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
-#from django.contrib.auth.context_processors import auth
+# from django.contrib.auth.context_processors import auth
 import datetime
 from django.conf import settings
 from django.core.mail import send_mail

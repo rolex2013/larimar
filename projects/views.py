@@ -1,11 +1,11 @@
 import os
-#import socket
+# import socket
 from django.conf import settings
 
 from django.urls import reverse_lazy
-#from django.core.urlresolvers import reverse
+# from django.core.urlresolvers import reverse
 from django.utils import timezone
-from datetime import datetime, timedelta #, date, time
+from datetime import datetime, timedelta  #, date, time
 
 import json
 import requests
@@ -17,7 +17,7 @@ from django.views.generic import View, TemplateView, ListView, DetailView, Creat
 from django.views.generic.edit import UpdateView, DeleteView
 from django.template import loader, Context, RequestContext
 from django.core.exceptions import ObjectDoesNotExist
-#from versane.models import Company
+# from versane.models import Company
 
 from companies.models import Company
 from main.models import ModelLog
@@ -26,9 +26,9 @@ from projects.models import Project, Task, TaskComment, ProjectFile #, ProjectSt
 
 from companies.forms import CompanyForm
 from .forms import ProjectForm, TaskForm, TaskCommentForm
-#from .forms import ProjectStatusLog, TaskStatusLog
+# from .forms import ProjectStatusLog, TaskStatusLog
 
-#from .tables import ProjectStatusLogTable, TaskStatusLogTable
+# from .tables import ProjectStatusLogTable, TaskStatusLogTable
 from django_tables2 import RequestConfig
 
 from django.contrib.auth.decorators import login_required
@@ -71,7 +71,7 @@ def projects(request, companyid=0, pk=0):
              project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid)
           elif prjstatus == "-2":
              # если в выпадающем списке выбрано "Просроченные"
-             project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.datetime.now())
+             project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, dateclose__isnull=True, dateend__lt=datetime.now())
           else:             
              project_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser,]), is_active=True, company=companyid, status=prjstatus) #, dateclose__isnull=True)
        prjstatus_selectid = prjstatus
@@ -302,7 +302,7 @@ def tasks(request, projectid=0, pk=0):
              task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid)
           elif tskstatus == "-2":
              # если в выпадающем списке выбрано "Просроченные"
-             task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True, dateend__lt=datetime.datetime.now())
+             task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, dateclose__isnull=True, dateend__lt=datetime.now())
           else:             
              task_list = Task.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(project__members__in=[currentuser,]), is_active=True, project=projectid, status=tskstatus) #, dateclose__isnull=True)
 
@@ -766,7 +766,7 @@ def projects_tasks(request):
     currentuser = request.user.id
     companies_id = request.session["_auth_user_companies_id"]
     date_end = datetime.now() + timedelta(days=10)
-    print(request, date_end)
+    # print(request, date_end)
 
     # projects_list = Project.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id) | Q(members__in=[currentuser, ]), is_active=True,
     #                                        company=companyid, dateclose__isnull=True)

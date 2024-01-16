@@ -12,9 +12,8 @@ from dateutil.parser import *
 from .models import Dict_Currency, CurrencyRate
 from companies.models import Company
 
-# Create your views here.
 
-#def parse_date(date_str):
+# def parse_date(date_str):
 #    """Parse date from string by DATE_INPUT_FORMATS of current language"""
 #    for item in get_format('DATE_INPUT_FORMATS'):
 #        #print(date_str, get_format('DATETIME_INPUT_FORMATS'))
@@ -22,8 +21,9 @@ from companies.models import Company
 #            return datetime.strptime(date_str, item).date()
 #        except (ValueError, TypeError):
 #            continue
-#
+
 #    return None
+
 
 @login_required   # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def finance(request):
@@ -75,11 +75,11 @@ def finance(request):
 
     # загружаем курсы на текущую дату
     r_date = r['Date']
-    #r_date = r_date[0:10] + ' ' + '0' + str(int(r_date[11:13]) - int(r_date[19:22])) + r_date[13:19]
-    #r_date = datetime.strptime(r_date, '%y-%m-%dT%H:%M:%S')
-    #r_date = datetime.datetime.strptime(r_date, '%d.%m.%Y %H:%M:%S')
+    # r_date = r_date[0:10] + ' ' + '0' + str(int(r_date[11:13]) - int(r_date[19:22])) + r_date[13:19]
+    # r_date = datetime.strptime(r_date, '%y-%m-%dT%H:%M:%S')
+    # r_date = datetime.datetime.strptime(r_date, '%d.%m.%Y %H:%M:%S')
     r_date = parse(r_date)
-    #r_base = 'RUB'   
+    # r_base = 'RUB'   
     r_curr = r['Valute']
     currents_list = Dict_Currency.objects.filter(is_active=True) #.exclude(code_char='RUB')
 

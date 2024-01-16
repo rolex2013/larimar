@@ -18,18 +18,18 @@ def dashboard_lists(request, companyid=0):
         companyid = request.session['_auth_user_currentcompany_id']
     current_company = get_current_company(companyid)
     user_companies = request.session['_auth_user_companies_id']
-    #print(companyid, current_company)
+    # print(companyid, current_company)
 
     (projects_list, projects_tasks_list) = projects_tasks(request)
-    #print(projects_list, projects_tasks_list)
+    # print(projects_list, projects_tasks_list)
     docs_tasks_list = docs_tasks(request)
     (clients_tasks_list, clients_events_list) = clients_tasks_events(request)
     (feedback_tickets_list, feedback_tasks_list) = feedback_tickets_tasks(request)
 
     full_list = itertools.chain(projects_list, projects_tasks_list, docs_tasks_list, clients_tasks_list, clients_events_list, feedback_tickets_list, feedback_tasks_list)
-    #full_list = functools.reduce(operator.or_, [projects_list, projects_tasks_list]) # это только для одной модели
-    #full_list = projects_list.union(projects_tasks_list)
-    #full_list = (projects_list | projects_tasks_list) # это только для одной модели
+    # full_list = functools.reduce(operator.or_, [projects_list, projects_tasks_list]) # это только для одной модели
+    # full_list = projects_list.union(projects_tasks_list)
+    # full_list = (projects_list | projects_tasks_list) # это только для одной модели
 
     full_list = sorted(full_list, key=attrgetter('date_for_sort'))
 
@@ -49,7 +49,7 @@ def dashboard_lists(request, companyid=0):
              'fdb_tckt': 'my_feedback:feedbacktasks',
              'fdb_tsk': 'my_feedback:feedbacktaskcomments',
              }
-    #print(links.get('docs_tsk'))
+    # print(links.get('docs_tsk'))
 
     return render(request, "dashboard_detail.html", {
         'component_name': 'dashboard',

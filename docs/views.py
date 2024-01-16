@@ -942,7 +942,7 @@ def doctaskfilter(request):
         elif taskstatus == "-2":
             # если в выпадающем списке выбрано "Просроченные"
             # date_format = '%Y-%m-%d'
-            today = datetime.datetime.now()
+            today = datetime.now()
             # yesterday = today - timedelta(days=1)
             task_list = DocTask.objects.filter(
                 Q(author=request.user.id)
@@ -1051,8 +1051,8 @@ def docver_change(request):
 def docs_tasks(request):
     currentuser = request.user.id
     companies_id = request.session["_auth_user_companies_id"]
-    date_end = datetime.datetime.now() + timedelta(days=10)
-    print(request, date_end)
+    date_end = datetime.now() + timedelta(days=10)
+    # print(request, date_end)
 
     docs_tasks_list = (
         DocTask.objects.filter(
