@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block ticket %}
     <!--<div class="project-entry">
     <h3>Проект: {{ task.ticket.name }}</h3>
@@ -19,39 +21,41 @@
 
     <div class="object-detail">
 
-        <div>
-            <div class="object-detail-header">
-                <h4>Задача: {{ task.name }}
-                    {% if not task.is_active %}
-                        (Задача перемещена в архив)
-                    {% endif %}
-                </h4>
-            </div>
+        <label for="check" class="togButton">
+            <h4>⇅ {% trans "Задача" %}: {{ task.name }}
+                {% if not task.is_active %}
+                    ({% trans "Задача перемещена в архив" %})
+                {% endif %}
+            </h4>
+        </label>
+        <input type="checkbox" class="togCheck" id="check">
 
+        <div class="togContent">
             <div class="object-detail-left">
                 <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p><br />
-                <i><p>Служба техподдержки: <span class="hint hint--bottom hint--info" data-hint="Служба техподдержки"><a href="{% url 'my_feedback:tickets' is_ticketslist_dev 1 current_companyid %}">{{ task.ticket.company.name }}</a></span></p></i>
-                <i><p>Тикет: <span class="hint hint--bottom hint--info" data-hint="Задачи тикета"><a href="{% url 'my_feedback:feedbacktasks' is_ticketslist_dev task.ticket.pk 0 %}">{{ task.ticket.name }}</a></span></p></i>
+                <i><p>{% trans "Служба техподдержки" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Служба техподдержки' %}"><a href="{% url 'my_feedback:tickets' is_ticketslist_dev 1 current_companyid %}">{{ task.ticket.company.name }}</a></span></p></i>
+                <i><p>{% trans "Тикет" %}: <span class="hint hint--bottom hint--info" data-hint="Задачи тикета"><a href="{% url 'my_feedback:feedbacktasks' is_ticketslist_dev task.ticket.pk 0 %}">{{ task.ticket.name }}</a></span></p></i>
                 {% if task.parent %}
-                    <p>Уровень выше: <a href="{% url 'my_feedback:feedbacktaskcomments' task.parent.pk %}">{{ task.parent.name }}</a></p>
+                    <p>{% trans "Уровень выше" %}: <a href="{% url 'my_feedback:feedbacktaskcomments' task.parent.pk %}">{{ task.parent.name }}</a></p>
                 {% else %}
                     <!-- <p>: <a href="{ url 'my_project:projects' current_project.company.pk current_project.parent.pk %}">{{ current_project.parent.name }}</a></p>-->
                 {% endif %}
-                {% comment %}<p>Бюджет: {{ task.cost }} {{ task.ticket.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>{% endcomment %}
-                <p>Бюджет: {{ task.cost }} {{ task.company.currency.shortname }}<i> (Освоено: {{ task.costsum|floatformat:2 }})</i></p>
-                <p>Исполнитель: <span class="hint hint--bottom hint--info" data-hint="Профиль исполнителя"><a href="{% url 'my_account:userprofile_detail' task.assigner.pk ' ' %}">{{ task.assigner }}</a></span></p>
-                <p>Начало: {{ task.datebegin }}</p>
-                <p>Окончание: {{ task.dateend }}</p>
-                {% comment %}<p>Тип: {{ task.type }}</p>{% endcomment %}
-                <p>Статус: {{ task.status }}</p>
-                <p>Затраченное время, час.: <!--{ taskcomment_timesum.time__sum|floatformat:2 }}-->{{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
-                <p>Выполнена на: {{ task.percentage }} %</p>
-                <em>Автор: {{ task.author }}</em><br />
-                <em>Дата: {{ task.datecreate }}</em>
+                {% comment %}<p>{% trans "Бюджет" %}: {{ task.cost }} {{ task.ticket.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>{% endcomment %}
+                <p>{% trans "Бюджет" %}: {{ task.cost }} {{ task.company.currency.shortname }}<i> (Освоено: {{ task.costsum|floatformat:2 }})</i></p>
+                <p>{% trans "Исполнитель" %}: <span class="hint hint--bottom hint--info" data-hint="Профиль исполнителя"><a href="{% url 'my_account:userprofile_detail' task.assigner.pk ' ' %}">{{ task.assigner }}</a></span></p>
+                <p>{% trans "Начало" %}: {{ task.datebegin }}</p>
+                <p>{% trans "Окончание" %}: {{ task.dateend }}</p>
+                {% comment %}<p>{% trans "Тип" %}: {{ task.type }}</p>{% endcomment %}
+                <p>{% trans "Статус" %}: {{ task.status }}</p>
+                <p>{% trans "Затраченное время, час." %}: <!--{ taskcomment_timesum.time__sum|floatformat:2 }}-->{{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
+                <p>{% trans "Выполнена на" %}: {{ task.percentage }} %</p>
+                <em>{% trans "Автор" %}: {{ task.author }}</em><br />
+                <em>{% trans "Дата" %}: {{ task.datecreate }}</em>
                 <p>&nbsp;</p>
             </div>
             <div class="object-detail-right">{% include 'objectfile_list.html' %}</div>
         </div>
+
         <div class="object-detail-buttons">
             <a href="{% url 'my_feedback:feedbacktask_create' task.ticket.id task.id current_companyid %}">{{ button_task_create }}</a>
             <a href="{% url 'my_feedback:feedbacktask_update' task.pk %}">{{ button_task_update }}</a>
@@ -71,7 +75,7 @@
 
     <div class="object-list">
 
-        <h5>Комментарии</h5>
+        <h5>{% trans "Комментарии" %}</h5>
 
         <!--<a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
         <div class="object-list-buttons">
@@ -90,7 +94,7 @@
                   {{ task.ticket.company.currency.symbol }}{{ taskcomment.cost }}</span></b>
                 <p>{% autoescape off %}{{ taskcomment.description }}{% endautoescape %}</p>
                 {% if taskcomment.files %}
-                    <em style="font-size: 70%;">Файлы:</em>
+                    <em style="font-size: 70%;">{% trans "Файлы" %}:</em>
                 {% endif %}
                 {% for f in taskcomment.files %}
                     <em style="font-size: 70%;"><a href="{{ media_path }}{{ f.pfile }}" target="_blank">{{ f.uname }}</a><!-- { f.psize }} { f.datecreate }}-->, </em>

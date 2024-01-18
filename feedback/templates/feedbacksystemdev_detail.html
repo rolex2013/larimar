@@ -1,26 +1,32 @@
 {% extends 'base.html' %}
 
 <!--{ load bootstrap4 %}-->
+{% load i18n %}
 
 {% block company %}
    
    <!-- Защита от прямого доступа к компании, если это не Служба техподдержки
    { if current_company.id in user_companies or current_company.is_support %} -->
 
-      <div class="object-detail">
+   <div class="object-detail">
 
-        <div class="object-detail-header">
-            <h2>Разработчик</h2>
-        </div>
-        <p>Наименование системы: {{ systemdev.name }}</p>
-        <p>Домен: {{ systemdev.domain }}</p>
-        <p>URL: <a href="{{ systemdev.url }}" target="_blank">{{ systemdev.url }}</a></p>
-        <p>IP: {{ systemdev.ip }}</p>
-        <p>E-mail: {{ systemdev.email }}</p>
-        <p>Телефон: {{ systemdev.phone }}</p>
-        <em>Дата: {{ systemdev.datecreate }}</em>
-
+      <label for="check" class="togButton">
+      <!-- <div class="object-detail-header"> -->
+         <h2>⇅ {% trans "Разработчик" %}</h2>
+      <!-- </div> -->
+      </label>
+      <input type="checkbox" class="togCheck" id="check">
+      <div class="togContent">
+         <p>{% trans "Наименование системы" %}: {{ systemdev.name }}</p>
+         <p>{% trans "Домен" %}: {{ systemdev.domain }}</p>
+         <p>URL: <a href="{{ systemdev.url }}" target="_blank">{{ systemdev.url }}</a></p>
+         <p>IP: {{ systemdev.ip }}</p>
+         <p>E-mail: {{ systemdev.email }}</p>
+         <p>{% trans "Телефон" %}: {{ systemdev.phone }}</p>
+         <em>{% trans "Дата" %}: {{ systemdev.datecreate }}</em>
       </div>
+
+   </div>
 
    <!--{ else %}
 
@@ -42,7 +48,7 @@
 
                 <div class="object-list-left">
 
-                    <h4>Тикеты</h4>
+                    <h4>{% trans "Тикеты" %}</h4>
 
                     <!--{ if len_list %}-->
 
@@ -50,11 +56,11 @@
                         <form method="GET">
                            {% csrf_token %}
                            <div class="object-list-filters">
-                              <label>По статусу: </label>
+                              <label>{% trans "По статусу" %}: </label>
                               <select name="select-feedbackticketstatus" id="feedbackticketstatusselectid" class="select-feedbackticket-status">
-                                 <option value="-1" {% if "-1" == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- Все</option>
-                                 <option value="0" {% if 0 == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>- Все активные</option>
-                                 <option value="-2" {% if 1 == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- Все закрытые</option>
+                                 <option value="-1" {% if "-1" == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- {% trans "Все" %}</option>
+                                 <option value="0" {% if 0 == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>- {% trans "Все активные" %}</option>
+                                 <option value="-2" {% if 1 == feedbackticketstatus_selectid %} selected="selected" {% endif %}>- {% trans "Все закрытые" %}</option>
                                  <!--<option value="-2" { if "-2" tktstatus_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                                  {% for tktstatus in feedbackticketstatus %}
                                     <option value="{{tktstatus.id}}" {% if tktstatus.id == feedbackticketstatus_selectid|add:"0" %} selected="selected" {% endif %}>
@@ -62,9 +68,9 @@
                                     </option>
                                  {% endfor %}
                               </select>
-                              <label>По типу: </label>
+                              <label>{% trans "По типу" %}: </label>
                               <select name="select-feedbacktickettype" id="feedbacktickettypeselectid" class="select-feedbackticket-type">
-                                 <option value="-1" {% if "-1" == feedbacktickettype_selectid %} selected="selected" {% endif %}>- Все</option>
+                                 <option value="-1" {% if "-1" == feedbacktickettype_selectid %} selected="selected" {% endif %}>{% trans "- Все" %}</option>
                                  <!--<option value="0" { if 0 feedbacktickettype_selectid|add:"0" %} selected="selected" { endif %}>- Все активные</option>
                                  <option value="-2" { if "-2" feedbacktickettype_selectid %} selected="selected" { endif %}>- Просроченные</option>-->
                                  {% for tkttype in feedbacktickettype %}
@@ -73,7 +79,7 @@
                                     </option>
                                  {% endfor %}
                               </select>
-                              <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">Применить</button>
+                              <button id="selection-button-feedbackticket" type="submit" method="GET" class="object-filter-button">{% trans "Применить" %}</button>
                            </div>
                         </form>
 

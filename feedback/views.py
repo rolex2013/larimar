@@ -314,11 +314,11 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
                 return Response(serializer.data)
             except:
                 # тут надо сообщить отправителю, что такого тикета у разработчика нет!
-                text = "Нет такого тикета!"
+                text = _("Нет такого тикета!")
                 response_data = {"text": text}
                 return Response(response_data)
         except:
-            text = "Система с кодом '" + systemcode + "' не зарегистрирована!"
+            text = _("Система с кодом") +" '" + systemcode + "' " + _("не зарегистрирована!")
             response_data = {"text": text}
             return Response(response_data)
 
@@ -385,7 +385,7 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
                 ticketid = ticket.id
             except:
                 return Response(
-                    {"files": "Тикет id_remote=" + str(ticketremoteid) + " не найден!"}
+                    {"files": _("Тикет") + " id_remote=" + str(ticketremoteid) + " "+ _("не найден!")}
                 )
 
             try:
@@ -398,17 +398,17 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
                 except:
                     return Response(
                         {
-                            "files": "Комментарий id_remote="
+                            "files": _("Комментарий") + " id_remote="
                             + str(ticketcommentremoteid)
-                            + " тикета id_remote="
+                            + " " + _("тикета") + " id_remote="
                             + str(ticketremoteid)
-                            + " не найден!"
+                            + " " + _("не найден!")
                         }
                     )
             except:
                 ticketcommentid = None
         except:
-            return Response({"files": "Не передан id Тикета!"})
+            return Response({"files": _("Не передан id Тикета!")})
 
         serializer = add_files(request, files, ticketid, ticketcommentid)
         return Response({"files": serializer.data})
@@ -494,13 +494,13 @@ class Dict_SystemCreate(CreateView):
                 requeststatuscode=200,
             )
         except:
-            print("Что-то пошло не так с сервером...")
+            print(_("Что-то пошло не так с сервером..."))
         # ***
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["header"] = "Регистрация новой Системы"
+        context["header"] = _("Регистрация новой Системы")
         return context
 
     # def get_form_kwargs(self):
@@ -687,8 +687,8 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
         #                                                dateclose__isnull=True) #.exclude(ticket__system=systemdevid)
         # feedbackticket_task_list = tickettasklist(request, companyid, "-1", "-1", "-1", is_ticketslist_dev)
         # len_task_list = len(feedbackticket_task_list)
-        button_feedbackticketdev = "Обращения к разработчику"
-        button_feedbackticketdev_create = "Добавить"
+        button_feedbackticketdev = _("Обращения к разработчику")
+        button_feedbackticketdev_create = _("Добавить")
 
     len_list = len(feedbackticket_list)
 
@@ -702,8 +702,8 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
     if len(comps_support) < 2:
         button_company_select = ""
     else:
-        button_company_select = "Сменить службу техподдержки"
-    button_feedbackticket_create = "Добавить"
+        button_company_select = _("Сменить службу техподдержки")
+    button_feedbackticket_create = _("Добавить")
     # Проверяем кол-во компаний - служб техподдержки
     is_many_support_member = True
     is_support_member = False
@@ -880,7 +880,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["header"] = "Новый Тикет"
+        context["header"] = _("Новый Тикет")
         return context
 
     def get_form_kwargs(self):
@@ -1111,15 +1111,15 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
     button_ticketcomment_create = ""
 
     if currentuser == currentticket.author_id or is_support_member:  # or is_member:
-        button_ticketcomment_create = "Создать"
+        button_ticketcomment_create = _("Создать")
         # if currentuser == currentticket.author_id:
-        button_feedbackticket_update = "Изменить"
+        button_feedbackticket_update = _("Изменить")
     button_feedbacktask_create = ""
     if (
         currentticket.company_id in request.session["_auth_user_companies_id"]
         or is_support_member
     ):
-        button_feedbacktask_create = "Создать"
+        button_feedbacktask_create = _("Создать")
 
     is_system_dev = request.session["system_dev"][1]
     try:
@@ -1183,7 +1183,7 @@ class FeedbackTicketCommentCreate(AddFilesMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(FeedbackTicketCommentCreate, self).get_context_data(**kwargs)
-        context["header"] = "Новый комментарий Тикета"
+        context["header"] = _("Новый комментарий Тикета")
         return context
 
     def get_form_kwargs(self):
@@ -1276,7 +1276,7 @@ class FeedbackTaskCreate(AddFilesMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(FeedbackTaskCreate, self).get_context_data(**kwargs)
-        context["header"] = "Новая Задача"
+        context["header"] = _("Новая Задача")
         return context
 
     def get_form_kwargs(self):
@@ -1300,7 +1300,7 @@ class FeedbackTaskUpdate(AddFilesMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(FeedbackTaskUpdate, self).get_context_data(**kwargs)
-        context["header"] = "Изменить Задачу"
+        context["header"] = _("Изменить Задачу")
         context["files"] = FeedbackFile.objects.filter(
             task_id=self.kwargs["pk"], is_active=True
         ).order_by("uname")
@@ -1385,14 +1385,14 @@ def feedbacktaskcomments(request, taskid):
     if (
         currentuser == currenttask.author_id or currentuser == currenttask.assigner_id
     ):  # or is_member:
-        button_task_create = "Добавить"
-        # button_task_history = 'История'
-        button_taskcomment_create = "Добавить"
+        button_task_create = _("Добавить")
+        # button_task_history = _('История')
+        button_taskcomment_create = _("Добавить")
         if (
             currentuser == currenttask.author_id
             or currentuser == currenttask.assigner_id
         ):
-            button_task_update = "Изменить"
+            button_task_update = _("Изменить")
 
     try:
         current_companyid = request.session["_auth_user_supportcompany_id"]
@@ -1442,7 +1442,7 @@ class FeedbackTaskCommentCreate(AddFilesMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(FeedbackTaskCommentCreate, self).get_context_data(**kwargs)
-        context["header"] = "Новый Комментарий"
+        context["header"] = _("Новый Комментарий")
         return context
 
     def form_valid(self, form):
@@ -1462,7 +1462,7 @@ class FeedbackTaskCommentUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(FeedbackTaskCommentUpdate, self).get_context_data(**kwargs)
-        context["header"] = "Изменить Комментарий"
+        context["header"] = _("Изменить Комментарий")
         context["files"] = FeedbackFile.objects.filter(
             taskcomment_id=self.kwargs["pk"], is_active=True
         ).order_by("uname")
@@ -1581,12 +1581,12 @@ def ticketfilter(request):
     # print(statuss_list, ticketstatus)
     # print(systemid, companyid, ticket_list)
 
-    button_feedbackticket_create = "Добавить"
+    button_feedbackticket_create = _("Добавить")
 
     len_list = len(nodes)
     object_message = ""
     if len_list == 0:
-        object_message = "Тикеты не найдены!"
+        object_message = _("Тикеты не найдены!")
 
     return render(
         request,
@@ -1648,7 +1648,7 @@ def tickettaskfilter(request):
     len_list = len(nodes)
     object_message = ""
     if len_list == 0:
-        object_message = "Задачи не найдены!"
+        object_message = _("Задачи не найдены!")
 
     return render(
         request,

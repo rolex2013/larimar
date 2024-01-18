@@ -122,7 +122,7 @@ class TaskForm(forms.ModelForm):
                     #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                     user_profile = UserProfile.objects.get(user=self.initial['author'], is_active=True)
                     objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id                    
-                    send_mail('1Yes. Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
+                    send_mail('1Yes! Ваша Задача закрыта.', 'Уведомляем о закрытии Вашей Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])                 
                     Notification.objects.create(type=user_profile.protocoltype,
                                                 objecttype_id=objecttypeid,
                                                 objectid=self.initial['id'],
@@ -137,7 +137,7 @@ class TaskForm(forms.ModelForm):
            elif self.cleaned_data['assigner'].id != self.initial['assigner']:
               user_profile = UserProfile.objects.get(user=self.cleaned_data['assigner'].id, is_active=True)
               objecttypeid = Meta_ObjectType.objects.get(shortname='tsk').id
-              send_mail('1Yes. Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
+              send_mail('1Yes! Вы назначены исполнителем Задачи.', 'Уведомляем о назначении Вам Задачи!', settings.EMAIL_HOST_USER, [user_profile.email])
               Notification.objects.create(type=user_profile.protocoltype,
                                           objecttype_id=objecttypeid,      
                                           objectid=self.initial['id'],        

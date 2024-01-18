@@ -1,37 +1,41 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block ticket %}
     <!-- Защита от прямого доступа к Тикету, если это его просматривает не сотрудник компании, создавшей Тикет или не Служба техподдержки -->
     {% if current_feedbackticket.companyfrom.id in user_companies or current_company.is_support or is_system_dev %}
 
         <div class="object-detail">
-            <div>
-                <div class="object-detail-header">
-                    <h3>{{ current_feedbackticket.name }}
-                        {% if not current_feedbackticket.is_active %}
-                            (Тикет перемещён в архив)
-                        {% endif %}
-                    </h3>
-                </div>
 
+            <label for="check" class="togButton">
+                <h3>⇅ {{ current_feedbackticket.name }}
+                    {% if not current_feedbackticket.is_active %}
+                        ({% trans "Тикет перемещён в архив" %})
+                    {% endif %}
+                </h3>
+            </label>
+            <input type="checkbox" class="togCheck" id="check">
+
+            <div class="togContent">
                 <div class="object-detail-left">
                     <p>{% autoescape off %}{{ current_feedbackticket.description }}{% endautoescape %}</p>
                     <!--{ if is_ticketlist_dev %}-->
                     {% if current_feedbackticket.company_id %}
-                        <i><p>Организация: <span class="hint hint--bottom hint--info" data-hint="Тикеты организации"><a href="{% url 'my_feedback:tickets' 0 current_feedbackticket.system.id current_feedbackticket.company.pk %}">{{ current_feedbackticket.company }}</a></span></p></i>
+                        <i><p>{% trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Тикеты организации' %}"><a href="{% url 'my_feedback:tickets' 0 current_feedbackticket.system.id current_feedbackticket.company.pk %}">{{ current_feedbackticket.company }}</a></span></p></i>
                     {% else %}
-                        <i><p>Разработчик: <span class="hint hint--bottom hint--info" data-hint="Вернуться к списку тикетов"><a href="{% url 'my_feedback:tickets0' 1 current_feedbackticket.system.id %}">{{ current_feedbackticket.system.name }}</a></span></p></i>
+                        <i><p>{% trans "Разработчик" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Вернуться к списку тикетов' %}"><a href="{% url 'my_feedback:tickets0' 1 current_feedbackticket.system.id %}">{{ current_feedbackticket.system.name }}</a></span></p></i>
                     {% endif %}
-                    <p>Тип: {{ current_feedbackticket.type }}</p>
-                    <p>Статус: {{ current_feedbackticket.status }}</p>
+                    <p>{% trans "Тип" %}: {{ current_feedbackticket.type }}</p>
+                    <p>{% trans "Статус" %}: {{ current_feedbackticket.status }}</p>
                     <!--<p>Затраченное время, час.: { hours }} час { minutes }}  мин { seconds|floatformat:0 }} сек</p>
                     <p>Выполнен на: { current_feedbackticket.percentage }} %</p>-->
                     {% if current_feedbackticket.system.is_local and is_support_member %}
-                        <p>Бюджет: {{ task_costsum.cost__sum|floatformat:2 }} {{ current_feedbackticket.company.currency.shortname }}
-                            <i>(Освоено: {{ ticketcomment_costsum.cost__sum|floatformat:2 }} + {{ taskcomment_costsum.cost__sum|floatformat:2 }} {{ current_feedbackticket.company.currency.shortname }})</i></p>
+                        <p>{% trans "Бюджет" %}: {{ task_costsum.cost__sum|floatformat:2 }} {{ current_feedbackticket.company.currency.shortname }}
+                            <i>({% trans "Освоено" %}: {{ ticketcomment_costsum.cost__sum|floatformat:2 }} + {{ taskcomment_costsum.cost__sum|floatformat:2 }} {{ current_feedbackticket.company.currency.shortname }})</i></p>
                     {% endif %}
-                    <em>Автор: {{ current_feedbackticket.author }}</em><br />
-                    <em>Дата: {{ current_feedbackticket.datecreate }}</em><br /><br />
+                    <em>{% trans "Автор" %}: {{ current_feedbackticket.author }}</em><br />
+                    <em>{% trans "Дата" %}: {{ current_feedbackticket.datecreate }}</em><br /><br />
                 </div>
                 <div class="object-detail-right">
                     {% include 'objectfile_list.html' %}
@@ -51,7 +55,7 @@
 
     {% else %}
 
-        <h4>Информация о тикете недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
+        <h4>{% trans "Информация о тикете недоступна!" %}</h4> <!--{ current_company.id }}/{ user_companies }}-->
 
     {% endif %}
 
@@ -87,7 +91,7 @@
         </div>
 
     {% else %}
-        <h5>Информация о комментариях и задачах недоступна!</h5>
+        <h5>{% trans "Информация о комментариях и задачах недоступна!" %}</h5>
     {% endif %}
 
 {% endblock list %}

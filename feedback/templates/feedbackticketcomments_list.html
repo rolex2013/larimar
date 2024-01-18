@@ -1,4 +1,6 @@
-<h4>Комментарии</h4>
+{% load i18n %}
+
+<h4>{% trans "Комментарии" %}</h4>
 
  {% if ticketcommentnodes %}
     <br />
@@ -19,7 +21,7 @@
                 <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{% url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{{ node.author.username }}</i></a></span> | {{ node.datecreate }}
              {% endif %}
                     {% if is_support_member %}
-                     | {{ node.time }} час. | {{ node.ticket.company.currency.symbol }}{{ node.cost }}
+                     | {{ node.time }} {% trans "час." %} | {{ node.ticket.company.currency.symbol }}{{ node.cost }}
                     {%  endif %}
              </span></b><br /><br />
              <p>{{ node.description|safe }}</p>
@@ -31,7 +33,7 @@
 
  {% else %}
 
-    <p>Комментариев пока нет...</p>
+    <p>{% trans "Комментариев пока нет..." %}</p>
 
  {% endif %}
  
