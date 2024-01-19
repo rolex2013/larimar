@@ -2,7 +2,8 @@
 
 <h4>{% trans "Задачи" %}</h4>
 
-{% if len_list %}
+<!-- { if len_list %} -->
+{% if nodes|length %}
 
  <!--<form action="{ url 'my_crm:tasks' current_client.pk 0 %}" method="post">-->
  <form method="GET">           

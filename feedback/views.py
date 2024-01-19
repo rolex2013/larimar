@@ -265,9 +265,9 @@ class FeedbackTicketViewSet(viewsets.ModelViewSet):
             )
         return Response(
             {
-                "success": _("Тикет") + ' {} '.format(
-                    str(ticket_saved.id) + ". " + ticket_saved.name
-                ) + _("успешно изменён!")
+                "success": _("Тикет")
+                + " {} ".format(str(ticket_saved.id) + ". " + ticket_saved.name)
+                + _("успешно изменён!")
             }
         )
 
@@ -318,7 +318,13 @@ class FeedbackTicketCommentViewSet(viewsets.ModelViewSet):
                 response_data = {"text": text}
                 return Response(response_data)
         except:
-            text = _("Система с кодом") +" '" + systemcode + "' " + _("не зарегистрирована!")
+            text = (
+                _("Система с кодом")
+                + " '"
+                + systemcode
+                + "' "
+                + _("не зарегистрирована!")
+            )
             response_data = {"text": text}
             return Response(response_data)
 
@@ -385,7 +391,13 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
                 ticketid = ticket.id
             except:
                 return Response(
-                    {"files": _("Тикет") + " id_remote=" + str(ticketremoteid) + " "+ _("не найден!")}
+                    {
+                        "files": _("Тикет")
+                        + " id_remote="
+                        + str(ticketremoteid)
+                        + " "
+                        + _("не найден!")
+                    }
                 )
 
             try:
@@ -398,11 +410,15 @@ class FeedbackFileViewSet(viewsets.ModelViewSet):
                 except:
                     return Response(
                         {
-                            "files": _("Комментарий") + " id_remote="
+                            "files": _("Комментарий")
+                            + " id_remote="
                             + str(ticketcommentremoteid)
-                            + " " + _("тикета") + " id_remote="
+                            + " "
+                            + _("тикета")
+                            + " id_remote="
                             + str(ticketremoteid)
-                            + " " + _("не найден!")
+                            + " "
+                            + _("не найден!")
                         }
                     )
             except:
@@ -630,6 +646,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
             # список тикетов разработчику в системе разработчика 1YES!
             # feedbackticket_list = feedbackticket_list.filter(system_id=systemdevid)
             feedbackticket_list = feedbackticket_list.exclude(system_id=systemdevid)
+            # print(systemdevid, feedbackticket_list)
         else:
             # список тикетов разработчику в локальной системе
             feedbackticket_list = feedbackticket_list.filter(
@@ -682,7 +699,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
     button_feedbackticketdev = ""
     button_feedbackticketdev_create = ""
     # len_task_list = 0
-    if is_support_member == True:
+    if is_support_member is True:
         # feedbackticket_task_list = FeedbackTask.objects.filter(Q(author=request.user.id) | Q(assigner=request.user.id), ticket__company=companyid,
         #                                                dateclose__isnull=True) #.exclude(ticket__system=systemdevid)
         # feedbackticket_task_list = tickettasklist(request, companyid, "-1", "-1", "-1", is_ticketslist_dev)
@@ -690,7 +707,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
         button_feedbackticketdev = _("Обращения к разработчику")
         button_feedbackticketdev_create = _("Добавить")
 
-    len_list = len(feedbackticket_list)
+    # len_list = len(feedbackticket_list)
 
     comps = request.session["_auth_user_companies_id"]
 
@@ -719,7 +736,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
             is_active=True, is_support=True, id__in=comps
         )
         if len(comps_support) == 1:
-            ## если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
+            # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
             is_many_support_member = False
             # button_company_select = ''
         task_list = tickettasklist(
@@ -780,7 +797,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
             "tskstatus_myselectid": tskstatus_myselectid,
             "object_list": "feedbacktask_list",
             "taskstatus": Dict_FeedbackTaskStatus.objects.filter(is_active=True),
-            "len_list": len_list,
+            # "len_list": len_list,
             "len_task_list": len_task_list,
             "is_support_member": is_support_member,
             "is_admin": is_admin,
@@ -1049,7 +1066,7 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
         tskstatus_myselectid,
         is_ticketslist_dev,
     )
-    len_list = len(task_list)
+    # len_list = len(task_list)
 
     ticketcomment_list = FeedbackTicketComment.objects.filter(
         ticket_id=ticketid, is_active=True
@@ -1136,8 +1153,8 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
         {
             "nodes": task_list.distinct(),
             "ticketcommentnodes": ticketcomment_list.distinct().order_by(),
-            "len_list": len_list,
-            "is_system_dev": is_system_dev,
+            # "len_list": len_list,
+            # "is_system_dev": is_system_dev,
             "current_task": current_task,
             "root_task_id": root_task_id,
             "tree_task_id": tree_task_id,
@@ -1154,9 +1171,9 @@ def feedbacktasks(request, is_ticketslist_dev=0, ticketid=0, pk=0):
             .order_by("uname"),
             "objtype": "fbtsk",
             "media_path": settings.MEDIA_URL,
-            #'button_client_create': button_client_create,
+            # 'button_client_create': button_client_create,
             "button_feedbackticket_update": button_feedbackticket_update,
-            #'button_client_history': button_client_history,
+            # 'button_client_history': button_client_history,
             "button_feedbacktask_create": button_feedbacktask_create,
             "button_ticketcomment_create": button_ticketcomment_create,
             "taskstatus": Dict_FeedbackTaskStatus.objects.filter(is_active=True),
@@ -1719,6 +1736,7 @@ def feedback_tickets_tasks(request):
     currentuser = request.user.id
     companies_id = request.session["_auth_user_companies_id"]
     date_end = datetime.now() + timedelta(days=10)
+    # print('timedelta={}'.format(timedelta(days=10)))
     # print(request, date_end)
 
     feedback_tickets_list = (

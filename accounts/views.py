@@ -102,7 +102,7 @@ class ELoginView(View):
                     else:
                         cmp_id = 1
                     # cmp_id=''
-                    if request.user.is_superuser == True:
+                    if request.user.is_superuser is True:
                         UserCompanyComponentGroup.objects.create(
                             user_id=request.user.id,
                             company_id=cmp_id,
@@ -121,7 +121,7 @@ class ELoginView(View):
                         user=request.user.id, is_active=True
                     ).values_list("company", flat=True)
                 )[0]
-                if current_company != None:
+                if current_company is not None:
                     UserProfile.objects.filter(user_id=request.user.id).update(
                         company_id=current_company
                     )
@@ -166,16 +166,19 @@ class ELoginView(View):
                 )
                 # print(current_company)
             request.session["_auth_user_component_id"] = list(set(components_list))
-            request.session[settings.LANGUAGE_COOKIE_NAME] = 'ru'
+            request.session[settings.LANGUAGE_COOKIE_NAME] = "ru"
             if current_profile.lang:
                 request.session[settings.LANGUAGE_COOKIE_NAME] = current_profile.lang
             request.session.modified = True
             # получаем список Техподдержек
             comp_support_list = UserCompanyComponentGroup.objects.filter(
-                                                    user=request.user.id,
-                                                    is_active=True,
-                                                    company__is_support=True,
-                                                    company__is_active=True).values_list("company_id", flat=True) # .select_related("company")
+                user=request.user.id,
+                is_active=True,
+                company__is_support=True,
+                company__is_active=True,
+            ).values_list(
+                "company_id", flat=True
+            )  # .select_related("company")
             request.session["_auth_user_compsupportid"] = list(set(comp_support_list))
             # ======================
             # получаем предыдущий url
@@ -291,7 +294,6 @@ def register(request):
 
 def add(request, companyid=1):
     if request.method == "POST":
-
         user_form = UserAddForm(request.POST)
         if user_form.is_valid():
             new_user = user_form.save(commit=False)
@@ -309,7 +311,12 @@ def add(request, companyid=1):
                 up = UserProfile.objects.get(user_id=new_user.user.id)
                 up.company_id = companyid
                 up.lang = request.LANGUAGE_CODE
-                up.save(update_fields=["lang", "company_id",])
+                up.save(
+                    update_fields=[
+                        "lang",
+                        "company_id",
+                    ]
+                )
 
             components = Component.objects.filter(is_active=True)
 
@@ -318,16 +325,14 @@ def add(request, companyid=1):
                 grp = 7
 
             for comp in components:
-
                 if comp.is_employee_default is True:
-
                     uccg, created = UserCompanyComponentGroup.objects.update_or_create(
-                                        user_id=new_user.user.id,
-                                        company_id=companyid,
-                                        component_id=comp.id,
-                                        group_id=grp,
-                                        defaults={'is_active': True},
-                                        )
+                        user_id=new_user.user.id,
+                        company_id=companyid,
+                        component_id=comp.id,
+                        group_id=grp,
+                        defaults={"is_active": True},
+                    )
                     # print(uccg, created)
 
             return render(
@@ -524,7 +529,7 @@ def UserProfileDetail(request, userid=0, param=""):
     # ).select_related("author", "type", "recipient", "objecttype")
     # # print(notification_list)
     # # table = NotificationTable(notification_list)
-    notification_list = notificationlist(request.user.id, '2', '0')
+    notification_list = notificationlist(request.user.id, "2", "0")
     # print('++++++++++++++++++++++', notification_list)
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
 
