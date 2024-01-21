@@ -594,9 +594,11 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
     systemdevid = request.session["system_dev"][0]
     is_system_dev = request.session["system_dev"][1]
 
+    # feedbackticket_list = FeedbackTicket.objects.filter(is_active=True)  # .select_related("status", "type", "company", "companyfrom", "system", "author")
     feedbackticket_list = FeedbackTicket.objects.filter(is_active=True).select_related(
         "status", "type", "company", "companyfrom", "system", "author"
     )
+    # print("+++++++++++++", feedbackticket_list)
 
     if companyid == 0:
         # Проверяем наличие хоть одной Службы поддержки в Системе
@@ -657,6 +659,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
         # список тикетов внутри системы
         template_name = "company_detail.html"
         feedbackticket_list = feedbackticket_list.exclude(system=systemdevid)
+        # tktstatus = "0"
         # *** фильтруем по статусу и принадлежности ***
         try:
             tktstatus = request.POST["select_feedbackticketstatus"]
@@ -694,6 +697,7 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
                     )
                 else:
                     feedbackticket_list = feedbackticket_list.filter(status=tktstatus)
+            # print('-----------------------', tktstatus)
         # *******************************
 
     button_feedbackticketdev = ""
@@ -753,6 +757,9 @@ def feedbacktickets(request, is_ticketslist_dev=0, systemid=1, companyid=0):
     else:
         task_list_distinct = None
         len_task_list = 0
+
+    # tktstatus = "0"
+    # print("==================", tktstatus, feedbackticket_list.distinct())
 
     # Добавляем Систему в справочник
     is_system_reged = True

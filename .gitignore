@@ -21,3 +21,4 @@ requirements.txt
 out.sql
 out.sqlsource
 out.json
+import.sql
