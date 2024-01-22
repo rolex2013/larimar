@@ -583,31 +583,31 @@
    {% endif %}
 
    {% if component_name == 'feedback' %}
-   $('#selection-button-feedbackticket').click(function () {
-      event.preventDefault(); // *** без этого страница перегружается после возврата data
-      var statusSelected = $("#feedbackticketstatusselectid option:selected").val()
-      var typeSelected = $("#feedbacktickettypeselectid option:selected").val()
-      var mySelected = $("#myfeedbackticketselectid option:selected").val()
-      $.ajax({
-         type: 'GET',
-         url: "{% url 'my_feedback:ticket_filter' %}",
-         data: {
-            //systemid: { systemid }},
-            companyid: {{ current_company.id }},
-      statusid: statusSelected,
-      typeid: typeSelected,
-      my: mySelected,
-      is_ticketslist_dev: {{ is_ticketslist_dev }}
-               },
-      success: function (data) {
-         $('#ajax_feedbackticketlistresult').html(data);
-      },
-      error: function (xhr, errmsg, err) {
-         console.log("error")
-         $('#ajax_listerrors').html('Нет данных!');
-      }
-            });
+      $('#selection-button-feedbackticket').click(function () {
+         event.preventDefault(); // *** без этого страница перегружается после возврата data
+         var statusSelected = $("#feedbackticketstatusselectid option:selected").val()
+         var typeSelected = $("#feedbacktickettypeselectid option:selected").val()
+         var mySelected = $("#myfeedbackticketselectid option:selected").val()
+         $.ajax({
+            type: 'GET',
+            url: "{% url 'my_feedback:ticket_filter' %}",
+            data: {
+               //systemid: { systemid }},
+               companyid: {{ current_company.id }},
+               statusid: statusSelected,
+               typeid: typeSelected,
+               my: mySelected,
+               is_ticketslist_dev: {{ is_ticketslist_dev }}
+            },
+            success: function (data) {
+               $('#ajax_feedbackticketlistresult').html(data);
+            },
+            error: function (xhr, errmsg, err) {
+            console.log("error")
+            $('#ajax_listerrors').html('Нет данных!');
+            }
          });
+      });
    {% endif %}
 
 </script>

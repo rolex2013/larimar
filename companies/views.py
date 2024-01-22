@@ -58,8 +58,8 @@ def companies(request, pk=0, razdel='projects'):
         root_company_id = 0
         tree_company_id = 0
         project_id = 0
-        #template_name = "menu_companies.html"
-        #print(comps)
+        # template_name = "menu_companies.html"
+        # print(comps)
     else:
         current_company = Company.objects.filter(id=pk).select_related(
             "author", "currency", "structure_type", "type").first()
@@ -85,15 +85,15 @@ def companies(request, pk=0, razdel='projects'):
     is_many_support_member = True
 
     if razdel == 'feedback':
-        #is_support_member = request.session['_auth_user_issupportmember']
+        # is_support_member = request.session['_auth_user_issupportmember']
         # сотрудникам Техподдержки показывать только те компании, где они работают
         # это неправильно, ибо они тоже должны иметь возможность обращаться в другие техподдержки!
-        #if is_support_member:
+        # if is_support_member:
         #    nodes = Company.objects.filter(is_active=True, is_support=True, id__in=comps)
         #    if len(nodes) == 1:
         #        # если пользователь является сотрудником только одной Техподдержки, то он не может выбрать другую службу
         #        is_many_support_member = False
-        #else:
+        # else:
         nodes = Company.objects.filter(is_active=True, is_support=True)
     else:
         nodes = Company.objects.filter(is_active=True, id__in=comps)
@@ -202,7 +202,7 @@ def stafflist(request, companyid=0, pk=0):
         root_stafflist_id = 0
         tree_stafflist_id = 0
         stafflist_id = 0
-        #template_name = "stafflist.html"
+        # template_name = "stafflist.html"
     else:
         current_stafflist = StaffList.objects.filter(id=pk).select_related(
             "author", "company", "currency", "type").first()

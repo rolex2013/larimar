@@ -1,8 +1,15 @@
 
 <ul>
     {% for node in nodes_tickets %}
-        <li>
-            {{ node }}
+        <li><span class="hint hint--bottom hint--info" data-hint="{{ node.description|striptags }}"><b><a
+                        href="{% url 'my_feedback:feedbacktasks' is_ticketslist_dev node.pk 0 %}">#{{ node.id }}. 
+                        {{ node.name }}</a></b></span>&nbsp;
+            <span style="font-size: 70%; color: green;">{{ node.datecreate}} | {{ node.type }} | {{ node.status }} |
+            {% if node.system.is_local == False %}
+                <span class="hint hint--bottom hint--info" data-hint="{{ node.system.domain }}"><i>{{ node.system.name }}</i></span></span>
+            {% else %}
+                <span class="hint hint--bottom hint--info" data-hint="Компания"><i>{{ node.companyfrom }}</i></span></span>
+            {% endif %}
         </li>
     {% endfor %}
 </ul>

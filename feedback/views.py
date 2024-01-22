@@ -853,6 +853,7 @@ class FeedbackTicketCreate(AddFilesMixin, CreateView):
         ]
         # form.instance.status_id = 1 # Новому Тикету присваиваем статус "Новый"
         # form.instance.system_id = 1  # Новый Тикет временно приписываем к локальной Системе
+        print('*******', sys.is_local, form.instance.author_id, form.instance.id)
         self.object = form.save()  # Созадём новый тикет
         af = self.add_files(
             form, "feedback", "ticket"
@@ -1567,12 +1568,14 @@ def ticketfilter(request):
             feedbackticket_list = feedbackticket_list.filter(
                 system_id=systemdevid, company_id__isnull=True, companyfrom_id=companyid
             )
-        template_name = "feedbacksystemdev_detail.html"
+        template_name = "feedbackticketsdev_list.html"
+        # print("************************", feedbackticket_list)
     else:
         # список тикетов внутри системы
         feedbackticket_list = feedbackticket_list.filter(company=companyid).exclude(
             system=systemdevid
         )
+        template_name = "feedbacktickets_list.html"
 
     # *** фильтруем по статусу ***
     if statusid == "0":
@@ -1614,10 +1617,12 @@ def ticketfilter(request):
 
     return render(
         request,
-        "feedbacktickets_list.html",
+        template_name,
         {
             "nodes_tickets": nodes,
             "object_list": "feedbacktask_list",
+            "systemdevid": systemdevid,
+            "companyid": companyid,
             "len_list": len_list,
             "current_company": current_company,
             "current_ticketid": 0,
@@ -1627,6 +1632,7 @@ def ticketfilter(request):
             "myticketselectid": myticketuser,
             "is_ticketslist_dev": is_ticketslist_dev,
             "button_feedbackticket_create": button_feedbackticket_create,
+            "button_feedbackticketdev_create": button_feedbackticket_create,
         },
     )
 

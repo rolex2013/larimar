@@ -2,6 +2,7 @@ __pycache__/
 .htaccess
 db.sqlite3-journal
 db.sqlite3
+db_test.sqlite3
 reqs_larimaritgroup.txt
 reqs_1yes_larimaritgroup.txt
 manage.py
