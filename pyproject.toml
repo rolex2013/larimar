@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "larimar"
-version = "2.2.0"
+version = "4.12.0"
 description = "1YES!"
 authors = ["larimarit <larimaritgroup.ru@gmail.com>"]
 readme = "README.md"
@@ -22,7 +22,7 @@ constantly = "15.1.0"
 cryptography = "36.0.1"
 distlib = "0.3.6"
 Django = "4.1.7"
-django-bootstrap-datepicker-plus = "^5.0.3"
+# django-bootstrap-datepicker-plus = "^5.0.3"
 django-bootstrap4 = "^1.1.1"
 django-ckeditor = "^6.5.1"
 django-crispy-forms = "^2.0"

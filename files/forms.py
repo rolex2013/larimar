@@ -1,17 +1,16 @@
 from django import forms
 
 from .models import Dict_Theme, Dict_FolderType, Folder, FolderFile
-#from main.models import Notification, Meta_ObjectType
+# from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
-#from django.contrib.admin.widgets import AdminDateWidget
-#from django.contrib.admin.widgets import AdminSplitDateTime
-#from bootstrap_datepicker_plus import DatePickerInput
+# from django.contrib.admin.widgets import AdminDateWidget
+# from django.contrib.admin.widgets import AdminSplitDateTime
 from django.contrib.auth.context_processors import auth
 import datetime
 from django.conf import settings
-#from django.core.mail import send_mail
+# from django.core.mail import send_mail
 
 
 class FolderForm(forms.ModelForm):

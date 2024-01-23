@@ -97,6 +97,7 @@ def companies(request, pk=0, razdel='projects'):
         nodes = Company.objects.filter(is_active=True, is_support=True)
     else:
         nodes = Company.objects.filter(is_active=True, id__in=comps)
+    nodes = nodes.order_by("tree_id", "level")
 
     return render(
         request,

@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     "jquery",
     "bootstrap4",
     "crispy_forms",
-    "bootstrap_datepicker_plus",
+    # "bootstrap_datepicker_plus",
     # 'bootstrap4_datetime',
     "django_mptt_admin",
     "mptt",
@@ -135,10 +135,10 @@ CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
     "default": {
         "toolbar": "None",
-        #'height': 500,
+        # 'height': 500,
         "width": "100%"
-        #'toolbarCanCollapse': False,
-        #'forcePasteAsPlainText': True
+        # 'toolbarCanCollapse': False,
+        # 'forcePasteAsPlainText': True
     },
 }
 
@@ -183,11 +183,11 @@ ASGI_APPLICATION = "larimar.asgi.application"
 
 CHANNEL_LAYERS = {
     "default": {
-        #'BACKEND': 'asgiref.inmemory.ChannelLayer',
+        # 'BACKEND': 'asgiref.inmemory.ChannelLayer',
         "BACKEND": "channels.layers.InMemoryChannelLayer",
-        #'ROUTING': 'larimar.routing.channel_routing',
-        #'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        #'CONFIG': {
+        # 'ROUTING': 'larimar.routing.channel_routing',
+        # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        # 'CONFIG': {
         #     "hosts": [('127.0.0.1', 6379)],
         # },
     },
@@ -295,7 +295,7 @@ if IS_DEV == "True":
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": os.path.join(BASE_DIR, "db_test.sqlite3"),
-            # "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+            # "NAME": os.path.join(BASE_DIR, "data.sqlite"),
         }
     }
 

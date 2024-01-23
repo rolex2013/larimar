@@ -19,7 +19,7 @@ from django.contrib.auth.models import User
 
 # from django.contrib.admin.widgets import AdminDateWidget
 # from django.contrib.admin.widgets import AdminSplitDateTime
-from bootstrap_datepicker_plus.widgets import DateTimePickerInput
+# from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 from django.contrib.auth.context_processors import auth
 import datetime
 from django.conf import settings
@@ -297,9 +297,17 @@ class FeedbackTaskForm(forms.ModelForm):
             "id",
             "author",
         ]
+        # widgets = {
+        #     "datebegin": DateTimePickerInput(options={"format": "DD.MM.YY HH:MM"}),
+        #     "dateend": DateTimePickerInput(options={"format": "DD.MM.YY HH:MM"}),
+        # }
         widgets = {
-            "datebegin": DateTimePickerInput(options={"format": "DD.MM.YY HH:MM"}),
-            "dateend": DateTimePickerInput(options={"format": "DD.MM.YY HH:MM"}),
+            "datebegin": forms.DateTimeInput(
+                attrs={"class": "form-control", "type": "datetime-local"}
+            ),
+            "dateend": forms.DateTimeInput(
+                attrs={"class": "form-control", "type": "datetime-local"}
+            ),
         }
 
 

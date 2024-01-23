@@ -199,13 +199,16 @@ class Task(SetPropertiesDashboardMixin, MPTTModel):
     # суммарная стоимость по Комментариям (сколько освоено средств)
     def costsum(self):
         return TaskComment.objects.filter(task_id=self.id).aggregate(Sum('cost'))
+    
     @property
     # суммарная затраченное время по Комментариям
     def timesum(self):
         return TaskComment.objects.filter(task_id=self.id).aggregate(Sum('time'))
+    
     @property
     def object_name(self):
         return ('prj_tsk', _("Задача проекта"))
+    
     @property
     def link(self):
         index = str(self.pk)
@@ -214,11 +217,14 @@ class Task(SetPropertiesDashboardMixin, MPTTModel):
     def get_absolute_url(self):
         return reverse('my_project:taskcomments', kwargs={'taskid': self.pk})
         #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
+    
     def __str__(self):
          return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')                           
+    
     class MPTTMeta:
         #order_insertion_by = ['name']    
         order_insertion_by = ['dateend']
+    
     class Meta:
         verbose_name = 'Задача'
         verbose_name_plural = 'Задачи'         

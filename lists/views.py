@@ -45,6 +45,8 @@ def ylists(request, companyid=0, pk=0):
         button_company_update = _("Изменить")
         button_list_create = _("Добавить")
     if current_company.id in comps:
+        button_company_create = ""
+        button_company_update = ""
         button_list_create = _("Добавить")
 
     return render(
@@ -184,7 +186,9 @@ def ylist_items(request, pk=0):
     # print(fields)
     fieldtype = Dict_YListFieldType.objects.filter(is_active=True)
 
-    ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related("ylist", "author", "authorupdate")
+    ylistitem = YListItem.objects.filter(ylist=pk, is_active=True).select_related(
+        "ylist", "author", "authorupdate"
+    )
 
     ylisttable = []
     columns = []

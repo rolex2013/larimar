@@ -3,6 +3,7 @@ __pycache__/
 db.sqlite3-journal
 db.sqlite3
 db_test.sqlite3
+data.sqlite
 reqs_larimaritgroup.txt
 reqs_1yes_larimaritgroup.txt
 manage.py

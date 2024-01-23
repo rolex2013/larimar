@@ -8,7 +8,7 @@ from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
-from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
+# from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
 from django.contrib.auth.context_processors import auth
 import datetime
 from django.conf import settings
@@ -273,8 +273,10 @@ class DocTaskForm(forms.ModelForm):
         ]
         widgets = {
             # 'datebegin': DateTimePickerInput(format='%d.%m.%Y %H:%M'),  # default date-format %m/%d/%Y will be used
-            "dateend": DatePickerInput(
-                options={"format": "DD.MM.YY HH:MM"}
+            # "dateend": DatePickerInput(
+            #     options={"format": "DD.MM.YY HH:MM"},
+            "dateend": forms.DateTimeInput(
+                attrs={"class": "form-control", "type": "datetime-local"}
             ),  # specify date-frmat
         }
 
