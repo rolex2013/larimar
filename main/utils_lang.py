@@ -14,6 +14,7 @@ class TranslateFieldMixin(object):
         # except KeyError:
         #     lang = 'ru'
         # lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
+        # print("**********************", exposed_request)
 
         try:
             # lang = exposed_request.session[settings.LANGUAGE_SESSION_KEY]
@@ -23,7 +24,7 @@ class TranslateFieldMixin(object):
                 lang = exposed_request.session[settings.LANGUAGE_COOKIE_NAME]
             except KeyError:
                 lang = "ru"
-                
+
         if lang is None:
             lang = "ru"
 

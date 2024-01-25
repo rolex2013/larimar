@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!--<div id="ajax_filelistresult">
 
     <div class="object-filelist-right">-->
@@ -10,9 +12,9 @@
                         <!--{ if user.id == file.author.id %}-->
                         {% if obj_files_rights and obj_files_rights != 0 %}
                             {% if file.is_active == True %}
-                                <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Удалить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                                <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Удалить этот файл' %}"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                             {% else %}
-                                <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="Восстановить этот файл"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
+                                <div class="cell-files"><span class="hint hint--bottom hint--info" data-hint="{% trans 'Восстановить этот файл' %}"><input type="checkbox" value="{{file.id}}" name="myCheck_{{file.id}}" /></span></div>
                             {% endif %}
                         {% endif %}
                         <div class="cell-files-left"><a href="{{ media_path }}{{ file.pfile }}" target="_blank">{{ file.uname }}</a></div>
@@ -23,7 +25,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>Файлов пока нет...</p>
+            <p>{% trans "Файлов пока нет..." %}</p>
         {% endif %}
         <br />
 

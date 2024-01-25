@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-<!--{ load bootstrap4 %}-->
+{% load i18n %}
 
 {% block folder %}
    
@@ -10,25 +10,25 @@
       <div class="object-detail">
 
         <h2>{{ current_folder.name }}
-        {% if not current_folder.is_active %}(Папка перемещена в архив){% endif %}
+        {% if not current_folder.is_active %}({% trans "Папка перемещена в архив" %}){% endif %}
         </h2>
         <p>{% autoescape off %} {{ current_folder.description }}{% endautoescape %}</p>
 
         <i>
         {% if current_folder.parent.pk %}
-            <p>Папка верхнего уровня:
+            <p>{% trans "Папка верхнего уровня" %}:
              <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{ current_folder.parent.name }}</a>-->
              <a href="{% url 'my_file:folders' current_folder.company.id current_folder.parent.pk %}">{{ current_folder.parent.name }}</a>
              </p></i>
         {% else %}
-             <p><a href="{% url 'my_file:folders0' %}">Корневая папка</a></p>
+             <p><a href="{% url 'my_file:folders0' %}">{% trans "Корневая папка" %}</a></p>
         {% endif %}
         </i>
 
-        <p>Тематика: {{ current_folder.theme }}</p>
-        <p>Тип: {{ current_folder.type }}</p>
-        <em>Автор: {{ current_folder.author }}</em>
-        <em>Дата: {{ current_folder.datecreate }}</em>
+        <p>{% trans "Тематика" %}: {{ current_folder.theme }}</p>
+        <p>{% trans "Тип" %}: {{ current_folder.type }}</p>
+        <em>{% trans "Автор" %}: {{ current_folder.author }}</em>
+        <em>{% trans "Дата" %}: {{ current_folder.datecreate }}</em>
         <br />
 
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
@@ -47,8 +47,8 @@
 
    {% else %}
 
-     <h4>Информация о папке недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
-     <em>Пожалуйста, обратитесь к администратору.</em>
+     <h4>{% trans "Информация о папке недоступна!" %}</h4> <!--{ current_company.id }}/{ user_companies }}-->
+     <em>{% trans "Пожалуйста, обратитесь к администратору." %}</em>
 
    {% endif %}  
 
@@ -62,38 +62,39 @@
       <div class="object-list">
         <div class="object-list-wrapper">
             <div class="object-list-left">
-                <h4>Папки</h4>
+                <h4>{% trans "Папки" %}</h4>
+                
                 {% if len_list %}
 
                     <!--<form action="{ url 'my_doc:docs' current_company.pk 0 %}" method="post">-->
                     <form method="GET">
                        {% csrf_token %}
                        <div class="object-list-filters">
-                           <label>По тематике: </label>
+                           <label>{% trans "По тематике" %}: </label>
                            <select name="select-folder-theme" id="themeselectid" class="select-folder-theme">
-                              <option value="-1" {% if "-1" == theme_selectid %} selected="selected" {% endif %}>- Все</option>
+                              <option value="-1" {% if "-1" == theme_selectid %} selected="selected" {% endif %}>- {% trans "Все" %}</option>
                               {% for fldrtheme in foldertheme %}
                                  <option value="{{fldrtheme.id}}" {% if fldrtheme.id == fldrtheme_selectid|add:"0" %} selected="selected" {% endif %}>
                                     {{fldrtheme.name}}
                                  </option>
                               {% endfor %}
                            </select>
-                           <label>По типу: </label>
+                           <label>{% trans "По типу" %}: </label>
                            <select name="select-folder-type" id="typeselectid" class="select-folder-type">
-                              <option value="-1" {% if "-1" == type_selectid %} selected="selected" {% endif %}>- Все</option>
+                              <option value="-1" {% if "-1" == type_selectid %} selected="selected" {% endif %}>- {% trans "Все" %}</option>
                               {% for fldrtype in foldertype %}
                                  <option value="{{fldrtype.id}}" {% if fldrtype.id == fldrtype_selectid|add:"0" %} selected="selected" {% endif %}>
                                     {{fldrtype.name}}
                                  </option>
                               {% endfor %}
                            </select>
-                           <label>Автор: </label>
+                           <label>{% trans "Автор" %}: </label>
                            <select name="select-myfolder" id="myselectid" class="select-my-doc">
-                              <option value="-1" {% if "-1" == my_selectid %} selected="selected" {% endif %}>Все активные</option>
-                              <option value="1" {% if "1" == my_selectid %} selected="selected" {% endif %}>Мои активные</option>
-                              <option value="2" {% if "2" == my_selectid %} selected="selected" {% endif %}>Мои неактивные</option>
+                              <option value="-1" {% if "-1" == my_selectid %} selected="selected" {% endif %}>{% trans "Все активные" %}</option>
+                              <option value="1" {% if "1" == my_selectid %} selected="selected" {% endif %}>{% trans "Мои активные" %}</option>
+                              <option value="2" {% if "2" == my_selectid %} selected="selected" {% endif %}>{% trans "Мои неактивные" %}</option>
                            </select>
-                           <button id="selection-button-folder" type="submit" method="GET" class="object-filter-button">Применить</button>
+                           <button id="selection-button-folder" type="submit" method="GET" class="object-filter-button">{% trans "Применить" %}</button>
                        </div>
                     </form>
 
@@ -101,7 +102,7 @@
 
                 {% else %}
 
-                    <p>Папок пока нет...</p>
+                    <p>{% trans "Папок пока нет..." %}</p>
 
                 {% endif %}
 
@@ -112,31 +113,31 @@
             </div>
                 <!--{ include 'objectfile_list.html' %}-->
             <div class="object-list-right">
-                    <h4>Файлы</h4>
+                    <h4>{% trans "Файлы" %}</h4>
                     <form method="GET">
                        {% csrf_token %}
                        <div class="object-list-filters">
-                           <label>Упорядочить: </label>
+                           <label>{% trans "Упорядочить" %}: </label>
                            <select name="select-sort" id="sortselectid" class="select-sort">
-                                <option value="1" {% if "1" == sort_selectid %} selected="selected" {% endif %}>По имени</option>
-                                <option value="2" {% if "3" == sort_selectid %} selected="selected" {% endif %}>По размеру</option>
-                                <option value="3" {% if "4" == sort_selectid %} selected="selected" {% endif %}>По дате</option>
-                                {% comment %}<option value="4" {% if "2" fl_sort_selectid %} selected="selected" {% endif %}>По расширению</option>{% endcomment %}
+                                <option value="1" {% if "1" == sort_selectid %} selected="selected" {% endif %}>{% trans "По имени" %}</option>
+                                <option value="2" {% if "3" == sort_selectid %} selected="selected" {% endif %}>{% trans "По размеру" %}</option>
+                                <option value="3" {% if "4" == sort_selectid %} selected="selected" {% endif %}>{% trans "По дате" %}</option>
+                                {% comment %}<option value="4" {% if "2" fl_sort_selectid %} selected="selected" {% endif %}>{% trans "По расширению" %}</option>{% endcomment %}
                            </select>
                            <!--<label>Порядок: </label>-->
                            <select name="select-sort" id="sortdirselectid" class="select-sortdir">
-                                <option value="1" {% if "1" == sortdir_selectid %} selected="selected" {% endif %}>По возрастанию</option>
-                                <option value="2" {% if "2" == sortdir_selectid %} selected="selected" {% endif %}>По убыванию</option>
-                                <option value="-1" {% if "-1" == sortdir_selectid %} selected="selected" {% endif %}>Без сортировки</option>
+                                <option value="1" {% if "1" == sortdir_selectid %} selected="selected" {% endif %}>{% trans "По возрастанию" %}</option>
+                                <option value="2" {% if "2" == sortdir_selectid %} selected="selected" {% endif %}>{% trans "По убыванию" %}</option>
+                                <option value="-1" {% if "-1" == sortdir_selectid %} selected="selected" {% endif %}>{% trans "Без сортировки" %}</option>
                            </select>
                            <!--<button id="selection-button-filesort" type="submit" method="GET" class="object-filter-button">Сортировать</button>-->
-                           <label>Автор: </label>
+                           <label>{% trans "Автор" %}: </label>
                            <select name="select-myfile" id="myfileselectid" class="select-my-file">
-                                <option value="-1" {% if "-1" == myfileselectid %} selected="selected" {% endif %}>Все активные</option>
-                                <option value="1" {% if "1" == myfileselectid %} selected="selected" {% endif %}>Мои активные</option>
-                                <option value="2" {% if "2" == myfileselectid %} selected="selected" {% endif %}>Мои неактивные</option>
+                                <option value="-1" {% if "-1" == myfileselectid %} selected="selected" {% endif %}>{% trans "Все активные" %}</option>
+                                <option value="1" {% if "1" == myfileselectid %} selected="selected" {% endif %}>{% trans "Мои активные" %}</option>
+                                <option value="2" {% if "2" == myfileselectid %} selected="selected" {% endif %}>{% trans "Мои неактивные" %}</option>
                            </select>
-                           <button id="selection-button-file" type="submit" method="GET" class="object-filter-button">Выбрать</button>
+                           <button id="selection-button-file" type="submit" method="GET" class="object-filter-button">{% trans "Выбрать" %}</button>
                        </div>
                     </form>
 

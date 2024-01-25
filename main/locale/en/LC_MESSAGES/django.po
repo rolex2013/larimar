@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-26 15:25+0300\n"
-"PO-Revision-Date: 2023-12-26 15:33+0300\n"
+"POT-Creation-Date: 2024-01-25 14:51+0300\n"
+"PO-Revision-Date: 2024-01-25 14:52+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -20,12 +20,12 @@ msgstr ""
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
 #: models.py:15 models.py:35 models.py:55 models.py:75 models.py:155
-#: models.py:181 models.py:217
+#: models.py:181 models.py:217 utils_model.py:13
 msgid "Наименование_ru"
 msgstr "Name_ru"
 
 #: models.py:16 models.py:36 models.py:56 models.py:76 models.py:156
-#: models.py:182 models.py:218
+#: models.py:182 models.py:218 utils_model.py:15
 msgid "Наименование_en"
 msgstr "Name_en"
 
@@ -54,7 +54,7 @@ msgid "Сортировка"
 msgstr "Sorting"
 
 #: models.py:39 models.py:58 models.py:84 models.py:126 models.py:143
-#: models.py:162 models.py:192 models.py:222
+#: models.py:162 models.py:192 models.py:222 utils_model.py:18
 msgid "Активность"
 msgstr "Activity"
 
@@ -264,11 +264,11 @@ msgstr "By type"
 msgid "Применить"
 msgstr "Apply"
 
-#: templates/notify_list.html:12
+#: templates/notify_list.html:13 templates/notify_list.html:19
 msgid "Отметить непрочитанным"
 msgstr "Mark as unread"
 
-#: templates/notify_list.html:14
+#: templates/notify_list.html:15 templates/notify_list.html:21
 msgid "Отметить прочитанным"
 msgstr "Mark as read"
 
@@ -287,6 +287,10 @@ msgstr "From"
 #: templates/sidebar_notifications_list.html:26
 msgid "Пометить прочитанными"
 msgstr "Mark as read"
+
+#: templatetags/main_tags.py:66
+msgid "\"Не назначено\""
+msgstr "\"Not Assigned\""
 
 #~ msgid "Прочитано"
 #~ msgstr "Read"
