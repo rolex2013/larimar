@@ -10,12 +10,10 @@ from main.models import ModelLog, Dict_Theme
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
-from companies.models import Company
+# from companies.models import Company
 
-from main.utils_lang import TranslateFieldMixin
+# from main.utils_lang import TranslateFieldMixin
 from main.utils_model import Dict_Model
-
-# from main.utils_lang import Dict_Model
 
 
 exposed_request = ""

@@ -4,7 +4,7 @@ import requests
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import Company, Project, Task, TaskComment, ProjectFile
+from .models import Project, Task, TaskComment, ProjectFile  # , Company
 
 # from .models import ProjectStatusLog, TaskStatusLog
 from .models import Dict_ProjectStatus, Dict_TaskStatus
@@ -156,9 +156,7 @@ class ProjectForm(forms.ModelForm):
             "datebegin": forms.DateInput(
                 attrs={"class": "form-control", "type": "date"}
             ),
-            "dateend": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"}
-            ),
+            "dateend": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
         }
 
 
@@ -330,7 +328,7 @@ class TaskCommentForm(forms.ModelForm):
         fields = ["name", "description", "time", "cost"]
 
 
-class FilterStatusForm(forms.ModelForm):
-    class Meta:
-        model = Dict_ProjectStatus
-        fields = ["name"]
+# class FilterStatusForm(forms.ModelForm):
+#     class Meta:
+#         model = Dict_ProjectStatus
+#         fields = ["name"]

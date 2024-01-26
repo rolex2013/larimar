@@ -1,141 +1,246 @@
 from django.db import models
 from django.db.models import Sum
 
-from django.urls import reverse #, reverse_lazy
-from datetime import datetime
+from django.urls import reverse  # , reverse_lazy
+
+# from datetime import datetime
 
 from django.utils.translation import gettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
-from main.models import ModelLog
+
+# from main.models import ModelLog
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
-from companies.models import Company
+# from companies.models import Company
 
 from dashboard.utils import SetPropertiesDashboardMixin
-
-#import json
-#from datetime import datetime, timedelta
-#import pytz
+from main.utils_model import Dict_Model
 
 
-class Dict_ProjectStatus(models.Model):
-    name = models.CharField("Наименование", max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+exposed_request = ""
+
+
+# import json
+# from datetime import datetime, timedelta
+# import pytz
+
+
+# class Dict_ProjectStatus(models.Model):
+#     name = models.CharField("Наименование", max_length=64)
+#     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+#     name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
+#     is_close = models.BooleanField("Закрывает проект", default=False)
+#     is_active = models.BooleanField("Активность", default=True)
+#     class Meta:
+#         ordering = ('sort',)
+#         verbose_name = 'Статус проекта'
+#         verbose_name_plural = 'Статусы проектов'
+#     def __str__(self):
+#         return (self.name)
+
+
+class Dict_ProjectStatus(Dict_Model):
     is_close = models.BooleanField("Закрывает проект", default=False)
-    is_active = models.BooleanField("Активность", default=True)    
-    class Meta:
-        ordering = ('sort',)
-        verbose_name = 'Статус проекта'
-        verbose_name_plural = 'Статусы проектов'
-    def __str__(self):
-        return (self.name)
 
-class Dict_ProjectStructureType(models.Model):
-    name = models.CharField("Наименование", max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
-    is_active = models.BooleanField("Активность", default=True)    
-    class Meta:
-        ordering = ('sort',)
-        verbose_name = 'Тип проектов в иерархии'
-        verbose_name_plural = 'Типы проектов в иерархии'
-    def __str__(self):
-        return (self.name)
+    @property
+    def name(self):
+        return self.trans_field(exposed_request, "name")
 
-class Dict_ProjectType(models.Model):
-    name = models.CharField("Наименование", max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
-    is_active = models.BooleanField("Активность", default=True)    
-    class Meta:
-        ordering = ('sort',)
-        verbose_name = 'Тип проекта'
-        verbose_name_plural = 'Типы проектов'
-    def __str__(self):
-        return (self.name)
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
 
-class Dict_TaskStatus(models.Model):
-    name = models.CharField("Наименование", max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
-    is_close = models.BooleanField("Закрывает задачу", default=False)    
-    is_active = models.BooleanField("Активность", default=True)    
     class Meta:
-        ordering = ('sort',)
-        verbose_name = 'Статус задачи'
-        verbose_name_plural = 'Статусы задач'
-    def __str__(self):
-        return (self.name)
+        verbose_name = "Статус проекта"
+        verbose_name_plural = "Статусы проектов"
 
-class Dict_TaskStructureType(models.Model):
-    name = models.CharField("Наименование", max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
-    is_active = models.BooleanField("Активность", default=True)    
-    class Meta:
-        ordering = ('sort',)
-        verbose_name = 'Тип задачи в иерархии'
-        verbose_name_plural = 'Типы задач в иерархии'
-    def __str__(self):
-        return (self.name)
 
-class Dict_TaskType(models.Model):
-    name = models.CharField("Наименование", max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    name_lang = models.CharField("Перевод", max_length=64, blank=True, null=True)
-    is_active = models.BooleanField("Активность", default=True)    
+class Dict_ProjectStructureType(Dict_Model):
+    @property
+    def name(self):
+        return self.trans_field(exposed_request, "name")
+
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ('sort',)
-        verbose_name = 'Тип задачи'
-        verbose_name_plural = 'Типы задач'
-    def __str__(self):
-        return (self.name)
+        verbose_name = "Тип проектов в иерархии"
+        verbose_name_plural = "Типы проектов в иерархии"
+
+
+class Dict_ProjectType(Dict_Model):
+    @property
+    def name(self):
+        return self.trans_field(exposed_request, "name")
+
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
+    class Meta:
+        verbose_name = "Тип проекта"
+        verbose_name_plural = "Типы проектов"
+
+
+class Dict_TaskStatus(Dict_Model):
+    is_close = models.BooleanField("Закрывает задачу", default=False)
+
+    @property
+    def name(self):
+        return self.trans_field(exposed_request, "name")
+
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
+    class Meta:
+        verbose_name = "Статус задачи"
+        verbose_name_plural = "Статусы задач"
+
+
+class Dict_TaskStructureType(Dict_Model):
+    @property
+    def name(self):
+        return self.trans_field(exposed_request, "name")
+
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
+    class Meta:
+        verbose_name = "Тип задачи в иерархии"
+        verbose_name_plural = "Типы задач в иерархии"
+
+
+class Dict_TaskType(Dict_Model):
+    @property
+    def name(self):
+        return self.trans_field(exposed_request, "name")
+
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
+    class Meta:
+        verbose_name = "Тип задачи"
+        verbose_name_plural = "Типы задач"
+
 
 class Project(SetPropertiesDashboardMixin, MPTTModel):
     name = models.CharField("Наименование", max_length=64)
     description = RichTextUploadingField("Описание")
     datebegin = models.DateField("Начало")
     dateend = models.DateField("Окончание")
-    company = models.ForeignKey('companies.Company', on_delete=models.CASCADE, related_name='resultcompany', verbose_name="Компания")
-    parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_children', verbose_name="Проект верхнего уровня")
-    assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='project_assigner', verbose_name="Исполнитель") 
-    currency = models.ForeignKey('finance.Dict_Currency', on_delete=models.CASCADE, related_name='resultcurrency', verbose_name="Валюта")   
+    company = models.ForeignKey(
+        "companies.Company",
+        on_delete=models.CASCADE,
+        related_name="resultcompany",
+        verbose_name="Компания",
+    )
+    parent = TreeForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        limit_choices_to={"is_active": True},
+        on_delete=models.CASCADE,
+        related_name="project_children",
+        verbose_name="Проект верхнего уровня",
+    )
+    assigner = models.ForeignKey(
+        "auth.User",
+        on_delete=models.CASCADE,
+        related_name="project_assigner",
+        verbose_name="Исполнитель",
+    )
+    currency = models.ForeignKey(
+        "finance.Dict_Currency",
+        on_delete=models.CASCADE,
+        related_name="resultcurrency",
+        verbose_name="Валюта",
+    )
     cost = models.DecimalField("Стоимость", max_digits=12, decimal_places=2, default=0)
-    percentage = models.DecimalField("Процент выполнения", max_digits=5, decimal_places=2, default=0)
-    structure_type = models.ForeignKey('Dict_ProjectStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_structure_type', verbose_name="Тип в иерархии")
-    type = models.ForeignKey('Dict_ProjectType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
-    status = models.ForeignKey('Dict_ProjectStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
+    percentage = models.DecimalField(
+        "Процент выполнения", max_digits=5, decimal_places=2, default=0
+    )
+    structure_type = models.ForeignKey(
+        "Dict_ProjectStructureType",
+        limit_choices_to={"is_active": True},
+        on_delete=models.CASCADE,
+        related_name="project_structure_type",
+        verbose_name="Тип в иерархии",
+    )
+    type = models.ForeignKey(
+        "Dict_ProjectType",
+        limit_choices_to={"is_active": True},
+        on_delete=models.CASCADE,
+        related_name="project_type",
+        verbose_name="Тип",
+    )
+    status = models.ForeignKey(
+        "Dict_ProjectStatus",
+        limit_choices_to={"is_active": True},
+        on_delete=models.CASCADE,
+        related_name="project_status",
+        verbose_name="Статус",
+    )
     datecreate = models.DateTimeField("Создан", auto_now_add=True)
-    dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='project_author', verbose_name="Автор")
-    members = models.ManyToManyField('auth.User', related_name='project_members', verbose_name="Участники")
+    dateclose = models.DateTimeField(
+        "Дата закрытия", auto_now_add=False, blank=True, null=True
+    )
+    author = models.ForeignKey(
+        "auth.User",
+        on_delete=models.CASCADE,
+        related_name="project_author",
+        verbose_name="Автор",
+    )
+    members = models.ManyToManyField(
+        "auth.User", related_name="project_members", verbose_name="Участники"
+    )
     is_active = models.BooleanField("Активность", default=True)
 
     @property
     def object_name(self):
-        return ('prj_prj', _("Проект"))
+        return ("prj_prj", _("Проект"))
+
     @property
     def link(self):
         index = str(self.pk)
-        #print(index[-1].__class__.__name__)
-        return f'my_project:tasks {index} 0' # + str(self.pk)
-        #return mark_safe(f"{ my_project:tasks {index} 0 %}")
+        # print(index[-1].__class__.__name__)
+        return f"my_project:tasks {index} 0"  # + str(self.pk)
+        # return mark_safe(f"{ my_project:tasks {index} 0 %}")
+
     @property
     # суммарная стоимость по Комментам (сколько освоено средств)
     def costsum(self):
-        return TaskComment.objects.filter(task__project_id=self.id).aggregate(Sum('cost'))
+        return TaskComment.objects.filter(task__project_id=self.id).aggregate(
+            Sum("cost")
+        )
+
     @property
     # суммарная затраченное время по Комментам
     def timesum(self):
-        return TaskComment.objects.filter(task__project_id=self.id).aggregate(Sum('time'))
+        return TaskComment.objects.filter(task__project_id=self.id).aggregate(
+            Sum("time")
+        )
 
     def get_absolute_url(self):
-        return reverse('my_project:tasks', kwargs={'projectid': self.pk, 'pk': '0'})  
+        return reverse("my_project:tasks", kwargs={"projectid": self.pk, "pk": "0"})
+
     def __str__(self):
-        return (self.name + ' (' + self.datebegin.strftime('%d.%m.%Y') + '-' + self.dateend.strftime('%d.%m.%Y') + ' / ' + self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + ')')
+        return (
+            self.name
+            + " ("
+            + self.datebegin.strftime("%d.%m.%Y")
+            + "-"
+            + self.dateend.strftime("%d.%m.%Y")
+            + " / "
+            + self.datecreate.strftime("%d.%m.%Y %H:%M:%S")
+            + ")"
+        )
+
     """
     def save(self, *args, **kwargs):
         # Получаем старые значения для дальнейшей проверки на изменения
@@ -170,100 +275,210 @@ class Project(SetPropertiesDashboardMixin, MPTTModel):
                           #, "Участники":self.members.username
                          }                                     
         ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson))
-    """                               
-    #class MPTTMeta:
+    """
+
+    # class MPTTMeta:
     #    order_insertion_by = ['name']
     class Meta:
-        verbose_name = 'Проект'
-        verbose_name_plural = 'Проекты'
+        verbose_name = "Проект"
+        verbose_name_plural = "Проекты"
+
 
 class Task(SetPropertiesDashboardMixin, MPTTModel):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")
     datebegin = models.DateTimeField("Начало")
     dateend = models.DateTimeField("Окончание")
-    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='resultproject', verbose_name="Проект")
-    parent = TreeForeignKey('self', null=True, blank=True, limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_children', verbose_name="Задача верхнего уровня")
-    assigner = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='task_assigner', verbose_name="Исполнитель")   
+    project = models.ForeignKey(
+        "Project",
+        on_delete=models.CASCADE,
+        related_name="resultproject",
+        verbose_name="Проект",
+    )
+    parent = TreeForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        limit_choices_to={"is_active": True},
+        on_delete=models.CASCADE,
+        related_name="task_children",
+        verbose_name="Задача верхнего уровня",
+    )
+    assigner = models.ForeignKey(
+        "auth.User",
+        on_delete=models.CASCADE,
+        related_name="task_assigner",
+        verbose_name="Исполнитель",
+    )
     cost = models.DecimalField("Стоимость", max_digits=12, decimal_places=2)
-    percentage = models.DecimalField("Процент выполнения", max_digits=5, decimal_places=2, default=0)    
-    structure_type = models.ForeignKey('Dict_TaskStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_structure_type', verbose_name="Тип задачи в иерархии")
-    type = models.ForeignKey('Dict_TaskType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
-    status = models.ForeignKey('Dict_TaskStatus', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_status', verbose_name="Статус")
-    datecreate = models.DateTimeField("Создана", auto_now_add=True)    
-    dateclose = models.DateTimeField("Дата закрытия", auto_now_add=False, blank=True, null=True)
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='resultuser', verbose_name="Автор")
+    percentage = models.DecimalField(
+        "Процент выполнения", max_digits=5, decimal_places=2, default=0
+    )
+    structure_type = models.ForeignKey(
+        "Dict_TaskStructureType",
+        limit_choices_to={"is_active": True},
+        on_delete=models.CASCADE,
+        related_name="task_structure_type",
+        verbose_name="Тип задачи в иерархии",
+    )
+    type = models.ForeignKey(
+        "Dict_TaskType",
+        limit_choices_to={"is_active": True},
+        on_delete=models.CASCADE,
+        related_name="project_type",
+        verbose_name="Тип",
+    )
+    status = models.ForeignKey(
+        "Dict_TaskStatus",
+        limit_choices_to={"is_active": True},
+        on_delete=models.CASCADE,
+        related_name="project_status",
+        verbose_name="Статус",
+    )
+    datecreate = models.DateTimeField("Создана", auto_now_add=True)
+    dateclose = models.DateTimeField(
+        "Дата закрытия", auto_now_add=False, blank=True, null=True
+    )
+    author = models.ForeignKey(
+        "auth.User",
+        on_delete=models.CASCADE,
+        related_name="resultuser",
+        verbose_name="Автор",
+    )
     is_active = models.BooleanField("Активность", default=True)
 
     @property
     # суммарная стоимость по Комментариям (сколько освоено средств)
     def costsum(self):
-        return TaskComment.objects.filter(task_id=self.id).aggregate(Sum('cost'))
-    
+        return TaskComment.objects.filter(task_id=self.id).aggregate(Sum("cost"))
+
     @property
     # суммарная затраченное время по Комментариям
     def timesum(self):
-        return TaskComment.objects.filter(task_id=self.id).aggregate(Sum('time'))
-    
+        return TaskComment.objects.filter(task_id=self.id).aggregate(Sum("time"))
+
     @property
     def object_name(self):
-        return ('prj_tsk', _("Задача проекта"))
-    
+        return ("prj_tsk", _("Задача проекта"))
+
     @property
     def link(self):
         index = str(self.pk)
-        return f'my_project:taskcomments {index}' # + str(self.pk)
+        return f"my_project:taskcomments {index}"  # + str(self.pk)
 
     def get_absolute_url(self):
-        return reverse('my_project:taskcomments', kwargs={'taskid': self.pk})
-        #return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
-    
+        return reverse("my_project:taskcomments", kwargs={"taskid": self.pk})
+        # return reverse('my_project:taskcomments, kwargs={'taskid': self.pk})
+
     def __str__(self):
-         return (str(self.project) + '. ' + self.name + ' (' + self.datebegin.strftime('%d.%m.%Y, %H:%M') + ' - ' + self.dateend.strftime('%d.%m.%Y, %H:%M') + ')')                           
-    
+        return (
+            str(self.project)
+            + ". "
+            + self.name
+            + " ("
+            + self.datebegin.strftime("%d.%m.%Y, %H:%M")
+            + " - "
+            + self.dateend.strftime("%d.%m.%Y, %H:%M")
+            + ")"
+        )
+
     class MPTTMeta:
-        #order_insertion_by = ['name']    
-        order_insertion_by = ['dateend']
-    
+        # order_insertion_by = ['name']
+        order_insertion_by = ["dateend"]
+
     class Meta:
-        verbose_name = 'Задача'
-        verbose_name_plural = 'Задачи'         
+        verbose_name = "Задача"
+        verbose_name_plural = "Задачи"
+
 
 class TaskComment(models.Model):
     name = models.CharField("Наименование", max_length=128)
     description = RichTextUploadingField("Описание")
-    time = models.DecimalField("Время работы, час.", max_digits=6, decimal_places=2, blank=False, null=False, default=0)
+    time = models.DecimalField(
+        "Время работы, час.",
+        max_digits=6,
+        decimal_places=2,
+        blank=False,
+        null=False,
+        default=0,
+    )
     cost = models.DecimalField("Стоимость", max_digits=9, decimal_places=2, default=0)
-    task = models.ForeignKey('Task', on_delete=models.CASCADE, related_name='resulttask', verbose_name="Задача")
-    datecreate = models.DateTimeField("Создан", auto_now_add=True)    
-    author = models.ForeignKey('auth.User', on_delete=models.CASCADE, verbose_name="Автор")
-    is_active = models.BooleanField("Активность", default=True) 
+    task = models.ForeignKey(
+        "Task",
+        on_delete=models.CASCADE,
+        related_name="resulttask",
+        verbose_name="Задача",
+    )
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    author = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, verbose_name="Автор"
+    )
+    is_active = models.BooleanField("Активность", default=True)
 
     def get_absolute_url(self):
-        return reverse('my_project:taskcomments', kwargs={'taskid': self.task_id})           
+        return reverse("my_project:taskcomments", kwargs={"taskid": self.task_id})
 
     def __str__(self):
-        return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
+        return (
+            str(self.task)
+            + ". "
+            + self.name
+            + " ("
+            + self.datecreate.strftime("%d.%m.%Y, %H:%M")
+            + ")"
+        )
 
     @property
     def files(self):
         return ProjectFile.objects.filter(taskcomment_id=self.id, is_active=True)
 
     class Meta:
-        verbose_name = 'Комментарий'
-        verbose_name_plural = 'Комментарии'
+        verbose_name = "Комментарий"
+        verbose_name_plural = "Комментарии"
+
 
 class ProjectFile(models.Model):
     name = models.CharField("Наименование", null=True, blank=True, max_length=255)
-    uname = models.CharField("Уникальное наименование", null=True, blank=True, max_length=255)
-    project = models.ForeignKey('Project', null=True, blank=True, on_delete=models.CASCADE, related_name='project_file', verbose_name="Проект")
-    task = models.ForeignKey('Task', null=True, blank=True, on_delete=models.CASCADE, related_name='task_file', verbose_name="Задача")
-    taskcomment = models.ForeignKey('TaskComment', null=True, blank=True, on_delete=models.CASCADE, related_name='taskcomment_file', verbose_name="Комментарий")        
-    pfile = models.FileField(upload_to='uploads/files/projects', blank=True, null=True, verbose_name='Файл')
-    #psize = models.CharField(editable=False, max_length=64)
+    uname = models.CharField(
+        "Уникальное наименование", null=True, blank=True, max_length=255
+    )
+    project = models.ForeignKey(
+        "Project",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="project_file",
+        verbose_name="Проект",
+    )
+    task = models.ForeignKey(
+        "Task",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="task_file",
+        verbose_name="Задача",
+    )
+    taskcomment = models.ForeignKey(
+        "TaskComment",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        related_name="taskcomment_file",
+        verbose_name="Комментарий",
+    )
+    pfile = models.FileField(
+        upload_to="uploads/files/projects", blank=True, null=True, verbose_name="Файл"
+    )
+    # psize = models.CharField(editable=False, max_length=64)
     psize = models.PositiveIntegerField(editable=False, null=True, blank=True)
-    datecreate = models.DateTimeField("Создан", auto_now_add=True)    
-    author = models.ForeignKey('auth.User', null=True, blank=True, on_delete=models.CASCADE, verbose_name="Автор")
+    datecreate = models.DateTimeField("Создан", auto_now_add=True)
+    author = models.ForeignKey(
+        "auth.User",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+        verbose_name="Автор",
+    )
     is_active = models.BooleanField("Активность", default=True)
 
     class Meta:
@@ -271,5 +486,4 @@ class ProjectFile(models.Model):
         verbose_name_plural = "Файлы"
 
     def __str__(self):
-        return str(self.id) + ' ' + self.uname #file.name
-
+        return str(self.id) + " " + self.uname  # file.name

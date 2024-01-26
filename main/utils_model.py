@@ -4,6 +4,11 @@ from django.utils.translation import gettext_lazy as _
 
 # from main.utils_lang import TranslateFieldMixin
 
+# exposed_request = ""
+
+# models.exposed_request = request
+# response = get_response(request)
+
 
 # class Dict_Model(TranslateFieldMixin, models.Model):
 class Dict_Model(models.Model):
@@ -16,8 +21,12 @@ class Dict_Model(models.Model):
     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
     is_active = models.BooleanField(_("Активность"), default=True)
 
+    # @property
+    # def name(self):
+    #     return self.trans_field(models.exposed_request, "name")
+
     def __str__(self):
-        return self.name
+        return self.name if self.name else self.name_ru
 
     def trans_field(self, exp_req, name):
         try:

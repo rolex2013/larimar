@@ -1,12 +1,12 @@
-#from django.contrib.auth import views
+# from django.contrib.auth import views
 from django.urls import path
 
-from companies.models import Company
-from projects.models import Project, Task, TaskComment
+# from companies.models import Company
+# from projects.models import Project, Task, TaskComment
 
-#from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
+# from companies.views import CompaniesList, companies, CompanyDetail, CompanyCreate, CompanyUpdate
 from . import views
-#from main.views import objecthistory
+# from main.views import objecthistory
 
 app_name = 'my_project'
 
