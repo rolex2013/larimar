@@ -11,6 +11,7 @@ from companies.models import Company
 
 from dashboard.utils import SetPropertiesDashboardMixin
 from main.utils_lang import TranslateFieldMixin
+from main.utils_model import Dict_Model, Comment_Model
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -329,9 +330,7 @@ class FeedbackTask(SetPropertiesDashboardMixin, MPTTModel):
         verbose_name_plural = _("Задачи")
 
 
-class FeedbackTicketComment(models.Model):
-    name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"))
+class FeedbackTicketComment(Comment_Model):
     time = models.DecimalField(
         _("Время работы, час."),
         null=True,
@@ -349,7 +348,6 @@ class FeedbackTicketComment(models.Model):
         related_name="feedback_ticket",
         verbose_name=_("Тикет"),
     )
-    datecreate = models.DateTimeField(_("Создан"), auto_now_add=True)
     company = models.ForeignKey(
         "companies.Company",
         null=True,
@@ -371,7 +369,6 @@ class FeedbackTicketComment(models.Model):
     id_remote = models.IntegerField(
         _("ID комментария в удалённой системе"), null=True, blank=True
     )
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     def get_absolute_url(self):
         return reverse(
@@ -388,7 +385,6 @@ class FeedbackTicketComment(models.Model):
             + self.datecreate.strftime("%d.%m.%Y, %H:%M")
             + ")"
         )
-        # return (self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
 
     @property
     def files(self):
@@ -399,45 +395,17 @@ class FeedbackTicketComment(models.Model):
         verbose_name_plural = _("Комментарии тикетов")
 
 
-class FeedbackTaskComment(models.Model):
-    name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"))
-    time = models.DecimalField(
-        _("Время работы, час."),
-        max_digits=6,
-        decimal_places=2,
-        blank=False,
-        null=False,
-        default=0,
-    )
-    cost = models.DecimalField(
-        _("Стоимость"), max_digits=9, decimal_places=2, default=0
-    )
+class FeedbackTaskComment(Comment_Model):
     task = models.ForeignKey(
         "FeedbackTask",
         on_delete=models.CASCADE,
         related_name="resulttask",
         verbose_name=_("Задача"),
     )
-    datecreate = models.DateTimeField(_("Создан"), auto_now_add=True)
-    author = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, verbose_name=_("Автор")
-    )
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     def get_absolute_url(self):
         return reverse(
             "my_feedback:feedbacktaskcomments", kwargs={"taskid": self.task_id}
-        )
-
-    def __str__(self):
-        return (
-            str(self.task)
-            + ". "
-            + self.name
-            + " ("
-            + self.datecreate.strftime("%d.%m.%Y, %H:%M")
-            + ")"
         )
 
     @property

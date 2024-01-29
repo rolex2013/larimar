@@ -2,6 +2,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from ckeditor_uploader.fields import RichTextUploadingField
+
 # from main.utils_lang import TranslateFieldMixin
 
 # exposed_request = ""
@@ -44,3 +46,37 @@ class Dict_Model(models.Model):
     class Meta:
         abstract = True
         ordering = ("sort",)
+
+
+class Comment_Model(models.Model):
+    name = models.CharField(_("Наименование"), max_length=128)
+    description = RichTextUploadingField(_("Описание"))
+    time = models.DecimalField(
+        _("Время работы, час."),
+        max_digits=6,
+        decimal_places=2,
+        blank=False,
+        null=False,
+        default=0,
+    )
+    cost = models.DecimalField(
+        _("Стоимость"), max_digits=9, decimal_places=2, default=0
+    )
+    datecreate = models.DateTimeField(_("Создан"), auto_now_add=True)
+    author = models.ForeignKey(
+        "auth.User", on_delete=models.CASCADE, verbose_name=_("Автор")
+    )
+    is_active = models.BooleanField(_("Активность"), default=True)
+
+    def __str__(self):
+        return (
+            str(self.task)
+            + ". "
+            + self.name
+            + " ("
+            + self.datecreate.strftime("%d.%m.%Y, %H:%M")
+            + ")"
+        )
+
+    class Meta:
+        abstract = True    

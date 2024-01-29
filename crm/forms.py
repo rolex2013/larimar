@@ -474,4 +474,4 @@ class ClientEventCommentForm(forms.ModelForm):
 
     class Meta:
         model = ClientEventComment
-        fields = ["name", "description"]
+        fields = ["name", "description", "time", "cost"]

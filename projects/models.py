@@ -16,7 +16,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 # from companies.models import Company
 
 from dashboard.utils import SetPropertiesDashboardMixin
-from main.utils_model import Dict_Model
+from main.utils_model import Dict_Model, Comment_Model
 
 
 exposed_request = ""
@@ -391,44 +391,16 @@ class Task(SetPropertiesDashboardMixin, MPTTModel):
         verbose_name_plural = _("Задачи")
 
 
-class TaskComment(models.Model):
-    name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"))
-    time = models.DecimalField(
-        _("Время работы, час."),
-        max_digits=6,
-        decimal_places=2,
-        blank=False,
-        null=False,
-        default=0,
-    )
-    cost = models.DecimalField(
-        _("Стоимость"), max_digits=9, decimal_places=2, default=0
-    )
+class TaskComment(Comment_Model):
     task = models.ForeignKey(
         "Task",
         on_delete=models.CASCADE,
         related_name="resulttask",
         verbose_name=_("Задача"),
     )
-    datecreate = models.DateTimeField(_("Создан"), auto_now_add=True)
-    author = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, verbose_name=_("Автор")
-    )
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     def get_absolute_url(self):
         return reverse("my_project:taskcomments", kwargs={"taskid": self.task_id})
-
-    def __str__(self):
-        return (
-            str(self.task)
-            + ". "
-            + self.name
-            + " ("
-            + self.datecreate.strftime("%d.%m.%Y, %H:%M")
-            + ")"
-        )
 
     @property
     def files(self):

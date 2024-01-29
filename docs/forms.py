@@ -295,4 +295,4 @@ class DocTaskCommentForm(forms.ModelForm):
     class Meta:
         model = DocTaskComment
         # fields = ['name', 'description']
-        fields = ["description"]
+        fields = ["name", "description"]

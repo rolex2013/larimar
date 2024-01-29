@@ -1,6 +1,7 @@
 from django.db import models
 
 from django.urls import reverse  # , reverse_lazy
+
 # from datetime import datetime  # , date, timedelta
 
 from django.utils.translation import gettext_lazy as _
@@ -15,6 +16,7 @@ from companies.models import Company
 from dashboard.utils import SetPropertiesDashboardMixin
 
 from main.utils_lang import TranslateFieldMixin
+from main.utils_model import Dict_Model, Comment_Model
 
 
 exposed_request = ""
@@ -193,7 +195,9 @@ class Doc(models.Model):
             + self.datecreate.strftime("%d.%m.%Y, %H:%M")
             + " "
             + self.author.username
-            + ") " + _("вер.") + " "
+            + ") "
+            + _("вер.")
+            + " "
             + str(self.docver)
         )
 
@@ -335,7 +339,9 @@ class DocTask(SetPropertiesDashboardMixin, models.Model):
             str(self.docver)
             + ". "
             + self.name
-            + " (" + _("Срок") + ": "
+            + " ("
+            + _("Срок")
+            + ": "
             + self.dateend.strftime("%d.%m.%Y")
             + ")"
         )
@@ -349,9 +355,7 @@ class DocTask(SetPropertiesDashboardMixin, models.Model):
         verbose_name_plural = _("Задачи")
 
 
-class DocTaskComment(models.Model):
-    # name = models.CharField("Наименование", max_length=128)
-    description = RichTextUploadingField(_("Текст"))
+class DocTaskComment(Comment_Model):
     time = models.DecimalField(
         _("Время работы, час."),
         max_digits=6,
@@ -360,33 +364,15 @@ class DocTaskComment(models.Model):
         null=False,
         default=0,
     )
-    cost = models.DecimalField(_("Стоимость"), max_digits=9, decimal_places=2, default=0)
     task = models.ForeignKey(
         "DocTask",
         on_delete=models.CASCADE,
         related_name="resultdoctask",
         verbose_name=_("Задача"),
     )
-    datecreate = models.DateTimeField(_("Создан"), auto_now_add=True)
-    author = models.ForeignKey(
-        "auth.User", on_delete=models.CASCADE, verbose_name=_("Автор")
-    )
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     def get_absolute_url(self):
         return reverse("my_doc:doctaskcomments", kwargs={"taskid": self.task_id})
-
-    def __str__(self):
-        # return (str(self.task) + '. ' + self.name + ' (' + self.datecreate.strftime('%d.%m.%Y, %H:%M') + ')')
-        return (
-            str(self.task)
-            + ". "
-            + " ("
-            + self.author
-            + " | "
-            + self.datecreate.strftime("%d.%m.%Y, %H:%M")
-            + ")"
-        )
 
     @property
     def files(self):

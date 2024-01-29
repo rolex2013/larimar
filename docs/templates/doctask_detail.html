@@ -63,7 +63,7 @@
             {% else %}
                 <div class="object-list-right">
             {%  endif %}
-                <b><!--{ taskcomment.name }} :--> <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} |
+                <b>{{ taskcomment.name }} : <span style="font-size: 70%; color: blue;">{{ taskcomment.datecreate }} |
                 <span>
                     <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль Автора' %}"><a style="color: blue;" href="{% url 'my_account:userprofile_detail' taskcomment.author.pk ' ' %}">{{ taskcomment.author.username }}</a></span></i>
                 </span></b>
