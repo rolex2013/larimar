@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
 <!--{ load render_table from django_tables2 %}-->
 
 {% block project %}
@@ -9,22 +10,22 @@
      <div class="object-detail">
        <h4>{{ current_object.name }}
        {% if not current_object.is_active %}
-          (Проект перемещён в архив)
+          ({% trans "Проект перемещён в архив" %})
        {% endif %}
        </h4>
        <p>{% autoescape off %}{{ current_object.description }}{% endautoescape %}</p>
-       <p>Исполнитель: {{ current_object.assigner }}</p>     
-       <p>Начало: {{ current_object.datebegin }}</p>
-       <p>Окончание: {{ current_object.dateend }}</p>
-       <p>Статус: {{ current_object.status }}</p>
-       <p><i>Участники: 
+       <p>{% trans "Исполнитель" %}: {{ current_object.assigner }}</p>     
+       <p>{% trans "Начало" %}: {{ current_object.datebegin }}</p>
+       <p>{% trans "Окончание" %}: {{ current_object.dateend }}</p>
+       <p>{% trans "Статус" %}: {{ current_object.status }}</p>
+       <p><i>{% trans "Участники" %}: 
        {% for u in current_object.members.all %}
-          <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
+          <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
        {% endfor %}
        </i></p>
-       <em>Автор: {{ current_object.author }}</em><br /> 
-       <!--<em>Участники: { current_object.members.name }}</em><br /> -->
-       <em>Дата: {{ current_object.datecreate }}</em>
+       <em>{% trans "Автор" %}: {{ current_object.author }}</em>
+       <!--<em>Участники: { current_object.members.name }}</em> -->
+       <em>{% trans "Дата" %}: {{ current_object.datecreate }}</em>
        <p>&nbsp;</p>
        {% if user.is_authenticated and user.id == current_object.author_id  %}
 
@@ -32,7 +33,7 @@
      </div>
 
   {% else %}
-     <h4>Информация о проекте недоступна!</h4>
+     <h4>{% trans "Информация о проекте недоступна!" %}</h4>
   {% endif %}  
 
 {% endblock project %}
@@ -44,7 +45,7 @@
 <!--     <div class="project-history-list">-->
       <div class="object-list">
 
-         <h4>История проекта</h4>
+         <h4>{% trans "История изменений проекта" %}</h4>
 
          <!--{ render_table table %}   -->
 
@@ -56,7 +57,7 @@
    <!--<div class="task-entry"></div><a href="{ url 'my_project:task_create' projectid 0 %}" class="top-menu"><span class="badge badge-secondary">{{ button_task_create }}</span></a></div>-->
 
    {% else %}
-      <h5>Информация об истории проекта недоступна!</h5>
+      <h5>{% trans "Информация об истории проекта недоступна!" %}</h5>
    {% endif %}  
 
    {% endblock list %}

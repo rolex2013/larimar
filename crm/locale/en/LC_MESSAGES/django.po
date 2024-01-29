@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-28 18:53+0300\n"
-"PO-Revision-Date: 2023-12-29 13:28+0300\n"
+"POT-Creation-Date: 2024-01-29 13:58+0300\n"
+"PO-Revision-Date: 2024-01-29 14:39+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -19,613 +19,656 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: forms.py:26
+#: crm/forms.py:41
 msgid "Файлы клиента"
 msgstr "Client files"
 
-#: forms.py:43
+#: crm/forms.py:66
 msgid "1YES! Ваш Клиент закрыт."
 msgstr "1YES! Your Client is closed."
 
-#: forms.py:43
+#: crm/forms.py:67
 msgid "Уведомляем о закрытии Вашего Клиента!"
 msgstr "We notify on closing of your Client!"
 
-#: forms.py:48
+#: crm/forms.py:76
 msgid "Ваш Клиент закрыт!"
 msgstr "Your Client is closed!"
 
-#: forms.py:49
+#: crm/forms.py:77
 msgid "Уведомляем о закрытии Вашего Клиента."
 msgstr "We notify on closing of your Client."
 
-#: forms.py:58
+#: crm/forms.py:90
 msgid "1YES! Вы назначены менеджером Клиента."
 msgstr "1YES! You are assigned as a Client Manager."
 
-#: forms.py:58
+#: crm/forms.py:91
 msgid "Уведомляем о назначении Вам Клиента!"
 msgstr "We notify you of the appointment of the Client!"
 
-#: forms.py:63
+#: crm/forms.py:100
 msgid "Вы назначены менеджером Клиента."
 msgstr "You are assigned as a Client Manager."
 
-#: forms.py:64
+#: crm/forms.py:101
 msgid "Уведомляем о назначении Вам Клиента \""
 msgstr "We notify you of the appointment of the Client \""
 
-#: forms.py:105
+#: crm/forms.py:175
 msgid "Файлы задачи"
 msgstr "Task files"
 
-#: forms.py:122 forms.py:226
+#: crm/forms.py:200 crm/forms.py:354
 msgid "1YES! Ваша Задача закрыта."
 msgstr "1YES! Your task is closed."
 
-#: forms.py:122 forms.py:128 forms.py:226
+#: crm/forms.py:201 crm/forms.py:211 crm/forms.py:355
 msgid "Уведомляем о закрытии Вашей Задачи!"
 msgstr "We notify you that your Task is closed!"
 
-#: forms.py:127
+#: crm/forms.py:210
 msgid "Ваша Задача закрыта."
 msgstr "Your task is closed."
 
-#: forms.py:137
+#: crm/forms.py:224
 msgid "1YES! Вы назначены исполнителем Задачи."
 msgstr "1YES! You have been appointed as the executor of the Task."
 
-#: forms.py:137
+#: crm/forms.py:225
 msgid "Уведомляем о назначении Вам Задачи!"
 msgstr "We will notify you that a Task has been assigned to you!"
 
-#: forms.py:142
+#: crm/forms.py:234
 msgid "Вы назначены исполнителем Задачи."
 msgstr "You have been appointed as the executor of the Task."
 
-#: forms.py:143
+#: crm/forms.py:235
 msgid "Уведомляем о назначении Вам Задачи \""
 msgstr "We notify you that a Task has been assigned to you \""
 
-#: forms.py:190
+#: crm/forms.py:312
 msgid "Файлы комментария задачи"
 msgstr "Task comment files"
 
-#: forms.py:241
+#: crm/forms.py:379
 msgid "1YES! Вы назначены исполнителем События."
 msgstr "1YES! You have been appointed as the performer of the Event."
 
-#: forms.py:241
+#: crm/forms.py:380
 msgid "Уведомляем о назначении Вам События!"
 msgstr "We notify you of the appointment Events for you!"
 
-#: forms.py:246
+#: crm/forms.py:389
 msgid "Вы назначены исполнителем События."
 msgstr "You have been appointed as the performer of the Event."
 
-#: forms.py:247
+#: crm/forms.py:390
 msgid "Уведомляем о назначении Вам События \""
 msgstr "We will notify you that an Event has been assigned to you \""
 
-#: forms.py:295
+#: crm/forms.py:470
 msgid "Файлы комментария события"
 msgstr "Event Comment Files"
 
-#: models.py:25 models.py:50 models.py:76 models.py:96 models.py:115
-#: models.py:134 models.py:153 models.py:173
+#: crm/models.py:25 crm/models.py:50 crm/models.py:76 crm/models.py:96
+#: crm/models.py:115 crm/models.py:134 crm/models.py:153 crm/models.py:173
 msgid "Наименование_ru"
 msgstr "Name_ru"
 
-#: models.py:26 models.py:51 models.py:77 models.py:97 models.py:116
-#: models.py:135 models.py:154 models.py:174
+#: crm/models.py:26 crm/models.py:51 crm/models.py:77 crm/models.py:97
+#: crm/models.py:116 crm/models.py:135 crm/models.py:154 crm/models.py:174
 msgid "Наименование_en"
 msgstr "Name_en"
 
-#: models.py:27 models.py:52
+#: crm/models.py:27 crm/models.py:52
 msgid "Описание_ru"
 msgstr "Description_ru"
 
-#: models.py:28 models.py:53
+#: crm/models.py:28 crm/models.py:53
 msgid "Описание_en"
 msgstr "Description_en"
 
-#: models.py:30 models.py:56 models.py:80 models.py:99 models.py:118
-#: models.py:137 models.py:157 models.py:176 models.py:216 models.py:253
-#: models.py:283 models.py:319 models.py:346 models.py:375 views.py:649
-#: views.py:730 views.py:1073 views.py:1167
+#: crm/models.py:30 crm/models.py:56 crm/models.py:80 crm/models.py:99
+#: crm/models.py:118 crm/models.py:137 crm/models.py:157 crm/models.py:176
+#: crm/models.py:216 crm/models.py:253 crm/models.py:283 crm/models.py:319
+#: crm/models.py:346 crm/models.py:375 crm/views.py:602 crm/views.py:662
+#: crm/views.py:983 crm/views.py:1056
 msgid "Активность"
 msgstr "Active"
 
-#: models.py:42 models.py:198
+#: crm/models.py:42 crm/models.py:198
 msgid "Тип клиента"
 msgstr "Client Type"
 
-#: models.py:43
+#: crm/models.py:43
 msgid "Типы клиентов"
 msgstr "Client Types"
 
-#: models.py:55
+#: crm/models.py:55
 msgid "Закрывает клиента"
 msgstr "Closes the Client"
 
-#: models.py:68 models.py:199
+#: crm/models.py:68 crm/models.py:199
 msgid "Статус клиента"
 msgstr "Client Status"
 
-#: models.py:69
+#: crm/models.py:69
 msgid "Статусы клиентов"
 msgstr "Client Statuses"
 
-#: models.py:79
+#: crm/models.py:79
 msgid "Закрывает задачу"
 msgstr "Closes the Task"
 
-#: models.py:88
+#: crm/models.py:88
 msgid "Статус задачи"
 msgstr "Task Status"
 
-#: models.py:89
+#: crm/models.py:89
 msgid "Статусы задач"
 msgstr "Task Statuses"
 
-#: models.py:107
+#: crm/models.py:107
 msgid "Тип задачи в иерархии"
 msgstr "Task Type in Hierarchy"
 
-#: models.py:108
+#: crm/models.py:108
 msgid "Типы задач в иерархии"
 msgstr "Task Types in Hierarchy"
 
-#: models.py:126
+#: crm/models.py:126
 msgid "Тип задачи"
 msgstr "Task Type"
 
-#: models.py:127
+#: crm/models.py:127
 msgid "Типы задач"
 msgstr "Task Types"
 
-#: models.py:145 models.py:313
+#: crm/models.py:145 crm/models.py:313
 msgid "Тип события"
 msgstr "Event Type"
 
-#: models.py:146
+#: crm/models.py:146
 msgid "Типы событий"
 msgstr "Event Types"
 
-#: models.py:156
+#: crm/models.py:156
 msgid "Закрывает событие"
 msgstr "Closes the Event"
 
-#: models.py:165 models.py:314
+#: crm/models.py:165 crm/models.py:314
 msgid "Статус события"
 msgstr "Event Status"
 
-#: models.py:166
+#: crm/models.py:166
 msgid "Статусы событий"
 msgstr "Event Statuses"
 
-#: models.py:184 models.py:252 models.py:318 templates/client_detail.html:44
-#: templates/clientevent_detail.html:27 templates/clientevent_history.html:28
-#: templates/clienttask_detail.html:31 views.py:257 views.py:374 views.py:647
-#: views.py:724 views.py:1069 views.py:1161
+#: crm/models.py:184 crm/models.py:252 crm/models.py:318
+#: crm/templates/client_detail.html:45
+#: crm/templates/clientevent_detail.html:27
+#: crm/templates/clientevent_history.html:28
+#: crm/templates/clienttask_detail.html:31 crm/views.py:253 crm/views.py:347
+#: crm/views.py:600 crm/views.py:660 crm/views.py:981 crm/views.py:1054
 msgid "Инициатор"
 msgstr "Initiator"
 
-#: models.py:185
+#: crm/models.py:185
 msgid "Инициаторы"
 msgstr "Initiators"
 
-#: models.py:193 templates/client_detail.html:29
+#: crm/models.py:193 crm/templates/client_detail.html:30
 msgid "Организация"
 msgstr "Organization"
 
-#: models.py:194 templates/client_detail.html:38 views.py:258 views.py:377
+#: crm/models.py:194 crm/templates/client_detail.html:39 crm/views.py:254
+#: crm/views.py:348
 msgid "Менеджер"
 msgstr "Manager"
 
-#: models.py:195 views.py:248 views.py:353
+#: crm/models.py:195 crm/views.py:246 crm/views.py:339
 msgid "Пользователь"
 msgstr "User"
 
-#: models.py:196
+#: crm/models.py:196
 msgid "Оповещать"
 msgstr "Notify"
 
-#: models.py:197
+#: crm/models.py:197
 msgid "Протокол оповещения"
 msgstr "Notify Protocol"
 
-#: models.py:200 views.py:245 views.py:344
+#: crm/models.py:200 crm/views.py:243 crm/views.py:336
 msgid "Имя"
 msgstr "Name"
 
-#: models.py:201 views.py:246 views.py:347
+#: crm/models.py:201 crm/views.py:244 crm/views.py:337
 msgid "Отчество"
 msgstr "Second Name"
 
-#: models.py:202 views.py:247 views.py:350
+#: crm/models.py:202 crm/views.py:245 crm/views.py:338
 msgid "Фамилия"
 msgstr "Last Name"
 
-#: models.py:204 views.py:251 views.py:358
+#: crm/models.py:204 crm/views.py:247 crm/views.py:341
 msgid "Телефон"
 msgstr "Phone"
 
-#: models.py:206 models.py:237 models.py:277 models.py:302 models.py:342
+#: crm/models.py:206 crm/models.py:237 crm/models.py:277 crm/models.py:302
+#: crm/models.py:342
 msgid "Описание"
 msgstr "Description"
 
-#: models.py:207 views.py:255 views.py:368
+#: crm/models.py:207 crm/views.py:251 crm/views.py:345
 msgid "Валюта"
 msgstr "Currency"
 
-#: models.py:208 models.py:243 models.py:279 views.py:645 views.py:719
+#: crm/models.py:208 crm/models.py:243 crm/models.py:279 crm/views.py:598
+#: crm/views.py:658
 msgid "Стоимость"
 msgstr "Cost"
 
-#: models.py:209 models.py:244
+#: crm/models.py:209 crm/models.py:244
 msgid "Процент выполнения"
 msgstr "Completion percentage"
 
-#: models.py:210 models.py:281 models.py:344 models.py:373
+#: crm/models.py:210 crm/models.py:281 crm/models.py:344 crm/models.py:373
 msgid "Создан"
 msgstr "Created"
 
-#: models.py:211 models.py:250 models.py:316
+#: crm/models.py:211 crm/models.py:250 crm/models.py:316
 msgid "Дата закрытия"
 msgstr "Closing Date"
 
-#: models.py:213
+#: crm/models.py:213
 msgid "Инициатор клиента"
 msgstr "Client initiator"
 
-#: models.py:214 models.py:282 models.py:317 models.py:374
-#: templates/client_detail.html:53 templates/clientevent_detail.html:28
-#: templates/clientevent_history.html:29 templates/clienttask_detail.html:34
-#: templates/clienttask_history.html:24
+#: crm/models.py:214 crm/models.py:282 crm/models.py:317 crm/models.py:374
+#: crm/templates/client_detail.html:54
+#: crm/templates/clientevent_detail.html:28
+#: crm/templates/clientevent_history.html:29
+#: crm/templates/clienttask_detail.html:34
+#: crm/templates/clienttask_history.html:24
 msgid "Автор"
 msgstr "Author"
 
-#: models.py:215 templates/client_detail.html:47 views.py:259 views.py:380
+#: crm/models.py:215 crm/templates/client_detail.html:48 crm/views.py:255
+#: crm/views.py:349
 msgid "Участники"
 msgstr "Participants"
 
-#: models.py:231 models.py:240 models.py:306 models.py:366
-#: templates/clientevent_detail.html:18 templates/clientevent_history.html:19
-#: templates/clienttask_detail.html:18
+#: crm/models.py:231 crm/models.py:240 crm/models.py:306 crm/models.py:366
+#: crm/templates/clientevent_detail.html:18
+#: crm/templates/clientevent_history.html:19
+#: crm/templates/clienttask_detail.html:18
 msgid "Клиент"
 msgstr "Client"
 
-#: models.py:232
+#: crm/models.py:232
 msgid "Клиенты"
 msgstr "Clients"
 
-#: models.py:236 models.py:276 models.py:301 models.py:341 models.py:364
+#: crm/models.py:236 crm/models.py:276 crm/models.py:301 crm/models.py:341
+#: crm/models.py:364
 msgid "Наименование"
 msgstr "Name"
 
-#: models.py:238 models.py:303 templates/clientevent_detail.html:23
-#: templates/clientevent_history.html:24 templates/clienttask_detail.html:26
-#: templates/clienttask_history.html:19 views.py:641 views.py:707
-#: views.py:1061 views.py:1150
+#: crm/models.py:238 crm/models.py:303
+#: crm/templates/clientevent_detail.html:23
+#: crm/templates/clientevent_history.html:24
+#: crm/templates/clienttask_detail.html:26
+#: crm/templates/clienttask_history.html:19 crm/views.py:594 crm/views.py:654
+#: crm/views.py:977 crm/views.py:1050
 msgid "Начало"
 msgstr "Start"
 
-#: models.py:239 models.py:304 templates/clientevent_detail.html:24
-#: templates/clientevent_history.html:25 templates/clienttask_detail.html:27
-#: templates/clienttask_history.html:20 views.py:642 views.py:710
-#: views.py:1063 views.py:1153
+#: crm/models.py:239 crm/models.py:304
+#: crm/templates/clientevent_detail.html:24
+#: crm/templates/clientevent_history.html:25
+#: crm/templates/clienttask_detail.html:27
+#: crm/templates/clienttask_history.html:20 crm/views.py:595 crm/views.py:655
+#: crm/views.py:978 crm/views.py:1051
 msgid "Окончание"
 msgstr "End"
 
-#: models.py:241
+#: crm/models.py:241
 msgid "Задача верхнего уровня"
 msgstr "Top level Task"
 
-#: models.py:242 models.py:308 templates/clientevent_detail.html:22
-#: templates/clientevent_history.html:23 templates/clienttask_detail.html:25
-#: templates/clienttask_history.html:18 views.py:648 views.py:727
-#: views.py:1071 views.py:1164
+#: crm/models.py:242 crm/models.py:308
+#: crm/templates/clientevent_detail.html:22
+#: crm/templates/clientevent_history.html:23
+#: crm/templates/clienttask_detail.html:25
+#: crm/templates/clienttask_history.html:18 crm/views.py:601 crm/views.py:661
+#: crm/views.py:982 crm/views.py:1055
 msgid "Исполнитель"
 msgstr "Executor"
 
-#: models.py:245 templates/clienttask_detail.html:28
-#: templates/clienttask_history.html:21 views.py:643 views.py:713
+#: crm/models.py:245 crm/templates/clienttask_detail.html:28
+#: crm/templates/clienttask_history.html:21 crm/views.py:596 crm/views.py:656
 msgid "Тип в иерархии"
 msgstr "Type in Hierarchy"
 
-#: models.py:246 templates/client_detail.html:42
-#: templates/clientevent_detail.html:25 templates/clientevent_history.html:26
-#: templates/clienttask_detail.html:29 templates/clienttask_history.html:22
-#: views.py:252 views.py:360 views.py:644 views.py:716 views.py:1065
-#: views.py:1156
+#: crm/models.py:246 crm/templates/client_detail.html:43
+#: crm/templates/clientevent_detail.html:25
+#: crm/templates/clientevent_history.html:26
+#: crm/templates/clienttask_detail.html:29
+#: crm/templates/clienttask_history.html:22 crm/views.py:248 crm/views.py:342
+#: crm/views.py:597 crm/views.py:657 crm/views.py:979 crm/views.py:1052
 msgid "Тип"
 msgstr "Type"
 
-#: models.py:248 templates/client_detail.html:43
-#: templates/clientevent_detail.html:26 templates/clientevent_history.html:27
-#: templates/clienttask_detail.html:30 templates/clienttask_history.html:23
-#: views.py:253 views.py:363 views.py:640 views.py:704 views.py:1059
-#: views.py:1147
+#: crm/models.py:248 crm/templates/client_detail.html:44
+#: crm/templates/clientevent_detail.html:26
+#: crm/templates/clientevent_history.html:27
+#: crm/templates/clienttask_detail.html:30
+#: crm/templates/clienttask_history.html:23 crm/views.py:249 crm/views.py:343
+#: crm/views.py:593 crm/views.py:653 crm/views.py:976 crm/views.py:1049
 msgid "Статус"
 msgstr "Status"
 
-#: models.py:249 models.py:315
+#: crm/models.py:249 crm/models.py:315
 msgid "Дата создания"
 msgstr "Date create"
 
-#: models.py:257
+#: crm/models.py:257
 msgid "Задача клиента"
 msgstr "Client Task"
 
-#: models.py:271 models.py:280 models.py:367
-#: templates/clienttask_detail.html:10 views.py:639 views.py:702 views.py:1056
-#: views.py:1143
+#: crm/models.py:271 crm/models.py:280 crm/models.py:367
+#: crm/templates/clienttask_detail.html:10 crm/views.py:592 crm/views.py:652
+#: crm/views.py:975 crm/views.py:1048
 msgid "Задача"
 msgstr "Task"
 
-#: models.py:272 templates/clienttasks_list.html:3
+#: crm/models.py:272 crm/templates/clienttasks_list.html:3
 msgid "Задачи"
 msgstr "Tasks"
 
-#: models.py:278
+#: crm/models.py:278
 msgid "Время работы, час."
 msgstr "Working time, hour."
 
-#: models.py:296 models.py:359 models.py:368
+#: crm/models.py:296 crm/models.py:359 crm/models.py:368
 msgid "Комментарий"
 msgstr "Comment"
 
-#: models.py:297 models.py:360 templates/clientevent_detail.html:51
-#: templates/clienttask_detail.html:61
+#: crm/models.py:297 crm/models.py:360
+#: crm/templates/clientevent_detail.html:51
+#: crm/templates/clienttask_detail.html:61
 msgid "Комментарии"
 msgstr "Comments"
 
-#: models.py:305 views.py:1067 views.py:1159
+#: crm/models.py:305 crm/views.py:980 crm/views.py:1053
 msgid "Место"
 msgstr "Place"
 
-#: models.py:307 templates/clientevent_detail.html:20
-#: templates/clientevent_history.html:21
+#: crm/models.py:307 crm/templates/clientevent_detail.html:20
+#: crm/templates/clientevent_history.html:21
 msgid "Связанная задача"
 msgstr "Related Task"
 
-#: models.py:323
+#: crm/models.py:323
 msgid "Событие клиента"
 msgstr "Client Event"
 
-#: models.py:336 models.py:343 templates/clientevent_detail.html:10
-#: views.py:1053 views.py:1141
+#: crm/models.py:336 crm/models.py:343
+#: crm/templates/clientevent_detail.html:10 crm/views.py:973 crm/views.py:1047
 msgid "Событие"
 msgstr "Event"
 
-#: models.py:337 templates/clientevents_list.html:3
-#: templates/clienttask_detail.html:87
+#: crm/models.py:337 crm/templates/clientevents_list.html:3
+#: crm/templates/clienttask_detail.html:87
 msgid "События"
 msgstr "Events"
 
-#: models.py:365
+#: crm/models.py:365
 msgid "Уникальное наименование"
 msgstr "Unique name"
 
-#: models.py:370
+#: crm/models.py:370
 msgid "Комментарий события"
 msgstr "Event Comment"
 
-#: models.py:378 models.py:379
+#: crm/models.py:378 crm/models.py:379
 msgid "Файлы"
 msgstr "Files"
 
-#: templates/client_detail.html:17
+#: crm/templates/client_detail.html:17
 msgid "Клиент перемещён в архив"
 msgstr "The Client has been moved to the archive"
 
-#: templates/client_detail.html:29
+#: crm/templates/client_detail.html:30
 msgid "Клиенты организации"
 msgstr "Organization Clients"
 
-#: templates/client_detail.html:33 templates/clienttask_detail.html:20
+#: crm/templates/client_detail.html:34 crm/templates/clienttask_detail.html:20
 msgid "Уровень выше"
 msgstr "Level higher"
 
-#: templates/client_detail.html:37 templates/clienttask_detail.html:24
+#: crm/templates/client_detail.html:38 crm/templates/clienttask_detail.html:24
 msgid "Бюджет"
 msgstr "Budget"
 
-#: templates/client_detail.html:37 templates/clienttask_detail.html:24
+#: crm/templates/client_detail.html:38 crm/templates/clienttask_detail.html:24
 msgid "Освоено"
 msgstr "Conquered"
 
-#: templates/client_detail.html:45 templates/clienttask_detail.html:32
+#: crm/templates/client_detail.html:46 crm/templates/clienttask_detail.html:32
 msgid "Затраченное время, час."
 msgstr "Time spent, hour."
 
-#: templates/client_detail.html:46
+#: crm/templates/client_detail.html:47
 msgid "Выполнен на"
 msgstr "Completed on"
 
-#: templates/client_detail.html:49 templates/clientevents_objects_list.html:8
-#: templates/clients_list.html:14 templates/clienttask_detail.html:70
-#: templates/clienttask_detail.html:96
+#: crm/templates/client_detail.html:50
+#: crm/templates/clientevents_objects_list.html:8
+#: crm/templates/clients_list.html:14 crm/templates/clienttask_detail.html:70
+#: crm/templates/clienttask_detail.html:96
 msgid "Профиль"
 msgstr "Profile"
 
-#: templates/client_detail.html:55 templates/clientevent_detail.html:29
-#: templates/clientevent_history.html:30 templates/clienttask_detail.html:35
-#: templates/clienttask_history.html:26
+#: crm/templates/client_detail.html:56
+#: crm/templates/clientevent_detail.html:29
+#: crm/templates/clientevent_history.html:30
+#: crm/templates/clienttask_detail.html:35
+#: crm/templates/clienttask_history.html:26
 msgid "Дата"
 msgstr "Date"
 
-#: templates/client_detail.html:78
+#: crm/templates/client_detail.html:79
 msgid "Информация о Клиенте недоступна!"
 msgstr "Client information is not available!"
 
-#: templates/client_detail.html:104
+#: crm/templates/client_detail.html:105
 msgid "Информация о задачах и событиях недоступна!"
 msgstr "Information about Tasks and Events is not available!"
 
-#: templates/clientevent_detail.html:12 templates/clientevent_history.html:15
+#: crm/templates/clientevent_detail.html:12
+#: crm/templates/clientevent_history.html:15
 msgid "Событие перемещено в архив"
 msgstr "Event moved to archive"
 
-#: templates/clientevent_history.html:35
+#: crm/templates/clientevent_history.html:35
 msgid "Информация о Событии недоступна!"
 msgstr "Event information is not available!"
 
-#: templates/clientevent_history.html:46
+#: crm/templates/clientevent_history.html:46
 msgid "История события"
 msgstr "Event history"
 
-#: templates/clientevent_history.html:56
+#: crm/templates/clientevent_history.html:56
 msgid "Информация об истории события недоступна!"
 msgstr "Event history information is not available!"
 
-#: templates/clientevents_list.html:8 templates/clienttasks_list.html:11
+#: crm/templates/clientevents_list.html:8
+#: crm/templates/clienttasks_list.html:11
 msgid "По статусу"
 msgstr "By Status"
 
-#: templates/clientevents_list.html:10 templates/clientevents_list.html:21
-#: templates/clientevents_list.html:30 templates/clienttasks_list.html:13
-#: templates/clienttasks_list.html:24 templates/clienttasks_list.html:33
+#: crm/templates/clientevents_list.html:10
+#: crm/templates/clientevents_list.html:21
+#: crm/templates/clientevents_list.html:30
+#: crm/templates/clienttasks_list.html:13
+#: crm/templates/clienttasks_list.html:24
+#: crm/templates/clienttasks_list.html:33
 msgid "Все"
 msgstr "All"
 
-#: templates/clientevents_list.html:11 templates/clienttasks_list.html:14
+#: crm/templates/clientevents_list.html:11
+#: crm/templates/clienttasks_list.html:14
 msgid "Все активные"
 msgstr "All active"
 
-#: templates/clientevents_list.html:12 templates/clienttasks_list.html:15
+#: crm/templates/clientevents_list.html:12
+#: crm/templates/clienttasks_list.html:15
 msgid "Просроченные"
 msgstr "Overdue"
 
-#: templates/clientevents_list.html:19 templates/clienttasks_list.html:22
+#: crm/templates/clientevents_list.html:19
+#: crm/templates/clienttasks_list.html:22
 msgid "По типу"
 msgstr "By Type"
 
-#: templates/clientevents_list.html:28 templates/clienttasks_list.html:31
+#: crm/templates/clientevents_list.html:28
+#: crm/templates/clienttasks_list.html:31
 msgid "Мои"
 msgstr "My"
 
-#: templates/clientevents_list.html:31 templates/clienttasks_list.html:34
+#: crm/templates/clientevents_list.html:31
+#: crm/templates/clienttasks_list.html:34
 msgid "Я участник"
 msgstr "I'm a member"
 
-#: templates/clientevents_list.html:32 templates/clienttasks_list.html:35
+#: crm/templates/clientevents_list.html:32
+#: crm/templates/clienttasks_list.html:35
 msgid "Я автор"
 msgstr "I'm the author"
 
-#: templates/clientevents_list.html:33 templates/clienttasks_list.html:36
+#: crm/templates/clientevents_list.html:33
+#: crm/templates/clienttasks_list.html:36
 msgid "Я исполнитель"
 msgstr "I'm a executor"
 
-#: templates/clientevents_list.html:35 templates/clienttasks_list.html:38
+#: crm/templates/clientevents_list.html:35
+#: crm/templates/clienttasks_list.html:38
 msgid "Применить"
 msgstr "Apply"
 
-#: templates/clienttask_detail.html:12 templates/clienttask_history.html:14
+#: crm/templates/clienttask_detail.html:12
+#: crm/templates/clienttask_history.html:14
 msgid "Задача перемещена в архив"
 msgstr "The Task has been moved to the archive"
 
-#: templates/clienttask_detail.html:18
+#: crm/templates/clienttask_detail.html:18
 msgid "Задачи и События клиента"
 msgstr "Client Tasks and Events"
 
-#: templates/clienttask_detail.html:25
+#: crm/templates/clienttask_detail.html:25
 msgid "Профиль исполнителя"
 msgstr "Executor Profile"
 
-#: templates/clienttask_detail.html:33
+#: crm/templates/clienttask_detail.html:33
 msgid "Выполнена на"
 msgstr "Completed on"
 
-#: templates/clienttask_history.html:36
+#: crm/templates/clienttask_history.html:36
 msgid "Информация о Задаче недоступна!"
 msgstr "Task information is not available!"
 
-#: templates/clienttask_history.html:47
+#: crm/templates/clienttask_history.html:47
 msgid "История задачи"
 msgstr "Task history"
 
-#: templates/clienttask_history.html:80
+#: crm/templates/clienttask_history.html:80
 msgid "Информация об истории задачи недоступна!"
 msgstr "Task history information is not available!"
 
-#: views.py:176
+#: crm/views.py:176
 msgid "Сменить организацию"
 msgstr "Change organization"
 
-#: views.py:178 views.py:542 views.py:795 views.py:989 views.py:1210
+#: crm/views.py:178 crm/views.py:498 crm/views.py:723 crm/views.py:911
+#: crm/views.py:1094
 msgid "Добавить"
 msgstr "Add"
 
-#: views.py:179 views.py:546 views.py:801 views.py:994 views.py:1215
+#: crm/views.py:179 crm/views.py:501 crm/views.py:728 crm/views.py:916
+#: crm/views.py:1099
 msgid "Изменить"
 msgstr "Edit"
 
-#: views.py:254 views.py:366
+#: crm/views.py:250 crm/views.py:344
 msgid "Ст-ть"
 msgstr "Cost"
 
-#: views.py:256 views.py:371 views.py:646 views.py:721
+#: crm/views.py:252 crm/views.py:346 crm/views.py:599 crm/views.py:659
 msgid "Выполнен на, %"
 msgstr "Completed on, %"
 
-#: views.py:260 views.py:382
+#: crm/views.py:256 crm/views.py:350
 msgid "Оповещ."
 msgstr "Notify"
 
-#: views.py:261 views.py:385
+#: crm/views.py:257 crm/views.py:351
 msgid "Протокол"
 msgstr "Protocol"
 
-#: views.py:263 views.py:388
+#: crm/views.py:258 crm/views.py:352
 msgid "Активн."
 msgstr "Active"
 
-#: views.py:276
+#: crm/views.py:271
 msgid "Новый Клиент"
 msgstr "New Client"
 
-#: views.py:298
+#: crm/views.py:293
 msgid "Изменить Клиента"
 msgstr "Edit Client"
 
-#: views.py:541 views.py:796 views.py:990 views.py:1211
+#: crm/views.py:340
+msgid "E-mail"
+msgstr "E-mail"
+
+#: crm/views.py:497 crm/views.py:724 crm/views.py:912 crm/views.py:1095
 msgid "История"
 msgstr "History"
 
-#: views.py:663
+#: crm/views.py:616
 msgid "Новая Задача"
 msgstr "New Task"
 
-#: views.py:684
+#: crm/views.py:637
 msgid "Изменить Задачу"
 msgstr "Edit Task"
 
-#: views.py:866 views.py:1263
+#: crm/views.py:792 crm/views.py:1146
 msgid "Новый Комментарий"
 msgstr "New Comment"
 
-#: views.py:887 views.py:1284
+#: crm/views.py:810 crm/views.py:1165
 msgid "Изменить Комментарий"
 msgstr "Edit Comment"
 
-#: views.py:1088
+#: crm/views.py:997
 msgid "Новое Событие"
 msgstr "New Event"
 
-#: views.py:1110
+#: crm/views.py:1019
 msgid "Изменить Событие"
 msgstr "Edit Event"
 
-#: views.py:1459
+#: crm/views.py:1338
 msgid "Клиенты не найдены!"
 msgstr "Clients not found!"
 
-#: views.py:1557
+#: crm/views.py:1436
 msgid "Задачи не найдены!"
 msgstr "Tasks not found!"
 
-#: views.py:1647
+#: crm/views.py:1525
 msgid "События не найдены!"
 msgstr "Events not found!"

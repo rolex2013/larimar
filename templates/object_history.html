@@ -3,14 +3,7 @@
    <!--<div class="object-list-tr">
       <div class="object-list-td">-->
          <div class="table">
-            {% comment %}
-            <div class="row">
-               <div class="cell">Дата</div> <div class="cell">Автор</div>
-               {% for key, value in titles %}          
-                  <div class="cell">{ key }}</div>
-               {% endfor %}
-            </div>
-            {% endcomment %}
+
             {% for rec in mas %}
                {% if forloop.first %}
                   <div class="th-row">                      
@@ -47,6 +40,7 @@
                   {% endfor %}
                </div>                               
             {% endfor %}
+
          </div>                  
    <!--   </div>
    </div>-->

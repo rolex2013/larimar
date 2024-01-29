@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-07 14:10+0300\n"
+"POT-Creation-Date: 2024-01-29 13:58+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -205,7 +205,7 @@ msgid "Добавить столбец справа"
 msgstr "Add Column to Right"
 
 #: lists/templates/ylist_items_list.html:68 lists/views.py:45
-#: lists/views.py:172 lists/views.py:238 lists/views.py:326 lists/views.py:427
+#: lists/views.py:174 lists/views.py:242 lists/views.py:330 lists/views.py:431
 msgid "Изменить"
 msgstr "Edit"
 
@@ -259,7 +259,7 @@ msgstr "Are you sure you want to delete the row?"
 msgid "Сменить организацию"
 msgstr "Change organization"
 
-#: lists/views.py:44 lists/views.py:46 lists/views.py:48 lists/views.py:173
-#: lists/views.py:239 lists/views.py:327 lists/views.py:428
+#: lists/views.py:44 lists/views.py:46 lists/views.py:50 lists/views.py:175
+#: lists/views.py:243 lists/views.py:331 lists/views.py:432
 msgid "Добавить"
 msgstr "Add"

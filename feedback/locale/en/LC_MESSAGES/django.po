@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-18 15:25+0300\n"
-"PO-Revision-Date: 2024-01-18 16:14+0300\n"
+"POT-Creation-Date: 2024-01-29 14:41+0300\n"
+"PO-Revision-Date: 2024-01-29 15:10+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -23,7 +23,7 @@ msgstr ""
 msgid "Файлы тикета"
 msgstr "Ticket Files"
 
-#: forms.py:65 views.py:401
+#: forms.py:65 views.py:413
 msgid "Комментарий"
 msgstr "Comment"
 
@@ -44,7 +44,7 @@ msgid "Файлы задачи"
 msgstr "Task Files"
 
 #: forms.py:207
-msgid "1Yes! Ваша Задача закрыта."
+msgid "1YES! Ваша Задача закрыта."
 msgstr "1YES! Your Task has been closed."
 
 #: forms.py:208 forms.py:218
@@ -56,9 +56,9 @@ msgid "Ваша Задача закрыта."
 msgstr "Your Task has been closed."
 
 #: forms.py:231
-#| msgid "1Yes. Вы назначены исполнителем Задачи."
-msgid "1Yes! Вы назначены исполнителем Задачи."
-msgstr "1Yes! You are assigned as a Task Performer."
+#| msgid "1Yes! Вы назначены исполнителем Задачи."
+msgid "1YES! Вы назначены исполнителем Задачи."
+msgstr "1YES! You are assigned as a Task executor."
 
 #: forms.py:232
 msgid "Уведомляем о назначении Вам Задачи!"
@@ -72,7 +72,7 @@ msgstr "You are assigned as a Task Performer."
 msgid "Уведомляем о назначении Вам Задачи"
 msgstr "We notify you of the assignment of Task"
 
-#: forms.py:308
+#: forms.py:316
 msgid "Файлы комментария"
 msgstr "Comment Files"
 
@@ -209,7 +209,7 @@ msgid "ID тикета в удалённой системе"
 msgstr "Remote Ticket ID"
 
 #: models.py:195 models.py:236 models.py:249 models.py:350 models.py:463
-#: templates/feedbacktask_detail.html:37 views.py:268 views.py:388
+#: templates/feedbacktask_detail.html:37 views.py:268 views.py:395
 msgid "Тикет"
 msgstr "Ticket"
 
@@ -314,17 +314,17 @@ msgid "Дата"
 msgstr "Date"
 
 #: templates/feedbacksystemdev_detail.html:59
-#: templates/feedbacktasks_list.html:11
+#: templates/feedbacktasks_list.html:12
 msgid "По статусу"
 msgstr "By Status"
 
 #: templates/feedbacksystemdev_detail.html:61
-#: templates/feedbacktasks_list.html:13 templates/feedbacktasks_list.html:24
+#: templates/feedbacktasks_list.html:14 templates/feedbacktasks_list.html:25
 msgid "Все"
 msgstr "All"
 
 #: templates/feedbacksystemdev_detail.html:62
-#: templates/feedbacktasks_list.html:14
+#: templates/feedbacktasks_list.html:15
 msgid "Все активные"
 msgstr "All active"
 
@@ -341,7 +341,7 @@ msgid "- Все"
 msgstr "- All"
 
 #: templates/feedbacksystemdev_detail.html:82
-#: templates/feedbacktasks_list.html:29
+#: templates/feedbacktasks_list.html:30
 msgid "Применить"
 msgstr "Apply"
 
@@ -375,27 +375,27 @@ msgstr "Completed"
 msgid "Комментарии"
 msgstr "Comments"
 
-#: templates/feedbacktasks_list.html:15
+#: templates/feedbacktasks_list.html:16
 msgid "Просроченные"
 msgstr "Overdue"
 
-#: templates/feedbacktasks_list.html:22
+#: templates/feedbacktasks_list.html:23
 msgid "Мои"
 msgstr "My"
 
-#: templates/feedbacktasks_list.html:25
+#: templates/feedbacktasks_list.html:26
 msgid "Все мои"
 msgstr "All My"
 
-#: templates/feedbacktasks_list.html:26
+#: templates/feedbacktasks_list.html:27
 msgid "Я автор"
 msgstr "I'm author"
 
-#: templates/feedbacktasks_list.html:27
+#: templates/feedbacktasks_list.html:28
 msgid "Я исполнитель"
 msgstr "I'm performer"
 
-#: templates/feedbacktasks_list.html:39
+#: templates/feedbacktasks_list.html:40
 msgid "Задач пока нет..."
 msgstr "There are no Tasks yet..."
 
@@ -435,11 +435,11 @@ msgstr "hours"
 msgid "Комментариев пока нет..."
 msgstr "There are no Comments yet..."
 
-#: views.py:195 views.py:321
+#: views.py:195 views.py:322
 msgid "Система с кодом"
 msgstr "System with Code"
 
-#: views.py:197 views.py:321
+#: views.py:197 views.py:326
 msgid "не зарегистрирована!"
 msgstr "not registered!"
 
@@ -451,74 +451,74 @@ msgstr "successfully changed!"
 msgid "Нет такого тикета!"
 msgstr "There is no such Ticket!"
 
-#: views.py:388 views.py:405
+#: views.py:399 views.py:421
 msgid "не найден!"
 msgstr "not found!"
 
-#: views.py:403
+#: views.py:417
 msgid "тикета"
 msgstr "ticket"
 
-#: views.py:411
+#: views.py:427
 msgid "Не передан id Тикета!"
 msgstr "Ticket ID not transmitted!"
 
-#: views.py:497
+#: views.py:513
 msgid "Что-то пошло не так с сервером..."
 msgstr "Something went wrong with the server..."
 
-#: views.py:503
+#: views.py:519
 msgid "Регистрация новой Системы"
 msgstr "New System Registration"
 
-#: views.py:690
+#: views.py:711
 msgid "Обращения к разработчику"
 msgstr "Calls to the developer"
 
-#: views.py:691 views.py:706 views.py:1388 views.py:1390 views.py:1584
+#: views.py:712 views.py:727 views.py:1413 views.py:1415 views.py:1611
 msgid "Добавить"
 msgstr "Add"
 
-#: views.py:705
+#: views.py:726
 msgid "Сменить службу техподдержки"
 msgstr "Change Technical Support"
 
-#: views.py:883
+#: views.py:908
 msgid "Новый Тикет"
 msgstr "New Ticket"
 
-#: views.py:1114 views.py:1122
+#: views.py:1139 views.py:1147
 msgid "Создать"
 msgstr "Create"
 
-#: views.py:1116 views.py:1395
+#: views.py:1141 views.py:1420
 msgid "Изменить"
 msgstr "Edit"
 
-#: views.py:1186
+#: views.py:1211
 msgid "Новый комментарий Тикета"
 msgstr "New Ticket Comment"
 
-#: views.py:1279
+#: views.py:1304
 msgid "Новая Задача"
 msgstr "New Task"
 
-#: views.py:1303
+#: views.py:1328
 msgid "Изменить Задачу"
 msgstr "Edit Task"
 
-#: views.py:1445
+#: views.py:1470
 msgid "Новый Комментарий"
 msgstr "New Comment"
 
-#: views.py:1465
+#: views.py:1490
 msgid "Изменить Комментарий"
 msgstr "Edit Comment"
 
-#: views.py:1589
+#: views.py:1616
 msgid "Тикеты не найдены!"
 msgstr "Tickets not found!"
 
-#: views.py:1651
+#: views.py:1681
 msgid "Задачи не найдены!"
 msgstr "Tasks not found!"

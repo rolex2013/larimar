@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block project %}
   <div class="object-detail">
     <h2>{{ taskcomment.task.project.name }}</h2>
     <p>{{ taskcomment.task.project.description }}</p>
-    <p>Исполнитель: {{ taskcomment.task.project.assigner }}</p>     
-    <p>Начало: {{ taskcomment.task.project.datebegin }}</p>
-    <p>Окончание: {{ taskcomment.task.project.dateend }}</p>
-    <p><i>Автор: {{ taskcomment.task.project.author }}</i></p> 
-    <p><i>Дата: {{ taskcomment.task.project.datecreate }}</i></p>
+    <p>{% trans "Исполнитель" %}: {{ taskcomment.task.project.assigner }}</p>     
+    <p>{% trans "Начало" %}: {{ taskcomment.task.project.datebegin }}</p>
+    <p>{% trans "Окончание" %}: {{ taskcomment.task.project.dateend }}</p>
+    <p><i>{% trans "Автор" %}: {{ taskcomment.task.project.author }}</i></p> 
+    <p><i>{% trans "Дата" %}: {{ taskcomment.task.project.datecreate }}</i></p>
     <p>&nbsp;</p>   
   </div>
 {% endblock project %}
@@ -17,11 +19,11 @@
    <div class="object-detail">
       <h2>{{ taskcomment.task.name }}</h2>
       <p>{{ taskcomment.task.description }}</p>
-      <p>Исполнитель: {{ taskcomment.task.assigner }}</p>       
-      <p>Начало: {{ taskcomment.task.datebegin }}</p>
-      <p>Окончание: {{ taskcomment.task.dateend }}</p>
-      <p><i>Автор: {{ taskcomment.task.author }}</i></p>
-      <p><i>Дата: {{ taskcomment.task.datecreate }}</i></p>              
+      <p>{% trans "Исполнитель" %}: {{ taskcomment.task.assigner }}</p>       
+      <p>{% trans "Начало" %}: {{ taskcomment.task.datebegin }}</p>
+      <p>{% trans "Окончание" %}: {{ taskcomment.task.dateend }}</p>
+      <p><i>{% trans "Автор" %}: {{ taskcomment.task.author }}</i></p>
+      <p><i>{% trans "Дата" %}: {{ taskcomment.task.datecreate }}</i></p>              
       <p>&nbsp;</p>
    </div>
 {% endblock task %}
@@ -30,8 +32,8 @@
     <div class="object-detail">
         <h2>{{ taskcomment.name }}</h2>
         <p>{{ taskcomment.description }}</p>
-        <p><i>Автор: {{ taskcomment.author }}</i></p>
-        <p><i>Дата: {{ taskcomment.datecreate }}</i></p>        
+        <p><i>{% trans "Автор" %}: {{ taskcomment.author }}</i></p>
+        <p><i>{% trans "Дата" %}: {{ taskcomment.datecreate }}</i></p>        
         <p>&nbsp;</p>
     </div>
     <!--<div class="comment-entry"></div><a href="{ url 'my_project:taskcomment_create' task.pk %}" class="top-menu"><span class="badge badge-secondary">Добавить Комментарий</span></a></div> -->

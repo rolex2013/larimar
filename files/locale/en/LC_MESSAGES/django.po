@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-25 19:15+0300\n"
+"POT-Creation-Date: 2024-01-29 13:58+0300\n"
 "PO-Revision-Date: 2024-01-25 19:15+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,207 +19,208 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: forms.py:23 forms.py:57
+#: files/forms.py:23 files/forms.py:57
 msgid "Файлы папки"
 msgstr "Folder Files"
 
-#: models.py:55
+#: files/models.py:53
 msgid "Тип содержимого папки"
 msgstr "Folder Content Type"
 
-#: models.py:56
+#: files/models.py:54
 msgid "Типы содержимого папок"
 msgstr "Folder Content Types"
 
-#: models.py:60 models.py:126
+#: files/models.py:58 files/models.py:124
 msgid "Наименование"
 msgstr "Name"
 
-#: models.py:61
+#: files/models.py:59
 msgid "Описание"
 msgstr "Description"
 
-#: models.py:66
+#: files/models.py:64
 msgid "Компания"
 msgstr "Company"
 
-#: models.py:75 templates/folder_detail.html:19
+#: files/models.py:73 files/templates/folder_detail.html:19
 msgid "Папка верхнего уровня"
 msgstr "Top-level folder"
 
-#: models.py:82 templates/folder_detail.html:28
+#: files/models.py:80 files/templates/folder_detail.html:28
 msgid "Тематика"
 msgstr "Subject"
 
-#: models.py:89 templates/folder_detail.html:29
+#: files/models.py:87 files/templates/folder_detail.html:29
 msgid "Тип"
 msgstr "Type"
 
-#: models.py:93 models.py:143
+#: files/models.py:91 files/models.py:141
 msgid "Создан"
 msgstr "Created"
 
-#: models.py:99 models.py:149 templates/folder_detail.html:30
-#: templates/folder_detail.html:91 templates/folder_detail.html:135
+#: files/models.py:97 files/models.py:147 files/templates/folder_detail.html:30
+#: files/templates/folder_detail.html:91 files/templates/folder_detail.html:135
 msgid "Автор"
 msgstr "Author"
 
-#: models.py:102 models.py:151
+#: files/models.py:100 files/models.py:149
 msgid "Активность"
 msgstr "Activity"
 
-#: models.py:121 models.py:136
+#: files/models.py:119 files/models.py:134
 msgid "Папка"
 msgstr "Folder"
 
-#: models.py:122 templates/folder_detail.html:65
+#: files/models.py:120 files/templates/folder_detail.html:65
 msgid "Папки"
 msgstr "Folders"
 
-#: models.py:128
+#: files/models.py:126
 msgid "Уникальное наименование"
 msgstr "Unique name"
 
-#: models.py:139
+#: files/models.py:137
 msgid "Файл"
 msgstr "File"
 
-#: models.py:154 models.py:155 templates/folder_detail.html:116
+#: files/models.py:152 files/models.py:153
+#: files/templates/folder_detail.html:116
 msgid "Файлы"
 msgstr "Files"
 
-#: templates/folder_detail.html:13
+#: files/templates/folder_detail.html:13
 msgid "Папка перемещена в архив"
 msgstr "Folder moved to archive"
 
-#: templates/folder_detail.html:24
+#: files/templates/folder_detail.html:24
 msgid "Корневая папка"
 msgstr "Root Folder"
 
-#: templates/folder_detail.html:31
+#: files/templates/folder_detail.html:31
 msgid "Дата"
 msgstr "Date"
 
-#: templates/folder_detail.html:50
+#: files/templates/folder_detail.html:50
 msgid "Информация о папке недоступна!"
 msgstr "The folder information is not available!"
 
-#: templates/folder_detail.html:51
+#: files/templates/folder_detail.html:51
 msgid "Пожалуйста, обратитесь к администратору."
 msgstr "Please contact your administrator."
 
-#: templates/folder_detail.html:73
+#: files/templates/folder_detail.html:73
 msgid "По тематике"
 msgstr "By Subject"
 
-#: templates/folder_detail.html:75 templates/folder_detail.html:84
+#: files/templates/folder_detail.html:75 files/templates/folder_detail.html:84
 msgid "Все"
 msgstr "All"
 
-#: templates/folder_detail.html:82
+#: files/templates/folder_detail.html:82
 msgid "По типу"
 msgstr "By Type"
 
-#: templates/folder_detail.html:93 templates/folder_detail.html:137
+#: files/templates/folder_detail.html:93 files/templates/folder_detail.html:137
 msgid "Все активные"
 msgstr "All active"
 
-#: templates/folder_detail.html:94 templates/folder_detail.html:138
+#: files/templates/folder_detail.html:94 files/templates/folder_detail.html:138
 msgid "Мои активные"
 msgstr "My active"
 
-#: templates/folder_detail.html:95 templates/folder_detail.html:139
+#: files/templates/folder_detail.html:95 files/templates/folder_detail.html:139
 msgid "Мои неактивные"
 msgstr "My inactive"
 
-#: templates/folder_detail.html:97
+#: files/templates/folder_detail.html:97
 msgid "Применить"
 msgstr "Apply"
 
-#: templates/folder_detail.html:105
+#: files/templates/folder_detail.html:105
 msgid "Папок пока нет..."
 msgstr "There are no folders yet..."
 
-#: templates/folder_detail.html:120
+#: files/templates/folder_detail.html:120
 msgid "Упорядочить"
 msgstr "To order"
 
-#: templates/folder_detail.html:122
+#: files/templates/folder_detail.html:122
 msgid "По имени"
 msgstr "By Name"
 
-#: templates/folder_detail.html:123
+#: files/templates/folder_detail.html:123
 msgid "По размеру"
 msgstr "By Size"
 
-#: templates/folder_detail.html:124
+#: files/templates/folder_detail.html:124
 msgid "По дате"
 msgstr "By Date"
 
-#: templates/folder_detail.html:130
+#: files/templates/folder_detail.html:130
 msgid "По возрастанию"
 msgstr "Ascending"
 
-#: templates/folder_detail.html:131
+#: files/templates/folder_detail.html:131
 msgid "По убыванию"
 msgstr "Descending"
 
-#: templates/folder_detail.html:132
+#: files/templates/folder_detail.html:132
 msgid "Без сортировки"
 msgstr "Without sorting"
 
-#: templates/folder_detail.html:141
+#: files/templates/folder_detail.html:141
 msgid "Выбрать"
 msgstr "Select"
 
-#: templates/folderfile_list.html:15
+#: files/templates/folderfile_list.html:15
 msgid "Удалить этот файл"
 msgstr "Delete this file"
 
-#: templates/folderfile_list.html:17
+#: files/templates/folderfile_list.html:17
 msgid "Восстановить этот файл"
 msgstr "Resore this file"
 
-#: templates/folderfile_list.html:28
+#: files/templates/folderfile_list.html:28
 msgid "Файлов пока нет..."
 msgstr "There are no files yet..."
 
-#: templates/folders_list.html:16
+#: files/templates/folders_list.html:16
 msgid "Открыть папку"
 msgstr "Open Folder"
 
-#: templates/folders_list.html:18
+#: files/templates/folders_list.html:18
 msgid "Профиль"
 msgstr "Profile"
 
-#: templates/folders_list.html:18
+#: files/templates/folders_list.html:18
 msgid "Файлов"
 msgstr "Files"
 
-#: views.py:121
+#: files/views.py:129
 msgid "Сменить организацию"
 msgstr "Change Organization"
 
-#: views.py:142 views.py:144
+#: files/views.py:150 files/views.py:152
 msgid "Добавить"
 msgstr "Add"
 
-#: views.py:143
+#: files/views.py:151
 msgid "Изменить"
 msgstr "Edit"
 
-#: views.py:206
+#: files/views.py:214
 msgid "Новая Папка"
 msgstr "New Folder"
 
-#: views.py:231
+#: files/views.py:239
 msgid "Изменить Папку"
 msgstr "Edit Folder"
 
-#: views.py:333
+#: files/views.py:346
 msgid "Папки не найдены!"
 msgstr "Folders not found!"
 
-#: views.py:404
+#: files/views.py:417
 msgid "Файлы не найдены!"
 msgstr "Files not found!"

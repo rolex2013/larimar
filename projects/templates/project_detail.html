@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load i18n %}
+
 {% block project %}
     <!-- Защита от прямого доступа к проекту -->
     {% if current_project.company.id in user_companies %}
@@ -9,36 +11,36 @@
                 <div class="object-detail-header">
                     <h3>{{ current_project.name }}
                         {% if not current_project.is_active %}
-                            (Проект перемещён в архив)
+                            ({% trans "Проект перемещён в архив" %})
                         {% endif %}
                     </h3>
                 </div>
 
                 <div class="object-detail-left">
-                    <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p>
-                    <i><p>Организация: <span class="hint hint--bottom hint--info" data-hint="Проекты организации"><a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></span></p></i>
+                    <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p><br />
+                    <i><p>{% trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Проекты организации' %}"><a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></span></p></i>
                     {% if current_project.parent %}
-                        <p>Уровень выше: <a href="{% url 'my_project:tasks' current_project.parent.pk 0 %}">{{ current_project.parent.name }}</a></p>
+                        <p>{% trans "Уровень выше" %}: <a href="{% url 'my_project:tasks' current_project.parent.pk 0 %}">{{ current_project.parent.name }}</a></p>
                     {% else %}
                         <!-- <p>: <a href="{ url 'my_project:projects' current_project.company.pk current_project.parent.pk %}">{{ current_project.parent.name }}</a></p>-->
                     {% endif %}
-                    <p>Бюджет: {{ current_project.cost }} {{ current_project.currency.shortname }}<i> (Освоено: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
-                    <p>Исполнитель: {{ current_project.assigner }}</p>
-                    <p>Начало: {{ current_project.datebegin }}</p>
-                    <p>Окончание: {{ current_project.dateend }}</p>
-                    <p>Тип в иерархии: {{ current_project.structure_type }}</p>
-                    <p>Тип: {{ current_project.type }}</p>
-                    <p>Статус: {{ current_project.status }}</p>
-                    <p>Затраченное время, час.: {{ hours }} час {{ minutes }}  мин {{ seconds|floatformat:0 }} сек</p>
-                    <p>Выполнен на: {{ current_project.percentage }} %</p>
-                    <p><i>Участники:
+                    <p>{% trans "Бюджет" %}: {{ current_project.cost }} {{ current_project.currency.shortname }}<i> ({% trans "Освоено" %}: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
+                    <p>{% trans "Исполнитель" %}: {{ current_project.assigner }}</p>
+                    <p>{% trans "Начало" %}: {{ current_project.datebegin }}</p>
+                    <p>{% trans "Окончание" %}: {{ current_project.dateend }}</p>
+                    <p>{% trans "Тип в иерархии" %}: {{ current_project.structure_type }}</p>
+                    <p>{% trans "Тип" %}: {{ current_project.type }}</p>
+                    <p>{% trans "Статус" %}: {{ current_project.status }}</p>
+                    <p>{% trans "Затраченное время, час." %}: {{ hours }} {% trans "час" %} {{ minutes }} {% trans "мин" %} {{ seconds|floatformat:0 }} {% trans "сек" %}</p>
+                    <p>{% trans "Выполнен на" %}: {{ current_project.percentage }} %</p>
+                    <p><i>{% trans "Участники" %}:
                         {% for u in current_project.members.all %}
-                            <span class="hint hint--bottom hint--info" data-hint="Профиль"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
+                            <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a href="{% url 'my_account:userprofile_detail' u.pk ' ' %}">{{ u.username }}</a>,</span>&nbsp;
                         {% endfor %}
                     </i></p>
-                    <p><em>Автор: {{ current_project.author }}</em></p>
-                    <!--<em>Участники: { current_project.members.name }}</em><br /> -->
-                    <p><em>Дата: {{ current_project.datecreate }}</em></p>
+                    <em>{% trans "Автор" %}: {{ current_project.author }}</em><br />
+                    <!--<em>Участники: { current_project.members.name }}</em> -->
+                    <em>{% trans "Дата" %}: {{ current_project.datecreate }}</em>
                     <!--<p>&nbsp;</p>       -->
                     <br />
                 </div>
@@ -60,7 +62,7 @@
 
     {% else %}
 
-        <h4>Информация о проекте недоступна!</h4> <!--{ current_company.id }}/{ user_companies }}-->
+        <h4>{% trans "Информация о проекте недоступна!" %}</h4> <!--{ current_company.id }}/{ user_companies }}-->
 
     {% endif %}
 
@@ -72,7 +74,7 @@
 
         <div class="object-list">
 
-            <h4>Задачи</h4>
+            <h4>{% trans "Задачи" %}</h4>
 
             <!--{ if len_list %}-->
 
@@ -80,25 +82,25 @@
             <form method="GET">
                 {% csrf_token %}
                 <div class="object-list-filters">
-                    <label>Фильтр по статусу: </label>
+                    <label>{% trans "По статусу" %}: </label>
                     <select name="select_taskstatus" id="selectid" class="select-task-status">
-                        <option value="-1" {% if "-1" == tskstatus_selectid %} selected="selected" {% endif %}>- Все</option>
-                        <option value="0" {% if 0 == tskstatus_selectid|add:"0" %} selected="selected" {% endif %}>- Все активные</option>
-                        <option value="-2" {% if "-2" == tskstatus_selectid %} selected="selected" {% endif %}>- Просроченные</option>
+                        <option value="-1" {% if "-1" == tskstatus_selectid %} selected="selected" {% endif %}>- {% trans "Все" %}</option>
+                        <option value="0" {% if 0 == tskstatus_selectid|add:"0" %} selected="selected" {% endif %}>- {% trans "Все активные" %}</option>
+                        <option value="-2" {% if "-2" == tskstatus_selectid %} selected="selected" {% endif %}>- {% trans "Просроченные" %}</option>
                         {% for tskstatus in taskstatus %}
                             <option value="{{tskstatus.id}}" {% if tskstatus.id == tskstatus_selectid|add:"0" %} selected="selected" {% endif %}>
                                 {{tskstatus.name}}
                             </option>
                         {% endfor %}
                     </select>
-                    <label>Мои задачи: </label>
+                    <label>{% trans "Мои задачи" %}: </label>
                     <select name="select-mytask" id="myselectid" class="select-my-task">
-                        <option value="-1" {% if "-1" == tskstatus_myselectid %} selected="selected" {% endif %}>- Все</option>
-                        <option value="0" {% if "0" == tskstatus_myselectid %} selected="selected" {% endif %}>- Я участник</option>
-                        <option value="1" {% if "1" == tskstatus_myselectid %} selected="selected" {% endif %}>- Я автор</option>
-                        <option value="2" {% if "2" == tskstatus_myselectid %} selected="selected" {% endif %}>- Я исполнитель</option>
+                        <option value="-1" {% if "-1" == tskstatus_myselectid %} selected="selected" {% endif %}>- {% trans "Все" %}</option>
+                        <option value="0" {% if "0" == tskstatus_myselectid %} selected="selected" {% endif %}>- {% trans "Я участник" %}</option>
+                        <option value="1" {% if "1" == tskstatus_myselectid %} selected="selected" {% endif %}>- {% trans "Я автор" %}</option>
+                        <option value="2" {% if "2" == tskstatus_myselectid %} selected="selected" {% endif %}>- {% trans "Я исполнитель" %}</option>
                     </select>
-                    <button id="selection-button" type="submit" method="GET" class="object-filter-button">Применить</button>
+                    <button id="selection-button" type="submit" method="GET" class="object-filter-button">{% trans "Применить" %}</button>
                 </div>
                 <!--<button type="submit">Применить</button>-->
             </form>
@@ -106,38 +108,6 @@
             <div id="ajax_tsk_listresult">{% include 'objects_list.html' %}</div>
             <div id="ajax_tsk_listerrors"></div>
 
-            <!--{ else %}
-
-               <p>Задач пока нет...</p>
-
-            { endif %}         -->
-
-            <!--
-                    { load mptt_tags %}
-
-                    <ul>
-                      { recursetree nodes %}
-                         <!-{ if node.project_id projectid %}->
-                            { if user.is_authenticated and node.is_active %}
-                               <li>
-                                 <b><a href="{ url 'my_project:task_detail' node.pk %}">
-                                 <!- <a href="{ url 'my_project:tasks' current_project.id node.pk %}">->
-                                 { node.name }}</a> : <span style="font-size: 70%; color: brown;">{ node.datebegin }} - { node.dateend }} |
-                                    { node.status.name }} |
-                                    <span class="hint hint--bottom hint--info" data-hint="Профиль"><a style="color: brown;" href="{ url 'my_account:userprofile_detail' node.author.pk ' ' %}"><i>{ node.author.username }}</i></a></span> |
-                                    { node.cost }}</span></b>
-                                 { if not node.is_leaf_node %}
-                                    <ul class="children">
-                                       { children }}
-                                    </ul>
-                                 { endif %}
-                               </li>
-                            { endif %}
-                         <!-{ endif %}->
-                      { endrecursetree %}
-                    </ul>
-            -->
-            <!--<a href="{ url 'my_project:task_create' project.pk %}" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>-->
             <div class="object-list-buttons">
                 <a href="{% url 'my_project:task_create' projectid 0 %}">{{ button_task_create }}</a>
             </div>
@@ -196,7 +166,7 @@
         </script>
 
     {% else %}
-        <h5>Информация о задачах недоступна!</h5>
+        <h5>{% trans "Информация о задачах недоступна!" %}</h5>
     {% endif %}
 
 {% endblock list %}

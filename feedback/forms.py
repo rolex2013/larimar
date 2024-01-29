@@ -204,7 +204,7 @@ class FeedbackTaskForm(forms.ModelForm):
                         )
                         objecttypeid = Meta_ObjectType.objects.get(shortname="tsk").id
                         send_mail(
-                            _("1Yes! Ваша Задача закрыта."),
+                            _("1YES! Ваша Задача закрыта."),
                             _("Уведомляем о закрытии Вашей Задачи!"),
                             settings.EMAIL_HOST_USER,
                             [user_profile.email],
@@ -228,7 +228,7 @@ class FeedbackTaskForm(forms.ModelForm):
                 )
                 objecttypeid = Meta_ObjectType.objects.get(shortname="tsk").id
                 send_mail(
-                    _("1Yes! Вы назначены исполнителем Задачи."),
+                    _("1YES! Вы назначены исполнителем Задачи."),
                     _("Уведомляем о назначении Вам Задачи!"),
                     settings.EMAIL_HOST_USER,
                     [user_profile.email],

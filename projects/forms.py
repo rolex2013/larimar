@@ -1,13 +1,13 @@
 # from django.http import HttpResponse
 # from ckeditor.widgets import CKEditorWidget
-import requests
+# import requests
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from .models import Project, Task, TaskComment, ProjectFile  # , Company
+from .models import Project, Task, TaskComment  # , ProjectFile  # , Company
 
 # from .models import ProjectStatusLog, TaskStatusLog
-from .models import Dict_ProjectStatus, Dict_TaskStatus
+# from .models import Dict_TaskStatus, Dict_ProjectStatus
 from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
@@ -33,7 +33,7 @@ class DateInput(forms.DateInput):
 
 class ProjectForm(forms.ModelForm):
     files = forms.FileField(
-        label="Файлы проекта",
+        label=_("Файлы проекта"),
         widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
@@ -58,8 +58,8 @@ class ProjectForm(forms.ModelForm):
                         )
                         objecttypeid = Meta_ObjectType.objects.get(shortname="prj").id
                         send_mail(
-                            "1YES. Ваш Проект закрыт.",
-                            "Уведомляем о закрытии Вашего Проекта!",
+                            _("1YES! Ваш Проект закрыт."),
+                            _("Уведомляем о закрытии Вашего Проекта!"),
                             settings.EMAIL_HOST_USER,
                             [user_profile.email],
                         )
@@ -69,8 +69,8 @@ class ProjectForm(forms.ModelForm):
                             objecttype_id=objecttypeid,
                             objectid=self.initial["id"],
                             sendfrom=settings.EMAIL_HOST_USER,
-                            theme="Ваш Проект закрыт!",
-                            text="Уведомляем о закрытии Вашего Проекта.",
+                            theme=_("Ваш Проект закрыт!"),
+                            text=_("Уведомляем о закрытии Вашего Проекта."),
                             recipient_id=self.initial["author"],
                             sendto=user_profile.email,
                             author_id=self.user.id,
@@ -90,8 +90,9 @@ class ProjectForm(forms.ModelForm):
                     objecttype_id=objecttypeid,
                     objectid=self.initial["id"],
                     sendfrom=settings.EMAIL_HOST_USER,
-                    theme="Вы назначены исполнителем Проекта.",
-                    text='Уведомляем о назначении Вам Проекта "'
+                    theme=_("Вы назначены исполнителем Проекта."),
+                    text=_("Уведомляем о назначении Вам Проекта")
+                    + ' "'
                     + self.cleaned_data["name"]
                     + '".',
                     recipient_id=self.cleaned_data["assigner"].id,
@@ -162,7 +163,7 @@ class ProjectForm(forms.ModelForm):
 
 class TaskForm(forms.ModelForm):
     files = forms.FileField(
-        label="Файлы задачи",
+        label=_("Файлы задачи"),
         widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
@@ -188,8 +189,8 @@ class TaskForm(forms.ModelForm):
                         )
                         objecttypeid = Meta_ObjectType.objects.get(shortname="tsk").id
                         send_mail(
-                            "1Yes! Ваша Задача закрыта.",
-                            "Уведомляем о закрытии Вашей Задачи!",
+                            _("1YES! Ваша Задача закрыта."),
+                            _("Уведомляем о закрытии Вашей Задачи!"),
                             settings.EMAIL_HOST_USER,
                             [user_profile.email],
                         )
@@ -198,8 +199,8 @@ class TaskForm(forms.ModelForm):
                             objecttype_id=objecttypeid,
                             objectid=self.initial["id"],
                             sendfrom=settings.EMAIL_HOST_USER,
-                            theme="Ваша Задача закрыта.",
-                            text="Уведомляем о закрытии Вашей Задачи!",
+                            theme=_("Ваша Задача закрыта."),
+                            text=_("Уведомляем о закрытии Вашей Задачи!"),
                             recipient_id=self.initial["author"],
                             sendto=user_profile.email,
                             author_id=self.user.id,
@@ -212,8 +213,8 @@ class TaskForm(forms.ModelForm):
                 )
                 objecttypeid = Meta_ObjectType.objects.get(shortname="tsk").id
                 send_mail(
-                    "1Yes! Вы назначены исполнителем Задачи.",
-                    "Уведомляем о назначении Вам Задачи!",
+                    _("1YES! Вы назначены исполнителем Задачи."),
+                    _("Уведомляем о назначении Вам Задачи!"),
                     settings.EMAIL_HOST_USER,
                     [user_profile.email],
                 )
@@ -222,8 +223,9 @@ class TaskForm(forms.ModelForm):
                     objecttype_id=objecttypeid,
                     objectid=self.initial["id"],
                     sendfrom=settings.EMAIL_HOST_USER,
-                    theme="Вы назначены исполнителем Задачи.",
-                    text='Уведомляем о назначении Вам Задачи "'
+                    theme=_("Вы назначены исполнителем Задачи."),
+                    text=_("Уведомляем о назначении Вам Задачи")
+                    + ' "'
                     + self.cleaned_data["name"]
                     + '".',
                     recipient_id=self.cleaned_data["assigner"],
@@ -318,7 +320,7 @@ class TaskForm(forms.ModelForm):
 
 class TaskCommentForm(forms.ModelForm):
     files = forms.FileField(
-        label="Файлы комментария",
+        label=_("Файлы комментария"),
         widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
