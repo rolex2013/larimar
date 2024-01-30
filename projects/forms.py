@@ -51,7 +51,9 @@ class ProjectForm(forms.ModelForm):
                     self.cleaned_data["dateclose"] = datetime.datetime.today()
                     self.cleaned_data["percentage"] = 100
                     if self.user.id != self.initial["author"]:
-                        # если проект закрывается Исполнителем, то уведомление отсылается Автору
+                        """
+                        Сообщение и Уведомление высылаются Автору Задачи, если её завершил не он
+                        """
                         # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                         user_profile = UserProfile.objects.get(
                             user=self.initial["author"], is_active=True
@@ -180,9 +182,12 @@ class TaskForm(forms.ModelForm):
         if self.action == "update":
             if self.cleaned_data["status"].id != self.initial["status"]:
                 if self.cleaned_data["status"].is_close:
+                    self.cleaned_data["dateclose"] = datetime.datetime.today()
+                    self.cleaned_data["percentage"] = 100
                     if self.user.id != self.initial["author"]:
-                        self.cleaned_data["dateclose"] = datetime.datetime.today()
-                        self.cleaned_data["percentage"] = 100
+                        """
+                        Сообщение и Уведомление высылаются Автору Задачи, если её завершил не он
+                        """
                         # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                         user_profile = UserProfile.objects.get(
                             user=self.initial["author"], is_active=True
@@ -292,22 +297,6 @@ class TaskForm(forms.ModelForm):
             "id",
             "author",
         ]
-        # widgets = {
-        #     "datebegin": DateTimePickerInput(
-        #         options={"format": "DD.MM.YY HH:MM"}
-        #     ),  # default date-format %m/%d/%Y will be used
-        #     "dateend": DateTimePickerInput(
-        #         options={"format": "DD.MM.YY HH:MM"}
-        #     ),  # specify date-frmat
-        # }
-        # widgets = {
-        #     "datebegin": DateTime_PickerInput(),
-        #     "dateend": DateTime_PickerInput(),
-        # }
-        # widgets = {
-        #     "datebegin": AdminDateWidget(),
-        #     "dateend": AdminDateWidget(),
-        # }
         widgets = {
             "datebegin": forms.DateTimeInput(
                 attrs={"class": "form-control", "type": "datetime-local"}

@@ -52,11 +52,13 @@ class ClientForm(forms.ModelForm):
         if self.action == "update":
             if self.cleaned_data["status"].id != self.initial["status"]:
                 if self.cleaned_data["status"].is_close:  # == "Выполнен":
+                    self.cleaned_data["dateclose"] = datetime.datetime.today()
+                    # self.cleaned_data['percentage'] = 100
+                    # self.cleaned_data['phone'] = '+7(999)999-9998'
                     if self.user.id != self.initial["author"]:
-                        # если Клиент закрывается Менеджером, то уведомление отсылается Автору
-                        self.cleaned_data["dateclose"] = datetime.datetime.today()
-                        # self.cleaned_data['percentage'] = 100
-                        # self.cleaned_data['phone'] = '+7(999)999-9998'
+                        """
+                        Сообщение и Уведомление высылаются Автору Клиента, если его завершил не он
+                        """
                         # #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                         user_profile = UserProfile.objects.get(
                             user=self.initial["author"], is_active=True
@@ -186,11 +188,16 @@ class ClientTaskForm(forms.ModelForm):
             self.cleaned_data["dateend"] = self.cleaned_data["datebegin"]
         # здесь надо поставить проверку на view.TaskUpdate
         if self.action == "update":
+            print("update")
             if self.cleaned_data["status"].id != self.initial["status"]:
+                print("status changed")
                 if self.cleaned_data["status"].is_close:
+                    self.cleaned_data["dateclose"] = datetime.datetime.today()
+                    self.cleaned_data["percentage"] = 100
                     if self.user.id != self.initial["author"]:
-                        self.cleaned_data["dateclose"] = datetime.datetime.today()
-                        self.cleaned_data["percentage"] = 100
+                        """
+                        Сообщение и Уведомление высылаются Автору Задачи, если её завершил не он
+                        """
                         # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                         user_profile = UserProfile.objects.get(
                             user=self.initial["author"], is_active=True
@@ -344,8 +351,11 @@ class ClientEventForm(forms.ModelForm):
         if self.action == "update":
             if self.cleaned_data["status"].id != self.initial["status"]:
                 if self.cleaned_data["status"].is_close:
+                    self.cleaned_data["dateclose"] = datetime.datetime.today()
                     if self.user.id != self.initial["author"]:
-                        self.cleaned_data["dateclose"] = datetime.datetime.today()
+                        """
+                        Сообщение и Уведомление высылаются Автору События, если его завершил не он
+                        """
                         user_profile = UserProfile.objects.get(
                             user=self.initial["author"], is_active=True
                         )

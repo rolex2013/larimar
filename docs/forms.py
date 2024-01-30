@@ -8,6 +8,7 @@ from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
+
 # from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
 from django.contrib.auth.context_processors import auth
 import datetime
@@ -40,7 +41,9 @@ class DocForm(forms.ModelForm):
                     self.cleaned_data["datepublic"] = datetime.datetime.today()
                     self.cleaned_data["is_public"] = True
                     if self.user.id != self.initial["author"]:
-                        # если Документ публикуется Менеджером, то уведомление отсылается Автору
+                        """
+                        Сообщение и Уведомление высылаются Автору Документа, если его завершил не он
+                        """
                         # self.cleaned_data['percentage'] = 100
                         # self.cleaned_data['phone'] = '+7(999)999-9998'
                         # #user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
@@ -70,6 +73,9 @@ class DocForm(forms.ModelForm):
                     self.cleaned_data["datepublic"] = None
                     self.cleaned_data["is_public"] = False
             elif self.cleaned_data["manager"].id != self.initial["manager"]:
+                """
+                Сообщение и Уведомление высылаются Менеджеру Документа, если не он сам себя назначил
+                """
                 user_profile = UserProfile.objects.get(
                     user=self.cleaned_data["manager"].id, is_active=True
                 )
@@ -166,9 +172,12 @@ class DocTaskForm(forms.ModelForm):
         if self.action == "update":
             if self.cleaned_data["status"].id != self.initial["status"]:
                 if self.cleaned_data["status"].is_close:
+                    self.cleaned_data["dateclose"] = datetime.datetime.today()
+                    self.cleaned_data["percentage"] = 100
                     if self.user.id != self.initial["author"]:
-                        self.cleaned_data["dateclose"] = datetime.datetime.today()
-                        self.cleaned_data["percentage"] = 100
+                        """
+                        Сообщение и Уведомление высылаются Автору Задачи, если её завершил не он
+                        """
                         # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                         user_profile = UserProfile.objects.get(
                             user=self.initial["author"], is_active=True

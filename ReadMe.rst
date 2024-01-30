@@ -2,7 +2,7 @@
 <img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/></h1>
 <h3 align="center">Проект независимой группы разработчиков<br />"Larimar IT Group"</h3>
 
-Реализован на Python Django 4.
+Реализован на Python Django 4.1.7
 
 Для тестирования доступен функционирующий прототип по адресу: http://1yes.larimaritgroup.ru
 

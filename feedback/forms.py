@@ -76,7 +76,9 @@ class FeedbackTicketForm(forms.ModelForm):
                     # self.cleaned_data['percentage'] = 100
                     # print(self.initial['author'])
                     if self.user.id != self.initial["author"]:
-                        # если Тикет закрывается Исполнителем из Службы Техподдержки, то уведомление отсылается Автору
+                        """
+                        Если Тикет закрывается Исполнителем из Службы Техподдержки, то уведомление отсылается Автору
+                        """
                         # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                         user_profile = UserProfile.objects.get(
                             user=self.initial["author"], is_active=True
@@ -195,9 +197,12 @@ class FeedbackTaskForm(forms.ModelForm):
                 #                             status_id=dict_status.id,
                 #                             author_id=self.user.id)
                 if self.cleaned_data["status"].is_close:
-                    if self.user.id != self.initial["author"]:
-                        self.cleaned_data["dateclose"] = datetime.datetime.today()
-                        self.cleaned_data["percentage"] = 100
+                    self.cleaned_data["dateclose"] = datetime.datetime.today()
+                    self.cleaned_data["percentage"] = 100
+                    if self.user.id != self.initial["author"]:                        
+                        """
+                        Сообщение и Уведомление высылаются Автору задачи, если её завершил не он
+                        """
                         # user_profile = UserProfile.objects.get(user=self.user.id, is_active=True)
                         user_profile = UserProfile.objects.get(
                             user=self.initial["author"], is_active=True
