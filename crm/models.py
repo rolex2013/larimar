@@ -17,20 +17,14 @@ from dashboard.utils import SetPropertiesDashboardMixin
 from datetime import datetime
 
 from django.utils.translation import gettext_lazy as _
-from main.utils_lang import TranslateFieldMixin
-from main.utils_model import Dict_Model, Comment_Model
+
+# from main.utils_lang import TranslateFieldMixin
+from main.utils_model import Dict_Model, Task_Model, Comment_Model
 
 exposed_request = ""
 
 
-class Dict_ClientType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    description_ru = models.TextField(_("Описание_ru"), blank=True, null=True)
-    description_en = models.TextField(_("Описание_en"), blank=True, null=True)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_ClientType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
@@ -40,22 +34,12 @@ class Dict_ClientType(TranslateFieldMixin, models.Model):
         return self.trans_field(exposed_request, "description")
 
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип клиента")
         verbose_name_plural = _("Типы клиентов")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_ClientStatus(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    description_ru = models.TextField(_("Описание_ru"), blank=True, null=True)
-    description_en = models.TextField(_("Описание_en"), blank=True, null=True)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+class Dict_ClientStatus(Dict_Model):
     is_close = models.BooleanField(_("Закрывает клиента"), default=False)
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
     def name(self):
@@ -66,128 +50,92 @@ class Dict_ClientStatus(TranslateFieldMixin, models.Model):
         return self.trans_field(exposed_request, "description")
 
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Статус клиента")
         verbose_name_plural = _("Статусы клиентов")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_ClientTaskStatus(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+class Dict_ClientTaskStatus(Dict_Model):
     is_close = models.BooleanField(_("Закрывает задачу"), default=False)
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Статус задачи")
         verbose_name_plural = _("Статусы задач")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_ClientTaskStructureType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_ClientTaskStructureType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип задачи в иерархии")
         verbose_name_plural = _("Типы задач в иерархии")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_ClientTaskType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_ClientTaskType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип задачи")
         verbose_name_plural = _("Типы задач")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_ClientEventType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_ClientEventType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип события")
         verbose_name_plural = _("Типы событий")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_ClientEventStatus(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+class Dict_ClientEventStatus(Dict_Model):
     is_close = models.BooleanField(_("Закрывает событие"), default=False)
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Статус события")
         verbose_name_plural = _("Статусы событий")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_ClientInitiator(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_ClientInitiator(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Инициатор")
         verbose_name_plural = _("Инициаторы")
-
-    def __str__(self):
-        return self.name
 
 
 class Client(models.Model):
@@ -294,11 +242,8 @@ class Client(models.Model):
         verbose_name_plural = _("Клиенты")
 
 
-class ClientTask(SetPropertiesDashboardMixin, MPTTModel):
-    name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"), null=True, blank=True)
-    datebegin = models.DateTimeField(_("Начало"))
-    dateend = models.DateTimeField(_("Окончание"))
+class ClientTask(SetPropertiesDashboardMixin, Task_Model):
+    cost = models.DecimalField(_("Стоимость"), max_digits=12, decimal_places=2)
     client = models.ForeignKey(
         "Client",
         on_delete=models.CASCADE,
@@ -319,10 +264,6 @@ class ClientTask(SetPropertiesDashboardMixin, MPTTModel):
         on_delete=models.CASCADE,
         related_name="clienttask_assigner",
         verbose_name=_("Исполнитель"),
-    )
-    cost = models.DecimalField(_("Стоимость"), max_digits=12, decimal_places=2)
-    percentage = models.DecimalField(
-        _("Процент выполнения"), max_digits=5, decimal_places=2, default=0
     )
     structure_type = models.ForeignKey(
         "Dict_ClientTaskStructureType",
@@ -348,10 +289,6 @@ class ClientTask(SetPropertiesDashboardMixin, MPTTModel):
         related_name="clienttask_status",
         verbose_name=_("Статус"),
     )
-    datecreate = models.DateTimeField(_("Дата создания"), auto_now_add=True)
-    dateclose = models.DateTimeField(
-        _("Дата закрытия"), auto_now_add=False, blank=True, null=True
-    )
     author = models.ForeignKey(
         "auth.User",
         on_delete=models.CASCADE,
@@ -365,7 +302,6 @@ class ClientTask(SetPropertiesDashboardMixin, MPTTModel):
         related_name="clienttask_initiator",
         verbose_name=_("Инициатор"),
     )
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
     def object_name(self):
@@ -520,12 +456,7 @@ class ClientEventComment(Comment_Model):
         default=0,
     )
     cost = models.DecimalField(
-        _("Стоимость"),
-        max_digits=9,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        default=0
+        _("Стоимость"), max_digits=9, decimal_places=2, blank=True, null=True, default=0
     )
 
     def get_absolute_url(self):

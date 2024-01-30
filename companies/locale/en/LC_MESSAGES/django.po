@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 13:58+0300\n"
+"POT-Creation-Date: 2024-01-30 16:17+0300\n"
 "PO-Revision-Date: 2023-12-20 13:45+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,24 +19,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: companies/models.py:24 companies/models.py:44 companies/models.py:64
-#: companies/models.py:412 companies/models.py:432
-msgid "Наименование_ru"
-msgstr "Company structure type"
-
-#: companies/models.py:25 companies/models.py:45 companies/models.py:65
-#: companies/models.py:413 companies/models.py:433
-msgid "Наименование_en"
-msgstr "Company structure type"
-
-#: companies/models.py:28 companies/models.py:48 companies/models.py:68
-#: companies/models.py:122 companies/models.py:178 companies/models.py:242
-#: companies/models.py:281 companies/models.py:323 companies/models.py:386
-#: companies/models.py:416 companies/models.py:436
-msgid "Активность"
-msgstr "Is active"
-
-#: companies/models.py:36 companies/models.py:107
+#: companies/models.py:36 companies/models.py:120
 #: companies/templates/company_detail.html:71
 msgid "Тип в оргструктуре"
 msgstr "Type in the organizational structure"
@@ -45,227 +28,232 @@ msgstr "Type in the organizational structure"
 msgid "Типы в оргструктуре"
 msgstr "Types in the organizational structure"
 
-#: companies/models.py:56
+#: companies/models.py:50
 msgid "Тип организации"
 msgstr "Company type"
 
-#: companies/models.py:57
+#: companies/models.py:51
 msgid "Типы организаций"
 msgstr "Company types"
 
-#: companies/models.py:76 companies/models.py:226
+#: companies/models.py:64 companies/models.py:239
 msgid "Тип должности"
 msgstr "Position type"
 
-#: companies/models.py:77
+#: companies/models.py:65
 msgid "Типы должностей"
 msgstr "Position types"
 
-#: companies/models.py:84 companies/models.py:219
+#: companies/models.py:78
+msgid "Тип контента"
+msgstr "Content Type"
+
+#: companies/models.py:79
+msgid "Типы контента"
+msgstr "Content Types"
+
+#: companies/models.py:92
+msgid "Место отображения контента"
+msgstr "Content Display Location"
+
+#: companies/models.py:93
+msgid "Места отображения контента"
+msgstr "Content Display Locations"
+
+#: companies/models.py:97 companies/models.py:232
 msgid "Наименование"
 msgstr "Name"
 
-#: companies/models.py:86 companies/models.py:220 companies/models.py:320
+#: companies/models.py:99 companies/models.py:233 companies/models.py:333
 msgid "Описание"
 msgstr "Description"
 
-#: companies/models.py:94
+#: companies/models.py:107
 msgid "Головная организация"
 msgstr "Main Organization"
 
-#: companies/models.py:100 companies/models.py:232
+#: companies/models.py:113 companies/models.py:245
 msgid "Валюта"
 msgstr "Currency"
 
-#: companies/models.py:114 companies/models.py:365
+#: companies/models.py:127 companies/models.py:378
 #: companies/templates/company_detail.html:72
 #: companies/templates/content_detail.html:21
 #: companies/templates/stafflist_detail.html:33
 msgid "Тип"
 msgstr "Type"
 
-#: companies/models.py:116
+#: companies/models.py:129
 msgid "Служба техподдержки"
 msgstr "Technical Support"
 
-#: companies/models.py:118 companies/models.py:237 companies/models.py:277
+#: companies/models.py:131 companies/models.py:250 companies/models.py:290
 msgid "Создана"
 msgstr "Created"
 
-#: companies/models.py:120 companies/models.py:239 companies/models.py:279
-#: companies/models.py:374 companies/templates/company_detail.html:73
+#: companies/models.py:133 companies/models.py:252 companies/models.py:292
+#: companies/models.py:387 companies/templates/company_detail.html:73
 #: companies/templates/stafflist_detail.html:34
 msgid "Автор"
 msgstr "Author"
 
-#: companies/models.py:135 companies/models.py:164 companies/models.py:217
+#: companies/models.py:135 companies/models.py:191 companies/models.py:255
+#: companies/models.py:294 companies/models.py:336 companies/models.py:399
+msgid "Активность"
+msgstr "Is active"
+
+#: companies/models.py:148 companies/models.py:177 companies/models.py:230
 #: companies/templates/company_detail.html:36
 #: companies/templates/company_user_detail.html:12
 msgid "Организация"
 msgstr "Organization"
 
-#: companies/models.py:136 companies/models.py:369
+#: companies/models.py:149 companies/models.py:382
 #: companies/templates/companies.html:29
 msgid "Организации"
 msgstr "Organizations"
 
-#: companies/models.py:158 companies/models.py:270
+#: companies/models.py:171 companies/models.py:283
 #: companies/templates/company_user_detail.html:13
 msgid "Пользователь"
 msgstr "User"
 
-#: companies/models.py:170 companies/templates/company_user_roles_list.html:21
+#: companies/models.py:183 companies/templates/company_user_roles_list.html:21
 msgid "Компонент"
 msgstr "Component"
 
-#: companies/models.py:176 companies/templates/company_user_roles_list.html:30
+#: companies/models.py:189 companies/templates/company_user_roles_list.html:30
 msgid "Группа"
 msgstr "Group"
 
-#: companies/models.py:194
+#: companies/models.py:207
 msgid "Пользователь и Группа Организации и Компонента"
 msgstr "User & Organization Group & Component"
 
-#: companies/models.py:195
+#: companies/models.py:208
 msgid "Пользователи и Группы Организаций и Компонентов"
 msgstr "Users & Organization Groups & Components"
 
-#: companies/models.py:210
+#: companies/models.py:223
 msgid "Головная должность"
 msgstr "Main Position"
 
-#: companies/models.py:234 companies/templates/stafflist_detail.html:27
+#: companies/models.py:247 companies/templates/stafflist_detail.html:27
 msgid "Оклад"
 msgstr "Salary"
 
-#: companies/models.py:235 companies/templates/stafflist_detail.html:28
+#: companies/models.py:248 companies/templates/stafflist_detail.html:28
 msgid "Кол-во сотрудников"
 msgstr "Number of employees"
 
-#: companies/models.py:236 companies/templates/stafflist_detail.html:31
+#: companies/models.py:249 companies/templates/stafflist_detail.html:31
 msgid "Описание вакансии"
 msgstr "Job description"
 
-#: companies/models.py:241
+#: companies/models.py:254
 msgid "Вакансия"
 msgstr "Vacancy"
 
-#: companies/models.py:254 companies/templates/company_detail.html:139
+#: companies/models.py:267 companies/templates/company_detail.html:139
 #: companies/views.py:79
 msgid "Штатное расписание"
 msgstr "Staff list"
 
-#: companies/models.py:255
+#: companies/models.py:268
 msgid "Штатные расписания"
 msgstr "Staff list"
 
-#: companies/models.py:264 companies/models.py:310
+#: companies/models.py:277 companies/models.py:323
 msgid "Должность"
 msgstr "Position"
 
-#: companies/models.py:273
+#: companies/models.py:286
 msgid "Ставка (0,1 - 1)"
 msgstr "Rate (0.1 - 1)"
 
-#: companies/models.py:275
+#: companies/models.py:288
 msgid "Начало работы"
 msgstr "Start of work"
 
-#: companies/models.py:276
+#: companies/models.py:289
 msgid "Окончание работы"
 msgstr "Completion of work"
 
-#: companies/models.py:300
+#: companies/models.py:313
 msgid "Сотрудник"
 msgstr "Employee"
 
-#: companies/models.py:301 companies/templates/stafflist_detail.html:80
+#: companies/models.py:314 companies/templates/stafflist_detail.html:80
 msgid "Сотрудники"
 msgstr "Employees"
 
-#: companies/models.py:312
+#: companies/models.py:325
 msgid "Тема"
 msgstr "Theme"
 
-#: companies/models.py:313
+#: companies/models.py:326
 msgid "Имя"
 msgstr "Name"
 
-#: companies/models.py:315
+#: companies/models.py:328
 msgid "Отчество"
 msgstr "Second Name"
 
-#: companies/models.py:317
+#: companies/models.py:330
 msgid "Фамилия"
 msgstr "Last Name"
 
-#: companies/models.py:318 companies/templates/company_user_detail.html:19
+#: companies/models.py:331 companies/templates/company_user_detail.html:19
 msgid "E-mail"
 msgstr "E-mail"
 
-#: companies/models.py:319
+#: companies/models.py:332
 msgid "Телефон"
 msgstr "Phone"
 
-#: companies/models.py:321
+#: companies/models.py:334
 msgid "Создано"
 msgstr "Created"
 
-#: companies/models.py:348 companies/models.py:349
+#: companies/models.py:361 companies/models.py:362
 msgid "Резюме"
 msgstr "CV"
 
-#: companies/models.py:354
+#: companies/models.py:367
 msgid "Заголовок"
 msgstr "Header"
 
-#: companies/models.py:355
+#: companies/models.py:368
 msgid "Анонс"
 msgstr "Announcement"
 
-#: companies/models.py:356
+#: companies/models.py:369
 msgid "Текст"
 msgstr "Text"
 
-#: companies/models.py:357
+#: companies/models.py:370
 msgid "Начало"
 msgstr "Start"
 
-#: companies/models.py:358
+#: companies/models.py:371
 msgid "Окончание"
 msgstr "End"
 
-#: companies/models.py:359
+#: companies/models.py:372
 msgid "Всегда наверху"
 msgstr "Always at the top"
 
-#: companies/models.py:371 companies/templates/company_user_detail.html:25
+#: companies/models.py:384 companies/templates/company_user_detail.html:25
 msgid "Создан"
 msgstr "Created"
 
-#: companies/models.py:384
+#: companies/models.py:397
 msgid "Место"
 msgstr "Place"
 
-#: companies/models.py:407 companies/models.py:408
+#: companies/models.py:420 companies/models.py:421
 msgid "Контент"
 msgstr "Content"
-
-#: companies/models.py:424
-msgid "Тип контента"
-msgstr "Content Type"
-
-#: companies/models.py:425
-msgid "Типы контента"
-msgstr "Content Types"
-
-#: companies/models.py:444
-msgid "Место отображения контента"
-msgstr "Content Display Location"
-
-#: companies/models.py:445
-msgid "Места отображения контента"
-msgstr "Content Display Locations"
 
 #: companies/templates/companies.html:27
 msgid "Организации техподдержки"
@@ -573,6 +561,12 @@ msgstr "\"This\" role has already been assigned!"
 #: companies/views.py:795
 msgid "Добавить роль"
 msgstr "Add role"
+
+#~ msgid "Наименование_ru"
+#~ msgstr "Company structure type"
+
+#~ msgid "Наименование_en"
+#~ msgstr "Company structure type"
 
 #, fuzzy
 #~ msgid "Организации======="

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 13:58+0300\n"
+"POT-Creation-Date: 2024-01-30 16:17+0300\n"
 "PO-Revision-Date: 2024-01-25 19:15+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,68 +23,68 @@ msgstr ""
 msgid "Файлы папки"
 msgstr "Folder Files"
 
-#: files/models.py:53
+#: files/models.py:32
 msgid "Тип содержимого папки"
 msgstr "Folder Content Type"
 
-#: files/models.py:54
+#: files/models.py:33
 msgid "Типы содержимого папок"
 msgstr "Folder Content Types"
 
-#: files/models.py:58 files/models.py:124
+#: files/models.py:37 files/models.py:103
 msgid "Наименование"
 msgstr "Name"
 
-#: files/models.py:59
+#: files/models.py:38
 msgid "Описание"
 msgstr "Description"
 
-#: files/models.py:64
+#: files/models.py:43
 msgid "Компания"
 msgstr "Company"
 
-#: files/models.py:73 files/templates/folder_detail.html:19
+#: files/models.py:52 files/templates/folder_detail.html:19
 msgid "Папка верхнего уровня"
 msgstr "Top-level folder"
 
-#: files/models.py:80 files/templates/folder_detail.html:28
+#: files/models.py:59 files/templates/folder_detail.html:28
 msgid "Тематика"
 msgstr "Subject"
 
-#: files/models.py:87 files/templates/folder_detail.html:29
+#: files/models.py:66 files/templates/folder_detail.html:29
 msgid "Тип"
 msgstr "Type"
 
-#: files/models.py:91 files/models.py:141
+#: files/models.py:70 files/models.py:120
 msgid "Создан"
 msgstr "Created"
 
-#: files/models.py:97 files/models.py:147 files/templates/folder_detail.html:30
+#: files/models.py:76 files/models.py:126 files/templates/folder_detail.html:30
 #: files/templates/folder_detail.html:91 files/templates/folder_detail.html:135
 msgid "Автор"
 msgstr "Author"
 
-#: files/models.py:100 files/models.py:149
+#: files/models.py:79 files/models.py:128
 msgid "Активность"
 msgstr "Activity"
 
-#: files/models.py:119 files/models.py:134
+#: files/models.py:98 files/models.py:113
 msgid "Папка"
 msgstr "Folder"
 
-#: files/models.py:120 files/templates/folder_detail.html:65
+#: files/models.py:99 files/templates/folder_detail.html:65
 msgid "Папки"
 msgstr "Folders"
 
-#: files/models.py:126
+#: files/models.py:105
 msgid "Уникальное наименование"
 msgstr "Unique name"
 
-#: files/models.py:137
+#: files/models.py:116
 msgid "Файл"
 msgstr "File"
 
-#: files/models.py:152 files/models.py:153
+#: files/models.py:131 files/models.py:132
 #: files/templates/folder_detail.html:116
 msgid "Файлы"
 msgstr "Files"

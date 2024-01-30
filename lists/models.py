@@ -3,21 +3,13 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 import json
 
-from main.utils_lang import TranslateFieldMixin
+# from main.utils_lang import TranslateFieldMixin
+from main.utils_model import Dict_Model
 
 exposed_request = ""
 
 
-class Dict_YListFieldType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=128)
-    name_en = models.CharField(_("Наименование_en"), max_length=128)
-    description_ru = models.TextField(_("Описание_ru"), blank=True, null=True)
-    description_en = models.TextField(_("Описание_en"), blank=True, null=True)
-    sort = models.PositiveSmallIntegerField(
-        _("Сортировка"), default=1, blank=True, null=True
-    )
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_YListFieldType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
@@ -27,12 +19,8 @@ class Dict_YListFieldType(TranslateFieldMixin, models.Model):
         return self.trans_field(exposed_request, "description")
 
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип данных")
         verbose_name_plural = _("Типы данных")
-
-    def __str__(self):
-        return self.name
 
 
 class YList(models.Model):
@@ -82,24 +70,9 @@ class YList(models.Model):
             return ""
         else:
             lst = list(d.items())
-            # lst.insert(position, (key_name, key_value))
-            # print('&&&&&&&&&&&&&&&&&&&&&&&&&& ', position)
-            # i = j = 0
-            # for dd_key, dd_val in lst:
-            #     if dd_val["is_active"] == "False":
-            #         i += 1
-            #     if j >= position:
-            #         break
-            #     j += 1
-            #     # print("-!!!-", dd_key, dd_val, i)
-            # lst.insert(
-            #     position + i, (key_name, {"type": key_value, "is_active": "True"})
-            # )
             lst.insert(position, (key_name, {"type": key_value}))
             d = dict(lst)
             self.fieldslist = json.dumps(d)
-            # print(type(d), d, type(lst), lst, self.fieldslist)
-            # print(json.loads(self.fieldslist))
             self.save()
             return self.fieldslist
 
@@ -210,7 +183,7 @@ class YListItem(models.Model):
 
     def __str__(self):
         # return (self.datecreate.strftime('%d.%m.%Y %H:%M:%S') + '|' + self.name)
-        return self.fieldslist #+ "|" + str(self.ylist.id)
+        return self.fieldslist  # + "|" + str(self.ylist.id)
 
     def last_row(self):
         return (

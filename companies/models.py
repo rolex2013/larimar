@@ -15,69 +15,82 @@ from ckeditor_uploader.fields import RichTextUploadingField
 # from django_group_by import GroupByMixin
 
 from django.utils.translation import gettext_lazy as _
-from main.utils_lang import TranslateFieldMixin
+
+# from main.utils_lang import TranslateFieldMixin
+from main.utils_model import Dict_Model
+
 
 exposed_request = ""
 
 
-class Dict_CompanyStructureType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    # name_lang = models.CharField(_("Перевод"), max_length=64, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_CompanyStructureType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип в оргструктуре")
         verbose_name_plural = _("Типы в оргструктуре")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_CompanyType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    # name_lang = models.CharField(_("Перевод"), max_length=64, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_CompanyType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип организации")
         verbose_name_plural = _("Типы организаций")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_PositionType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    # name_lang = models.CharField(_("Перевод"), max_length=64, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_PositionType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип должности")
         verbose_name_plural = _("Типы должностей")
 
-    def __str__(self):
-        return self.name
+
+class Dict_ContentType(Dict_Model):
+    @property
+    def name(self):
+        return self.trans_field(exposed_request, "name")
+
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
+    class Meta:
+        verbose_name = _("Тип контента")
+        verbose_name_plural = _("Типы контента")
+
+
+class Dict_ContentPlace(Dict_Model):
+    @property
+    def name(self):
+        return self.trans_field(exposed_request, "name")
+
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
+    class Meta:
+        verbose_name = _("Место отображения контента")
+        verbose_name_plural = _("Места отображения контента")
 
 
 class Company(MPTTModel):
@@ -406,43 +419,3 @@ class Content(models.Model):
         ordering = ("-is_ontop", "-id")
         verbose_name = _("Контент")
         verbose_name_plural = _("Контент")
-
-
-class Dict_ContentType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    # name_lang = models.CharField(_("Перевод"), max_length=64, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
-    @property
-    def name(self):
-        return self.trans_field(exposed_request, "name")
-
-    class Meta:
-        ordering = ("sort",)
-        verbose_name = _("Тип контента")
-        verbose_name_plural = _("Типы контента")
-
-    def __str__(self):
-        return self.name
-
-
-class Dict_ContentPlace(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=2, blank=True, null=True)
-    # name_lang = models.CharField(_("Перевод"), max_length=64, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
-    @property
-    def name(self):
-        return self.trans_field(exposed_request, "name")
-
-    class Meta:
-        ordering = ("sort",)
-        verbose_name = _("Место отображения контента")
-        verbose_name_plural = _("Места отображения контента")
-
-    def __str__(self):
-        return self.name

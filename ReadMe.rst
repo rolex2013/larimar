@@ -6,6 +6,9 @@
 
 Для тестирования доступен функционирующий прототип по адресу: http://1yes.larimaritgroup.ru
 
+# v.2.3.0 - 30.01.2024
+## (+) Localization and Translation
+
 # v.2.2.0 - 28.11.2023
 ## (+) List application
 

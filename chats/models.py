@@ -13,28 +13,25 @@ from ckeditor_uploader.fields import RichTextUploadingField
 # from django.dispatch import receiver
 
 from django.utils.translation import gettext_lazy as _
-from main.utils_lang import TranslateFieldMixin
+
+# from main.utils_lang import TranslateFieldMixin
+from main.utils_model import Dict_Model  # , Task_Model, Comment_Model
 
 exposed_request = ""
 
 
-class Dict_ChatType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(_("Наименование_en"), max_length=64)
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_ChatType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип чата")
         verbose_name_plural = _("Типы чатов")
-
-    def __str__(self):
-        return self.name
 
 
 class Chat(models.Model):

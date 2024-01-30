@@ -1,3 +1,5 @@
+# перенесено в utils_model.py
+
 from django.conf import settings
 
 # exposed_request = ''

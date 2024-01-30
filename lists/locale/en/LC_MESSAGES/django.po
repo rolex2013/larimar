@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 13:58+0300\n"
+"POT-Creation-Date: 2024-01-30 16:17+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,103 +18,79 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: lists/models.py:12
-msgid "Наименование_ru"
-msgstr "Name_ru"
-
-#: lists/models.py:13
-msgid "Наименование_en"
-msgstr "Name_en"
-
-#: lists/models.py:14
-msgid "Описание_ru"
-msgstr "Description_ru"
-
-#: lists/models.py:15
-msgid "Описание_en"
-msgstr "Description_en"
-
-#: lists/models.py:17
-msgid "Сортировка"
-msgstr "Sort"
-
-#: lists/models.py:19
-msgid "Активность"
-msgstr "Is active"
-
-#: lists/models.py:31
+#: lists/models.py:22
 msgid "Тип данных"
 msgstr "Type"
 
-#: lists/models.py:32
+#: lists/models.py:23
 msgid "Типы данных"
 msgstr "Types"
 
-#: lists/models.py:39
+#: lists/models.py:27
 msgid "Наименование"
 msgstr "Name"
 
-#: lists/models.py:40
+#: lists/models.py:28
 msgid "Описание"
 msgstr "Description"
 
-#: lists/models.py:41
+#: lists/models.py:29
 msgid "Список и тип полей"
 msgstr "List and fields type"
 
-#: lists/models.py:46
+#: lists/models.py:34
 msgid "Компания"
 msgstr "Company"
 
-#: lists/models.py:48 lists/models.py:186
+#: lists/models.py:36 lists/models.py:159
 msgid "Дата создания"
 msgstr "Date create"
 
-#: lists/models.py:49 lists/models.py:187
+#: lists/models.py:37 lists/models.py:160
 msgid "Дата изменения"
 msgstr "Date update"
 
-#: lists/models.py:50 lists/models.py:188
+#: lists/models.py:38 lists/models.py:161
 msgid "Дата закрытия"
 msgstr "Closing date"
 
-#: lists/models.py:55 lists/models.py:193
+#: lists/models.py:43 lists/models.py:166
 msgid "Автор последних изменений"
 msgstr "Last Modified Author"
 
-#: lists/models.py:61 lists/models.py:199
+#: lists/models.py:49 lists/models.py:172
 msgid "Автор"
 msgstr "Author"
 
-#: lists/models.py:64 lists/templates/ylist_detail.html:33
+#: lists/models.py:52 lists/templates/ylist_detail.html:33
 msgid "Участники"
 msgstr "Participants"
 
-#: lists/models.py:66
+#: lists/models.py:54
 msgid "Активность Списка"
 msgstr "List Activity"
 
-#: lists/models.py:173 lists/models.py:183
+#: lists/models.py:146 lists/models.py:156
 msgid "Список"
 msgstr "List"
 
-#: lists/models.py:174 lists/templates/ylists_list.html:4
+#: lists/models.py:147 lists/templates/ylists_list.html:4
 msgid "Списки"
 msgstr "Lists"
 
-#: lists/models.py:178
+#: lists/models.py:151
 msgid "Список и значения полей"
 msgstr "Field List and Values"
 
-#: lists/models.py:201
+#: lists/models.py:174
 msgid "Активность элемента Списка"
 msgstr "List Item Activity"
 
-#: lists/models.py:224
+#: lists/models.py:197
 msgid "Запись списка"
 msgstr "List Item"
 
-#: lists/models.py:225
+#: lists/models.py:198
 msgid "Записи списков"
 msgstr "Lists Items"
 
@@ -263,3 +239,21 @@ msgstr "Change organization"
 #: lists/views.py:243 lists/views.py:331 lists/views.py:432
 msgid "Добавить"
 msgstr "Add"
+
+#~ msgid "Наименование_ru"
+#~ msgstr "Name_ru"
+
+#~ msgid "Наименование_en"
+#~ msgstr "Name_en"
+
+#~ msgid "Описание_ru"
+#~ msgstr "Description_ru"
+
+#~ msgid "Описание_en"
+#~ msgstr "Description_en"
+
+#~ msgid "Сортировка"
+#~ msgstr "Sort"
+
+#~ msgid "Активность"
+#~ msgstr "Is active"

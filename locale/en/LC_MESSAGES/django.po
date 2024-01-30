@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 13:58+0300\n"
+"POT-Creation-Date: 2024-01-30 14:52+0300\n"
 "PO-Revision-Date: 2024-01-29 15:13+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,590 +27,6 @@ msgstr "Russian"
 msgid "English"
 msgstr "Enflish"
 
-#: projects/forms.py:36
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Файлы проекта"
-msgstr "Project Task"
-
-#: projects/forms.py:61
-msgid "1YES. Ваш Проект закрыт."
-msgstr ""
-
-#: projects/forms.py:62
-msgid "Уведомляем о закрытии Вашего Проекта!"
-msgstr ""
-
-#: projects/forms.py:72
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Ваш Проект закрыт!"
-msgstr "Project Task"
-
-#: projects/forms.py:73
-msgid "Уведомляем о закрытии Вашего Проекта."
-msgstr ""
-
-#: projects/forms.py:93
-msgid "Вы назначены исполнителем Проекта."
-msgstr ""
-
-#: projects/forms.py:94
-msgid "Уведомляем о назначении Вам Проекта"
-msgstr ""
-
-#: projects/forms.py:166
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Файлы задачи"
-msgstr "Projects & Tasks"
-
-#: projects/forms.py:192
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "1Yes! Ваша Задача закрыта."
-msgstr "Project Task"
-
-#: projects/forms.py:193 projects/forms.py:203
-msgid "Уведомляем о закрытии Вашей Задачи!"
-msgstr ""
-
-#: projects/forms.py:202
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Ваша Задача закрыта."
-msgstr "Project Task"
-
-#: projects/forms.py:216
-msgid "1Yes! Вы назначены исполнителем Задачи."
-msgstr ""
-
-#: projects/forms.py:217
-msgid "Уведомляем о назначении Вам Задачи!"
-msgstr ""
-
-#: projects/forms.py:226
-msgid "Вы назначены исполнителем Задачи."
-msgstr ""
-
-#: projects/forms.py:227
-msgid "Уведомляем о назначении Вам Задачи"
-msgstr ""
-
-#: projects/forms.py:272 projects/forms.py:273 projects/forms.py:274
-#: projects/forms.py:275
-msgid "Пока не выбран"
-msgstr ""
-
-#: projects/forms.py:323
-#, fuzzy
-#| msgid "Задача документа"
-msgid "Файлы комментария"
-msgstr "Document Task"
-
-#: projects/models.py:45
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Закрывает проект"
-msgstr "Project Task"
-
-#: projects/models.py:56
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Статус проекта"
-msgstr "Project Task"
-
-#: projects/models.py:57
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Статусы проектов"
-msgstr "Project Task"
-
-#: projects/models.py:70
-msgid "Тип проектов в иерархии"
-msgstr ""
-
-#: projects/models.py:71
-msgid "Типы проектов в иерархии"
-msgstr ""
-
-#: projects/models.py:84
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Тип проекта"
-msgstr "Project Task"
-
-#: projects/models.py:85
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Типы проектов"
-msgstr "Project Task"
-
-#: projects/models.py:89
-msgid "Закрывает задачу"
-msgstr ""
-
-#: projects/models.py:100
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Статус задачи"
-msgstr "Projects & Tasks"
-
-#: projects/models.py:101
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Статусы задач"
-msgstr "Projects & Tasks"
-
-#: projects/models.py:114 projects/models.py:322
-msgid "Тип задачи в иерархии"
-msgstr ""
-
-#: projects/models.py:115
-msgid "Типы задач в иерархии"
-msgstr ""
-
-#: projects/models.py:128
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Тип задачи"
-msgstr "Projects & Tasks"
-
-#: projects/models.py:129
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Типы задач"
-msgstr "Projects & Tasks"
-
-#: projects/models.py:133 projects/models.py:288 projects/models.py:395
-#: projects/models.py:443
-msgid "Наименование"
-msgstr ""
-
-#: projects/models.py:134 projects/models.py:289 projects/models.py:396
-msgid "Описание"
-msgstr ""
-
-#: projects/models.py:135 projects/models.py:290
-#: projects/templates/project_detail.html:29
-#: projects/templates/project_history.html:18
-#: projects/templates/task_detail.html:45
-#: projects/templates/task_history.html:20
-#: projects/templates/taskcomment_detail.html:10
-#: projects/templates/taskcomment_detail.html:23 projects/views.py:257
-#: projects/views.py:354 projects/views.py:648 projects/views.py:701
-msgid "Начало"
-msgstr ""
-
-#: projects/models.py:136 projects/models.py:291
-#: projects/templates/project_detail.html:30
-#: projects/templates/project_history.html:19
-#: projects/templates/task_detail.html:46
-#: projects/templates/task_history.html:21
-#: projects/templates/taskcomment_detail.html:11
-#: projects/templates/taskcomment_detail.html:24 projects/views.py:258
-#: projects/views.py:357 projects/views.py:649 projects/views.py:704
-msgid "Окончание"
-msgstr ""
-
-#: projects/models.py:141
-msgid "Компания"
-msgstr ""
-
-#: projects/models.py:150
-msgid "Проект верхнего уровня"
-msgstr ""
-
-#: projects/models.py:156 projects/models.py:311
-#: projects/templates/project_detail.html:28
-#: projects/templates/project_history.html:17
-#: projects/templates/task_detail.html:44
-#: projects/templates/task_history.html:19
-#: projects/templates/taskcomment_detail.html:9
-#: projects/templates/taskcomment_detail.html:22 projects/views.py:264
-#: projects/views.py:373 projects/views.py:654 projects/views.py:717
-msgid "Исполнитель"
-msgstr ""
-
-#: projects/models.py:162 projects/views.py:262 projects/views.py:367
-msgid "Валюта"
-msgstr ""
-
-#: projects/models.py:165 projects/models.py:313 projects/models.py:406
-#: projects/views.py:261 projects/views.py:366 projects/views.py:652
-#: projects/views.py:713
-msgid "Стоимость"
-msgstr ""
-
-#: projects/models.py:168 projects/models.py:315
-#, fuzzy
-#| msgid "Панель управления"
-msgid "Процент выполнения"
-msgstr "Dashboard"
-
-#: projects/models.py:175 projects/templates/project_detail.html:31
-#: projects/templates/task_detail.html:47 projects/views.py:259
-#: projects/views.py:360 projects/views.py:650 projects/views.py:707
-msgid "Тип в иерархии"
-msgstr ""
-
-#: projects/models.py:182 projects/models.py:329
-#: projects/templates/project_detail.html:32
-#: projects/templates/task_detail.html:48 projects/views.py:260
-#: projects/views.py:363 projects/views.py:651 projects/views.py:710
-#, fuzzy
-#| msgid "Тикет"
-msgid "Тип"
-msgstr "Ticket"
-
-#: projects/models.py:189 projects/models.py:336
-#: projects/templates/project_detail.html:33
-#: projects/templates/project_history.html:20
-#: projects/templates/task_detail.html:49
-#: projects/templates/task_history.html:22 projects/views.py:256
-#: projects/views.py:351 projects/views.py:647 projects/views.py:698
-msgid "Статус"
-msgstr ""
-
-#: projects/models.py:191 projects/models.py:414 projects/models.py:479
-msgid "Создан"
-msgstr ""
-
-#: projects/models.py:193 projects/models.py:340
-msgid "Дата закрытия"
-msgstr ""
-
-#: projects/models.py:199 projects/models.py:346 projects/models.py:416
-#: projects/models.py:485 projects/templates/project_detail.html:41
-#: projects/templates/project_history.html:26
-#: projects/templates/task_detail.html:52
-#: projects/templates/task_history.html:23
-#: projects/templates/taskcomment_detail.html:12
-#: projects/templates/taskcomment_detail.html:25
-#: projects/templates/taskcomment_detail.html:35
-#: templates/object_history.html:18
-msgid "Автор"
-msgstr "Author"
-
-#: projects/models.py:202 projects/templates/project_detail.html:36
-#: projects/templates/project_history.html:21 projects/views.py:265
-#: projects/views.py:377
-msgid "Участники"
-msgstr ""
-
-#: projects/models.py:204 projects/models.py:348 projects/models.py:418
-#: projects/models.py:487 projects/views.py:266 projects/views.py:378
-#: projects/views.py:655 projects/views.py:721
-msgid "Активность"
-msgstr ""
-
-#: projects/models.py:208 projects/models.py:283 projects/models.py:296
-#: projects/models.py:453 projects/templates/task_detail.html:35
-#: projects/views.py:255 projects/views.py:350
-msgid "Проект"
-msgstr "Project"
-
-#: projects/models.py:284
-#, fuzzy
-#| msgid "Проект"
-msgid "Проекты"
-msgstr "Project"
-
-#: projects/models.py:305
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Задача верхнего уровня"
-msgstr "Project Task"
-
-#: projects/models.py:338
-msgid "Создана"
-msgstr ""
-
-#: projects/models.py:362
-msgid "Задача проекта"
-msgstr "Project Task"
-
-#: projects/models.py:390 projects/models.py:412 projects/models.py:461
-#: projects/templates/task_detail.html:26 projects/views.py:646
-#: projects/views.py:697
-#, fuzzy
-#| msgid "Задача тикета"
-msgid "Задача"
-msgstr "Ticket Task"
-
-#: projects/models.py:391 projects/templates/project_detail.html:77
-#, fuzzy
-#| msgid "Задача тикета"
-msgid "Задачи"
-msgstr "Ticket Task"
-
-#: projects/models.py:398
-msgid "Время работы, час."
-msgstr ""
-
-#: projects/models.py:438 projects/models.py:469
-#, fuzzy
-#| msgid "Документы"
-msgid "Комментарий"
-msgstr "Documents"
-
-#: projects/models.py:439 projects/templates/task_detail.html:77
-#, fuzzy
-#| msgid "Документы"
-msgid "Комментарии"
-msgstr "Documents"
-
-#: projects/models.py:445
-msgid "Уникальное наименование"
-msgstr ""
-
-#: projects/models.py:475
-#, fuzzy
-#| msgid "Файлы"
-msgid "Файл"
-msgstr "Files"
-
-#: projects/models.py:490 projects/models.py:491
-#: projects/templates/task_detail.html:96 templates/objectfile_list.html:8
-#: templates/objects_list.html:19
-msgid "Файлы"
-msgstr "Files"
-
-#: projects/templates/project_detail.html:14
-#: projects/templates/project_history.html:13
-msgid "Проект перемещён в архив"
-msgstr ""
-
-#: projects/templates/project_detail.html:21
-msgid "Организация"
-msgstr ""
-
-#: projects/templates/project_detail.html:21
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Проекты организации"
-msgstr "Projects & Tasks"
-
-#: projects/templates/project_detail.html:23
-#: projects/templates/task_detail.html:37
-msgid "Уровень выше"
-msgstr ""
-
-#: projects/templates/project_detail.html:27
-#: projects/templates/task_detail.html:41
-msgid "Бюджет"
-msgstr ""
-
-#: projects/templates/project_detail.html:27
-#: projects/templates/task_detail.html:41
-msgid "Освоено"
-msgstr ""
-
-#: projects/templates/project_detail.html:34
-#: projects/templates/task_detail.html:50
-msgid "Затраченное время, час."
-msgstr ""
-
-#: projects/templates/project_detail.html:34
-#: projects/templates/task_detail.html:50
-msgid "час"
-msgstr ""
-
-#: projects/templates/project_detail.html:34
-#: projects/templates/task_detail.html:50
-msgid "мин"
-msgstr ""
-
-#: projects/templates/project_detail.html:34
-#: projects/templates/task_detail.html:50
-msgid "сек"
-msgstr ""
-
-#: projects/templates/project_detail.html:35
-msgid "Выполнен на"
-msgstr ""
-
-#: projects/templates/project_detail.html:38
-#: projects/templates/project_history.html:23 templates/objects_list.html:37
-#: templates/objects_list.html:40 templates/objects_list.html:70
-#: templates/objects_list.html:72
-msgid "Профиль"
-msgstr "Profile"
-
-#: projects/templates/project_detail.html:43
-#: projects/templates/project_history.html:28
-#: projects/templates/task_detail.html:53
-#: projects/templates/task_history.html:25
-#: projects/templates/taskcomment_detail.html:13
-#: projects/templates/taskcomment_detail.html:26
-#: projects/templates/taskcomment_detail.html:36
-#: templates/object_history.html:18
-msgid "Дата"
-msgstr "Date"
-
-#: projects/templates/project_detail.html:65
-#: projects/templates/project_history.html:36
-#: projects/templates/task_history.html:35
-msgid "Информация о проекте недоступна!"
-msgstr ""
-
-#: projects/templates/project_detail.html:85
-msgid "По статусу"
-msgstr ""
-
-#: projects/templates/project_detail.html:87
-#: projects/templates/project_detail.html:98
-msgid "Все"
-msgstr ""
-
-#: projects/templates/project_detail.html:88
-msgid "Все активные"
-msgstr ""
-
-#: projects/templates/project_detail.html:89
-msgid "Просроченные"
-msgstr ""
-
-#: projects/templates/project_detail.html:96
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Мои задачи"
-msgstr "Projects & Tasks"
-
-#: projects/templates/project_detail.html:99
-msgid "Я участник"
-msgstr ""
-
-#: projects/templates/project_detail.html:100
-#, fuzzy
-#| msgid "Автор"
-msgid "Я автор"
-msgstr "Author"
-
-#: projects/templates/project_detail.html:101
-msgid "Я исполнитель"
-msgstr ""
-
-#: projects/templates/project_detail.html:103
-#, fuzzy
-#| msgid "Сохранить"
-msgid "Применить"
-msgstr "Save"
-
-#: projects/templates/project_detail.html:169
-msgid "Информация о задачах недоступна!"
-msgstr ""
-
-#: projects/templates/project_history.html:48
-msgid "История изменений проекта"
-msgstr ""
-
-#: projects/templates/project_history.html:60
-#: projects/templates/task_history.html:56
-msgid "Информация об истории проекта недоступна!"
-msgstr ""
-
-#: projects/templates/task_detail.html:28
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Задача перемещена в архив"
-msgstr "Project Task"
-
-#: projects/templates/task_detail.html:35
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Задачи проекта"
-msgstr "Project Task"
-
-#: projects/templates/task_detail.html:51
-msgid "Выполнена на"
-msgstr ""
-
-#: projects/templates/task_detail.html:92
-msgid "час."
-msgstr ""
-
-#: projects/templates/task_history.html:15
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Задача перемещна в архив"
-msgstr "Project Task"
-
-#: projects/templates/task_history.html:46
-msgid "История изменений задачи"
-msgstr ""
-
-#: projects/views.py:186
-msgid "Сменить организацию"
-msgstr ""
-
-#: projects/views.py:188 projects/views.py:190 projects/views.py:192
-#: projects/views.py:557 projects/views.py:559 projects/views.py:795
-#: projects/views.py:797
-msgid "Добавить"
-msgstr ""
-
-#: projects/views.py:189 projects/views.py:564 projects/views.py:802
-#, fuzzy
-#| msgid "Сохранить"
-msgid "Изменить"
-msgstr "Save"
-
-#: projects/views.py:263 projects/views.py:370 projects/views.py:653
-#: projects/views.py:714
-msgid "Выполнен на, %"
-msgstr ""
-
-#: projects/views.py:279
-#, fuzzy
-#| msgid "Проект"
-msgid "Новый Проект"
-msgstr "Project"
-
-#: projects/views.py:304
-#, fuzzy
-#| msgid "Задача проекта"
-msgid "Изменить Проект"
-msgstr "Project Task"
-
-#: projects/views.py:558 projects/views.py:796
-msgid "История"
-msgstr ""
-
-#: projects/views.py:621
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Новая Задача"
-msgstr "Projects & Tasks"
-
-#: projects/views.py:676
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Изменить Задачу"
-msgstr "Projects & Tasks"
-
-#: projects/views.py:843
-#, fuzzy
-#| msgid "Задача документа"
-msgid "Новый Комментарий"
-msgstr "Document Task"
-
-#: projects/views.py:863
-msgid "Изменить Комментарий"
-msgstr ""
-
-#: projects/views.py:958
-#, fuzzy
-#| msgid "Проекты и Задачи"
-msgid "Проекты не найдены!"
-msgstr "Projects & Tasks"
-
-#: projects/views.py:1054
-#, fuzzy
-#| msgid "Версия не найдена!"
-msgid "Задачи не найдены!"
-msgstr "Version not faund!"
-
 #: templates/base.html:15 templates/base.html:31 templates/base.html:35
 msgid "Ваша первая и единственная Корпоративная система управления"
 msgstr "Your first and only ERP"
@@ -627,13 +43,25 @@ msgstr "Our vacancies"
 msgid "Сохранить"
 msgstr "Save"
 
-#: templates/object_history.html:33
+#: templates/object_history.html:10
+msgid "Дата"
+msgstr "Date"
+
+#: templates/object_history.html:10
+msgid "Автор"
+msgstr "Author"
+
+#: templates/object_history.html:25
 msgid "Актуальн."
 msgstr "Actual"
 
-#: templates/object_history.html:38
+#: templates/object_history.html:30
 msgid "Сделать актуальной"
 msgstr "Make actual"
+
+#: templates/objectfile_list.html:8 templates/objects_list.html:19
+msgid "Файлы"
+msgstr "Files"
 
 #: templates/objectfile_list.html:39
 msgid "Удалить этот файл"
@@ -670,6 +98,212 @@ msgstr "Dashboard"
 #: templates/objects_list.html:29
 msgid "Списки"
 msgstr "Lists"
+
+#: templates/objects_list.html:37 templates/objects_list.html:40
+#: templates/objects_list.html:70 templates/objects_list.html:72
+msgid "Профиль"
+msgstr "Profile"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Файлы проекта"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Ваш Проект закрыт!"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Файлы задачи"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "1Yes! Ваша Задача закрыта."
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Ваша Задача закрыта."
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача документа"
+#~ msgid "Файлы комментария"
+#~ msgstr "Document Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Закрывает проект"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Статус проекта"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Статусы проектов"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Тип проекта"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Типы проектов"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Статус задачи"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Статусы задач"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Тип задачи"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Типы задач"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Панель управления"
+#~ msgid "Процент выполнения"
+#~ msgstr "Dashboard"
+
+#, fuzzy
+#~| msgid "Тикет"
+#~ msgid "Тип"
+#~ msgstr "Ticket"
+
+#~ msgid "Проект"
+#~ msgstr "Project"
+
+#, fuzzy
+#~| msgid "Проект"
+#~ msgid "Проекты"
+#~ msgstr "Project"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Задача верхнего уровня"
+#~ msgstr "Project Task"
+
+#~ msgid "Задача проекта"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача тикета"
+#~ msgid "Задача"
+#~ msgstr "Ticket Task"
+
+#, fuzzy
+#~| msgid "Задача тикета"
+#~ msgid "Задачи"
+#~ msgstr "Ticket Task"
+
+#, fuzzy
+#~| msgid "Документы"
+#~ msgid "Комментарий"
+#~ msgstr "Documents"
+
+#, fuzzy
+#~| msgid "Документы"
+#~ msgid "Комментарии"
+#~ msgstr "Documents"
+
+#, fuzzy
+#~| msgid "Файлы"
+#~ msgid "Файл"
+#~ msgstr "Files"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Проекты организации"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Мои задачи"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Автор"
+#~ msgid "Я автор"
+#~ msgstr "Author"
+
+#, fuzzy
+#~| msgid "Сохранить"
+#~ msgid "Применить"
+#~ msgstr "Save"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Задача перемещена в архив"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Задачи проекта"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Задача перемещна в архив"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Сохранить"
+#~ msgid "Изменить"
+#~ msgstr "Save"
+
+#, fuzzy
+#~| msgid "Проект"
+#~ msgid "Новый Проект"
+#~ msgstr "Project"
+
+#, fuzzy
+#~| msgid "Задача проекта"
+#~ msgid "Изменить Проект"
+#~ msgstr "Project Task"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Новая Задача"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Изменить Задачу"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Задача документа"
+#~ msgid "Новый Комментарий"
+#~ msgstr "Document Task"
+
+#, fuzzy
+#~| msgid "Проекты и Задачи"
+#~ msgid "Проекты не найдены!"
+#~ msgstr "Projects & Tasks"
+
+#, fuzzy
+#~| msgid "Версия не найдена!"
+#~ msgid "Задачи не найдены!"
+#~ msgstr "Version not faund!"
 
 #~ msgid "Задача клиента"
 #~ msgstr "Client Task"

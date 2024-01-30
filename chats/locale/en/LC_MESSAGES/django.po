@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-20 13:29+0300\n"
+"POT-Creation-Date: 2024-01-30 16:17+0300\n"
 "PO-Revision-Date: 2023-12-20 13:46+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,19 +35,6 @@ msgstr "In chat chatid="
 msgid "отправлено сообщение"
 msgstr "message sent"
 
-#: chats/models.py:22
-msgid "Наименование_ru"
-msgstr "Name_ru"
-
-#: chats/models.py:23
-msgid "Наименование_en"
-msgstr "Name_en"
-
-#: chats/models.py:25 chats/models.py:77 chats/models.py:127
-#: chats/models.py:189
-msgid "Активность"
-msgstr "Activity"
-
 #: chats/models.py:33
 msgid "Тип чата"
 msgstr "Type"
@@ -56,91 +43,95 @@ msgstr "Type"
 msgid "Типы чатов"
 msgstr "Types"
 
-#: chats/models.py:41
+#: chats/models.py:38
 msgid "Наименование"
 msgstr "Name"
 
-#: chats/models.py:42 chats/templates/chats.html:30
+#: chats/models.py:39 chats/templates/chats.html:30
 msgid "Описание"
 msgstr "Description"
 
-#: chats/models.py:49
+#: chats/models.py:46
 msgid "Компания"
 msgstr "Company"
 
-#: chats/models.py:56
+#: chats/models.py:53
 msgid "Тип"
 msgstr "Type"
 
-#: chats/models.py:58 chats/models.py:104 chats/models.py:171
+#: chats/models.py:55 chats/models.py:101 chats/models.py:168
 msgid "Создан"
 msgstr "Created"
 
-#: chats/models.py:60 chats/models.py:107
+#: chats/models.py:57 chats/models.py:104
 msgid "Дата закрытия"
 msgstr "Date close"
 
-#: chats/models.py:67 chats/templates/chat_members_list.html:6
+#: chats/models.py:64 chats/templates/chat_members_list.html:6
 msgid "Участники"
 msgstr "Participants"
 
-#: chats/models.py:75 chats/models.py:125 chats/models.py:187
+#: chats/models.py:72 chats/models.py:122 chats/models.py:184
 msgid "Автор"
 msgstr "Author"
 
-#: chats/models.py:85
+#: chats/models.py:74 chats/models.py:124 chats/models.py:186
+msgid "Активность"
+msgstr "Activity"
+
+#: chats/models.py:82
 msgid "Чат Компании"
 msgstr "Company chat"
 
-#: chats/models.py:86
+#: chats/models.py:83
 msgid "Чаты компаний"
 msgstr "Company chats"
 
-#: chats/models.py:95 chats/models.py:169
+#: chats/models.py:92 chats/models.py:166
 msgid "Чат"
 msgstr "Chat"
 
-#: chats/models.py:101
+#: chats/models.py:98
 msgid "Участник"
 msgstr "Participant"
 
-#: chats/models.py:110
+#: chats/models.py:107
 msgid "Момент входа в чат"
 msgstr "Entry moment"
 
-#: chats/models.py:113
+#: chats/models.py:110
 msgid "Момент последней активности"
 msgstr "Last activity moment"
 
-#: chats/models.py:116
+#: chats/models.py:113
 msgid "Момент выхода из чата"
 msgstr "Exit moment"
 
-#: chats/models.py:118
+#: chats/models.py:115
 msgid "Администратор"
 msgstr "Administrator"
 
-#: chats/models.py:149
+#: chats/models.py:146
 msgid "Участник Чата"
 msgstr "Chat Participant"
 
-#: chats/models.py:150
+#: chats/models.py:147
 msgid "Участники чатов"
 msgstr "Chat Participants"
 
-#: chats/models.py:163
+#: chats/models.py:160
 msgid "Текст"
 msgstr "Text"
 
-#: chats/models.py:179
+#: chats/models.py:176
 msgid "Только для"
 msgstr "Only for"
 
-#: chats/models.py:197
+#: chats/models.py:194
 msgid "Сообщение пользователя"
 msgstr "User message"
 
-#: chats/models.py:198
+#: chats/models.py:195
 msgid "Сообщения пользователей"
 msgstr "Users messages"
 
@@ -190,8 +181,13 @@ msgstr "No such command exists!"
 
 #: chats/views.py:305
 msgid ""
-"Сожалеем, но у Вас нет прав Администратора для выполнения команд в этом "
-"чате!"
+"Сожалеем, но у Вас нет прав Администратора для выполнения команд в этом чате!"
 msgstr ""
 "Sorry, but you do not have Administrator privileges to run commands in this "
 "chat!"
+
+#~ msgid "Наименование_ru"
+#~ msgstr "Name_ru"
+
+#~ msgid "Наименование_en"
+#~ msgstr "Name_en"

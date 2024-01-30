@@ -19,27 +19,6 @@ from main.utils_model import Dict_Model
 exposed_request = ""
 
 
-# class Dict_FolderType(TranslateFieldMixin, models.Model):
-#     name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-#     name_en = models.CharField(
-#         _("Наименование_en"), max_length=64, blank=True, null=True
-#     )
-#     sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-#     is_active = models.BooleanField(_("Активность"), default=True)
-
-#     @property
-#     def name(self):
-#         return self.trans_field(exposed_request, "name")
-
-#     class Meta:
-#         ordering = ("sort",)
-#         verbose_name = _("Тип содержимого папки")
-#         verbose_name_plural = _("Типы содержимого папок")
-
-#     def __str__(self):
-#         return self.name
-
-
 class Dict_FolderType(Dict_Model):
     @property
     def name(self):

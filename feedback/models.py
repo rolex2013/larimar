@@ -10,8 +10,9 @@ from main.models import ModelLog
 from companies.models import Company
 
 from dashboard.utils import SetPropertiesDashboardMixin
-from main.utils_lang import TranslateFieldMixin
-from main.utils_model import Dict_Model, Comment_Model
+
+# from main.utils_lang import TranslateFieldMixin
+from main.utils_model import Dict_Model, Task_Model, Comment_Model
 
 from ckeditor_uploader.fields import RichTextUploadingField
 
@@ -66,69 +67,50 @@ class Dict_System(models.Model):
         )
 
 
-class Dict_FeedbackTicketStatus(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(
-        _("Наименование_en"), max_length=64, blank=True, null=True
-    )
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+class Dict_FeedbackTicketStatus(Dict_Model):
     is_close = models.BooleanField(_("Закрывает тикет"), default=False)
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Статус тикета")
         verbose_name_plural = _("Статусы тикетов")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_FeedbackTicketType(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(
-        _("Наименование_en"), max_length=64, blank=True, null=True
-    )
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
-    is_active = models.BooleanField(_("Активность"), default=True)
-
+class Dict_FeedbackTicketType(Dict_Model):
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Тип тикета")
         verbose_name_plural = _("Типы тикетов")
 
-    def __str__(self):
-        return self.name
 
-
-class Dict_FeedbackTaskStatus(TranslateFieldMixin, models.Model):
-    name_ru = models.CharField(_("Наименование_ru"), max_length=64)
-    name_en = models.CharField(
-        _("Наименование_en"), max_length=64, blank=True, null=True
-    )
-    sort = models.PositiveSmallIntegerField(default=1, blank=True, null=True)
+class Dict_FeedbackTaskStatus(Dict_Model):
     is_close = models.BooleanField(_("Закрывает задачу"), default=False)
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
     def name(self):
         return self.trans_field(exposed_request, "name")
 
+    @property
+    def description(self):
+        return self.trans_field(exposed_request, "description")
+
     class Meta:
-        ordering = ("sort",)
         verbose_name = _("Статус задачи")
         verbose_name_plural = _("Статусы задач")
-
-    def __str__(self):
-        return self.name
 
 
 class FeedbackTicket(SetPropertiesDashboardMixin, models.Model):
@@ -238,11 +220,8 @@ class FeedbackTicket(SetPropertiesDashboardMixin, models.Model):
         verbose_name_plural = _("Тикеты")
 
 
-class FeedbackTask(SetPropertiesDashboardMixin, MPTTModel):
-    name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"))
-    datebegin = models.DateTimeField(_("Начало"))
-    dateend = models.DateTimeField(_("Окончание"))
+class FeedbackTask(SetPropertiesDashboardMixin, Task_Model):
+    cost = models.DecimalField(_("Стоимость"), max_digits=12, decimal_places=2)
     ticket = models.ForeignKey(
         "FeedbackTicket",
         on_delete=models.CASCADE,
@@ -264,12 +243,6 @@ class FeedbackTask(SetPropertiesDashboardMixin, MPTTModel):
         related_name="ticket_task_assigner",
         verbose_name=_("Исполнитель"),
     )
-    cost = models.DecimalField(_("Стоимость"), max_digits=12, decimal_places=2)
-    percentage = models.DecimalField(
-        _("Процент выполнения"), max_digits=5, decimal_places=2, default=0
-    )
-    # structure_type = models.ForeignKey('Dict_TaskStructureType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='task_structure_type', verbose_name="Тип задачи в иерархии")
-    # type = models.ForeignKey('Dict_TaskType', limit_choices_to={'is_active':True}, on_delete=models.CASCADE, related_name='project_type', verbose_name="Тип")
     status = models.ForeignKey(
         "Dict_FeedbackTaskStatus",
         limit_choices_to={"is_active": True},
@@ -277,17 +250,12 @@ class FeedbackTask(SetPropertiesDashboardMixin, MPTTModel):
         related_name="feedback_taskstatus",
         verbose_name=_("Статус"),
     )
-    datecreate = models.DateTimeField(_("Создана"), auto_now_add=True)
-    dateclose = models.DateTimeField(
-        _("Дата закрытия"), auto_now_add=False, blank=True, null=True
-    )
     author = models.ForeignKey(
         "auth.User",
         on_delete=models.CASCADE,
         related_name="feedback_task_user",
         verbose_name=_("Автор"),
     )
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
     def object_name(self):

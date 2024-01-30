@@ -16,7 +16,7 @@ from ckeditor_uploader.fields import RichTextUploadingField
 # from companies.models import Company
 
 from dashboard.utils import SetPropertiesDashboardMixin
-from main.utils_model import Dict_Model, Comment_Model
+from main.utils_model import Dict_Model, Task_Model, Comment_Model
 
 
 exposed_request = ""
@@ -284,11 +284,8 @@ class Project(SetPropertiesDashboardMixin, MPTTModel):
         verbose_name_plural = _("Проекты")
 
 
-class Task(SetPropertiesDashboardMixin, MPTTModel):
-    name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"))
-    datebegin = models.DateTimeField(_("Начало"))
-    dateend = models.DateTimeField(_("Окончание"))
+class Task(SetPropertiesDashboardMixin, Task_Model):
+    cost = models.DecimalField(_("Стоимость"), max_digits=12, decimal_places=2)
     project = models.ForeignKey(
         "Project",
         on_delete=models.CASCADE,
@@ -309,10 +306,6 @@ class Task(SetPropertiesDashboardMixin, MPTTModel):
         on_delete=models.CASCADE,
         related_name="task_assigner",
         verbose_name=_("Исполнитель"),
-    )
-    cost = models.DecimalField(_("Стоимость"), max_digits=12, decimal_places=2)
-    percentage = models.DecimalField(
-        _("Процент выполнения"), max_digits=5, decimal_places=2, default=0
     )
     structure_type = models.ForeignKey(
         "Dict_TaskStructureType",
@@ -335,17 +328,12 @@ class Task(SetPropertiesDashboardMixin, MPTTModel):
         related_name="project_status",
         verbose_name=_("Статус"),
     )
-    datecreate = models.DateTimeField(_("Создана"), auto_now_add=True)
-    dateclose = models.DateTimeField(
-        _("Дата закрытия"), auto_now_add=False, blank=True, null=True
-    )
     author = models.ForeignKey(
         "auth.User",
         on_delete=models.CASCADE,
         related_name="resultuser",
         verbose_name=_("Автор"),
     )
-    is_active = models.BooleanField(_("Активность"), default=True)
 
     @property
     # суммарная стоимость по Комментариям (сколько освоено средств)
