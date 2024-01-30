@@ -61,7 +61,7 @@ class Dict_Model(TranslateFieldMixin, models.Model):
 
     class Meta:
         abstract = True
-        ordering = ("sort",)
+        ordering = ["sort"]
 
 
 class Task_Model(MPTTModel):
@@ -119,3 +119,5 @@ class Comment_Model(models.Model):
 
     class Meta:
         abstract = True
+        verbose_name = _("Комментарий")
+        verbose_name_plural = _("Комментарии")

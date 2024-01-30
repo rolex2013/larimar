@@ -274,10 +274,10 @@ class TaskForm(forms.ModelForm):
         for field in self.disabled_fields:
             self.fields[field].disabled = True
 
-        self.fields["assigner"].empty_label = _("Пока не выбран")
-        self.fields["type"].empty_label = _("Пока не выбран")
-        self.fields["structure_type"].empty_label = _("Пока не выбран")
-        self.fields["status"].empty_label = _("Пока не выбран")
+        # self.fields["assigner"].empty_label = _("Пока не выбран")
+        # self.fields["type"].empty_label = _("Пока не выбран")
+        # self.fields["structure_type"].empty_label = _("Пока не выбран")
+        # self.fields["status"].empty_label = _("Пока не выбран")
 
     class Meta:
         model = Task

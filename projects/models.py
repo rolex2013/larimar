@@ -52,7 +52,7 @@ class Dict_ProjectStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус проекта")
         verbose_name_plural = _("Статусы проектов")
 
@@ -66,7 +66,7 @@ class Dict_ProjectStructureType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип проектов в иерархии")
         verbose_name_plural = _("Типы проектов в иерархии")
 
@@ -80,7 +80,7 @@ class Dict_ProjectType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип проекта")
         verbose_name_plural = _("Типы проектов")
 
@@ -96,7 +96,7 @@ class Dict_TaskStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус задачи")
         verbose_name_plural = _("Статусы задач")
 
@@ -110,7 +110,7 @@ class Dict_TaskStructureType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип задачи в иерархии")
         verbose_name_plural = _("Типы задач в иерархии")
 
@@ -124,7 +124,7 @@ class Dict_TaskType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип задачи")
         verbose_name_plural = _("Типы задач")
 
@@ -374,9 +374,10 @@ class Task(SetPropertiesDashboardMixin, Task_Model):
         # order_insertion_by = ['name']
         order_insertion_by = ["dateend"]
 
-    class Meta:
-        verbose_name = _("Задача")
-        verbose_name_plural = _("Задачи")
+    class Meta(Task_Model.Meta):
+        pass
+        # verbose_name = _("Задача")
+        # verbose_name_plural = _("Задачи")
 
 
 class TaskComment(Comment_Model):
@@ -394,9 +395,10 @@ class TaskComment(Comment_Model):
     def files(self):
         return ProjectFile.objects.filter(taskcomment_id=self.id, is_active=True)
 
-    class Meta:
-        verbose_name = _("Комментарий")
-        verbose_name_plural = _("Комментарии")
+    class Meta(Comment_Model.Meta):
+        pass
+        # verbose_name = _("Комментарий")
+        # verbose_name_plural = _("Комментарии")
 
 
 class ProjectFile(models.Model):

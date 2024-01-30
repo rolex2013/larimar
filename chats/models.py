@@ -29,7 +29,7 @@ class Dict_ChatType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип чата")
         verbose_name_plural = _("Типы чатов")
 

@@ -78,7 +78,7 @@ class Dict_FeedbackTicketStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус тикета")
         verbose_name_plural = _("Статусы тикетов")
 
@@ -92,7 +92,7 @@ class Dict_FeedbackTicketType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип тикета")
         verbose_name_plural = _("Типы тикетов")
 
@@ -108,7 +108,7 @@ class Dict_FeedbackTaskStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус задачи")
         verbose_name_plural = _("Статусы задач")
 
@@ -293,9 +293,10 @@ class FeedbackTask(SetPropertiesDashboardMixin, Task_Model):
     class MPTTMeta:
         order_insertion_by = ["dateend"]
 
-    class Meta:
-        verbose_name = _("Задача")
-        verbose_name_plural = _("Задачи")
+    class Meta(Task_Model.Meta):
+        pass
+        # verbose_name = _("Задача")
+        # verbose_name_plural = _("Задачи")
 
 
 class FeedbackTicketComment(Comment_Model):
@@ -358,7 +359,7 @@ class FeedbackTicketComment(Comment_Model):
     def files(self):
         return FeedbackFile.objects.filter(taskcomment_id=self.id, is_active=True)
 
-    class Meta:
+    class Meta(Comment_Model.Meta):
         verbose_name = _("Комментарий тикета")
         verbose_name_plural = _("Комментарии тикетов")
 
@@ -380,7 +381,7 @@ class FeedbackTaskComment(Comment_Model):
     def files(self):
         return FeedbackFile.objects.filter(taskcomment_id=self.id, is_active=True)
 
-    class Meta:
+    class Meta(Comment_Model.Meta):
         verbose_name = _("Комментарий задачи")
         verbose_name_plural = _("Комментарии задач")
 

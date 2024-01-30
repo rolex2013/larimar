@@ -32,7 +32,7 @@ class Dict_CompanyStructureType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип в оргструктуре")
         verbose_name_plural = _("Типы в оргструктуре")
 
@@ -46,7 +46,7 @@ class Dict_CompanyType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип организации")
         verbose_name_plural = _("Типы организаций")
 
@@ -60,7 +60,7 @@ class Dict_PositionType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип должности")
         verbose_name_plural = _("Типы должностей")
 
@@ -74,7 +74,7 @@ class Dict_ContentType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип контента")
         verbose_name_plural = _("Типы контента")
 
@@ -88,7 +88,7 @@ class Dict_ContentPlace(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Место отображения контента")
         verbose_name_plural = _("Места отображения контента")
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-30 16:17+0300\n"
+"POT-Creation-Date: 2024-01-30 20:04+0300\n"
 "PO-Revision-Date: 2024-01-14 17:11+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,427 +19,422 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Translated-Using: django-rosetta 0.9.9\n"
 
-#: docs/forms.py:22
+#: forms.py:23
 msgid "Файлы документа"
 msgstr "Document Files"
 
-#: docs/forms.py:27
+#: forms.py:28
 msgid "Опубликован"
 msgstr "Published"
 
-#: docs/forms.py:52
+#: forms.py:55
 msgid "1YES! Ваш Документ опубликован."
 msgstr "1YES! Your Document has been published."
 
-#: docs/forms.py:53
+#: forms.py:56
 msgid "Уведомляем о публикации Вашего Документа!"
 msgstr "We notify you of the publication of your document!"
 
-#: docs/forms.py:62
+#: forms.py:65
 msgid "Ваш Документ опубликован!"
 msgstr "Your Document has been published!"
 
-#: docs/forms.py:63
+#: forms.py:66
 msgid "Уведомляем об опубликовании Вашего Документа."
 msgstr "We notify you of the publication of your Document."
 
-#: docs/forms.py:78
+#: forms.py:84
 msgid "1YES! Вы назначены менеджером Документа."
 msgstr "1YES! You have been appointed Document Manager."
 
-#: docs/forms.py:79
+#: forms.py:85
 msgid "Уведомляем о назначении Вам Документа!"
 msgstr "We will notify you that the Document has been assigned to you!"
 
-#: docs/forms.py:88
+#: forms.py:94
 msgid "Вы назначены менеджером Документа."
 msgstr "You have been appointed Document Manager."
 
-#: docs/forms.py:89
+#: forms.py:95
 msgid "Уведомляем о назначении Вам Документа"
 msgstr "We notify you that the Document has been assigned to you."
 
-#: docs/forms.py:152
+#: forms.py:158
 msgid "Файлы задачи"
 msgstr "Task Files"
 
-#: docs/forms.py:158 docs/models.py:339 docs/models.py:378
+#: forms.py:164 models.py:379
 msgid "Комментарий"
 msgstr "Comments"
 
-#: docs/forms.py:178
+#: forms.py:187
 msgid "1YES! Ваша Задача закрыта."
 msgstr "1YES! Your Task is closed."
 
-#: docs/forms.py:179 docs/forms.py:189
+#: forms.py:188 forms.py:198
 msgid "Уведомляем о закрытии Вашей Задачи!"
 msgstr "We notify you that your Task is closed!"
 
-#: docs/forms.py:188
+#: forms.py:197
 msgid "Ваша Задача закрыта."
 msgstr "Your Task is closed."
 
-#: docs/forms.py:202
+#: forms.py:211
 msgid "1YES! Вы назначены исполнителем Задачи."
 msgstr "1YES! You have been appointed as the executor of the Task."
 
-#: docs/forms.py:203
+#: forms.py:212
 msgid "Уведомляем о назначении Вам Задачи!"
 msgstr "We will notify you that a Task has been assigned to you!"
 
-#: docs/forms.py:212
+#: forms.py:221
 msgid "Вы назначены исполнителем Задачи."
 msgstr "You have been appointed as the executor of the Task."
 
-#: docs/forms.py:213
+#: forms.py:222
 msgid "Уведомляем о назначении Вам Задачи"
 msgstr "We notify you that a Task has been assigned to you"
 
-#: docs/forms.py:290
+#: forms.py:299
 msgid "Файлы комментария"
 msgstr "Comment Files"
 
-#: docs/models.py:35
-msgid "Тип документ"
-msgstr "Document Type"
-
-#: docs/models.py:36
-msgid "Типы документов"
-msgstr "Document Types"
-
-#: docs/models.py:40
-msgid "Публикует версию документа"
-msgstr "Publishes a version of a document"
-
-#: docs/models.py:51 docs/models.py:111 docs/models.py:195
-msgid "Статус документа"
-msgstr "Document Status"
-
-#: docs/models.py:52
-msgid "Статусы документов"
-msgstr "Document Statuses"
-
-#: docs/models.py:65
-msgid "Тип задачи"
-msgstr "Task Type"
-
-#: docs/models.py:66
-msgid "Типы задач"
-msgstr "Task Types"
-
-#: docs/models.py:70
-msgid "Закрывает задачу"
-msgstr "Closes the Task"
-
-#: docs/models.py:81
-msgid "Статус задачи"
-msgstr "Task Status"
-
-#: docs/models.py:82
-msgid "Статусы задач"
-msgstr "Task Statuses"
-
-#: docs/models.py:90 docs/templates/doc_detail.html:28
-msgid "Организация"
-msgstr "Organization"
-
-#: docs/models.py:96 docs/models.py:180
-msgid "Менеджер документа"
-msgstr "Document manager"
-
-#: docs/models.py:98 docs/models.py:182 docs/models.py:236 docs/models.py:344
-#: docs/views.py:249 docs/views.py:378
-msgid "Наименование"
-msgstr "Name"
-
-#: docs/models.py:104 docs/models.py:188
+#: models.py:35 models.py:104 models.py:188
 msgid "Тип документа"
 msgstr "Document Type"
 
-#: docs/models.py:113 docs/models.py:197 docs/models.py:237
+#: models.py:36
+msgid "Типы документов"
+msgstr "Document Types"
+
+#: models.py:40
+msgid "Публикует версию документа"
+msgstr "Publishes a version of a document"
+
+#: models.py:51 models.py:111 models.py:195
+msgid "Статус документа"
+msgstr "Document Status"
+
+#: models.py:52
+msgid "Статусы документов"
+msgstr "Document Statuses"
+
+#: models.py:65
+msgid "Тип задачи"
+msgstr "Task Type"
+
+#: models.py:66
+msgid "Типы задач"
+msgstr "Task Types"
+
+#: models.py:70
+msgid "Закрывает задачу"
+msgstr "Closes the Task"
+
+#: models.py:81
+msgid "Статус задачи"
+msgstr "Task Status"
+
+#: models.py:82
+msgid "Статусы задач"
+msgstr "Task Statuses"
+
+#: models.py:90 templates/doc_detail.html:28
+msgid "Организация"
+msgstr "Organization"
+
+#: models.py:96 models.py:180
+msgid "Менеджер документа"
+msgstr "Document manager"
+
+#: models.py:98 models.py:182 models.py:236 models.py:345 views.py:249
+#: views.py:378
+msgid "Наименование"
+msgstr "Name"
+
+#: models.py:113 models.py:197 models.py:237
 msgid "Описание"
 msgstr "Description"
 
-#: docs/models.py:114 docs/models.py:198 docs/models.py:384
+#: models.py:114 models.py:198 models.py:385
 msgid "Создан"
 msgstr "Created"
 
-#: docs/models.py:116 docs/models.py:200
+#: models.py:116 models.py:200
 msgid "Дата публикации"
 msgstr "Publication date"
 
-#: docs/models.py:122 docs/models.py:206 docs/models.py:282 docs/models.py:390
-#: docs/templates/doc_detail.html:39 docs/templates/doc_history.html:29
-#: docs/templates/doctask_detail.html:26
+#: models.py:122 models.py:206 models.py:282 models.py:391
+#: templates/doc_detail.html:39 templates/doc_history.html:29
+#: templates/doctask_detail.html:26
 msgid "Автор"
 msgstr "Author"
 
-#: docs/models.py:125 docs/models.py:209 docs/templates/doc_detail.html:34
-#: docs/templates/doc_history.html:24 docs/views.py:253 docs/views.py:391
+#: models.py:125 models.py:209 templates/doc_detail.html:34
+#: templates/doc_history.html:24 views.py:253 views.py:391
 msgid "Участники"
 msgstr "Participants"
 
-#: docs/models.py:127 docs/models.py:213 docs/models.py:284 docs/models.py:392
-#: docs/views.py:617 docs/views.py:698
+#: models.py:127 models.py:213 models.py:284 models.py:393 views.py:617
+#: views.py:698
 msgid "Активность"
 msgstr "Active"
 
-#: docs/models.py:156
+#: models.py:156
 msgid "вер."
 msgstr "ver."
 
-#: docs/models.py:164 docs/models.py:174 docs/models.py:244 docs/models.py:354
-#: docs/templates/doctask_detail.html:21
+#: models.py:164 models.py:174 models.py:244 models.py:355
+#: templates/doctask_detail.html:21
 msgid "Документ"
 msgstr "Document"
 
-#: docs/models.py:165
+#: models.py:165
 msgid "Документы"
 msgstr "Documents"
 
-#: docs/models.py:169
+#: models.py:169
 msgid "Номер версии"
 msgstr "Version number"
 
-#: docs/models.py:211
+#: models.py:211
 msgid "Опубликована"
 msgstr "Published"
 
-#: docs/models.py:212
+#: models.py:212
 msgid "Актуальность"
 msgstr "Relevance"
 
-#: docs/models.py:231 docs/models.py:250 docs/models.py:362
+#: models.py:231 models.py:250 models.py:363
 msgid "Версия Документа"
 msgstr "Document version"
 
-#: docs/models.py:232
+#: models.py:232
 msgid "Версии Документов"
 msgstr "Document versions"
 
-#: docs/models.py:239 docs/templates/doctask_detail.html:24 docs/views.py:610
-#: docs/views.py:685
+#: models.py:239 templates/doctask_detail.html:24 views.py:610 views.py:685
 msgid "Окончание"
 msgstr "Finish"
 
-#: docs/models.py:256 docs/templates/doctask_detail.html:23 docs/views.py:616
-#: docs/views.py:695
+#: models.py:256 templates/doctask_detail.html:23 views.py:616 views.py:695
 msgid "Исполнитель"
 msgstr "Executor"
 
-#: docs/models.py:265 docs/templates/doc_detail.html:32
-#: docs/templates/doc_history.html:22 docs/templates/doctask_detail.html:22
-#: docs/views.py:250 docs/views.py:381 docs/views.py:612 docs/views.py:689
+#: models.py:265 templates/doc_detail.html:32 templates/doc_history.html:22
+#: templates/doctask_detail.html:22 views.py:250 views.py:381 views.py:612
+#: views.py:689
 msgid "Тип"
 msgstr "Type"
 
-#: docs/models.py:272 docs/templates/doc_detail.html:33
-#: docs/templates/doc_history.html:23 docs/templates/doctask_detail.html:25
-#: docs/views.py:251 docs/views.py:384 docs/views.py:608 docs/views.py:681
+#: models.py:272 templates/doc_detail.html:33 templates/doc_history.html:23
+#: templates/doctask_detail.html:25 views.py:251 views.py:384 views.py:608
+#: views.py:681
 msgid "Статус"
 msgstr "Status"
 
-#: docs/models.py:274
+#: models.py:274
 msgid "Дата создания"
 msgstr "Date of creation"
 
-#: docs/models.py:276
+#: models.py:276
 msgid "Дата закрытия"
 msgstr "Closing date"
 
-#: docs/models.py:288
+#: models.py:288
 msgid "Задача документа"
 msgstr "Document Task"
 
-#: docs/models.py:300
+#: models.py:300
 msgid "Срок"
 msgstr "Term"
 
-#: docs/models.py:311 docs/models.py:328 docs/models.py:370 docs/views.py:607
-#: docs/views.py:680
+#: models.py:311 models.py:328 models.py:371 views.py:607 views.py:680
 msgid "Задача"
 msgstr "Task"
 
-#: docs/models.py:312
+#: models.py:312
 msgid "Задачи"
 msgstr "Tasks"
 
-#: docs/models.py:317
+#: models.py:317
 msgid "Время работы, час."
 msgstr "Working time, hour."
 
-#: docs/models.py:340 docs/templates/doctask_detail.html:52
-msgid "Комментарии"
-msgstr "Comments"
-
-#: docs/models.py:346
+#: models.py:347
 msgid "Уникальное наименование"
 msgstr "Unique name"
 
-#: docs/models.py:381
+#: models.py:382
 msgid "Файл"
 msgstr "File"
 
-#: docs/models.py:395 docs/models.py:396 docs/templates/doctask_detail.html:72
+#: models.py:396 models.py:397 templates/doctask_detail.html:72
 msgid "Файлы"
 msgstr "Files"
 
-#: docs/templates/doc_detail.html:17
+#: templates/doc_detail.html:17
 msgid "версия"
 msgstr "version"
 
-#: docs/templates/doc_detail.html:19 docs/templates/doc_history.html:15
+#: templates/doc_detail.html:19 templates/doc_history.html:15
 msgid "Документ перемещён в архив"
 msgstr "The document has been moved to the archive"
 
-#: docs/templates/doc_detail.html:28
+#: templates/doc_detail.html:28
 msgid "Документы организации"
 msgstr "Organization documents"
 
-#: docs/templates/doc_detail.html:29 docs/templates/doc_history.html:19
-#: docs/views.py:252 docs/views.py:387
+#: templates/doc_detail.html:29 templates/doc_history.html:19 views.py:252
+#: views.py:387
 msgid "Менеджер"
 msgstr "Manager"
 
-#: docs/templates/doc_detail.html:29 docs/templates/doc_detail.html:36
-#: docs/templates/doc_history.html:19 docs/templates/doc_history.html:26
+#: templates/doc_detail.html:29 templates/doc_detail.html:36
+#: templates/doc_history.html:19 templates/doc_history.html:26
 msgid "Профиль"
 msgstr "Profile"
 
-#: docs/templates/doc_detail.html:41 docs/templates/doc_history.html:30
-#: docs/templates/doctask_detail.html:27
+#: templates/doc_detail.html:41 templates/doc_history.html:30
+#: templates/doctask_detail.html:27
 msgid "Дата"
 msgstr "Date"
 
-#: docs/templates/doc_detail.html:63 docs/templates/doc_history.html:44
+#: templates/doc_detail.html:63 templates/doc_history.html:44
 msgid "Информация о Документе недоступна!"
 msgstr "Information about the Document is not available!"
 
-#: docs/templates/doc_detail.html:77
+#: templates/doc_detail.html:77
 msgid "Движение Документа"
 msgstr "Document Movement"
 
-#: docs/templates/doc_detail.html:82
+#: templates/doc_detail.html:82
 msgid "По статусу"
 msgstr "By status"
 
-#: docs/templates/doc_detail.html:84 docs/templates/doc_detail.html:95
+#: templates/doc_detail.html:84 templates/doc_detail.html:95
 msgid "Все"
 msgstr "All"
 
-#: docs/templates/doc_detail.html:85
+#: templates/doc_detail.html:85
 msgid "Все активные"
 msgstr "All active"
 
-#: docs/templates/doc_detail.html:86
+#: templates/doc_detail.html:86
 msgid "Просроченные"
 msgstr "Overdue"
 
-#: docs/templates/doc_detail.html:93
+#: templates/doc_detail.html:93
 msgid "По типу"
 msgstr "By type"
 
-#: docs/templates/doc_detail.html:112
+#: templates/doc_detail.html:112
 msgid "Применить"
 msgstr "Apply"
 
-#: docs/templates/doc_detail.html:130
+#: templates/doc_detail.html:130
 msgid "Информация о движении Документа недоступна!"
 msgstr "Information about the movement of the Document is not available!"
 
-#: docs/templates/doc_history.html:34
+#: templates/doc_history.html:34
 msgid "Вернуться"
 msgstr "Return"
 
-#: docs/templates/doc_history.html:56
+#: templates/doc_history.html:56
 msgid "История Документа (версии)"
 msgstr "Document History (versions)"
 
-#: docs/templates/doc_history.html:69
+#: templates/doc_history.html:69
 msgid "Информация об истории Документа недоступна!"
 msgstr "Information about the history of the Document is not available!"
 
-#: docs/templates/docs_list.html:6
+#: templates/docs_list.html:6
 msgid "Профиль Менеджера"
 msgstr "Manager Profile"
 
-#: docs/templates/docs_list.html:7 docs/templates/doctask_detail.html:68
-#: docs/templates/doctasks_list.html:8
+#: templates/docs_list.html:7 templates/doctask_detail.html:68
+#: templates/doctasks_list.html:8
 msgid "Профиль Автора"
 msgstr "Author Profile"
 
-#: docs/templates/doctask_detail.html:12
+#: templates/doctask_detail.html:12
 msgid "Задача перемещена в архив"
 msgstr "The task has been moved to the archive"
 
-#: docs/templates/doctask_detail.html:21
+#: templates/doctask_detail.html:21
 msgid "Движение документа"
 msgstr "Document Movement"
 
-#: docs/templates/doctask_detail.html:23
+#: templates/doctask_detail.html:23
 msgid "Профиль исполнителя"
 msgstr "Executor profile"
 
-#: docs/templates/doctasks_list.html:7
+#: templates/doctask_detail.html:52
+msgid "Комментарии"
+msgstr "Comments"
+
+#: templates/doctasks_list.html:7
 msgid "Профиль Исполнителя"
 msgstr "Executor Profile"
 
-#: docs/views.py:171
+#: views.py:171
 msgid "Сменить организацию"
 msgstr "Change Organization"
 
-#: docs/views.py:173 docs/views.py:175 docs/views.py:177 docs/views.py:531
-#: docs/views.py:755
+#: views.py:173 views.py:175 views.py:177 views.py:531 views.py:755
 msgid "Добавить"
 msgstr "Add"
 
-#: docs/views.py:174 docs/views.py:541 docs/views.py:760
+#: views.py:174 views.py:541 views.py:760
 msgid "Изменить"
 msgstr "Edit"
 
-#: docs/views.py:247 docs/views.py:376
+#: views.py:247 views.py:376
 msgid "Номер"
 msgstr "Number"
 
-#: docs/views.py:248 docs/views.py:377
+#: views.py:248 views.py:377
 msgid "Актуальн."
 msgstr "Actual"
 
-#: docs/views.py:254 docs/views.py:392
+#: views.py:254 views.py:392
 msgid "Активн."
 msgstr "Active"
 
-#: docs/views.py:267
+#: views.py:267
 msgid "Новый Документ"
 msgstr "New Document"
 
-#: docs/views.py:291
+#: views.py:291
 msgid "Изменить Документ"
 msgstr "Edit Document"
 
-#: docs/views.py:526
+#: views.py:526
 msgid "Версии"
 msgstr "Versions"
 
-#: docs/views.py:635
+#: views.py:635
 msgid "Новая Задача"
 msgstr "New Task"
 
-#: docs/views.py:660
+#: views.py:660
 msgid "Изменить Задачу"
 msgstr "Edit Task"
 
-#: docs/views.py:754
+#: views.py:754
 msgid "История"
 msgstr "History"
 
-#: docs/views.py:798
+#: views.py:798
 msgid "Новый Комментарий"
 msgstr "New Comment"
 
-#: docs/views.py:893 docs/views.py:995
+#: views.py:893 views.py:995
 msgid "Задачи не найдены!"
 msgstr "Tasks not found!"
+
+#~ msgid "Тип документ"
+#~ msgstr "Document Type"
 
 #~ msgid "Наименование_ru"
 #~ msgstr "Name_ru"

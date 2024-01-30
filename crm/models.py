@@ -33,7 +33,7 @@ class Dict_ClientType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип клиента")
         verbose_name_plural = _("Типы клиентов")
 
@@ -49,7 +49,7 @@ class Dict_ClientStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус клиента")
         verbose_name_plural = _("Статусы клиентов")
 
@@ -65,7 +65,7 @@ class Dict_ClientTaskStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус задачи")
         verbose_name_plural = _("Статусы задач")
 
@@ -79,7 +79,7 @@ class Dict_ClientTaskStructureType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип задачи в иерархии")
         verbose_name_plural = _("Типы задач в иерархии")
 
@@ -93,7 +93,7 @@ class Dict_ClientTaskType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип задачи")
         verbose_name_plural = _("Типы задач")
 
@@ -103,7 +103,7 @@ class Dict_ClientEventType(Dict_Model):
     def name(self):
         return self.trans_field(exposed_request, "name")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип события")
         verbose_name_plural = _("Типы событий")
 
@@ -119,7 +119,7 @@ class Dict_ClientEventStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус события")
         verbose_name_plural = _("Статусы событий")
 
@@ -133,7 +133,7 @@ class Dict_ClientInitiator(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Инициатор")
         verbose_name_plural = _("Инициаторы")
 
@@ -327,9 +327,10 @@ class ClientTask(SetPropertiesDashboardMixin, Task_Model):
         # order_insertion_by = ['name']
         order_insertion_by = ["-dateend"]
 
-    class Meta:
-        verbose_name = _("Задача")
-        verbose_name_plural = _("Задачи")
+    class Meta(Task_Model.Meta):
+        pass
+        # verbose_name = _("Задача")
+        # verbose_name_plural = _("Задачи")
 
 
 class ClientTaskComment(Comment_Model):
@@ -347,9 +348,10 @@ class ClientTaskComment(Comment_Model):
     def files(self):
         return ClientFile.objects.filter(taskcomment_id=self.id, is_active=True)
 
-    class Meta:
-        verbose_name = _("Комментарий")
-        verbose_name_plural = _("Комментарии")
+    class Meta(Comment_Model.Meta):
+        pass
+        # verbose_name = _("Комментарий")
+        # verbose_name_plural = _("Комментарии")
 
 
 class ClientEvent(SetPropertiesDashboardMixin, models.Model):
@@ -476,9 +478,10 @@ class ClientEventComment(Comment_Model):
     def files(self):
         return ClientFile.objects.filter(eventcomment_id=self.id, is_active=True)
 
-    class Meta:
-        verbose_name = _("Комментарий")
-        verbose_name_plural = _("Комментарии")
+    class Meta(Comment_Model.Meta):
+        pass
+        # verbose_name = _("Комментарий")
+        # verbose_name_plural = _("Комментарии")
 
 
 class ClientFile(models.Model):

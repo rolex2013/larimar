@@ -31,8 +31,8 @@ class Dict_DocType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
-        verbose_name = _("Тип документ")
+    class Meta(Dict_Model.Meta):
+        verbose_name = _("Тип документа")
         verbose_name_plural = _("Типы документов")
 
 
@@ -47,7 +47,7 @@ class Dict_DocStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус документа")
         verbose_name_plural = _("Статусы документов")
 
@@ -61,7 +61,7 @@ class Dict_DocTaskType(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Тип задачи")
         verbose_name_plural = _("Типы задач")
 
@@ -77,7 +77,7 @@ class Dict_DocTaskStatus(Dict_Model):
     def description(self):
         return self.trans_field(exposed_request, "description")
 
-    class Meta:
+    class Meta(Dict_Model.Meta):
         verbose_name = _("Статус задачи")
         verbose_name_plural = _("Статусы задач")
 
@@ -335,9 +335,10 @@ class DocTaskComment(Comment_Model):
     def files(self):
         return DocVerFile.objects.filter(taskcomment_id=self.id, is_active=True)
 
-    class Meta:
-        verbose_name = _("Комментарий")
-        verbose_name_plural = _("Комментарии")
+    class Meta(Comment_Model.Meta):
+        pass
+        # verbose_name = _("Комментарий")
+        # verbose_name_plural = _("Комментарии")
 
 
 class DocVerFile(models.Model):
