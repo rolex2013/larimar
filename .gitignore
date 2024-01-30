@@ -12,7 +12,6 @@ media/
 .idea/
 .vscode/
 .venv/
-/larimar/config/
 /larimar/config/.env
 /tmp
 requirements.~xt
