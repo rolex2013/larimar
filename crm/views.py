@@ -37,6 +37,7 @@ from django.utils.translation import gettext_lazy as _
 # from django.core.exceptions import ObjectDoesNotExist
 
 from django.shortcuts import render  # , redirect, get_object_or_404
+
 # View, TemplateView, ListView,
 from django.views.generic import DetailView, CreateView
 from django.views.generic.edit import UpdateView  # , DeleteView
@@ -68,9 +69,11 @@ def clients(request, companyid=0, pk=0):
         client_list = Client.objects.filter(
             Q(author=request.user.id)
             | Q(manager=request.user.id)
-            | Q(members__in=[
-                currentuser,
-            ]),
+            | Q(
+                members__in=[
+                    currentuser,
+                ]
+            ),
             is_active=True,
             company=companyid,
             dateclose__isnull=True,
@@ -81,9 +84,11 @@ def clients(request, companyid=0, pk=0):
             client_list = Client.objects.filter(
                 Q(author=request.user.id)
                 | Q(manager=request.user.id)
-                | Q(members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 company=companyid,
                 dateclose__isnull=True,
@@ -94,9 +99,11 @@ def clients(request, companyid=0, pk=0):
                 client_list = Client.objects.filter(
                     Q(author=request.user.id)
                     | Q(manager=request.user.id)
-                    | Q(members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     company=companyid,
                 )
@@ -105,9 +112,11 @@ def clients(request, companyid=0, pk=0):
                 client_list = Client.objects.filter(
                     Q(author=request.user.id)
                     | Q(manager=request.user.id)
-                    | Q(members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     company=companyid,
                     dateclose__isnull=True,
@@ -117,9 +126,11 @@ def clients(request, companyid=0, pk=0):
                 client_list = Client.objects.filter(
                     Q(author=request.user.id)
                     | Q(manager=request.user.id)
-                    | Q(members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     company=companyid,
                     status=clntstatus,
@@ -152,8 +163,10 @@ def clients(request, companyid=0, pk=0):
         # root_client_id = 0
     else:
         current_client = Client.objects.get(id=pk)
-        if (currentuser == current_client.author_id
-                or currentuser == current_client.manager_id):
+        if (
+            currentuser == current_client.author_id
+            or currentuser == current_client.manager_id
+        ):
             obj_files_rights = 1
         # tree_client_id = current_client.tree_id
         # root_client_id = current_client.get_root().id
@@ -226,7 +239,9 @@ class ClientCreate(AddFilesMixin, CreateView):
         #   form.instance.parent_id = self.kwargs['parentid']
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём нового клиента
-        af = self.add_files(form, "crm", "client")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(
+            form, "crm", "client"
+        )  # добавляем файлы из формы (метод из AddFilesMixin)
         # Делаем первую запись в историю изменений проекта
         self_user_username = ""
         if self.object.user:
@@ -243,7 +258,10 @@ class ClientCreate(AddFilesMixin, CreateView):
             str(_("Имя")): self.object.firstname,
             str(_("Отчество")): self.object.middlename,
             str(_("Фамилия")): self.object.lastname,
-            str(_("Пользователь")): "-" if self_user_username == "" else self_user_username, "E-mail": self.object.email,
+            str(_("Пользователь")): "-"
+            if self_user_username == ""
+            else self_user_username,
+            "E-mail": self.object.email,
             str(_("Телефон")): self.object.phone,
             str(_("Тип")): self.object.type.name,
             str(_("Статус")): self.object.status.name,
@@ -254,7 +272,9 @@ class ClientCreate(AddFilesMixin, CreateView):
             str(_("Менеджер")): self.object.manager.username,
             str(_("Участники")): membersstr,
             str(_("Оповещ.")): "✓" if self.object.is_notify else "-",
-            str(_("Протокол")): "-" if self_object_protocoltype_name == "" else self_object_protocoltype_name,
+            str(_("Протокол")): "-"
+            if self_object_protocoltype_name == ""
+            else self_object_protocoltype_name,
             str(_("Активн.")): "✓" if self.object.is_active else "-",
         }
         ModelLog.objects.create(
@@ -274,11 +294,13 @@ class ClientCreate(AddFilesMixin, CreateView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         # здесь нужно условие для 'action': 'create'
-        kwargs.update({
-            "user": self.request.user,
-            "action": "create",
-            "companyid": self.kwargs["companyid"],
-        })
+        kwargs.update(
+            {
+                "user": self.request.user,
+                "action": "create",
+                "companyid": self.kwargs["companyid"],
+            }
+        )
         return kwargs
 
 
@@ -292,7 +314,8 @@ class ClientUpdate(AddFilesMixin, UpdateView):
         context = super(ClientUpdate, self).get_context_data(**kwargs)
         context["header"] = _("Изменить Клиента")
         context["files"] = ClientFile.objects.filter(
-            client_id=self.kwargs["pk"], is_active=True).order_by("uname")
+            client_id=self.kwargs["pk"], is_active=True
+        ).order_by("uname")
         return context
 
     def get_form_kwargs(self):
@@ -302,9 +325,15 @@ class ClientUpdate(AddFilesMixin, UpdateView):
         return kwargs
 
     def form_valid(self, form):
-        self.object = form.save(commit=False)  # без commit=False происходит вызов save() Модели
-        af = self.add_files(form, "crm", "client")  # добавляем файлы из формы (метод из AddFilesMixin)
-        old = Client.objects.filter(pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        self.object = form.save(
+            commit=False
+        )  # без commit=False происходит вызов save() Модели
+        af = self.add_files(
+            form, "crm", "client"
+        )  # добавляем файлы из формы (метод из AddFilesMixin)
+        old = Client.objects.filter(
+            pk=self.object.pk
+        ).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
         old_user_username = ""
         self_user_username = ""
         if old.user:
@@ -333,23 +362,61 @@ class ClientUpdate(AddFilesMixin, UpdateView):
                     is_members_changed = True
 
         historyjson = {
-            str(_("Имя")): "" if self.object.firstname == old.firstname else self.object.firstname,
-            str(_("Отчество")): "" if self.object.middlename == old.middlename else self.object.middlename,
-            str(_("Фамилия")): "" if self.object.lastname == old.lastname else self.object.lastname,
-            str(_("Пользователь")): "" if self_user_username == old_user_username else "-" if self_user_username == "" else self_user_username,
-            str(_("E-mail")): "" if self.object.email == old.email else self.object.email,
-            str(_("Телефон")): "" if self.object.phone == old.phone else self.object.phone,
-            str(_("Тип")): "" if self.object.type.name == old.type.name else self.object.type.name,
-            str(_("Статус")): "" if self.object.status.name == old.status.name else self.object.status.name,
-            str(_("Ст-ть")): "" if self.object.cost == old.cost else str(self.object.cost),
-            str(_("Валюта")): "" if self.object.currency.code_char == old.currency.code_char else self.object.currency.code_char,
-            str(_("Выполнен на, %")): "" if self.object.percentage == old.percentage else str(self.object.percentage),
-            str(_("Инициатор")): "" if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
-            str(_("Менеджер")): "" if self.object.manager.username == old.manager.username else self.object.manager.username,
+            str(_("Имя")): ""
+            if self.object.firstname == old.firstname
+            else self.object.firstname,
+            str(_("Отчество")): ""
+            if self.object.middlename == old.middlename
+            else self.object.middlename,
+            str(_("Фамилия")): ""
+            if self.object.lastname == old.lastname
+            else self.object.lastname,
+            str(_("Пользователь")): ""
+            if self_user_username == old_user_username
+            else "-"
+            if self_user_username == ""
+            else self_user_username,
+            str(_("E-mail")): ""
+            if self.object.email == old.email
+            else self.object.email,
+            str(_("Телефон")): ""
+            if self.object.phone == old.phone
+            else self.object.phone,
+            str(_("Тип")): ""
+            if self.object.type.name == old.type.name
+            else self.object.type.name,
+            str(_("Статус")): ""
+            if self.object.status.name == old.status.name
+            else self.object.status.name,
+            str(_("Ст-ть")): ""
+            if self.object.cost == old.cost
+            else str(self.object.cost),
+            str(_("Валюта")): ""
+            if self.object.currency.code_char == old.currency.code_char
+            else self.object.currency.code_char,
+            str(_("Выполнен на, %")): ""
+            if self.object.percentage == old.percentage
+            else str(self.object.percentage),
+            str(_("Инициатор")): ""
+            if self.object.initiator.name == old.initiator.name
+            else self.object.initiator.name,
+            str(_("Менеджер")): ""
+            if self.object.manager.username == old.manager.username
+            else self.object.manager.username,
             str(_("Участники")): "" if is_members_changed is False else membersstr,
-            str(_("Оповещ.")): "" if self.object.is_notify == old.is_notify else "✓" if self.object.is_notify else "-",
-            str(_("Протокол")): "" if self.object.protocoltype.name == old.protocoltype.name else self.object.protocoltype.name,
-            str(_("Активн.")): "" if self.object.is_active == old.is_active else "✓" if self.object.is_active else "-",
+            str(_("Оповещ.")): ""
+            if self.object.is_notify == old.is_notify
+            else "✓"
+            if self.object.is_notify
+            else "-",
+            str(_("Протокол")): ""
+            if self.object.protocoltype.name == old.protocoltype.name
+            else self.object.protocoltype.name,
+            str(_("Активн.")): ""
+            if self.object.is_active == old.is_active
+            else "✓"
+            if self.object.is_active
+            else "-",
         }
         ModelLog.objects.create(
             componentname="clnt",
@@ -372,9 +439,11 @@ def clienttasks(request, clientid=0, pk=0):
         task_list = ClientTask.objects.filter(
             Q(author=request.user.id)
             | Q(assigner=request.user.id)
-            | Q(client__members__in=[
-                currentuser,
-            ]),
+            | Q(
+                client__members__in=[
+                    currentuser,
+                ]
+            ),
             is_active=True,
             client=clientid,
             dateclose__isnull=True,
@@ -385,9 +454,11 @@ def clienttasks(request, clientid=0, pk=0):
             task_list = ClientTask.objects.filter(
                 Q(author=request.user.id)
                 | Q(assigner=request.user.id)
-                | Q(client__members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    client__members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 client=clientid,
                 dateclose__isnull=True,
@@ -398,9 +469,11 @@ def clienttasks(request, clientid=0, pk=0):
                 task_list = ClientTask.objects.filter(
                     Q(author=request.user.id)
                     | Q(assigner=request.user.id)
-                    | Q(client__members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        client__members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     client=clientid,
                 )
@@ -409,9 +482,11 @@ def clienttasks(request, clientid=0, pk=0):
                 task_list = ClientTask.objects.filter(
                     Q(author=request.user.id)
                     | Q(assigner=request.user.id)
-                    | Q(client__members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        client__members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     client=clientid,
                     dateclose__isnull=True,
@@ -421,9 +496,11 @@ def clienttasks(request, clientid=0, pk=0):
                 task_list = ClientTask.objects.filter(
                     Q(author=request.user.id)
                     | Q(assigner=request.user.id)
-                    | Q(client__members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        client__members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     client=clientid,
                     status=tskstatus,
@@ -436,22 +513,28 @@ def clienttasks(request, clientid=0, pk=0):
     event_list = ClientEvent.objects.filter(client=clientid, is_active=True)
     # len_elist = len(event_list)
 
-    currentclient = (Client.objects.filter(id=clientid).select_related(
-        "company",
-        "manager",
-        "user",
-        "protocoltype",
-        "type",
-        "status",
-        "currency",
-        "initiator",
-        "author",
-    ).first())
+    currentclient = (
+        Client.objects.filter(id=clientid)
+        .select_related(
+            "company",
+            "manager",
+            "user",
+            "protocoltype",
+            "type",
+            "status",
+            "currency",
+            "initiator",
+            "author",
+        )
+        .first()
+    )
 
     taskcomment_costsum = ClientTaskComment.objects.filter(
-        task__client_id=currentclient.id).aggregate(Sum("cost"))
+        task__client_id=currentclient.id
+    ).aggregate(Sum("cost"))
     taskcomment_timesum = ClientTaskComment.objects.filter(
-        task__client_id=currentclient.id).aggregate(Sum("time"))
+        task__client_id=currentclient.id
+    ).aggregate(Sum("time"))
     try:
         sec = taskcomment_timesum["time__sum"] * 3600
     except:
@@ -468,22 +551,32 @@ def clienttasks(request, clientid=0, pk=0):
         tree_task_id = 0
         root_task_id = 0
         tree_task_id = 0
-        if (currentuser == currentclient.author_id or currentuser == currentclient.manager_id):
+        if (
+            currentuser == currentclient.author_id
+            or currentuser == currentclient.manager_id
+        ):
             obj_files_rights = 1
     else:
-        current_task = (ClientTask.objects.filter(id=pk).select_related(
-            "client",
-            "assigner",
-            "structure_type",
-            "type",
-            "status",
-            "author",
-            "initiator",
-        ).first())
+        current_task = (
+            ClientTask.objects.filter(id=pk)
+            .select_related(
+                "client",
+                "assigner",
+                "structure_type",
+                "type",
+                "status",
+                "author",
+                "initiator",
+            )
+            .first()
+        )
         tree_task_id = current_task.tree_id
         root_task_id = current_task.get_root().id
         tree_task_id = current_task.tree_id
-        if (currentuser == current_task.author_id or currentuser == current_task.assigner_id):
+        if (
+            currentuser == current_task.author_id
+            or currentuser == current_task.assigner_id
+        ):
             obj_files_rights = 1
 
     button_client_create = ""
@@ -491,85 +584,70 @@ def clienttasks(request, clientid=0, pk=0):
     button_client_history = ""
     button_task_create = ""
 
-    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
-    if (currentuser == currentclient.author_id or currentuser == currentclient.manager_id or is_member):
+    is_member = Client.objects.filter(
+        members__in=[
+            currentuser,
+        ]
+    ).exists()
+    if (
+        currentuser == currentclient.author_id
+        or currentuser == currentclient.manager_id
+        or is_member
+    ):
         # button_client_create = 'Добавить'
         button_client_history = _("История")
         button_task_create = button_event_create = _("Добавить")
         # button_event_create = _("Добавить")
-        if (currentuser == currentclient.author_id or currentuser == currentclient.manager_id):
+        if (
+            currentuser == currentclient.author_id
+            or currentuser == currentclient.manager_id
+        ):
             button_client_update = _("Изменить")
 
-    task_list = task_list.select_related("client", "assigner",
-                                         "structure_type", "type", "status",
-                                         "author", "initiator")
+    task_list = task_list.select_related(
+        "client", "assigner", "structure_type", "type", "status", "author", "initiator"
+    )
     event_list = event_list.select_related("client", "task", "type", "status")
 
     return render(
         request,
         "client_detail.html",
         {
-            # .order_by('tree_id', 'level', '-dateend'),
             "nodes":
-            task_list.distinct().order_by(),
-            "current_task":
-            current_task,
-            "root_task_id":
-            root_task_id,
-            "tree_task_id":
-            tree_task_id,
-            "current_client":
-            currentclient,
-            "clientid":
-            clientid,
-            "user_companies":
-            request.session["_auth_user_companies_id"],
-            "obj_files_rights":
-            obj_files_rights,
-            "files":
-            ClientFile.objects.filter(client=currentclient,
-                                      is_active=True).order_by("uname"),
-            "objtype":
-            "clnt",
-            "media_path":
-            settings.MEDIA_URL,
-            "button_client_create":
-            button_client_create,
-            "button_client_update":
-            button_client_update,
-            "button_client_history":
-            button_client_history,
-            "button_task_create":
-            button_task_create,
+            # task_list.distinct().order_by(),
+            task_list.distinct(),  # .order_by('tree_id', 'level', 'dateend'),
+            "current_task": current_task,
+            "root_task_id": root_task_id,
+            "tree_task_id": tree_task_id,
+            "current_client": currentclient,
+            "clientid": clientid,
+            "user_companies": request.session["_auth_user_companies_id"],
+            "obj_files_rights": obj_files_rights,
+            "files": ClientFile.objects.filter(
+                client=currentclient, is_active=True
+            ).order_by("uname"),
+            "objtype": "clnt",
+            "media_path": settings.MEDIA_URL,
+            "button_client_create": button_client_create,
+            "button_client_update": button_client_update,
+            "button_client_history": button_client_history,
+            "button_task_create": button_task_create,
             # 'button_task_history': button_task_history,
-            "taskstatus":
-            Dict_ClientTaskStatus.objects.filter(is_active=True),
-            "tasktype":
-            Dict_ClientTaskType.objects.filter(is_active=True),
-            "tskstatus_selectid":
-            tskstatus_selectid,
-            "object_list":
-            "clienttask_list",
-            "taskcomment_costsum":
-            taskcomment_costsum,
-            "taskcomment_timesum":
-            taskcomment_timesum,
-            "hours":
-            hours,
-            "minutes":
-            minutes,
-            "seconds":
-            seconds,
+            "taskstatus": Dict_ClientTaskStatus.objects.filter(is_active=True),
+            "tasktype": Dict_ClientTaskType.objects.filter(is_active=True),
+            "tskstatus_selectid": tskstatus_selectid,
+            "object_list": "clienttask_list",
+            "taskcomment_costsum": taskcomment_costsum,
+            "taskcomment_timesum": taskcomment_timesum,
+            "hours": hours,
+            "minutes": minutes,
+            "seconds": seconds,
             # 'len_list': len_list,
-            "enodes":
-            event_list.distinct().order_by(),
+            "enodes": event_list.distinct().order_by(),
             # 'len_elist': len_elist,
-            "button_event_create":
-            button_event_create,
-            "eventstatus":
-            Dict_ClientEventStatus.objects.filter(is_active=True),
-            "eventtype":
-            Dict_ClientEventType.objects.filter(is_active=True),
+            "button_event_create": button_event_create,
+            "eventstatus": Dict_ClientEventStatus.objects.filter(is_active=True),
+            "eventtype": Dict_ClientEventType.objects.filter(is_active=True),
             # 'evntstatus_selectid': evntstatus_selectid,
         },
     )
@@ -587,7 +665,9 @@ class ClientTaskCreate(AddFilesMixin, CreateView):
             form.instance.parent_id = self.kwargs["parentid"]
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новую задачу клиента
-        af = self.add_files(form, "crm", "task")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(
+            form, "crm", "task"
+        )  # добавляем файлы из формы (метод из AddFilesMixin)
         historyjson = {
             str(_("Задача")): self.object.name,
             str(_("Статус")): self.object.status.name,
@@ -618,11 +698,13 @@ class ClientTaskCreate(AddFilesMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(ClientTaskCreate, self).get_form_kwargs()
-        kwargs.update({
-            "user": self.request.user,
-            "action": "create",
-            "clientid": self.kwargs["clientid"],
-        })
+        kwargs.update(
+            {
+                "user": self.request.user,
+                "action": "create",
+                "clientid": self.kwargs["clientid"],
+            }
+        )
         return kwargs
 
 
@@ -636,7 +718,8 @@ class ClientTaskUpdate(AddFilesMixin, UpdateView):
         context = super(ClientTaskUpdate, self).get_context_data(**kwargs)
         context["header"] = _("Изменить Задачу")
         context["files"] = ClientFile.objects.filter(
-            task_id=self.kwargs["pk"], is_active=True).order_by("uname")
+            task_id=self.kwargs["pk"], is_active=True
+        ).order_by("uname")
         return context
 
     def get_form_kwargs(self):
@@ -646,20 +729,46 @@ class ClientTaskUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        af = self.add_files(form, "crm", "task")  # добавляем файлы из формы (метод из AddFilesMixin)
-        old = ClientTask.objects.filter(pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        af = self.add_files(
+            form, "crm", "task"
+        )  # добавляем файлы из формы (метод из AddFilesMixin)
+        old = ClientTask.objects.filter(
+            pk=self.object.pk
+        ).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
         historyjson = {
             str(_("Задача")): "" if self.object.name == old.name else self.object.name,
-            str(_("Статус")): "" if self.object.status.name == old.status.name else self.object.status.name,
-            str(_("Начало")): "" if self.object.datebegin == old.datebegin else self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
-            str(_("Окончание")): "" if self.object.dateend == old.dateend else self.object.dateend.strftime("%d.%m.%Y %H:%M"),
-            str(_("Тип в иерархии")): "" if self.object.structure_type.name == old.structure_type.name else self.object.structure_type.name,
-            str(_("Тип")): "" if self.object.type.name == old.type.name else self.object.type.name,
-            str(_("Стоимость")): "" if self.object.cost == old.cost else str(self.object.cost),
-            str(_("Выполнен на, %")): "" if self.object.percentage == old.percentage else str(self.object.percentage),
-            str(_("Инициатор")): "" if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
-            str(_("Исполнитель")): "" if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
-            str(_("Активность")): "" if self.object.is_active == old.is_active else "✓" if self.object.is_active else "-"
+            str(_("Статус")): ""
+            if self.object.status.name == old.status.name
+            else self.object.status.name,
+            str(_("Начало")): ""
+            if self.object.datebegin == old.datebegin
+            else self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
+            str(_("Окончание")): ""
+            if self.object.dateend == old.dateend
+            else self.object.dateend.strftime("%d.%m.%Y %H:%M"),
+            str(_("Тип в иерархии")): ""
+            if self.object.structure_type.name == old.structure_type.name
+            else self.object.structure_type.name,
+            str(_("Тип")): ""
+            if self.object.type.name == old.type.name
+            else self.object.type.name,
+            str(_("Стоимость")): ""
+            if self.object.cost == old.cost
+            else str(self.object.cost),
+            str(_("Выполнен на, %")): ""
+            if self.object.percentage == old.percentage
+            else str(self.object.percentage),
+            str(_("Инициатор")): ""
+            if self.object.initiator.name == old.initiator.name
+            else self.object.initiator.name,
+            str(_("Исполнитель")): ""
+            if self.object.assigner.username == old.assigner.username
+            else self.object.assigner.username,
+            str(_("Активность")): ""
+            if self.object.is_active == old.is_active
+            else "✓"
+            if self.object.is_active
+            else "-"
             # , str(_("Участники")):self.members.username
         }
         ModelLog.objects.create(
@@ -674,25 +783,31 @@ class ClientTaskUpdate(AddFilesMixin, UpdateView):
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienttaskcomments(request, taskid):
-    currenttask = (ClientTask.objects.filter(id=taskid).select_related(
-        "client",
-        "assigner",
-        "structure_type",
-        "type",
-        "status",
-        "author",
-        "initiator",
-    ).first())
+    currenttask = (
+        ClientTask.objects.filter(id=taskid)
+        .select_related(
+            "client",
+            "assigner",
+            "structure_type",
+            "type",
+            "status",
+            "author",
+            "initiator",
+        )
+        .first()
+    )
     currentuser = request.user.id
     if currentuser == currenttask.author_id or currentuser == currenttask.assigner_id:
         obj_files_rights = 1
     else:
         obj_files_rights = 0
 
-    taskcomment_costsum = ClientTaskComment.objects.filter(
-        task=taskid).aggregate(Sum("cost"))
-    taskcomment_timesum = ClientTaskComment.objects.filter(
-        task=taskid).aggregate(Sum("time"))
+    taskcomment_costsum = ClientTaskComment.objects.filter(task=taskid).aggregate(
+        Sum("cost")
+    )
+    taskcomment_timesum = ClientTaskComment.objects.filter(task=taskid).aggregate(
+        Sum("time")
+    )
     try:
         sec = taskcomment_timesum["time__sum"] * 3600
     except:
@@ -702,9 +817,11 @@ def clienttaskcomments(request, taskid):
     seconds = sec
     taskcomment_list = ClientTaskComment.objects.filter(
         Q(author=request.user.id)
-        | Q(task__client__members__in=[
-            currentuser,
-        ]),
+        | Q(
+            task__client__members__in=[
+                currentuser,
+            ]
+        ),
         is_active=True,
         task=taskid,
     )
@@ -717,14 +834,26 @@ def clienttaskcomments(request, taskid):
     button_task_create = ""
     button_task_update = ""
     button_task_history = ""
-    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
-    if (currentuser == currenttask.author_id
-            or currentuser == currenttask.assigner_id or is_member):
-        button_task_create = button_taskcomment_create = button_event_create = _("Добавить")
+    is_member = Client.objects.filter(
+        members__in=[
+            currentuser,
+        ]
+    ).exists()
+    if (
+        currentuser == currenttask.author_id
+        or currentuser == currenttask.assigner_id
+        or is_member
+    ):
+        button_task_create = button_taskcomment_create = button_event_create = _(
+            "Добавить"
+        )
         button_task_history = _("История")
         # button_taskcomment_create = "Добавить"
         # button_event_create = "Добавить"
-        if (currentuser == currenttask.author_id or currentuser == currenttask.assigner_id):
+        if (
+            currentuser == currenttask.author_id
+            or currentuser == currenttask.assigner_id
+        ):
             button_task_update = _("Изменить")
 
     taskcomment_list = taskcomment_list.select_related("task", "author")
@@ -734,45 +863,27 @@ def clienttaskcomments(request, taskid):
         request,
         "clienttask_detail.html",
         {
-            "nodes":
-            taskcomment_list.distinct().order_by(),
+            "nodes": taskcomment_list.distinct().order_by(),
             # 'current_taskcomment': currenttaskcomment,
-            "clienttask":
-            currenttask,
-            "obj_files_rights":
-            obj_files_rights,
-            "files":
-            ClientFile.objects.filter(
-                task=currenttask, is_active=True).select_related(
-                    "client", "task", "taskcomment", "event",
-                    "eventcomment").order_by("uname"),
-            "objtype":
-            "clnttsk",
-            "button_clienttask_create":
-            button_task_create,
-            "button_clienttask_update":
-            button_task_update,
-            "button_clienttask_history":
-            button_task_history,
+            "clienttask": currenttask,
+            "obj_files_rights": obj_files_rights,
+            "files": ClientFile.objects.filter(task=currenttask, is_active=True)
+            .select_related("client", "task", "taskcomment", "event", "eventcomment")
+            .order_by("uname"),
+            "objtype": "clnttsk",
+            "button_clienttask_create": button_task_create,
+            "button_clienttask_update": button_task_update,
+            "button_clienttask_history": button_task_history,
             # 'object_list': 'clienttask_list',
-            "clienttaskcomment_costsum":
-            taskcomment_costsum,
-            "clienttaskcomment_timesum":
-            taskcomment_timesum,
-            "hours":
-            hours,
-            "minutes":
-            minutes,
-            "seconds":
-            seconds,
-            "button_clienttaskcomment_create":
-            button_taskcomment_create,
-            "enodes":
-            event_list.distinct().order_by(),
-            "button_event_create":
-            button_event_create,
-            "media_path":
-            settings.MEDIA_URL,
+            "clienttaskcomment_costsum": taskcomment_costsum,
+            "clienttaskcomment_timesum": taskcomment_timesum,
+            "hours": hours,
+            "minutes": minutes,
+            "seconds": seconds,
+            "button_clienttaskcomment_create": button_taskcomment_create,
+            "enodes": event_list.distinct().order_by(),
+            "button_event_create": button_event_create,
+            "media_path": settings.MEDIA_URL,
         },
     )
 
@@ -796,7 +907,9 @@ class ClientTaskCommentCreate(AddFilesMixin, CreateView):
         form.instance.task_id = self.kwargs["taskid"]
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новый коммент задачи клиента
-        af = self.add_files(form, "crm", "taskcomment")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(
+            form, "crm", "taskcomment"
+        )  # добавляем файлы из формы (метод из AddFilesMixin)
         return super(ClientTaskCommentCreate, self).form_valid(form)
 
 
@@ -808,7 +921,9 @@ class ClientTaskCommentUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(ClientTaskCommentUpdate, self).get_context_data(**kwargs)
         context["header"] = _("Изменить Комментарий")
-        context["files"] = ClientFile.objects.filter(taskcomment_id=self.kwargs["pk"], is_active=True).order_by("uname")
+        context["files"] = ClientFile.objects.filter(
+            taskcomment_id=self.kwargs["pk"], is_active=True
+        ).order_by("uname")
         return context
 
 
@@ -823,9 +938,11 @@ def clientevents(request, clientid=0, pk=0):
         event_list = ClientEvent.objects.filter(
             Q(author=request.user.id)
             | Q(assigner=request.user.id)
-            | Q(client__members__in=[
-                currentuser,
-            ]),
+            | Q(
+                client__members__in=[
+                    currentuser,
+                ]
+            ),
             is_active=True,
             client=clientid,
             dateclose__isnull=True,
@@ -836,9 +953,11 @@ def clientevents(request, clientid=0, pk=0):
             event_list = ClientEvent.objects.filter(
                 Q(author=request.user.id)
                 | Q(assigner=request.user.id)
-                | Q(client__members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    client__members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 client=clientid,
                 dateclose__isnull=True,
@@ -849,9 +968,11 @@ def clientevents(request, clientid=0, pk=0):
                 event_list = ClientEvent.objects.filter(
                     Q(author=request.user.id)
                     | Q(assigner=request.user.id)
-                    | Q(client__members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        client__members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     client=clientid,
                 )
@@ -860,9 +981,11 @@ def clientevents(request, clientid=0, pk=0):
                 event_list = ClientEvent.objects.filter(
                     Q(author=request.user.id)
                     | Q(assigner=request.user.id)
-                    | Q(client__members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        client__members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     client=clientid,
                     dateclose__isnull=True,
@@ -872,9 +995,11 @@ def clientevents(request, clientid=0, pk=0):
                 event_list = ClientEvent.objects.filter(
                     Q(author=request.user.id)
                     | Q(assigner=request.user.id)
-                    | Q(client__members__in=[
-                        currentuser,
-                    ]),
+                    | Q(
+                        client__members__in=[
+                            currentuser,
+                        ]
+                    ),
                     is_active=True,
                     client=clientid,
                     status=evntstatus,
@@ -892,10 +1017,15 @@ def clientevents(request, clientid=0, pk=0):
         current_event = 0
 
     else:
-        current_event = (ClientEvent.objects.filter(id=pk).select_related(
-            "client", "task", "type", "status").first())
-        if (currentuser == current_event.author_id
-                or currentuser == current_event.assigner_id):
+        current_event = (
+            ClientEvent.objects.filter(id=pk)
+            .select_related("client", "task", "type", "status")
+            .first()
+        )
+        if (
+            currentuser == current_event.author_id
+            or currentuser == current_event.assigner_id
+        ):
             obj_files_rights = 1
 
     button_client_create = ""
@@ -903,16 +1033,23 @@ def clientevents(request, clientid=0, pk=0):
     button_client_history = ""
     button_event_create = ""
 
-    is_member = Client.objects.filter(members__in=[
-        currentuser,
-    ]).exists()
-    if (currentuser == currentclient.author_id
-            or currentuser == currentclient.assigner_id or is_member):
+    is_member = Client.objects.filter(
+        members__in=[
+            currentuser,
+        ]
+    ).exists()
+    if (
+        currentuser == currentclient.author_id
+        or currentuser == currentclient.assigner_id
+        or is_member
+    ):
         button_client_create = button_event_create = _("Добавить")
         button_client_history = _("История")
         # button_event_create = "Добавить"
-        if (currentuser == currentclient.author_id
-                or currentuser == currentclient.assigner_id):
+        if (
+            currentuser == currentclient.author_id
+            or currentuser == currentclient.assigner_id
+        ):
             button_client_update = _("Изменить")
 
     event_list = event_list.select_related("client", "task", "type", "status")
@@ -932,8 +1069,7 @@ def clientevents(request, clientid=0, pk=0):
             "button_event_create": button_client_create,
             "buttonevent_update": button_client_update,
             "button_event_history": button_client_history,
-            "eventstatus":
-            Dict_ClientEventStatus.objects.filter(is_active=True),
+            "eventstatus": Dict_ClientEventStatus.objects.filter(is_active=True),
             "eventtype": Dict_ClientEventType.objects.filter(is_active=True),
             "evntstatus_selectid": evntstatus_selectid,
             "object_list": "clientevent_list",
@@ -955,7 +1091,9 @@ class ClientEventCreate(AddFilesMixin, CreateView):
             form.instance.task_id = self.kwargs["taskid"]
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новое событие клиента
-        af = self.add_files(form, "crm", "event")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(
+            form, "crm", "event"
+        )  # добавляем файлы из формы (метод из AddFilesMixin)
         self_task = ""
         self_task_id = 0
         self_task_name = ""
@@ -972,7 +1110,9 @@ class ClientEventCreate(AddFilesMixin, CreateView):
         historyjson = {
             str(_("Событие")): self.object.name,
             # _("Задача"): '#'+str(self_task_id)+'. '+self_task_name,
-            str(_("Задача")): "#" + str(self_task_id) + ". " + self_task_name if self_task else "-",
+            str(_("Задача")): "#" + str(self_task_id) + ". " + self_task_name
+            if self_task
+            else "-",
             str(_("Статус")): self_status_name if self_status_name else "-",
             str(_("Начало")): self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
             str(_("Окончание")): self.object.dateend.strftime("%d.%m.%Y %H:%M"),
@@ -999,12 +1139,14 @@ class ClientEventCreate(AddFilesMixin, CreateView):
 
     def get_form_kwargs(self):
         kwargs = super(ClientEventCreate, self).get_form_kwargs()
-        kwargs.update({
-            "user": self.request.user,
-            "action": "create",
-            "clientid": self.kwargs["clientid"],
-            "taskid": self.kwargs["taskid"],
-        })
+        kwargs.update(
+            {
+                "user": self.request.user,
+                "action": "create",
+                "clientid": self.kwargs["clientid"],
+                "taskid": self.kwargs["taskid"],
+            }
+        )
         return kwargs
 
 
@@ -1018,7 +1160,8 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
         context = super(ClientEventUpdate, self).get_context_data(**kwargs)
         context["header"] = _("Изменить Событие")
         context["files"] = ClientFile.objects.filter(
-            event_id=self.kwargs["pk"], is_active=True).order_by("uname")
+            event_id=self.kwargs["pk"], is_active=True
+        ).order_by("uname")
         return context
 
     def get_form_kwargs(self):
@@ -1028,8 +1171,12 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        af = self.add_files(form, "crm", "event")  # добавляем файлы из формы (метод из AddFilesMixin)
-        old = ClientEvent.objects.filter(pk=self.object.pk).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
+        af = self.add_files(
+            form, "crm", "event"
+        )  # добавляем файлы из формы (метод из AddFilesMixin)
+        old = ClientEvent.objects.filter(
+            pk=self.object.pk
+        ).first()  # вместо objects.get(), чтоб не вызывало исключения при создании нового проекта
         # old_task_id = 0
         old_task = ""
         self_task = ""
@@ -1045,15 +1192,37 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
             self_task_name = self.object.task.name
         historyjson = {
             str(_("Событие")): "" if self.object.name == old.name else self.name,
-            str(_("Задача")): "" if self_task == old_task else ("#" + str(self_task_id) + ". " + self_task_name) if self_task else "-",
-            str(_("Статус")): "" if self.object.status.name == old.status.name else self.object.status.name,
-            str(_("Начало")): "" if self.object.datebegin == old.datebegin else self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
-            str(_("Окончание")): "" if self.object.dateend == old.dateend else self.object.dateend.strftime("%d.%m.%Y %H:%M"),
-            str(_("Тип")): "" if self.object.type.name == old.type.name else self.object.type.name,
-            str(_("Место")): "" if self.object.place == old.place else self.object.place,
-            str(_("Инициатор")): "" if self.object.initiator.name == old.initiator.name else self.object.initiator.name,
-            str(_("Исполнитель")): "" if self.object.assigner.username == old.assigner.username else self.object.assigner.username,
-            str(_("Активность")): "" if self.object.is_active == old.is_active else "✓" if self.object.is_active else "-"
+            str(_("Задача")): ""
+            if self_task == old_task
+            else ("#" + str(self_task_id) + ". " + self_task_name)
+            if self_task
+            else "-",
+            str(_("Статус")): ""
+            if self.object.status.name == old.status.name
+            else self.object.status.name,
+            str(_("Начало")): ""
+            if self.object.datebegin == old.datebegin
+            else self.object.datebegin.strftime("%d.%m.%Y %H:%M"),
+            str(_("Окончание")): ""
+            if self.object.dateend == old.dateend
+            else self.object.dateend.strftime("%d.%m.%Y %H:%M"),
+            str(_("Тип")): ""
+            if self.object.type.name == old.type.name
+            else self.object.type.name,
+            str(_("Место")): ""
+            if self.object.place == old.place
+            else self.object.place,
+            str(_("Инициатор")): ""
+            if self.object.initiator.name == old.initiator.name
+            else self.object.initiator.name,
+            str(_("Исполнитель")): ""
+            if self.object.assigner.username == old.assigner.username
+            else self.object.assigner.username,
+            str(_("Активность")): ""
+            if self.object.is_active == old.is_active
+            else "✓"
+            if self.object.is_active
+            else "-"
             # , str(_("Участники")):self.members.username
         }
         ModelLog.objects.create(
@@ -1068,7 +1237,11 @@ class ClientEventUpdate(AddFilesMixin, UpdateView):
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def clienteventcomments(request, eventid):
-    currentevent = (ClientEvent.objects.filter(id=eventid).select_related("client", "task", "type", "status").first())
+    currentevent = (
+        ClientEvent.objects.filter(id=eventid)
+        .select_related("client", "task", "type", "status")
+        .first()
+    )
     currentuser = request.user.id
     obj_files_rights = 0
     if currentuser == currentevent.author_id or currentuser == currentevent.assigner_id:
@@ -1076,9 +1249,11 @@ def clienteventcomments(request, eventid):
 
     eventcomment_list = ClientEventComment.objects.filter(
         Q(author=request.user.id)
-        | Q(event__client__members__in=[
-            currentuser,
-        ]),
+        | Q(
+            event__client__members__in=[
+                currentuser,
+            ]
+        ),
         is_active=True,
         event=eventid,
     )
@@ -1088,14 +1263,23 @@ def clienteventcomments(request, eventid):
     button_event_create = ""
     button_event_update = ""
     button_event_history = ""
-    is_member = Client.objects.filter(members__in=[currentuser,]).exists()
-    if (currentuser == currentevent.author_id
-            or currentuser == currentevent.assigner_id or is_member):
+    is_member = Client.objects.filter(
+        members__in=[
+            currentuser,
+        ]
+    ).exists()
+    if (
+        currentuser == currentevent.author_id
+        or currentuser == currentevent.assigner_id
+        or is_member
+    ):
         button_event_create = button_eventcomment_create = _("Добавить")
         button_event_history = _("История")
         # button_eventcomment_create = "Добавить"
-        if (currentuser == currentevent.author_id
-                or currentuser == currentevent.assigner_id):
+        if (
+            currentuser == currentevent.author_id
+            or currentuser == currentevent.assigner_id
+        ):
             button_event_update = _("Изменить")
 
     eventcomment_list = eventcomment_list.select_related("event", "author")
@@ -1104,29 +1288,19 @@ def clienteventcomments(request, eventid):
         request,
         "clientevent_detail.html",
         {
-            "nodes":
-            eventcomment_list.distinct().order_by(),
+            "nodes": eventcomment_list.distinct().order_by(),
             # 'current_eventcomment': currenteventcomment,
-            "clientevent":
-            currentevent,
-            "obj_files_rights":
-            obj_files_rights,
-            "files":
-            ClientFile.objects.filter(
-                event=currentevent, is_active=True).select_related(
-                    "client", "task", "taskcomment", "event",
-                    "eventcomment").order_by("uname"),
-            "objtype":
-            "clntevntcmnt",
-            "button_clientevent_create":
-            button_event_create,
-            "button_clientevent_update":
-            button_event_update,
-            "button_clientevent_history":
-            button_event_history,
+            "clientevent": currentevent,
+            "obj_files_rights": obj_files_rights,
+            "files": ClientFile.objects.filter(event=currentevent, is_active=True)
+            .select_related("client", "task", "taskcomment", "event", "eventcomment")
+            .order_by("uname"),
+            "objtype": "clntevntcmnt",
+            "button_clientevent_create": button_event_create,
+            "button_clientevent_update": button_event_update,
+            "button_clientevent_history": button_event_history,
             # 'object_list': 'clientevent_list',
-            "button_clienteventcomment_create":
-            button_eventcomment_create,
+            "button_clienteventcomment_create": button_eventcomment_create,
         },
     )
 
@@ -1150,7 +1324,9 @@ class ClientEventCommentCreate(AddFilesMixin, CreateView):
         form.instance.event_id = self.kwargs["eventid"]
         form.instance.author_id = self.request.user.id
         self.object = form.save()  # Созадём новый коммент события клиента
-        af = self.add_files(form, "crm", "eventcomment")  # добавляем файлы из формы (метод из AddFilesMixin)
+        af = self.add_files(
+            form, "crm", "eventcomment"
+        )  # добавляем файлы из формы (метод из AddFilesMixin)
         return super(ClientEventCommentCreate, self).form_valid(form)
 
 
@@ -1160,12 +1336,11 @@ class ClientEventCommentUpdate(UpdateView):
     template_name = "object_form.html"
 
     def get_context_data(self, **kwargs):
-        context = super(ClientEventCommentUpdate,
-                        self).get_context_data(**kwargs)
+        context = super(ClientEventCommentUpdate, self).get_context_data(**kwargs)
         context["header"] = _("Изменить Комментарий")
         context["files"] = ClientFile.objects.filter(
-            eventcomment_id=self.kwargs["pk"],
-            is_active=True).order_by("uname")
+            eventcomment_id=self.kwargs["pk"], is_active=True
+        ).order_by("uname")
         return context
 
 
@@ -1267,9 +1442,11 @@ def clientfilter(request):
         client_list = Client.objects.filter(
             Q(author=request.user.id)
             | Q(manager=request.user.id)
-            | Q(members__in=[
-                currentuser,
-            ]),
+            | Q(
+                members__in=[
+                    currentuser,
+                ]
+            ),
             is_active=True,
             company=companyid,
             dateclose__isnull=True,
@@ -1280,9 +1457,11 @@ def clientfilter(request):
             client_list = Client.objects.filter(
                 Q(author=request.user.id)
                 | Q(manager=request.user.id)
-                | Q(members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 company=companyid,
             )
@@ -1291,9 +1470,11 @@ def clientfilter(request):
             client_list = Client.objects.filter(
                 Q(author=request.user.id)
                 | Q(manager=request.user.id)
-                | Q(members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 company=companyid,
                 dateclose__isnull=True,
@@ -1303,9 +1484,11 @@ def clientfilter(request):
             client_list = Client.objects.filter(
                 Q(author=request.user.id)
                 | Q(manager=request.user.id)
-                | Q(members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 company=companyid,
                 status=clntstatus,
@@ -1317,22 +1500,32 @@ def clientfilter(request):
     # *** фильтр по принадлежности ***
     myclntuser = request.GET["myclientuser"]
     if myclntuser == "0":
-        client_list = client_list.filter(Q(members__in=[currentuser,]))
+        client_list = client_list.filter(
+            Q(
+                members__in=[
+                    currentuser,
+                ]
+            )
+        )
     elif myclntuser == "1":
         client_list = client_list.filter(Q(author=request.user.id))
     elif myclntuser == "2":
         client_list = client_list.filter(Q(manager=request.user.id))
-    nodes = (client_list.select_related(
-        "company",
-        "manager",
-        "user",
-        "protocoltype",
-        "type",
-        "status",
-        "currency",
-        "initiator",
-        "author",
-    ).order_by().distinct())
+    nodes = (
+        client_list.select_related(
+            "company",
+            "manager",
+            "user",
+            "protocoltype",
+            "type",
+            "status",
+            "currency",
+            "initiator",
+            "author",
+        )
+        .order_by()
+        .distinct()
+    )
     object_message = ""
     if len(nodes) == 0:
         object_message = _("Клиенты не найдены!")
@@ -1365,9 +1558,11 @@ def clienttaskfilter(request):
         task_list = ClientTask.objects.filter(
             Q(author=request.user.id)
             | Q(assigner=request.user.id)
-            | Q(client__members__in=[
-                currentuser,
-            ]),
+            | Q(
+                client__members__in=[
+                    currentuser,
+                ]
+            ),
             is_active=True,
             client=clientid,
             dateclose__isnull=True,
@@ -1378,9 +1573,11 @@ def clienttaskfilter(request):
             task_list = ClientTask.objects.filter(
                 Q(author=request.user.id)
                 | Q(assigner=request.user.id)
-                | Q(client__members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    client__members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 client=clientid,
             )
@@ -1389,9 +1586,11 @@ def clienttaskfilter(request):
             task_list = ClientTask.objects.filter(
                 Q(author=request.user.id)
                 | Q(assigner=request.user.id)
-                | Q(client__members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    client__members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 client=clientid,
                 dateclose__isnull=True,
@@ -1401,9 +1600,11 @@ def clienttaskfilter(request):
             task_list = ClientTask.objects.filter(
                 Q(author=request.user.id)
                 | Q(assigner=request.user.id)
-                | Q(client__members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    client__members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 client=clientid,
                 status=taskstatus,
@@ -1414,23 +1615,31 @@ def clienttaskfilter(request):
     # *** фильтр по принадлежности ***
     mytskuser = request.GET["mytaskuser"]
     if mytskuser == "0":
-        task_list = task_list.filter(Q(client__members__in=[
-            currentuser,
-        ]))
+        task_list = task_list.filter(
+            Q(
+                client__members__in=[
+                    currentuser,
+                ]
+            )
+        )
     elif mytskuser == "1":
         task_list = task_list.filter(Q(author=request.user.id))
     elif mytskuser == "2":
         task_list = task_list.filter(Q(assigner=request.user.id))
     # *******************************
-    nodes = (task_list.select_related(
-        "client",
-        "assigner",
-        "structure_type",
-        "type",
-        "status",
-        "author",
-        "initiator",
-    ).distinct().order_by())
+    nodes = (
+        task_list.select_related(
+            "client",
+            "assigner",
+            "structure_type",
+            "type",
+            "status",
+            "author",
+            "initiator",
+        )
+        .distinct()
+        .order_by()
+    )
     object_message = ""
     if len(nodes) == 0:
         object_message = _("Задачи не найдены!")
@@ -1460,9 +1669,11 @@ def clienteventfilter(request):
         event_list = ClientEvent.objects.filter(
             Q(author=request.user.id)
             | Q(assigner=request.user.id)
-            | Q(client__members__in=[
-                currentuser,
-            ]),
+            | Q(
+                client__members__in=[
+                    currentuser,
+                ]
+            ),
             is_active=True,
             client=clientid,
             dateclose__isnull=True,
@@ -1473,9 +1684,11 @@ def clienteventfilter(request):
             event_list = ClientEvent.objects.filter(
                 Q(author=request.user.id)
                 | Q(assigner=request.user.id)
-                | Q(client__members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    client__members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 client=clientid,
             )
@@ -1484,9 +1697,11 @@ def clienteventfilter(request):
             event_list = ClientEvent.objects.filter(
                 Q(author=request.user.id)
                 | Q(assigner=request.user.id)
-                | Q(client__members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    client__members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 client=clientid,
                 dateclose__isnull=True,
@@ -1496,9 +1711,11 @@ def clienteventfilter(request):
             event_list = ClientEvent.objects.filter(
                 Q(author=request.user.id)
                 | Q(assigner=request.user.id)
-                | Q(client__members__in=[
-                    currentuser,
-                ]),
+                | Q(
+                    client__members__in=[
+                        currentuser,
+                    ]
+                ),
                 is_active=True,
                 client=clientid,
                 status=eventstatus,
@@ -1509,15 +1726,23 @@ def clienteventfilter(request):
     # *** фильтр по принадлежности ***
     myevntuser = request.GET["myeventuser"]
     if myevntuser == "0":
-        event_list = event_list.filter(Q(client__members__in=[
-            currentuser,
-        ]))
+        event_list = event_list.filter(
+            Q(
+                client__members__in=[
+                    currentuser,
+                ]
+            )
+        )
     elif myevntuser == "1":
         event_list = event_list.filter(Q(author=request.user.id))
     elif myevntuser == "2":
         event_list = event_list.filter(Q(assigner=request.user.id))
     # *******************************
-    enodes = (event_list.select_related("client", "task", "type", "status").distinct().order_by())
+    enodes = (
+        event_list.select_related("client", "task", "type", "status")
+        .distinct()
+        .order_by()
+    )
     # print(enodes)
     event_message = ""
     len_elist = len(enodes)
@@ -1542,35 +1767,49 @@ def clients_tasks_events(request):
     date_end = datetime.now() + timedelta(days=10)
     # print(request, date_end)
 
-    clients_tasks_list = (ClientTask.objects.filter(
-        Q(client__author=request.user.id)
-        | Q(client__initiator=request.user.id)
-        | Q(client__manager=request.user.id)
-        | Q(author=request.user.id)
-        | Q(initiator=request.user.id)
-        | Q(assigner=request.user.id),
-        is_active=True,
-        status__is_close=False,
-        client__company__in=companies_id,
-        dateclose__isnull=True,
-        dateend__lte=date_end,
-    ).select_related("client", "type", "type", "status", "initiator", "assigner", "author").order_by("dateend", "type").distinct())
-    clients_events_list = (ClientEvent.objects.filter(
-        Q(client__author=request.user.id)
-        | Q(client__initiator=request.user.id)
-        | Q(client__manager=request.user.id)
-        | Q(task__author=request.user.id)
-        | Q(task__initiator=request.user.id)
-        | Q(task__assigner=request.user.id)
-        | Q(author=request.user.id)
-        | Q(initiator=request.user.id)
-        | Q(assigner=request.user.id),
-        is_active=True,
-        status__is_close=False,
-        dateclose__isnull=True,
-        client__company__in=companies_id,
-        dateend__lte=date_end,
-    ).select_related("client", "task", "type", "status", "initiator", "assigner", "author").order_by("dateend", "status").distinct())
+    clients_tasks_list = (
+        ClientTask.objects.filter(
+            Q(client__author=request.user.id)
+            | Q(client__initiator=request.user.id)
+            | Q(client__manager=request.user.id)
+            | Q(author=request.user.id)
+            | Q(initiator=request.user.id)
+            | Q(assigner=request.user.id),
+            is_active=True,
+            status__is_close=False,
+            client__company__in=companies_id,
+            dateclose__isnull=True,
+            dateend__lte=date_end,
+        )
+        .select_related(
+            "client", "type", "type", "status", "initiator", "assigner", "author"
+        )
+        .order_by("dateend", "type")
+        .distinct()
+    )
+    clients_events_list = (
+        ClientEvent.objects.filter(
+            Q(client__author=request.user.id)
+            | Q(client__initiator=request.user.id)
+            | Q(client__manager=request.user.id)
+            | Q(task__author=request.user.id)
+            | Q(task__initiator=request.user.id)
+            | Q(task__assigner=request.user.id)
+            | Q(author=request.user.id)
+            | Q(initiator=request.user.id)
+            | Q(assigner=request.user.id),
+            is_active=True,
+            status__is_close=False,
+            dateclose__isnull=True,
+            client__company__in=companies_id,
+            dateend__lte=date_end,
+        )
+        .select_related(
+            "client", "task", "type", "status", "initiator", "assigner", "author"
+        )
+        .order_by("dateend", "status")
+        .distinct()
+    )
 
     # print(projects_list, projects_tasks_list)
 

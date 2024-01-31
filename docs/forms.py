@@ -280,13 +280,19 @@ class DocTaskForm(forms.ModelForm):
             "id",
             "author",
         ]
+        # widgets = {
+        #     # 'datebegin': DateTimePickerInput(format='%d.%m.%Y %H:%M'),  # default date-format %m/%d/%Y will be used
+        #     # "dateend": DatePickerInput(
+        #     #     options={"format": "DD.MM.YY HH:MM"},
+        #     "dateend": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),  # specify date-frmat 
+        # }
         widgets = {
-            # 'datebegin': DateTimePickerInput(format='%d.%m.%Y %H:%M'),  # default date-format %m/%d/%Y will be used
-            # "dateend": DatePickerInput(
-            #     options={"format": "DD.MM.YY HH:MM"},
             "dateend": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
-            ),  # specify date-frmat
+                format="%Y-%m-%d",
+                attrs={"type": "date"},
+            ),
         }
 
 

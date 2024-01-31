@@ -156,10 +156,15 @@ class ProjectForm(forms.ModelForm):
         ]
 
         widgets = {
-            "datebegin": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"}
+            # "datebegin": DateInput(),
+            "datebegin": forms.DateTimeInput(
+                format="%Y-%m-%d",
+                attrs={"type": "date"},
+            ),            
+            "dateend": forms.DateTimeInput(
+                format="%Y-%m-%d",
+                attrs={"type": "date"},
             ),
-            "dateend": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
         }
 
 

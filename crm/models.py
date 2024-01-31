@@ -328,9 +328,10 @@ class ClientTask(SetPropertiesDashboardMixin, Task_Model):
         order_insertion_by = ["-dateend"]
 
     class Meta(Task_Model.Meta):
-        pass
+        ordering = ["tree_id", "level", "dateend"]
+        # pass
         # verbose_name = _("Задача")
-        # verbose_name_plural = _("Задачи")
+        # verbose_name_plural = _("Задачи") 
 
 
 class ClientTaskComment(Comment_Model):

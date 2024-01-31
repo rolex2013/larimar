@@ -97,7 +97,7 @@ def companies(request, pk=0, razdel='projects'):
         nodes = Company.objects.filter(is_active=True, is_support=True)
     else:
         nodes = Company.objects.filter(is_active=True, id__in=comps)
-    nodes = nodes.order_by("tree_id", "level")
+    # nodes = nodes.order_by("tree_id", "level")
 
     return render(
         request,
@@ -145,7 +145,7 @@ class CompanyDetail(DetailView):
 class CompanyCreate(CreateView):
     model = Company
     form_class = CompanyForm
-    #template_name = 'project_create.html'
+    # template_name = 'project_create.html'
     template_name = 'object_form.html'
 
     def form_valid(self, form):
@@ -180,9 +180,9 @@ class CompanyUpdate(UpdateView):
         return context
 
 
-#def getCompanies(request, user):
-#    #uc = UserCompany.objects.get(user=user)
-#    return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
+# def getCompanies(request, user):
+#     #uc = UserCompany.objects.get(user=user)
+#     return render(request, "menu_companies.html", {'nodes':request.UserCompany.objects.get(user=user)})
 
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
@@ -233,7 +233,7 @@ def stafflist(request, companyid=0, pk=0):
      # ) + " AND uc.is_active=1 AND u.is_active=1 AND c.code='" + component_name + "' GROUP BY uc.user_id"
     ) + " AND uc.is_active=1 AND u.is_active=1 GROUP BY uc.user_id"
     raw_query = raw_query_1 + raw_query_2
-   #  print(raw_query)
+    # print(raw_query)
     unodes = UserCompanyComponentGroup.objects.raw(raw_query)
 
     # print(companyid, unodes)

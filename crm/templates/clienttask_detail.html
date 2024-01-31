@@ -21,7 +21,7 @@
                 {% else %}
 
                 {% endif %}
-                <p>{% trans "Бюджет" %}": {{ clienttask.cost }} {{ clienttask.client.currency.shortname }}<i> ({% trans "Освоено" %}: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
+                <p>{% trans "Бюджет" %}: {{ clienttask.cost }} {{ clienttask.client.currency.shortname }}<i> ({% trans "Освоено" %}: {{ taskcomment_costsum.cost__sum|floatformat:2 }})</i></p>
                 <p>{% trans "Исполнитель" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль исполнителя' %}"><a href="{% url 'my_account:userprofile_detail' clienttask.assigner.pk ' ' %}">{{ clienttask.assigner }}</a></span></p>
                 <p>{% trans "Начало" %}: {{ clienttask.datebegin }}</p>
                 <p>{% trans "Окончание" %}: {{ clienttask.dateend }}</p>

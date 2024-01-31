@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-30 16:17+0300\n"
-"PO-Revision-Date: 2024-01-29 18:35+0300\n"
+"PO-Revision-Date: 2024-01-31 12:46+0300\n"
 "Last-Translator: Суперадмин  <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -180,7 +180,8 @@ msgid "Статусы событий"
 msgstr "Event Statuses"
 
 #: crm/models.py:137 crm/models.py:303 crm/models.py:411
-#: crm/templates/client_detail.html:45 crm/templates/clientevent_detail.html:27
+#: crm/templates/client_detail.html:45
+#: crm/templates/clientevent_detail.html:27
 #: crm/templates/clientevent_history.html:28
 #: crm/templates/clienttask_detail.html:31 crm/views.py:253 crm/views.py:347
 #: crm/views.py:600 crm/views.py:660 crm/views.py:981 crm/views.py:1054
@@ -258,7 +259,8 @@ msgid "Инициатор клиента"
 msgstr "Client initiator"
 
 #: crm/models.py:221 crm/models.py:404 crm/models.py:539
-#: crm/templates/client_detail.html:54 crm/templates/clientevent_detail.html:28
+#: crm/templates/client_detail.html:54
+#: crm/templates/clientevent_detail.html:28
 #: crm/templates/clientevent_history.html:29
 #: crm/templates/clienttask_detail.html:34
 #: crm/templates/clienttask_history.html:24
@@ -290,7 +292,8 @@ msgstr "Clients"
 msgid "Задача верхнего уровня"
 msgstr "Top level Task"
 
-#: crm/models.py:266 crm/models.py:380 crm/templates/clientevent_detail.html:22
+#: crm/models.py:266 crm/models.py:380
+#: crm/templates/clientevent_detail.html:22
 #: crm/templates/clientevent_history.html:23
 #: crm/templates/clienttask_detail.html:25
 #: crm/templates/clienttask_history.html:18 crm/views.py:601 crm/views.py:661
@@ -339,7 +342,8 @@ msgstr "Tasks"
 msgid "Комментарий"
 msgstr "Comment"
 
-#: crm/models.py:352 crm/models.py:481 crm/templates/clientevent_detail.html:51
+#: crm/models.py:352 crm/models.py:481
+#: crm/templates/clientevent_detail.html:51
 #: crm/templates/clienttask_detail.html:61
 msgid "Комментарии"
 msgstr "Comments"
@@ -381,8 +385,8 @@ msgstr "Date create"
 msgid "Событие клиента"
 msgstr "Client Event"
 
-#: crm/models.py:439 crm/models.py:448 crm/templates/clientevent_detail.html:10
-#: crm/views.py:973 crm/views.py:1047
+#: crm/models.py:439 crm/models.py:448
+#: crm/templates/clientevent_detail.html:10 crm/views.py:973 crm/views.py:1047
 msgid "Событие"
 msgstr "Event"
 
@@ -439,7 +443,8 @@ msgstr "Completed on"
 msgid "Профиль"
 msgstr "Profile"
 
-#: crm/templates/client_detail.html:56 crm/templates/clientevent_detail.html:29
+#: crm/templates/client_detail.html:56
+#: crm/templates/clientevent_detail.html:29
 #: crm/templates/clientevent_history.html:30
 #: crm/templates/clienttask_detail.html:35
 #: crm/templates/clienttask_history.html:26

@@ -279,7 +279,12 @@ class Project(SetPropertiesDashboardMixin, MPTTModel):
         ModelLog.objects.create(componentname='prj', modelname="Project", modelobjectid=self.id, author=self.author, log=json.dumps(historyjson))
     """
 
+    class MPTTMeta:
+        # order_insertion_by = ['name']
+        order_insertion_by = ["-dateend"]
+
     class Meta:
+        ordering = ["tree_id", "level", "dateend"]
         verbose_name = _("Проект")
         verbose_name_plural = _("Проекты")
 
@@ -371,11 +376,11 @@ class Task(SetPropertiesDashboardMixin, Task_Model):
         )
 
     class MPTTMeta:
-        # order_insertion_by = ['name']
         order_insertion_by = ["dateend"]
 
     class Meta(Task_Model.Meta):
-        pass
+        # pass
+        ordering = ["tree_id", "level", "dateend"]
         # verbose_name = _("Задача")
         # verbose_name_plural = _("Задачи")
 
