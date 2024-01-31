@@ -363,34 +363,34 @@ def staffs(request, stafflistid=0, pk=0):
     button_stafflist_create = ''
     button_stafflist_update = ''
     button_staff_create = ''
-    #button_staff_update = ''
+    # button_staff_update = ''
     if currentuser == current_company.author_id:
-        #print(number_employees.cnt)
-        #if number_employees[0].cnt < current_stafflist.numberemployees:
+        # print(number_employees.cnt)
+        # if number_employees[0].cnt < current_stafflist.numberemployees:
         if len(nodes) < current_stafflist.numberemployees:
             button_staff_create = _('Добавить')
         button_stafflist_create = _('Добавить')
         button_stafflist_update = _('Изменить')
-        #button_staff_update = _('Изменить')
+        # button_staff_update = _('Изменить')
 
     return render(
         request,
         template_name,
         {
-            #'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid).order_by(),
+            # 'nodes': Staff.objects.filter(is_active=True, stafflist_id=stafflistid).order_by(),
             # надо выводить только действующих Сотрудников (по датам)
             'nodes': nodes,
             'current_stafflist': current_stafflist,
-            #'current_company': current_company,
-            #'companyid': companyid,
+            # 'current_company': current_company,
+            # 'companyid': companyid,
             'user_companies': comps,
-            #'button_company_create' : button_company_create,
-            #'button_company_update' : button_company_update,
-            #'button_stafflist_create': button_stafflist_create,
-            #'button_StaffList': button_stafflist,
-            #'object_list': 'stafflist_list',
+            # 'button_company_create' : button_company_create,
+            # 'button_company_update' : button_company_update,
+            # 'button_stafflist_create': button_stafflist_create,
+            # 'button_StaffList': button_stafflist,
+            # 'object_list': 'stafflist_list',
             'component_name': component_name,
-            #'button_company_select' : button_company_select,
+            # 'button_company_select' : button_company_select,
             'button_stafflist_create': button_stafflist_create,
             'button_stafflist_update': button_stafflist_update,
             'button_staff_create': button_staff_create,
@@ -404,10 +404,10 @@ class StaffCreate(CreateView):
 
     def form_valid(self, form):
         form.instance.author_id = self.request.user.id
-        #if self.kwargs['parentid'] != 0:
+        # if self.kwargs['parentid'] != 0:
         #   form.instance.parent_id = self.kwargs['parentid']
 
-        #if form.is_valid():
+        # if form.is_valid():
         #   org = form.save()
         #   UserCompanyComponentGroup.objects.create(user_id=form.instance.author_id,
         #                                            company_id=org.id,
@@ -443,7 +443,7 @@ class StaffUpdate(UpdateView):
 
     def get_form_kwargs(self):
         kwargs = super(StaffUpdate, self).get_form_kwargs()
-        #kwargs.update({'user': self.request.user, 'action': 'update'})
+        # kwargs.update({'user': self.request.user, 'action': 'update'})
         kwargs.update({'user': self.request.user})
         return kwargs
 
@@ -777,15 +777,22 @@ def userrole_create(request):
     componentid = request.GET['componentid']
     companyuser = User.objects.get(id=userid)
     message = ''
-    try:
-        role = UserCompanyComponentGroup.objects.create(
-            user_id=userid,
-            company_id=companyid,
-            component_id=componentid,
-            group_id=groupid)
-        role.save()
-    except:
-        message = _('"Эта" роль уже назначена!')
+    # try:
+    #     role = UserCompanyComponentGroup.objects.create(
+    #         user_id=userid,
+    #         company_id=companyid,
+    #         component_id=componentid,
+    #         group_id=groupid)
+    #     role.save()
+    # except:
+    #     message = _('"Эта" роль уже назначена!')
+    obj, role = UserCompanyComponentGroup.objects.update_or_create(
+                    user_id=userid,
+                    company_id=companyid,
+                    component_id=componentid,
+                    group_id=groupid,
+                    defaults={"is_active": True}
+                )
     roles = UserCompanyComponentGroup.objects.filter(
         user_id=userid, company_id=companyid, is_active=True).select_related(
             "company", "component", "group",

@@ -54,6 +54,7 @@
 <script>
 
    $('input[type="checkbox"]').change(function() {
+      event.preventDefault(); // *** без этого страница перегружается после возврата data
       //console.log({{ companyid }})
       //console.log({{ companyuser.id }})  
       // Проверка, стоит галочка или нет
