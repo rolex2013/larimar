@@ -1,5 +1,6 @@
 __pycache__/
 .htaccess
+poetry.lock
 db.sqlite3-journal
 db.sqlite3
 db_test.sqlite3

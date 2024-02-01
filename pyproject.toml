@@ -3,7 +3,7 @@ name = "larimar"
 version = "4.12.0"
 description = "1YES!"
 authors = ["larimarit <larimaritgroup.ru@gmail.com>"]
-readme = "README.md"
+readme = "README.md" 
 
 [tool.poetry.dependencies]
 python = "^3.8"
