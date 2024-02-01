@@ -145,6 +145,7 @@ class Company(MPTTModel):
         order_insertion_by = ["name"]
 
     class Meta:
+        ordering = ["tree_id", "level"]
         verbose_name = _("Организация")
         verbose_name_plural = _("Организации")
 

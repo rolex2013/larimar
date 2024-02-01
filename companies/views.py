@@ -828,6 +828,7 @@ def userrole_delete(request):
         "",
     )
 
+
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def userrole_create(request):
     companyid = request.GET["companyid"]
@@ -855,6 +856,7 @@ def userrole_create(request):
     return roles_list(
         request, userid, companyid, componentid, groupid, companyuser, message
     )
+
 
 def roles_list(
     request, userid, companyid, componentid, groupid, companyuser, message=""
