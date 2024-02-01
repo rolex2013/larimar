@@ -55,14 +55,14 @@
 
    $('input[type="checkbox"]').change(function() {
       event.preventDefault(); // *** без этого страница перегружается после возврата data
-      //console.log({{ companyid }})
-      //console.log({{ companyuser.id }})  
+      // console.log({{ companyid }})
+      // console.log({{ companyuser.id }})  
       // Проверка, стоит галочка или нет
       if ($(this).is(':checked')) {
 
          var chk = $(this).attr("name");
          var chkVal = $(this).attr("value");
-         //console.log(chkVal)         
+         // console.log('chkVal' + chkVal)         
 
          $.ajax({
             url: "{% url 'my_company:userrole_delete' %}",
