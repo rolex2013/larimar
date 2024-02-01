@@ -160,7 +160,7 @@ class ProjectForm(forms.ModelForm):
             "datebegin": forms.DateTimeInput(
                 format="%Y-%m-%d",
                 attrs={"type": "date"},
-            ),            
+            ),
             "dateend": forms.DateTimeInput(
                 format="%Y-%m-%d",
                 attrs={"type": "date"},
@@ -302,12 +302,22 @@ class TaskForm(forms.ModelForm):
             "id",
             "author",
         ]
+        # widgets = {
+        #     "datebegin": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),
+        #     "dateend": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),
+        # }
         widgets = {
             "datebegin": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
             "dateend": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
         }
 

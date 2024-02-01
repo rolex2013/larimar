@@ -199,7 +199,7 @@ class FeedbackTaskForm(forms.ModelForm):
                 if self.cleaned_data["status"].is_close:
                     self.cleaned_data["dateclose"] = datetime.datetime.today()
                     self.cleaned_data["percentage"] = 100
-                    if self.user.id != self.initial["author"]:                        
+                    if self.user.id != self.initial["author"]:
                         """
                         Сообщение и Уведомление высылаются Автору задачи, если её завершил не он
                         """
@@ -306,12 +306,22 @@ class FeedbackTaskForm(forms.ModelForm):
         #     "datebegin": DateTimePickerInput(options={"format": "DD.MM.YY HH:MM"}),
         #     "dateend": DateTimePickerInput(options={"format": "DD.MM.YY HH:MM"}),
         # }
+        # widgets = {
+        #     "datebegin": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),
+        #     "dateend": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),
+        # }
         widgets = {
             "datebegin": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
             "dateend": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
         }
 

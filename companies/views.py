@@ -39,31 +39,6 @@ from .forms import (
     ContentForm,
 )
 
-# class CompaniesList(ListView):
-#    model = Company
-#    template_name = 'menu_companies.html'
-#    #ordering = ['company_up', 'id']
-#
-#    def get_context_data(self, *args, **kwargs):
-#        if self.request.user.is_authenticated:
-#            context = super().get_context_data(**kwargs)
-#            #current_membership = get_user_membership(self.request)
-#            #context['current_membership'] = str(current_membership.membership)
-#            # добавляем к контексту сессионный массив с id компаний, доступными этому авторизованному юзеру
-#            #button_company_select = 'Сменить организацию'
-#            context['user_companies'] = self.request.session['_auth_user_companies_id']
-#            #context['button_company_select'] = button_company_select
-#            return context
-
-# def companies_main(request):
-#    companies_list = Company.objects.filter(is_active=True)
-#    #companies_list = Company.objects.all()
-#    return render(request, 'menu_companies.html', {
-#                              'node': companies_list, #Company.objects.all(),
-#                              'user_companies': request.session['_auth_user_companies_id'],
-#                                             }
-#                 )
-
 
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def companies(request, pk=0, razdel="projects"):

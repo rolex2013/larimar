@@ -164,7 +164,7 @@ class ContentForm(forms.ModelForm):
         # self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.all(), level_indicator = u'---') # из документации
         self.fields["company"] = TreeNodeMultipleChoiceField(
             queryset=Company.objects.filter(id__in=self.companies),
-            level_indicator = "---",
+            level_indicator="---",
         )  # с иерархией
 
     class Meta:
@@ -184,9 +184,19 @@ class ContentForm(forms.ModelForm):
         #     "datebegin": DatePickerInput(options={"format": "DD.MM.YY HH:MM"}),
         #     "dateend": DatePickerInput(options={"format": "DD.MM.YY HH:MM"}),
         # }
+        # widgets = {
+        #     "datebegin": forms.DateInput(
+        #         attrs={"class": "form-control", "type": "date"}
+        #     ),
+        #     "dateend": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
+        # }
         widgets = {
-            "datebegin": forms.DateInput(
-                attrs={"class": "form-control", "type": "date"}
+            "datebegin": forms.DateTimeInput(
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
-            "dateend": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
+            "dateend": forms.DateTimeInput(
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
+            ),
         }

@@ -304,12 +304,22 @@ class ClientTaskForm(forms.ModelForm):
         #     'datebegin': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}), # default date-format %m/%d/%Y will be used
         #     'dateend': DateTimePickerInput(options={'format': 'DD.MM.YY HH:MM'}), # specify date-frmat
         # }
+        # widgets = {
+        #     "datebegin": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),
+        #     "dateend": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),
+        # }
         widgets = {
             "datebegin": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
             "dateend": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
         }
 
@@ -465,12 +475,22 @@ class ClientEventForm(forms.ModelForm):
         #         options={"format": "DD.MM.YY HH:MM"}
         #     ),  # specify date-frmat
         # }
+        # widgets = {
+        #     "datebegin": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),
+        #     "dateend": forms.DateTimeInput(
+        #         attrs={"class": "form-control", "type": "datetime-local"}
+        #     ),
+        # }
         widgets = {
             "datebegin": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
             "dateend": forms.DateTimeInput(
-                attrs={"class": "form-control", "type": "datetime-local"}
+                format="%Y-%m-%d %H:%M:%S",
+                attrs={"type": "datetime-local"},
             ),
         }
 
