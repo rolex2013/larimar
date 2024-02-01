@@ -45,6 +45,7 @@ class Meta_ObjectType(Dict_Model):
         return self.trans_field(exposed_request, "description")
 
     class Meta:
+        ordering = ("sort",)
         verbose_name = _("Список типов объектов")
         verbose_name_plural = _("Списки типов объектов")
 
