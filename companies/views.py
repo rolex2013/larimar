@@ -698,7 +698,7 @@ class ContentDetail(DetailView):
             context["button_content_create"] = _("Добавить")  # button_company_create
             context["button_content_update"] = _("Изменить")
             context["user_companies"] = self.request.session["_auth_user_companies_id"]
-            context["whoisauthor"] = _("Автор: ") + self.object.author.username
+            context["whoisauthor"] = _("Автор") + ": " + self.object.author.username
             if not self.object.is_active:
                 context["extdescription"] = _(" (Контент перемещен в архив)")
             return context

@@ -4,6 +4,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime, date, time
 
+from django.utils.translation import gettext_lazy as _
+
 from urllib.parse import urlparse
 
 from django.contrib.auth import logout
@@ -88,7 +90,7 @@ class ELoginView(View):
             current_company = UserProfile.objects.get(
                 user=request.user.id, is_active=True
             ).company_id
-            if current_company == None:
+            if current_company is None:
                 # === проверяем, даны ли права этому пользователю на какую-нибудь Организацию ===
                 try:
                     current_company = list(
@@ -238,8 +240,10 @@ def register(request):
                 new_user.save()
                 if user_form.cleaned_data["is_org_register"]:
                     instance_comp = Company.objects.create(
-                        name="Ваша новая Компания",
-                        description="Создана автоматически при регистрации пользователя",
+                        name=_("Ваша новая Компания"),
+                        description=_(
+                            "Создана автоматически при регистрации пользователя"
+                        ),
                         is_active=1,
                         lft=1,
                         rght=1,
@@ -255,7 +259,9 @@ def register(request):
                         company_id=instance_comp.id,
                         is_notify=True,
                         protocoltype_id=3,
-                        description="Профиль создан автоматически при регистрации пользователя",
+                        description=_(
+                            "Профиль создан автоматически при регистрации пользователя"
+                        ),
                     )
                     UserCompanyComponentGroup.objects.create(
                         user_id=new_user.id,
@@ -305,7 +311,7 @@ def add(request, companyid=1):
                     lang=request.LANGUAGE_CODE,
                     is_notify=True,
                     protocoltype_id=1,
-                    description="Профиль создан Администратором Организации",
+                    description=_("Профиль создан Администратором Организации"),
                 )
             else:
                 up = UserProfile.objects.get(user_id=new_user.user.id)
@@ -372,9 +378,9 @@ def invite(request, companyid=1):
                 company_id=companyid,
                 is_notify=True,
                 protocoltype_id=1,
-                description="Профиль создан Администратором Организации",
+                description=_("Профиль создан Администратором Организации"),
             )
-            if new_user.is_staff == True:
+            if new_user.is_staff is True:
                 # для Сотрудника
                 UserCompanyComponentGroup.objects.create(
                     user_id=new_user.id,
@@ -430,27 +436,34 @@ def invite(request, companyid=1):
 
             site_name = get_current_site(request)
             text_plain = (
-                "Вы приглашены в Систему 1YES! по адресу: http://"
+                _("Вы приглашены в Систему 1YES! по адресу")
+                + ": http://"
                 + str(site_name)
-                + "/accounts/login\r\nЛогин: "
+                + "/accounts/login\\r\\n"
+                + _("Логин")
+                + ": "
                 + new_user.username
-                + "r\n\Пароль: "
+                + "r\\n\\"
+                + _("Пароль")
+                + ": "
                 + pss
-                + "r\n\r\n\Добро пожаловать в нашу команду!"
+                + "r\\n\\r\n\\"
+                + _("Добро пожаловать в нашу команду!")
             )
             text_html = (
-                '<p>Вы приглашены в Систему 1YES! по адресу: <a href="http://'
+                "<p>_('Вы приглашены в Систему 1YES! по адресу')"
+                + ": <a href=http://"
                 + str(site_name)
                 + '/accounts/login">http://'
                 + str(site_name)
-                + "/accounts/login</a></p><p>Логин: "
+                + "/accounts/login</a></p><p>" + _('Логин') + ": "
                 + new_user.username
-                + "</p><p>Пароль: "
+                + "</p><p>" + _('Пароль') + ": "
                 + pss
-                + "</p><p>Добро пожаловать в нашу команду!</p>"
+                + "</p><p>" + _('Добро пожаловать в нашу команду!') + "</p>"
             )
             send_mail(
-                "1YES! Приглашение в Систему",
+                _("1YES! Приглашение в Систему"),
                 text_plain,
                 settings.EMAIL_HOST_USER,
                 [new_user.email],
@@ -487,7 +500,8 @@ def invite(request, companyid=1):
 @login_required  # декоратор для перенаправления неавторизованного пользователя на страницу авторизации
 def UserProfileDetail(request, userid=0, param=""):
     companies_id = request.session["_auth_user_companies_id"]
-    OurTZ = pytz.timezone("Europe/Moscow")
+    # OurTZ = pytz.timezone("Europe/Moscow")
+    OurTZ = pytz.timezone(settings.TIME_ZONE)
 
     if userid == 0:
         userid = request.user.id
@@ -534,11 +548,11 @@ def UserProfileDetail(request, userid=0, param=""):
     metaobjecttype_list = Meta_ObjectType.objects.filter(is_active=True)
 
     # button_project_create = ''
-    button_userprofile_update = "Изменить"
-    prompt_is_notify = "Вкл."
+    button_userprofile_update = _("Изменить")
+    prompt_is_notify = _("Вкл.")
     if user_profile:
-        if user_profile.is_notify == False:
-            prompt_is_notify = "Выкл."
+        if user_profile.is_notify is False:
+            prompt_is_notify = _("Выкл.")
 
     return render(
         request,
@@ -566,7 +580,7 @@ class UserProfileUpdate(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UserProfileUpdate, self).get_context_data(**kwargs)
-        context["header"] = "Изменить Профиль"
+        context["header"] = _("Изменить Профиль")
         return context
 
     def get_form_kwargs(self):
@@ -586,39 +600,39 @@ class UserProfileUpdate(UpdateView):
         return super(UserProfileUpdate, self).form_valid(form)
 
 
-def parsing_test():
-    url0 = "https://bobsoccer.ru"
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; fr-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)"
-    }
+# def parsing_test():
+#     url0 = "https://bobsoccer.ru"
+#     headers = {
+#         "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; fr-US; rv:1.9.1.5) Gecko/20091102 Firefox/3.5.5 (.NET CLR 3.5.30729)"
+#     }
 
-    for count in range(1, 3):
-        sleep(3)
-        url = url0 + f"/tags/?tag=%D0%A6%D0%A1%D0%9A%D0%90&part={count}"
-        r = requests.get(url, headers=headers)
-        soup = BS(r.text, "lxml")
-        data = soup.find_all("div", class_="blog-list")
-        for el in data:
-            datetime = el.find("time").get("datetime")
-            title = el.find("h2").text.replace("\n", "")
-            summary = el.find("p").text.replace("\n", "")
-            link = url0 + el.find("a").get("href")
-            print("Страница ", count)
-            print(datetime)
-            print(title)
-            print(summary)
-            print(link)
-            # вытаскиваем текст поста
-            r1 = requests.get(link, headers=headers)
-            soup1 = BS(r1.text, "lxml")
-            data1 = soup1.find_all("div", class_="blog-element")
-            for el1 in data1:
-                description = el1.find_all("p")[1].text
-                print(
-                    description.encode("utf-8", errors="ignore").decode(
-                        "utf-8", errors="ignore"
-                    )
-                )
-            print("\n")
+#     for count in range(1, 3):
+#         sleep(3)
+#         url = url0 + f"/tags/?tag=%D0%A6%D0%A1%D0%9A%D0%90&part={count}"
+#         r = requests.get(url, headers=headers)
+#         soup = BS(r.text, "lxml")
+#         data = soup.find_all("div", class_="blog-list")
+#         for el in data:
+#             datetime = el.find("time").get("datetime")
+#             title = el.find("h2").text.replace("\n", "")
+#             summary = el.find("p").text.replace("\n", "")
+#             link = url0 + el.find("a").get("href")
+#             print("Страница ", count)
+#             print(datetime)
+#             print(title)
+#             print(summary)
+#             print(link)
+#             # вытаскиваем текст поста
+#             r1 = requests.get(link, headers=headers)
+#             soup1 = BS(r1.text, "lxml")
+#             data1 = soup1.find_all("div", class_="blog-element")
+#             for el1 in data1:
+#                 description = el1.find_all("p")[1].text
+#                 print(
+#                     description.encode("utf-8", errors="ignore").decode(
+#                         "utf-8", errors="ignore"
+#                     )
+#                 )
+#             print("\n")
 
-    return
+#     return

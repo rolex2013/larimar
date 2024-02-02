@@ -26,16 +26,16 @@ class UserRegistrationForm(forms.ModelForm):
     #    usr = form.save()
     #    UserProfile.objects.create(user_id=usr.id) 
     #    return super(CompanyCreate, self).form_valid(form)
-"""
-class UserAddForm(forms.Select):
-    #user = forms.ChoiceField(UserProfile.objects.filter('is_active=True'))
-    #user = forms.ChoiceField(label="", initial='', widget=forms.Select({"vvfgfg","kkjkjkjkkjk"}), required=True)
-    a = 1
+# """
+# class UserAddForm(forms.Select):
+#     #user = forms.ChoiceField(UserProfile.objects.filter('is_active=True'))
+#     #user = forms.ChoiceField(label="", initial='', widget=forms.Select({"vvfgfg","kkjkjkjkkjk"}), required=True)
+#     a = 1
 
-    class Meta:
-        model = User
-        fields = ('username', 'is_staff')
-"""
+#     class Meta:
+#         model = User
+#         fields = ('username', 'is_staff')
+# """
 
 
 class UserSelect(forms.Select):
@@ -87,12 +87,12 @@ class UserInviteForm(forms.ModelForm):
 
 class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-        #self.user = kwargs.pop('user')
+        # self.user = kwargs.pop('user')
         self.companies = kwargs.pop('org')
-        #print(self.companies)
+        # print(self.companies)
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        #self.fields['company'].queryset = Company.objects.filter(id__in=self.companies) # это без иерархии
-        #self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.all(), level_indicator = u'---') # из документации
+        # self.fields['company'].queryset = Company.objects.filter(id__in=self.companies) # это без иерархии
+        # self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.all(), level_indicator = u'---') # из документации
         self.fields['company'] = TreeNodeChoiceField(queryset=Company.objects.filter(id__in=self.companies), level_indicator=u'---')   # с иерархией
 
     class Meta:

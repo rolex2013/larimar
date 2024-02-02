@@ -987,6 +987,7 @@ body {
 /* *************************************** */
 /* (A) HIDE CHECKBOX */
 .togCheck { display: none; }
+/* .togCheck { visibility:hidden; } */
 
 /* (B) HIDE CONTENT BY DEFAULT */
 .togContent {
@@ -994,7 +995,7 @@ body {
   opacity: 0;
   transition: max-height 1s;
   visibility: hidden;
-  background-image: url("images/expand-button_icon-icons.com_72763.png");
+  /* background-image: url("images/expand-button_icon-icons.com_72763.png"); */
 }
 
 /* (C) SHOW CONTENT WHEN CHECKED */
@@ -1005,14 +1006,6 @@ body {
   /* image: url("../images/expand-less_119177.png"); */
 }
 
-/* (X) COSMETICS - DOES NOT MATTER */
-/* (X1) ENTIRE DEMO */
-/* * {
-  font-family: arial, sans-serif;
-  box-sizing: border-box;
-} */
-
-/* (X2) TOGGLE BUTTON */
 .togButton {
   display: block;
   width: 100%;
@@ -1023,9 +1016,29 @@ body {
   /* image: url("../images/expand-less_119177.png"); */
 }
 
-/* (X3) CONTENT */
-/* .togContent { background: #f4f6ff; }
-.togContent p {
-  padding: 50px 10px;
-  margin: 0;
-} */
+.blog {
+  background: #fff;
+  padding: 2em;
+  /* height: 220px; */
+  position: relative;
+  z-index: 2;
+  border-radius: 0 5px 5px 5px;
+  box-shadow: 0 -2px 3px -2px rgba(0, 0, 0, .5);
+}
+
+.align-left {
+  float: left;
+  /* width:33%; */
+}
+
+.align-center {
+  text-align: center;
+  display: inline-block;
+  width:34%;
+}
+
+.align-right {
+  float: right;
+  text-align: right;
+  /* width:33%; */
+}

@@ -368,8 +368,8 @@ class Content(models.Model):
     name = models.CharField(_("Заголовок"), max_length=1024)
     announcement = models.TextField(_("Анонс"), max_length=10240, blank=True, null=True)
     description = RichTextUploadingField(_("Текст"), blank=True, null=True)
-    datebegin = models.DateTimeField(_("Начало"))
-    dateend = models.DateTimeField(_("Окончание"))
+    datebegin = models.DateTimeField(_("Дата публикации"))
+    dateend = models.DateTimeField(_("Дата снятия с публикации"))
     is_ontop = models.BooleanField(_("Всегда наверху"), default=False)
     type = models.ForeignKey(
         "Dict_ContentType",

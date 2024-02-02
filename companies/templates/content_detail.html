@@ -4,40 +4,40 @@
 
 {% block content %}
 
-   {% load i18n %}
+{% load i18n %}
 
-   <!-- Защита от прямого доступа к контенту -->
-   <!--{ object.company_id }} / { user_companies }}-->
-   <!--{ if object.company_id in user_companies %}-->
+<!-- Защита от прямого доступа к контенту -->
+<!--{ object.company_id }} / { user_companies }}-->
+<!--{ if object.company_id in user_companies %}-->
 
-     <div class="object-detail">
+<div class="object-detail">
 
-        <h2>{{ object.name }} {{ extdescription }}
-        <!--{ if not object.is_active %}(Контент перемещен в архив){ endif %}-->
-        </h2>
-        <p>{{ content.announcement }}</p>
-        <p>{% autoescape off %} {{ object.description }}{% endautoescape %}</p>
-
-        {% trans 'Тип' %}: {{ object.type }}<br />
-        <!--<em>Автор: {{ object.author }}</em><br /> -->
-        <em>{{ whoisauthor }}</em>
-        <em>{% trans 'Дата' %}: {{ object.datecreate }}</em>
-        <br />
-        <!--{user.is_authenticated}} and {user.id}} == {object.author_id}}-->
-        {% if user.is_authenticated and user.id == object.author_id %}
-           <!--{ button_content_create }}-->
-           <div class="object-detail-buttons">
-              <!--{ if perms.companies.change_content %}
+   <h2>{{ object.name }} {{ extdescription }}
+      <!--{ if not object.is_active %}(Контент перемещен в архив){ endif %}-->
+   </h2>
+   <p>{{ content.announcement }}</p>
+   <p>{% autoescape off %} {{ object.description }}{% endautoescape %}</p>
+   <p>{% trans 'Тип' %}: {{ object.type }}</p>
+   <p>{% trans 'Дата публикации' %}: {{ object.datebegin }}</p>
+   <p>{% trans 'Дата снятия с публикации' %}: {{ object.datebegin }}</p>
+   <em>{{ whoisauthor }}</em>
+   <em>{% trans 'Дата' %}: {{ object.datecreate }}</em>
+   <br />
+   <!--{user.is_authenticated}} and {user.id}} == {object.author_id}}-->
+   {% if user.is_authenticated and user.id == object.author_id %}
+   <!--{ button_content_create }}-->
+   <div class="object-detail-buttons">
+      <!--{ if perms.companies.change_content %}
                  <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>-->
-                 <a href="{% url 'my_company:content_update' object.pk %}">{{ button_content_update }}</a>
-              <!--{ endif %}-->
-           </div>
-         {% endif %}
-         
-     </div>
+      <a href="{% url 'my_company:content_update' object.pk %}">{{ button_content_update }}</a>
+      <!--{ endif %}-->
+   </div>
+   {% endif %}
+
+</div>
 
 
-   <!--{ else %}
+<!--{ else %}
 
      <h4>Контент недоступен!</h4>
 
@@ -48,4 +48,3 @@
 {% block list %}
 
 {% endblock list %}
-
