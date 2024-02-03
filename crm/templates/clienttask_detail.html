@@ -5,14 +5,17 @@
 {% block task %}
 
     <div class="object-detail">
-        <div>
-            <div class="object-detail-header">
-                <h4>{% trans "Задача" %}: {{ clienttask.name }}
-                    {% if not clienttask.is_active %}
-                        ({% trans "Задача перемещена в архив" %})
-                    {% endif %}
-                </h4>
-            </div>
+
+        <label for="check" class="togButton">
+            <h4>⇅ {% trans "Задача" %}: {{ clienttask.name }}
+                {% if not clienttask.is_active %}
+                    ({% trans "Задача перемещена в архив" %})
+                {% endif %}
+            </h4>
+        </label>
+        <input type="checkbox" class="togCheck" id="check"">
+                    
+        <div class=" togContent">
             <div class="object-detail-left">
                 <p>{% autoescape off %}{{ clienttask.description }}{% endautoescape %}</p>
                 <i><p>{% trans "Клиент" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Задачи и События клиента' %}"><a href="{% url 'my_crm:clienttasks' clienttask.client.pk 0 %}">{{ clienttask.client }}</a></span></p></i>
@@ -37,6 +40,7 @@
             </div>
             <div class="object-detail-right">{% include 'objectfile_list.html' %}</div>
         </div>
+
         <div class="object-detail-buttons">
             <a href="{% url 'my_crm:clienttask_create' clienttask.client.id clienttask.pk %}">{{ button_clienttask_create }}</a>
             <a href="{% url 'my_crm:clienttask_update' clienttask.pk %}">{{ button_clienttask_update }}</a>

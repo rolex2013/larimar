@@ -5,14 +5,17 @@
 {% block event %}
 
     <div class="object-detail">
-        <div>
-            <div class="object-detail-header">
-                <h4>{% trans "Событие" %}: {{ clientevent.name }}
-                    {% if not clientevent.is_active %}
-                        ({% trans "Событие перемещено в архив" %})
-                    {% endif %}
-                </h4>
-            </div>
+
+        <label for="check" class="togButton">
+            <h4>⇅ {% trans "Событие" %}: {{ clientevent.name }}
+                {% if not clientevent.is_active %}
+                    ({% trans "Событие перемещено в архив" %})
+                {% endif %}
+            </h4>
+        </label>
+        <input type="checkbox" class="togCheck" id="check"">
+                    
+        <div class=" togContent">
             <div class="object-detail-left">
                 <p>{% autoescape off %}{{ clientevent.description }}{% endautoescape %}</p>
                 <i><p>{% trans "Клиент" %}: <span class="hint hint--bottom hint--info" data-hint="Задачи и События клиента"><a href="{% url 'my_crm:clienttasks' clientevent.client.pk 0 %}">{{ clientevent.client }}</a></span></p></i>
@@ -31,6 +34,7 @@
             </div>
             <div class="object-detail-right">{% include 'objectfile_list.html' %}</div>
         </div>
+
         <div class="object-detail-buttons">
             <!--<a href="{ url 'my_crm:clientevent_create' clientevent.client.id 0 %}">{{ button_clientevent_create }}</a>-->
             <a href="{% url 'my_crm:clientevent_update' clientevent.pk %}">{{ button_clientevent_update }}</a>

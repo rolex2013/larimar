@@ -11,66 +11,58 @@
 {% if current_company.id in user_companies or current_company.is_support %}
 
 <div class="object-detail">
-   <!-- (A) TOGGLE BUTTON -->
+
    <label for="check" class="togButton">
       <h2>⇅<!--<img src="{ static 'images/strelki_vverh_i_vniz_white_32.png' %}" width="24" height="24">--> 
          {{ current_company.name }}</h2>
    </label>
-
-   <!-- (B) CONTENT -->
    <input type="checkbox" class="togCheck" id="check">
-   <!-- <div class="togContent">
-         <p>Just some random content here.</p>
-      </div> -->
 
-   <!-- (C) REST OF PAGE -->
-   <!-- <p>Hello World!</p> -->
-   <!-- *************************** -->
    <div class="togContent">
       <!-- <h2>{{ current_company.name }} -->
       {% if not current_company.is_active %}{% trans '(Организация перемещена в архив)' %}{% endif %}
       <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
 
       {% if current_company.parent.pk %}
-      <i>
-         <p>{% trans 'Организация' %}:
-            {% if component_name == 'companies' %}
-            <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
-            <a href="{% url 'my_company:stafflist' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
-            {% elif component_name == 'crm' %}
-            <a href="{% url 'my_crm:clients' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
-            {% elif component_name == 'docs' %}
-            <a href="{% url 'my_doc:docs' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
-            {% elif component_name == 'files' %}
-            <a href="{% url 'my_file:folders' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
-            {% elif component_name == 'feedback' %}
-            {% if is_many_support_member %}
-            {% if current_company.parent.is_support %}
-            <a href="{% url 'my_feedback:tickets' 0 1 current_company.parent.pk %}">{{ current_company.parent.name }}</a>
-            {% else %}
-            {{ current_company.parent.name }}
-            {% endif %}
-            {% else %}
-            {{ current_company.parent.name }}
-            {% endif %}
-            {% elif component_name == 'projects' %}
-            <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
-            {% elif component_name == 'chats' %}
-            <a href="{% url 'my_chat:chats' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
-            {% elif component_name == 'dashboard' %}
-            <a href="{% url 'my_dashboard:dashboard' current_company.parent.pk %}">{{ current_company.parent.name }}</a>
-            {% elif component_name == 'lists' %}
-            <a href="{% url 'my_list:ylists' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
-            {% endif %}
-         </p>
-      </i>
+         <i>
+            <p>{% trans 'Организация' %}:
+               {% if component_name == 'companies' %}
+               <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
+               <a href="{% url 'my_company:stafflist' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% elif component_name == 'crm' %}
+               <a href="{% url 'my_crm:clients' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% elif component_name == 'docs' %}
+               <a href="{% url 'my_doc:docs' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% elif component_name == 'files' %}
+               <a href="{% url 'my_file:folders' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% elif component_name == 'feedback' %}
+               {% if is_many_support_member %}
+               {% if current_company.parent.is_support %}
+               <a href="{% url 'my_feedback:tickets' 0 1 current_company.parent.pk %}">{{ current_company.parent.name }}</a>
+               {% else %}
+               {{ current_company.parent.name }}
+               {% endif %}
+               {% else %}
+               {{ current_company.parent.name }}
+               {% endif %}
+               {% elif component_name == 'projects' %}
+               <a href="{% url 'my_project:projects' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% elif component_name == 'chats' %}
+               <a href="{% url 'my_chat:chats' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% elif component_name == 'dashboard' %}
+               <a href="{% url 'my_dashboard:dashboard' current_company.parent.pk %}">{{ current_company.parent.name }}</a>
+               {% elif component_name == 'lists' %}
+               <a href="{% url 'my_list:ylists' current_company.parent.pk 0 %}">{{ current_company.parent.name }}</a>
+               {% endif %}
+            </p>
+         </i>
       <!--{ else %}
            Это головная организация-->
       {% endif %}
 
       <p>{% trans 'Тип в оргструктуре' %}: {{ current_company.structure_type }}</p>
       <p>{% trans 'Тип' %}: {{ current_company.type }}</p>
-      <em>{% trans 'Автор' %}: {{ current_company.author }}</em>
+      <em>{% trans 'Автор' %}: {{ current_company.author }}</em><br />
       <em>{% trans 'Дата' %}: {{ current_company.datecreate }}</em>
       <br />
    </div>

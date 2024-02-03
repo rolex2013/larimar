@@ -7,15 +7,17 @@
     {% if current_project.company.id in user_companies %}
 
         <div class="object-detail">
-            <div>
-                <div class="object-detail-header">
-                    <h3>{{ current_project.name }}
-                        {% if not current_project.is_active %}
-                            ({% trans "Проект перемещён в архив" %})
-                        {% endif %}
-                    </h3>
-                </div>
 
+            <label for="check" class="togButton">
+                <h3>⇅ {{ current_project.name }}
+                    {% if not current_project.is_active %}
+                        ({% trans "Проект перемещён в архив" %})
+                    {% endif %}
+                </h3>
+            </label>
+            <input type="checkbox" class="togCheck" id="check"">
+        
+            <div class=" togContent">
                 <div class="object-detail-left">
                     <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p><br />
                     <i><p>{% trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Проекты организации' %}"><a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></span></p></i>
@@ -41,8 +43,7 @@
                     <em>{% trans "Автор" %}: {{ current_project.author }}</em><br />
                     <!--<em>Участники: { current_project.members.name }}</em> -->
                     <em>{% trans "Дата" %}: {{ current_project.datecreate }}</em>
-                    <!--<p>&nbsp;</p>       -->
-                    <br />
+                    <p>&nbsp;</p>      
                 </div>
                 <div class="object-detail-right">
                     {% include 'objectfile_list.html' %}
