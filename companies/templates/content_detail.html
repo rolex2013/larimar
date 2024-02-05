@@ -29,6 +29,7 @@
    <div class="object-detail-buttons">
       <!--{ if perms.companies.change_content %}
                  <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>-->
+      <a href="{{ request.META.HTTP_REFERER }}">{% trans 'Вернуться' %}</a>
       <a href="{% url 'my_company:content_update' object.pk %}">{{ button_content_update }}</a>
       <!--{ endif %}-->
    </div>

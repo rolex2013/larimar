@@ -48,42 +48,50 @@
    </div>
    {% endif %}
 
-   <div class="object-list">
+   <div class="object-list" style="margin: 1% 0% 0% 0%; padding: 0px 0px 0px 0px;">
 
       {% for content in content_list %}
 
-      <label for="check_blog_{{ forloop.counter }}" class="togButton">
-         <p style="background: rgb(215, 216, 216)">
-            <span class="align--left">
-               {% if content.announcement and content.description %}⇅ {% endif %}
-               <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a></span>
-            <span class="align-right"><em>{{ content.datecreate }}</em>&nbsp;({{ content.type }}/{{ content.place
-               }})&nbsp;</span>
-         </p>
-         {% if content.announcement %}
-         <p>{{ content.announcement }}</p>
-         {% endif %}
-         {% if content.is_active == False %}
-         <strong><em>(в архиве)</em></strong>
-         {% endif %}
-      </label>
-      <input type="radio" class="togCheck" id="check_blog_{{ forloop.counter }}"
-         onclick="toggle_visibility('tog_blog_{{ forloop.counter }}');">
-<!-- <div> -->
-      <div {% if content.announcement %} id="tog_blog_{{ forloop.counter }}" style="display: none;"
-         {% endif %}>
-         {% autoescape off %}{{ content.description }}{% endautoescape %}
-      </div>
-<!-- </div> -->
+         <label for="check_blog_{{ forloop.counter }}" class="togButton">
+            <p style="background: rgb(215, 216, 216)">
+               <span>
+                  {% if content.description %}⇅ {% endif %}
+                  <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a>
+               </span>
+               <span class="align-right">
+                  <em>{{ content.datecreate }}</em>&nbsp;({{ content.type }}/{{ content.place }})&nbsp;
+               </span>
+            </p>
+            {% if content.announcement %}
+               <div>{{ content.announcement }}</div>
+            {% endif %}
+            {% if content.is_active == False %}
+               <strong><em>(в архиве)</em></strong>
+            {% endif %}
+         </label>
+         <input type="radio" class="togCheck" id="check_blog_{{ forloop.counter }}"
+            onclick="toggle_visibility('tog_blog_{{ forloop.counter }}');">
 
-      {% endfor %}
+         <div
+            {% if content.description %}
+               id="tog_blog_{{ forloop.counter }}" 
+               style="display: none; margin: 0% 1% 1% 1%; padding: 0px 0px 0px 10px; overflow: hidden;"
+            {% else %}
+               id="tog_blog_{{ forloop.counter }}" 
+               style="display: none; margin: 0% 1% 1% 1%; padding: 0px 0px 0px 10px; overflow: hidden;"
+            {% endif %}>
+            <!-- overflow: hidden; - чтобы отменить обтекание картинок в предыдущих блоках -->
+            {% autoescape off %}{{ content.description }}{% endautoescape %}
+         </div>
+
+         {% endfor %}
 
    </div>
 
    <hr>
 
    {% if user_profile.user.id == user.id %}
-   {% include 'notifies.html' %}
+      {% include 'notifies.html' %}
    {% endif %}
 
 </div>
