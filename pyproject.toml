@@ -90,7 +90,7 @@ hiredis = "^2.0.0"
 redis = "^4.5.1"
 autobahn = "^23.1.2"
 Twisted = "^22.10.0"
-channels = "3.0.4"
+channels = "^3.0.4"
 
 [build-system]
 requires = ["poetry-core"]
