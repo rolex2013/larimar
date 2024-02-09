@@ -1,7 +1,9 @@
 # from django.http import HttpResponse
 # from ckeditor.widgets import CKEditorWidget
 # import requests
+
 from django import forms
+
 from django.utils.translation import gettext_lazy as _
 
 from .models import Project, Task, TaskComment  # , ProjectFile  # , Company
@@ -25,6 +27,8 @@ import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 
+from main.utils import MultipleFileField
+
 
 # Create custom widget in your forms.py file.
 class DateInput(forms.DateInput):
@@ -32,9 +36,15 @@ class DateInput(forms.DateInput):
 
 
 class ProjectForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы проекта"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     # forms.ClearableFileInput.allow_multiple_selected = True,
+    #     # widget=forms.MultiFileInput(),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы проекта"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
     disabled_fields = (
@@ -169,9 +179,13 @@ class ProjectForm(forms.ModelForm):
 
 
 class TaskForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы задачи"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы задачи"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
 
@@ -323,9 +337,13 @@ class TaskForm(forms.ModelForm):
 
 
 class TaskCommentForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы комментария"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы комментария"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
 

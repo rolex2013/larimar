@@ -19,6 +19,7 @@ from .models import (
     Dict_ClientEventStatus,
 )
 from main.models import Notification, Meta_ObjectType
+from main.utils import MultipleFileField
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
@@ -36,13 +37,15 @@ from django.utils.translation import gettext_lazy as _
 
 class ClientForm(forms.ModelForm):
     # хотелось бы, если выбран юзер, заполнять данные этой формы (ФИО, email, phone) из его Профиля
-
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы клиента"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы клиента"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
-
     disabled_fields = (
         "dateclose",
         "author",
@@ -173,9 +176,13 @@ class ClientForm(forms.ModelForm):
 
 
 class ClientTaskForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы задачи"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы задачи"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
     disabled_fields = (
@@ -325,9 +332,13 @@ class ClientTaskForm(forms.ModelForm):
 
 
 class ClientTaskCommentForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы комментария задачи"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы комментария задачи"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
 
@@ -343,12 +354,15 @@ class FilterStatusForm(forms.ModelForm):
 
 
 class ClientEventForm(forms.ModelForm):
-    files = forms.FileField(
-        label="Файлы события",
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    # files = forms.FileField(
+    #     label="Файлы события",
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
+        label=_("Файлы события"),
         required=False,
     )
-
     disabled_fields = (
         "dateclose",
         "author",
@@ -496,12 +510,15 @@ class ClientEventForm(forms.ModelForm):
 
 
 class ClientEventCommentForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы комментария события"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы комментария события"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
-
     class Meta:
         model = ClientEventComment
         fields = ["name", "description", "time", "cost"]

@@ -13,6 +13,7 @@ from .models import (
 # from .models import FeedbackTicketStatusLog, TaskStatusLog
 from .models import Dict_System, Dict_FeedbackTicketStatus, Dict_FeedbackTaskStatus
 from main.models import Notification, Meta_ObjectType
+from main.utils import MultipleFileField
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
@@ -54,12 +55,16 @@ class FeedbackTicketForm(forms.ModelForm):
     # datebegin = forms.DateField(widget=AdminDateWidget())
     # datebegin = forms.DateField(widget=AdminSplitDateTime())
 
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы тикета"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     # widget=CustomClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы тикета"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
-        # widget=CustomClearableFileInput(attrs={"multiple": True}),
         required=False,
-    )
+    )  
     # comment = forms.CharField(label='Комментарий', widget=CKEditorWidget(), required=False)
     comment = forms.CharField(
         label=_("Комментарий"), widget=forms.Textarea, required=False
@@ -153,12 +158,15 @@ class FeedbackTicketForm(forms.ModelForm):
 
 
 class FeedbackTicketCommentForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы комментария тикета"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы комментария тикета"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
-
     def __init__(self, *args, **kwargs):
         self.is_support_member = kwargs.pop("is_support_member")
         self.is_ticketslist_dev = kwargs.pop("is_ticketslist_dev")
@@ -174,12 +182,15 @@ class FeedbackTicketCommentForm(forms.ModelForm):
 
 
 class FeedbackTaskForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы задачи"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы задачи"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
-
     disabled_fields = (
         "dateclose",
         "author",
@@ -327,12 +338,15 @@ class FeedbackTaskForm(forms.ModelForm):
 
 
 class FeedbackTaskCommentForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы комментария"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы комментария"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
-
     class Meta:
         model = FeedbackTaskComment
         fields = ["name", "description", "time", "cost"]

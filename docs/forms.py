@@ -4,10 +4,11 @@ from ckeditor.widgets import CKEditorWidget
 from django import forms
 from .models import Company, Doc, DocTask, DocTaskComment
 from .models import Dict_DocStatus, Dict_DocType
-from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
 from django.contrib.auth.models import User
+from main.models import Notification, Meta_ObjectType
+from main.utils import MultipleFileField
 
 # from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
 from django.contrib.auth.context_processors import auth
@@ -19,9 +20,13 @@ from django.utils.translation import gettext_lazy as _
 
 
 class DocForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы документа"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы документа"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
     # is_public = forms.BooleanField(label='Отметьте, если хотите опубликовать эту версию Документа', required=False)
@@ -154,9 +159,13 @@ class DocForm(forms.ModelForm):
 
 
 class DocTaskForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы задачи"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы задачи"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
     # comment = forms.CharField(label=_('Комментарий'), widget=forms.Textarea, required=False)
@@ -293,9 +302,13 @@ class DocTaskFormUpdate(DocTaskForm):
 
 
 class DocTaskCommentForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы комментария"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы комментария"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
 

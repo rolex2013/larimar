@@ -1,10 +1,13 @@
 from django import forms
 
 from .models import Dict_Theme, Dict_FolderType, Folder, FolderFile
-
 # from main.models import Notification, Meta_ObjectType
 from accounts.models import UserProfile
 from companies.models import UserCompanyComponentGroup
+
+from main.models import Notification, Meta_ObjectType
+from main.utils import MultipleFileField
+
 from django.contrib.auth.models import User
 
 # from django.contrib.admin.widgets import AdminDateWidget
@@ -19,12 +22,15 @@ from django.utils.translation import gettext_lazy as _
 
 
 class FolderForm(forms.ModelForm):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы папки"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы папки"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )
-
     disabled_fields = ("author",)
 
     def __init__(self, *args, **kwargs):
@@ -53,8 +59,12 @@ class FolderForm(forms.ModelForm):
 
 
 class UploadFilesForm(forms.Form):
-    files = forms.FileField(
+    # files = forms.FileField(
+    #     label=_("Файлы папки"),
+    #     widget=forms.ClearableFileInput(attrs={"multiple": True}),
+    #     required=False,
+    # )
+    files = MultipleFileField(
         label=_("Файлы папки"),
-        widget=forms.ClearableFileInput(attrs={"multiple": True}),
         required=False,
     )

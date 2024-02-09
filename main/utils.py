@@ -1,14 +1,15 @@
 import os
 from django.conf import settings
+from django.shortcuts import render, redirect, get_object_or_404
+
+from django import forms
 
 from projects.models import ProjectFile
 from crm.models import ClientFile
 from docs.models import DocVerFile
 from files.models import FolderFile
 from feedback.models import FeedbackFile
-from main.utils_lang import TranslateFieldMixin
-
-from django.shortcuts import render, redirect, get_object_or_404
+# from main.utils_lang import TranslateFieldMixin
 
 
 class AddFilesMixin(object):
@@ -177,3 +178,21 @@ class AddFilesMixin(object):
 
         return False
 
+
+# для формы загрузки нескольких файлов
+class MultipleFileInput(forms.ClearableFileInput):
+    allow_multiple_selected = True
+
+
+class MultipleFileField(forms.FileField):
+    def __init__(self, *args, **kwargs):
+        kwargs.setdefault("widget", MultipleFileInput())
+        super().__init__(*args, **kwargs)
+
+    def clean(self, data, initial=None):
+        single_file_clean = super().clean
+        if isinstance(data, (list, tuple)):
+            result = [single_file_clean(d, initial) for d in data]
+        else:
+            result = single_file_clean(data, initial)
+        return result
