@@ -409,8 +409,8 @@ else:
     STATICFILES_DIRS = (os.getenv("STATICFILES_DIRS"),)
     STATIC_ROOT = os.getenv("STATIC_ROOT")
 
-    # подменяем MySQLdb версией 1.4.2 модуля pymysql
-    pymysql.version_info = (1, 4, 2, "final", 0)
+    # подменяем MySQLdb версией 1.4.6 модуля pymysql
+    pymysql.version_info = (1, 4, 6, "final", 0)
     pymysql.install_as_MySQLdb()
     # ***
 
