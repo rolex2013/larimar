@@ -31,8 +31,10 @@
         <input type="checkbox" class="togCheck" id="check"">
 
         <div class="togContent">
+            <div class="object-detail-text">
+                <p>{{ task.description|safe }}</p><br />
+            </div>
             <div class="object-detail-left">
-                <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p><br />
                 <i><p>{% trans "Проект" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Задачи проекта' %}"><a href="{% url 'my_project:tasks' task.project.pk 0 %}">{{ task.project.name }}</a></span></p></i>
                 {% if task.parent %}
                     <p>{% trans "Уровень выше" %}: <a href="{% url 'my_project:taskcomments' task.parent.pk %}">{{ task.parent.name }}</a></p>

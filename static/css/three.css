@@ -115,18 +115,18 @@ body {
    margin-left: 20%;
 }*/
 .object-detail {
-    /*height: 300px; /* высота контента */
     background: #eee; /* фон */
     background: linear-gradient(to left, #eee, #8e968e);
-    /*margin: 2% 1% 2% 1%; /* боковые поля */
+    /* margin: 2% 1% 2% 1%; /* боковые поля */
     padding: 10px 15px 10px 15px;
-    /*border: 1px solid;*/
+    /* border: 1px solid; */
     border-radius: 10px;
     width: 100%;
-    /*float: left;    */
-    /*display: table;*/
+    /* float: left;    */
+    /* display: table; */
     display: grid;
 }
+
 .circle-left {
     width: 10px;
     height: 10px;
@@ -265,6 +265,10 @@ body {
 }
 .object-detail .object-detail-subcontainer {
     float: left;
+}
+
+.object-detail-text p {
+    line-height: 15px;
 }
 
 .object-list {

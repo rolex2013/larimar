@@ -560,14 +560,14 @@ def UserProfileDetail(request, userid=0, param=""):
         {
             "user_profile": user_profile,
             "button_userprofile_update": button_userprofile_update,
-            "content_list": content_list,
+            "content_list": content_list.order_by("-datebegin"),
             "user_companies": companies_id,
             "prompt_is_notify": prompt_is_notify,
             "notification_list": notification_list.distinct().order_by("-datecreate"),
             "metaobjecttype_list": metaobjecttype_list.distinct().order_by(),
             "status_selectid": "2",
             "metaobjecttype_selectid": "0",
-            #'table': table,
+            # 'table': table,
         },
     )
 

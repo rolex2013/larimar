@@ -29,6 +29,8 @@ from django.core.mail import send_mail
 
 from main.utils import MultipleFileField
 
+from django_ckeditor_5.widgets import CKEditor5Widget
+
 
 # Create custom widget in your forms.py file.
 class DateInput(forms.DateInput):
@@ -175,6 +177,9 @@ class ProjectForm(forms.ModelForm):
                 format="%Y-%m-%d",
                 attrs={"type": "date"},
             ),
+            # "description": CKEditor5Widget(
+            #     attrs={"class": "django_ckeditor_5"}, config_name="extends"
+            # ),            
         }
 
 

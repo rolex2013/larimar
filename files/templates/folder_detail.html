@@ -9,28 +9,32 @@
 
       <div class="object-detail">
 
-        <h2>{{ current_folder.name }}
-        {% if not current_folder.is_active %}({% trans "Папка перемещена в архив" %}){% endif %}
-        </h2>
-        <p>{% autoescape off %} {{ current_folder.description }}{% endautoescape %}</p>
+         <label for="check" class="togButton">
+            <h3>⇅ {{ current_folder.name }}
+            {% if not current_folder.is_active %}({% trans "Папка перемещена в архив" %}){% endif %}
+            </h3>
+         </label>
+         <input type="checkbox" class="togCheck" id="check">
+         <div class=" togContent">
+            <div class="object-detail-text"><p>{{ current_folder.description|safe }}</p></div>
 
-        <i>
-        {% if current_folder.parent.pk %}
-            <p>{% trans "Папка верхнего уровня" %}:
-             <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{ current_folder.parent.name }}</a>-->
-             <a href="{% url 'my_file:folders' current_folder.company.id current_folder.parent.pk %}">{{ current_folder.parent.name }}</a>
-             </p></i>
-        {% else %}
-             <p><a href="{% url 'my_file:folders0' %}">{% trans "Корневая папка" %}</a></p>
-        {% endif %}
-        </i>
+            <i>
+            {% if current_folder.parent.pk %}
+                  <p>{% trans "Папка верхнего уровня" %}:
+                  <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{ current_folder.parent.name }}</a>-->
+                  <a href="{% url 'my_file:folders' current_folder.company.id current_folder.parent.pk %}">{{ current_folder.parent.name }}</a>
+                  </p></i>
+            {% else %}
+                  <p><a href="{% url 'my_file:folders0' %}">{% trans "Корневая папка" %}</a></p>
+            {% endif %}
+            </i>
 
-        <p>{% trans "Тематика" %}: {{ current_folder.theme }}</p>
-        <p>{% trans "Тип" %}: {{ current_folder.type }}</p>
-        <em>{% trans "Автор" %}: {{ current_folder.author }}</em>
-        <em>{% trans "Дата" %}: {{ current_folder.datecreate }}</em>
-        <br />
-
+            <p>{% trans "Тематика" %}: {{ current_folder.theme }}</p>
+            <p>{% trans "Тип" %}: {{ current_folder.type }}</p>
+            <em>{% trans "Автор" %}: {{ current_folder.author }}</em>
+            <em>{% trans "Дата" %}: {{ current_folder.datecreate }}</em>
+            <br /><br />
+         </div>
         <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
           <div class="object-detail-buttons">
               <a href="{% url 'my_company:companies' 0 'files' %}">{{ button_company_select }}</a>
@@ -137,7 +141,7 @@
                                 <option value="1" {% if "1" == myfileselectid %} selected="selected" {% endif %}>{% trans "Мои активные" %}</option>
                                 <option value="2" {% if "2" == myfileselectid %} selected="selected" {% endif %}>{% trans "Мои неактивные" %}</option>
                            </select>
-                           <button id="selection-button-file" type="submit" method="GET" class="object-filter-button">{% trans "Выбрать" %}</button>
+                           <button id="selection-button-file" type="submit" method="GET" class="object-filter-button">{% trans "Применить" %}</button>
                        </div>
                     </form>
 

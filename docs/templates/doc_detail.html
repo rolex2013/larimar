@@ -22,8 +22,10 @@
                 <input type="checkbox" class="togCheck" id="check">
                 <!-- </div> -->
             <div class="togContent">
+                <div class="object-detail-text">
+                    <p>{{ current_doc.description|safe }}</p><br />
+                </div>
                 <div class="object-detail-left">
-                    <p>{% autoescape off %}{{ current_doc.description }}{% endautoescape %}</p><br />
                     <i><p>{% trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Документы организации' %}"><a href="{% url 'my_doc:docs' current_doc.company.pk 0 %}">{{ current_doc.company }}</a></span></p></i>
                     <p>{% trans "Менеджер" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль' %}"><a href="{% url 'my_account:userprofile_detail' current_doc.manager.pk ' ' %}">{{ current_doc.manager }}</a></span></p>
                     <!--<p>Создан: {{ current_doc.datecreate }}</p>

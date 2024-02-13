@@ -15,8 +15,10 @@
    <h2>{{ object.name }} {{ extdescription }}
       <!--{ if not object.is_active %}(Контент перемещен в архив){ endif %}-->
    </h2>
-   <p>{{ content.announcement }}</p>
-   <p>{% autoescape off %} {{ object.description }}{% endautoescape %}</p>
+   <div class="object-detail-text">
+      <p><i>{{ object.announcement|safe }}</i></p><hr>
+      <p>{{ object.description|safe }}</p><hr>
+   </div>  
    <p>{% trans 'Тип' %}: {{ object.type }}</p>
    <p>{% trans 'Дата публикации' %}: {{ object.datebegin }}</p>
    <p>{% trans 'Дата снятия с публикации' %}: {{ object.datebegin }}</p>
@@ -25,14 +27,15 @@
    <br />
    <!--{user.is_authenticated}} and {user.id}} == {object.author_id}}-->
    {% if user.is_authenticated and user.id == object.author_id %}
-   <!--{ button_content_create }}-->
-   <div class="object-detail-buttons">
-      <!--{ if perms.companies.change_content %}
-                 <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>-->
-      <a href="{{ request.META.HTTP_REFERER }}">{% trans 'Вернуться' %}</a>
-      <a href="{% url 'my_company:content_update' object.pk %}">{{ button_content_update }}</a>
-      <!--{ endif %}-->
-   </div>
+      <!--{ button_content_create }}-->
+      <div class="object-detail-buttons">
+         <!--{ if perms.companies.change_content %}
+                  <div style="float: left;">&nbsp;</div><div style="float: left;">&nbsp;</div>-->
+         <!-- <a href="{ request.META.HTTP_REFERER }}">{ trans 'Вернуться' %}</a> -->
+         <a href="{% url 'my_account:userprofile_detail' 0 'all' %}">{% trans 'Вернуться' %}</a>
+         <a href="{% url 'my_company:content_update' object.pk %}">{{ button_content_update }}</a>
+         <!--{ endif %}-->
+      </div>
    {% endif %}
 
 </div>

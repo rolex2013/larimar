@@ -166,6 +166,14 @@ class ContentForm(forms.ModelForm):
             queryset=Company.objects.filter(id__in=self.companies),
             level_indicator="---",
         )  # с иерархией
+        self.fields["announcement"].widget.attrs.update(
+            {"class": "form-control django_ckeditor_5"}
+        )
+        self.fields["announcement"].required = False
+        self.fields["description"].widget.attrs.update(
+            {"class": "form-control django_ckeditor_5"}
+        )
+        self.fields["description"].required = False
 
     class Meta:
         model = Content

@@ -16,8 +16,10 @@
         <input type="checkbox" class="togCheck" id="check">
 
         <div class="togContent">
+            <div class="object-detail-text">
+                <p>{{ task.description|safe }}</p><br />
+            </div>
             <div class="object-detail-left">
-                <p>{% autoescape off %}{{ task.description }}{% endautoescape %}</p><br />
                 <p><i>{% trans "Документ" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Движение документа' %}"><a href="{% url 'my_doc:doctasks' task.doc.pk %}">{{ task.doc.name }}</a></span></i></p>
                 <p>{% trans "Тип" %}: {{ task.type }}</p>
                 <p>{% trans "Исполнитель" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Профиль исполнителя' %}"><a href="{% url 'my_account:userprofile_detail' task.assigner.pk ' ' %}">{{ task.assigner }}</a></span></p>

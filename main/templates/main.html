@@ -2,68 +2,17 @@
 
 {% load i18n %}
 
-<!--{% block menu %}
-   { include 'menu.html' %} 
-{% endblock %}-->     
-
-
 {% block content %}
 
    <h4>{% trans 'Главная страница' %}</h4>
 
-   <!--<div class="content-entry">-->
-       {% if perms.companies.add_content %}
-          <br />
-          <div class="object-list-buttons">
-             <!--<div style="float: left;" class="content-entry"><a href="{ url 'my_company:content_create' %}" class="top-menu"><span class="badge
-             badge-secondary">Добавить--><!--{ button_content_create }}--/span></a></div>-->
-             <a href="{% url 'my_company:content_create' %}">{% trans 'Добавить' %}<!--{ button_content_create }}--></a>
-          </div>
-          <br />
-       {% endif %}
+   {% if perms.companies.add_content %}
+      <div class="object-list-buttons">
+         <a href="{% url 'my_company:content_create' %}">{% trans 'Добавить' %}<!--{ button_content_create }}--></a>
+      </div>
+   {% endif %}
 
-       {% for content in content_list %}
-              <em>{{ content.datecreate }}</em>&nbsp;
-              <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a><br />
-              {% if content.announcement %}
-                 {{ content.announcement }}
-              {% else %} 
-                 <p><div>{% autoescape off %}{{ content.description }}{% endautoescape %}</div></p>
-              {% endif %}
-              <hr>
-       {% endfor %}
-   <!--</div>-->
-   <p>&nbsp;</p>
+   {% include 'content_list.html' %}
 
 {% endblock %}
-
-{#{% block public_content %}#}
-{##}
-{#    <h4>{% trans 'Главная страница' %}</h4>#}
-{##}
-{#    <!--<div class="content-entry">-->#}
-{#    {% if perms.companies.add_content %}#}
-{#       <br />#}
-{#       <div class="object-list-buttons">#}
-{#          <!--<div style="float: left;" class="content-entry"><a href="{ url 'my_company:content_create' %}" class="top-menu"><span class="badge#}
-{#          badge-secondary">Добавить--><!--{ button_content_create }}--/span></a></div>-->#}
-{#          <a href="{% url 'my_company:content_create' %}">{% trans 'Добавить' %}<!--{ button_content_create }}--></a>#}
-{#       </div>#}
-{#       <br />#}
-{#    {% endif %}#}
-{##}
-{#    {% for content in content_list %}#}
-{#           <em>{{ content.datecreate }}</em>&nbsp;#}
-{#           <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a><br />#}
-{#           {% if content.announcement %}#}
-{#              {{ content.announcement }}#}
-{#           {% else %} #}
-{#              <p><div>{% autoescape off %}{{ content.description }}{% endautoescape %}</div></p>#}
-{#           {% endif %}#}
-{#           <hr>#}
-{#    {% endfor %}#}
-{#<!--</div>-->#}
-{#<p>&nbsp;</p>#}
-{# #}
-{#{% endblock %}#}
 

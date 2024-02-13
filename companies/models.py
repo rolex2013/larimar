@@ -1,4 +1,6 @@
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -6,8 +8,6 @@ from django.utils import timezone
 # import datetime
 
 from mptt.models import MPTTModel, TreeForeignKey
-
-from ckeditor_uploader.fields import RichTextUploadingField
 
 # from main.models import Component
 
@@ -331,7 +331,8 @@ class Summary(models.Model):
     candidatelastname = models.CharField(_("Фамилия"), max_length=64)
     email = models.CharField(_("E-mail"), max_length=64)
     phone = models.CharField(_("Телефон"), max_length=16)
-    description = RichTextUploadingField(_("Описание"), blank=True, null=True)
+    # description = RichTextUploadingField(_("Описание"), blank=True, null=True)
+    description = CKEditor5Field(_("Описание"), blank=True, null=True, config_name="extends")
     datecreate = models.DateTimeField(_("Создано"), auto_now_add=True)
     # document = models.FileField(upload_to='documents/summary/')
     is_active = models.BooleanField(_("Активность"), default=True)
@@ -366,8 +367,14 @@ class Summary(models.Model):
 class Content(models.Model):
     # objects = ContentQuerySet.as_manager()
     name = models.CharField(_("Заголовок"), max_length=1024)
-    announcement = models.TextField(_("Анонс"), max_length=10240, blank=True, null=True)
-    description = RichTextUploadingField(_("Текст"), blank=True, null=True)
+    # announcement = models.TextField(_("Анонс"), max_length=10240, blank=True, null=True)
+    announcement = CKEditor5Field(
+        _("Анонс"), max_length=10240, blank=True, config_name="extends"
+    )
+    # description = RichTextUploadingField(_("Текст"), blank=True, null=True)
+    description = CKEditor5Field(
+        _("Текст"), blank=True, config_name="extends"
+    )
     datebegin = models.DateTimeField(_("Дата публикации"))
     dateend = models.DateTimeField(_("Дата снятия с публикации"))
     is_ontop = models.BooleanField(_("Всегда наверху"), default=False)

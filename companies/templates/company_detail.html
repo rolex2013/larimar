@@ -21,7 +21,11 @@
    <div class="togContent">
       <!-- <h2>{{ current_company.name }} -->
       {% if not current_company.is_active %}{% trans '(Организация перемещена в архив)' %}{% endif %}
-      <p>{% autoescape off %} {{ current_company.description }}{% endautoescape %}</p>
+      {% if current_company.description %}
+         <div class="object-detail-text">
+            <p>{{ current_company.description|safe }}</p><br />
+         </div>
+      {% endif %}
 
       {% if current_company.parent.pk %}
          <i>
@@ -64,7 +68,7 @@
       <p>{% trans 'Тип' %}: {{ current_company.type }}</p>
       <em>{% trans 'Автор' %}: {{ current_company.author }}</em><br />
       <em>{% trans 'Дата' %}: {{ current_company.datecreate }}</em>
-      <br />
+      <br /><br />
    </div>
    <!--{ if user.is_authenticated and user.id == current_company.author_id  %}-->
    <div class="object-detail-buttons">

@@ -8,32 +8,39 @@
    {% if current_stafflist.company.id in user_companies %}
 
    <div class="object-detail">
-      <h2>{{ current_stafflist.name }}
-      {% if not current_stafflist.is_active %}(Должность перемещена в архив){% endif %}
-      </h2>
-      <!--<p>{ autoescape off %} { current_stafflist.description }}{ endautoescape %}</p>-->
-      {{ current_stafflist.description }}<br />
-      {% if current_stafflist.parent.pk %}
-         <i><p>{% trans 'Руководитель' %}: 
-         <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
-         <a href="{% url 'my_company:staffs' current_stafflist.parent.pk 0 %}">{{ current_stafflist.parent.name }}</a>
-         </p></i>
-      <!--{ else %}
-         Это головная организация-->
-      {% endif %}
+      <label for="check" class="togButton">
+         <h3>⇅ {{ current_stafflist.name }}
+         {% if not current_stafflist.is_active %}(Должность перемещена в архив){% endif %}
+         </h3>
+      </label>
+      <input type="checkbox" class="togCheck" id="check">
+      <div class=" togContent">
+         {% if current_stafflist.description %}
+            <div class="object-detail-text">
+               <p>{{ current_stafflist.description }}</p><br />
+            </div>
+         {% endif %}
+         {% if current_stafflist.parent.pk %}
+            <i><p>{% trans 'Руководитель' %}: 
+            <!--<a href="{ url 'my_project:companies' current_company.parent.pk %}">{{ current_company.parent.name }}</a>-->
+            <a href="{% url 'my_company:staffs' current_stafflist.parent.pk 0 %}">{{ current_stafflist.parent.name }}</a>
+            </p></i>
+         <!--{ else %}
+            Это головная организация-->
+         {% endif %}
 
-      <p></p>
-      <i><p>{% trans 'Компания' %}: <a href="{% url 'my_company:stafflist' current_stafflist.company.id 0 %}">{{ current_stafflist.company.name }}</a></p></i>
-      <p>{% trans 'Оклад' %}: {{ current_stafflist.salary }} {{ current_stafflist.currency.shortname }}</p>
-      <p>{% trans 'Кол-во сотрудников' %}: {{ current_stafflist.numberemployees }} {% trans 'чел.' %}</p>      
-      {% if current_stafflist.is_vacancy %} 
-         <p>{% trans 'Вакансия: Да' %}</p>    
-         <p>{% trans 'Описание вакансии' %}: {% autoescape off %} {{ current_stafflist.vacancy }} {% endautoescape %}</p>
-      {% endif %}  
-      <p>{% trans 'Тип' %}: {{ current_stafflist.type }}</p>
-      <em>{% trans 'Автор' %}: {{ current_stafflist.author }}</em> 
-      <em>{% trans 'Дата' %}: {{ current_stafflist.datecreate }}</em>
-      <p>&nbsp;</p>
+         <i><p>{% trans 'Компания' %}: <a href="{% url 'my_company:stafflist' current_stafflist.company.id 0 %}">{{ current_stafflist.company.name }}</a></p></i>
+         <p>{% trans 'Оклад' %}: {{ current_stafflist.salary }} {{ current_stafflist.currency.shortname }}</p>
+         <p>{% trans 'Кол-во сотрудников' %}: {{ current_stafflist.numberemployees }} {% trans 'чел.' %}</p>      
+         {% if current_stafflist.is_vacancy %} 
+            <p>{% trans 'Вакансия: Да' %}</p>    
+            <p>{% trans 'Описание вакансии' %}: {% autoescape off %} {{ current_stafflist.vacancy }} {% endautoescape %}</p>
+         {% endif %}  
+         <p>{% trans 'Тип' %}: {{ current_stafflist.type }}</p>
+         <em>{% trans 'Автор' %}: {{ current_stafflist.author }}</em> 
+         <em>{% trans 'Дата' %}: {{ current_stafflist.datecreate }}</em>
+         <p>&nbsp;</p>
+      </div>
       <div class="object-detail-buttons">
            <a href="{% url 'my_company:stafflist_create' current_stafflist.company.id current_stafflist.pk %}">{{ button_stafflist_create }}</a>
            <a href="{% url 'my_company:stafflist_update' current_stafflist.pk %}">{{ button_stafflist_update }}</a>

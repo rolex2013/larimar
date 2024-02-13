@@ -588,8 +588,6 @@ def contents(request, place=0):
     companies_id = request.session["_auth_user_companies_id"]
     content_list = ""
     if request.user.is_authenticated:
-        # content_list = Content.objects.filter(is_active=True, datebegin__lte=datetime.now(), dateend__gte=datetime.now(), company__is_active=True, company_id__in=companies_id)
-        # result=list(set(companies_id) & set(Word)) # - пример пересечения множеств
         if place == 0:
             content_list = Content.objects.filter(
                 is_active=True,
@@ -629,7 +627,7 @@ def contents(request, place=0):
         request,
         template_name,
         {
-            "content_list": content_list,
+            "content_list": content_list.order_by("-datebegin"),
             "user_companies": companies_id,  # request.session['_auth_user_companies_id'],
             "button_content_create": button_content_create,
         },
@@ -656,7 +654,7 @@ def publiccontents(request):
         request,
         template_name,
         {
-            "content_list": content_list,
+            "content_list": content_list.order_by("-datebegin"),
             "param": param,
         },
     )

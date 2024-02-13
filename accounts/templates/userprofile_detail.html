@@ -11,10 +11,14 @@
    <input type="radio" class="togCheck" id="check" onclick="toggle_visibility('tog');">
    <div id="tog" style="display: none; transition: max-height 3s;">
       {% if user_profile.user.username == None %}
-      {% trans "Профиль пользователя не найден!" %}
+         {% trans "Профиль пользователя не найден!" %}
       {% else %}
-      <p>{% trans "Пользователь" %}: {{ user_profile.user.username }}</p>
-      <p>{% trans "Описание" %}: {% autoescape off %}{{ user_profile.description }}{% endautoescape %}</p>
+         <p>{% trans "Пользователь" %}: {{ user_profile.user.username }}</p>
+         {% if user_profile.description %}
+            <div class="object-detail-text">
+               <p>{% trans "Описание" %}: {{ user_profile.description|safe }}</p>
+            </div>
+         {% endif %}
       {% endif %}
 
       {% if user_profile.user.id == user.id %}
@@ -35,83 +39,31 @@
 
 {% if user_profile.user.username != None %}
 
-{% if content_list.count > 0 or user_profile.user.id == user.id %}
+   {% if content_list.count > 0 or user_profile.user.id == user.id %}
 
-<div class="object-list">
+      <div class="object-list">
 
-   <h4>{% trans "Блог пользователя" %}</h4>
+         <h4>{% trans "Блог пользователя" %}</h4>
 
-   {% if user_profile.user.id == user.id %}
-   <div class="object-list-buttons">
-      <a href="{% url 'my_company:content_create' %}">{% trans "Добавить" %}</a>
-      <a href="{% url 'my_account:userprofile_detail' 0 'all' %}">{% trans "Вывести все" %}</a>
-   </div>
+         {% if user_profile.user.id == user.id %}
+            <div class="object-list-buttons">
+               <a href="{% url 'my_company:content_create' %}">{% trans "Добавить" %}</a>
+               <a href="{% url 'my_account:userprofile_detail' 0 'all' %}">{% trans "Вывести все" %}</a>
+            </div>
+         {% endif %}
+
+         {% include 'content_list.html' %}
+
+         {% if user_profile.user.id == user.id %}
+            {% include 'notifies.html' %}
+         {% endif %}
+
+      </div>
+
    {% endif %}
-
-   <div class="object-list" style="margin: 1% 0% 0% 0%; padding: 0px 0px 0px 0px;">
-
-      {% for content in content_list %}
-
-         <label for="check_blog_{{ forloop.counter }}" class="togButton">
-            <p style="background: rgb(215, 216, 216)">
-               <span>
-                  {% if content.description %}⇅ {% endif %}
-                  <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a>
-               </span>
-               <span class="align-right">
-                  <em>{{ content.datecreate }}</em>&nbsp;({{ content.type }}/{{ content.place }})&nbsp;
-               </span>
-            </p>
-            {% if content.announcement %}
-               <div>{{ content.announcement }}</div>
-            {% endif %}
-            {% if content.is_active == False %}
-               <strong><em>(в архиве)</em></strong>
-            {% endif %}
-         </label>
-         <input type="radio" class="togCheck" id="check_blog_{{ forloop.counter }}"
-            onclick="toggle_visibility('tog_blog_{{ forloop.counter }}');">
-
-         <div
-            {% if content.description %}
-               id="tog_blog_{{ forloop.counter }}" 
-               style="display: none; margin: 0% 1% 1% 1%; padding: 0px 0px 0px 10px; overflow: hidden;"
-            {% else %}
-               id="tog_blog_{{ forloop.counter }}" 
-               style="display: none; margin: 0% 1% 1% 1%; padding: 0px 0px 0px 10px; overflow: hidden;"
-            {% endif %}>
-            <!-- overflow: hidden; - чтобы отменить обтекание картинок в предыдущих блоках -->
-            {% autoescape off %}{{ content.description }}{% endautoescape %}
-         </div>
-
-         {% endfor %}
-
-   </div>
-
-   <hr>
-
-   {% if user_profile.user.id == user.id %}
-      {% include 'notifies.html' %}
-   {% endif %}
-
-</div>
 
 {% endif %}
 
-{% endif %}
 
-<script>
-
-   function toggle_visibility(id) {
-      var e = document.getElementById(id);
-      // console.log(e.id + '************' + e.style.display)
-      if (e.style.display == 'block') {
-         e.style.display = 'none';
-      } else {
-         e.style.display = 'block';
-      }
-   }
-
-</script>
 
 {% endblock profile %}

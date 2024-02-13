@@ -4,14 +4,14 @@
 
 {% block vacancy %}
    
-   <!-- Защита от прямого доступа к контенту -->
-   <!--{ object.company_id }} / { user_companies }}-->
-   <!--{ if object.company_id in user_companies %}-->
-
    <div class="object-detail">           
 
       <h2>{{ current_stafflist.name }}</h2> <i><h5>{{ current_stafflist.datecreate }}</h5></i>
-      <p>{% autoescape off %} {{ current_stafflist.vacancy }} {% endautoescape %}</p>
+      {% if current_stafflist.vacancy %}
+         <div class="object-detail-text">
+            <p>{{ current_stafflist.vacancy|safe }}</p><br />
+         </div>
+      {% endif %}
       <br />
       <div class="object-detail-buttons">
          <a href="{% url 'my_main:summary_create' stafflistid %}">{{ button_send_resume }}</a>      

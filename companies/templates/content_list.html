@@ -1,0 +1,52 @@
+<div class="object-list" style="margin: 1% 0% 0% 0%; padding: 0px 0px 0px 0px;">
+
+    {% for content in content_list %}
+
+    <label for="check_blog_{{ forloop.counter }}" class="togButton">
+        <p style="background: rgb(215, 216, 216)">
+            <span>
+                {% if content.description %}⇅ {% endif %}
+                <a href="{% url 'my_company:content_detail' content.pk %}">{{ content.name }}</a>
+            </span>
+            <span class="align-right">
+                <em>{{ content.datecreate }}</em>&nbsp;({{ content.type }}/{{ content.place }})&nbsp;
+            </span>
+        </p>
+        {% if content.announcement %}
+        <div>{{ content.announcement|safe }}</div>
+        <!-- <div>{ autoescape off %}{ content.announcement }}{ endautoescape %}</div> -->
+        {% endif %}
+        {% if content.is_active == False %}
+        <strong><em>(в архиве)</em></strong>
+        {% endif %}
+    </label>
+    <input type="radio" class="togCheck" id="check_blog_{{ forloop.counter }}"
+        onclick="toggle_visibility('tog_blog_{{ forloop.counter }}');">
+
+    <div {% if content.description %} id="tog_blog_{{ forloop.counter }}"
+        style="display: none; margin: 0% 1% 1% 1%; padding: 0px 0px 0px 10px; overflow: hidden;" {% else %}
+        id="tog_blog_{{ forloop.counter }}"
+        style="display: none; margin: 0% 1% 1% 1%; padding: 0px 0px 0px 10px; overflow: hidden;" {% endif %}>
+        <!-- overflow: hidden; - чтобы отменить обтекание картинок в предыдущих блоках -->
+        {{ content.description|safe }}
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<hr>
+
+<script>
+
+    function toggle_visibility(id) {
+        var e = document.getElementById(id);
+        // console.log(e.id + '************' + e.style.display)
+        if (e.style.display == 'block') {
+            e.style.display = 'none';
+        } else {
+            e.style.display = 'block';
+        }
+    }
+
+</script>

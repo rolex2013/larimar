@@ -22,10 +22,10 @@
         <!-- </div> -->
 
         <div class="togContent">
-
+            <div class="object-detail-text">
+                <p>{{ current_client.description|safe }}</p><br />
+            </div>
             <div class="object-detail-left">
-
-                <p>{% autoescape off %}{{ current_client.description }}{% endautoescape %}</p>
                 <i>
                     <p>{% trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Клиенты организации' %}"><a
                                 href="{% url 'my_crm:clients' current_client.company.pk 0 %}">{{ current_client.company }}</a></span></p>

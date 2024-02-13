@@ -15,11 +15,15 @@
                     {% endif %}
                 </h3>
             </label>
-            <input type="checkbox" class="togCheck" id="check"">
+            <input type="checkbox" class="togCheck" id="check">
         
             <div class=" togContent">
+                {% if clienttask.description %}
+                    <div class="object-detail-text">
+                        <p>{{ current_project.description|safe }}</p><br />
+                    </div>
+                {% endif %}
                 <div class="object-detail-left">
-                    <p>{% autoescape off %}{{ current_project.description }}{% endautoescape %}</p><br />
                     <i><p>{% trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Проекты организации' %}"><a href="{% url 'my_project:projects' current_project.company.pk 0 %}">{{ current_project.company }}</a></span></p></i>
                     {% if current_project.parent %}
                         <p>{% trans "Уровень выше" %}: <a href="{% url 'my_project:tasks' current_project.parent.pk 0 %}">{{ current_project.parent.name }}</a></p>

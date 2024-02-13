@@ -15,8 +15,12 @@
          <p>{{ current_summary.candidatefirstname }} {{ current_summary.candidatemiddlename }} {{ current_summary.candidatelastname }}</p>
          <p>{{ email }}</p>
          <p>{{ phone }}</p>
-         <p>{% autoescape off %} {{ current_summary.description }} {% endautoescape %}</p>
-   </div>
+         {% if current_summary.description %}
+            <div class="object-detail-text">
+               <p>{{ current_summary.description|safe }}</p><br />
+            </div>
+         {% endif %}
+</div>
 
    <!--{ else %}
 

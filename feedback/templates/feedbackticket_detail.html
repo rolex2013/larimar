@@ -18,8 +18,10 @@
             <input type="checkbox" class="togCheck" id="check">
 
             <div class="togContent">
+                <div class="object-detail-text">
+                    <p>{{ current_feedbackticket.description|safe }}</p><br />
+                </div>
                 <div class="object-detail-left">
-                    <p>{% autoescape off %}{{ current_feedbackticket.description }}{% endautoescape %}</p>
                     <!--{ if is_ticketlist_dev %}-->
                     {% if current_feedbackticket.company_id %}
                         <i><p>{% trans "Организация" %}: <span class="hint hint--bottom hint--info" data-hint="{% trans 'Тикеты организации' %}"><a href="{% url 'my_feedback:tickets' 0 current_feedbackticket.system.id current_feedbackticket.company.pk %}">{{ current_feedbackticket.company }}</a></span></p></i>
