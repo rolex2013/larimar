@@ -18,7 +18,7 @@
             <input type="checkbox" class="togCheck" id="check">
         
             <div class=" togContent">
-                {% if clienttask.description %}
+                {% if current_project.description %}
                     <div class="object-detail-text">
                         <p>{{ current_project.description|safe }}</p><br />
                     </div>
