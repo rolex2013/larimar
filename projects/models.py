@@ -12,7 +12,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 # from main.models import ModelLog
 
 # from ckeditor_uploader.fields import RichTextUploadingField
-from django_ckeditor_5.fields import CKEditor5Field
+# from django_ckeditor_5.fields import CKEditor5Field
 
 # from companies.models import Company
 
@@ -132,7 +132,7 @@ class Dict_TaskType(Dict_Model):
 
 class Project(SetPropertiesDashboardMixin, MPTTModel):
     name = models.CharField(_("Наименование"), max_length=64)
-    description = CKEditor5Field(_("Описание"), config_name="extends")  # models.TextField(_("Описание"))
+    description = models.TextField(_("Описание"))
     datebegin = models.DateField(_("Начало"))
     dateend = models.DateField(_("Окончание"))
     company = models.ForeignKey(
