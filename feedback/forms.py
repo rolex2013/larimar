@@ -1,5 +1,7 @@
 from django.http import HttpResponse
-from ckeditor.widgets import CKEditorWidget
+# from ckeditor.widgets import CKEditorWidget
+from django_ckeditor_5.widgets import CKEditor5Widget
+
 from django import forms
 from .models import (
     Company,
@@ -66,10 +68,16 @@ class FeedbackTicketForm(forms.ModelForm):
         required=False,
     )  
     # comment = forms.CharField(label='Комментарий', widget=CKEditorWidget(), required=False)
+    # comment = forms.CharField(
+    #     label=_("Комментарий"), widget=forms.Textarea, required=False
+    # )
     comment = forms.CharField(
-        label=_("Комментарий"), widget=forms.Textarea, required=False
+        label=_("Комментарий"),
+        widget=CKEditor5Widget(
+            attrs={"class": "django_ckeditor_5"}, config_name="extends"
+        ),
+        required=False,
     )
-
     # disabled_fields = ('name', 'description', 'type', 'files', 'status', 'is_active')
     # disabled_fields = ('dateclose', 'author')
 

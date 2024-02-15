@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django_ckeditor_5.fields import CKEditor5Field
 
 from mptt.models import MPTTModel
-from ckeditor_uploader.fields import RichTextUploadingField
+
 
 # exposed_request = ''
 
@@ -66,7 +67,7 @@ class Dict_Model(TranslateFieldMixin, models.Model):
 
 class Task_Model(MPTTModel):
     name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"), null=True, blank=True)
+    description = models.TextField(_("Описание"), null=True, blank=True)
     datebegin = models.DateTimeField(_("Начало"))
     dateend = models.DateTimeField(_("Окончание"))
     percentage = models.DecimalField(
@@ -89,7 +90,7 @@ class Task_Model(MPTTModel):
 
 class Comment_Model(models.Model):
     name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"))
+    description = CKEditor5Field(_("Описание"), config_name="extends")
     time = models.DecimalField(
         _("Время работы, час."),
         max_digits=6,

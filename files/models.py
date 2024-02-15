@@ -8,7 +8,8 @@ from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 from main.models import ModelLog, Dict_Theme
 
-from ckeditor_uploader.fields import RichTextUploadingField
+# from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 # from companies.models import Company
 
@@ -35,7 +36,7 @@ class Dict_FolderType(Dict_Model):
 
 class Folder(MPTTModel):
     name = models.CharField(_("Наименование"), max_length=64)
-    description = RichTextUploadingField(_("Описание"), blank=True, null=True)
+    description = models.TextField(_("Описание"), blank=True, null=True)
     company = models.ForeignKey(
         "companies.Company",
         on_delete=models.CASCADE,

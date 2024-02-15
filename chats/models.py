@@ -5,7 +5,8 @@ from django.utils import timezone
 
 # from django.db import models
 from django.urls import reverse, reverse_lazy
-from ckeditor_uploader.fields import RichTextUploadingField
+# from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 # from companies.models import Company
 
@@ -157,7 +158,7 @@ class ChatMember(models.Model):
 
 class Message(models.Model):
     # text = models.TextField("Наименование", max_length=2048)
-    text = RichTextUploadingField(_("Текст"))
+    text = CKEditor5Field(_("Текст"), config_name="extends")
     chat = models.ForeignKey(
         "Chat",
         limit_choices_to={"is_active": True},

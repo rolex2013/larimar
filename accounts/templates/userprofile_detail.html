@@ -22,19 +22,19 @@
       {% endif %}
 
       {% if user_profile.user.id == user.id %}
-      <h5>{% trans "Настройки" %}</h5>
-      <p>{% trans "Компания" %}: {{ user_profile.company.name }}</p>
-      <p>{% trans "Оповещения" %}: {{ prompt_is_notify }} </p>
-      <p>{% trans "Протокол" %}: {{ user_profile.protocoltype.name }}</p>
-      <p>{% trans "E-mail" %}: {{ user_profile.email }}</p>
-      <p>{% trans "Телефон" %}: {{ user_profile.phone }}</p>
+         <h5>{% trans "Настройки" %}</h5>
+         <p>{% trans "Компания" %}: {{ user_profile.company.name }}</p>
+         <p>{% trans "Оповещения" %}: {{ prompt_is_notify }} </p>
+         <p>{% trans "Протокол" %}: {{ user_profile.protocoltype.name }}</p>
+         <p>{% trans "E-mail" %}: {{ user_profile.email }}</p>
+         <p>{% trans "Телефон" %}: {{ user_profile.phone }}</p>
       {% endif %}
    </div>
    {% if user_profile.user.id == user.id %}
-   <div class="object-detail-buttons">
-      <a href="{% url 'my_account:userprofile_update' user_profile.pk %}">{{ button_userprofile_update }}</a>
-   </div>
-   {% endif %}
+      <div class="object-detail-buttons">
+         <a href="{% url 'my_account:userprofile_update' user_profile.pk %}">{{ button_userprofile_update }}</a>
+      </div>
+      {% endif %}
 </div>
 
 {% if user_profile.user.username != None %}

@@ -1,5 +1,5 @@
 from django.db import models
-from ckeditor_uploader.fields import RichTextUploadingField
+# from ckeditor_uploader.fields import RichTextUploadingField
 from django_ckeditor_5.fields import CKEditor5Field
 
 from django.urls import reverse, reverse_lazy
@@ -96,7 +96,7 @@ class Dict_ContentPlace(Dict_Model):
 class Company(MPTTModel):
     name = models.CharField(_("Наименование"), max_length=64)
     # description = models.TextField("Описание")
-    description = RichTextUploadingField(_("Описание"))
+    description = models.TextField(_("Описание"))
     parent = TreeForeignKey(
         "self",
         null=True,
@@ -247,7 +247,9 @@ class StaffList(MPTTModel):
     )
     salary = models.DecimalField(_("Оклад"), max_digits=14, decimal_places=2)
     numberemployees = models.PositiveIntegerField(_("Кол-во сотрудников"), default=1)
-    vacancy = RichTextUploadingField(_("Описание вакансии"), null=True, blank=True)
+    vacancy = CKEditor5Field(
+        _("Описание вакансии"), null=True, blank=True, config_name="extends"
+    )
     datecreate = models.DateTimeField(_("Создана"), auto_now_add=True)
     author = models.ForeignKey(
         "auth.User", on_delete=models.CASCADE, verbose_name=_("Автор")

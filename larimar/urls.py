@@ -20,7 +20,7 @@ urlpatterns = [
     path('', include('main.urls')),
     path('companies/', include('companies.urls')),
     path('projects/', include('projects.urls')),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
+    # path('ckeditor/', include('ckeditor_uploader.urls')),
     path("ckeditor5/", include("django_ckeditor_5.urls")),    
     path('accounts/', include('accounts.urls')),
     path('finance/', include('finance.urls')),

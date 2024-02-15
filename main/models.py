@@ -3,7 +3,8 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
-from ckeditor_uploader.fields import RichTextUploadingField
+# from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 from main.utils_model import TranslateFieldMixin, Dict_Model
 
 
@@ -146,7 +147,7 @@ class Notification(TranslateFieldMixin, models.Model):
     )
     sendfrom = models.CharField(_("От кого"), max_length=64, blank=True, null=True)
     theme = models.CharField(_("Тема"), max_length=256, blank=True, null=True)
-    text = RichTextUploadingField(_("Текст"), max_length=1024)
+    text = models.TextField(_("Текст"), max_length=1024)
     recipient = models.ForeignKey(
         "auth.User",
         on_delete=models.CASCADE,

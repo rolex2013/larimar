@@ -6,7 +6,8 @@ from django.urls import reverse
 
 from mptt.models import MPTTModel, TreeForeignKey
 
-from ckeditor_uploader.fields import RichTextUploadingField
+# from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 from main.models import ModelLog
 from companies.models import Company
@@ -188,8 +189,7 @@ class Client(models.Model):
     lastname = models.CharField(_("Фамилия"), max_length=64)
     email = models.CharField("E-mail", max_length=64, blank=True, null=True)
     phone = models.CharField(_("Телефон"), max_length=16, blank=True, null=True)
-    # description = models.TextField(_("Описание")
-    description = RichTextUploadingField(_("Описание"), blank=True, null=True)
+    description = models.TextField(_("Описание"), blank=True, null=True)
     currency = models.ForeignKey(
         "finance.Dict_Currency",
         on_delete=models.CASCADE,
@@ -357,7 +357,7 @@ class ClientTaskComment(Comment_Model):
 
 class ClientEvent(SetPropertiesDashboardMixin, models.Model):
     name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"), null=True, blank=True)
+    description = models.TextField(_("Описание"), null=True, blank=True)
     datebegin = models.DateTimeField(_("Начало"))
     dateend = models.DateTimeField(_("Окончание"))
     place = models.CharField(_("Место"), max_length=254, null=True, blank=True)

@@ -8,7 +8,8 @@ from django.utils.translation import gettext_lazy as _
 
 # from mptt.models import MPTTModel, TreeForeignKey
 
-from ckeditor_uploader.fields import RichTextUploadingField
+# from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 # from main.models import ModelLog
 from companies.models import Company
@@ -110,7 +111,7 @@ class Doc(models.Model):
         related_name="doc_status_doc",
         verbose_name=_("Статус документа"),
     )
-    description = RichTextUploadingField(_("Описание"), blank=True, null=True)
+    description = models.TextField(_("Описание"), blank=True, null=True)
     datecreate = models.DateTimeField(_("Создан"), auto_now_add=True)
     datepublic = models.DateTimeField(
         _("Дата публикации"), auto_now_add=False, blank=True, null=True
@@ -194,7 +195,7 @@ class DocVer(models.Model):
         related_name="docver_status",
         verbose_name=_("Статус документа"),
     )
-    description = RichTextUploadingField(_("Описание"), blank=True, null=True)
+    description = models.TextField(_("Описание"), blank=True, null=True)
     datecreate = models.DateTimeField(_("Создан"), auto_now_add=True)
     datepublic = models.DateTimeField(
         _("Дата публикации"), auto_now_add=False, blank=True, null=True
@@ -234,7 +235,7 @@ class DocVer(models.Model):
 
 class DocTask(SetPropertiesDashboardMixin, models.Model):
     name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"), null=True, blank=True)
+    description = models.TextField(_("Описание"), null=True, blank=True)
     # datebegin = models.DateTimeField("Начало")
     dateend = models.DateField(_("Окончание"))
     doc = models.ForeignKey(

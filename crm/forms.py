@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from ckeditor.widgets import CKEditorWidget
+# from ckeditor.widgets import CKEditorWidget
+# from django_ckeditor_5.widgets import CKEditor5Widget
 from django import forms
 from .models import (
     Company,

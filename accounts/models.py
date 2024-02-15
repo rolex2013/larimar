@@ -1,7 +1,8 @@
 from django.db import models
 from django.urls import reverse, reverse_lazy
-#from mptt.models import MPTTModel, TreeForeignKey
-from ckeditor_uploader.fields import RichTextUploadingField
+# from mptt.models import MPTTModel, TreeForeignKey
+# from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 from companies.models import Company
 
@@ -19,7 +20,10 @@ class UserProfile(models.Model):
     lang = models.CharField(_("Язык"), max_length=5, blank=True, null=True)
     email = models.CharField("E-mail", max_length=64, blank=True, null=True)
     phone = models.CharField(_("Телефон"), max_length=16, blank=True, null=True)
-    description = RichTextUploadingField(_("Описание"), blank=True, null=True)
+    description = CKEditor5Field(
+        _("Описание"), blank=True, null=True, config_name="extends"
+    )
+
     is_active = models.BooleanField(_("Активность"), default=True)
     # is_del = models.BooleanField("Метка удаления", default=False)
 

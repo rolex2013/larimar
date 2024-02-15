@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from ckeditor.widgets import CKEditorWidget
+# from ckeditor.widgets import CKEditorWidget
+from django_ckeditor_5.widgets import CKEditor5Widget
 
 from django import forms
 from .models import Company, Doc, DocTask, DocTaskComment
@@ -169,8 +170,15 @@ class DocTaskForm(forms.ModelForm):
         required=False,
     )
     # comment = forms.CharField(label=_('Комментарий'), widget=forms.Textarea, required=False)
+    # comment = forms.CharField(
+    #     label=_("Комментарий"), widget=CKEditorWidget(), required=False
+    # )
     comment = forms.CharField(
-        label=_("Комментарий"), widget=CKEditorWidget(), required=False
+        label=_("Комментарий"),
+        widget=CKEditor5Widget(
+            attrs={"class": "django_ckeditor_5"}, config_name="extends"
+        ),
+        required=False,
     )
     disabled_fields = ("dateclose", "author")
 
@@ -294,6 +302,9 @@ class DocTaskForm(forms.ModelForm):
                 format="%Y-%m-%d",
                 attrs={"type": "date"},
             ),
+            # "comment": CKEditor5Widget(
+            #     attrs={"class": "django_ckeditor_5"}, config_name="extends"
+            # ),
         }
 
 

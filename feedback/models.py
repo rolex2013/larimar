@@ -14,7 +14,8 @@ from dashboard.utils import SetPropertiesDashboardMixin
 # from main.utils_lang import TranslateFieldMixin
 from main.utils_model import Dict_Model, Task_Model, Comment_Model
 
-from ckeditor_uploader.fields import RichTextUploadingField
+# from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 exposed_request = ""
@@ -138,7 +139,7 @@ class FeedbackTicket(SetPropertiesDashboardMixin, models.Model):
     )
     # id_local = models.PositiveIntegerField("Локальный ID")
     name = models.CharField(_("Наименование"), max_length=128)
-    description = RichTextUploadingField(_("Описание"))
+    description = models.TextField(_("Описание"))
     type = models.ForeignKey(
         "Dict_FeedbackTicketType",
         limit_choices_to={"is_active": True},
