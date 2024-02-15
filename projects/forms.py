@@ -142,6 +142,10 @@ class ProjectForm(forms.ModelForm):
         self.fields["assigner"].queryset = usr
         self.fields["members"].queryset = usr
         self.fields["author"].initial = self.user.id
+        self.fields["description"].widget.attrs.update(
+            {"class": "form-control django_ckeditor_5"}
+        )
+        self.fields["description"].required = False
 
         for field in self.disabled_fields:
             self.fields[field].disabled = True
