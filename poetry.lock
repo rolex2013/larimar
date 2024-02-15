@@ -519,21 +519,6 @@ files = [
 beautifulsoup4 = "*"
 
 [[package]]
-name = "django-ckeditor"
-version = "6.7.1"
-description = "Django admin CKEditor integration."
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "django-ckeditor-6.7.1.tar.gz", hash = "sha256:7144f9ead662306266c728912487313b3b87ba2abf9dbb82c447f662ce25d1f7"},
-    {file = "django_ckeditor-6.7.1-py3-none-any.whl", hash = "sha256:55b5f9ce3af47e3c8a8ed37d42be8439da2a664d6e571c2247c1db5c96459dd7"},
-]
-
-[package.dependencies]
-Django = ">=3.2"
-django-js-asset = ">=2.0"
-
-[[package]]
 name = "django-ckeditor-5"
 version = "0.2.11"
 description = "CKEditor 5 for Django."
@@ -2012,4 +1997,4 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.10.12"
-content-hash = "d523d58b87d9e20f90f7576cc5045745bcbe01236bcd3ba46dbde34934195911"
+content-hash = "e3d6acbd7240d52bb0eaf8f49505fe4353c1a5f63fb60f3e2e143892306b7fda"

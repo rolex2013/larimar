@@ -3,7 +3,7 @@ name = "larimar"
 version = "3.0.0"
 description = "1YES!"
 authors = ["larimarit <larimaritgroup.ru@gmail.com>"]
-readme = "ReadMe.MD" 
+readme = "ReadMe.MD"
 
 [tool.poetry.dependencies]
 python = "3.10.12"
@@ -25,7 +25,7 @@ distlib = "0.3.6"
 Django = "^5.0.1"
 # django-bootstrap-datepicker-plus = "^5.0.3"
 django-bootstrap4 = "^1.1.1"
-django-ckeditor = "^6.7.0"
+# django-ckeditor = "^6.7.0"
 django-ckeditor-5 = "^0.2.11"
 django-crispy-forms = "^2.0"
 django-group-by = "^0.3.1"
@@ -95,4 +95,3 @@ channels = "^3.0.4"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
