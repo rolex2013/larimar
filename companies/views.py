@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import reverse_lazy
 from django.utils import timezone
 from datetime import datetime, date, time
@@ -697,6 +698,7 @@ class ContentDetail(DetailView):
             context["button_content_update"] = _("Изменить")
             context["user_companies"] = self.request.session["_auth_user_companies_id"]
             context["whoisauthor"] = _("Автор") + ": " + self.object.author.username
+            context["os_static"] = settings.BASE_DIR + " | " + settings.STATIC_URL + " | " + settings.MEDIA_URL + " | " + settings.MEDIA_ROOT + " | " + settings.BASE_DIR + " | " + settings.STATIC_ROOT
             if not self.object.is_active:
                 context["extdescription"] = _(" (Контент перемещен в архив)")
             return context
