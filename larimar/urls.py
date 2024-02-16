@@ -44,7 +44,7 @@ if settings.DEBUG:
     # ]
 
 # без этого ckeditor не видит загруженные на сервер файлы/картинки (https://qarchive.ru/37247_django_media_url_i_media_root)
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # if settings.DEBUG:
 #     urlpatterns = [path("__debug__/", include("debug_toolbar.urls"))] + urlpatterns
 #     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
