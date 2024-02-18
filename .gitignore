@@ -5,10 +5,14 @@ db.sqlite3-journal
 db.sqlite3
 db_test.sqlite3
 data.sqlite
+.dockerignore
 reqs_larimaritgroup.txt
 reqs_1yes_larimaritgroup.txt
 manage.py
 notes.ttt
+projects_dict_projectstatus.json
+loaddata_json
+ttt.txt
 media/
 .idea/
 .vscode/
@@ -24,3 +28,4 @@ out.sql
 out.sqlsource
 out.json
 import.sql
+Pipfile.lock
