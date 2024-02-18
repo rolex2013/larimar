@@ -369,8 +369,13 @@ if IS_DEV == "True":
     INSTALLED_APPS.append("debug_toolbar")
     MIDDLEWARE = ["debug_toolbar.middleware.DebugToolbarMiddleware"] + MIDDLEWARE
 
+    # STATIC_URL = "/static/"
+    # MEDIA_URL = "/media/"
+    # MEDIA_ROOT = BASE_DIR + "/media"
+    # STATIC_ROOT = BASE_DIR + "/static"
+
     STATIC_URL = "/static/"
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
     STATIC_ROOT = os.getenv("STATIC_ROOT")
 
     INTERNAL_IPS = [
