@@ -30,3 +30,5 @@ out.json
 import.sql
 Pipfile.lock
 Pipfile
+.kdev4/larimar.kdev4
+larimar.kdev4
