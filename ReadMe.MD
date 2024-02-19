@@ -7,7 +7,7 @@
 Для тестирования доступен функционирующий прототип по адресу: http://1yes.larimaritgroup.ru
 
 ## v.3.0.0 - 18.02.2024
-### (+) Upgarade to Django 5.0.2
+### (+) Upgrade to Django 5.0.2
 
 ## v.2.3.0 - 30.01.2024
 ### (+) Localization and Translation
