@@ -4,16 +4,16 @@
 
 Реализован на Python Django 5.0.2
 
-Для тестирования доступен функционирующий прототип по адресу: http://1yes.larimaritgroup.ru
+Для тестирования доступен функционирующий прототип по адресу: https://1yes.larimaritgroup.ru
 
-# v.3.0.0 - 18.02.2024
-## (+) Upgarade to Django 5.0.2
+## v.3.0.0 - 18.02.2024
+### (+) Upgrade to Django 5.0.2
 
-# v.2.3.0 - 30.01.2024
-## (+) Localization and Translation
+## v.2.3.0 - 30.01.2024
+### (+) Localization and Translation
 
-# v.2.2.0 - 28.11.2023
-## (+) List application
+## v.2.2.0 - 28.11.2023
+### (+) List application
 
-# v.2.1.0 - 27.04.2023
-## (+) Dashboard application
+## v.2.1.0 - 27.04.2023
+### (+) Dashboard application
