@@ -1,5 +1,5 @@
 <h1 align="center"><a href="https://1yes.larimaritgroup.ru/" target="_blank">1YES!</a> - Ваша первая и единственная бесплатная ERP! 
-<img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/></h1>
+<!--<img src="https://github.com/blackcater/blackcater/raw/main/images/Hi.gif" height="32"/>--></h1>
 <h3 align="center">Проект независимой группы разработчиков<br />"Larimar IT Group"</h3>
 
 Реализован на Python Django 5.0.2
