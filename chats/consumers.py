@@ -1,6 +1,8 @@
 import json
 from datetime import datetime, date, time
 from django.utils import timezone
+from django.conf import settings
+import pytz
 from channels.generic.websocket import (
     WebsocketConsumer,
     JsonWebsocketConsumer,
@@ -105,7 +107,10 @@ class ChatConsumer(WebsocketConsumer):
                         dt = mmb.dateoffline
                 ddt = " "
                 if dt is not None:
-                    dt = dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+                    # dt = dt.replace(tzinfo=timezone.utc).astimezone(tz=None)
+                    dt = dt.replace(
+                        tzinfo=pytz.timezone(settings.TIME_ZONE)
+                    ).astimezone(tz=None)
                     # dt = dt.split('+',1)[0]
                     ddt = str(dt.strftime("%d.%m.%y %H:%M:%S"))
                     # print(self.chat_member, dt)
